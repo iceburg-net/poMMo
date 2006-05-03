@@ -7,62 +7,6 @@
 <script src="{$url.theme.shared}/scriptaculous/dragdrop.js" type="text/javascript"></script>
 <script src="{$url.theme.shared}/scriptaculous/controls.js" type="text/javascript"></script>
 
-{literal}
-<style type="text/css">
-    div.auto_complete {
-      position:absolute;
-      width:250px;
-      background-color:white;
-      border:1px solid #888;
-      margin:0px;
-      padding:0px;
-    }
-    ul.contacts  {
-      list-style-type: none;
-      margin:0px;
-      padding:0px;
-    }
-    ul.contacts li.selected { background-color: #ffb; }
-    li.contact {
-      list-style-type: none;
-      display:block;
-      margin:0;
-      padding:2px;
-      height:32px;
-    }
-    li.contact div.image {
-      float:left;
-      width:32px;
-      height:32px;
-      margin-right:8px;
-    }
-    li.contact div.name {
-      font-weight:bold;
-      font-size:12px;
-      line-height:1.2em;
-    }
-    li.contact div.email {
-      font-size:10px;
-      color:#888;
-    }
-    #list {
-      margin:0;
-      margin-top:10px;
-      padding:0;
-      list-style-type: none;
-      width:250px;
-    }
-    #list li {
-      margin:0;
-      margin-bottom:4px;
-      padding:5px;
-      border:1px solid #888;
-      cursor:move;
-    }
-  </style>
- {/literal}
-
-
 <div id="mainbar">
 
 <h1>{t}Demographics Page{/t}</h1>
@@ -99,23 +43,21 @@
 </form>
 
 <div width="100%" id="demoOrder">
-<span>{t}Order{/t}</span>
-<span style="margin-left: 20px;">{t}Delete{/t}</span>
-<span style="margin-left: 20px; margin-right: 20px;">{t}Edit{/t}</span>
+<span>{t}Delete{/t}</span>
+<span style="margin-left: 20px;">{t}Edit{/t}</span>
+<span style="margin-left: 20px; margin-right: 20px;">{t}Order{/t}</span>
 <span style="text-align:left; margin-left: 5px;">{t}Demographic Name{/t}</span>
 
 {foreach name=demos from=$demographics key=key item=demo}
 <div id="demo_{$key}">
-	<span style="cursor:move"><img src="{$url.theme.shared}/images/icons/order.png"></span>
-	<span style="margin-left: 20px;">
 	<a href="{$smarty.server.PHP_SELF}?demographic_id={$key}&delete=TRUE&demographic_name={$demo.name}">
  	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0"></a>
-	</span>
-	<span style="margin-left: 20px; margin-right: 20px;">
+	<span style="margin-left: 25px;">
 	<a href="demographics_edit.php?demographic_id={$key}">
 			<img src="{$url.theme.shared}/images/icons/edit.png" border="0"></a>
 	</span>
-	<span style="text-align:left; margin-left: 5px;">
+	<span style="cursor:move; margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
+	<span style="text-align:left; margin-left: 12px;">
 	{if $demo.active}<b>{$demo.name}</b>{else}{$demo.name}{/if}
 			 ({$demo.type})
 	</span>
