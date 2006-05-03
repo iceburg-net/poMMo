@@ -1,0 +1,60 @@
+.container {
+	padding-top: 130px;
+	text-align: center;
+}
+
+.mailbar {
+	position: absolute;
+	background-repeat: no-repeat;
+	background-position: bottom center;
+	height: 50px;
+	width: 514px;
+	margin-left: -257px;
+	left: 50%;
+	top: 315px;
+}
+.baritems {
+	padding-top: 0px;
+	padding-left: 7px;
+	text-align: left;
+}
+.statusbox {
+	background-color: #FFFFFF;
+	position: absolute;
+	left: 50%;
+	width: 514px;		
+	margin-left: -257px;
+	height: 90px;	
+	top: 225px;
+}
+.percentbox {
+	background-color: #FFFFFF;
+	position: absolute;
+	left: 50%;
+	width: 514px;
+	margin-left: -257px;
+	height: 40px;
+	font-family: "Trebuchet MS", Arial, Helvetica;
+	font-size: 24px;
+	font-weight: bold;
+	color: #999999;
+	text-align: center;
+	top: 60px;
+}
+
+.statusfooter {
+	background-color: #FFFFFF;
+	position: absolute;
+	left: 50%;
+	width: 620px;
+	margin-left: -310px;
+	height: 40px;
+	font-family: "Trebuchet MS", Arial, Helvetica;
+	font-size: 11px;
+	color: #333333;
+	top: 115px;
+}
+#content {
+			width: auto;
+			text-align:left;
+}
