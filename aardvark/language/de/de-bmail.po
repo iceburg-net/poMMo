@@ -1,0 +1,1280 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BMail Translation 1.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2006-04-28 11:30+0100\n"
+"Last-Translator: Albert Warnecke <awarnecke@bandikutmedia.de>\n"
+"Language-Team: Albert Warnecke <awarnecke@bandikutmedia.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. bMail/themes/default/user/process.tpl
+#: bmail_theme_lang.php:3
+msgid "Subscription Review"
+msgstr "Abonnementüberblick "
+
+#. bMail/themes/default/user/process.tpl
+#: bmail_theme_lang.php:6
+msgid "Back to Subscription Form"
+msgstr "Zurück zum Anmeldeformular"
+
+#. bMail/themes/default/user/process.tpl
+#. bMail/themes/default/user/user_pending.tpl
+#. bMail/themes/default/user/confirm.tpl
+#. bMail/themes/default/user/user_update.tpl
+#: bmail_theme_lang.php:9
+#: bmail_theme_lang.php:33
+#: bmail_theme_lang.php:48
+#: bmail_theme_lang.php:54
+msgid "Return to %1"
+msgstr "Zurück zu"
+
+#. bMail/themes/default/user/process.tpl
+#: bmail_theme_lang.php:12
+msgid "If you would like to update your records click %1here%2"
+msgstr "Wenn Sie Ihre Angaben aktualisieren möchten, klicken Sie %1hier%2."
+
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:15
+msgid "Subscriber Login"
+msgstr "Abonnenten Login"
+
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:18
+msgid "In order to check your subscribtion status, update your information, or unsubscribe, you must enter your email address in the field below."
+msgstr "Bitte geben Sie Ihre E-Mail-Adresse im untenstehenden Feld ein, wenn Sie Ihre Benutzerdaten ändern nöchten oder den Newlsetter nicht mehr beziehen möchten."
+
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:21
+#: bmail_theme_lang.php:27
+msgid "Login"
+msgstr "Login"
+
+#. bMail/themes/default/user/login.tpl
+#. bMail/themes/default/subscribe/form.subscribe.tpl
+#. bMail/themes/default/subscribe/form.update.tpl
+#. bMail/themes/default/subscribe/form.mini.tpl
+#: bmail_theme_lang.php:24
+#: bmail_theme_lang.php:645
+#: bmail_theme_lang.php:666
+#: bmail_theme_lang.php:681
+msgid "Your Email:"
+msgstr "Ihre E-Mail-Adresse"
+
+#. bMail/themes/default/user/user_pending.tpl
+#: bmail_theme_lang.php:30
+msgid "Pending Changes"
+msgstr "bevorstehende Änderungen"
+
+#. bMail/themes/default/user/user_pending.tpl
+#: bmail_theme_lang.php:36
+msgid "Click to *send* another confirmation email"
+msgstr "Klicken Sie auf *Senden*, um eine weitere Bestätigungs-Mail zu versenden."
+
+#. bMail/themes/default/user/user_pending.tpl
+#: bmail_theme_lang.php:39
+msgid "Click to *cancel* your pending requestl"
+msgstr "Klicken Sie auf *Abbrechen*, um Ihre Anfrage abzubrechen."
+
+#. bMail/themes/default/user/inc.footer.tpl
+#. bMail/themes/default/install.tpl
+#. bMail/themes/default/admin/inc.footer.tpl
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:42
+#: bmail_theme_lang.php:126
+#: bmail_theme_lang.php:567
+#: bmail_theme_lang.php:639
+msgid "Page fueled by %1 mailing management software."
+msgstr "Diese Seite wurde mit der %1 Newsletter-Software erstellt."
+
+#. bMail/themes/default/user/confirm.tpl
+#: bmail_theme_lang.php:45
+msgid "Subscriber Confirmation"
+msgstr "Bestätigung für Abonnenten "
+
+#. bMail/themes/default/user/user_update.tpl
+#: bmail_theme_lang.php:51
+msgid "Subscriber Update"
+msgstr "Abonnenten-Daten aktualieren"
+
+#. bMail/themes/default/user/user_update.tpl
+#: bmail_theme_lang.php:57
+msgid "Click to Unsubscribe"
+msgstr "Hier klicken zum Abmelden"
+
+#. bMail/themes/default/install.tpl
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:60
+#: bmail_theme_lang.php:66
+#: bmail_theme_lang.php:615
+msgid "bMail Installation"
+msgstr "bMail Installation"
+
+#. bMail/themes/default/install.tpl
+#. bMail/themes/default/admin/inc.header.tpl
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:63
+#: bmail_theme_lang.php:591
+#: bmail_theme_lang.php:618
+msgid "Admin Page"
+msgstr "Administrations-Seite"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:69
+msgid "Online install"
+msgstr "Online-Installatíon"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:72
+msgid "Welcome to the bMail online installation process. We have connected to the database and set your language successfully. Fill in the values below, and you'll be on your way!"
+msgstr "Willkommen bei der Installationsroutine von bMail. Die Verbindung zur Datenbank konnte aufgebaut werden und die Spacheinstellungen wurden vorgenommen. Bitte füllen Sie die untenstehenden Felder aus. Dann steht einem erfolgreichen Start mit bMail nichts mehr im Weg."
+
+#. bMail/themes/default/install.tpl
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:75
+#: bmail_theme_lang.php:630
+msgid "To disable debugging"
+msgstr "Um das Debugging abzuschalten"
+
+#. bMail/themes/default/install.tpl
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:78
+#: bmail_theme_lang.php:633
+msgid "To enable debugging"
+msgstr "Um das Debugging einzuschalten"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:81
+msgid "Configuration Options"
+msgstr "Konfigurationsoptionen"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:84
+msgid "Name of Mailing List:"
+msgstr "Name der Mailing-Liste:"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:87
+#: bmail_theme_lang.php:111
+msgid "(ie. Brice's Mailing List)"
+msgstr "(z.B. Newsletter-Abo)"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:90
+msgid "Name of Website:"
+msgstr "Name der Web-Site:"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:93
+msgid "(ie. The bMail Website)"
+msgstr "(z.B. Meine Web-Site)"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:96
+msgid "Website URL:"
+msgstr "URL der Web-Site:"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:99
+msgid "(ie. http://www.bmail-rocks.com/)"
+msgstr "(z.B. http://www.meine-site.de)"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:102
+msgid "Administrator Password:"
+msgstr "Administrator Paßwort:"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:105
+msgid "(you will use this to login)"
+msgstr "(wird zum Login benötigt)"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:108
+msgid "Verify Password:"
+msgstr "Paßwort verifizieren:"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:114
+msgid "Administrator Email:"
+msgstr "Administrator E-Mail:"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:117
+msgid "(enter your valid email address)"
+msgstr "(bitte eine gültige E-Mail-Adresse angeben)"
+
+#. bMail/themes/default/install.tpl
+#: bmail_theme_lang.php:120
+msgid "Install"
+msgstr "Installieren"
+
+#. bMail/themes/default/install.tpl
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:123
+#: bmail_theme_lang.php:636
+msgid "Continue to login page"
+msgstr "Weiter zur Login-Seite"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:129
+msgid "Edit Demographic"
+msgstr "Benutzergruppen anlegen"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:132
+msgid "Return to Demographics Page"
+msgstr "Zurück zur Benutzergruppen-Seite"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:135
+msgid "Name:"
+msgstr "Name:"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:138
+msgid "A descriptive name to help you identify this demographic. End users will never see this."
+msgstr "Nutzen Sie einen beschreibenden Namen, um diese Benutzergruppe zu identifizieren. Es handelt sich um eine rein interne Bezeichnung. Die Abonennten des Newsletters werden diesen Namen niemals sehen."
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:141
+msgid "Prompt:"
+msgstr "Benutzerhinweis:"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:144
+msgid "The prompt for this demographic on the subscription form. ie. 'Type your city'"
+msgstr "Hinweis, den die Nutzer beim Ausfüllen des Abo-Formulars sehen. Z. B. \"Geben Sie den Namen Ihrer Stadt ein\"."
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:147
+msgid "Required:"
+msgstr "Pflichtfeld:"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:150
+msgid "Check to require this field on the subscription form. ie. user cannot leave blank."
+msgstr "Wenn Sie dieses Feld als Pflichtfeld deklarieren, muß der Nutzer es bei der Anmeldung zum Newsletter ausfüllen."
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:153
+msgid "Active:"
+msgstr "Aktiv:"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:156
+msgid "If not checked, this demographic will remain in the system, but will not display on the subscription form."
+msgstr "Wenn dieses Kästchen nicht markiert ist, wird dieses Feld zwar intern geführt, erscheint aber nicht im öffentlichen Abo-Formular."
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:159
+#: bmail_theme_lang.php:165
+#: bmail_theme_lang.php:171
+msgid "Default:"
+msgstr "Standardwert:"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:162
+msgid "If provided, this value will be pre-filled in on the subscription form"
+msgstr "Der von Ihnen hier angegebene Wert wird dem Nutzer beim Ausfüllen des Formulars als Standardwert vorgeschlagen."
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:168
+msgid "The initial state of the checkbox on the subscription form"
+msgstr "Die Grundeinstellung der Checkbox auf dem Anmeldeformular"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:174
+msgid "Initial value selected on the subscription form"
+msgstr "Der ausgewählte Anfangswert auf dem Anmeldeformular"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:177
+#: bmail_theme_lang.php:231
+#: bmail_theme_lang.php:258
+#: bmail_theme_lang.php:285
+#: bmail_theme_lang.php:312
+msgid "Update"
+msgstr "Aktualisieren"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:180
+msgid "type option(s)"
+msgstr "Option(en) eingeben"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:183
+msgid "Add Option(s)"
+msgstr "Option(en) hinzufügen"
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:186
+msgid "NOTE: You can add multiple options by seperating them by commas. To include special characters such as quote marks and commas, prefix them with a slash (\\)."
+msgstr "HINWEIS: Mehrere Optionen trennen Sie bei der Eingabe duch Kommata.  Sonderzeichen wie Anführungszeichen oder Kommata müssen mit einem führenden Schrägstrich versehen werden (\\)."
+
+#. bMail/themes/default/admin/demographics_edit.tpl
+#: bmail_theme_lang.php:189
+msgid "Remove Selected Option"
+msgstr "Gewählte Option löschen"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:192
+msgid "Message Settings"
+msgstr "Nachrichteneinstellungen"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:195
+msgid "You can configure the messages bMail sends when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task."
+msgstr "Wenn Nutzer sich anmelden, abmelden oder ihre Daten aktualisieren, verschickt bMail automatisch Bestätigungs-Mails. Den Text dieser Mails können Sie an Ihre Bedürfnisse anpassen.Die Texte, die bMail anzeigt, wenn ein Nutzer einen der obigen Aufgaben erfolreich durchgeführt hat, lassen sich ebenfalls anpassen."
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:198
+msgid "Note:"
+msgstr "Hinweis:"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:201
+msgid "Using '[[url]]' in the message body will reference the confirmation link."
+msgstr "Wenn Sie '[[url]]' im Text der Mail nutzen erscheint dort ein Link mit dieser URL."
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:204
+msgid "Return to configuration page"
+msgstr "Zurück zur Konfigurations-Seite"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:207
+msgid "Messages"
+msgstr "Nachrichten"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#. bMail/themes/default/subscribe/form.subscribe.tpl
+#. bMail/themes/default/subscribe/form.mini.tpl
+#: bmail_theme_lang.php:210
+#: bmail_theme_lang.php:654
+#: bmail_theme_lang.php:684
+msgid "Subscribe"
+msgstr "Abonnieren"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:213
+#: bmail_theme_lang.php:240
+#: bmail_theme_lang.php:267
+#: bmail_theme_lang.php:294
+msgid "Subject:"
+msgstr "Betreff:"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:216
+#: bmail_theme_lang.php:243
+#: bmail_theme_lang.php:270
+#: bmail_theme_lang.php:297
+msgid "(Subject of Sent Email)"
+msgstr "(Betreff der verschickten E-Mails)"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:219
+#: bmail_theme_lang.php:246
+#: bmail_theme_lang.php:273
+#: bmail_theme_lang.php:300
+msgid "Message:"
+msgstr "Nachricht:"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:222
+#: bmail_theme_lang.php:249
+#: bmail_theme_lang.php:276
+#: bmail_theme_lang.php:303
+msgid "(Use [[url]] for the confirm link at least once)"
+msgstr "(Verwenden Sie [[url]] für den Bestätigungs-Link wenigstens einmal in Ihrer Mail)"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:225
+#: bmail_theme_lang.php:252
+#: bmail_theme_lang.php:279
+#: bmail_theme_lang.php:306
+msgid "Success:"
+msgstr "Erfolg:"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:228
+#: bmail_theme_lang.php:255
+#: bmail_theme_lang.php:282
+#: bmail_theme_lang.php:309
+msgid "(Message displayed upon success)"
+msgstr "(Diese Nachricht wird angezeigt, wenn alles glatt gelaufen ist)"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:234
+#: bmail_theme_lang.php:261
+#: bmail_theme_lang.php:288
+#: bmail_theme_lang.php:315
+msgid "Restore to Defaults"
+msgstr "Standardwerte wieder herstellen"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:237
+msgid "Unsubscribe"
+msgstr "Abmelden"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#. bMail/themes/default/subscribe/form.update.tpl
+#: bmail_theme_lang.php:264
+#: bmail_theme_lang.php:678
+msgid "Update Records"
+msgstr "Datensatz aktualisieren"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:291
+msgid "Change Password"
+msgstr "Paßwort ändern"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:318
+#: bmail_theme_lang.php:330
+#: bmail_theme_lang.php:339
+msgid "bMail Setup"
+msgstr "bMail Setup"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:321
+#: bmail_theme_lang.php:597
+msgid "Configure"
+msgstr "Konfigiurieren"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/setup_demographics.tpl
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:324
+#: bmail_theme_lang.php:369
+#: bmail_theme_lang.php:603
+msgid "Demographics"
+msgstr "Nutzerdemographie"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:327
+msgid "Generate"
+msgstr "Erzeuge"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:333
+#: bmail_theme_lang.php:555
+msgid "Send"
+msgstr "Sende"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:336
+#: bmail_theme_lang.php:561
+msgid "History"
+msgstr "Verlauf"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:342
+#: bmail_theme_lang.php:495
+msgid "Manage"
+msgstr "Verwalten"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:345
+#: bmail_theme_lang.php:501
+msgid "Import"
+msgstr "Importieren"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:348
+#: bmail_theme_lang.php:507
+msgid "Groups"
+msgstr "Gruppen"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:351
+#: bmail_theme_lang.php:438
+msgid "Mailings"
+msgstr "Mailings"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:354
+#: bmail_theme_lang.php:432
+msgid "Subscribers"
+msgstr "Abonnenten"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:357
+#: bmail_theme_lang.php:426
+msgid "Setup"
+msgstr "Setup"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:360
+msgid "Demonstration mode is ON."
+msgstr "Demonstationsmodus ist EIN."
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:363
+msgid "Demonstration mode is OFF."
+msgstr "Demonatrationsmodus ist AUS."
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:366
+msgid "Demographics Page"
+msgstr "Benutzergruppen-Seite"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:372
+msgid "Make New"
+msgstr "Neu anlegen"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:375
+#: bmail_theme_lang.php:378
+msgid "type new demographic name"
+msgstr "Neues Feld anlegen"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:381
+msgid "Text"
+msgstr "Text"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:384
+msgid "Number"
+msgstr "Zahl"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:387
+msgid "Check Box"
+msgstr "Check Box"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:390
+msgid "Multiple Choice"
+msgstr "Mehrfachauswahl"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:393
+msgid "Date"
+msgstr "Datum"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:396
+msgid "Add"
+msgstr "Hinzufügen"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:399
+msgid "Order"
+msgstr "Sortieren"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:402
+msgid "Delete"
+msgstr "Löschen"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:405
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:408
+msgid "Demographic Name"
+msgstr "Name der Benutzergruppe"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:411
+msgid "No demographics have been assigned."
+msgstr "Es wurden keine Felder zugewiesen"
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:414
+msgid "Names in <strong>bold</strong> are active."
+msgstr "<strong>Fett</strong> geschriebene Feldnamen sind aktiv."
+
+#. bMail/themes/default/admin/setup_demographics.tpl
+#: bmail_theme_lang.php:417
+msgid "Change the ordering of fields on the subscription form by dragging and dropping the order icon"
+msgstr "Sie können die Reihenfolge der Felder auf dem Anmeldeformular ändern indem Sie das Reihenfolge-Icon mit der Maus auf die gewünschte Position ziehen."
+
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:420
+msgid "Hello and welcome to the bMail \"Aardvark\" release. The \"A\" in Aardvark stands for \"alpha\" and designates this as an early version of bMail. Much development is underway, so please report your findings and suggestions to the %1."
+msgstr "Willkommen beim  bMail \"Aardvark\" release. Das \"A\" in Aardvark steht für \"alpha\" und zeigt an, daß es sich um eine frühe bMasil-Version handelt. An dieser Software wird noch kräftig gearbeitet. Bitte senden Sie Ihre Vorschläge und Fehlerberichte an %1."
+
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:423
+msgid "Admin Menu"
+msgstr "Administrationsmenü"
+
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:429
+msgid "This area allows you to configure bMail and its default behavior. Set mailing list parameters, choose the information you'd like to collect from subscribers, and generate subscription forms from here."
+msgstr "Hier passen Sie die Standardeinstellungen von bMail an. Sie setzen hier die Parameter für die Mailing-Liste, legen fest, welche Informationen sie von den Abonnenten erheben möchten und generieren dann das Abo-Formular."
+
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:435
+msgid "Here you can list, add, delete, import, export, and update your subscribers. You can also create groups (subsets) of your subsribers from here."
+msgstr "Folgende Funktionen sind im Abonnenten-Management verfügbar: Auflisten, hiunzufügen, löschen, importieren und exportieren.Auerdem können Sie hier Untergruppen einer bestehenden Mailing-Liste anlegen."
+
+#. bMail/themes/default/admin/admin.tpl
+#: bmail_theme_lang.php:441
+msgid "Send mailings to the entire list or to a subset of subscribers. Mailing status and history can also be viewed from here."
+msgstr "Verschicken Sie Mails an die gesamte Liste oder an ausgewählte Abonenntengruppen. Hinweise zum  Status des aktuellen Mailings und zu bereits erfolgten Mailings finden Sie hier ebenfalls."
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:444
+msgid "Embedded Subscription Forms"
+msgstr "Eingebettete Abo-Formulare"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:447
+msgid "Subscription forms can easily be added to your website using a line of code. You can use the PHP include listed below, or embed the actual HTML. Remember, you can also direct subscribers to the "
+msgstr "Abo-Formulare lassen sich sehr einfach mit einer einzigen Code-Zeile in Ihre Web-Site integrieren. Verwenden Sie entweder den untenstehenden PHP-Code oder fügen Sie den eigentlichen HTML-Code ein.Nicht vergesen: Sie können die Abonennten auch direkt auf das"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:450
+msgid "Default Subscribe Form"
+msgstr "Standard Abo-Formular"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:453
+msgid "Return to Subscription Forms"
+msgstr "Zurück zum Anmeldeformular"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:456
+#: bmail_theme_lang.php:480
+msgid "Mini Subscription Form"
+msgstr "Mini-Abo-Formular verweisen."
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:459
+#: bmail_theme_lang.php:471
+#: bmail_theme_lang.php:483
+#: bmail_theme_lang.php:489
+msgid "Preview"
+msgstr "Vorschau"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:462
+#: bmail_theme_lang.php:474
+msgid "URL"
+msgstr "URL"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:465
+msgid "This prints a form which prompts for a user's email address. If the inputted email exists as a registered subscriber, it redirects to the subscriber update page. If not, it redirects to the the default subscription form."
+msgstr "Dieser Code gibt ein Formular aus, in dem der Nutzer seine E-Mail-Adresse angeben kann.Wenn es sich um die E-Mail eines Abonennten handelt, verweist das Programm ihn auf die Abonnenten-Seite. Wenn es sich um eine neue Adresse handelt, verweist das Programm auf das Standard-Abo-Formular."
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:468
+msgid "Full Subscription Form"
+msgstr "Vollständiges Abo-Formular"
+
+#. bMail/themes/default/admin/form_embed.tpl
+#: bmail_theme_lang.php:477
+msgid "This prints the entire subscription form."
+msgstr "Dieser Code gibt das komplette Abo-Formular aus."
+
+#. bMail/themes/default/admin/form_embed.tpl
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:486
+#: bmail_theme_lang.php:609
+msgid "Subscription Form"
+msgstr "Abo-Formular"
+
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:492
+msgid "Subscribers Page"
+msgstr "Abonnenten-Seite"
+
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:498
+msgid "subscribers. See an overview of your current and pending subscribers. You can add, delete, and edit subscribers from here."
+msgstr "Abonnenten. Überblick aller freugeschalteten und noch zu bearbeitenden Abonnenten. Hier können Sie Abonnenten hinzufügen, löschen und bearbeiten."
+
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:504
+msgid "Subscribers.  You can import large amounts of subscribers using files stored on your computer."
+msgstr "Abonnenten. Wenn Sie eine größere Zahl an bestehenden Abonnenten haben, können Sie diese über eine Datei importieren."
+
+#. bMail/themes/default/admin/admin_subscribers.tpl
+#: bmail_theme_lang.php:510
+msgid "Manage \"mailing groups\" from this area. Mailing groups allow you to mail subsets of your subscribers, rather than just the entire list."
+msgstr "Verwalten Sie  \"mailing groups\" in diesem Bereich. Mit Hilfe von Mailing-Gruppen können Sie nur einem bestimmten Nutzerkreis eine Mail schicken anstatt der ganzen Liste."
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:513
+msgid "Subscription Forms"
+msgstr "Abo-Formulare"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:516
+msgid "Default Subscription Form"
+msgstr "Standard Abo-Formular"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:519
+msgid "Preview the default subscription form. Its look and feel can be adjusted through the theme template ([theme]/user/subscribe.tpl)."
+msgstr "Vorschau des Standard Abo-Formulars. Die Optik kann mit Hilfe des folgenden Templates  ([theme]/user/subscribe.tpl) angepaßt werden."
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:522
+msgid "Embedded Subscription From"
+msgstr "Eingebettetes Abo-Formular"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:525
+msgid "Preview subscription forms that you can embed into an area of an existing webpage."
+msgstr "Vorschau der eingebetteten Abo-Formulare. Diese Formulare lassen sich nahtlos in eine bestehende Web-Site integrieren."
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:528
+msgid "HTML Subscription Form"
+msgstr "HTML Abo-Formular"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:531
+msgid "Generate a plain HTML subscription form that you can customize to fit your site.."
+msgstr "Erstelle ein HTML-Abo-Formular. Dieses Formular können Sie beliebig an Ihre Bedürfnisse anpassen."
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:534
+msgid "Important URLs"
+msgstr "Wichtige URLs"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:537
+msgid "Default Form"
+msgstr "Standardformular"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:540
+msgid "Embedded Form"
+msgstr "Eingebetettes Formular"
+
+#. bMail/themes/default/admin/form_setup.tpl
+#: bmail_theme_lang.php:543
+msgid "Embedded Mini Form"
+msgstr "Eigebettetes Mini-Formular"
+
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:546
+msgid "Mailings Page"
+msgstr "Mailings-Seite"
+
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:549
+msgid "Status"
+msgstr "Status"
+
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:552
+msgid "A mailing is currently taking place. You can not create a mailing until this one completes. Visit this page to check on the status of this mailing."
+msgstr "Zur Zeit wird gerade ein Mailing verschickt. Solange dieses Mailing nicht abgeschlossen ist, können Sie kein weiteres Mailing anlegen. Bitte besuchten Sie diese Seite, um sich über den Fortgang des Versands zu informieren."
+
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:558
+msgid "Create and send a mailing."
+msgstr "Mailing anlegen und verschicken"
+
+#. bMail/themes/default/admin/admin_mailings.tpl
+#: bmail_theme_lang.php:564
+msgid "View mailings that have already been sent."
+msgstr "Bereits verschickte Mailings ansehen"
+
+#. bMail/themes/default/admin/confirm.tpl
+#: bmail_theme_lang.php:570
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#. bMail/themes/default/admin/confirm.tpl
+#: bmail_theme_lang.php:573
+msgid "Confirm your action."
+msgstr "Wollen Sie das wirklich tun?"
+
+#. bMail/themes/default/admin/confirm.tpl
+#: bmail_theme_lang.php:576
+msgid "Yes"
+msgstr "Ja"
+
+#. bMail/themes/default/admin/confirm.tpl
+#: bmail_theme_lang.php:579
+msgid "I confirm."
+msgstr "Ich will"
+
+#. bMail/themes/default/admin/confirm.tpl
+#: bmail_theme_lang.php:582
+msgid "No"
+msgstr "Nein"
+
+#. bMail/themes/default/admin/confirm.tpl
+#: bmail_theme_lang.php:585
+msgid "Please Return."
+msgstr "Bitte gehen Sie zurück."
+
+#. bMail/themes/default/admin/inc.header.tpl
+#: bmail_theme_lang.php:588
+msgid "Logout"
+msgstr "Abmelden"
+
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:594
+msgid "Setup Page"
+msgstr "Einrichtungs-Seite"
+
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:600
+msgid "bMail. Set your mailing list name, its default behavior, and the administrator's information."
+msgstr "bMail. Legen Sie den Namen Ihrer Mailingliste, die Standardeinstellungen und die administrativen Daten fest."
+
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:606
+msgid "Choose the information you'd like to collect from your subscribers."
+msgstr "Welche Daten möchten Sie von Ihren Abonnenten erheben?"
+
+#. bMail/themes/default/admin/admin_setup.tpl
+#: bmail_theme_lang.php:612
+msgid "Preview and Generate the subscription form for your website."
+msgstr "Vorschau und Generieren des Abo-Formulars "
+
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:621
+msgid "bMail Upgrader"
+msgstr "bMail Upgrader"
+
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:624
+msgid "Online Upgrade Script"
+msgstr "Online Aktualisierungs-Script"
+
+#. bMail/themes/default/upgrade.tpl
+#: bmail_theme_lang.php:627
+msgid "Welcome to the bMail online upgrade process. This script will automatically upgrade your old version of bMail."
+msgstr "Willkommen beim bMail Online-Aktualisierungsprozeß. Dieses Skript aktualisiert Ihre alte bMail-Version automatisch."
+
+#. bMail/themes/default/subscribe/form.subscribe.tpl
+#. bMail/themes/default/subscribe/form.update.tpl
+#: bmail_theme_lang.php:642
+#: bmail_theme_lang.php:663
+msgid "Your Information"
+msgstr "Ihre Daten"
+
+#. bMail/themes/default/subscribe/form.subscribe.tpl
+#. bMail/themes/default/subscribe/form.update.tpl
+#: bmail_theme_lang.php:648
+#: bmail_theme_lang.php:672
+msgid "Unsupported Demographic Type."
+msgstr "Dieser Feld-Typ wird nicht unterstützt"
+
+#. bMail/themes/default/subscribe/form.subscribe.tpl
+#. bMail/themes/default/subscribe/form.update.tpl
+#: bmail_theme_lang.php:651
+#: bmail_theme_lang.php:675
+msgid "Fields in %1bold%2 are required"
+msgstr "%1Fett%2 gesetzte Felder sind Pflichtfelder"
+
+#. bMail/themes/default/subscribe/subscribe.tpl
+#: bmail_theme_lang.php:657
+#: bmail_theme_lang.php:660
+msgid "Subscription"
+msgstr "Abonnement"
+
+#. bMail/themes/default/subscribe/form.update.tpl
+#: bmail_theme_lang.php:669
+msgid "Verify Email:"
+msgstr "E-Mail-Adresse erneut angeben:"
+
+#: bMail/inc/db_procedures.php:74
+#, php-format
+msgid "You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->"
+msgstr "Sie möchten sich bei %s anmelden. Aus Sicherheitsgründen müssen wir die E-Mail-Adresse auf Gültigkeit überprüfen, bevor wir Sie als Abonnent aufnehmen können. Bitte klicken Sie auf den untenstehenden Link, um aufgenommen zu werden -> "
+
+#: bMail/inc/db_procedures.php:74
+#: bMail/inc/db_procedures.php:81
+#: bMail/inc/db_procedures.php:88
+#: bMail/inc/db_procedures.php:95
+msgid "If you have received this message in error, please ignore it."
+msgstr "Wenn Sie diese Mail fälschlicherweise erhalten haben, möchten wir Sie bitten, die Mail einfach zu löschen."
+
+#: bMail/inc/db_procedures.php:75
+msgid "Subscription request"
+msgstr "Abo-Wunsch"
+
+#: bMail/inc/db_procedures.php:76
+msgid "Welcome to our mailing list. Enjoy your stay."
+msgstr "Willkommen bei unserer Mailingliste. Wir hoffen Sie sind zufrieden mit Ihrem Abo."
+
+#: bMail/inc/db_procedures.php:81
+#, php-format
+msgid "You have requested to unsubscribe from %s."
+msgstr "Sie möchten sich von %s abmelden."
+
+#: bMail/inc/db_procedures.php:81
+#: bMail/inc/db_procedures.php:88
+#: bMail/inc/db_procedures.php:95
+msgid "Before processing this request, you must validate your email by clicking the link below ->"
+msgstr "Befor wir diesem Wunsch nachkommen können, müssen wir Ihre E-Mail-Adresse auf Gültigkeit prüfen. Bitte klicken Sie auf den untenstehenden Link ->"
+
+#: bMail/inc/db_procedures.php:82
+msgid "Unsubscription request"
+msgstr "Abmeldewunsch"
+
+#: bMail/inc/db_procedures.php:83
+msgid "You have successfully unsubscribed. Enjoy your travels."
+msgstr "Ihe Abonnement ist jetzt beendet. Wir wünschen Ihnen alles Gute."
+
+#: bMail/inc/db_procedures.php:88
+#: bMail/inc/db_procedures.php:95
+#, php-format
+msgid "You have requested to change your password for %s."
+msgstr "Sie wollten Ihr Paßwort für %s ändern."
+
+#: bMail/inc/db_procedures.php:89
+msgid "Change Password request"
+msgstr "Wunsch das Paßwort zu ändern"
+
+#: bMail/inc/db_procedures.php:90
+msgid "Your password has been reset. Enjoy!"
+msgstr "Ihr Paßwort wurde zurückgesetzt."
+
+#: bMail/inc/db_procedures.php:96
+msgid "Update Records request"
+msgstr "Wunsch die Abonnentendaten zu aktualisieren"
+
+#: bMail/inc/db_procedures.php:97
+msgid "Your records have been updated. Enjoy!"
+msgstr "Ihre Daten wurden aktualisiert."
+
+#: bMail/inc/class.template.php:34
+msgid "Template file not found in default theme."
+msgstr "Template-Datei im Standard-Layout nicht gefunden."
+
+#: bMail/inc/lib.validate_subscriber.php:30
+msgid "Invalid Email Address"
+msgstr "Ungültige E-Mail-Adresse"
+
+#: bMail/inc/lib.validate_subscriber.php:34
+msgid "Emails must match."
+msgstr "Die E-Mail-Adressen müssen übereinstimmen."
+
+#: bMail/inc/lib.validate_subscriber.php:56
+msgid "was a required field."
+msgstr "war ein Pflichtfeld."
+
+#: bMail/inc/lib.common.php:71
+msgid "Redirecting, please wait..."
+msgstr "Weiterleitung, bitte warten"
+
+#: bMail/inc/lib.common.php:204
+#: bMail/inc/lib.common.php:211
+msgid "bMail Website"
+msgstr "bMail Website"
+
+#: bMail/inc/lib.mailings.php:59
+msgid "Unable to send confirmation mailing. Contact Administrator."
+msgstr "Es war nicht möglich die Bestätigungs-E-Mail zu verschicken. Bitte kontaktieren Sie den Administrator."
+
+#: bMail/user/process.php:79
+msgid "Subscription request received."
+msgstr "Abo-Anfrage erhalten."
+
+#: bMail/user/process.php:79
+#: bMail/user/user_update.php:70
+#: bMail/user/user_update.php:81
+msgid "A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions."
+msgstr "Eine Bestätigungs-E-Mail wurde verschickt. Diese sollte in den nächsten Minuten bei Ihnen ankommen. Bitte folgen Sie den Anweisungen in dieser Mail."
+
+#: bMail/user/process.php:81
+msgid "Problem sending mail! Please contact the administrator."
+msgstr "Es gab ein Problem beim Versenden der Mail. Bitte kontaktieren Sie den Administrator."
+
+#: bMail/user/process.php:88
+msgid "Problem adding subscriber. Please contact the administrator."
+msgstr "Es gab ein Problem beim Hinzufügen des Abonnenten. Bitte kontaktieren Sie den Administrator"
+
+#: bMail/user/login.php:31
+msgid "subscriber logon"
+msgstr "Abonnenten-Login"
+
+#: bMail/user/login.php:42
+msgid "Invalid email address"
+msgstr "Ungültige E-Mail-Adresse"
+
+#: bMail/user/login.php:63
+msgid "That email address was not found in our system. Please try again."
+msgstr "Leider ist diese E-Mail-Adresse nicht in unserer Datenbank gespeichert. Bitte versuchen Sie es mit einer anderen Adresse."
+
+#: bMail/user/user_pending.php:59
+#, php-format
+msgid "A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!"
+msgstr "Eine Bestätigungs-E-Mail wurde an %s verschickt. Diese sollte in den nächsten Minuten bei Ihnen ankommen. Bitte folgen Sie den Anweisungen in dieser Mail um sich endgültig anzumelden."
+
+#: bMail/user/user_pending.php:63
+msgid "Your pending request has been cancelled."
+msgstr "Ihre vorbehaltliche Anmeldung wurde annulliert."
+
+#: bMail/user/user_pending.php:65
+msgid "Error cancelling your request. Contact the administrator."
+msgstr "Es gab Probleme bei Abbrechen Ihrer Anfrage. Bitte kontaktieren Sie den Administrator"
+
+#: bMail/user/user_pending.php:79
+msgid "You have pending changes. Please respond to your confirmation email"
+msgstr "Ihre Änderungswünsche sind noch nicht endgültig durchgeführt. Bitte antworten Sie auf die Bestätigungs-E-Mail."
+
+#: bMail/user/user_pending.php:83
+#, php-format
+msgid "Please Try Again! %s login %s"
+msgstr "Bitte versuchen Sie es erneut! %s Login %s"
+
+#: bMail/user/confirm.php:35
+msgid "No code given."
+msgstr "Kein Code angegeben"
+
+#: bMail/user/confirm.php:42
+msgid "Invalid code! Make sure you copied it correctly from the email."
+msgstr "Dieser Code ist ungültig. Bitte stellen Sie sicher, daß beim Kopieren aus der E-Mail nichts verloren gegangen ist."
+
+#: bMail/user/confirm.php:63
+msgid "Subscription Successful. Redirecting..."
+msgstr "Abonnement erfolgreich abgechlossen. Weiterleitung, bitte warten..."
+
+#: bMail/user/confirm.php:86
+#, php-format
+msgid "You may now login with username: %1$s and password: %2$s "
+msgstr "Sie können sich jetzt mit dem Nutzernamen: %1$s und dem Paßwort: %2$s einloggen."
+
+#: bMail/user/confirm.php:89
+msgid "Could not reset password. Contact Administrator."
+msgstr "Das Paßwort konnte nicht zurückgesetzt werden. Bitte kontaktieren Sie den Administrator."
+
+#: bMail/user/confirm.php:91
+msgid "Can only reset the administrator password"
+msgstr "Nur das Administrator-Paßwort kann zurückgesetzt werden."
+
+#: bMail/user/confirm.php:94
+msgid "Unknown type. Contact Administrator."
+msgstr "Unbekannter Typ. Bitte kontaktieren Sie den Administrator"
+
+#: bMail/user/user_update.php:66
+#: bMail/user/user_update.php:77
+msgid "The system could not process your request. Perhaps you already have requested a change?"
+msgstr "Das System konnte Ihrem Änderungswunsch leider nicht nachkommen. Kann es sein, daß Sie diese Änderung bereits beantragt haben?"
+
+#: bMail/user/user_update.php:67
+#: bMail/user/user_update.php:78
+#, php-format
+msgid "%s Click Here %s to try again."
+msgstr "%s Klicken Sie hier %s, um es erneut zu versuchen."
+
+#: bMail/user/user_update.php:70
+msgid "Update request received."
+msgstr "Aktualiserungsanfrage erhalten."
+
+#: bMail/user/user_update.php:81
+msgid "Unsubscribe request received."
+msgstr "Abmeldewunsch erhalten"
+
+#: bMail/admin/setup/demographics_edit.php:54
+msgid "Remove Option"
+msgstr "Gewählte Option löschen"
+
+#: bMail/admin/setup/demographics_edit.php:57
+#, php-format
+msgid "Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records."
+msgstr "Das Löschen der Option %1$s betrifft %2$s Abonnenten, die diese Auswahl getroffen haben. Diese Abonnenten werden markiert und davon in Kewnntnis gesetzt, daß sie ihre Daten ändern müssen."
+
+#: bMail/admin/setup/demographics_edit.php:79
+#: bMail/admin/setup/setup_messages.php:70
+#: bMail/install/install.php:60
+msgid "Cannot be empty."
+msgstr "Dieses Feld darf nicht leer sein."
+
+#: bMail/admin/setup/demographics_edit.php:108
+#: bMail/admin/setup/setup_messages.php:140
+msgid "Settings updated."
+msgstr "Einstellungen aktualisiert"
+
+#: bMail/admin/setup/demographics_edit.php:112
+#: bMail/admin/setup/setup_messages.php:144
+#: bMail/install/install.php:123
+msgid "Please review and correct errors with your submission."
+msgstr "Bitte überprüfen Sie Ihre Anmeldung und merzen Sie die Fehler aus."
+
+#: bMail/admin/setup/demographics_edit.php:118
+msgid "This is a <b>TEXT</b> based demographic. Subscribers will be allowed to type in any value in for this demographic. Text demographics are useful for collecting names, cities, and such."
+msgstr "Das ist ein <b>TEXT-Feld</b>. Abonnenten können freien Text in dieses Feld eintragen. Textfelder sind gut geeignet um Eigennamen oder geografische Daten wie Städtenamen abzufragen."
+
+#: bMail/admin/setup/demographics_edit.php:121
+msgid "This is a <b>CHECKBOX</b> based demographic. Subscribers will be allowed to toggle this demographic ON and OFF. Checkboxes are useful for asking a user if they'd like to be included or excluded in something."
+msgstr "Das ist eine <b>CHECKBOX</b>. Nutzer können dieses Feld markieren, bzw. leer lassen. Checkboxen sind nützlich, wenn es darum geht abzufragen, ob ein Abonnent an einer Sache teilnehmen/nicht teilnehmen möchte."
+
+#: bMail/admin/setup/demographics_edit.php:124
+msgid "This is a <b>NUMBER</b> based demographic -- <b>UNSUPPORTED</b>. Support for this type will be added later."
+msgstr "Das ist ein <b>ZAHLENFELD</b> -- <b>NICHT UNTERSTÜTZT</b>. In einer späteren Version wird bMail auch Zahlenfelder unterstützen."
+
+#: bMail/admin/setup/demographics_edit.php:127
+msgid "This is a <b>DATE</b> based demographic -- <b>UNSUPPORTED</b>. Support for this type will be added later."
+msgstr "Das ist ein <b>DATUMSFELD</b>. -- <b>NICHT UNTERSTÜTZT</b>. In einer späteren Version wird bMail auch Datumsfelder unterstützen."
+
+#: bMail/admin/setup/demographics_edit.php:130
+msgid "This is a <b>MULTIPLE CHOICE</b> based demographic. Subscribers will be able to select a value from the options you provide below. Multiple choice demographics have reliable values, and are useful for collecting subsscriber Country, income range, and such."
+msgstr "Dasist eine <b>DROP DOWN LISTE</b>. Abonnenten haben die Möglichkeit eine der von Ihnen angebotenen Möglichkeiten auszuwählen. Der Vorteil: Drop Down Listen liefern homogene Werte und sind deshalb besonders geeignet um Ländernamen, Haushaltseinkommen, etc. abzufragen."
+
+#: bMail/admin/setup/setup_messages.php:76
+msgid "You must include \"[[URL]]\" for the confirm link"
+msgstr "Sie müssen die folgende URL für den Bestätigungs-Link integrieren: \"[[URL]]\" "
+
+#: bMail/admin/setup/setup_demographics.php:32
+msgid "Demographics are pieces of information you choose to collect from subscribers (other than email address). Any number of demographics can be assigned to the subscription form.  Each demographic is categorized as either <em>TEXT</em>, <em>NUMBER</em>, <em>MULTIPLE CHOICE</em>, <em>CHECK BOX</em>, or <em>DATE</em> depending on kind of information it collects."
+msgstr "Mit Hilfe von frei definierbaren Zusatzdfeldern können Sie zusätzlich zur E-Mail-Adresse weitere Daten von den Abonnenten erheben. Jedes Abo-Formular kann dabei eine beliebige Zahl an Feldern enthalten.Ihnen stehen dabei die folgenden Feldtypen zur Verfügung: <em>TEXT</em>, <em>ZAHL</em>, <em>DROP DOWN LISTE</em>, <em>CHECKBOX</em>, oder <em>DATUM</em>."
+
+#: bMail/admin/setup/setup_demographics.php:48
+#: bMail/admin/setup/setup_demographics.php:66
+msgid "Demographic cannot be deleted."
+msgstr "Zusatzfeld kann nicht gelöscht werden"
+
+#: bMail/admin/setup/setup_demographics.php:56
+msgid "Delete Demographic"
+msgstr "Feld löschen"
+
+#: bMail/admin/setup/setup_demographics.php:59
+#, php-format
+msgid "Currently, %1$s subscribers have a non empty value for this demographic. All Subscriber data relating to this demographic will be lost. Are you sure you want to remove demographic %2$s?"
+msgstr "Zur Zeit nutzen die Abonnenten von %1$s dieses Zusatzfeld. Alle Abonnenten-Daten, die mit diesem Zusatzfeld zusammenhängen werden unwiederbringlich gelöscht. Wollen Sie das Zusatzfeld %2$s wirklich löschen?"
+
+#: bMail/admin/setup/ajax_demoOrder.php:30
+#: bMail/admin/setup/ajax_demoOrder.php:34
+msgid "Error updating order"
+msgstr "Die Feldreihenfolge konnte nicht geändert werden."
+
+#: bMail/admin/mailings/mailings_send4.php:34
+#, php-format
+msgid "Background script with serial %d spawned"
+msgstr "Im Hintergrund wurde ein neuer Prozeß des Scripts mit der Nummer %d gestartet."
+
+#: bMail/admin/admin.php:31
+msgid "bMail Aardvark"
+msgstr "bMail Aardvark"
+
+#: bMail/admin/admin.php:32
+msgid "Powerful mailing list software for"
+msgstr "Professionelle Mailing Listen Software für"
+
+#: bMail/bootstrap.php:56
+msgid "Work Directory not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file."
+msgstr "Dieses Arbeitsverzeichnis ist nicht definiert. Bitte legen Sie es an und stellen Sie sicher, daß der Web-Server Schreibrechte auf dieses Verzeichnis hat. Tragen Sie das neue Verzeichnis in die Datei config.php ein."
+
+#: bMail/bootstrap.php:58
+msgid "Webserver cannot write to Work Directory. Make sure it has the proper permissions."
+msgstr "Der Web-Server hat keine Schreibrechte auf das Arbeitsverzeichnis. Bitte stellen Sie sicher, daß diese Rechte korrekt gesetzt werden."
+
+#: bMail/bootstrap.php:61
+#: bMail/bootstrap.php:63
+msgid "Could not create directory"
+msgstr "Konnte das Verzeichnis nicht anlegen."
+
+#: bMail/bootstrap.php:134
+#, php-format
+msgid "Error loading configuration. Have you %s installed %s ?"
+msgstr "Die Konfiguration konnte nicht geladen werden Haben Sie %s installiert %s ?"
+
+#: bMail/bootstrap.php:144
+#, php-format
+msgid "Version Mismatch. Have you %s upgraded %s ?"
+msgstr "Versionsprobleme!  Haben Sie die %s aktuelle Version %s ?"
+
+#: bMail/bootstrap.php:153
+#, php-format
+msgid "Denied access. You must %s logon %s to access this page..."
+msgstr "Zugriff verweigert. Sie müssen sich %s einloggen %s, um diese Zeite aufzurufen."
+
+#: bMail/install/install.php:38
+msgid "bMail appears to already by installed. If you would like to clear all data and re-install bMail, delete your database."
+msgstr "bMail ist bereits installiert. Wenn Sie sämtliche Daten löschen möchten und bMail komplett neu installieren möchten, müssen Sie die Datenbank löschen."
+
+#: bMail/install/install.php:61
+msgid "Passwords must match."
+msgstr "Die Paßwörter müssen übereinstimmen."
+
+#: bMail/install/install.php:62
+msgid "Must be a valid URL"
+msgstr "Die URL muß gültig sein"
+
+#: bMail/install/install.php:63
+msgid "Must be a valid email"
+msgstr "Die E-Mail-Adresse muß gültig sein"
+
+#: bMail/install/install.php:101
+msgid "Installation Complete! You may now login and setup bMail."
+msgstr "Die Installation ist erfolgreich abgelaufen. Bitte loggen Sie sich jetzt ein und passen Sie bMail an Ihre Wünsche an."
+
+#: bMail/install/install.php:102
+msgid "Login Username: "
+msgstr "Login Benutzername"
+
+#: bMail/install/install.php:103
+msgid "Login Password: "
+msgstr "Login-Paßwort"
+
+#: bMail/install/upgrade.php:39
+#, php-format
+msgid "bMail appears to be up to date. If you want to force an upgrade, %s click here %s"
+msgstr "Die aktuelle bMail-Version ist installiert. Wenn Sie eine Aktualisierung erzwingen möchten,  %s klicken Sie hier. %s"
+
+#: bMail/install/upgrade.php:50
+#, php-format
+msgid "bMail does not appear to be installed! Please %s INSTALL %s before attempting an upgrade."
+msgstr "bMail ist nicht installiert. Bitte %s INSTALLIEREN %s Sie das Programm, bevor Sie versuchen es zu aktualisieren."
+
+#: bMail/install/upgrade.php:52
+#, php-format
+msgid "To upgrade bMail, %s click here %s"
+msgstr "Um bMail zu aktualisieren, %s klicken Sie hier %s"
+
+#: bMail/install/upgrade.php:61
+msgid "Upgrade Complete!"
+msgstr "Aktualisierung erfolgreich abgeschlossen!"
+
+#: bMail/install/upgrade.php:72
+msgid "Upgrade Failed!"
+msgstr "Aktualisierung fehlgeschlagen!"
+
+#: bMail/install/helper.install.php:30
+msgid "Error installing. Could not read sql.schema.php"
+msgstr "Installationsfehler. Die Datei sql.schema.php konnte nicht gelesen werden."
+
+#: bMail/install/helper.install.php:43
+msgid "Database Error: "
+msgstr "Datenbankfehler:"
+
+#: bMail/install/helper.upgrade.php:56
+msgid "Bumping bMail version to: "
+msgstr "Aktualisiere bMail auf die Version: "
+
+#: bMail/install/helper.upgrade.php:104
+#, php-format
+msgid "Failed to properly serialize update %s : %s"
+msgstr "Das Update %s : %s konnte nicht erfolgreich fertiggestellt werden"
+
+#: bMail/install/helper.upgrade.php:107
+msgid "success!"
+msgstr "Erfolg:"
+
+#: bMail/install/helper.upgrade.php:110
+msgid "FAILED!"
+msgstr "VERSAGT!"
+

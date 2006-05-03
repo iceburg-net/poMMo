@@ -1,0 +1,270 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2006-04-23 22:42-0500\n"
+"Last-Translator: Brice Burgess <bhb@iceburg.net>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:3
+msgid "Subscriber Login"
+msgstr "Connexion abonn&eacute;"
+
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:6
+msgid "In order to check your subscribtion status, update your information, or unsubscribe, you must enter your email address in the field below."
+msgstr "Pour pouvoir v&eacute;rifier l'&eacute;tat de votre abonnement, mettre &agrave; jour votre profil, ou vous d&eacute;sabonner, vous devez saisir votre adresse email dans le champ ci-dessous"
+
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:9
+#: bmail_theme_lang.php:15
+msgid "Login"
+msgstr "Identifiant"
+
+#. bMail/themes/default/user/login.tpl
+#: bmail_theme_lang.php:12
+msgid "Your Email:"
+msgstr "Votre email :"
+
+#. bMail/themes/default/user/inc.footer.tpl
+#. bMail/themes/default/admin/inc.footer.tpl
+#: bmail_theme_lang.php:18
+#: bmail_theme_lang.php:168
+msgid "Page fueled by %1 mailing management software."
+msgstr "Page activ&eacute;e par le logiciel de mailing %1"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:21
+msgid "Message Settings"
+msgstr "Configuration Message"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:24
+#, fuzzy
+msgid "You can configure the messages bMail sends when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task."
+msgstr "Vous pouvez configurer les messages envoy&eacute;s par %1 quand les utilisateurs s'abonnent, se d&eacute;sabonnent, ou mettent &agrave; jour leurs profils. Vous pouvez aussi configurer les messages affich&eacute;s quand l'utilisateur ach&egrave;ve cette t&acirc;che avec succ&egrave;s."
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:27
+msgid "Return to configuration page"
+msgstr "Retour &agrave; la page de configuration"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:30
+msgid "Messages"
+msgstr "Messages"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:33
+msgid "Subscribe"
+msgstr "Abonnement"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:36
+#: bmail_theme_lang.php:57
+#: bmail_theme_lang.php:78
+#: bmail_theme_lang.php:99
+msgid "Subject:"
+msgstr "Objet :"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:39
+#: bmail_theme_lang.php:60
+#: bmail_theme_lang.php:81
+#: bmail_theme_lang.php:102
+msgid "(Subject of Sent Email)"
+msgstr "(Objet du Message Envoy&eacute;)"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:42
+#: bmail_theme_lang.php:63
+#: bmail_theme_lang.php:84
+#: bmail_theme_lang.php:105
+msgid "Message:"
+msgstr "Message :"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:45
+#: bmail_theme_lang.php:66
+#: bmail_theme_lang.php:87
+#: bmail_theme_lang.php:108
+msgid "(Use [[url]] for the confirm link at least once)"
+msgstr "(Utilisez au moins une fois [[url]] pour le lien de confirmation)"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:48
+#: bmail_theme_lang.php:69
+#: bmail_theme_lang.php:90
+#: bmail_theme_lang.php:111
+msgid "Success:"
+msgstr "Succ&egrave;s :"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:51
+#: bmail_theme_lang.php:72
+#: bmail_theme_lang.php:93
+#: bmail_theme_lang.php:114
+msgid "(Message displayed upon success)"
+msgstr "(Message affich&eacute; en cas de succ&egrave;s)"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:54
+msgid "Unsubscribe"
+msgstr "D&eacute;sabonnement"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:75
+msgid "Update Records"
+msgstr "Mise &agrave; Jour du Profil"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:96
+msgid "Change Password"
+msgstr "Changement de Mot de Passe"
+
+#. bMail/themes/default/admin/setup_messages.tpl
+#: bmail_theme_lang.php:117
+msgid "Update"
+msgstr "Mise &agrave; Jour"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:120
+#: bmail_theme_lang.php:132
+#: bmail_theme_lang.php:141
+msgid "bMail Setup"
+msgstr "Configuration de %1"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:123
+msgid "Configure"
+msgstr "Configuration"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:126
+msgid "Demographics"
+msgstr "Segmentation"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:129
+msgid "Generate"
+msgstr "G&eacute;n&eacute;ration"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:135
+msgid "Send"
+msgstr "Envoi"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:138
+msgid "History"
+msgstr "Historique"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:144
+msgid "Manage"
+msgstr "Gestion"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:147
+msgid "Import"
+msgstr "Import"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:150
+msgid "Groups"
+msgstr "Groupes"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:153
+msgid "Mailings"
+msgstr "Mailings"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:156
+msgid "Subscribers"
+msgstr "Abonn&eacute;s"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:159
+msgid "Setup"
+msgstr "Configuration Initiale"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:162
+msgid "Demonstration mode is ON."
+msgstr "Mode d&eacute;monstration ACTIF"
+
+#. bMail/themes/default/admin/inc.sidebar.tpl
+#: bmail_theme_lang.php:165
+msgid "Demonstration mode is OFF."
+msgstr "Mode d&eacute;monstration INACTIF"
+
+#. bMail/themes/default/admin/inc.header.tpl
+#: bmail_theme_lang.php:171
+msgid "Logout"
+msgstr "Sortir"
+
+#. bMail/themes/default/admin/inc.header.tpl
+#: bmail_theme_lang.php:174
+msgid "Admin Page"
+msgstr "Page d'Administration"
+
+#: bMail/inc/class.template.php:34
+msgid "Template file not found in default theme."
+msgstr "Fichier mod&egrave;le introuvable dans le th&egrave;me par d&eacute;faut"
+
+#: bMail/inc/lib.common.php:47
+msgid "Redirecting, please wait..."
+msgstr "Redirection en cours, veuillez patienter ..."
+
+#: bMail/user/login.php:30
+#: bMail/user/user_pending.php:31
+msgid "subscriber logon"
+msgstr "connexion abonn&eacute;"
+
+#: bMail/user/login.php:40
+msgid "Invalid email address"
+msgstr "Adresse email invalide"
+
+#: bMail/user/login.php:61
+msgid "That email address was not found in our system. Please try again."
+msgstr "Cette adresse email est inconnue dans notre syst&egrave;me. Veuillez r&eacute;essayer."
+
+#: bMail/admin/setup/setup_messages.php:54
+msgid "Cannot be empty."
+msgstr "Champ obligatoire."
+
+#: bMail/admin/setup/setup_messages.php:60
+msgid "You must include \"[[URL]]\" for the confirm link"
+msgstr "Vous devez inclure \"[[URL]]\" pour le lien de confirmation"
+
+#: bMail/admin/setup/setup_messages.php:71
+msgid "Please review and correct errors with your submission."
+msgstr "Veuillez v&eacute;rifier votre soumission et en corriger les erreurs."
+
+#: bMail/bootstrap.php:47
+msgid "Work Directory not defined! Have you installed the config.php file? See the included config.sample.php for an example."
+msgstr "R&eacute;pertoire de travail ind&eacute;fini ! Avez-vous install&eacute; le fichier config.php ? Reportez vous au fichier inclus config.sample.php &agrave; titre d'exemple."
+
+#: bMail/bootstrap.php:51
+msgid "Work Directory not found! Please create it, and ensure the webserver is able to write to it. You can change its location in the config.php file."
+msgstr "R&eacute;pertoire de travail introuvable ! Veuillez le cr&eacute;er, et vous assurer que le serveur Web peut y &eacute;crire. Vous pouvez modifier son emplacement dans le ficher config.php."
+
+#: bMail/bootstrap.php:53
+msgid "Webserver is unable to write to Work Directory. Please ensure it has the proper permissions."
+msgstr "Le serveur Web est incapable d'&eacute;crire dans le R&eacute;pertoire de Travail. Veuillez vous assurer qu'il a les permissions ad&eacute;quates."
+
+#: bMail/bootstrap.php:56
+#: bMail/bootstrap.php:58
+msgid "Could not create directory"
+msgstr "Incapable de cr&eacute;er le r&eacute;pertoire"
+
