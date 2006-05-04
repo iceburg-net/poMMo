@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -19,8 +19,8 @@ require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_subscribers.php');
 require_once (bm_baseDir.'/inc/db_demographics.php');
 require_once (bm_baseDir.'/inc/lib.txt.php');
-$bMail = & fireup("secure");
-$dbo = & $bMail->openDB();
+$poMMo = & fireup("secure");
+$dbo = & $poMMo->openDB();
 
 $appendUrl = "limit=".$_REQUEST['limit']."&order=".$_REQUEST['order']."&orderType=".$_REQUEST['orderType']."&group_id=".$_REQUEST['group_id']."&table=".$_REQUEST['table'];
 
@@ -89,7 +89,7 @@ elseif (empty ($_REQUEST['sid']) || empty ($_REQUEST['action'])) {
 	die("Invalid input. Being redirected to <a href=\"subscribers_manage.php?".$appendUrl."\">Subscriber Page</a>");
 }
 
-/** bMail templating system **/
+/** poMMo templating system **/
 // overide 'content' ID to allow for a WIDE page (auto adjusting width...)
 $_head = '
 	<style type="text/css" media="all">
@@ -106,11 +106,11 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = "<a href=\"".bm_baseUrl."/index.php?logout=TRUE\">Logout</a>";
 $_menu[] = "<a href=\"admin_subscribers.php\">Subscribers Page</a>";
-$_menu[] = "<a href=\"".$bMail->_config['site_url']."\">".$bMail->_config['site_name']."</a>";
+$_menu[] = "<a href=\"".$poMMo->_config['site_url']."\">".$poMMo->_config['site_name']."</a>";
 
 // right bar settings -->
 $_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of bMail demonstration mode status
+$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
 
 include (bm_baseDir.'/setup/top.php');
 /** End templating system **/

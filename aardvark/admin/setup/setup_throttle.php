@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -16,8 +16,8 @@ define('_IS_VALID', TRUE);
 
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_procedures.php');
-$bMail = & fireup("secure");
-$dbo = & $bMail->openDB();
+$poMMo = & fireup("secure");
+$dbo = & $poMMo->openDB();
 
 // Read user requested changes	
 if (!empty($_POST['throttle-restore'])) {
@@ -30,7 +30,7 @@ elseif(!empty($_POST['throttle-submit'])) {
 }
 
 
-/** bMail templating system **/
+/** poMMo templating system **/
 
 // header settings -->
 $_head = "\n<link href=\"".bm_baseUrl."/inc/css/bform.css\" rel=\"stylesheet\" type =\"text/css\">\n<script src=\"".bm_baseUrl."/inc/js/bform.js\" type=\"text/javascript\"></script>";
@@ -39,14 +39,14 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = "<a href=\"".bm_baseUrl."/index.php?logout=TRUE\">Logout</a>";
 $_menu[] = "<a href=\"admin_setup.php\">Setup Page</a>";
-$_menu[] = "<a href=\"".$bMail->_config['site_url']."\">".$bMail->_config['site_name']."</a>";
+$_menu[] = "<a href=\"".$poMMo->_config['site_url']."\">".$poMMo->_config['site_name']."</a>";
 
 // right bar settings -->
 $_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of bMail demonstration mode status
+$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
 
 $_extmenu = array ();
-$_extmenu['name'] = "bMail Setup";
+$_extmenu['name'] = "poMMo Setup";
 $_extmenu['links'] = array ();
 $_extmenu['links'][] = "<a href=\"setup_configure.php\">Configure</a>";
 $_extmenu['links'][] = "<a href=\"setup_demographics.php\">Demographics</a>";
@@ -62,7 +62,7 @@ echo "
 <img src=\"".bm_baseUrl."/img/icons/settings.png\" class=\"articleimg\">
 
 <p>
-bMail can be configured to throttle the sending of mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be limited. Additionally, you can control how many mails and kilobytes may be sent to a single domain per a specified time frame.
+poMMo can be configured to throttle the sending of mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be limited. Additionally, you can control how many mails and kilobytes may be sent to a single domain per a specified time frame.
 </p>
 ";
 
@@ -70,7 +70,7 @@ echo '<a href="setup_configure.php"><img src="'.bm_baseUrl.'/img/icons/back.png"
 
 echo '<h2>Throttling &raquo;</h2>';
 
-$config= $bMail->getConfig(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
+$config= $poMMo->getConfig(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
 
 require(bm_baseDir.'/inc/printouts.php');
 printThrottleForm($config);

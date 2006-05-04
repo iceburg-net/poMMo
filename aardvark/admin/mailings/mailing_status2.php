@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -15,22 +15,22 @@ define('_IS_VALID', TRUE);
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_mailing.php');
 
-$bMail = fireup('secure');
-$dbo = & $bMail->openDB();
+$poMMo = fireup('secure');
+$dbo = & $poMMo->openDB();
 
 if (!empty ($_GET['command'])) {
 	switch ($_GET['command']) {
 		case "pause" :
-			dbMailingStamp($dbo, "stop");
+			dpoMMoingStamp($dbo, "stop");
 			break;
 		case "restart" :
-			dbMailingStamp($dbo, "restart");
+			dpoMMoingStamp($dbo, "restart");
 			$sql = 'SELECT securityCode FROM '.$dbo->table['mailing_current'];
   			$code = $dbo->query($sql,0,0);
   			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$code);
 			break;
 		case "kill" :
-			dbMailingEnd($dbo);
+			dpoMMoingEnd($dbo);
 			break;
 		case "clear" :
 			$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET notices=NULL';

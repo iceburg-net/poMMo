@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -20,9 +20,9 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_groups.php');
 require_once (bm_baseDir . '/inc/db_mailing.php');
 
-$bMail = & fireup('secure', 'keep');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure', 'keep');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -39,7 +39,7 @@ if (!mailingQueueEmpty($dbo)) {
 $groups = dbGetGroups($dbo);
 $smarty->assign('groups', $groups);
 
-if ($bMail->_config['demo_mode'] == 'on')
+if ($poMMo->_config['demo_mode'] == 'on')
 	$logger->addMsg(_T('Demonstration Mode is on. No Emails will be sent.'));
 
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
@@ -64,11 +64,11 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$smarty->assign('formError', $formError);
 
 	// populate _POST with info from database (fills in form values...) or historic input if set...
-	$historic = $bMail->get();
+	$historic = $poMMo->get();
 	if (isset ($historic['fromname']))
 		$_POST = $historic;
 	else {
-		$dbvalues = $bMail->getConfig(array (
+		$dbvalues = $poMMo->getConfig(array (
 			'list_fromname',
 			'list_fromemail',
 			'list_frombounce'
@@ -89,8 +89,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		SmartyValidate :: disconnect();
 
-		$bMail->set($_POST);
-		if (!empty ($bMail->_data['body']))
+		$poMMo->set($_POST);
+		if (!empty ($poMMo->_data['body']))
 			bmRedirect('mailings_send3.php');
 		else
 			bmRedirect('mailings_send2.php');

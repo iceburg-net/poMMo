@@ -2,7 +2,7 @@
 /*
  * index.php
  *
- * PROJECT: bMail
+ * PROJECT: poMMo
  * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL
  *

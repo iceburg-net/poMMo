@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -17,25 +17,25 @@
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
-require (bm_baseDir . '/inc/class.bmailer.php');
+require (bm_baseDir . '/inc/class.pommoer.php');
 require (bm_baseDir . '/inc/class.bthrottler.php');
 require (bm_baseDir . '/inc/db_mailing.php');
 
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $bm_sessionName = $serial;
 
-$bMail = & fireup('sessionName');
-$bMail->loadConfig();
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('sessionName');
+$poMMo->loadConfig();
+$dbo = & $poMMo->openDB();
 $dbo->dieOnQuery(FALSE);
 
 
-$logger = & $bMail->logger;
+$logger = & $poMMo->logger;
 $logger->addMsg(sprintf(_T('Background script with serial %d spawned'), $serial), 3);
 
-if (empty ($bMail->_config['list_exchanger'])) {
+if (empty ($poMMo->_config['list_exchanger'])) {
 	// get list exchanger & smtp values. If more than 1 smtp relay exist, enter "multimode"
-	$config = $bMail->getConfig(array (
+	$config = $poMMo->getConfig(array (
 		'list_exchanger',
 		'smtp_1',
 		'smtp_2',
@@ -43,33 +43,33 @@ if (empty ($bMail->_config['list_exchanger'])) {
 		'smtp_4',
 		'throttle_SMTP'
 	));
-	$bMail->_config['list_exchanger'] = $config['list_exchanger'];
-	$bMail->_config['multimode'] = false;
-	$bMail->_config['throttler'] = 'shared';
+	$poMMo->_config['list_exchanger'] = $config['list_exchanger'];
+	$poMMo->_config['multimode'] = false;
+	$poMMo->_config['throttler'] = 'shared';
 
 	if ($config['list_exchanger'] == 'smtp') {
 		if (!empty ($config['smtp_1'])) {
-			$bMail->_config['smtp_1'] = unserialize($config['smtp_1']);
+			$poMMo->_config['smtp_1'] = unserialize($config['smtp_1']);
 			$logger->addMsg('SMTP Relay #1 detected', 1);
 		}
 		if (!empty ($config['smtp_2'])) {
-			$bMail->_config['multimode'] = true;
-			$bMail->_config['smtp_2'] = unserialize($config['smtp_2']);
+			$poMMo->_config['multimode'] = true;
+			$poMMo->_config['smtp_2'] = unserialize($config['smtp_2']);
 			$logger->addMsg('SMTP Relay #2 detected, multimode enabled.', 1);
 		}
 		if (!empty ($config['smtp_3'])) {
-			$bMail->_config['multimode'] = true;
-			$bMail->_config['smtp_3'] = unserialize($config['smtp_3']);
+			$poMMo->_config['multimode'] = true;
+			$poMMo->_config['smtp_3'] = unserialize($config['smtp_3']);
 			$logger->addMsg('SMTP Relay #3 detected, multimode enabled.', 1);
 		}
 		if (!empty ($config['smtp_4'])) {
-			$bMail->_config['multimode'] = true;
-			$bMail->_config['smtp_4'] = unserialize($config['smtp_4']);
+			$poMMo->_config['multimode'] = true;
+			$poMMo->_config['smtp_4'] = unserialize($config['smtp_4']);
 			$logger->addMsg('SMTP Relay #4 detected, multimode enabled.', 1);
 		}
 		if ($config['throttle_SMTP'] == 'individual')
-			$bMail->_config['throttler'] = 'individual';
-		$logger->addMsg('SMTP Throttle control set to: ' . $bMail->_config['throttler'], 1);
+			$poMMo->_config['throttler'] = 'individual';
+		$logger->addMsg('SMTP Throttle control set to: ' . $poMMo->_config['throttler'], 1);
 	}
 }
 
@@ -98,7 +98,7 @@ function bmMKill($reason) {
  *********************************/
 
 // DOS prevention
-if ($bMail->_config['dos_processors'] > 5)
+if ($poMMo->_config['dos_processors'] > 5)
 	die();
 else {
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=config_value+1 WHERE config_name=\'dos_processors\' LIMIT 1';
@@ -132,22 +132,22 @@ elseif ($row['serial'] != $serial) {
  *********************************/
 
 // checks to see if mailing should be halted (or is in halted state...)
-dbMailingPoll($dbo, $serial);
+dpoMMoingPoll($dbo, $serial);
 
 // spawn script per relay if in multimode
-if ($bMail->_config['multimode']) {
+if ($poMMo->_config['multimode']) {
 	if (empty ($_GET['relay_id'])) {
-		if (!empty ($bMail->_config['smtp_1']))
+		if (!empty ($poMMo->_config['smtp_1']))
 			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=1&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		sleep(1); // delay to help prevent "shared" throttlers racing to create queue
-		if (!empty ($bMail->_config['smtp_2']))
+		if (!empty ($poMMo->_config['smtp_2']))
 			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=2&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
-		if (!empty ($bMail->_config['smtp_3']))
+		if (!empty ($poMMo->_config['smtp_3']))
 			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=3&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
-		if (!empty ($bMail->_config['smtp_4']))
+		if (!empty ($poMMo->_config['smtp_4']))
 			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=4&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		bmMKill('Multimode detected. Spawning background scripts for SMTP relays.');
@@ -155,7 +155,7 @@ if ($bMail->_config['multimode']) {
 	$bmMailer = & bmInitMailer($dbo, $_GET['relay_id']);
 	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id']);
 
-	if ($bMail->_config['throttler'] == 'individual')
+	if ($poMMo->_config['throttler'] == 'individual')
 		$bmThrottler = & bmInitThrottler($dbo, $bmQueue, $_GET['relay_id']);
 	else
 		$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
@@ -197,10 +197,10 @@ function updateDB(& $sentMails, & $timer) {
 	global $logger;
 
 	// update mailing status in database and flush sent mails from queue
-	dbMailingUpdate($dbo, $sentMails);
+	dpoMMoingUpdate($dbo, $sentMails);
 
 	// poll mailing	
-	dbMailingPoll($dbo, $serial);
+	dpoMMoingPoll($dbo, $serial);
 
 	// reset variables
 	$sentMails = array ();
@@ -214,7 +214,7 @@ function proccessQueue() {
 	global $logger;
 	global $byteMask;
 	global $sentMails;
-	global $bMail;
+	global $poMMo;
 	global $timer;
 
 	// check if there are mails in throttler queue, return true if throttler's queue is empty
@@ -227,7 +227,7 @@ function proccessQueue() {
 	// if an email was returned, send it.
 	if ($mail) {
 		if (!$bmMailer->bmSendmail($mail[0])) // sending failed, write to log   PHASE OUT getMessages!
-			$logger->addMsg($bMail->getMessages(" "), 3);
+			$logger->addMsg($poMMo->getMessages(" "), 3);
 
 		// If throttling by bytes (bandwith) is enabled, add the size of the message to the throttler
 		if ($byteMask > 1) {
@@ -268,7 +268,7 @@ while (proccessQueue()) {
 
 	// if queue is empty, end mailing and kill script.	
 	if (empty ($bmQueue)) {
-		dbMailingStamp($dbo, "finished");
+		dpoMMoingStamp($dbo, "finished");
 		if ($bmMailer->SMTPKeepAlive == TRUE)
 			$bmMailer->SmtpClose();
 		bmMKill('Mailing finished!');
