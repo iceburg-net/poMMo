@@ -14,12 +14,12 @@ CREATE TABLE :::config::: (
 INSERT INTO :::config::: VALUES ('admin_username', 'admin', 'Username', 'off', 'on');
 INSERT INTO :::config::: VALUES ('admin_password', 'c40d70861d2b0e48a8ff2daa7ca39727', 'Password', 'off', 'on');
 INSERT INTO :::config::: VALUES ('site_name', 'A', 'Website Name', 'on', 'on');
-INSERT INTO :::config::: VALUES ('site_url', 'http://66.111.62.220/bmail', 'Website URL', 'on', 'on');
+INSERT INTO :::config::: VALUES ('site_url', 'http://66.111.62.220/pommo', 'Website URL', 'on', 'on');
 INSERT INTO :::config::: VALUES ('site_success', '', 'Signup Success URL', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_name', 'A', 'List Name', 'on', 'on');
 INSERT INTO :::config::: VALUES ('admin_email', 'nesta@iceburg.net', 'Administrator Email', 'on', 'on');
-INSERT INTO :::config::: VALUES ('list_fromname', 'bMail Administrative Team', 'From Name', 'off', 'on');
-INSERT INTO :::config::: VALUES ('list_fromemail', 'bmail@yourdomain.com', 'From Email', 'off', 'on');
+INSERT INTO :::config::: VALUES ('list_fromname', 'poMMo Administrative Team', 'From Name', 'off', 'on');
+INSERT INTO :::config::: VALUES ('list_fromemail', 'pommo@yourdomain.com', 'From Email', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_frombounce', 'bounces@yourdomain.com', 'Bounces', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_exchanger', 'sendmail', 'List Exchanger', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_confirm', 'on', 'Confirmation Messages', 'off', 'on');
@@ -38,7 +38,7 @@ INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on')
 INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11', 'bMail Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('revision', '19', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS

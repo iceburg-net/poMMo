@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -19,16 +19,16 @@ define('_IS_VALID', TRUE);
 require('../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_subscribers.php');
 
-$bMail = & fireup();
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
-$bMail->loadConfig();
+$poMMo = & fireup();
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
+$poMMo->loadConfig();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-$smarty->assign('title', $bMail->_config['site_name'] . ' - ' . _T('subscriber logon'));
+$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . _T('subscriber logon'));
 
 
 $smarty->prepareForForm();
@@ -49,13 +49,13 @@ else {
 		// __ FORM IS VALID __
 		if (isDupeEmail($dbo, $_POST['Email'], 'pending')) {
 			// __EMAIL IN PENDING TABLE, REDIRECT
-			$bMail->set(array('email' => $_POST['Email']));
+			$poMMo->set(array('email' => $_POST['Email']));
 			SmartyValidate :: disconnect();
 			bmRedirect('user_pending.php');
 }
 		elseif (isDupeEmail($dbo, $_POST['Email'], 'subscribers')) {
 			// __ EMAIL IN SUBSCRIBERS TABLE, REDIRECT
-			$bMail->set(array('saveSubscribeForm' => array('bm_email' => $_POST['Email'])));
+			$poMMo->set(array('saveSubscribeForm' => array('bm_email' => $_POST['Email'])));
 			SmartyValidate :: disconnect();
 			bmRedirect('user_update.php');
 		} else {

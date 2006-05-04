@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -66,7 +66,7 @@ function & dbQueueGet(& $dbo, $id = '1', $limit = 100) {
 	return $retArray;
 }
 
-function dbMailingCreate(& $dbo, & $input) {
+function dpoMMoingCreate(& $dbo, & $input) {
 	// generate security code
 	$code = md5(rand(0, 5000) . time());
 
@@ -98,7 +98,7 @@ function dbMailingCreate(& $dbo, & $input) {
 	return $code;
 }
 
-function dbMailingStamp(& $dbo, $arg) {
+function dpoMMoingStamp(& $dbo, $arg) {
 	switch ($arg) {
 		case 'start' :
 			$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET started=NOW()';
@@ -116,7 +116,7 @@ function dbMailingStamp(& $dbo, $arg) {
 }
 
 // checks the status or if a "command" has been issued for a mailing
-function dbMailingPoll($dbo, $serial = '') {
+function dpoMMoingPoll($dbo, $serial = '') {
 	
 	$sql = 'SELECT command, status, serial FROM ' . $dbo->table['mailing_current'];
 	$dbo->query($sql);
@@ -136,7 +136,7 @@ function dbMailingPoll($dbo, $serial = '') {
 	return true;
 }
 
-function dbMailingUpdate(& $dbo, & $sentMails) {
+function dpoMMoingUpdate(& $dbo, & $sentMails) {
 	global $logger;
 	
 	// update DB
@@ -151,7 +151,7 @@ function dbMailingUpdate(& $dbo, & $sentMails) {
 	return;
 }
 
-function dbMailingEnd(&$dbo) {
+function dpoMMoingEnd(&$dbo) {
  	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM '.$dbo->table['mailing_current'].' LIMIT 1';
  	$dbo->query($sql);
  	
@@ -168,10 +168,10 @@ function mailingQueueEmpty(& $dbo) {
 }
 
 function & bmInitMailer(& $dbo, $relay_id = 1) {
-	if (isset ($_SESSION["bMailer_" . $relay_id]))
-		return $_SESSION["bMailer_" . $relay_id];
+	if (isset ($_SESSION["poMMoer_" . $relay_id]))
+		return $_SESSION["poMMoer_" . $relay_id];
 
-	global $bMail;
+	global $poMMo;
 	global $logger;
 
 	$sql = "SELECT ishtml,fromname,fromemail,frombounce,subject,body,altbody FROM " . $dbo->table['mailing_current'];
@@ -186,26 +186,26 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 			$altbody = db2mail($row['altbody']);
 	}
 
-	// load new bMailer into session
-	$_SESSION["bMailer_" . $relay_id] = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce']);
+	// load new poMMoer into session
+	$_SESSION["poMMoer_" . $relay_id] = new poMMoer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce']);
 
 	// reference it as $Mail
-	$bmMailer = & $_SESSION["bMailer_" . $relay_id];
+	$bmMailer = & $_SESSION["poMMoer_" . $relay_id];
 	
 	$logger->addMsg('bmMailer initialized with relay ID #'.$relay_id,1);
 
 	// prepare the Mail with prepareMail()	-- if it fails, stop the mailing & report errors.
 	if (!$bmMailer->prepareMail(db2mail($row['subject']), db2mail($row['body']), $html, $altbody)) {
 		$logger->addMsg('prepareMail() returned false.',3);
-		$logger->addMsg($bMail->getMessages(" "));
+		$logger->addMsg($poMMo->getMessages(" "));
 		$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET status=\'stopped\', notices=CONCAT_WS(\',\',notices,\''. mysql_real_escape_string(array2csv($logger->getMsg())) .'\')';
 		$dbo->query($sql);
 		bmMKill('prepareMail() returned errors.');
 	}
 
 	// Set the appropriate SMTP relay and keep SMTP connection up
-	if ($bMail->_config['list_exchanger'] == 'smtp') {
-		$bmMailer->setRelay($bMail->_config['smtp_' . $relay_id]);
+	if ($poMMo->_config['list_exchanger'] == 'smtp') {
+		$bmMailer->setRelay($poMMo->_config['smtp_' . $relay_id]);
 		$bmMailer->SMTPKeepAlive = TRUE;
 	}
 	return $bmMailer;
@@ -215,9 +215,9 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 	if (isset ($_SESSION["bThrottle_" . $relay_id]))
 		return $_SESSION["bThrottle_" . $relay_id];
 
-	global $bMail;
+	global $poMMo;
 
-	$config = $bMail->getConfig(array (
+	$config = $poMMo->getConfig(array (
 		'throttle_MPS',
 		'throttle_BPS',
 		'throttle_DP',

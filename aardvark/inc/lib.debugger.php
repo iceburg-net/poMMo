@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -31,14 +31,14 @@ function bmDebug() {
 		echo "\nWorkDir:" . bm_workDir . "<br>\n";
 		echo "\nLang:" . bm_lang . "<br>\n";
 		echo "\nVerbosity:" . bm_verbosity . "<br>\n";
-		echo "\nRevision: " . bmail_revision . "<br>\n";
+		echo "\nRevision: " . pommo_revision . "<br>\n";
 		echo "\nSection: " . bm_section . "<br>\n";
 
 		echo "\n\n<br><br><b>CONFIG DEBUG</b><hr><br>\n\n";
-		global $bMail;
-		if (is_object($bMail)) {
+		global $poMMo;
+		if (is_object($poMMo)) {
 			
-			$config = $bMail->getConfig('all');
+			$config = $poMMo->getConfig('all');
 			if (!empty ($config)) {
 				echo "\n\n<br>CONFIG:<br>\n\n";
 				foreach ($config as $name => $value) {

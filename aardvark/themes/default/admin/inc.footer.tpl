@@ -6,7 +6,7 @@
 
 <div id="footer">
 &nbsp;<br />
- {t escape="no" url='<a href="http://bmail.sourceforge.net/">bMail</a>'}Page fueled by %1 mailing management software.{/t}
+ {t escape="no" url='<a href="http://pommo.sourceforge.net/">poMMo</a>'}Page fueled by %1 mailing management software.{/t}
 </div>
 <!-- end footer -->
 

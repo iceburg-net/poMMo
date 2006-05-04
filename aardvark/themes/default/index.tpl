@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>{t}bMail Installation{/t}</title>
+	<title>{t}poMMo Installation{/t}</title>
 	<link href="{$url.theme.this}/admin/style.css" type="text/css" rel="STYLESHEET">
 	<link href="{$url.theme.shared}/bform.css" type="text/css" rel="STYLESHEET">
 	<script src="{$url.theme.shared}/bform.js" type="text/javascript"></script>
@@ -17,7 +17,7 @@
 <center>
 
 <div id="menu">
-<a href="http://www.iceburg.net/bmail/">{t}The bMail Website{/t}</a>
+<a href="http://www.iceburg.net/pommo/">{t}The poMMo Website{/t}</a>
 </div>
 <!-- end menu -->
 		
@@ -25,9 +25,9 @@
 
 <div id="sidebar">
 
-<img src="{$url.theme.shared}/images/bmail.png" alt="bMail Logo" class="logo" />
+<img src="{$url.theme.shared}/images/pommo.png" alt="poMMo Logo" class="logo" />
 <h1>{t}Links{/t}</h1>
-<div class="submenu"><a href="http://www.iceburg.net/bmail/">{t}The bMail Website{/t}</a> 
+<div class="submenu"><a href="http://www.iceburg.net/pommo/">{t}The poMMo Website{/t}</a> 
 </div>
 
 <!-- end submenu -->	
@@ -101,7 +101,7 @@
 
 <div id="footer">
 &nbsp;<br />
- {t escape="no" url='<a href="http://bmail.sourceforge.net/">bMail</a>'}Page fueled by %1 mailing management software.{/t}
+ {t escape="no" url='<a href="http://pommo.sourceforge.net/">poMMo</a>'}Page fueled by %1 mailing management software.{/t}
 </div>
 <!-- end footer -->
 

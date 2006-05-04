@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -19,9 +19,9 @@ define('_IS_VALID', TRUE);
 
 require ('bootstrap.php');
 
-$bMail = & fireup();
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup();
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -30,22 +30,22 @@ $smarty = & bmSmartyInit();
 
 if (isset ($_GET['logout'])) {
 	// if user chose to logout, destroy session and redirect to this page
-	$bMail->setAuthenticated(FALSE);
+	$poMMo->setAuthenticated(FALSE);
 	session_destroy();
 	header('Location: ' . bm_http . bm_baseUrl . '/index.php');
 }
-elseif ($bMail->isAuthenticated()) {
+elseif ($poMMo->isAuthenticated()) {
 	// If user is authenticated (has logged in), redirect to admin.php
 	bmRedirect(bm_http . bm_baseUrl . '/admin/admin.php');
 }
 elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 	// Check if user submitted correct username & password. If so, Authenticate.
-	$auth = $bMail->getConfig(array (
+	$auth = $poMMo->getConfig(array (
 		'admin_username',
 		'admin_password'
 	));
 	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
-		$bMail->setAuthenticated(TRUE);
+		$poMMo->setAuthenticated(TRUE);
 		bmRedirect(bm_http . bm_baseUrl . '/admin/admin.php');
 	}
 	else {
@@ -69,17 +69,17 @@ elseif (!empty ($_POST['resetPassword'])) {
 		require_once (bm_baseDir . '/inc/lib.mailings.php');
 
 		// see if there is already a pending request for the administrator
-		if (isDupeEmail($dbo, $bMail->_config['admin_email'], 'pending')) {
-			$bMail->set(array (
-				'email' => $bMail->_config['admin_email']
+		if (isDupeEmail($dbo, $poMMo->_config['admin_email'], 'pending')) {
+			$poMMo->set(array (
+				'email' => $poMMo->_config['admin_email']
 			));
 			bmRedirect(bm_http . bm_baseUrl . '/user/user_pending.php');
 		}
 
 		// create a password change request, send confirmation mail
-		$code = dbPendingAdd($dbo, "password", $bMail->_config['admin_email']);
+		$code = dbPendingAdd($dbo, "password", $poMMo->_config['admin_email']);
 		if (!empty ($code)) {
-			bmSendConfirmation($bMail->_config['admin_email'], $code, "password");
+			bmSendConfirmation($poMMo->_config['admin_email'], $code, "password");
 		}
 
 		$logger->addMsg(_T('Password reset request recieved. Check your email.'));

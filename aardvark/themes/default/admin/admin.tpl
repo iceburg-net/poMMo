@@ -2,7 +2,7 @@
 {include file="admin/inc.sidebar.tpl"}
 
 <p class="introduction">
-{t escape=no url=$config.app.weblink}Hello and welcome to the bMail "Aardvark" release. The "A" in Aardvark stands for "alpha" and designates this as an early version of bMail. Much development is underway, so please report your findings and suggestions to the %1.{/t}
+{t escape=no url=$config.app.weblink}Hello and welcome to the poMMo "Aardvark" release. The "A" in Aardvark stands for "alpha" and designates this as an early version of poMMo. Much development is underway, so please report your findings and suggestions to the %1.{/t}
 </p>
 
 <div id="mainbar">
@@ -12,7 +12,7 @@
 			<a href="{$url.base}/admin/setup/admin_setup.php">
 			<img src="{$url.theme.shared}/images/icons/settings.png" class="navimage" />
 			{t}Setup{/t}</a> - 
-			{t}This area allows you to configure bMail and its default behavior. Set mailing list parameters, choose the information you'd like to collect from subscribers, and generate subscription forms from here.{/t}
+			{t}This area allows you to configure poMMo and its default behavior. Set mailing list parameters, choose the information you'd like to collect from subscribers, and generate subscription forms from here.{/t}
 		</p>					
 		
 		<p>

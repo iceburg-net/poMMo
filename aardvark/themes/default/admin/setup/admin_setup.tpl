@@ -9,7 +9,7 @@
 			<a href="{$url.base}/admin/setup/setup_configure.php">
 			<img src="{$url.theme.shared}/images/icons/settings.png" class="navimage" />
 			{t}Configure{/t}</a> - 
-			{t}bMail. Set your mailing list name, its default behavior, and the administrator's information.{/t}
+			{t}poMMo. Set your mailing list name, its default behavior, and the administrator's information.{/t}
 			<br>&nbsp;
 
 		</p>		

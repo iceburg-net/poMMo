@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -68,7 +68,7 @@ class Common {
 				$this->_config[$row['config_name']] = $row['config_value'];
 		}
 		$dbo->dieOnQUery(TRUE);
-		return (!empty ($this->_config['version'])) ? true : bmKill('bMail does not appear to be set up.' .
+		return (!empty ($this->_config['version'])) ? true : bmKill('poMMo does not appear to be set up.' .
 				'Have you <a href="'.bm_baseUrl.'/install/install.php">Installed?</a>');
 	}
 	

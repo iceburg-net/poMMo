@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>{t}bMail Installation{/t}</title>
+	<title>{t}poMMo Installation{/t}</title>
 	<link href="{$url.theme.this}/admin/style.css" type="text/css" rel="STYLESHEET">
 	<link href="{$url.theme.shared}/bform.css" type="text/css" rel="STYLESHEET">
 	<script src="{$url.theme.shared}/bform.js" type="text/javascript"></script>
@@ -22,7 +22,7 @@
 </div>
 
 <div id="header">
-	<h1>{t}bMail Installation{/t}</h1>
+	<h1>{t}poMMo Installation{/t}</h1>
 	<h2>
 		{t}Online install{/t}
 	</h2>
@@ -33,7 +33,7 @@
 
 <div style="font-size: 155%; ">
 <img src="{$url.theme.shared}/images/icons/alert.png" style="float: left;" border='0'>
-{t}Welcome to the bMail online installation process. We have connected to the database and set your language successfully. Fill in the values below, and you'll be on your way!{/t}
+{t}Welcome to the poMMo online installation process. We have connected to the database and set your language successfully. Fill in the values below, and you'll be on your way!{/t}
 </div>
 
 	{if $messages}
@@ -89,7 +89,7 @@
 			<label for="site_name"><span class="required">{t}Name of Website:{/t} </span></label>
 			<input type="text" class="text" size="32" maxlength="60"
 			  name="site_name" value="{$site_name|escape}" id="site_name" />
-			  <div class="notes">{t}(ie. The bMail Website){/t}</div>
+			  <div class="notes">{t}(ie. The poMMo Website){/t}</div>
 		</div>
 		
 		<div class="field">
@@ -97,7 +97,7 @@
 			<label for="site_url"><span class="required">{t}Website URL:{/t} </span></label>
 			<input type="text" class="text" size="32" maxlength="60"
 			  name="site_url" value="{$site_url|escape}" id="site_url" />
-			  <div class="notes">{t}(ie. http://www.bmail-rocks.com/){/t}</div>
+			  <div class="notes">{t}(ie. http://www.pommo-rocks.com/){/t}</div>
 		</div>
 		
 		<div class="field">
@@ -146,7 +146,7 @@
 
 <div id="footer">
 &nbsp;<br />
- {t escape="no" url='<a href="http://bmail.sourceforge.net/">bMail</a>'}Page fueled by %1 mailing management software.{/t}
+ {t escape="no" url='<a href="http://pommo.sourceforge.net/">poMMo</a>'}Page fueled by %1 mailing management software.{/t}
 </div>
 <!-- end footer -->
 

@@ -1,10 +1,10 @@
 
 <div id="sidebar">
-	<img src="{$url.theme.shared}/images/bmail.png" alt="bMail Logo" class="logo" />
+	<img src="{$url.theme.shared}/images/pommo.png" alt="poMMo Logo" class="logo" />
 
 	{if $section == "setup"}
 	<!-- start section nav -->
-	<h1>{t}bMail Setup{/t}</h1>
+	<h1>{t}poMMo Setup{/t}</h1>
 	<div class="submenu">
 		<a href="setup_configure.php">{t}Configure{/t}</a> 
 		<a href="setup_demographics.php">{t}Demographics{/t}</a>
@@ -13,7 +13,7 @@
 	<!-- end section nav -->
 	{elseif $section == "mailings"}
 	<!-- start section nav -->
-	<h1>{t}bMail Setup{/t}</h1>
+	<h1>{t}poMMo Setup{/t}</h1>
 	<div class="submenu">
 		<a href="mailings_send.php">{t}Send{/t}</a> 
 		<a href="mailings_history.php">{t}History{/t}</a>
@@ -21,7 +21,7 @@
 	<!-- end section nav -->
 	{elseif $section == "subscribers"}
 	<!-- start section nav -->
-	<h1>{t}bMail Setup{/t}</h1>
+	<h1>{t}poMMo Setup{/t}</h1>
 	<div class="submenu">
 		<a href="subscribers_manage.php">{t}Manage{/t}</a> 
 		<a href="subscribers_import.php">{t}Import{/t}</a> 

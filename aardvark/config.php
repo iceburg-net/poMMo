@@ -1,10 +1,10 @@
 <?php 
 /**
- * bMail Configuration File:
+ * poMMo Configuration File:
  *   This file sets up your database, language, and debugging options.
  *
  *   IMPORTANT: File must be named "config.php" and saved in the
- * 	"root" directory of your bMail installation (where bootstrap.php is)
+ * 	"root" directory of your poMMo installation (where bootstrap.php is)
  */
 // DO NOT REMOVE OR CHANGE THE BELOW LINE
 defined('_IS_VALID') or die('Move along...');
@@ -15,23 +15,23 @@ defined('_IS_VALID') or die('Move along...');
  *     (only alter values after the = sign)
  * 
  * ::: MySQL Database Information :::
- *   in order to use bMail, you must have access to a valid MySQL database.
+ *   in order to use poMMo, you must have access to a valid MySQL database.
  *   Contact your webhost for details if you are unsure of its details.
 */
 
 // * Set your MySQL username
-$bmdb['username'] = 'bmail';
+$bmdb['username'] = 'pommo';
 
 // * Set your MySQL password
-$bmdb['password'] = 'bmail';
+$bmdb['password'] = 'pommo';
 
 // * Set your MySQL hostname ("localhost" if  your MySQL database is running on the webserver)
 $bmdb['hostname'] = 'localhost';
 
-// * Set the name of the MySQL database used by bMail
-$bmdb['database'] = 'bmail'; 
+// * Set the name of the MySQL database used by poMMo
+$bmdb['database'] = 'pommo'; 
 
-// * Set the table prefix  (change if you intend to have multiple bMails running from the same database)
+// * Set the table prefix  (change if you intend to have multiple poMMos running from the same database)
 $bmdb['prefix'] = '';
 
 /************************************************************************
@@ -66,8 +66,8 @@ define('bm_verbosity',1);
 
 /************************************************************************
  * ::: Work Directory :::
- *   Set this to a directory bMail can use to cache its templates.
- *   bMail will NOT work without the proper setting of this directory.
+ *   Set this to a directory poMMo can use to cache its templates.
+ *   poMMo will NOT work without the proper setting of this directory.
  * 
  *   If you'd like to change it, it is recommended to set it outside
  *   the web root (for security). Uncomment the below line to set.
@@ -75,9 +75,9 @@ define('bm_verbosity',1);
  *   Make sure it a) exists and b) your webserver can write to it.
  *  
  *   DO NOT USE A RELATIVE PATH, USE THE FULL SERVER PATH: ie.
- *   '/home/b/brice/bmailData'
+ *   '/home/b/brice/pommoData'
  * 
- *    Defaults to the "cache" directory in bMail's root.'
+ *    Defaults to the "cache" directory in poMMo's root.'
 */
 //define('bm_workDir','');
 ?>

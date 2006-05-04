@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -27,7 +27,7 @@ defined('_IS_VALID') or die('Move along...');
 
 <div id="footer">
 &nbsp;<br />
- Page fueled by <a href="http://bmail.sourceforge.net/">bMail</a> mailing management software.
+ Page fueled by <a href="http://pommo.sourceforge.net/">poMMo</a> mailing management software.
  </div>
 <!-- end footer -->
 

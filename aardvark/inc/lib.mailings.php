@@ -2,7 +2,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -23,10 +23,10 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 	if (empty($confirmation_key) || empty ($to) || empty($type)) 
 		return false;
 	
-	global $bMail;
-	$logger = & $bMail->logger;
+	global $poMMo;
+	$logger = & $poMMo->logger;
 		
-	$dbvalues = $bMail->getConfig(array('messages'));
+	$dbvalues = $poMMo->getConfig(array('messages'));
 	$messages = unserialize($dbvalues['messages']);
 	
 	$subject = $messages[$type]['sub'];
@@ -37,8 +37,8 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 	if (empty($subject) || empty($body))
 		return false;
 	
-	require_once(bm_baseDir.'/inc/class.bmailer.php');
-	$message = new bMailer;
+	require_once(bm_baseDir.'/inc/class.pommoer.php');
+	$message = new poMMoer;
 	
 	// allow mail to be sent, even if demo mode is on
 	$message->toggleDemoMode("off");
@@ -54,7 +54,7 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 	
 	// PHASE OUT .. use logger!
 	$msg = "<b>Error</b>: Confirmation Mailing Not Sent.";
-	$_SESSION["bMail"]->addMessage($msg);
+	$_SESSION["poMMo"]->addMessage($msg);
 	
 	$logger->addErr(_T('Unable to send confirmation mailing. Contact Administrator.'));
 	return false;	
@@ -62,9 +62,9 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 
 // Sends a "test" mailing to an address, returns <string> status.
 function bmSendTestMailing(&$to, &$input) {
-	require_once (bm_baseDir.'/inc/class.bmailer.php');
+	require_once (bm_baseDir.'/inc/class.pommoer.php');
 	require_once (bm_baseDir.'/inc/lib.txt.php');
-		$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce']);
+		$Mail = new poMMoer($input['fromname'], $input['fromemail'], $input['frombounce']);
 		$altbody = NULL;
 		$html = FALSE;
 		if ($input['mailtype'] == 'html')
@@ -75,7 +75,7 @@ function bmSendTestMailing(&$to, &$input) {
 			return '(Errors Preparing Test)';
 		
 		if (!$Mail->bmSendmail($to))
-			return _T('Error Sending: ').$_SESSION['bMail']->getMessages();
+			return _T('Error Sending: ').$_SESSION['poMMo']->getMessages();
 		return sprintf(_T('Test sent to %s'), $to);
 }
 	

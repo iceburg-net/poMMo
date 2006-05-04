@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -118,7 +118,7 @@ class dbo {
 		
 		$this->_results = array ();
 
-		// connect to mysql database using config variables from bMail class (set in setup/config.php). 
+		// connect to mysql database using config variables from poMMo class (set in setup/config.php). 
 		// supress errors to hide login information...
 		$this->_link = @ mysql_connect($hostname, $username, $password);
 
@@ -153,7 +153,7 @@ class dbo {
 	 * 
 	 * Example invocations from partent script:
 	 * 
-	 *   $dbo = & $bMail->openDB();
+	 *   $dbo = & $poMMo->openDB();
 	 *   $dbo->dieOnQuery(TRUE);
 	 *   $dbo->debug(TRUE);
 	 * 

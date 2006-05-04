@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -12,7 +12,7 @@
  ** [END HEADER]**/
  
  /*
-bMail templating system.  
+poMMo templating system.  
 
 //Set values to FALSE/empty/or leave out if a item is undesred.
  * 
@@ -20,7 +20,7 @@ bMail templating system.
 $_nosidebar = TRUE; // set this to TRUE to leave out right sidebar
 
 // header settings -->
-$_header = "Welcome to bMail";
+$_header = "Welcome to poMMo";
 $_subheader = "Empowering a mailing list near you.";
 $_intro = "This is some introductory text";
 
@@ -49,9 +49,9 @@ $_extmenu['links'][] = "<a href=\"bar.php\">bar</a>";
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>. ..bMail.. .</title>
+<title>. ..poMMo.. .</title>
 <?php if (empty($_css))
-	echo '<link href="'.bm_baseUrl.'/inc/css/bmail.css" rel="stylesheet" type="text/css" />';
+	echo '<link href="'.bm_baseUrl.'/inc/css/pommo.css" rel="stylesheet" type="text/css" />';
 else 
 	echo "<link href=\"".$_css."\" rel=\"stylesheet\" type=\"text/css\" />";
 	

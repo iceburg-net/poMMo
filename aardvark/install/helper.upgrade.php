@@ -5,7 +5,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -30,7 +30,7 @@ function bmIsInstalled(& $dbo) {
 	return false;
 }
 
-// Returns the bMail revision the user is upgrading from
+// Returns the poMMo revision the user is upgrading from
 function getOldVersion(& $dbo) {
 	$oldRevision = NULL;
 
@@ -39,7 +39,7 @@ function getOldVersion(& $dbo) {
 	if (is_numeric($oldRevision))
 		return $oldRevision;
 
-	// Revision was not found in database... check to see if we're dealing w/ an OLD version of bMail
+	// Revision was not found in database... check to see if we're dealing w/ an OLD version of poMMo
 	$sql = "SELECT * FROM {$dbo->table['subscriber_data']} LIMIT 1";
 	if ($dbo->records($sql)) {
 		$sql = "SELECT * FROM {$dbo->table['config']} LIMIT 1";
@@ -53,7 +53,7 @@ function getOldVersion(& $dbo) {
 function bmBumpVersion(& $dbo, $revision, $versionStr) {
 	global $logger;
 	
-	$logger->addMsg(_T('Bumping bMail version to: ').$versionStr);
+	$logger->addMsg(_T('Bumping poMMo version to: ').$versionStr);
 	// TODO : Make array of queries.. send array to dbo->query(); update query function to allow arrays...
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=\'' . $revision . '\' WHERE config_name=\'revision\'';
 	$dbo->query($sql);
@@ -114,10 +114,10 @@ function performUpdate(& $sql, & $dbo, $serial, $message = NULL, $check = TRUE, 
 
 // pass database object as argument
 function bmUpgrade(& $dbo) {
-	if (!is_numeric(bmail_revision))
+	if (!is_numeric(pommo_revision))
 		die('Can not read current revision');
 	$oldRevision = getOldVersion($dbo);
-	if ($oldRevision >= bmail_revision)
+	if ($oldRevision >= pommo_revision)
 		return true; // eventually analyze $oldRevision & call an appropriate function name (ie. during a branch)
 
 	return bmUpgradeAardvark($oldRevision, $dbo);
@@ -133,19 +133,19 @@ function bmInstallConfig(& $dbo) {
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (3, 'site_name', 'My Website', 'Website Name', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (4, 'site_url', 'http://localhost/', 'Website URL', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (5, 'site_success', 'http://localhost/thanks.html', 'Signup Success URL', 'off', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (6, 'list_name', 'The bMail Fanclub Mailing List', 'List Name', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (7, 'admin_email', 'admin@bmail.com', 'Administrator Email', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (8, 'list_fromname', 'bMail Administrative Team', 'From Name', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (9, 'list_fromemail', 'bmail@yourdomain.com', 'From Email', 'on', 'on')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (6, 'list_name', 'The poMMo Fanclub Mailing List', 'List Name', 'on', 'on')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (7, 'admin_email', 'admin@pommo.com', 'Administrator Email', 'on', 'on')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (8, 'list_fromname', 'poMMo Administrative Team', 'From Name', 'on', 'on')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (9, 'list_fromemail', 'pommo@yourdomain.com', 'From Email', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (10, 'list_frombounce', 'bounces@yourdomain.com', 'Bounces', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (11, 'list_exchanger', 'sendmail', 'List Exchanger', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (12, 'list_confirm', 'on', 'Confirmation Messages', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (13, 'demo_mode', 'on', 'Demonstration Mode', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (14, 'mailMax', '300', 'Mails per refresh', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (15, 'mailNum', '30', 'Mails per error dump', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (16, 'mailSize', '10', 'Mails per bMailer BATCH array', 'on', 'off')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (16, 'mailSize', '10', 'Mails per poMMoer BATCH array', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (17, 'mailDelay', '1000', 'Microsends to delay between batches. A value of 2000000 would be 2 seconds.', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (18, 'version', 'Aardvark PR1', 'bMail Version', 'on', 'off')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (18, 'version', 'Aardvark PR1', 'poMMo Version', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (19, 'revision', '1', 'Internal Revision', 'on', 'off')";
 	foreach ($queries as $sql) {
 		if (!$dbo->query($sql))
