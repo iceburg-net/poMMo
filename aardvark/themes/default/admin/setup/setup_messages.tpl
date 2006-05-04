@@ -7,7 +7,7 @@
 	<img src="{$url.theme.shared}/images/icons/settings.png" class="articleimg">
 
 	<p>
-		{t}You can configure the messages bMail sends when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task.{/t}
+		{t}You can configure the messages poMMo sends when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task.{/t}
 	</p>
 	
 	<p>
