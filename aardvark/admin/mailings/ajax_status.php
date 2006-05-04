@@ -19,12 +19,11 @@ define('_IS_VALID', TRUE);
 
 require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/class.json.php');
+require_once (bm_baseDir . '/inc/lib.txt.php');
 
-$bMail = & fireup('secure');
-$logger = $bMail->logger;
+$bMail = & fireup('secure','keep');
 $dbo = & $bMail->openDB();
 
-$noMailing = FALSE;
 $sql = 'SELECT subscriberCount, sent, notices, status, command FROM ' . $dbo->table['mailing_current'];
 $dbo->query($sql);
 if ($row = mysql_fetch_assoc($dbo->_result)) {
@@ -34,7 +33,6 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 	$status = $row['status'];
 	$command = $row['command'];
 } else {
-	$noMailing = TRUE;
 	$subscriberCount = 0;
 	$sent = 0;
 	$percent = 100;
@@ -42,16 +40,16 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 }
 
 // end the mailing?
-if (!$noMailing) {
-	if ($subscriberCount == $sent) {
+if ($sent >= $subscriberCount  || $status == 'finished') {
 		$status = 'finished';
 		require_once (bm_baseDir . '/inc/db_mailing.php');
-
-		if (mailingQueueEmpty($dbo))
+		if (!mailingQueueEmpty($dbo)) {
 			dbMailingEnd($dbo);
-	}
-	$percent = round($sent * (100 / $subscriberCount));
+		}
 }
+
+if (!isset($percent))
+	$percent = round($sent * (100 / $subscriberCount));
 
 // make JSON return
 $json = array();
@@ -61,7 +59,12 @@ $json['percent'] = $percent;
 $json['sent'] = $sent;
 $json['status'] = $status;
 
-$json['command'] = (empty($command)) ? null : $command;
+$json['command'] = (empty($command)) ? 'none' : $command;
+
+if (count($notices) > 50) {
+	$notices = array_slice($notices, -50);
+}
+
 $json['notices'] = (empty($notices)) ? null : $notices;
 
 header('x-json: '.$encoder->encode($json));

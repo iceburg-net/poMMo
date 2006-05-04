@@ -31,7 +31,7 @@ if ((version >= 5.5) && (document.body.filters))
          var strNewHTML = "<span " + imgID + imgClass + imgTitle
          + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
          + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
-         + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>" 
+         + "(src=\'" + img.src + "\', sizingMethod='image');\"></span>" 
          img.outerHTML = strNewHTML
          i = i-1
       }

@@ -127,6 +127,7 @@ function _TP($msg, $plural, $count) { // for plurals
 	return ($l10n) ? T_ngettext($msg, $plural, $count) : $msg;
 }
 
+
 /**
  *  SMARTY TEMPLATE FUNCTIONS
  */
