@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -17,7 +17,7 @@
 <?php // print out logo
 if (empty($_nologo)) { 
 ?>
-<img src="<?php echo bm_baseUrl; ?>/img/bmail.png" alt="bMail Logo" class="logo" />
+<img src="<?php echo bm_baseUrl; ?>/img/pommo.png" alt="poMMo Logo" class="logo" />
 <?php }
 
 if (!empty($_extmenu)) { // print out extra menu
@@ -52,7 +52,7 @@ Design modified from <a href="http://www.jameskoster.co.uk/">James Koster's</a> 
 
 <?php }
 	if (empty($_nodemo)) {
-		if ($bMail->_config['demo_mode'] == "on")
+		if ($poMMo->_config['demo_mode'] == "on")
 			echo "<p><img src=\"".bm_baseUrl."/img/icons/demo.png\" class=\"sideimage\">Demonstration mode is ON.</p>";
 		else
 			echo "<p><img src=\"".bm_baseUrl."/img/icons/nodemo.png\" class=\"sideimage\">Demonstration mode is OFF.</p>";

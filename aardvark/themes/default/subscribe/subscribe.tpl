@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{$config.site_name} {t}Subscription{/t}</title>
-	<script src="/eclipse/bMail/themes/shared/bform.js" type="text/javascript"></script>
+	<script src="/eclipse/poMMo/themes/shared/bform.js" type="text/javascript"></script>
 </head>
 <body>
 

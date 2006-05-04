@@ -5,7 +5,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -21,9 +21,9 @@ define('_IS_VALID', TRUE);
 require ('../bootstrap.php');
 require_once (bm_baseDir . '/install/helper.upgrade.php');
 
-$bMail = & fireup('install');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('install');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 $dbo->dieOnQuery(FALSE);
 
 /**********************************
@@ -32,11 +32,11 @@ $dbo->dieOnQuery(FALSE);
 $smarty = & bmSmartyInit();
 $smarty->prepareForForm();
 
-$bMail->loadConfig();
+$poMMo->loadConfig();
 
-// Check to make sure bMail is not already installed.
-if ($bMail->_config['revision'] == bmail_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {
-	$logger->addErr(sprintf(_T('bMail appears to be up to date. If you want to force an upgrade, %s click here %s'), '<a href="' . $_SERVER['PHP_SELF'] . '?forceUpgrade=TRUE">', '</a>'));
+// Check to make sure poMMo is not already installed.
+if ($poMMo->_config['revision'] == pommo_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {
+	$logger->addErr(sprintf(_T('poMMo appears to be up to date. If you want to force an upgrade, %s click here %s'), '<a href="' . $_SERVER['PHP_SELF'] . '?forceUpgrade=TRUE">', '</a>'));
 	$smarty->display('upgrade.tpl');
 	bmKill();
 }
@@ -47,9 +47,9 @@ elseif (isset ($_REQUEST['debugInstall'])) $smarty->assign('debug', TRUE);
 
 if (empty ($_REQUEST['continue'])) {
 	if (!bmIsInstalled($dbo))
-		$logger->addErr(sprintf(_T('bMail does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . bm_baseUrl . '/install/install.php">', '</a>'));
+		$logger->addErr(sprintf(_T('poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . bm_baseUrl . '/install/install.php">', '</a>'));
 	else
-		$logger->addErr(sprintf(_T('To upgrade bMail, %s click here %s'), '<a href="' . bm_baseUrl . '/install/upgrade.php?continue=TRUE">', '</a>'));
+		$logger->addErr(sprintf(_T('To upgrade poMMo, %s click here %s'), '<a href="' . bm_baseUrl . '/install/upgrade.php?continue=TRUE">', '</a>'));
 } else {
 	$smarty->assign('attempt', TRUE);
 

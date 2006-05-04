@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -23,7 +23,7 @@ defined('_IS_VALID') or die('Move along...');
 define('bm_baseDir', dirname(__FILE__));
 define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
 define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
-define('bmail_revision', '19');
+define('pommo_revision', '19');
 
 // get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
@@ -120,24 +120,24 @@ function & fireup() {
 	session_start();
 	
 	// load common class. If $bm_preInit exists, the common class in $_SESSION is overwritten
-	if (isset ($_SESSION["bMail"])) 
-		$bMail = & $_SESSION["bMail"];
+	if (isset ($_SESSION["poMMo"])) 
+		$poMMo = & $_SESSION["poMMo"];
 	else {
-		$bMail = new Common();
-		$bMail->loadConfig();
+		$poMMo = new Common();
+		$poMMo->loadConfig();
 	}	
 
 	// check that config has been loaded
-	if (empty($bMail->_config) || count($bMail->_config) < 5) {
-		$bMail->loadConfig();
-		if (count($bMail->_config) < 5)
+	if (empty($poMMo->_config) || count($poMMo->_config) < 5) {
+		$poMMo->loadConfig();
+		if (count($poMMo->_config) < 5)
 			bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
 	}
 		
 	// checks version of DB against file version
-	$dbo = $bMail->openDB();
+	$dbo = $poMMo->openDB();
 	$dbo->dieOnQuery(FALSE);
 	$sql = 'SELECT config_value FROM '.$dbo->table['config'].' WHERE config_name=\'revision\'';
 	$revision = $dbo->query($sql,0);
@@ -145,27 +145,27 @@ function & fireup() {
 		bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
-	elseif (bmail_revision != $dbo->query($sql,0))
+	elseif (pommo_revision != $dbo->query($sql,0))
 		bmKill(sprintf(_T('Version Mismatch. Have you %s upgraded %s ?'),
 		'<a href="'.bm_baseUrl.'/install/upgrade.php">',
 		'</a>'));
 	$dbo->dieOnQuery(TRUE);
 	
 	// load common class into session
-	$_SESSION["bMail"] = & $bMail;
+	$_SESSION["poMMo"] = & $poMMo;
 
-	if (isset($bm_secure) && !$bMail->isAuthenticated() )
+	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
 		bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
 		 '<a href="'.bm_baseUrl.'/index.php">',
 		'</a>'));
 		
 	if (!isset($bm_dataSave)) // PHASE OUT -> when _messages gone, perform actual dataClear func..
-		$bMail->dataClear();
+		$poMMo->dataClear();
 		
 	if (isset($bm_loadConfig))
-		$bMail->loadConfig();
+		$poMMo->loadConfig();
 
 	// returns a copy of the object
-	return $bMail;
+	return $poMMo;
 }
 ?>

@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -21,8 +21,8 @@ defined('_IS_VALID') or die('Move along...');
 require_once (bm_baseDir . '/inc/phpmailer/class.phpmailer.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
-// create bMailer class (an extension of PHPMailer)
-class bMailer extends PHPMailer {
+// create poMMoer class (an extension of PHPMailer)
+class poMMoer extends PHPMailer {
 
 	var $_fromname;
 	var $_fromemail;
@@ -39,11 +39,11 @@ class bMailer extends PHPMailer {
 
 	// default constructor....
 
-	// called like $bmail = new bMailer(fromname,fromemail,frombounce, exchanger)
+	// called like $pommo = new poMMoer(fromname,fromemail,frombounce, exchanger)
 	//  If an argument is not supplied, resorts to default value (from setup/config.php).
-	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL) {
+	function poMMoer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL) {
 
-		$listConfig = $_SESSION['bMail']->getConfig(array (
+		$listConfig = $_SESSION['poMMo']->getConfig(array (
 			'list_fromname',
 			'list_fromemail',
 			'list_frombounce',
@@ -62,7 +62,7 @@ class bMailer extends PHPMailer {
 			$exchanger = $listConfig['list_exchanger'];
 
 		if (empty ($demonstration))
-			$demonstration = $_SESSION["bMail"]->_config['demo_mode'];
+			$demonstration = $_SESSION["poMMo"]->_config['demo_mode'];
 
 		// initialize object's values
 
@@ -81,7 +81,7 @@ class bMailer extends PHPMailer {
 
 		$langPath = bm_baseDir . '/inc/phpmailer/language/';
 		if (!$this->SetLanguage('en', $langPath))
-			die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">bMailer(): Unable to set language.');
+			die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">poMMoer(): Unable to set language.');
 
 	}
 
@@ -91,7 +91,7 @@ class bMailer extends PHPMailer {
 			$this->_demonstration = "on";
 		elseif ($val == "off") $this->_demonstration = "off";
 		else
-			$this->_demonstration = $_SESSION["bMail"]->_config['demo_mode'];
+			$this->_demonstration = $_SESSION["poMMo"]->_config['demo_mode'];
 		return $this->_demonstration;
 	}
 
@@ -120,26 +120,26 @@ class bMailer extends PHPMailer {
 		}
 	}
 
-	// Gets called before sending a mail to make sure all is proper (during prepareMail). Returns false if messages were created must pass global bMail object (TODO maybe rename to site??)
+	// Gets called before sending a mail to make sure all is proper (during prepareMail). Returns false if messages were created must pass global poMMo object (TODO maybe rename to site??)
 	function validate() {
 
 		if (empty ($this->_fromname))
-			$_SESSION["bMail"]->addMessage("Name cannot be blank.");
+			$_SESSION["poMMo"]->addMessage("Name cannot be blank.");
 
 		if (!isEmail($this->_fromemail))
-			$_SESSION["bMail"]->addMessage("From email must be a valid email address.");
+			$_SESSION["poMMo"]->addMessage("From email must be a valid email address.");
 
 		if (!isEmail($this->_frombounce))
-			$_SESSION["bMail"]->addMessage("Bounce email must be a valid email address.");
+			$_SESSION["poMMo"]->addMessage("Bounce email must be a valid email address.");
 
 		if (empty ($this->_subject))
-			$_SESSION["bMail"]->addMessage("Subject cannot be blank.");
+			$_SESSION["poMMo"]->addMessage("Subject cannot be blank.");
 
 		if (empty ($this->_body))
-			$_SESSION["bMail"]->addMessage("Message content cannot be blank.");
+			$_SESSION["poMMo"]->addMessage("Message content cannot be blank.");
 
 		// if Messages exist, return false..	
-		if ($_SESSION["bMail"]->isMessage())
+		if ($_SESSION["poMMo"]->isMessage())
 			return false;
 
 		return true;
@@ -174,7 +174,7 @@ class bMailer extends PHPMailer {
 			$this->Mailer = $this->_exchanger;
 
 			if ($this->Mailer == 'smtp') { // loads the default relay (#1) -- use setRelay() to change.
-				$config = $_SESSION['bMail']->getConfig(array('smtp_1'));
+				$config = $_SESSION['poMMo']->getConfig(array('smtp_1'));
 				$smtp = unserialize($config['smtp_1']);
 	
 				if (!empty ($smtp['host']))
@@ -209,18 +209,18 @@ class bMailer extends PHPMailer {
 	function bmSendmail(& $to) { // TODO rename function send in order to not confuse w/ PHPMailer's Send()?
 
 		if ($this->_validated == FALSE) {
-			$_SESSION["bMail"]->addMessage("bMail has not passed sanity checks. has prepareMail been called?");
+			$_SESSION["poMMo"]->addMessage("poMMo has not passed sanity checks. has prepareMail been called?");
 			return false;
 		}
 		// make sure $to is valid, or send errors...
 		elseif (empty ($to)) {
-			$_SESSION["bMail"]->addMessage("To email supplied to send() command is empty.");
+			$_SESSION["poMMo"]->addMessage("To email supplied to send() command is empty.");
 			return false;
 		}
 
 		$errors = array ();
 
-		if ($this->_demonstration == "off") { // If bMail is not in set in demonstration mode, SEND MAILS...
+		if ($this->_demonstration == "off") { // If poMMo is not in set in demonstration mode, SEND MAILS...
 
 			// if $to is not an array (single email address has been supplied), simply send the mail.
 			if (!is_array($to)) {
@@ -263,7 +263,7 @@ class bMailer extends PHPMailer {
 		// if message(s) exist, return false. (Sending failed w/ error messages)
 		if (!empty ($errors)) {
 			foreach ($errors as $error)
-				$_SESSION["bMail"]->addMessage($error);
+				$_SESSION["poMMo"]->addMessage($error);
 			return false;
 		}
 		return true;

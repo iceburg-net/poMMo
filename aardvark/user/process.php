@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -21,9 +21,9 @@ require_once (bm_baseDir . '/inc/db_subscribers.php');
 require_once (bm_baseDir . '/inc/db_demographics.php');
 require(bm_baseDir.'/inc/lib.validate_subscriber.php');
 
-$bMail = & fireup();
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup();
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -31,13 +31,13 @@ $dbo = & $bMail->openDB();
 $smarty = & bmSmartyInit();
 
 // STORE input
-$bMail->set(array('saveSubscribeForm' => $_POST));
+$poMMo->set(array('saveSubscribeForm' => $_POST));
 
 /**********************************
 	VALIDATE INPUT
  *********************************/
 
-if (empty ($_POST['bmail_signup']))
+if (empty ($_POST['pommo_signup']))
 	bmRedirect('login.php');
 
 // check if errors exist, if so print results and die.
@@ -59,7 +59,7 @@ if (empty ($confirmation_key))
 	bmKill('dbPendingAdd(): Confirmation key not returned.');
 
 // determine if we should bypass output from this page and redirect.
-$config = $bMail->getConfig(array (
+$config = $poMMo->getConfig(array (
 	'site_success',
 	'site_confirm',
 	'list_confirm',

@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -178,7 +178,7 @@ class bThrottler {
 	// bThrottler() - simple initialization of class variables.
 	function bThrottler($genesis, & $queue, $targetMPS = 0, $targetBPS = 0, $domPeriod = 0, $domMPP = 0, $domBPP = 0) {
 
-		// Use the standard bMail logger for output
+		// Use the standard poMMo logger for output
 		global $logger;
 		if (!is_object($logger))
 			bmKill('Logger not available to throttler.');

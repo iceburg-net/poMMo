@@ -5,7 +5,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -99,13 +99,13 @@ $l10n = FALSE;
 // for speed, don't load PHP gettext libraries if language is english or not set...
 // TODO --> SET LANGUAGE VIA INSTALL SCRIPT _GET / CONFIGURATION / ?GET
 if (defined('bm_lang') && trim(bm_lang) != '' && bm_lang != 'en') {
-	if (!is_file(bm_baseDir . '/language/' . bm_lang . '/LC_MESSAGES/bmail.mo'))
+	if (!is_file(bm_baseDir . '/language/' . bm_lang . '/LC_MESSAGES/pommo.mo'))
 		bmKill(bm_lang .
 		' -> language not found/supported');
 
 	require (bm_baseDir . '/inc/gettext/gettext.inc');
 
-	$domain = 'bmail';
+	$domain = 'pommo';
 	$encoding = 'UTF-8';
 	$l10n = TRUE;
 
@@ -133,14 +133,14 @@ function _TP($msg, $plural, $count) { // for plurals
  */
 
 function & bmSmartyInit() {
-	global $bMail;
+	global $poMMo;
 	require (bm_baseDir . '/inc/class.template.php');
 	$smarty = new bTemplate();
 
 	// ___ SETUP TEMPLATE ___
 
 	// set theme
-	//$theme = $bMail->_config['theme'];
+	//$theme = $poMMo->_config['theme'];
 	$theme = 'default';
 
 	// set directories
@@ -165,19 +165,19 @@ function & bmSmartyInit() {
 	));
 
 	// config is not loaded during install... check for it first!
-	if (isset ($bMail->_config['version'])) {
+	if (isset ($poMMo->_config['version'])) {
 		$smarty->assign('config', array (
 			'app' => array (
 				'path' => bm_baseDir,
-				'version' => $bMail->_config['version'],
-				'weblink' => '<a href="http://bmail.sourceforge.net/">' . _T('bMail Website'
+				'version' => $poMMo->_config['version'],
+				'weblink' => '<a href="http://pommo.sourceforge.net/">' . _T('poMMo Website'
 			) . '</a>'
-		), 'site_name' => $bMail->_config['site_name'], 'site_url' => $bMail->_config['site_url'], 'list_name' => $bMail->_config['list_name'], 'admin_email' => $bMail->_config['admin_email'], 'demo_mode' => $bMail->_config['demo_mode']));
+		), 'site_name' => $poMMo->_config['site_name'], 'site_url' => $poMMo->_config['site_url'], 'list_name' => $poMMo->_config['list_name'], 'admin_email' => $poMMo->_config['admin_email'], 'demo_mode' => $poMMo->_config['demo_mode']));
 	} else {
 		$smarty->assign('config', array (
 			'app' => array (
 				'path' => bm_baseDir,
-				'weblink' => '<a href="http://bmail.sourceforge.net/">' . _T('bMail Website'
+				'weblink' => '<a href="http://pommo.sourceforge.net/">' . _T('poMMo Website'
 			) . '</a>'
 		)));
 	}
@@ -187,7 +187,7 @@ function & bmSmartyInit() {
 	$smarty->_gettext_plural_func = '_TP';
 
 	// assign page title
-	$smarty->assign('title', '. ..bMail.. .');
+	$smarty->assign('title', '. ..poMMo.. .');
 
 	// assign section (used for sidebar template)
 	$smarty->assign('section', bm_section);

@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -23,7 +23,7 @@ require(bm_baseDir.'/inc/smarty/Smarty.class.php');
 class bTemplate extends Smarty {
 	
 	// custom display function to fall back to "default" theme if template file not found
-	// also assigns any bMail errors or messages
+	// also assigns any poMMo errors or messages
 	function display($resource_name, $cache_id = null, $compile_id = null, $display = false) {
 		
 		// attempt to load the theme's requested template
@@ -35,11 +35,11 @@ class bTemplate extends Smarty {
 			else
 				$resource_name = $this->_themeDir.'default/'.$resource_name;
 		
-		global $bMail;
-		if ($bMail->logger->isMsg()) 
-			$this->assign('messages',$bMail->logger->getMsg());
-		if ($bMail->logger->isErr())
-			$this->assign('errors',$bMail->logger->getErr());
+		global $poMMo;
+		if ($poMMo->logger->isMsg()) 
+			$this->assign('messages',$poMMo->logger->getMsg());
+		if ($poMMo->logger->isErr())
+			$this->assign('errors',$poMMo->logger->getErr());
 		
 		return parent::display($resource_name, $cache_id = null, $compile_id = null, $display = false);;
 	}
@@ -66,7 +66,7 @@ class bTemplate extends Smarty {
 	function prepareForSubscribeForm() {
 		require_once (bm_baseDir . '/inc/db_demographics.php');
 		global $dbo;
-		global $bMail;
+		global $poMMo;
 		
 		// Get array of demographics. Key is ID, value is an array of the demo's info
 		$demographics = dbGetDemographics($dbo);
@@ -77,10 +77,10 @@ class bTemplate extends Smarty {
 		require_once(bm_baseDir.'/inc/lib.txt.php');
 		
 		// process.php stores form values in Session (so they don't get lost). Attempt to reload them
-		$input = $bMail->get();
+		$input = $poMMo->get();
 		if (isset($input['saveSubscribeForm'])) {
 			$_POST = $input['saveSubscribeForm'];
-			$bMail->dataClear(); // TODO -> should bMail data be cleared once "gotten" --> like the logger..?
+			$poMMo->dataClear(); // TODO -> should poMMo data be cleared once "gotten" --> like the logger..?
 		}
 		$this->assign($_POST);
 

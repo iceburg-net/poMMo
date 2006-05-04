@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -58,10 +58,10 @@ function dbUpdateConfig(& $dbo, & $input, $force = FALSE) {
 
 function dbResetMessageDefaults($section = 'all') {
 		global $dbo;
-		global $bMail;
+		global $poMMo;
 		
 		if ($section != 'all') {
-			$dbvalues = $bMail->getConfig(array('messages'));
+			$dbvalues = $poMMo->getConfig(array('messages'));
 			$messages = unserialize($dbvalues['messages']);
 		}
 		else {
@@ -71,28 +71,28 @@ function dbResetMessageDefaults($section = 'all') {
 		
 		if ($section == 'all' || $section == 'subscribe') {
 		$messages['subscribe'] = array();
-		$messages['subscribe']['msg'] = sprintf(_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $bMail->_config['list_name'])."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['subscribe']['msg'] = sprintf(_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $poMMo->_config['list_name'])."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['subscribe']['sub'] = _T('Subscription request'); 
 		$messages['subscribe']['suc'] = _T('Welcome to our mailing list. Enjoy your stay.');
 		}
 		
 		if ($section == 'all' || $section == 'unsubscribe') {
 		$messages['unsubscribe'] = array();
-		$messages['unsubscribe']['msg'] = sprintf(_T('You have requested to unsubscribe from %s.'),$bMail->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['unsubscribe']['msg'] = sprintf(_T('You have requested to unsubscribe from %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['unsubscribe']['sub'] = _T('Unsubscription request'); 
 		$messages['unsubscribe']['suc'] = _T('You have successfully unsubscribed. Enjoy your travels.');
 		}
 		
 		if ($section == 'all' || $section == 'password') {
 		$messages['password'] = array();
-		$messages['password']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$bMail->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['password']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['password']['sub'] = _T('Change Password request'); 
 		$messages['password']['suc'] = _T('Your password has been reset. Enjoy!');
 		}
 		
 		if ($section == 'all' || $section == 'update') {
 		$messages['update'] = array();
-		$messages['update']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$bMail->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['update']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['update']['sub'] = _T('Update Records request'); 
 		$messages['update']['suc'] = _T('Your records have been updated. Enjoy!');
 		}

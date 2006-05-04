@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -21,9 +21,9 @@ require ('../bootstrap.php');
 require_once (bm_baseDir . '/install/helper.install.php');
 require_once (bm_baseDir . '/install/helper.upgrade.php');
 
-$bMail = & fireup('install');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('install');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 $dbo->dieOnQuery(FALSE);
 session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
 
@@ -31,12 +31,12 @@ session_start(); // required by smartyValidate. TODO -> move to prepareForForm()
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-//$smarty->assign('title', $bMail->_config['site_name'] . ' - ' . _T('subscriber logon'));
+//$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . _T('subscriber logon'));
 $smarty->prepareForForm();
 
-// Check to make sure bMail is not already installed.
+// Check to make sure poMMo is not already installed.
 if (bmIsInstalled($dbo)) {
-	$logger->addErr(_T('bMail appears to already by installed. If you would like to clear all data and re-install bMail, delete your database.'));
+	$logger->addErr(_T('poMMo appears to already by installed. If you would like to clear all data and re-install poMMo, delete your database.'));
 	$smarty->assign('installed', TRUE);
 	$smarty->display('install.tpl');
 	bmKill();
@@ -72,7 +72,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		if (isset ($_POST['installerooni'])) {
 
-			// drop existing bMail tables
+			// drop existing poMMo tables
 			foreach (array_keys($dbo->table) as $key) {
 				$table = $dbo->table[$key];
 				$sql = 'DROP TABLE IF EXISTS ' . $table;
@@ -82,7 +82,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			if (isset ($_REQUEST['debugInstall']))
 				$dbo->debug(TRUE);
 
-			// install bMail
+			// install poMMo
 			require_once (bm_baseDir . '/inc/db_procedures.php');
 			$install = parse_mysql_dump();
 
@@ -96,10 +96,10 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				dbUpdateConfig($dbo, $_POST);
 
 				// load configuration, set message defaults.
-				$bMail->loadConfig();
+				$poMMo->loadConfig();
 				dbResetMessageDefaults('all');
 
-				$logger->addMsg(_T('Installation Complete! You may now login and setup bMail.'));
+				$logger->addMsg(_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(_T('Login Username: ') . 'admin');
 				$logger->addMsg(_T('Login Password: ') . $pass);
 
@@ -109,7 +109,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 				$dbo->debug(FALSE);
 
-				// drop existing bMail tables
+				// drop existing poMMo tables
 				foreach (array_keys($dbo->table) as $key) {
 					$table = $dbo->table[$key];
 					$sql = 'DROP TABLE IF EXISTS ' . $table;

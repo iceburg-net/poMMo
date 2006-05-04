@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>{t}bMail Installation{/t}</title>
+	<title>{t}poMMo Installation{/t}</title>
 	<link href="{$url.theme.this}/admin/style.css" type="text/css" rel="STYLESHEET">
 {* The following fixes transparent PNG issues in IE < 7 *}
 	<!--[if lt IE 7.]>
@@ -20,7 +20,7 @@
 </div>
 
 <div id="header">
-	<h1>{t}bMail Upgrader{/t}</h1>
+	<h1>{t}poMMo Upgrader{/t}</h1>
 	<h2>
 		{t}Online Upgrade Script{/t}
 	</h2>
@@ -31,7 +31,7 @@
 
 <div style="font-size: 155%; ">
 <img src="{$url.theme.shared}/images/icons/alert.png" style="float: left;" border='0'>
-{t}Welcome to the bMail online upgrade process. This script will automatically upgrade your old version of bMail.{/t}
+{t}Welcome to the poMMo online upgrade process. This script will automatically upgrade your old version of poMMo.{/t}
 </div>
 
 	{if $errors}
@@ -99,7 +99,7 @@
 
 <div id="footer">
 &nbsp;<br />
- {t escape="no" url='<a href="http://bmail.sourceforge.net/">bMail</a>'}Page fueled by %1 mailing management software.{/t}
+ {t escape="no" url='<a href="http://pommo.sourceforge.net/">poMMo</a>'}Page fueled by %1 mailing management software.{/t}
 </div>
 <!-- end footer -->
 

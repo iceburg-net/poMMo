@@ -5,7 +5,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -24,7 +24,7 @@ require_once (bm_baseDir.'/inc/lib.txt.php');
 // Reads a CSV file and returns an array. Returns false if the file is invalid.
 //  Validation -> 1 email address per line, # of cells not to exceed # of demographics by 5
 //  Output array { ['assignLine'] => 'line # w/ most fields, [#linenumber] => array ([field1],[field2],[...]) }
-function & csvPrepareFile(& $bMail, & $dbo, & $uploadFile) {
+function & csvPrepareFile(& $poMMo, & $dbo, & $uploadFile) {
 
 	// set maximum fields / line based off # of demographics
 	$sql = 'SELECT COUNT(demographic_id) FROM '.$dbo->table['demographics'];
@@ -46,13 +46,13 @@ function & csvPrepareFile(& $bMail, & $dbo, & $uploadFile) {
 
 		// check to see if any fields were read in
 		if (!$numFields || $numFields < 1) {
-			$bMail->addMessage('Line # '. ($line_num +1).' could not be processed. Is this valid?');
+			$poMMo->addMessage('Line # '. ($line_num +1).' could not be processed. Is this valid?');
 			continue; // skip this line, as it has failed sanity check.
 		}
 
 		// check to see if this line exceeded the maximum allowed fields
 		if ($numFields > $maxFields) {
-			$bMail->addMessage('Line # '. ($line_num +1).' had too many fields.');
+			$poMMo->addMessage('Line # '. ($line_num +1).' had too many fields.');
 			continue; // skip this line, as it has failed sanity check.
 		}
 
@@ -65,12 +65,12 @@ function & csvPrepareFile(& $bMail, & $dbo, & $uploadFile) {
 		}
 
 		if ($emailCount > 1) {
-			$bMail->addMessage('Line # '. ($line_num +1).' had more than 1 email address.');
+			$poMMo->addMessage('Line # '. ($line_num +1).' had more than 1 email address.');
 			continue; // skip this line, as it has failed sanity check.
 		}
 
 		if ($emailCount == 0) {
-			$bMail->addMessage('Line # '. ($line_num +1).' had no email address.');
+			$poMMo->addMessage('Line # '. ($line_num +1).' had no email address.');
 			continue; // skip this line, as it has failed sanity check.	
 		}
 
@@ -84,7 +84,7 @@ function & csvPrepareFile(& $bMail, & $dbo, & $uploadFile) {
 	}
 
 	// return false if there were errors
-	if ($bMail->isMessage())
+	if ($poMMo->isMessage())
 		return false;
 
 	return $outArray;
@@ -93,7 +93,7 @@ function & csvPrepareFile(& $bMail, & $dbo, & $uploadFile) {
 // csvPrepareImport: <array> returns an array of dbGetSubscriber style subscribers to import. 
 // The array consists of 2 arrays, 'valid' and 'invalid'. If a subscriber is in 'invalid', they will be flagged to
 //  update their records.
-function csvPrepareImport(& $bMail, & $dbo, & $demographics, & $csvArray, & $fieldAssign) {
+function csvPrepareImport(& $poMMo, & $dbo, & $demographics, & $csvArray, & $fieldAssign) {
 	
 	require_once (bm_baseDir.'/inc/db_subscribers.php');
 
@@ -166,7 +166,7 @@ function csvPrepareImport(& $bMail, & $dbo, & $demographics, & $csvArray, & $fie
 					$subscriber['data'][$demographic_id] = mysql_real_escape_string($value);
 				}
 				else {
-					$bMail->addMessage('Subscriber on line '. ($line +1).' has an unknown option ('.$value.') for field '.$demographic['name'].'.');
+					$poMMo->addMessage('Subscriber on line '. ($line +1).' has an unknown option ('.$value.') for field '.$demographic['name'].'.');
 					$valid = FALSE;
 				}
 				break;
@@ -175,7 +175,7 @@ function csvPrepareImport(& $bMail, & $dbo, & $demographics, & $csvArray, & $fie
 				if ($date)
 					$subscriber['data'][$demographic_id] = $date;
 				else {
-					$bMail->addMessage('Subscriber on line '. ($line +1).' has an invalid date ('.$value.') for '.$demographic['name'].'.');
+					$poMMo->addMessage('Subscriber on line '. ($line +1).' has an invalid date ('.$value.') for '.$demographic['name'].'.');
 					$valid = FALSE;
 				}
 				break;
@@ -186,7 +186,7 @@ function csvPrepareImport(& $bMail, & $dbo, & $demographics, & $csvArray, & $fie
 				if (is_numeric($value))
 					$subscriber['data'][$demographic_id] = mysql_real_escape_string($value);
 				else {
-					$bMail->addMessage('Subscriber on line '. ($line +1).' has a non number ('.$value.') for '.$demographic['name'].'.');
+					$poMMo->addMessage('Subscriber on line '. ($line +1).' has a non number ('.$value.') for '.$demographic['name'].'.');
 					$valid = FALSE;
 				}
 				break;
@@ -201,7 +201,7 @@ function csvPrepareImport(& $bMail, & $dbo, & $demographics, & $csvArray, & $fie
 
 	if (!empty ($required)) {
 		foreach (array_keys($required) as $demographic_id)
-			$bMail->addMessage('Subscriber on line '. ($line +1).' has a required field ('.$required[$demographic_id].') empty.');
+			$poMMo->addMessage('Subscriber on line '. ($line +1).' has a required field ('.$required[$demographic_id].') empty.');
 		$valid = FALSE;
 	}
 
