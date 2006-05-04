@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -19,8 +19,8 @@ define('_IS_VALID', TRUE);
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_procedures.php');
 require_once (bm_baseDir.'/inc/class.bform.php');
-$bMail = & fireup("secure");
-$dbo = & $bMail->openDB();
+$poMMo = & fireup("secure");
+$dbo = & $poMMo->openDB();
 $form = new bForm();
 
 $updated = FALSE;
@@ -38,14 +38,14 @@ if ($form->validateForm()) {
 
 	dbUpdateConfig($dbo, $form->_input);
 
-	$bMail->loadConfig();
+	$poMMo->loadConfig();
 	$updated = TRUE;
 	$form->inputClear();
 }
 
 // ## FORM: FORM WAS NOT SUBMITTED, OR HAD INVALID INPUT.
 
-/** bMail templating system **/
+/** poMMo templating system **/
 
 // header settings -->
 $_head = "\n<link href=\"".bm_baseUrl."/inc/css/bform.css\" rel=\"stylesheet\" type =\"text/css\">\n<script src=\"".bm_baseUrl."/inc/js/bform.js\" type=\"text/javascript\"></script>";
@@ -54,14 +54,14 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = "<a href=\"".bm_baseUrl."/index.php?logout=TRUE\">Logout</a>";
 $_menu[] = "<a href=\"admin_setup.php\">Setup Page</a>";
-$_menu[] = "<a href=\"".$bMail->_config['site_url']."\">".$bMail->_config['site_name']."</a>";
+$_menu[] = "<a href=\"".$poMMo->_config['site_url']."\">".$poMMo->_config['site_name']."</a>";
 
 // right bar settings -->
 $_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of bMail demonstration mode status
+$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
 
 $_extmenu = array ();
-$_extmenu['name'] = "bMail Setup";
+$_extmenu['name'] = "poMMo Setup";
 $_extmenu['links'] = array ();
 $_extmenu['links'][] = "<a href=\"setup_configure.php\">Configure</a>";
 $_extmenu['links'][] = "<a href=\"setup_demographics.php\">Demographics</a>";
@@ -77,7 +77,7 @@ echo "
 <img src=\"".bm_baseUrl."/img/icons/settings.png\" class=\"articleimg\">
 
 <p>
-Use this page to configure bMail. You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.
+Use this page to configure poMMo. You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.
 </p>
 ";
 
@@ -87,9 +87,9 @@ if ($updated)
 // setup a shortcut for an often typed string. class="required" references styling in bform.css
 $reqStr = '<span class="required" title="This field is required.">*</span>';
 
-$config = $bMail->getConfig(array('admin_username','site_success','site_confirm','list_fromname','list_fromemail','list_frombounce','list_exchanger','list_confirm','mailMax','mailNum','mailSize','mailDelay'));
+$config = $poMMo->getConfig(array('admin_username','site_success','site_confirm','list_fromname','list_fromemail','list_frombounce','list_exchanger','list_confirm','mailMax','mailNum','mailSize','mailDelay'));
 
-$form->inputLoad($bMail->dataGet());
+$form->inputLoad($poMMo->dataGet());
 $form->startForm();
 
 // print any errors that occured
@@ -131,8 +131,8 @@ $form->newField("admin_email");
 $form->setField("prompt", "Administrator Email: ".$reqStr);
 $form->setField("type", "text");
 $form->setField("default", "enter email");
-if (!empty ($bMail->_config['admin_email']))
-	$form->setField("init", $bMail->_config['admin_email']);
+if (!empty ($poMMo->_config['admin_email']))
+	$form->setField("init", $poMMo->_config['admin_email']);
 $form->setField("notes", "(email address of administrator)");
 $form->setField("misc", "maxlength=\"60\" size=\"32\"");
 $form->setField("validate", "req.email");
@@ -147,8 +147,8 @@ $form->newField("site_name");
 $form->setField("prompt", "Website Name: ".$reqStr);
 $form->setField("type", "text");
 $form->setField("default", "enter website name");
-if (!empty ($bMail->_config['site_name']))
-	$form->setField("init", $bMail->_config['site_name']);
+if (!empty ($poMMo->_config['site_name']))
+	$form->setField("init", $poMMo->_config['site_name']);
 $form->setField("notes", "(The name of your Website)");
 $form->setField("misc", "maxlength=\"60\" size=\"32\"");
 $form->setField("validate", "req");
@@ -159,8 +159,8 @@ $form->newField("site_url");
 $form->setField("prompt", "Website URL: ".$reqStr);
 $form->setField("type", "text");
 $form->setField("default", "enter website url");
-if (!empty ($bMail->_config['site_url']))
-	$form->setField("init", $bMail->_config['site_url']);
+if (!empty ($poMMo->_config['site_url']))
+	$form->setField("init", $poMMo->_config['site_url']);
 $form->setField("notes", "(Your websites web address)");
 $form->setField("misc", "maxlength=\"60\" size=\"32\"");
 $form->setField("validate", "req.url");
@@ -199,7 +199,7 @@ $form->newField("demo_mode");
 $form->setField("prompt", "Demonstration Mode: ");
 $form->setField("type", "checkbox");
 $form->setField("notes", "Check this box to enable demonstration mode.");
-if (!empty ($bMail->_config['demo_mode']) && ($bMail->_config['demo_mode'] == "on"))
+if (!empty ($poMMo->_config['demo_mode']) && ($poMMo->_config['demo_mode'] == "on"))
 	$form->setField("default", "checked");
 else
 	$form->setField("default", "unchecked");
@@ -220,8 +220,8 @@ $form->newField("list_name");
 $form->setField("prompt", "List Name: ".$reqStr);
 $form->setField("type", "text");
 $form->setField("default", "enter list name");
-if (!empty ($bMail->_config['list_name']))
-	$form->setField("init", $bMail->_config['list_name']);
+if (!empty ($poMMo->_config['list_name']))
+	$form->setField("init", $poMMo->_config['list_name']);
 $form->setField("notes", "(The name of your Mailing List)");
 $form->setField("misc", "maxlength=\"60\" size=\"32\"");
 $form->setField("validate", "req");

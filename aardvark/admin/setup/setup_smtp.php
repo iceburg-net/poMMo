@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -17,8 +17,8 @@ define('_IS_VALID', TRUE);
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_procedures.php');
 require_once (bm_baseDir.'/inc/class.bform.php');
-$bMail = & fireup("secure");
-$dbo = & $bMail->openDB();
+$poMMo = & fireup("secure");
+$dbo = & $poMMo->openDB();
 
 // Read user requested changes	
 if (!empty($_POST['addSmtpServer'])) {
@@ -41,7 +41,7 @@ elseif(!empty($_POST['throttle_smtp'])) {
 	dbUpdateConfig($dbo,$input);
 }
 
-/** bMail templating system **/
+/** poMMo templating system **/
 
 // header settings -->
 $_head = "\n<link href=\"".bm_baseUrl."/inc/css/bform.css\" rel=\"stylesheet\" type =\"text/css\">\n<script src=\"".bm_baseUrl."/inc/js/bform.js\" type=\"text/javascript\"></script>";
@@ -50,14 +50,14 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = "<a href=\"".bm_baseUrl."/index.php?logout=TRUE\">Logout</a>";
 $_menu[] = "<a href=\"admin_setup.php\">Setup Page</a>";
-$_menu[] = "<a href=\"".$bMail->_config['site_url']."\">".$bMail->_config['site_name']."</a>";
+$_menu[] = "<a href=\"".$poMMo->_config['site_url']."\">".$poMMo->_config['site_name']."</a>";
 
 // right bar settings -->
 $_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of bMail demonstration mode status
+$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
 
 $_extmenu = array ();
-$_extmenu['name'] = "bMail Setup";
+$_extmenu['name'] = "poMMo Setup";
 $_extmenu['links'] = array ();
 $_extmenu['links'][] = "<a href=\"setup_configure.php\">Configure</a>";
 $_extmenu['links'][] = "<a href=\"setup_demographics.php\">Demographics</a>";
@@ -73,7 +73,7 @@ echo "
 <img src=\"".bm_baseUrl."/img/icons/settings.png\" class=\"articleimg\">
 
 <p>
-bMail can be configured to use up to 4 SMTP servers to relay mail from. Each server can be individually regulated by its own throttle controller, or can share a global one. For maximum output, use individual throttle controllers. Throttling set 
+poMMo can be configured to use up to 4 SMTP servers to relay mail from. Each server can be individually regulated by its own throttle controller, or can share a global one. For maximum output, use individual throttle controllers. Throttling set 
 from the main configuration page will be inherrited.
 </p>
 ";
@@ -86,7 +86,7 @@ echo '<h2>SMTP Relays &raquo;</h2>';
 require_once (bm_baseDir.'/inc/phpmailer/class.phpmailer.php');
 require_once (bm_baseDir.'/inc/phpmailer/class.smtp.php');
 
-$smtpConfig = $bMail->getConfig(array ('smtp_1', 'smtp_2', 'smtp_3', 'smtp_4','throttle_SMTP'));
+$smtpConfig = $poMMo->getConfig(array ('smtp_1', 'smtp_2', 'smtp_3', 'smtp_4','throttle_SMTP'));
 
 $smtp[1] = unserialize($smtpConfig['smtp_1']);
 $smtp[2] = unserialize($smtpConfig['smtp_2']);
@@ -99,7 +99,7 @@ if (empty($smtp[1]))
 
 
 $form = new bForm();
-$form->inputLoad($bMail->dataGet());
+$form->inputLoad($poMMo->dataGet());
 $form->startForm();
 // print any errors that occured
 $form->printErrors();

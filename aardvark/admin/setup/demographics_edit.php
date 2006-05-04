@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -20,9 +20,9 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_demographics.php');
 require_once (bm_baseDir.'/inc/lib.txt.php');
 
-$bMail = & fireup('secure','keep');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure','keep');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -84,7 +84,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$demographic = & $demographics[$demographic_id];
 	$demographic['id'] = $demographic_id;
 	$smarty->assign('demographic', $demographic);
-	$bMail->set($demographic);
+	$poMMo->set($demographic);
 
 	// populate _POST with info from database (fills in form values...)
 	@ $_POST['demographic_name'] = $demographic['name'];
@@ -95,7 +95,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 } else {
 	
-	$demographic =& $bMail->get();
+	$demographic =& $poMMo->get();
 	$smarty->assign('demographic', $demographic);
 	
 	// ___ USER HAS SENT FORM ___

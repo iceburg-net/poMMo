@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -17,8 +17,8 @@
  
  require('../../bootstrap.php');
  require_once(bm_baseDir.'/inc/db_demographics.php');
- $bMail =& fireup("secure");
- $dbo = & $bMail->openDB();
+ $poMMo =& fireup("secure");
+ $dbo = & $poMMo->openDB();
 
  
 // URL which processes the form input + adds (or warns) subscriber to pending table.
@@ -45,12 +45,12 @@ $form_name = "signup";
 
 
 <hr>
-<div align="center"><b><?php echo $bMail->_config['list_name']; ?> Subscriber Form</b></div>
+<div align="center"><b><?php echo $poMMo->_config['list_name']; ?> Subscriber Form</b></div>
 <hr>
 
-<!-- 	Set "ACTION" to the URL of bMail's process.php
-		process.php located in the "user" directory of your bMail installation.
-		** bMail attempted to detect this location, and it may not need to be changed. ** -->
+<!-- 	Set "ACTION" to the URL of poMMo's process.php
+		process.php located in the "user" directory of your poMMo installation.
+		** poMMo attempted to detect this location, and it may not need to be changed. ** -->
 		
 <form action="<?php echo $signup_url; ?>" method="POST" name="<?php echo $form_name; ?>">
 
@@ -125,9 +125,9 @@ foreach (array_keys($demographics) as $demographic_id) {
 
 <br>
 
-<!--  *** DO NOT CHANGE name="bmail_signup" ! ***
+<!--  *** DO NOT CHANGE name="pommo_signup" ! ***
 	  If you'd like to change the button text change the "value=" text. -->
-<INPUT type="submit" name="bmail_signup" value="Signup"> <INPUT type="reset">
+<INPUT type="submit" name="pommo_signup" value="Signup"> <INPUT type="reset">
 
 </FORM>
 

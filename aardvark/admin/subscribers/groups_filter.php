@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -18,8 +18,8 @@ require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_groups.php');
 require_once (bm_baseDir.'/inc/db_demographics.php');
 require_once (bm_baseDir.'/inc/lib.txt.php');
-$bMail = & fireup('secure');
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure');
+$dbo = & $poMMo->openDB();
 
 // setup $criteria_id. Make OK for DB...
 $criteria_id = '';
@@ -37,7 +37,7 @@ if (!empty ($_POST['value']) && is_array($_POST['value'])) {
 		$updated = bm_baseUrl.'/img/icons/ok.png';
 }
 
-/** bMail templating system **/
+/** poMMo templating system **/
 // header settings -->
 $_head = '<script src="inc/js/bform.js" type="text/javascript"></script>';
 
@@ -45,11 +45,11 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = '<a href="'.bm_baseUrl.'/index.php?logout=TRUE">Logout</a>';
 $_menu[] = '<a href="subscribers_groups.php">Groups Page</a>';
-$_menu[] = '<a href="'.$bMail->_config['site_url'].'">'.$bMail->_config['site_name'].'</a>';
+$_menu[] = '<a href="'.$poMMo->_config['site_url'].'">'.$poMMo->_config['site_name'].'</a>';
 
 // right bar settings -->
 $_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of bMail demonstration mode status
+$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
 
 $_extmenu = array ();
 $_extmenu['name'] = "Subscriber Management";

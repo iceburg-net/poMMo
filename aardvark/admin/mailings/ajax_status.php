@@ -4,7 +4,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -21,8 +21,8 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/class.json.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
-$bMail = & fireup('secure','keep');
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure','keep');
+$dbo = & $poMMo->openDB();
 
 $sql = 'SELECT subscriberCount, sent, notices, status, command FROM ' . $dbo->table['mailing_current'];
 $dbo->query($sql);
@@ -44,7 +44,7 @@ if ($sent >= $subscriberCount  || $status == 'finished') {
 		$status = 'finished';
 		require_once (bm_baseDir . '/inc/db_mailing.php');
 		if (!mailingQueueEmpty($dbo)) {
-			dbMailingEnd($dbo);
+			dpoMMoingEnd($dbo);
 		}
 }
 

@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -20,9 +20,9 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_mailing.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
-$bMail = & fireup('secure', 'keep');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure', 'keep');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -49,14 +49,14 @@ if (empty ($_POST)) {
 	$formError['fromname'] = $formError['body'] = _T('Cannot be empty.');
 	$smarty->assign('formError', $formError);
 	
-	$_POST = $bMail->get();
+	$_POST = $poMMo->get();
 
 } elseif(isset($_POST['preview'])) {
 	// ___ USER HAS SENT FORM ___
 	
 		// __ FORM IS VALID
 		unset($_POST['preview']);
-		$bMail->set($_POST);
+		$poMMo->set($_POST);
 		bmRedirect('mailings_send3.php');
 }
 

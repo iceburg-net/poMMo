@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -16,10 +16,10 @@ define('_IS_VALID', TRUE);
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/lib.import.php');
 require_once (bm_baseDir.'/inc/db_demographics.php');
-$bMail = & fireup('secure', 'dataSave');
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure', 'dataSave');
+$dbo = & $poMMo->openDB();
 
-/** bMail templating system **/
+/** poMMo templating system **/
 // overide 'content' ID to allow for a WIDE page (auto adjusting width...)
 $_head = '
 	<style type="text/css" media="all">
@@ -33,7 +33,7 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = '<a href="'.bm_baseUrl.'/index.php?logout=TRUE">Logout</a>';
 $_menu[] = '<a href="admin_subscribers.php">Subscribers Page</a>';
-$_menu[] = '<a href="'.$bMail->_config['site_url'].'">'.$bMail->_config['site_name'].'</a>';
+$_menu[] = '<a href="'.$poMMo->_config['site_url'].'">'.$poMMo->_config['site_name'].'</a>';
 include (bm_baseDir.'/setup/top.php');
 /** End templating system **/
 
@@ -45,7 +45,7 @@ echo "</div>\n<hr>";
 echo '<div align="center">';
 
 // load data from session
-$sessionArray = & $bMail->dataGet();
+$sessionArray = & $poMMo->dataGet();
 $csvArray = & $sessionArray['csvArray'];
 
 $demographics = dbGetDemographics($dbo);
@@ -88,7 +88,7 @@ elseif (!empty($_POST['preview'])) { // check to see if a preview has been reque
 	require_once (bm_baseDir.'/inc/printouts.php');
 
 	// prepare csvArray for import
-	$importArray = csvPrepareImport($bMail, $dbo, $demographics,$csvArray,$_POST['field']);
+	$importArray = csvPrepareImport($poMMo, $dbo, $demographics,$csvArray,$_POST['field']);
 	
 	// get count of subscribers to be imported
 	$totalImported = count($importArray['valid'])+count($importArray['invalid']);
@@ -100,7 +100,7 @@ elseif (!empty($_POST['preview'])) { // check to see if a preview has been reque
 
 	// save Array to session
 	$sessionArray['importArray'] = & $importArray;
-	$bMail->dataSet($sessionArray);
+	$poMMo->dataSet($sessionArray);
 		
 echo '<div style="width: 60%">';
 echo '<p><h2>Import Preview</h2></p>';
@@ -191,7 +191,7 @@ echo '<br><b>'.$numLines.'</b> subscribers to import.<br>
 if (!empty($invalidExists)) {	
 echo '<div style="width: 60%">';
 echo '<p><h2>Invalid Subscribers:</h2></p>';
-$bMail->printMessages('</li>','<li>');
+$poMMo->printMessages('</li>','<li>');
 echo '</div>';
 }
 

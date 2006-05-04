@@ -2,7 +2,7 @@
 /*
  * ajax.php
  *
- * PROJECT: bMail
+ * PROJECT: poMMo
  * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL
  *
@@ -18,9 +18,9 @@ define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_demographics.php');
 
-$bMail = & fireup('secure');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 // key is order, value is demo ID
 function updateList($array) {

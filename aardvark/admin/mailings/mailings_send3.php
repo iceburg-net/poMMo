@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -22,9 +22,9 @@ require_once (bm_baseDir.'/inc/db_groups.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 require_once (bm_baseDir.'/inc/db_sqlgen.php');
 
-$bMail = & fireup('secure', 'keep');
-$logger = & $bMail->logger;
-$dbo = & $bMail->openDB();
+$poMMo = & fireup('secure', 'keep');
+$logger = & $poMMo->logger;
+$dbo = & $poMMo->openDB();
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -36,7 +36,7 @@ if (!mailingQueueEmpty($dbo)) {
 	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>'));
 }
 
-$input = $bMail->get();
+$input = $poMMo->get();
 
 $groupName = dbGroupName($dbo, $input['group_id']);
 $subscriberCount = dbGroupTally($dbo, $input['group_id']);
@@ -62,10 +62,10 @@ if (!empty($_POST['testMail'])) {
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
 if (!empty ($_GET['sendaway'])) {
 	
-	$securityCode = dbMailingCreate($dbo, $input);
+	$securityCode = dpoMMoingCreate($dbo, $input);
 	dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
 	
-	dbMailingStamp($dbo, "start");
+	dpoMMoingStamp($dbo, "start");
 	
 	bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
 	sleep(1); // allows mailing to begin...

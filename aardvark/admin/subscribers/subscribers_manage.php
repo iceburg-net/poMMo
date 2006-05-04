@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -21,8 +21,8 @@ require_once (bm_baseDir.'/inc/db_groups.php');
 require_once (bm_baseDir.'/inc/db_sqlgen.php');
 require_once (bm_baseDir.'/inc/db_demographics.php');
 require_once (bm_baseDir.'/inc/class.pager.php');
-$bMail = & fireup("secure", "dataSave");
-$dbo = & $bMail->openDB();
+$poMMo = & fireup("secure", "dataSave");
+$dbo = & $poMMo->openDB();
 
 if (bm_debug == 'on' && isset($dbo) && is_object($dbo))
 	$dbo->debug(TRUE);
@@ -71,7 +71,7 @@ function isSelected($x, $y) {
 	return '';
 }
 
-/** bMail templating system **/
+/** poMMo templating system **/
 $_head = '<script src="'.bm_baseUrl.'/inc/js/bform.js" type="text/javascript"></script>';
 // overide 'content' ID to allow for a WIDE page (auto adjusting width...)
 $_head .= '
@@ -89,11 +89,11 @@ $_nologo = FALSE;
 $_menu = array ();
 $_menu[] = "<a href=\"".bm_baseUrl."/index.php?logout=TRUE\">Logout</a>";
 $_menu[] = "<a href=\"admin_subscribers.php\">Subscribers Page</a>";
-$_menu[] = "<a href=\"".$bMail->_config['site_url']."\">".$bMail->_config['site_name']."</a>";
+$_menu[] = "<a href=\"".$poMMo->_config['site_url']."\">".$poMMo->_config['site_name']."</a>";
 
 // right bar settings -->
 $_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of bMail demonstration mode status
+$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
 
 include (bm_baseDir.'/setup/top.php');
 
