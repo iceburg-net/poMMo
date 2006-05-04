@@ -20,7 +20,7 @@ $dbo = & $bMail->openDB();
 
 if (!empty ($_GET['command'])) {
 	switch ($_GET['command']) {
-		case "stop" :
+		case "pause" :
 			dbMailingStamp($dbo, "stop");
 			break;
 		case "restart" :
@@ -35,6 +35,21 @@ if (!empty ($_GET['command'])) {
 		case "clear" :
 			$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET notices=NULL';
 			$dbo->query($sql);
+			break;
+		
+		case "clear50" :
+			require_once (bm_baseDir.'/inc/lib.txt.php');
+			$sql = 'SELECT notices FROM ' . $dbo->table['mailing_current'];
+			$notices = quotesplit($dbo->query($sql,0));
+			if (count($notices) > 50) {
+				$notices = array_slice($notices, 0, count($notices) - 50);
+				$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET notices=\''.mysql_real_escape_string(array2csv($notices)).'\'';
+				$dbo->query($sql);
+			}
+			else {
+				$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET notices=NULL';
+				$dbo->query($sql);
+			}
 			break;
 		default :
 			break;

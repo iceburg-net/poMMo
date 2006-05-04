@@ -21,7 +21,7 @@ define('_IS_VALID', TRUE);
 
 require ('../../bootstrap.php');
 
-$bMail = & fireup('secure');
+$bMail = & fireup('secure','keep');
 $logger = & $bMail->logger;
 $dbo = & $bMail->openDB();
 
@@ -30,7 +30,12 @@ $dbo = & $bMail->openDB();
  *********************************/
 $smarty = & bmSmartyInit();
 
+$sql = 'SELECT subscriberCount FROM ' . $dbo->table['mailing_current'];
+$sc = $dbo->query($sql,0);
+$subscriberCount = ($sc) ? $sc : 0;
+$smarty->assign('subscriberCount', $subscriberCount);
+
 
 $smarty->display('admin/mailings/mailing_status.tpl');
 bmKill();
-
+?>
