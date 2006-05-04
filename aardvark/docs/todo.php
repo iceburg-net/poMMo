@@ -3,7 +3,7 @@
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://bmail.sourceforge.net/
+ * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
@@ -24,14 +24,14 @@ IMMEDIATE (for next release):
   * Smarty template scheme throughout whole program
 		+ Remove /img, /inc/css|js, /setup directory
 		+ Remove class.bform.php
-  * Rid all bMail getmessages in favor of Logger....
+  * Rid all poMMo getmessages in favor of Logger....
   * Add test "suite" to check httpspawn, create temporary tables, etc. etc.
   * Rename "demographics" to .... ?
   * instatiate ob_start() @ call to common.php ... call end method (flush) @ end of template display / redirection
    + Requires all pages to be under smarty templating architecutre
   * Fix embedded forms
      + Theme URLS should resolve to FULL http location ()
-     +  better (proper) detection of bMail root?
+     +  better (proper) detection of poMMo root?
   
 SHORT TERM:
   
