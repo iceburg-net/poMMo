@@ -32,7 +32,7 @@ function & dbGetGroups(& $dbo, $where = NULL) {
 
 	$groups = array ();
 
-	$sql = 'SELECT group_id, group_name FROM '.$dbo->table['groups'].$whereStr;
+	$sql = 'SELECT group_id, group_name FROM '.$dbo->table['groups'].$whereStr.' ORDER BY group_name';
 	while ($row = $dbo->getRows($sql, TRUE)) {
 		$groups[$row[0]] = $row[1];
 	}
