@@ -26,6 +26,9 @@
  *  if limit is given, the array returned array will have a max # of entries. If
  *   start is given, the resultset will begin at the start entry
  */
+ 
+ // TODO -> known bug: if you include/exclude a group w/ no criteria.. warnings are thrown.
+ 
 function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list', $order_by = NULL, $order_type = 'ASC', $limit = NULL, $start = NULL) {
 	if ($table != 'subscribers' && $table != 'pending')
 		die('<img src="' .

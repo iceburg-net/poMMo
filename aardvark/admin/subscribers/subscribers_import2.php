@@ -11,6 +11,8 @@
  * 
  ** [END HEADER]**/
 
+// TODO --> bad link
+
 define('_IS_VALID', TRUE);
 
 require('../../bootstrap.php');

@@ -87,9 +87,9 @@
 	</span>
 	<span style="text-align:left; margin-left: 12px;">
 		{if $filter.logic == 'is_in'}
-			{t}Include subscribers belonging to{/t} <strong>{$groups[$filter.demographic_id].name}</strong>
+			{t}Include subscribers belonging to{/t} <strong>{$groups[$filter.demographic_id]}</strong>
 		{elseif $filter.logic == 'not_in'}
-			{t}Exclude subscribers belonging to{/t} <strong>{$groups[$filter.demographic_id].name}</strong>
+			{t}Exclude subscribers belonging to{/t} <strong>{$groups[$filter.demographic_id]}</strong>
 		{elseif $filter.logic == 'is_equal'}
 			{t escape=no 1="<strong>`$demos[$filter.demographic_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
 		{elseif $filter.logic == 'not_equal'}
