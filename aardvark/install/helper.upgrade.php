@@ -143,7 +143,7 @@ function bmInstallConfig(& $dbo) {
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (13, 'demo_mode', 'on', 'Demonstration Mode', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (14, 'mailMax', '300', 'Mails per refresh', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (15, 'mailNum', '30', 'Mails per error dump', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (16, 'mailSize', '10', 'Mails per poMMoer BATCH array', 'on', 'off')";
+	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (16, 'mailSize', '10', 'Mails per bMailer BATCH array', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (17, 'mailDelay', '1000', 'Microsends to delay between batches. A value of 2000000 would be 2 seconds.', 'on', 'on')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (18, 'version', 'Aardvark PR1', 'poMMo Version', 'on', 'off')";
 	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (19, 'revision', '1', 'Internal Revision', 'on', 'off')";

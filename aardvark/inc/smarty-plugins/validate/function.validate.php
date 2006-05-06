@@ -112,7 +112,7 @@ function smarty_function_validate($params, &$smarty) {
                         : false;
                 $_echo = true;
                 if(isset($params['assign'])) {
-                    $smarty->assign($params['assign'], $_sess['validators'][$_validator_key]['message']);                    
+                    $smarty->assign($params['assign'], $_sess['validators'][$_validator_key]['message']);                   
                 } elseif (isset($params['append'])) {
                     $smarty->append($params['append'], $_sess['validators'][$_validator_key]['message']);                                        
                 } else {
