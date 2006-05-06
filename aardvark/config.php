@@ -20,16 +20,16 @@ defined('_IS_VALID') or die('Move along...');
 */
 
 // * Set your MySQL username
-$bmdb['username'] = 'pommo';
+$bmdb['username'] = 'bmail';
 
 // * Set your MySQL password
-$bmdb['password'] = 'pommo';
+$bmdb['password'] = 'bmail';
 
 // * Set your MySQL hostname ("localhost" if  your MySQL database is running on the webserver)
 $bmdb['hostname'] = 'localhost';
 
 // * Set the name of the MySQL database used by poMMo
-$bmdb['database'] = 'pommo'; 
+$bmdb['database'] = 'bmail'; 
 
 // * Set the table prefix  (change if you intend to have multiple poMMos running from the same database)
 $bmdb['prefix'] = '';
@@ -75,7 +75,7 @@ define('bm_verbosity',1);
  *   Make sure it a) exists and b) your webserver can write to it.
  *  
  *   DO NOT USE A RELATIVE PATH, USE THE FULL SERVER PATH: ie.
- *   '/home/b/brice/pommoData'
+ *   '/home/b/brice/bmailData'
  * 
  *    Defaults to the "cache" directory in poMMo's root.'
 */

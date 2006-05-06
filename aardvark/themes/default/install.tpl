@@ -113,7 +113,7 @@
 			<label for="admin_password2"><span class="required">{t}Verify Password:{/t} </span></label>
 			<input type="text" class="text" size="32" maxlength="60"
 			  name="admin_password2" value="{$admin_password2|escape}" id="admin_password2" />
-			  <div class="notes">{t}(ie. Brice's Mailing List){/t}</div>
+			  <div class="notes">{t}(enter password again){/t}</div>
 		</div>
 		
 		<div class="field">

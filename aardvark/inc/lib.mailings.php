@@ -37,8 +37,8 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 	if (empty($subject) || empty($body))
 		return false;
 	
-	require_once(bm_baseDir.'/inc/class.pommoer.php');
-	$message = new poMMoer;
+	require_once(bm_baseDir.'/inc/class.bmailer.php');
+	$message = new bMailer;
 	
 	// allow mail to be sent, even if demo mode is on
 	$message->toggleDemoMode("off");
@@ -62,9 +62,9 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 
 // Sends a "test" mailing to an address, returns <string> status.
 function bmSendTestMailing(&$to, &$input) {
-	require_once (bm_baseDir.'/inc/class.pommoer.php');
+	require_once (bm_baseDir.'/inc/class.bmailer.php');
 	require_once (bm_baseDir.'/inc/lib.txt.php');
-		$Mail = new poMMoer($input['fromname'], $input['fromemail'], $input['frombounce']);
+		$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce']);
 		$altbody = NULL;
 		$html = FALSE;
 		if ($input['mailtype'] == 'html')

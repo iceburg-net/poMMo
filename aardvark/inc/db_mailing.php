@@ -168,8 +168,8 @@ function mailingQueueEmpty(& $dbo) {
 }
 
 function & bmInitMailer(& $dbo, $relay_id = 1) {
-	if (isset ($_SESSION["poMMoer_" . $relay_id]))
-		return $_SESSION["poMMoer_" . $relay_id];
+	if (isset ($_SESSION["bMailer_" . $relay_id]))
+		return $_SESSION["bMailer_" . $relay_id];
 
 	global $poMMo;
 	global $logger;
@@ -186,11 +186,11 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 			$altbody = db2mail($row['altbody']);
 	}
 
-	// load new poMMoer into session
-	$_SESSION["poMMoer_" . $relay_id] = new poMMoer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce']);
+	// load new bMailer into session
+	$_SESSION["bMailer_" . $relay_id] = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce']);
 
 	// reference it as $Mail
-	$bmMailer = & $_SESSION["poMMoer_" . $relay_id];
+	$bmMailer = & $_SESSION["bMailer_" . $relay_id];
 	
 	$logger->addMsg('bmMailer initialized with relay ID #'.$relay_id,1);
 

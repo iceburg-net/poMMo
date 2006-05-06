@@ -54,7 +54,11 @@ function bmDebug() {
 			echo "\n\n<br>CONFIG: could not load\n\n";
 
 		echo "\n\n<br><br><b>OBJECT DEBUG</b><hr><br>\n\n";
-		show_vars(FALSE, TRUE);
+		
+		if (bm_verbosity > 1)
+			show_vars(FALSE, TRUE);
+		else
+			show_vars(FALSE, TRUE, 0);
 }
 
 function bmBacktrace() {

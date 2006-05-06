@@ -21,8 +21,8 @@ defined('_IS_VALID') or die('Move along...');
 require_once (bm_baseDir . '/inc/phpmailer/class.phpmailer.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
-// create poMMoer class (an extension of PHPMailer)
-class poMMoer extends PHPMailer {
+// create bMailer class (an extension of PHPMailer)
+class bMailer extends PHPMailer {
 
 	var $_fromname;
 	var $_fromemail;
@@ -39,9 +39,9 @@ class poMMoer extends PHPMailer {
 
 	// default constructor....
 
-	// called like $pommo = new poMMoer(fromname,fromemail,frombounce, exchanger)
+	// called like $pommo = new bMailer(fromname,fromemail,frombounce, exchanger)
 	//  If an argument is not supplied, resorts to default value (from setup/config.php).
-	function poMMoer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL) {
+	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL) {
 
 		$listConfig = $_SESSION['poMMo']->getConfig(array (
 			'list_fromname',
@@ -81,7 +81,7 @@ class poMMoer extends PHPMailer {
 
 		$langPath = bm_baseDir . '/inc/phpmailer/language/';
 		if (!$this->SetLanguage('en', $langPath))
-			die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">poMMoer(): Unable to set language.');
+			die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">bMailer(): Unable to set language.');
 
 	}
 
