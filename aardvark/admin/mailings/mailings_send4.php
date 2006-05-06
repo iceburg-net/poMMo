@@ -17,7 +17,7 @@
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
-require (bm_baseDir . '/inc/class.pommoer.php');
+require (bm_baseDir . '/inc/class.bmailer.php');
 require (bm_baseDir . '/inc/class.bthrottler.php');
 require (bm_baseDir . '/inc/db_mailing.php');
 

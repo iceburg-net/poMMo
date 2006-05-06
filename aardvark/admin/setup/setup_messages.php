@@ -29,6 +29,7 @@ $dbo = & $poMMo->openDB();
 $smarty = & bmSmartyInit();
 //$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . _T('subscriber logon'));
 $smarty->prepareForForm();
+$smarty->assign('returnStr',_T('Configure'));
 
 
 // Check if user requested to restore defaults

@@ -14,10 +14,11 @@
 		<strong>{t}Note:{/t}</strong>
 		{t}Using '[[url]]' in the message body will reference the confirmation link.{/t}
 	</p>
-		
-	<a href="setup_configure.php">
+	
+	
+	<a href="{$url.base}/admin/setup/setup_configure.php">
 		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
-		{t}Return to configuration page{/t}</a>
+		{t 1=$returnStr}Return to %1{/t}</a>
 		
 	<h2>{t}Messages{/t} &raquo;</h2>
 	

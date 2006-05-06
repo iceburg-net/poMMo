@@ -44,11 +44,11 @@ if (!empty ($_POST['demographic_name'])) {
 if (!empty ($_GET['delete'])) {
 
 	// make sure it is a valid demographic
-	if (!dbDemographicCheck($dbo, $_REQUEST['demographic_id'])) {
+	if (!dbDemographicCheck($dbo, $_GET['demographic_id'])) {
 		$logger->addMsg(_T('Demographic cannot be deleted.'));
 	} else {
 		// See if this change will affect any subscribers, if so, confirm the change.
-		$sql = 'SELECT COUNT(data_id) FROM ' . $dbo->table['subscribers_data'] . ' WHERE demographic_id=\'' . $demographic_id . '\'';
+		$sql = 'SELECT COUNT(data_id) FROM ' . $dbo->table['subscribers_data'] . ' WHERE demographic_id=\'' . $_GET['demographic_id'] . '\'';
 		$affected = $dbo->query($sql, 0);
 
 		if ($affected && empty ($_GET['dVal-force'])) {
@@ -75,3 +75,4 @@ if (!empty($demographics))
 	
 $smarty->display('admin/setup/setup_demographics.tpl');
 bmKill();
+?>

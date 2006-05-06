@@ -12,12 +12,26 @@
  * 
  ** [END HEADER]**/
 
+/**********************************
+	INITIALIZATION METHODS
+ *********************************/
 define('_IS_VALID', TRUE);
 
-require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_procedures.php');
-$poMMo = & fireup("secure");
+require ('../../bootstrap.php');
+require_once (bm_baseDir . '/inc/db_procedures.php');
+
+$poMMo = & fireup('secure');
+$logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
+
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+$smarty = & bmSmartyInit();
+$smarty->prepareForForm();
+$smarty->assign('returnStr',_T('Configure'));
+
+
 
 // Read user requested changes	
 if (!empty($_POST['throttle-restore'])) {
@@ -29,52 +43,9 @@ elseif(!empty($_POST['throttle-submit'])) {
 	dbUpdateConfig($dbo,$input,TRUE);
 }
 
-
-/** poMMo templating system **/
-
-// header settings -->
-$_head = "\n<link href=\"".bm_baseUrl."/inc/css/bform.css\" rel=\"stylesheet\" type =\"text/css\">\n<script src=\"".bm_baseUrl."/inc/js/bform.js\" type=\"text/javascript\"></script>";
-
-$_nologo = FALSE;
-$_menu = array ();
-$_menu[] = "<a href=\"".bm_baseUrl."/index.php?logout=TRUE\">Logout</a>";
-$_menu[] = "<a href=\"admin_setup.php\">Setup Page</a>";
-$_menu[] = "<a href=\"".$poMMo->_config['site_url']."\">".$poMMo->_config['site_name']."</a>";
-
-// right bar settings -->
-$_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
-
-$_extmenu = array ();
-$_extmenu['name'] = "poMMo Setup";
-$_extmenu['links'] = array ();
-$_extmenu['links'][] = "<a href=\"setup_configure.php\">Configure</a>";
-$_extmenu['links'][] = "<a href=\"setup_demographics.php\">Demographics</a>";
-$_extmenu['links'][] = "<a href=\"setup_form.php\">Setup Form</a>";
-
-include (bm_baseDir.'/setup/top.php');
-
-/** End templating system **/
-
-echo "
-<h1>Settings</h1>
-
-<img src=\"".bm_baseUrl."/img/icons/settings.png\" class=\"articleimg\">
-
-<p>
-poMMo can be configured to throttle the sending of mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be limited. Additionally, you can control how many mails and kilobytes may be sent to a single domain per a specified time frame.
-</p>
-";
-
-echo '<a href="setup_configure.php"><img src="'.bm_baseUrl.'/img/icons/back.png" align="middle" class="navimage" border=\'0\'>Return to configuration page</a>';
-
-echo '<h2>Throttling &raquo;</h2>';
-
 $config= $poMMo->getConfig(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
 
-require(bm_baseDir.'/inc/printouts.php');
-printThrottleForm($config);
-
-
-include (bm_baseDir.'/setup/footer.php');
+$smarty->assign($config);
+$smarty->display('admin/setup/setup_throttle.tpl');
+bmKill();
 ?>
