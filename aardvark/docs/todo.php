@@ -22,8 +22,6 @@ IMMEDIATE (for next release):
 
   (goals for PR11.1)
   * Smarty template scheme throughout whole program
-		+ Remove /img, /inc/css|js, /setup directory
-		+ Remove class.bform.php
   * Rid all poMMo getmessages in favor of Logger....
   * Add test "suite" to check httpspawn, create temporary tables, etc. etc.
   * Rename "demographics" to .... ?
