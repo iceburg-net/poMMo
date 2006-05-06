@@ -105,7 +105,7 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 			}
 
 		}
-		elseif (isset ($_POST['group_logic'])) {
+		elseif (!empty($_POST['group_logic'])) {
 			switch ($_POST['group_logic']) {
 				case 'is_in' :
 				case 'not_in' :
@@ -125,7 +125,7 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 	// validate addition
 	if (validateFilter()) {
 		@$logic = (!empty ($_POST['group_logic'])) ? $_POST['group_logic'] : $_POST['logic'];
-		@$value = (!empty ($_POST['group_logic'])) ? null : $_POST['logic-val'];
+		@$value = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['logic-val'];
 		@$demo_id = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['field_id'];
 
 		// check if we should update filter

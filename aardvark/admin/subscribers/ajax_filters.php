@@ -1,6 +1,4 @@
 <?php
-
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -77,7 +75,8 @@ function checkLogic($check) {
 
 function checkValue($check) {
 	global $defaultValue;
-	return (in_array($check, $defaultValue)) ? ' SELECTED' : null;
+	if ($defaultValue)
+		return (in_array($check, $defaultValue)) ? ' SELECTED' : null;
 }
 
 echo "
