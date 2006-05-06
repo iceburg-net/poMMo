@@ -219,6 +219,10 @@ function dbGroupFilterAdd(& $dbo, $group_id, $demographic_id, $logic, $value = N
 	if (!dbGroupFilterVerify($dbo, $group_id, $demographic_id, $logic, $value))
 		return false;
 
+	if(is_array($value)) {
+		require_once (bm_baseDir . '/inc/lib.txt.php');
+		$value = array2csv($value);
+	}
 	$sql = 'INSERT INTO '.$dbo->table['groups_criteria'].' (group_id, demographic_id, logic, value) VALUES (\''.$group_id.'\', \''.$demographic_id.'\', \''.$logic.'\', \''.$value.'\')';
 	return $dbo->affected($sql);
 }

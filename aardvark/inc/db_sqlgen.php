@@ -61,9 +61,13 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 		// generate include/exclude arrays for the group
 		$criteriaTbl = '';
 		$subtractTbl = '';
-		$sqlArray = genSql($dbo, $group_id) or die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">genSQL returned false for group_id: ' . $group_id.' No criteria?');
+		$sqlArray = genSql($dbo, $group_id);
 		
-		if ($sqlArray['include'][1]) {
+		if (!$sqlArray) {
+			// no group criteria exist?
+			$group_id = 'all';
+		}
+		elseif ($sqlArray['include'][1]) {
 			for ($i = 2; $i <= $sqlArray['include'][0]; $i++)
 				$criteriaTbl .= ' inner join ' . $dbo->table[$table . '_data'] . ' t' . $i . ' using (' . $table . '_id)';
 			$whereSQL = ' WHERE ' . $sqlArray['include'][1];

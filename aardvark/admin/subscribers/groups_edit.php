@@ -10,269 +10,155 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
- 
+
+/**********************************
+	INITIALIZATION METHODS
+*********************************/
 define('_IS_VALID', TRUE);
 
-require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_groups.php');
-require_once (bm_baseDir.'/inc/db_demographics.php');
-require_once (bm_baseDir.'/inc/lib.txt.php');
+require ('../../bootstrap.php');
+require_once (bm_baseDir . '/inc/db_groups.php');
+require_once (bm_baseDir . '/inc/db_demographics.php');
+require_once (bm_baseDir . '/inc/lib.txt.php');
+
 $poMMo = & fireup('secure');
+$logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
 
-// delete criteria if requested
-if (!empty($_GET['delete']))  
-	dbGroupFilterDel($dbo, str2db($_GET['criteria_id']));
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+$smarty = & bmSmartyInit();
+$smarty->prepareForForm();
+$smarty->assign('returnStr', _T('Groups Page'));
 
-// setup $group_id. Make OK for DB...
-$group_id = '';
-$group_id = str2db($_REQUEST['group_id']);
+// validate group_id before setting it as var
+if (isset ($_REQUEST['group_id']) && dbGroupCheck($dbo, $_REQUEST['group_id']))
+	$group_id = str2db($_REQUEST['group_id']);
+else {
+	bmRedirect('subscribers_groups.php');
+}
+
+// delete criteria if requested
+if (!empty ($_GET['delete'])) {
+	if (is_numeric($_GET['filter_id']))
+		if (dbGroupFilterDel($dbo, str2db($_GET['filter_id'])))
+			$logger->addMsg(_T('Filter Removed'));
+}
 
 // change group name  if requested
-if (!empty ($_POST['group_name']))
+if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
 	dbGroupUpdateName($dbo, $group_id, str2db($_POST['group_name']));
-	
-// get group
-$groups = & dbGetGroups($dbo, $group_id);
-$group_name = db2str($groups[$group_id]);
 
+// get groups, demographics
+$groups = & dbGetGroups($dbo);
+$demos = & dbGetDemographics($dbo);
 
-// get array of demographics
-$demoArray = & dbGetDemographics($dbo);
+// check if a filter is requested to be added
+if (isset ($_POST['add']) || isset ($_POST['update'])) {
 
-$errorStr = '';
-// check if a filter is requested to be add
-if (isset ($_POST['demographic_id'])) {
-	// validate that the user selected combination is legal. 
+	function validateFilter() {
+		global $demos;
+		global $groups;
 
-	if ($_POST['demographic_id'] != '')
-		$demographic = & $demoArray[$_POST['demographic_id']];
+		if (isset ($_POST['logic'])) {
 
-	switch ($_POST['logic']) {
-		case '' :
-			$errorStr = 'A filter must be supplied';
-			break;
-		case 'is_in' :
-		case 'not_in' :
-			// Not legal if demographic_id is set. 
-			if ($_POST['demographic_id'] != '')
-				$errorStr = 'Leave criteria empty if filter is include another mail group';
-			break;
-		case 'is_equal' :
-		case 'not_equal' :
-			// Not legal if  demographic_id is empty, or type is check.
-			if ($_POST['demographic_id'] == '')
-				$errorStr = 'Select a criteria if filter is to enforce value';
-			elseif ($demographic['type'] == 'checkbox') $errorStr = 'Checkbox criteria cannot be used when enforcing value(s).';
-			break;
-		case 'is_more' :
-		case 'is_less' :
-			// Not legal if  demographic_id is empty, or type is check or select.
-			if ($_POST['demographic_id'] == '')
-				$errorStr = 'Select a criteria if filter is to enforce value';
-			elseif (($demographic['type'] == 'checkbox') || ($demographic['type'] == 'multiple')) $errorStr = 'Only text, date, or year criteria can be compared.';
-			break;
-		case 'is_true' :
-		case 'not_true' :
-			// Not legal if demographic_id is empty, type must be a checkbox
-			if ($_POST['demographic_id'] == '')
-				$errorStr = 'Select a criteria if filter is to examine selected status';
-			elseif ($demographic['type'] != 'checkbox') 
-				$errorStr = 'Only checkbox criteria status can be determined.';
-			break;
-		default :
-			$errorStr = 'Unknown filter received.';
-			break;
-	}
+			// logic-val: what a field should be compared to
+			// field_id: which field_id (demographic_id) should be compared
+			// logic: the logic of the comparisson
 
-	// no errors were found in users selection, add to DB with a bunk value
-	if (empty ($errorStr)) {
-		if (dbGroupFilterAdd($dbo, $group_id, str2db($_POST['demographic_id']), str2db($_POST['logic']), 0))
-			header('Location: '.bm_http.bm_baseUrl.'/admin/subscribers/groups_filter.php?group_id='.$group_id.'&criteria_id='.$dbo->lastId());
-		else
-			$errorStr = 'Could not add filter. Perhaps it\'s a duplicate or negates an existing filter?';
-	}
-	elseif (!empty ($demographic)) $errorStr .= '<br>&nbsp;&nbsp; '.$demographic['name'].' type is: '.$demographic['type'];
+			// make sure field_id is valid
+			$demo = & $demos[$_POST['field_id']];
+			if (!is_array($demo))
+				return false;
 
-}
+			switch ($_POST['logic']) {
+				case 'is_in' :
+				case 'not_in' :
+					return false; // group inclusion/exclusion should be hanled by section below...
 
-/** poMMo templating system **/
-// header settings -->
-$_head = '<script src="inc/js/bform.js" type="text/javascript"></script>';
+				case 'is_equal' :
+				case 'not_equal' :
+					if (empty($_POST['logic-val']))
+						return false;
+			
+					if ($demo['type'] == 'checkbox')
+						return false;
+					break;
 
-$_nologo = FALSE;
-$_menu = array ();
-$_menu[] = '<a href="'.bm_baseUrl.'/index.php?logout=TRUE">Logout</a>';
-$_menu[] = '<a href="subscribers_groups.php">Groups Page</a>';
-$_menu[] = '<a href="'.$poMMo->_config['site_url'].'">'.$poMMo->_config['site_name'].'</a>';
-
-// right bar settings -->
-$_nomenu = FALSE; // turn off main "admin menu" in right bar
-$_nodemo = FALSE; // turn off display of poMMo demonstration mode status
-
-$_extmenu = array();
-$_extmenu['name'] = "Subscriber Management";
-$_extmenu['links'] = array();
-$_extmenu['links'][] = "<a href=\"subscribers_manage.php\">Manage</a>";
-$_extmenu['links'][] = "<a href=\"subscribers_import.php\">Import</a>";
-$_extmenu['links'][] = "<a href=\"subscribers_groups.php\">Groups</a>";
-
-include (bm_baseDir.'/setup/top.php');
-/** End templating system **/
-
-// validate group_id
-if (empty ($group_id) || !is_numeric($group_id) || !dbGroupCheck($dbo, $group_id)) {
-	// bad groupId / nonexistant group
-	echo '
-									<img src="'.bm_baseUrl.'/img/icons/error.png" align="middle">
-										<b>ERROR</b>: Invalid Group.';
-	include (bm_baseDir.'/setup/footer.php');
-	die();
-}
-?>
-
-<h1>Edit Mailing Group</h1>
-
-<img src="<?php echo bm_baseUrl; ?>/img/icons/groups.png" class="articleimg">
-
-<p>
-Groups are made of filtering criteria. Available criteria is based on
-<a href="setup_demographics.php">demographics</a> you collect . You can match subscribers 
-against any demographic's value(s). For instance, if you collect 'age', you can create a  group to match 
-subscribers over 21. To do this, create a filter that matches 'age' to the value of '21', and another 
-that matches 'age' to greater than '21'.
-</p>	  
-<?php 
-
-echo '<a href="subscribers_groups.php"><img src="'.bm_baseUrl.'/img/icons/back.png" align="middle" class="navimage" border=\'0\'>Return to groups page</a>';
-
-echo '<h2>'.$group_name.' &raquo;</h2><br>';
-
-echo '
-	<form id="gName" action="'.$_SERVER['PHP_SELF'].'" method="POST">
-	<input type="hidden" name="group_id" value="'.$group_id.'">
-	<div class="field">
-			<input type="text" class="text" name="group_name" id="group_name" title="enter group name" value="'.$group_name.'" maxlength="60" size="32" />
-			<input class="button" id="gName-submit" name="gName-submit" type="submit" value="Change Name" />
-	</div>
-	</form>';
-
-// fetch this group filters to an array. array_key == filter/criteria_id
-$filters = dbGetGroupFilter($dbo, $group_id);
-$filterCount = count($filters);
-
-if ($filterCount < 1)
-	echo '<br><b>No filtering criteria has been supplied.</b>';
-else {
-?>
-	<div width="100%" align="center"><table border="0" cellspacing="4" width="97%">
-	<tr align="center"><td width="30">&nbsp;</td><td width="30">Delete</td><td width="30">Edit</td><td align="left"> &nbsp; &nbsp; &nbsp;Match Subscribers Who:</td><td width="30" nowrap></td></tr>
-<?php 
-	$i = 0;
-	foreach (array_keys($filters) as $criteria_id) {
-		$row = & $filters[$criteria_id];
-		$i ++;
-
-		$andStr = '';
-		if ($i < $filterCount)
-			$andStr = 'AND';
-
-		// make an array holding the demographic info (ie. 'name','prompt','active','required',etc)
-		if (is_numeric($row['demographic_id']) && ($row['demographic_id'] >= 0)) // make sure demo_id is not 0 [ 0 is set for is_in or not_in logic]...
-			$demographic = & $demoArray[$row['demographic_id']];
-
-		$matchStr = '';
-		switch ($row['logic']) {
-			case "is_in" :
-				$matchStr = 'Belong to mailing group <b>'.dbGroupName($dbo, $row['value']).'</b>';
-				break;
-			case "not_in" :
-				$matchStr = 'Do not belong to mailing group <b>'.dbGroupName($dbo, $row['value']).'</b>';
-				break;
-			case "is_equal" :
-				// determine criteria matches a single or multiple values
-				$values = quotesplit($row['value']);
-				if (count($values) > 1)
-					$matchStr =  'Have <em>'.$demographic['name'].'</em> set to one of these <a href="groups_filter.php?group_id='.$group_id.'&criteria_id='.$criteria_id.'">values</a>';
-				else
-					$matchStr =  'Have <em>'.$demographic['name'].'</em> set to <b>'.$values[0].'</b>';
-				break;
-			case "not_equal" :
-				// determine criteria matches a single or multiple values
-				$values = quotesplit($row['value']);
-				if (count($values) > 1)
-					$matchStr =  'Did not set <em>'.$demographic['name'].'</em> to one of these <a href="groups_filter.php?group_id='.$group_id.'&criteria_id='.$criteria_id.'">values</a>';
-				else
-					$matchStr =  'Did not set <em>'.$demographic['name'].'</em> to <b>'.$values[0].'</b>';
-				break;
-			case "is_more" :
-				$matchStr =  'Have <em>'.$demographic['name'].'</em> greater than <b>'.$row['value'].'</b>';
-				break;
-			case "is_less" :
-				$matchStr = 'Have <em>'.$demographic['name'].'</em> less than <b>'.$row['value'].'</b>';
-				break;
-			case "is_true" :
-				$matchStr =  'Checked <em>'.$demographic['name'].'</em>';
-				break;
-			case "not_true" :
-				$matchStr =  'Did not check <em>'.$demographic['name'].'</em>';
-				break;
+				case 'is_more' :
+				case 'is_less' :
+					if (empty($_POST['logic-val']))
+						return false;
+						
+					if ($demo['type'] == 'checkbox' || $demo['type'] == 'multiple')
+						return false;
+					break;
+				case 'is_true' :
+				case 'not_true' :
+					if ($demo['type'] != 'checkbox')
+						return false;
+					break;
+				default :
+					return false;
+					break;
+			}
 
 		}
+		elseif (isset ($_POST['group_logic'])) {
+			switch ($_POST['group_logic']) {
+				case 'is_in' :
+				case 'not_in' :
+					// make sure logic-val is a valid group
 
-		echo '
-										<tr>
-											<td align="right"> '.$i.'. </td>
-											<td align="center"><a href="'.$_SERVER['PHP_SELF'].'?group_id='.$group_id.'&criteria_id='.$criteria_id.'&delete=TRUE" onclick="javascript:return confirm(\'Are you sure you want to delete filter criteria #'.$i.'?\')"><img src="'.bm_baseUrl.'/img/icons/delete.png" border="0"></a></td>
-											<td align="center"><a href="groups_filter.php?group_id='.$group_id.'&criteria_id='.$criteria_id.'"><img src="'.bm_baseUrl.'/img/icons/edit.png" border="0"></a></td>
-											<td align="left"> &nbsp; &nbsp; <b>'.$matchStr.'</b></td>
-											<td align="center">'.$andStr.'</td>
-										</tr>
-										';
+					if (!isset ($groups[$_POST['logic-val']]))
+						return false;
+					break;
+			}
+		} else {
+			return false;
+		}
+		// addition passed sanity checks
+		return true;
 	}
-	echo '
-					<tr><td colspan="2"></td><td colspan="3">Filters match <b>'.dbGroupTally($dbo,$group_id).'</b> total subscribers <a href="'.bm_baseUrl.'/subscribers_manage.php?group_id='.$group_id.'">(view)</a></td>			
-				</table></div><br><br>';
+
+	// validate addition
+	if (validateFilter()) {
+		@$logic = (!empty ($_POST['group_logic'])) ? $_POST['group_logic'] : $_POST['logic'];
+		@$value = (!empty ($_POST['group_logic'])) ? null : $_POST['logic-val'];
+		@$demo_id = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['field_id'];
+
+		// check if we should update filter
+		if (isset ($_POST['update']) && isset ($_POST['filter_id']) && is_numeric($_POST['filter_id'])) {
+			if (dbGroupFilterDel($dbo, $_POST['filter_id']))
+				if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
+					$logger->addMsg(_T('Filter Updated'));
+				else
+					$logger->addMsg(_T('Update failed'));
+		} else {
+			if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
+				$logger->addMsg(_T('Filter Added'));
+			else
+				$logger->addMsg(_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
+		}
+	} else {
+		$logger->addMsg(_T('Filter failed validation'));
+	}
 }
 
-$demoStr = '<option value="">Choose Criteria</option>';
-foreach (array_keys($demoArray) as $key) {
-	$selected = '';
-	$demoId = & $key;
-	if (!empty ($_POST['demographic_id']) && ($demoId == $_POST['demographic_id']))
-		$selected = 'SELECTED';
-	$demographic = & $demoArray[$key];
-		$demoStr .= '<option value="'.$demoId.'" '.$selected.' />'.$demographic['name'].'</option>';
-}
+$tally = dbGroupTally($dbo, $group_id);
+$filters = dbGetGroupFilter($dbo, $group_id);
+$filterCount = count($filters);
+$group_name = db2str($groups[$group_id]);
 
-$logicStr = '<option value="">Choose Filter</option>';
-$logicStr .= '<option value="is_equal">Has value (=)</option>';
-$logicStr .= '<option value="not_equal">Not value (!=)</option>';
-$logicStr .= '<option value="is_more">Is more than (>)</option>';
-$logicStr .= '<option value="is_less">Is less than (<)</option>';
-$logicStr .= '<option value="is_true">Is checked</option>';
-$logicStr .= '<option value="not_true">Is not checked</option>';
-$logicStr .= '<option value="is_in">Also In mail group</option>';
-$logicStr .= '<option value="not_in">Not in mail group</option>';
+$smarty->assign('group_name', $group_name);
+$smarty->assign('demos', $demos);
+$smarty->assign('groups', $groups);
+$smarty->assign('group_id', $group_id);
+$smarty->assign('filters', $filters);
+$smarty->assign('filterCount', $filterCount);
+$smarty->assign('tally', $tally);
 
-if (!empty ($errorStr))
-	$errorStr = '<font color="red"><b>ERROR:</b> '.$errorStr.'</font>';
-
-echo '
-	<form id="gCriteria" action="'.$_SERVER['PHP_SELF'].'" method="POST">
-	<input type="hidden" name="group_id" value="'.$group_id.'">
-	<fieldset>
-		<legend>Add filtering criteria</legend>
-	<br>'.$errorStr.'
-	<div class="field"> &nbsp;
-			<select name="demographic_id">'.$demoStr.'</select>
-			<select name="logic">'.$logicStr.'</select>
-			&raquo;
-			<input class="button" id="gCriteria-submit" name="gCriteria-submit" type="submit" value="Select Value(s)" />
-	</div>
-	<br>
-	</fieldset>
-	</form>';
-	
-include (bm_baseDir.'/setup/footer.php');
+$smarty->display('admin/subscribers/groups_edit.tpl');
+bmKill();
 ?>
