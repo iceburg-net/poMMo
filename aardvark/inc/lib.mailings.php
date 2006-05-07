@@ -52,11 +52,7 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 	// reset demo mode to default
 	$message->toggleDemoMode();
 	
-	// PHASE OUT .. use logger!
-	$msg = "<b>Error</b>: Confirmation Mailing Not Sent.";
-	$_SESSION["poMMo"]->addMessage($msg);
-	
-	$logger->addErr(_T('Unable to send confirmation mailing. Contact Administrator.'));
+	$logger->addErr(_T('Error Sending Mail'));
 	return false;	
 }
 
@@ -75,7 +71,7 @@ function bmSendTestMailing(&$to, &$input) {
 			return '(Errors Preparing Test)';
 		
 		if (!$Mail->bmSendmail($to))
-			return _T('Error Sending: ').$_SESSION['poMMo']->getMessages();
+			return _T('Error Sending Mail');
 		return sprintf(_T('Test sent to %s'), $to);
 }
 	
