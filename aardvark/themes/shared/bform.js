@@ -1,16 +1,3 @@
-/* The following code is to "check all/check none" NOTE: form name must properly be set */
-var form='oForm' //Give the form name here
-function SetChecked(val,chkName) {
-	dml=document.forms[form];
-	len = dml.elements.length;
-	var i=0;
-	for( i=0 ; i<len ; i++) {
-		if (dml.elements[i].name==chkName) {
-			dml.elements[i].checked=val;
-		}
-	}
-}
-/* Continue bForm */
 function highlight_form_field(form_field)
 {
   if ('undefined' != form_field.className)

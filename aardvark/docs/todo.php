@@ -38,11 +38,11 @@ SHORT TERM:
   (API) Merge validator's is_email rules with lib.txt.php's isEmail
   (API) Add validation schemes to subscription form (process.php)
   (API) when inserting into subscribers_flagged, watch for duplicate keys (either add IGNORE or explicity check for flag_type...)
-  
+  (API) Allow fetching of demographic id, names, + types -- NOT OPTIONS, etc... too much data being passed around manage/groups/import/etc.
   
   (feature) add mailing history
   (feature) add message templating
-  (feature) Add Date + Numeric types
+  (feature) Add Date + Numeric types  [[[{html_select_date}]]]
   
 
 MEDIUM TERM:

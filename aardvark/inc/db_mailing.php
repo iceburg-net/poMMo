@@ -21,7 +21,7 @@ defined('_IS_VALID') or die('Move along...');
 function dbQueueCreate(& $dbo, & $input) {
 	if (!is_array($input))
 		die('<img src="' .
-		bm_baseUrl . '/img/icons/alert.png" align="middle">dbQueueCreate() -> Bad Queue Passed.');
+		bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">dbQueueCreate() -> Bad Queue Passed.');
 
 	// clear the table
 	$sql = 'TRUNCATE TABLE ' . $dbo->table['queue'];
