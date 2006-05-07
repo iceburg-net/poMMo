@@ -31,7 +31,7 @@ class bTemplate extends Smarty {
 			// template file not existant in theme, fallback to "default" theme
 			if (!is_file($this->_themeDir.'default/'.$resource_name))
 				// requested template file does not exist in "default" theme, die.
-				die('<img src="'.bm_baseUrl.'/img/icons/alert.png" align="middle">'.$resource_name.': '._T('Template file not found in default theme.'));
+				die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">'.$resource_name.': '._T('Template file not found in default theme.'));
 			else
 				$resource_name = $this->_themeDir.'default/'.$resource_name;
 		

@@ -82,7 +82,7 @@ function bmKill($msg = NULL) {
 	}
 	
 	if ($msg)
-		die('<div style="float: left;"><img src="' . bm_baseUrl . '/img/icons/alert.png" align="bottom"></div>' . $msg);
+		die('<div style="float: left;"><img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="bottom"></div>' . $msg);
 	die();
 }
 

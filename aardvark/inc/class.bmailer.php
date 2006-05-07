@@ -81,7 +81,7 @@ class bMailer extends PHPMailer {
 
 		$langPath = bm_baseDir . '/inc/phpmailer/language/';
 		if (!$this->SetLanguage('en', $langPath))
-			die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">bMailer(): Unable to set language.');
+			die('<img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">bMailer(): Unable to set language.');
 
 	}
 

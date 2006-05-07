@@ -32,7 +32,7 @@
 function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list', $order_by = NULL, $order_type = 'ASC', $limit = NULL, $start = NULL) {
 	if ($table != 'subscribers' && $table != 'pending')
 		die('<img src="' .
-		bm_baseUrl . '/img/icons/alert.png" align="middle">Unknown table passed to dbGetGroupSubscribers().');
+		bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">Unknown table passed to dbGetGroupSubscribers().');
 
 	// set variables to be appended onto SQL statements
 	$sortTbl = '';
@@ -85,14 +85,14 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 		if (!empty ($sqlArray['exclude'][0]) && $sqlArray['exclude'][0] > 0) {
 			$dbo->dieOnQuery(FALSE);
 			$sql = 'DROP TABLE IF EXISTS subtract';
-			$dbo->query($sql) or die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">Please ensure your MySQL user has privileges to DROP TEMPORARY TABLE.');
+			$dbo->query($sql) or die('<img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">Please ensure your MySQL user has privileges to DROP TEMPORARY TABLE.');
 			$sql = 'CREATE TEMPORARY TABLE subtract (' . $table . '_id INT UNSIGNED NOT NULL, INDEX (' . $table . '_id))';
-			$dbo->query($sql) or die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">Please ensure your MySQL user has privileges to CREATE TEMPORARY TABLE.');
+			$dbo->query($sql) or die('<img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">Please ensure your MySQL user has privileges to CREATE TEMPORARY TABLE.');
 			$sql = 'INSERT INTO subtract (' . $table . '_id) SELECT DISTINCT t1.' . $table . '_id FROM ' . $dbo->table[$table . '_data'] . ' t1';
 			for ($i = 2; $i <= $sqlArray['exclude'][0]; $i++)
 				$sql .= ' inner join ' . $dbo->table[$table . '_data'] . ' t' . $i . ' using (' . $table . '_id)';
 			$sql .= ' WHERE ' . $sqlArray['exclude'][1];
-			$dbo->query($sql) or die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">Error inserting records into temp table. <br><br>Query was: ' . $sql);
+			$dbo->query($sql) or die('<img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">Error inserting records into temp table. <br><br>Query was: ' . $sql);
 
 			$subtractTbl = ' LEFT JOIN subtract ON t1.' . $table . '_id=subtract.' . $table . '_id';
 			$whereSQL .= ' AND subtract.' . $table . '_id IS NULL';
@@ -131,7 +131,7 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 			$result = & $dbo->getAll($sql, 'row', '0');
 			break;
 		default :
-			die('<img src="' . bm_baseUrl . '/img/icons/alert.png" align="middle">Unknown type sent to dbGetGroupSubscribers()');
+			die('<img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">Unknown type sent to dbGetGroupSubscribers()');
 	}
 	return $result;
 }

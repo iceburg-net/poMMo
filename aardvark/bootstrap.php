@@ -29,7 +29,7 @@ define('pommo_revision', '19');
 define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
 
 @include(bm_baseDir.'/config.php');
-defined('bm_lang') or die('<img src="'.bm_baseUrl.'/img/icons/alert.png" align="middle"><br><br>
+defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>
 Language not defined! Have you installed the config.php file? See the included config.sample.php for an example.
 <br><br>
 DE translation, etc.
