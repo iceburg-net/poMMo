@@ -42,7 +42,7 @@ $bmdb['prefix'] = '';
  *	fr - French
  *	de - German
 */
-define('bm_lang','en');
+define('bm_lang','de');
 
 
 /************************************************************************

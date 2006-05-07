@@ -46,8 +46,6 @@
 	
 	<span style="width: 30px;"></span>
 	
-	{debug}
-	
 	{t}Order by:{/t}
 		<SELECT name="order" onChange="document.bForm.submit()">
 			<option value="email">{t}email{/t}</option>
