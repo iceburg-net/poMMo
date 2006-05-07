@@ -1,3 +1,4 @@
+{if !$embeddedConfirm}
 {include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
 
@@ -10,7 +11,7 @@
 {/if}
 
 <br>
-
+{/if}
 	<table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td colspan="2">{$confirm.msg}</td>
@@ -35,8 +36,9 @@
 		  </td>
 		</tr>
 		</table>
-
+{if !$embeddedConfirm}
 </div>
 <!-- end mainbar -->
 
 {include file="admin/inc.footer.tpl"}
+{/if}
