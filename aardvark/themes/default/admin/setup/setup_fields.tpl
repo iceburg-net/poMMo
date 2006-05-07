@@ -9,14 +9,14 @@
 
 <div id="mainbar">
 
-<h1>{t}Demographics Page{/t}</h1>
+<h1>{t}Fields Page{/t}</h1>
 
-<img src="{$url.theme.shared}/images/icons/demographics.png" class="articleimg">
+<img src="{$url.theme.shared}/images/icons/fields.png" class="articleimg">
 
 {if $intro}<p>{$intro}</p>{/if}
 
 
-<h2>{t}Demographics{/t} &raquo;</h2>
+<h2>{t}Fields{/t} &raquo;</h2>
   
 {if $messages}
     <div class="msgdisplay">
@@ -29,9 +29,9 @@
  <form action="" method="POST">
 	<div class="field">
 		<b>{t}Make New{/t} &raquo;</b>
-		<input type="text" class="text"  title="{t}type new demographic name{/t}" maxlength="60" size="30" 
-		name="demographic_name" id="demographic_name"  value="{t}type new demographic name{/t}" />
-		<select name="demographic_type">
+		<input type="text" class="text"  title="{t}type new field name{/t}" maxlength="60" size="30" 
+		name="field_name" id="field_name"  value="{t}type new field name{/t}" />
+		<select name="field_type">
 			<option value="text">{t}Text{/t}</option>
 			<option value="number">{t}Number{/t}</option>
 			<option value="checkbox">{t}Check Box{/t}</option>
@@ -46,14 +46,14 @@
 <span>{t}Delete{/t}</span>
 <span style="margin-left: 20px;">{t}Edit{/t}</span>
 <span style="margin-left: 20px; margin-right: 20px;">{t}Order{/t}</span>
-<span style="text-align:left; margin-left: 5px;">{t}Demographic Name{/t}</span>
+<span style="text-align:left; margin-left: 5px;">{t}Field Name{/t}</span>
 
-{foreach name=demos from=$demographics key=key item=demo}
+{foreach name=demos from=$fields key=key item=demo}
 <div id="demo_{$key}">
-	<a href="{$smarty.server.PHP_SELF}?demographic_id={$key}&delete=TRUE&demographic_name={$demo.name}">
+	<a href="{$smarty.server.PHP_SELF}?field_id={$key}&delete=TRUE&field_name={$demo.name}">
  	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0"></a>
 	<span style="margin-left: 25px;">
-	<a href="demographics_edit.php?demographic_id={$key}">
+	<a href="fields_edit.php?field_id={$key}">
 			<img src="{$url.theme.shared}/images/icons/edit.png" border="0"></a>
 	</span>
 	<span style="cursor:move; margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
@@ -63,7 +63,7 @@
 	</span>
 </div>
 {foreachelse}
- 	<div><br><strong>{t}No demographics have been assigned.{/t}</strong></div>
+ 	<div><br><strong>{t}No fields have been assigned.{/t}</strong></div>
 {/foreach}
 
 </div>

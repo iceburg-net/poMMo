@@ -20,7 +20,7 @@ define('_IS_VALID', TRUE);
 
 require ('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/lib.import.php');
-require_once (bm_baseDir.'/inc/db_demographics.php');
+require_once (bm_baseDir.'/inc/db_fields.php');
 
 $poMMo = & fireup('secure','keep');
 $logger = & $poMMo->logger;
@@ -37,12 +37,12 @@ $smarty->assign('returnStr', _T('Subscribers Page'));
 $sessionArray = & $poMMo->get();
 $csvArray = & $sessionArray['csvArray'];
 $numFields = count($csvArray['csvFile'][$csvArray['lineWithMostFields']]);
-$demographics = dbGetDemographics($dbo);
+$fields = dbGetFields($dbo);
 
 
 $smarty->assign('numFields',$numFields);
 $smarty->assign('csvArray',$csvArray);
-$smarty->assign('demographics',$demographics);
+$smarty->assign('fields',$fields);
 
 
 if (!empty($_GET['import'])) { // check to see if we should import
@@ -80,7 +80,7 @@ if (!empty($_GET['import'])) { // check to see if we should import
 elseif (!empty($_POST['preview'])) { // check to see if a preview has been requested
 
 	// prepare csvArray for import
-	$importArray = csvPrepareImport($poMMo, $dbo, $demographics,$csvArray['csvFile'],$_POST['field']);
+	$importArray = csvPrepareImport($poMMo, $dbo, $fields,$csvArray['csvFile'],$_POST['field']);
 	
 	// get count of subscribers to be imported
 	$totalImported = count($importArray['valid'])+count($importArray['invalid']);

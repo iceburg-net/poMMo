@@ -7,7 +7,7 @@
 	<h1>{t}poMMo Setup{/t}</h1>
 	<div class="submenu">
 		<a href="setup_configure.php">{t}Configure{/t}</a> 
-		<a href="setup_demographics.php">{t}Demographics{/t}</a>
+		<a href="setup_fields.php">{t}Fields{/t}</a>
 		<a href="setup_form.php">{t}Setup Form{/t}</a>
 	</div>
 	<!-- end section nav -->

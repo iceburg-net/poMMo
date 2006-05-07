@@ -150,7 +150,7 @@ msgstr "Configuration"
 
 #. poMMo/themes/default/admin/inc.sidebar.tpl
 #: pommo_theme_lang.php:126
-msgid "Demographics"
+msgid "Fields"
 msgstr "Segmentation"
 
 #. poMMo/themes/default/admin/inc.sidebar.tpl

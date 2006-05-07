@@ -101,7 +101,7 @@ function dbGroupUpdateName(& $dbo, $group_id, $groupName) {
 }
 
 // <array> : Returns an array of criteria filters. Array's key is criteria_id and it points
-//  to an array holding criteria group_id, demographic_id, logic, and value.
+//  to an array holding criteria group_id, field_id, logic, and value.
 //  if group_id is given, only criteria pertaining to group_id will be returned.
 //  if criteria_id is given, only that criteria will be returned
 function & dbGetGroupFilter(& $dbo, $group_id = NULL, $criteria_id = NULL) {
@@ -137,7 +137,7 @@ function & dbGetGroupFilter(& $dbo, $group_id = NULL, $criteria_id = NULL) {
 	while ($row = $dbo->getRows($sql)) {
 		$a = array ();
 		$a['group_id'] = $row['group_id'];
-		$a['demographic_id'] = $row['demographic_id'];
+		$a['field_id'] = $row['field_id'];
 		$a['logic'] = $row['logic'];
 		$a['value'] = $row['value'];
 		$returnArray[$row['criteria_id']] = $a;
@@ -155,7 +155,7 @@ function dbGroupFilterDel(& $dbo, $criteria_id) {
 }
 
 // dbGroupFilterVerify: <bool> - Returns true if a filter addition/update proves to be sane.
-function dbGroupFilterVerify(& $dbo, & $group_id, & $demographic_id, & $logic, & $value) {
+function dbGroupFilterVerify(& $dbo, & $group_id, & $field_id, & $logic, & $value) {
 
 	$oppLogic = NULL;
 	switch ($logic) {
@@ -192,7 +192,7 @@ function dbGroupFilterVerify(& $dbo, & $group_id, & $demographic_id, & $logic, &
 			return false;
 	}
 	if (!empty ($oppLogic))
-		$sql = 'SELECT count(criteria_id) FROM '.$dbo->table['groups_criteria'].' WHERE group_id=\''.$group_id.'\' AND demographic_id=\''.$demographic_id.'\' AND logic=\''.$oppLogic.'\'';
+		$sql = 'SELECT count(criteria_id) FROM '.$dbo->table['groups_criteria'].' WHERE group_id=\''.$group_id.'\' AND field_id=\''.$field_id.'\' AND logic=\''.$oppLogic.'\'';
 	if ($dbo->query($sql, 0))
 		return false;
 
@@ -203,7 +203,7 @@ function dbGroupFilterVerify(& $dbo, & $group_id, & $demographic_id, & $logic, &
 function dbGroupFilterUpdate(& $dbo, $criteria_id, $value = NULL) {
 
 		// get info -- 
-	$sql = 'SELECT group_id, demographic_id, logic FROM '.$dbo->table['groups_criteria'].' WHERE criteria_id=\''.$criteria_id.'\'';
+	$sql = 'SELECT group_id, field_id, logic FROM '.$dbo->table['groups_criteria'].' WHERE criteria_id=\''.$criteria_id.'\'';
 	$row = mysql_fetch_row($dbo->query($sql));
 
 	if (!$row || !dbGroupFilterVerify($dbo, $row['0'], $row['1'], $row['2'], $value))
@@ -214,16 +214,16 @@ function dbGroupFilterUpdate(& $dbo, $criteria_id, $value = NULL) {
 }
 
 // dbGroupFilterAdd: <bool> - Returns true if a filtering criteria was added to the database
-function dbGroupFilterAdd(& $dbo, $group_id, $demographic_id, $logic, $value = NULL) {
+function dbGroupFilterAdd(& $dbo, $group_id, $field_id, $logic, $value = NULL) {
 
-	if (!dbGroupFilterVerify($dbo, $group_id, $demographic_id, $logic, $value))
+	if (!dbGroupFilterVerify($dbo, $group_id, $field_id, $logic, $value))
 		return false;
 
 	if(is_array($value)) {
 		require_once (bm_baseDir . '/inc/lib.txt.php');
 		$value = array2csv($value);
 	}
-	$sql = 'INSERT INTO '.$dbo->table['groups_criteria'].' (group_id, demographic_id, logic, value) VALUES (\''.$group_id.'\', \''.$demographic_id.'\', \''.$logic.'\', \''.$value.'\')';
+	$sql = 'INSERT INTO '.$dbo->table['groups_criteria'].' (group_id, field_id, logic, value) VALUES (\''.$group_id.'\', \''.$field_id.'\', \''.$logic.'\', \''.$value.'\')';
 	return $dbo->affected($sql);
 }
 

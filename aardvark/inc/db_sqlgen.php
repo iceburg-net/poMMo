@@ -20,7 +20,7 @@
  *   (count) the # of subscibedrs in a group_id 
  *   (email) an array of emails in a group (for fast mail queue population)
  *
- *  if order_id is given, results will be ordered by the that particular demographic_id.	
+ *  if order_id is given, results will be ordered by the that particular field_id.	
  *    ordering can be changed from ASC to DESC if $order_type is provided (as 'DESC')
  *
  *  if limit is given, the array returned array will have a max # of entries. If
@@ -46,7 +46,7 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 				$sortTbl = ' INNER JOIN ' . $dbo->table[$table] . ' sort ON (s.' . $table . '_id=sort.' . $table . '_id)';
 				$orderSQL = ' ORDER BY sort.email,s.' . $table . '_id ' . $order_type;
 			} else {
-				$sortTbl = ' LEFT JOIN ' . $dbo->table[$table] . '_data sort ON (s.' . $table . '_id=sort.' . $table . '_id AND sort.demographic_id=' . $order_by . ')';
+				$sortTbl = ' LEFT JOIN ' . $dbo->table[$table] . '_data sort ON (s.' . $table . '_id=sort.' . $table . '_id AND sort.field_id=' . $order_by . ')';
 				$orderSQL = ' ORDER BY sort.value,s.' . $table . '_id ' . $order_type;
 			}
 		} else {
@@ -54,7 +54,7 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 				$sortTbl = ' INNER JOIN ' . $dbo->table[$table] . ' sort ON (t1.' . $table . '_id=sort.' . $table . '_id)';
 				$orderSQL = ' ORDER BY sort.email,t1.' . $table . '_id ' . $order_type;
 			} else {
-				$sortTbl = ' LEFT JOIN ' . $dbo->table[$table] . '_data sort ON (t1.' . $table . '_id=sort.' . $table . '_id AND sort.demographic_id=' . $order_by . ')';
+				$sortTbl = ' LEFT JOIN ' . $dbo->table[$table] . '_data sort ON (t1.' . $table . '_id=sort.' . $table . '_id AND sort.field_id=' . $order_by . ')';
 				$orderSQL = ' ORDER BY sort.value,t1.' . $table . '_id ' . $order_type;
 			}
 		}
@@ -140,25 +140,25 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 // opposite logic must be applied. Rules:
 //   1) Subscribers matching anything in the 'exclude' array will be SUBTRACTED from subscribers matched in the INCLUDE array
 //   2) not_equal + not_true logic will be converted to opposite logic and placed in the opposite array.
-//      ie. if a demographic has 'not_equal' logic & is in the exclude array, it will be transformed to 'is_in' and moved to the INCLUDE array
-function makedemo(& $tree, & $criteriaArray, & $demographics, $include = 'include') {
+//      ie. if a field has 'not_equal' logic & is in the exclude array, it will be transformed to 'is_in' and moved to the INCLUDE array
+function makedemo(& $tree, & $criteriaArray, & $fields, $include = 'include') {
 	foreach (array_keys($tree) as $key) {
 
 		$criteria = & $criteriaArray[$key];
 
 		if (is_array($tree[$key])) {
 			if ($criteria['logic'] == 'not_in')
-				makedemo($tree[$key], $criteriaArray, $demographics, 'exclude');
+				makedemo($tree[$key], $criteriaArray, $fields, 'exclude');
 			else
-				makedemo($tree[$key], $criteriaArray, $demographics);
+				makedemo($tree[$key], $criteriaArray, $fields);
 		} else {
-			if (!isset ($demographics[$criteria['demographic_id']]))
-				$demographics[$criteria['demographic_id']] = array (
+			if (!isset ($fields[$criteria['field_id']]))
+				$fields[$criteria['field_id']] = array (
 					'include' => array (),
 					'exclude' => array ()
 				);
 
-			$demographic = & $demographics[$criteria['demographic_id']];
+			$field = & $fields[$criteria['field_id']];
 
 			// convert not_equal and not_true to opposite logic
 			if ($criteria['logic'] == 'not_equal')
@@ -167,33 +167,33 @@ function makedemo(& $tree, & $criteriaArray, & $demographics, $include = 'includ
 
 			if (isset ($oppLogic)) {
 				if ($include == 'include')
-					if (!isset ($demographic['exclude']['is_equal']))
-						$demographic['exclude'][$oppLogic] = quotesplit($criteria['value']);
+					if (!isset ($field['exclude']['is_equal']))
+						$field['exclude'][$oppLogic] = quotesplit($criteria['value']);
 					else
-						$demographic['exclude'][$oppLogic] = array_unique(array_merge($demographic['exclude'][$oppLogic], quotesplit($criteria['value'])));
+						$field['exclude'][$oppLogic] = array_unique(array_merge($field['exclude'][$oppLogic], quotesplit($criteria['value'])));
 				else
-					if (!isset ($demographic['include'][$oppLogic]))
-						$demographic['include'][$oppLogic] = quotesplit($criteria['value']);
+					if (!isset ($field['include'][$oppLogic]))
+						$field['include'][$oppLogic] = quotesplit($criteria['value']);
 					else
-						$demographic['include'][$oppLogic] = array_unique(array_merge($demographic['include'][$oppLogic], quotesplit($criteria['value'])));
+						$field['include'][$oppLogic] = array_unique(array_merge($field['include'][$oppLogic], quotesplit($criteria['value'])));
 				unset ($oppLogic);
 			}
-			elseif (!isset ($demographic[$include][$criteria['logic']])) $demographic[$include][$criteria['logic']] = quotesplit($criteria['value']);
+			elseif (!isset ($field[$include][$criteria['logic']])) $field[$include][$criteria['logic']] = quotesplit($criteria['value']);
 			else
-				$demographic[$include][$criteria['logic']] = array_unique(array_merge($demographic[$include][$criteria['logic']], quotesplit($criteria['value'])));
+				$field[$include][$criteria['logic']] = array_unique(array_merge($field[$include][$criteria['logic']], quotesplit($criteria['value'])));
 
 		}
 	}
-	return $demographics;
+	return $fields;
 }
 
-function whereGen(& $demographic, & $logicTbl, & $i) {
-	if (empty ($demographic))
+function whereGen(& $field, & $logicTbl, & $i) {
+	if (empty ($field))
 		return;
 
 	$whereSQL = ' AND (';
-	foreach (array_keys($demographic) as $logic) {
-		$values = & $demographic[$logic];
+	foreach (array_keys($field) as $logic) {
+		$values = & $field[$logic];
 		switch ($logic) {
 			case 'is_equal' :
 				$count = count($values);
@@ -274,16 +274,16 @@ function & genSql(& $dbo, & $group_id) {
 	$groupsVisited = array ();
 	$tree = & dbCrawl($dbo, $group_id, $criteriaArray, $groupArray, $groupsVisited);
 
-	// create array containing every demographic touched by this group's filtering process.
+	// create array containing every field touched by this group's filtering process.
 	// FORMAT: 
-	// [3]=> array { (3 is demographic_id)
+	// [3]=> array { (3 is field_id)
 	//    ["include"]=> array { ["is_equal"/logic] => array { "Milwaukee"/values } }
 	//    ["exclude"]=> (same) as above
 	//  Include should be parsed with 'AND', exlude with 'AND NOT'
 	//  excludes are derived from criteria where a group 'IS NOT BELONG TO'.
 
 	$a = array ();
-	$demographics = makedemo($tree, $criteriaArray, $a);
+	$fields = makedemo($tree, $criteriaArray, $a);
 
 	// create array to translate poMMo logic to valid mySql syntax
 	$logicTbl = array ();
@@ -293,33 +293,33 @@ function & genSql(& $dbo, & $group_id) {
 	// not_equal, not_true, is_true have been removed b/c they'll never be looked up
 	//   see makedemo comments
 
-	// how many demographics we're filtering from
-	$demographicCount = count($demographics);
+	// how many fields we're filtering from
+	$fieldCount = count($fields);
 
 	$includeCount = 0;
 	$excludeCount = 0;
 	$includeSQL = '';
 	$excludeSQL = '';
-	foreach (array_keys($demographics) as $demographic_id) {
-		$demographic = & $demographics[$demographic_id];
+	foreach (array_keys($fields) as $field_id) {
+		$field = & $fields[$field_id];
 
-		if (!empty ($demographic['include'])) {
+		if (!empty ($field['include'])) {
 			$includeCount++;
 			if ($includeCount > 1)
 				$includeSQL .= ' AND ';
-			if (isset ($demographic['include']['is_true']))
-				$includeSQL .= '(t' . $includeCount . '.demographic_id = ' . $demographic_id . ' AND t' . $includeCount . '.value = \'on\')';
+			if (isset ($field['include']['is_true']))
+				$includeSQL .= '(t' . $includeCount . '.field_id = ' . $field_id . ' AND t' . $includeCount . '.value = \'on\')';
 			else
-				$includeSQL .= '(t' . $includeCount . '.demographic_id = \'' . $demographic_id . '\'' . whereGen($demographic['include'], $logicTbl, $includeCount) . ')';
+				$includeSQL .= '(t' . $includeCount . '.field_id = \'' . $field_id . '\'' . whereGen($field['include'], $logicTbl, $includeCount) . ')';
 		}
-		if (!empty ($demographic['exclude'])) {
+		if (!empty ($field['exclude'])) {
 			$excludeCount++;
 			if ($excludeCount > 1)
 				$excludeSQL .= ' AND ';
-			if (isset ($demographic['exclude']['is_true']))
-				$excludeSQL .= '(t' . $excludeCount . '.demographic_id = ' . $demographic_id . ' AND t' . $excludeCount . '.value = \'on\')';
+			if (isset ($field['exclude']['is_true']))
+				$excludeSQL .= '(t' . $excludeCount . '.field_id = ' . $field_id . ' AND t' . $excludeCount . '.value = \'on\')';
 			else
-				$excludeSQL .= '(t' . $excludeCount . '.demographic_id = \'' . $demographic_id . '\'' . whereGen($demographic['exclude'], $logicTbl, $excludeCount) . ')';
+				$excludeSQL .= '(t' . $excludeCount . '.field_id = \'' . $field_id . '\'' . whereGen($field['exclude'], $logicTbl, $excludeCount) . ')';
 		}
 	}
 

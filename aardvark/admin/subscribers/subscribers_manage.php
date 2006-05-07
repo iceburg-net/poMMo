@@ -11,7 +11,7 @@
  * 
  ** [END HEADER]**/
  
- /* TODO --> make cool w/ a) no subscribers,  b) no demographics   ,   c) blank demographics [edit demographic creation to auto fill prompt, etc.] */
+ /* TODO --> make cool w/ a) no subscribers,  b) no fields   ,   c) blank fields [edit field creation to auto fill prompt, etc.] */
  // TODO --> enhance w/ AJAX prefetching .... rework[cleanup] this page
  
  /**********************************
@@ -23,7 +23,7 @@ require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_subscribers.php');
 require_once (bm_baseDir.'/inc/db_groups.php');
 require_once (bm_baseDir.'/inc/db_sqlgen.php');
-require_once (bm_baseDir.'/inc/db_demographics.php');
+require_once (bm_baseDir.'/inc/db_fields.php');
 require_once (bm_baseDir.'/inc/class.pager.php');
 
 $poMMo = & fireup('secure');
@@ -32,16 +32,16 @@ $dbo = & $poMMo->openDB();
 
 /** Setup Variables
  * 
- * demographics = array of all demographics (key is demographic_id)
+ * fields = array of all fields (key is field_id)
  * groups = array of all groups (key is group_id)
  * table = table to perform lookup on. Either 'subscribers' or 'pending''
  * group_id = The ID of the group being viewed. If none set to "all" for all subscribers
  * limit = The Maximum # of subscribers to show per page
- * order = The demographic (demographic_id) to order subscribers by
+ * order = The field (field_id) to order subscribers by
  * orderType = type of ordering (ascending - ASC /descending - DESC)
  * appendUrl = all the values strung together in HTTP_GET form
  */
-$demographics = dbGetDemographics($dbo);
+$fields = dbGetFields($dbo);
 $groups = dbGetGroups($dbo);
 $table = (empty ($_REQUEST['table'])) ? 'subscribers' : str2db($_REQUEST['table']);
 $group_id = (empty ($_REQUEST['group_id'])) ? 'all' : str2db($_REQUEST['group_id']);
@@ -74,7 +74,7 @@ else
 $smarty = & bmSmartyInit();
 $smarty->assign('returnStr', _T('Subscribers Page'));
 
-$smarty->assign('demographics',$demographics);
+$smarty->assign('fields',$fields);
 $smarty->assign('groups',$groups);
 $smarty->assign('table',$table);
 $smarty->assign('group_id',$group_id);

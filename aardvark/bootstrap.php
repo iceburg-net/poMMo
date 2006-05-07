@@ -23,7 +23,7 @@ defined('_IS_VALID') or die('Move along...');
 define('bm_baseDir', dirname(__FILE__));
 define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
 define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
-define('pommo_revision', '19');
+define('pommo_revision', '20');
 
 // get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));

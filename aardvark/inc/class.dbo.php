@@ -98,7 +98,8 @@ class dbo {
 		$this->table = array ();
 
 		$this->table['config'] = $tablePrefix.'config';
-		$this->table['demographics'] = $tablePrefix.'demographics';
+		$this->table['demographics'] = $tablePrefix.'demographics'; // PHASE OUT
+		$this->table['fields'] = $tablePrefix.'subscriber_fields';
 		$this->table['groups'] = $tablePrefix.'groups';
 		$this->table['groups_criteria'] = $tablePrefix.'groups_criteria';
 		$this->table['mailing_current'] = $tablePrefix.'mailing_current';
@@ -107,8 +108,9 @@ class dbo {
 		$this->table['queue_working'] = $tablePrefix.'queue_working';
 		$this->table['pending'] = $tablePrefix.'pending';
 		$this->table['pending_data'] = $tablePrefix.'pending_data';
+		$this->table['subscriber_fields'] = $tablePrefix.'subscriber_fields';
 		$this->table['subscribers'] = $tablePrefix.'subscribers';
-		$this->table['old_subscribers_data'] = $tablePrefix.'subscriber_data';
+		$this->table['old_subscribers_data'] = $tablePrefix.'subscriber_data'; // PHASE OUT
 		$this->table['subscribers_data'] = $tablePrefix.'subscribers_data';
 		$this->table['subscribers_flagged'] = $tablePrefix.'subscribers_flagged';
 		$this->table['updates'] = $tablePrefix.'updates';

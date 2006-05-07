@@ -18,7 +18,7 @@ define('_IS_VALID', TRUE);
 
 require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_groups.php');
-require_once (bm_baseDir . '/inc/db_demographics.php');
+require_once (bm_baseDir . '/inc/db_fields.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
 $poMMo = & fireup('secure');
@@ -50,9 +50,9 @@ if (!empty ($_GET['delete'])) {
 if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
 	dbGroupUpdateName($dbo, $group_id, str2db($_POST['group_name']));
 
-// get groups, demographics
+// get groups, fields
 $groups = & dbGetGroups($dbo);
-$demos = & dbGetDemographics($dbo);
+$demos = & dbGetFields($dbo);
 
 // check if a filter is requested to be added
 if (isset ($_POST['add']) || isset ($_POST['update'])) {
@@ -64,7 +64,7 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 		if (isset ($_POST['logic'])) {
 
 			// logic-val: what a field should be compared to
-			// field_id: which field_id (demographic_id) should be compared
+			// field_id: which field_id (field_id) should be compared
 			// logic: the logic of the comparisson
 
 			// make sure field_id is valid
