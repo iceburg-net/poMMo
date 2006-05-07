@@ -1,27 +1,4 @@
 === Release Notes for Aardvark PR11 ===
- <Released April 28, 2006>
+ <Released April ??, 2010>
  
- Aardvark PR11 is a milestone release. Enjoy!
- 
- [CHANGES]
-  * Look and feel now controlled by Smarty Templates.
-    (Allows for easy customization of subscribe form, user,
-     and admin pages using templates devoid of PHP)
-  * Added i18n support through gettext
-  * Massive reogranization of file structure:
-    !!! config.php is now in root directory. See the sample !!!
-  * Generation of subscription form greatly enhanced. Now supports
-    3 modes: Default Form, Embedded Form(s), Plain HTML
- 
- [ENHANCEMENTS]
-  * Added a work directory to store cached templates
-  * Drag and Drop ordering of demographics
-  * Debugging is more verbose
-  * Improved logging mechanism
-  * French and German Translation
-  
- [BUG FIXES]
-  * Fixed configuration of SMTP servers
-  * Many small cleanups and bugfixes
-  * Migration away from old HTML form class
-  
+ Coming to a theatre near you!
