@@ -1,6 +1,4 @@
--- <?php defined('_IS_VALID') or die('Move along...'); ?>
-
--- CONFIG
+-- CONFIG <?php defined('_IS_VALID') or die('Move along...'); ?>
 
 CREATE TABLE :::config::: (
   `config_name` varchar(64) NOT NULL default '',
@@ -38,8 +36,8 @@ INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on')
 INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11', 'poMMo Version', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '19', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11.1', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '20', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 

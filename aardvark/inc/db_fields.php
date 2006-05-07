@@ -49,7 +49,7 @@ function & dbGetFields(& $dbo, $where = NULL) {
 
 		$demos[$row['field_id']] = $a;
 	}
-	return (!empty($demos)) ? $demos : false;
+	return (!empty($demos)) ? $demos : array();
 }
 
 // dbfieldCheck: <bool> - Returns true if a name/id field exists
@@ -75,7 +75,7 @@ function dbFieldAdd(& $dbo, $fieldName, $fieldType) {
 	$sql = 'SELECT field_ordering FROM '.$dbo->table['subscriber_fields'].' ORDER BY field_ordering DESC';
 	$order = $dbo->query($sql, 0) + 1;
 
-	$sql = 'INSERT INTO '.$dbo->table['subscriber_fields'].' SET field_name=\''.$fieldName.'\', field_type=\''.$fieldType.'\', field_ordering=\''.$order.'\'';
+	$sql = 'INSERT INTO '.$dbo->table['subscriber_fields'].' SET field_name=\''.$fieldName.'\', field_type=\''.$fieldType.'\', field_ordering=\''.$order.'\',field_active=\'on\',field_required=\'off\'';
 	return $dbo->affected($sql);
 }
 

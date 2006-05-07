@@ -58,7 +58,7 @@
 	</span>
 	<span style="cursor:move; margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
 	<span style="text-align:left; margin-left: 12px;">
-	{if $demo.active}<b>{$demo.name}</b>{else}{$demo.name}{/if}
+	{if $demo.active == 'on'}<b>{$demo.name}</b>{else}{$demo.name}{/if}
 			 ({$demo.type})
 	</span>
 </div>

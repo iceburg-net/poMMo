@@ -11,7 +11,7 @@
  * 
  ** [END HEADER]**/
  
- /* TODO --> make cool w/ a) no subscribers,  b) no fields   ,   c) blank fields [edit field creation to auto fill prompt, etc.] */
+ /* TODO --> make cool w/  b) no fields   ,   c) blank fields [edit field creation to auto fill prompt, etc.] */
  // TODO --> enhance w/ AJAX prefetching .... rework[cleanup] this page
  
  /**********************************
@@ -41,6 +41,7 @@ $dbo = & $poMMo->openDB();
  * orderType = type of ordering (ascending - ASC /descending - DESC)
  * appendUrl = all the values strung together in HTTP_GET form
  */
+
 $fields = dbGetFields($dbo);
 $groups = dbGetGroups($dbo);
 $table = (empty ($_REQUEST['table'])) ? 'subscribers' : str2db($_REQUEST['table']);
@@ -63,10 +64,13 @@ $pages = $p->findPages($groupCount, $limit);
 $pagelist = $p->pageList($_GET['page'], $pages);
 
 // get the subscribers array
-if ($groupCount)
+if ($groupCount) {
 	$subscribers = & dbGetSubscriber($dbo, dbGetGroupSubscribers($dbo, $table, $group_id,'list', $order, $orderType, $limit, $start),'detailed', $table);
-else
+}
+else {
 	$groupCount = 0;
+	$subscribers = array();
+}
 	
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -74,7 +78,7 @@ else
 $smarty = & bmSmartyInit();
 $smarty->assign('returnStr', _T('Subscribers Page'));
 
-$smarty->assign('fields',$fields);
+$smarty->assign('fields', $fields);
 $smarty->assign('groups',$groups);
 $smarty->assign('table',$table);
 $smarty->assign('group_id',$group_id);
