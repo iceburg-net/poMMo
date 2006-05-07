@@ -226,8 +226,8 @@ function proccessQueue() {
 
 	// if an email was returned, send it.
 	if ($mail) {
-		if (!$bmMailer->bmSendmail($mail[0])) // sending failed, write to log   PHASE OUT getMessages!
-			$logger->addMsg($poMMo->getMessages(" "), 3);
+		if (!$bmMailer->bmSendmail($mail[0])) // sending failed, write to log  
+			$logger->addMsg(_T('Error Sending Mail'));
 
 		// If throttling by bytes (bandwith) is enabled, add the size of the message to the throttler
 		if ($byteMask > 1) {

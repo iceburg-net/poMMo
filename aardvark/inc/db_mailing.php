@@ -196,8 +196,7 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 
 	// prepare the Mail with prepareMail()	-- if it fails, stop the mailing & report errors.
 	if (!$bmMailer->prepareMail(db2mail($row['subject']), db2mail($row['body']), $html, $altbody)) {
-		$logger->addMsg('prepareMail() returned false.',3);
-		$logger->addMsg($poMMo->getMessages(" "));
+		$logger->addMsg(_T('Error Sending Mail'));
 		$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET status=\'stopped\', notices=CONCAT_WS(\',\',notices,\''. mysql_real_escape_string(array2csv($logger->getMsg())) .'\')';
 		$dbo->query($sql);
 		bmMKill('prepareMail() returned errors.');

@@ -37,6 +37,8 @@ class bMailer extends PHPMailer {
 	var $_demonstration;
 	var $_validated; // if this is TRUE, skip all validation checks + setting of all parameters other than "to" .. this is used for bulk mailing
 
+	var $logger; // references the global logger
+	
 	// default constructor....
 
 	// called like $pommo = new bMailer(fromname,fromemail,frombounce, exchanger)
@@ -78,11 +80,14 @@ class bMailer extends PHPMailer {
 		$this->_validated = FALSE;
 
 		$this->_sentCount = 0;
+		
+		global $logger;
+		$this->logger =& $logger;
+		
 
 		$langPath = bm_baseDir . '/inc/phpmailer/language/';
 		if (!$this->SetLanguage('en', $langPath))
-			die('<img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">bMailer(): Unable to set language.');
-
+			bmKill('bMailer(): Unable to set language.');
 	}
 
 	// toggles demonstration mode on or off if sepcified, or else uses the configured mode. Returns value.
@@ -123,24 +128,30 @@ class bMailer extends PHPMailer {
 	// Gets called before sending a mail to make sure all is proper (during prepareMail). Returns false if messages were created must pass global poMMo object (TODO maybe rename to site??)
 	function validate() {
 
-		if (empty ($this->_fromname))
-			$_SESSION["poMMo"]->addMessage("Name cannot be blank.");
-
-		if (!isEmail($this->_fromemail))
-			$_SESSION["poMMo"]->addMessage("From email must be a valid email address.");
-
-		if (!isEmail($this->_frombounce))
-			$_SESSION["poMMo"]->addMessage("Bounce email must be a valid email address.");
-
-		if (empty ($this->_subject))
-			$_SESSION["poMMo"]->addMessage("Subject cannot be blank.");
-
-		if (empty ($this->_body))
-			$_SESSION["poMMo"]->addMessage("Message content cannot be blank.");
-
-		// if Messages exist, return false..	
-		if ($_SESSION["poMMo"]->isMessage())
+		if (empty ($this->_fromname)) {
+			$this->logger->addMsg("Name cannot be blank.");
 			return false;
+		}
+
+		if (!isEmail($this->_fromemail)) {
+			$this->logger->addMsg("From email must be a valid email address.");
+			return false;	
+		}
+
+		if (!isEmail($this->_frombounce)) {
+			$this->logger->addMsg("Bounce email must be a valid email address.");
+			return false;	
+		}
+
+		if (empty ($this->_subject)) {
+			$this->logger->addMsg("Subject cannot be blank.");
+			return false;	
+		}
+
+		if (empty ($this->_body)) {
+			$this->logger->addMsg("Message content cannot be blank.");
+			return false;	
+		}
 
 		return true;
 	}
@@ -209,12 +220,12 @@ class bMailer extends PHPMailer {
 	function bmSendmail(& $to) { // TODO rename function send in order to not confuse w/ PHPMailer's Send()?
 
 		if ($this->_validated == FALSE) {
-			$_SESSION["poMMo"]->addMessage("poMMo has not passed sanity checks. has prepareMail been called?");
+			$this->logger->addMsg("poMMo has not passed sanity checks. has prepareMail been called?");
 			return false;
 		}
 		// make sure $to is valid, or send errors...
 		elseif (empty ($to)) {
-			$_SESSION["poMMo"]->addMessage("To email supplied to send() command is empty.");
+			$this->logger->addMsg("To email supplied to send() command is empty.");
 			return false;
 		}
 
@@ -262,8 +273,7 @@ class bMailer extends PHPMailer {
 
 		// if message(s) exist, return false. (Sending failed w/ error messages)
 		if (!empty ($errors)) {
-			foreach ($errors as $error)
-				$_SESSION["poMMo"]->addMessage($error);
+			$this->logger->addMsg($errors);
 			return false;
 		}
 		return true;

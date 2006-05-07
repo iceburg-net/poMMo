@@ -27,7 +27,6 @@ class Common {
 
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_authenticated; // TRUE if user has successfully logged on.
-	var $_messages; // Used to hold the status/output messages of various functions such as input validation function, database update functions, etc. Is an array -- accessed like a stack via class member functions
 	var $_data; // Used to hold temporary data (such as an uploaded file's contents).. accessed via dataSet (sets), dataGet (returns), dataClear (deletes)
 	var $logger; // holds the logger class object
 	
@@ -36,7 +35,6 @@ class Common {
 		$this->_dbo = FALSE;
 		$this->_config = array ();
 		$this->_authenticated = FALSE;
-		$this->_messages = array ();
 		$this->logger = new bmLogger();
 	}
 
@@ -102,53 +100,6 @@ class Common {
 		return ($this->_authenticated = $var) ? true : false;
 	}
 
-	// PHASE OUT MESSAGE STACK (have logger...)
-	/** 
-	 * Message stack functions
-	 * TODO: Maybe move to txt_functions? Enhance error reporting...
-	 */
-
-	// returns true if at least one message exists in the stack
-	function isMessage() {
-		return ($this->_messages) ? true : false;
-	}
-
-	// returns a message & removes it from the stack
-	function getMessage() {
-		return array_pop($this->_messages);
-	}
-
-	// Adds a message to the stack. Suffix it and Prefix it with a string if they exist
-	// Returns the # of messages in the stack
-	function addMessage($message, $suffix = NULL, $prefix = NULL) {
-		$message = $prefix.$message.$suffix;
-		return array_push($this->_messages, $message);
-	}
-
-	// Prints a message fromt he stack in LIFO fashion. Prefix and Suffix if existant...
-	function printMessage($suffix = NULL, $prefix = NULL) {
-		echo $prefix.$this->getMessage().$suffix;
-		return;
-	}
-
-	// Prints the entire stack of messages
-	function printMessages($suffix = NULL, $prefix = NULL) {
-		while ($this->isMessage()) {
-			$this->printMessage($suffix, $prefix);
-		}
-		return;
-	}
-
-	// Returns the stack of message as a string.
-	function getMessages($suffix = NULL, $prefix = NULL) {
-		$str = "";
-		while ($this->isMessage()) {
-			$str .= $prefix.$this->getMessage().$suffix;
-		}
-		return $str;
-	}
-
-
 	// PHASE OUT data*()   -- favor > store(), get(), keep()
 	function dataSet($val) {
 		return ($this->_data = $val) ? true : false;
@@ -162,8 +113,6 @@ class Common {
 
 	// PHASE OUT -> rename to clear  when all references to data*() are gone
 	function dataClear() {
-		// PHASE OUT -> remove _messages when all references to it are gone
-		$this->_messages = array(); // purge messages.. they *theoretically* be printed+removed whenever they're capable of being added.'
 		return ($this->_data = array()) ? true : false;
 	}
 	
