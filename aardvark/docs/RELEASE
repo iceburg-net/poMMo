@@ -1,0 +1,25 @@
+=== Release Notes for Aardvark PR11.1 ===
+ <Released May 7th, 2006>
+ 
+ Aardvark PR10.2 is a minor bugfix release.
+[CHANGES]
+  * New AJAX based Group handling
+  * New AJAX based Mailing Status page
+  * Demographics renamed to "subscriber fields"
+  * Dropped legacy support
+  * Changed all instances of bMail to poMMo
+  
+ [ENHANCEMENTS]
+  * Much improved filter creation
+  * All browser pages updated with new framework
+  * Usability Enhancements
+  * Groups returned in alphabetical order
+  
+ [BUG FIXES]
+  * Better protection against null fields
+  * Removed legacy logger (common)
+  * Updated to SmartyValidate 1.8 dev to fix issues
+  
+ [NOTES]
+  *  Development switched to Subversion, with three branches;
+      aardvark(stable), aardvark-testing(semi-stable), aardvark-brice(bleeding edge)
