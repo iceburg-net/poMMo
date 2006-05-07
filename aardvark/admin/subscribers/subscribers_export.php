@@ -21,8 +21,8 @@ $dbo = & $poMMo->openDB();
 
 
 if (empty($_GET['group_id']) || empty($_GET['table']))
-	die('<img src="'.bm_baseUrl.'/img/icons/alert.png" align="middle">Export failed - no group_id or table supplied.');
-
+	bmKill('Export failed - no group_id or table supplied.');
+	
 $group_id = str2db($_GET['group_id']);
 $table = str2db($_GET['table']);
 
@@ -36,8 +36,7 @@ elseif (is_numeric($group_id)) {
 	$subscribers = & dbGetSubscriber($dbo, dbGetGroupSubscribers($dbo, $table, $group_id,'list'),'detailed', $table);
 }
 else
-	die('<img src="'.bm_baseUrl.'/img/icons/alert.png" align="middle">Bad group sent to export');
-
+	bmKill('Bad group sent to export');
 
 $encaser = "\"";
 $delim = ", ";
