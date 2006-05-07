@@ -21,9 +21,6 @@ defined('_IS_VALID') or die('Move along...');
 IMMEDIATE (for next release):
 
   (goals for PR11.1)
-  
-  * Rename "fields" to .... ?
-   + Requires all pages to be under smarty templating architecutre
   * Fix embedded forms
      + Theme URLS should resolve to FULL http location ()
      +  better (proper) detection of poMMo root?

@@ -53,8 +53,6 @@ define('bm_lang','en');
 
 // enable (on) or disable (off) debug mode. Set this to 'on' to provide debugging information
 //  to the developers. Make sure to set it to 'off' when you are finished collecting information.
-// NOTE: when providing debugging information, please use the output from the HTML source by
-//  by choosing "view source" in your web browser.
 define('bm_debug','off');
 
 // set the verbosity level of logging.

@@ -31,7 +31,6 @@ session_start(); // required by smartyValidate. TODO -> move to prepareForForm()
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-//$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . _T('subscriber logon'));
 $smarty->prepareForForm();
 
 // Check to make sure poMMo is not already installed.
@@ -69,7 +68,6 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID
-
 		if (isset ($_POST['installerooni'])) {
 
 			// drop existing poMMo tables

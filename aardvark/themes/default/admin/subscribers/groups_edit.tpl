@@ -53,17 +53,20 @@
 		</select>
 	</div>
 	
-	{if count($groups) > 1}
+	<div id="group">
 	
-		<div id="group">
+	{if count($groups) > 1}
 			{t escape=no 1="<strong>" 2="</strong>"}or, Select a %1 group %2 to{/t} 
 			<select name="group_logic" id="group_logic" onChange="updateGroup({$group_id})">
 				<option value="">Choose to Include or Exclude</option>	
 				<option value="is_in">{t}Include{/t}</option>
 				<option value="not_in">{t}Exclude{/t}</option>
 			</select>
-		</div>	
+	{else}
+		{* PLACEHOLDER FOR group_logic *}<span id="group_logic" style="visibility: hidden;"></span>
 	{/if}
+	
+	</div>	
 </div>
 	
 	<div id="critLogic" style="float: right; background-color: #e6eaff; padding: 7px; border: 1px solid; margin: 2px;"></div>

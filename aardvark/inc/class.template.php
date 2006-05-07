@@ -69,7 +69,7 @@ class bTemplate extends Smarty {
 		global $poMMo;
 		
 		// Get array of fields. Key is ID, value is an array of the demo's info
-		$fields = dbGetFields($dbo);
+		$fields = dbGetFields($dbo,'active');
 		if (!empty($fields))
 			$this->assign('fields', $fields);
 		

@@ -46,11 +46,13 @@
 	
 	<span style="width: 30px;"></span>
 	
+	{debug}
+	
 	{t}Order by:{/t}
 		<SELECT name="order" onChange="document.bForm.submit()">
 			<option value="email">{t}email{/t}</option>
 			{foreach from=$fields key=key item=item}
-				<option value="{$key}"{if $order == $key} SELECTED{/if}>{$item}</option>
+				<option value="{$key}"{if $order == $key} SELECTED{/if}>{$item.name}</option>
 			{/foreach}
 		</SELECT>
 	

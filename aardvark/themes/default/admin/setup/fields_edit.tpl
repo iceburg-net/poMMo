@@ -50,7 +50,7 @@
 
 	<div class="field">
 		<label for="field_required">{t}Required:{/t} </label>
-		<input type="checkbox" class="checkbox" {if $field_required}checked{/if}
+		<input type="checkbox" class="checkbox" {if $field_required == 'on'}checked{/if}
 		  name="field_required" id="field_required"  />
 		<div class="notes">{t}Check to require this field on the subscription form. ie. user cannot leave blank.{/t}</div>
 	</div>
