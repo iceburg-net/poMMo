@@ -19,7 +19,7 @@ define('_IS_VALID', TRUE);
 
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_subscribers.php');
-require_once (bm_baseDir.'/inc/db_demographics.php');
+require_once (bm_baseDir.'/inc/db_fields.php');
 require_once (bm_baseDir.'/inc/lib.txt.php');
 
 $poMMo = & fireup('secure');
@@ -66,10 +66,10 @@ elseif (!empty ($_REQUEST['editId'])) {
 		$a = array ('email' => $_REQUEST['email'][$key], 'date' => $_REQUEST['date'][$key], 'data' => array ());
 		if ($a['email'] != $_REQUEST['oldEmail'][$key])
 			$a['oldEmail'] = $_REQUEST['oldEmail'][$key];
-		foreach (array_keys($_REQUEST['d'][$key]) as $demographic_id) {
-			$subVal = & $_REQUEST['d'][$key][$demographic_id];
+		foreach (array_keys($_REQUEST['d'][$key]) as $field_id) {
+			$subVal = & $_REQUEST['d'][$key][$field_id];
 			if (!empty ($subVal))
-				$a['data'][$demographic_id] = $subVal;
+				$a['data'][$field_id] = $subVal;
 		}
 		$updates[] = $a;		
 	}
@@ -84,7 +84,7 @@ elseif (!empty ($_REQUEST['editId'])) {
 
 
 // BEGIN MAIN PAGE
-$demographics = dbGetDemographics($dbo);
+$fields = dbGetFields($dbo);
 
 
 switch ($_REQUEST['action']) {
@@ -114,7 +114,7 @@ switch ($_REQUEST['action']) {
 }
 
 
-$smarty->assign('demographics',$demographics);
+$smarty->assign('fields',$fields);
 $smarty->assign('sid',$_REQUEST['sid']);
 $smarty->assign('action',$_REQUEST['action']);
 

@@ -44,7 +44,7 @@ function getOldVersion(& $dbo) {
 	if ($dbo->records($sql)) {
 		$sql = "SELECT * FROM {$dbo->table['config']} LIMIT 1";
 		if (!$dbo->query($sql))
-			$oldRevision = 5; // if there are fields in subscriber_data, but the config table does not exist, we're using Aardvark PR6 or before.'
+			$oldRevision = 5; // if there are demographics in subscriber_data, but the config table does not exist, we're using Aardvark PR6 or before.'
 	}
 	return $oldRevision;
 }
@@ -52,8 +52,8 @@ function getOldVersion(& $dbo) {
 // updates the version + revision in the DB
 function bmBumpVersion(& $dbo, $revision, $versionStr) {
 	global $logger;
-	
-	$logger->addMsg(_T('Bumping poMMo version to: ').$versionStr);
+
+	$logger->addMsg(_T('Bumping poMMo version to: ') . $versionStr);
 	// TODO : Make array of queries.. send array to dbo->query(); update query function to allow arrays...
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=\'' . $revision . '\' WHERE config_name=\'revision\'';
 	$dbo->query($sql);
@@ -73,7 +73,7 @@ function checkUpdate($serial, & $dbo) {
 function performUpdate(& $sql, & $dbo, $serial, $message = NULL, $check = TRUE, $sqlBool = FALSE) {
 
 	global $logger;
-	
+
 	// check to see if this was already performed. Bypassed if check is false
 	if ($check)
 		if (checkUpdate($serial, $dbo))
@@ -101,13 +101,13 @@ function performUpdate(& $sql, & $dbo, $serial, $message = NULL, $check = TRUE, 
 	if ($sqlBool) {
 		$sql = "INSERT INTO {$dbo->table['updates']} (update_serial) VALUES('" . $serial . "')";
 		if ($dbo->affected($sql) != 1) {
-			$logger->addMsg(sprintf(_T('Failed to properly serialize update %s : %s'),$serial, $message));
+			$logger->addMsg(sprintf(_T('Failed to properly serialize update %s : %s'), $serial, $message));
 			return false;
 		}
-		$logger->addMsg($serial . '. ' . $message . '... '._T('success!'));
+		$logger->addMsg($serial . '. ' . $message . '... ' . _T('success!'));
 		return TRUE;
 	} else {
-		$logger->addMsg($serial . '. ' . $message . '... <span style="font-weight: bold; background-color: red; color: white;">'._T('FAILED!').'</span>');
+		$logger->addMsg($serial . '. ' . $message . '... <span style="font-weight: bold; background-color: red; color: white;">' . _T('FAILED!') . '</span>');
 		return FALSE;
 	}
 }
@@ -174,7 +174,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					$failed = TRUE;
 
 				$sql = 'ALTER TABLE `' . $dbo->table['subscriber_data'] . '` ADD `visible` ENUM(\'on\',\'off\') DEFAULT \'off\' NOT NULL AFTER `active`, ADD `ordering` TINYINT UNSIGNED NOT NULL AFTER `visible`';
-				if (!performUpdate($sql, $dbo, 3, 'Adding fields to subscriber_data'))
+				if (!performUpdate($sql, $dbo, 3, 'Adding demographics to subscriber_data'))
 					$failed = TRUE;
 
 				$sql = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` DROP INDEX `active`, ADD INDEX `active` (`active`,`visible`,`ordering`)'; // Data Changes
@@ -186,7 +186,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					$failed = TRUE;
 
 				$sql = 'ALTER TABLE `' . $dbo->table['config'] . '` CHANGE `change` `user_change` ENUM(\'on\',\'off\') NOT NULL DEFAULT \'on\'';
-				if (!performUpdate($sql, $dbo, 6, 'Renaming alter field in config table'))
+				if (!performUpdate($sql, $dbo, 6, 'Renaming alter demographic in config table'))
 					$failed = TRUE;
 
 				if (!checkUpdate(7, $dbo)) { // LOAD DEFAULT CONFIG (if config hasn't already been loaded')
@@ -270,7 +270,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					$failed = TRUE;
 
 				$sql = 'ALTER TABLE `' . $dbo->table['groups'] . '` ADD `group_cacheTally` INT UNSIGNED NOT NULL, ADD `group_cacheTime` TIMESTAMP';
-				if (!performUpdate($sql, $dbo, 22, 'Adding cache fields to groups'))
+				if (!performUpdate($sql, $dbo, 22, 'Adding cache demographics to groups'))
 					$failed = TRUE;
 
 				// bump version
@@ -484,7 +484,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` CHANGE `subscriber_id` `subscribers_id` INT( 10 ) UNSIGNED NOT NULL DEFAULT \'0\'';
 				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` CHANGE `value` `value` VARCHAR(60) NOT NULL';
 				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` DROP INDEX `demographic_id`';
-				if (!performUpdate($sqlA, $dbo, 43, 'Making field name and index adjustments.'))
+				if (!performUpdate($sqlA, $dbo, 43, 'Making demographic name and index adjustments.'))
 					$failed = TRUE;
 
 				$sql = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` ADD INDEX `s_plus_demo_id` (`demographic_id`,`subscribers_id`)';
@@ -709,35 +709,58 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 		case 19 : // AARDVARK PR11
 
 			if ($dbRev < $revision) {
-				
-				$sqlA = array();
+
+				$sqlA = array ();
 				$sqlA[] = 'ALTER TABLE `' . $dbo->table['config'] . '` DROP INDEX `name`';
 				$sqlA[] = 'ALTER TABLE `' . $dbo->table['config'] . '` DROP `config_id`';
 				if (!performUpdate($sqlA, $dbo, 68, 'Enforcing unique name on config table.'))
 					$failed = TRUE;
-				
-				
+
 				$sql = 'INSERT INTO `' . $dbo->table['config'] . '` (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES (\'messages\', \'\', \'\', \'off\', \'off\');';
 				if (!performUpdate($sql, $dbo, 69, 'Adding customizable messages to configuration.'))
 					$failed = TRUE;
-					
-				require_once(bm_baseDir.'/inc/db_procedures.php');
+
+				require_once (bm_baseDir . '/inc/db_procedures.php');
 				dbResetMessageDefaults('all');
-					
+
 				// bump version
 				if (!$failed)
 					bmBumpVersion($dbo, $revision, "Aardvark PR11");
 			}
 
+			$revision = 20;
+			break;
+
+		case 20 : // Aardvark PR11.1
+			
+			if ($dbRev < $revision) {
+
+				$sql = 'ALTER TABLE `' . $dbo->table['demographics'] . '` RENAME `subscriber_fields`;';
+				if (!performUpdate($sql, $dbo, 70, 'Renaming demographic table to fields.'))
+					$failed = TRUE;
+
+				$sqlA = array ();
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscriber_fields'] . '` CHANGE `demographic_id` `field_id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT, CHANGE `demographic_active` `field_active` ENUM(\'on\',\'off\') NOT NULL DEFAULT \'off\', CHANGE `demographic_ordering` `field_ordering` SMALLINT(5) UNSIGNED NOT NULL DEFAULT \'0\', CHANGE `demographic_name` `field_name` VARCHAR(60) NULL DEFAULT NULL, CHANGE `demographic_prompt` `field_prompt` VARCHAR(60) NULL DEFAULT NULL, CHANGE `demographic_type` `field_type` ENUM(\'checkbox\',\'multiple\',\'text\',\'date\',\'number\') NULL DEFAULT NULL, CHANGE `demographic_normally` `field_normally` VARCHAR(60) NULL DEFAULT NULL, CHANGE `demographic_options` `field_options` TEXT NULL DEFAULT NULL, CHANGE `demographic_required` `field_required` ENUM(\'on\',\'off\') NOT NULL DEFAULT \'off\'';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['groups_criteria'] . '` CHANGE `demographic_id` `field_id` TINYINT(3) UNSIGNED NOT NULL DEFAULT \'0\'';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['pending_data'] . '` CHANGE `demographic_id` `field_id` INT(10) UNSIGNED NOT NULL DEFAULT \'0\'';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` CHANGE `demographic_id` `field_id` INT(10) UNSIGNED NOT NULL DEFAULT \'0\'';
+				if (!performUpdate($sqlA, $dbo, 71, 'Migrating references from demographics to fields'))
+					$failed = TRUE;
+
+				// bump version
+				if (!$failed)
+					bmBumpVersion($dbo, $revision, "Aardvark PR11.1");
+			}
+
+	
 			// follows last case
 			if ($failed)
 				return FALSE;
 			return TRUE;
 
-			$revision = 20;
-			break;
+			$revision = 21;
 
-			
+			break;
 
 		default :
 			die('Unknown Revision passed to upgrade function - ' . $revision);

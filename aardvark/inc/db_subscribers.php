@@ -50,7 +50,7 @@ function isDupeEmail(& $dbo, $email, $table = NULL) {
 // 		email => 'sub@scriber.com', 
 //		date => '01/01/2006', 
 //		data => array(
-//				99 => 'Brice Burgess',   -- 99 == demographic_id
+//				99 => 'Brice Burgess',   -- 99 == field_id
 //				101 => 'Milwaukee'
 //				)
 //		)
@@ -91,7 +91,7 @@ function & dbGetSubscriber(& $dbo, & $input, $retunType = 'detailed', $table = '
 			$sql = 'SELECT s.code FROM '.$dbo->table[$table].' s WHERE '.$dbMatch;
 			return $dbo->getAll($sql, 'row', '0');
 		case 'detailed' :
-			$sql = 'SELECT DISTINCT s.'.$table.'_id,s.email,s.date,d.demographic_id,d.value'.$addFields.' FROM '.$dbo->table[$table].' s LEFT JOIN '.$dbo->table[$table.'_data'].' d ON (s.'.$table.'_id = d.'.$table.'_id) WHERE '.$dbMatch;
+			$sql = 'SELECT DISTINCT s.'.$table.'_id,s.email,s.date,d.field_id,d.value'.$addFields.' FROM '.$dbo->table[$table].' s LEFT JOIN '.$dbo->table[$table.'_data'].' d ON (s.'.$table.'_id = d.'.$table.'_id) WHERE '.$dbMatch;
 			$sArray = & $dbo->getAll($sql, 'row');
 
 			foreach (array_keys($sArray) as $key) {
@@ -114,20 +114,20 @@ function & dbGetSubscriber(& $dbo, & $input, $retunType = 'detailed', $table = '
 // dbPending: Adds an entry to the pending table. Returns the confirmation code generated
 //  Type is either "add", "del", or "mod" for Add Subscriber, Remove Subscriber, or Update Subscriber
 //  $input is an array whose keys correlate to fields (columns) in a MySQL table
-// demographics must be passed as an array in order to be added to -- key = demo_id, value = demo_value
+// fields must be passed as an array in order to be added to -- key = demo_id, value = demo_value
 
-function dbPendingAdd(& $dbo, $type = NULL, $email = NULL, $demographics = NULL) {
+function dbPendingAdd(& $dbo, $type = NULL, $email = NULL, $fields = NULL) {
 	$confirmation_key = md5(rand(0, 5000).time());
 	$newEmail = '';
 	
 	switch ($type) {
 		case 'change':
 		case 'del' :
-			if (!empty($demographics['newEmail']) && isEmail($demographics['newEmail']) && $demographics['newEmail'] != $email)
-				$newEmail = $demographics['newEmail'];
+			if (!empty($fields['newEmail']) && isEmail($fields['newEmail']) && $fields['newEmail'] != $email)
+				$newEmail = $fields['newEmail'];
 				
-			unset($demographics['newEmail']); // must be done so as not to interfere with valuesStr below...
-			unset($demographics['newEmail2']);
+			unset($fields['newEmail']); // must be done so as not to interfere with valuesStr below...
+			unset($fields['newEmail2']);
 		case 'add' :
 		case 'password' :
 			// check to make sure no entries for this email already exist in pending table
@@ -144,20 +144,20 @@ function dbPendingAdd(& $dbo, $type = NULL, $email = NULL, $demographics = NULL)
 			if (empty ($pending_id) || !is_numeric($pending_id))
 				die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbAddPending() -> Unable to fetch pending_id. Notify Administrator.');
 
-			// if demographics were given, add them to the pending_data table
-			if (!empty ($demographics) && is_array($demographics))
-				foreach (array_keys($demographics) as $demographic_id) {
+			// if fields were given, add them to the pending_data table
+			if (!empty ($fields) && is_array($fields))
+				foreach (array_keys($fields) as $field_id) {
 					// don't insert any null/blank values into pending_data
-					if (!empty ($demographics[$demographic_id])) {
+					if (!empty ($fields[$field_id])) {
 						if (!isset ($values))
-							$values = '('.str2db($pending_id).','.str2db($demographic_id).',\''.str2db($demographics[$demographic_id]).'\')';
+							$values = '('.str2db($pending_id).','.str2db($field_id).',\''.str2db($fields[$field_id]).'\')';
 						else
-							$values .= ',('.str2db($pending_id).','.str2db($demographic_id).',\''.str2db($demographics[$demographic_id]).'\')';
+							$values .= ',('.str2db($pending_id).','.str2db($field_id).',\''.str2db($fields[$field_id]).'\')';
 					}
 				}
 
 			if (!empty ($values)) {
-				$sql = 'INSERT INTO '.$dbo->table['pending_data'].' (pending_id,demographic_id,value) VALUES '.$values;
+				$sql = 'INSERT INTO '.$dbo->table['pending_data'].' (pending_id,field_id,value) VALUES '.$values;
 				$dbo->query($sql);
 			}
 			break;
@@ -226,14 +226,14 @@ function dbSubscriberAdd(& $dbo, & $arg, $pending = FALSE) {
 		die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbSubscriberAdd() -> Unable to fetch subscriber_id. Notify Administrator.');
 
 	// insert subscriber's data into subscribers_data
-	foreach (array_keys($subscriber['data']) as $demographic_id) {
+	foreach (array_keys($subscriber['data']) as $field_id) {
 		if (!isset ($values))
-			$values = '('.$subscriber_id.','.$demographic_id.',\''.$subscriber['data'][$demographic_id].'\')';
+			$values = '('.$subscriber_id.','.$field_id.',\''.$subscriber['data'][$field_id].'\')';
 		else
-			$values .= ',('.$subscriber_id.','.$demographic_id.',\''.$subscriber['data'][$demographic_id].'\')';
+			$values .= ',('.$subscriber_id.','.$field_id.',\''.$subscriber['data'][$field_id].'\')';
 	}
 	if (!empty ($values)) {
-		$sql = 'INSERT INTO '.$dbo->table['subscribers_data'].' (subscribers_id,demographic_id,value) VALUES '.$values;
+		$sql = 'INSERT INTO '.$dbo->table['subscribers_data'].' (subscribers_id,field_id,value) VALUES '.$values;
 		$dbo->query($sql);
 	}
 

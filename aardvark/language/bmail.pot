@@ -214,102 +214,102 @@ msgstr ""
 msgid "Continue to login page"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:129
-msgid "Edit Demographic"
+msgid "Edit Field"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:132
-msgid "Return to Demographics Page"
+msgid "Return to Fields Page"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:135
 msgid "Name:"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:138
 msgid ""
-"A descriptive name to help you identify this demographic. End users will "
+"A descriptive name to help you identify this field. End users will "
 "never see this."
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:141
 msgid "Prompt:"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:144
 msgid ""
-"The prompt for this demographic on the subscription form. ie. 'Type your "
+"The prompt for this field on the subscription form. ie. 'Type your "
 "city'"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:147
 msgid "Required:"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:150
 msgid ""
 "Check to require this field on the subscription form. ie. user cannot leave "
 "blank."
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:153
 msgid "Active:"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:156
 msgid ""
-"If not checked, this demographic will remain in the system, but will not "
+"If not checked, this field will remain in the system, but will not "
 "display on the subscription form."
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:159 pommo_theme_lang.php:165 pommo_theme_lang.php:171
 msgid "Default:"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:162
 msgid "If provided, this value will be pre-filled in on the subscription form"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:168
 msgid "The initial state of the checkbox on the subscription form"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:174
 msgid "Initial value selected on the subscription form"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #. poMMo/themes/default/admin/setup_messages.tpl
 #: pommo_theme_lang.php:177 pommo_theme_lang.php:231 pommo_theme_lang.php:258
 #: pommo_theme_lang.php:285 pommo_theme_lang.php:312
 msgid "Update"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:180
 msgid "type option(s)"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:183
 msgid "Add Option(s)"
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:186
 msgid ""
 "NOTE: You can add multiple options by seperating them by commas. To include "
@@ -317,7 +317,7 @@ msgid ""
 "(\\)."
 msgstr ""
 
-#. poMMo/themes/default/admin/demographics_edit.tpl
+#. poMMo/themes/default/admin/fields_edit.tpl
 #: pommo_theme_lang.php:189
 msgid "Remove Selected Option"
 msgstr ""
@@ -433,10 +433,10 @@ msgid "Configure"
 msgstr ""
 
 #. poMMo/themes/default/admin/inc.sidebar.tpl
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #. poMMo/themes/default/admin/admin_setup.tpl
 #: pommo_theme_lang.php:324 pommo_theme_lang.php:369 pommo_theme_lang.php:603
-msgid "Demographics"
+msgid "Fields"
 msgstr ""
 
 #. poMMo/themes/default/admin/inc.sidebar.tpl
@@ -502,82 +502,82 @@ msgstr ""
 msgid "Demonstration mode is OFF."
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:366
-msgid "Demographics Page"
+msgid "Fields Page"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:372
 msgid "Make New"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:375 pommo_theme_lang.php:378
-msgid "type new demographic name"
+msgid "type new field name"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:381
 msgid "Text"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:384
 msgid "Number"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:387
 msgid "Check Box"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:390
 msgid "Multiple Choice"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:393
 msgid "Date"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:396
 msgid "Add"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:399
 msgid "Order"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:402
 msgid "Delete"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:405
 msgid "Edit"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:408
-msgid "Demographic Name"
+msgid "Field Name"
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:411
-msgid "No demographics have been assigned."
+msgid "No fields have been assigned."
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:414
 msgid "Names in <strong>bold</strong> are active."
 msgstr ""
 
-#. poMMo/themes/default/admin/setup_demographics.tpl
+#. poMMo/themes/default/admin/setup_fields.tpl
 #: pommo_theme_lang.php:417
 msgid ""
 "Change the ordering of fields on the subscription form by dragging and "
@@ -880,7 +880,7 @@ msgstr ""
 #. poMMo/themes/default/subscribe/form.subscribe.tpl
 #. poMMo/themes/default/subscribe/form.update.tpl
 #: pommo_theme_lang.php:648 pommo_theme_lang.php:672
-msgid "Unsupported Demographic Type."
+msgid "Unsupported Field Type."
 msgstr ""
 
 #. poMMo/themes/default/subscribe/form.subscribe.tpl
@@ -1092,63 +1092,63 @@ msgstr ""
 msgid "Unsubscribe request received."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:54
+#: poMMo/admin/setup/fields_edit.php:54
 msgid "Remove Option"
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:57
+#: poMMo/admin/setup/fields_edit.php:57
 #, php-format
 msgid ""
 "Deleting option %1$s will affect %2$s subscribers who have selected this "
 "choice. They will be flagged as needing to update their records."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:79
+#: poMMo/admin/setup/fields_edit.php:79
 #: poMMo/admin/setup/setup_messages.php:70 poMMo/install/install.php:60
 msgid "Cannot be empty."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:108
+#: poMMo/admin/setup/fields_edit.php:108
 #: poMMo/admin/setup/setup_messages.php:140
 msgid "Settings updated."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:112
+#: poMMo/admin/setup/fields_edit.php:112
 #: poMMo/admin/setup/setup_messages.php:144 poMMo/install/install.php:123
 msgid "Please review and correct errors with your submission."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:118
+#: poMMo/admin/setup/fields_edit.php:118
 msgid ""
-"This is a <b>TEXT</b> based demographic. Subscribers will be allowed to type "
-"in any value in for this demographic. Text demographics are useful for "
+"This is a <b>TEXT</b> based field. Subscribers will be allowed to type "
+"in any value in for this field. Text fields are useful for "
 "collecting names, cities, and such."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:121
+#: poMMo/admin/setup/fields_edit.php:121
 msgid ""
-"This is a <b>CHECKBOX</b> based demographic. Subscribers will be allowed to "
-"toggle this demographic ON and OFF. Checkboxes are useful for asking a user "
+"This is a <b>CHECKBOX</b> based field. Subscribers will be allowed to "
+"toggle this field ON and OFF. Checkboxes are useful for asking a user "
 "if they'd like to be included or excluded in something."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:124
+#: poMMo/admin/setup/fields_edit.php:124
 msgid ""
-"This is a <b>NUMBER</b> based demographic -- <b>UNSUPPORTED</b>. Support for "
+"This is a <b>NUMBER</b> based field -- <b>UNSUPPORTED</b>. Support for "
 "this type will be added later."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:127
+#: poMMo/admin/setup/fields_edit.php:127
 msgid ""
-"This is a <b>DATE</b> based demographic -- <b>UNSUPPORTED</b>. Support for "
+"This is a <b>DATE</b> based field -- <b>UNSUPPORTED</b>. Support for "
 "this type will be added later."
 msgstr ""
 
-#: poMMo/admin/setup/demographics_edit.php:130
+#: poMMo/admin/setup/fields_edit.php:130
 msgid ""
-"This is a <b>MULTIPLE CHOICE</b> based demographic. Subscribers will be able "
+"This is a <b>MULTIPLE CHOICE</b> based field. Subscribers will be able "
 "to select a value from the options you provide below. Multiple choice "
-"demographics have reliable values, and are useful for collecting subsscriber "
+"fields have reliable values, and are useful for collecting subsscriber "
 "Country, income range, and such."
 msgstr ""
 
@@ -1156,30 +1156,30 @@ msgstr ""
 msgid "You must include \"[[URL]]\" for the confirm link"
 msgstr ""
 
-#: poMMo/admin/setup/setup_demographics.php:32
+#: poMMo/admin/setup/setup_fields.php:32
 msgid ""
-"Demographics are pieces of information you choose to collect from "
-"subscribers (other than email address). Any number of demographics can be "
-"assigned to the subscription form.  Each demographic is categorized as "
+"Fields are pieces of information you choose to collect from "
+"subscribers (other than email address). Any number of fields can be "
+"assigned to the subscription form.  Each field is categorized as "
 "either <em>TEXT</em>, <em>NUMBER</em>, <em>MULTIPLE CHOICE</em>, <em>CHECK "
 "BOX</em>, or <em>DATE</em> depending on kind of information it collects."
 msgstr ""
 
-#: poMMo/admin/setup/setup_demographics.php:48
-#: poMMo/admin/setup/setup_demographics.php:66
-msgid "Demographic cannot be deleted."
+#: poMMo/admin/setup/setup_fields.php:48
+#: poMMo/admin/setup/setup_fields.php:66
+msgid "Field cannot be deleted."
 msgstr ""
 
-#: poMMo/admin/setup/setup_demographics.php:56
-msgid "Delete Demographic"
+#: poMMo/admin/setup/setup_fields.php:56
+msgid "Delete Field"
 msgstr ""
 
-#: poMMo/admin/setup/setup_demographics.php:59
+#: poMMo/admin/setup/setup_fields.php:59
 #, php-format
 msgid ""
-"Currently, %1$s subscribers have a non empty value for this demographic. All "
-"Subscriber data relating to this demographic will be lost. Are you sure you "
-"want to remove demographic %2$s?"
+"Currently, %1$s subscribers have a non empty value for this field. All "
+"Subscriber data relating to this field will be lost. Are you sure you "
+"want to remove field %2$s?"
 msgstr ""
 
 #: poMMo/admin/setup/ajax_demoOrder.php:30

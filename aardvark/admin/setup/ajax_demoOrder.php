@@ -16,7 +16,7 @@
 define('_IS_VALID', TRUE);
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_demographics.php');
+require_once (bm_baseDir . '/inc/db_fields.php');
 
 $poMMo = & fireup('secure');
 $logger = & $poMMo->logger;
@@ -29,7 +29,7 @@ function updateList($array) {
 		if (!is_numeric($key) || !is_numeric($value))
 			die(_T('Error updating order'));
 		
-		$sql = 'UPDATE '.$dbo->table['demographics'].' set demographic_ordering='.$key.' WHERE demographic_id='.$value.' LIMIT 1';
+		$sql = 'UPDATE '.$dbo->table['subscriber_fields'].' set field_ordering='.$key.' WHERE field_id='.$value.' LIMIT 1';
 		if (!$dbo->query($sql))
 			die(_T('Error updating order'));
 	}

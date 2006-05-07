@@ -27,7 +27,7 @@
 		<tr>
 			<td nowrap>{t}email{/t}</td>
 			
-			{foreach from=$demographics key=key item=item}
+			{foreach from=$fields key=key item=item}
 				<td nowrap>{$item.name}</td>
 			{/foreach}
 		
@@ -45,7 +45,7 @@
 				<input type="text" name="email[{$key}]" value="{$item.email}" maxlength="60">
 			</td>
 			
-			{foreach name=demo from=$demographics key=demo_id item=demo}
+			{foreach name=demo from=$fields key=demo_id item=demo}
 				<td nowrap>
 				{if $demo.type == 'text'}
 					<input type="text" name="d[{$key}][{$demo_id}]" maxlength="60" value="{$item.data.$demo_id}">

@@ -14,7 +14,7 @@
 // TODO : Make array of queries.. send array to dbo->query(); update query function to allow arrays...
 // TODO : Play with output buffering...
 // TODO : load array of done serials @ beginning of loop.. not per each update!!!
-// TODO : delete from data tables where demographic type is checkbox & value is off
+// TODO : delete from data tables where field type is checkbox & value is off
 //      * ensure program behaves similarly (ignoring 'off') -- ie. user_update2.php removes 'off's
 
 // NOTE TO SELF -- all updates in a upgrade must be serialized, and their serial incremented!

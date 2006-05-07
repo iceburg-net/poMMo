@@ -46,7 +46,7 @@
 		</td>
 	</tr>
 
-	{foreach name=demos from=$demographics key=key item=demo}
+	{foreach name=demos from=$fields key=key item=demo}
 	<tr>
 		<td class="prompt">
 			<label {if $demo.required}class="required"{/if}>{$demo.prompt}</label>
@@ -69,7 +69,7 @@
    				</select>
    					
    			{else}
-   				{t}Unsupported Demographic Type.{/t}
+   				{t}Unsupported Field Type.{/t}
    				
    			{/if}
    		</td>

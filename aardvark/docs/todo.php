@@ -21,24 +21,25 @@ defined('_IS_VALID') or die('Move along...');
 IMMEDIATE (for next release):
 
   (goals for PR11.1)
-  * Smarty template scheme throughout whole program
-  * Rid all poMMo getmessages in favor of Logger....
-  * Add test "suite" to check httpspawn, create temporary tables, etc. etc.
-  * Rename "demographics" to .... ?
-  * instatiate ob_start() @ call to common.php ... call end method (flush) @ end of template display / redirection
+  
+  * Rename "fields" to .... ?
    + Requires all pages to be under smarty templating architecutre
   * Fix embedded forms
      + Theme URLS should resolve to FULL http location ()
      +  better (proper) detection of poMMo root?
   
 SHORT TERM:
+  ie. create groups based off of the values of subscriber fields..
   
+  (API) * instatiate ob_start() @ call to common.php ... call end method (flush) @ end of template display / redirection
   (API) Better mailing send debugging ->
     Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
   (API) Merge validator's is_email rules with lib.txt.php's isEmail
   (API) Add validation schemes to subscription form (process.php)
   (API) when inserting into subscribers_flagged, watch for duplicate keys (either add IGNORE or explicity check for flag_type...)
-  (API) Allow fetching of demographic id, names, + types -- NOT OPTIONS, etc... too much data being passed around manage/groups/import/etc.
+  (API) Allow fetching of field id, names, + types -- NOT OPTIONS, etc... too much data being passed around manage/groups/import/etc.
+  
+  (feature) Add test "suite" to check httpspawn, create temporary tables, etc. etc.
   
   (feature) add mailing history
   (feature) add message templating

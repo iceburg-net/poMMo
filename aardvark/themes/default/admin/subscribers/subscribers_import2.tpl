@@ -2,7 +2,6 @@
 
 </div>
 <!-- wide layout -->
-{debug}
 
 {literal}
 <style>
@@ -92,7 +91,7 @@
 					<SELECT name="field[{$smarty.section.field.index}]">
 						<option value="ignore">{t}Ignore Field{/t}</option>
 						<option value="ignore">----------------</option>
-					{foreach from=demographics key=key item=item}
+					{foreach from=$fields key=key item=item}
 						<option value="{$key}">{$item.name}</option>
 					{/foreach}
 					</SELECT>

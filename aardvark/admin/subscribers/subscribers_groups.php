@@ -37,7 +37,7 @@ if (!empty ($_POST['group_name'])) {
 }
 
 if (!empty ($_GET['delete'])) {
-	// make sure it is a valid demographic
+	// make sure it is a valid field
 	if (!dbGroupCheck($dbo, $_GET['group_id'])) {
 		$logger->addMsg(_T('Group cannot be deleted.'));
 	} else {
@@ -54,7 +54,7 @@ if (!empty ($_GET['delete'])) {
 			$smarty->display('admin/confirm.tpl');
 			bmKill();
 		} else {
-			// delete demographic
+			// delete field
 			if (dbGroupDelete($dbo, $_GET['group_id'])) {
 				$logger->addMsg(sprintf(_T('%s deleted.'),$_GET['group_name']));
 				bmRedirect($_SERVER['PHP_SELF']);

@@ -20,7 +20,7 @@ define('_IS_VALID', TRUE);
 require ('../bootstrap.php');
 require (bm_baseDir . '/inc/lib.validate_subscriber.php');
 require_once (bm_baseDir . '/inc/db_subscribers.php');
-require_once (bm_baseDir . '/inc/db_demographics.php');
+require_once (bm_baseDir . '/inc/db_fields.php');
 require_once (bm_baseDir . '/inc/lib.mailings.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
@@ -33,7 +33,7 @@ $dbo = & $poMMo->openDB();
  *********************************/
 $smarty = & bmSmartyInit();
 
-// Prepare for subscriber form -- load in demographics + POST/Saved Subscribe Form
+// Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
 $smarty->prepareForSubscribeForm(); 
 
 if (empty($_POST['bm_email']))

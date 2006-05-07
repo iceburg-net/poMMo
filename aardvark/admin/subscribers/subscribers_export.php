@@ -15,7 +15,7 @@ define('_IS_VALID', TRUE);
  
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_subscribers.php');
-require_once (bm_baseDir.'/inc/db_demographics.php');
+require_once (bm_baseDir.'/inc/db_fields.php');
 $poMMo =& fireup("secure");
 $dbo = & $poMMo->openDB();
 
@@ -27,7 +27,7 @@ $group_id = str2db($_GET['group_id']);
 $table = str2db($_GET['table']);
 
 
-$demographics = & dbGetDemographics($dbo);
+$fields = & dbGetFields($dbo);
 
 if ($group_id == 'all')
 	$subscribers = & dbGetSubscriber($dbo, $group_id, 'detailed',$table);
@@ -44,8 +44,8 @@ $newline = "\n";
 $empty = "NULL";
 
 $csv_output = $encaser."email".$encaser.$delim;
-foreach ( array_keys($demographics) as $demographic_id ) {
-  $csv_output .= $encaser.addslashes($demographics[$demographic_id]['name']).$encaser.$delim;
+foreach ( array_keys($fields) as $field_id ) {
+  $csv_output .= $encaser.addslashes($fields[$field_id]['name']).$encaser.$delim;
 }
 $csv_output .= $encaser."date".$encaser.$newline;
 
@@ -57,11 +57,11 @@ foreach (array_keys($subscribers) as $subscriber_id) {
 		$csv_output .= $empty.$delim;
 	else
 		$csv_output .= $encaser.$subscriber['email'].$encaser.$delim;
-	foreach ( array_keys($demographics) as $demographic_id) {
-			if (empty($subscriber['data'][$demographic_id]))
+	foreach ( array_keys($fields) as $field_id) {
+			if (empty($subscriber['data'][$field_id]))
 				$csv_output .= $empty.$delim;
 			else
-				$csv_output .= $encaser.$subscriber['data'][$demographic_id].$encaser.$delim;
+				$csv_output .= $encaser.$subscriber['data'][$field_id].$encaser.$delim;
 	}
 	if (empty($subscriber['date']))
 		$csv_output .= $empty.$delim;

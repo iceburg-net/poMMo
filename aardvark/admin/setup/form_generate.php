@@ -16,7 +16,7 @@
  define('_IS_VALID', TRUE);
  
  require('../../bootstrap.php');
- require_once(bm_baseDir.'/inc/db_demographics.php');
+ require_once(bm_baseDir.'/inc/db_fields.php');
  $poMMo =& fireup("secure");
  $dbo = & $poMMo->openDB();
 
@@ -64,32 +64,32 @@ $form_name = "signup";
 <br>
 <?php
 
-$demographics = & dbGetDemographics($dbo, 'active');
-foreach (array_keys($demographics) as $demographic_id) {
-	$demographic = & $demographics[$demographic_id];
+$fields = & dbGetFields($dbo, 'active');
+foreach (array_keys($fields) as $field_id) {
+	$field = & $fields[$field_id];
 	
-	if ($demographic['required'] == 'on')
-		echo "\n\n <!-- BEGIN INPUT FOR REQUIRED FIELD ".$demographic['name']." --> \n<p>\n <font color=\"red\"><LABEL for=\"d[".$demographic_id."]\">".db2str($demographic['prompt']).": </LABEL></font>\n\t";
+	if ($field['required'] == 'on')
+		echo "\n\n <!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." --> \n<p>\n <font color=\"red\"><LABEL for=\"d[".$field_id."]\">".db2str($field['prompt']).": </LABEL></font>\n\t";
 	else
-		echo "\n\n <!-- BEGIN INPUT FOR FIELD ".$demographic['name']." --> \n<p>\n<LABEL for=\"d[".$demographic_id."]\">".db2str($demographic['prompt']).": </LABEL>\n\t";
+		echo "\n\n <!-- BEGIN INPUT FOR FIELD ".$field['name']." --> \n<p>\n<LABEL for=\"d[".$field_id."]\">".db2str($field['prompt']).": </LABEL>\n\t";
 	
-	switch ($demographic['type']) {
+	switch ($field['type']) {
 		case "checkbox": // checkbox	
-			if (empty($demographic['normally']))
-				echo "\t<input type=\"checkbox\" name=\"d[".$demographic_id."]\">";
+			if (empty($field['normally']))
+				echo "\t<input type=\"checkbox\" name=\"d[".$field_id."]\">";
 			else
-				echo "\t<input type=\"checkbox\" name=\"d[".$demographic_id."]\" checked>";
+				echo "\t<input type=\"checkbox\" name=\"d[".$field_id."]\" checked>";
 			break;
 			
 		case "multiple": // select
 		
-			echo "\t<select name=\"d[".$demographic_id."]\">\n";
+			echo "\t<select name=\"d[".$field_id."]\">\n";
 			
 			echo "\t  <option value=\"\"> Please Choose...\n";
 			
-			foreach ($demographic['options'] as $option) {
+			foreach ($field['options'] as $option) {
 				
-				if (!empty($demographic['normally']) && $option == $demographic['normally'])
+				if (!empty($field['normally']) && $option == $field['normally'])
 					echo "\t  <option value=\"".db2str($option)."\" selected> ".db2str($option)."\n";
 				else
 					echo "\t  <option value=\"".db2str($option)."\"> ".db2str($option)."\n";
@@ -100,10 +100,10 @@ foreach (array_keys($demographics) as $demographic_id) {
 			
 		case "text": // select
 		
-			if (empty($demographic['normally']))
-				echo "<input type=\"text\" name=\"d[".$demographic_id."]\" maxlength=\"60\">";
+			if (empty($field['normally']))
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\">";
 			else
-				echo "<input type=\"text\" name=\"d[".$demographic_id."]\" maxlength=\"60\" value=\"".db2str($demographic['normally'])."\">";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".db2str($field['normally'])."\">";
 			break; 
 			
 		case "date": // select

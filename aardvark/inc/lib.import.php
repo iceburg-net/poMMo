@@ -22,7 +22,7 @@ defined('_IS_VALID') or die('Move along...');
 require_once (bm_baseDir.'/inc/lib.txt.php');
 
 // Reads a CSV file and returns an array. Returns false if the file is invalid.
-//  Validation -> 1 email address per line, # of cells not to exceed # of demographics by 5
+//  Validation -> 1 email address per line, # of cells not to exceed # of fields by 5
 //  Output array {  array ('lineWithMostFields' => 0, 'emailField' => '', 'csvFile' => array([field1],[field2],[...]) }
 function & csvPrepareFile(& $uploadFile) {
 
@@ -31,8 +31,8 @@ function & csvPrepareFile(& $uploadFile) {
 	global $poMMo;
 	
 	
-	// set maximum fields / line based off # of demographics
-	$sql = 'SELECT COUNT(demographic_id) FROM '.$dbo->table['demographics'];
+	// set maximum fields / line based off # of fields
+	$sql = 'SELECT COUNT(field_id) FROM '.$dbo->table['subscriber_fields'];
 	$maxFields = $dbo->query($sql, 0) + 5;
 
 	// the most fields the parser encounters / line
@@ -114,18 +114,18 @@ function & csvPrepareFile(& $uploadFile) {
 // csvPrepareImport: <array> returns an array of dbGetSubscriber style subscribers to import. 
 // The array consists of 2 arrays, 'valid' and 'invalid'. If a subscriber is in 'invalid', they will be flagged to
 //  update their records.
-function csvPrepareImport(& $poMMo, & $dbo, & $demographics, & $csvFile, & $fieldAssign) {
+function csvPrepareImport(& $poMMo, & $dbo, & $fields, & $csvFile, & $fieldAssign) {
 	
 	global $logger;
 	require_once (bm_baseDir.'/inc/db_subscribers.php');
 
 	$outArray = array ('valid' => array (), 'invalid' => array (), 'duplicate' => array ());
 
-	// array of required demographics
+	// array of required fields
 	$requiredArray = array ();
-	foreach (array_keys($demographics) as $demographic_id)
-		if ($demographics[$demographic_id]['required'] == 'on')
-			$requiredArray[$demographic_id] = $demographics[$demographic_id]['name'];
+	foreach (array_keys($fields) as $field_id)
+		if ($fields[$field_id]['required'] == 'on')
+			$requiredArray[$field_id] = $fields[$field_id]['name'];
 
 	// find the field # holding the email address
 	foreach (array_keys($fieldAssign) as $field_num) {
@@ -144,7 +144,7 @@ function csvPrepareImport(& $poMMo, & $dbo, & $demographics, & $csvFile, & $fiel
 		$subscriber = array ('data' => array ());
 		$valid = TRUE;
 
-		// array of required demographics.
+		// array of required fields.
 		$required = $requiredArray;
 
 		// check if this is the email field
@@ -169,44 +169,44 @@ function csvPrepareImport(& $poMMo, & $dbo, & $demographics, & $csvFile, & $fiel
 		if (empty ($value))
 			continue;
 
-		// assign the demographic_id to this field
-		$demographic_id = & $fieldAssign[$field_num];
-		$demographic = & $demographics[$demographic_id];
+		// assign the field_id to this field
+		$field_id = & $fieldAssign[$field_num];
+		$field = & $fields[$field_id];
 
 		// validate this field
-		switch ($demographic['type']) {
+		switch ($field['type']) {
 			case 'checkbox' :
 				if ($value == 'on' || $value == 'ON' || $value == 'checked' || $value == 'CHECKED' || $value = 'yes' || $value == 'YES')
-					$subscriber['data'][$demographic_id] = 'on';
+					$subscriber['data'][$field_id] = 'on';
 				break;
 			case 'multiple' :
 				// verify the input matches a selection (for data congruency)
-				$options = quotesplit($demographic['options']);
+				$options = quotesplit($field['options']);
 				if (in_array($value, $options)) {
-					$subscriber['data'][$demographic_id] = mysql_real_escape_string($value);
+					$subscriber['data'][$field_id] = mysql_real_escape_string($value);
 				}
 				else {
-					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has an unknown option (%2$s) for field %3$s'),$line + 1,$value, $demographic['name']));
+					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has an unknown option (%2$s) for field %3$s'),$line + 1,$value, $field['name']));
 					$valid = FALSE;
 				}
 				break;
 			case 'date' : // validate if input is a date
 				$date = strtotime($value);
 				if ($date)
-					$subscriber['data'][$demographic_id] = $date;
+					$subscriber['data'][$field_id] = $date;
 				else {
-					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has an invalid date (%2$s) for field %3$s'),$line + 1,$value, $demographic['name']));
+					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has an invalid date (%2$s) for field %3$s'),$line + 1,$value, $field['name']));
 					$valid = FALSE;
 				}
 				break;
 			case 'text' :
-				$subscriber['data'][$demographic_id] = mysql_real_escape_string($value);
+				$subscriber['data'][$field_id] = mysql_real_escape_string($value);
 				break;
 			case 'number' :
 				if (is_numeric($value))
-					$subscriber['data'][$demographic_id] = mysql_real_escape_string($value);
+					$subscriber['data'][$field_id] = mysql_real_escape_string($value);
 				else {
-					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has a non number (%2$s) for field %3$s'),$line + 1,$value, $demographic['name']));
+					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has a non number (%2$s) for field %3$s'),$line + 1,$value, $field['name']));
 					$valid = FALSE;
 				}
 				break;
@@ -214,14 +214,14 @@ function csvPrepareImport(& $poMMo, & $dbo, & $demographics, & $csvFile, & $fiel
 				die('Unknown Type in Import Process');
 		}
 
-		// tick off this field from the required demographics if it was required
-		if (isset ($required[$demographic_id]))
-			unset ($required[$demographic_id]);
+		// tick off this field from the required fields if it was required
+		if (isset ($required[$field_id]))
+			unset ($required[$field_id]);
 	}
 
 	if (!empty ($required)) {
-		foreach (array_keys($required) as $demographic_id)
-		$logger->addMsg(sprintf(_T('Subscriber on line %1$s has a empty required field (%2$s)'),$line + 1,$demographics[$demographic_id]['name']));			
+		foreach (array_keys($required) as $field_id)
+		$logger->addMsg(sprintf(_T('Subscriber on line %1$s has a empty required field (%2$s)'),$line + 1,$fields[$field_id]['name']));			
 		$valid = FALSE;
 	}
 

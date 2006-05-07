@@ -43,30 +43,30 @@ function validateSubscribeForm($dupeCheck = TRUE) {
 		}
 	}
 
-	// ** validate user submitted demographics
-	$demographics = & dbGetDemographics($dbo, 'active');
+	// ** validate user submitted fields
+	$fields = & dbGetFields($dbo, 'active');
 	$subscriber_data = array ();
 	
-	if (!empty($demographics)) {
-	foreach (array_keys($demographics) as $demographic_id) {
-		$demographic = & $demographics[$demographic_id];
+	if (!empty($fields)) {
+	foreach (array_keys($fields) as $field_id) {
+		$field = & $fields[$field_id];
 
-		// check to make sure a required demographic is not empty
-		if (empty ($_POST['d'][$demographic_id]) && $demographic['required'] == 'on') {
-			$logger->addErr($demographic['prompt'] . ' ' . _T('was a required field.'));
+		// check to make sure a required field is not empty
+		if (empty ($_POST['d'][$field_id]) && $field['required'] == 'on') {
+			$logger->addErr($field['prompt'] . ' ' . _T('was a required field.'));
 			continue;
 		}
 
-		// create demographic array
-		if (!empty ($_POST['d'][$demographic_id])) {
+		// create field array
+		if (!empty ($_POST['d'][$field_id])) {
 			// TODO : insert validation schemes here (ie. check options, #, date)
-			switch ($demographic['type']) {
+			switch ($field['type']) {
 				case 'checkbox' :
-					if ($_POST['d'][$demographic_id] == 'on') // don't add to subscriber_data if value is not checked..
-						$subscriber_data[$demographic_id] = str2db($_POST['d'][$demographic_id]);
+					if ($_POST['d'][$field_id] == 'on') // don't add to subscriber_data if value is not checked..
+						$subscriber_data[$field_id] = str2db($_POST['d'][$field_id]);
 					break;
 				default :
-					$subscriber_data[$demographic_id] = str2db($_POST['d'][$demographic_id]);
+					$subscriber_data[$field_id] = str2db($_POST['d'][$field_id]);
 					break;
 			}
 

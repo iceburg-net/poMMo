@@ -11,7 +11,7 @@
 <img src="{$url.theme.shared}/images/icons/groups.png" class="articleimg">
 
 <p>
-{t}Groups are made by creating "filters" which match subscriber fields to a value, or other groups. For instance, if you have  "age" and "country" fields, you can match subscribers 21 and older living in Japan by creating two filtering critiera; one which matches "age" to a value GREATER THAN 20, and another which matches "country" EQUAL TO "Japan"{/t} 
+{t}They are made up of "filters" that match field values or other groups. For instance, if you collect  "age" and "country", you can match subscribers 21 and older living in Japan by creating two filtering critiera; one which matches "age" to a value GREATER THAN 20, and another which matches "country" EQUAL TO "Japan"{/t} 
 <p>
 
 <a href="{$url.base}/admin/subscribers/subscribers_groups.php">
@@ -87,21 +87,21 @@
 	</span>
 	<span style="text-align:left; margin-left: 12px;">
 		{if $filter.logic == 'is_in'}
-			{t}Include subscribers belonging to{/t} <strong>{$groups[$filter.demographic_id]}</strong>
+			{t}Include subscribers belonging to{/t} <strong>{$groups[$filter.field_id]}</strong>
 		{elseif $filter.logic == 'not_in'}
-			{t}Exclude subscribers belonging to{/t} <strong>{$groups[$filter.demographic_id]}</strong>
+			{t}Exclude subscribers belonging to{/t} <strong>{$groups[$filter.field_id]}</strong>
 		{elseif $filter.logic == 'is_equal'}
-			{t escape=no 1="<strong>`$demos[$filter.demographic_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
+			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
 		{elseif $filter.logic == 'not_equal'}
-			{t escape=no 1="<strong>`$demos[$filter.demographic_id].name`</strong>" 2="<em>`$filter.value`</em>}Exclude subscribers who have %1 equal to %2{/t}
+			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Exclude subscribers who have %1 equal to %2{/t}
 		{elseif $filter.logic == 'is_more'}
-			{t escape=no 1="<strong>`$demos[$filter.demographic_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 greater than %2{/t}
+			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 greater than %2{/t}
 		{elseif $filter.logic == 'is_less'}
-			{t escape=no 1="<strong>`$demos[$filter.demographic_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 less than %2{/t}
+			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 less than %2{/t}
 		{elseif $filter.logic == 'not_true'}
-			{t}Exclude subscribers that checked{/t} <strong>{$demos[$filter.demographic_id].name}</strong>
+			{t}Exclude subscribers that checked{/t} <strong>{$demos[$filter.field_id].name}</strong>
 		{elseif $filter.logic == 'is_true'}
-			{t}Include subscribers that checked{/t} <strong>{$demos[$filter.demographic_id].name}</strong>
+			{t}Include subscribers that checked{/t} <strong>{$demos[$filter.field_id].name}</strong>
 		{/if}
 	</span>
 </div>

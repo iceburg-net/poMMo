@@ -15,9 +15,9 @@
 		</p>		
 						
 		<p>
-			<a href="{$url.base}/admin/setup/setup_demographics.php">
-			<img src="{$url.theme.shared}/images/icons/demographics.png" class="navimage" />							
-			{t}Demographics{/t}</a> - 
+			<a href="{$url.base}/admin/setup/setup_fields.php">
+			<img src="{$url.theme.shared}/images/icons/fields.png" class="navimage" />							
+			{t}Subscriber Fields{/t}</a> - 
 			{t}Choose the information you'd like to collect from your subscribers.{/t}
 			<br>&nbsp;
 		</p>

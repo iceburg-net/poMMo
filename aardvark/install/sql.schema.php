@@ -43,18 +43,18 @@ INSERT INTO :::config::: VALUES ('revision', '19', 'Internal Revision', 'on', 'o
 
 -- DEMOGRAPHICS
 
-CREATE TABLE :::demographics::: (
-  `demographic_id` smallint(5) unsigned NOT NULL auto_increment,
-  `demographic_active` enum('on','off') NOT NULL default 'off',
-  `demographic_ordering` smallint(5) unsigned NOT NULL default '0',
-  `demographic_name` varchar(60) default NULL,
-  `demographic_prompt` varchar(60) default NULL,
-  `demographic_normally` varchar(60) default NULL,
-  `demographic_options` text,
-  `demographic_required` enum('on','off') NOT NULL default 'off',
-  `demographic_type` enum('checkbox','multiple','text','date','number') default NULL,
-  PRIMARY KEY  (`demographic_id`),
-  KEY `active` (`demographic_active`,`demographic_ordering`)
+CREATE TABLE :::fields::: (
+  `field_id` smallint(5) unsigned NOT NULL auto_increment,
+  `field_active` enum('on','off') NOT NULL default 'off',
+  `field_ordering` smallint(5) unsigned NOT NULL default '0',
+  `field_name` varchar(60) default NULL,
+  `field_prompt` varchar(60) default NULL,
+  `field_normally` varchar(60) default NULL,
+  `field_options` text,
+  `field_required` enum('on','off') NOT NULL default 'off',
+  `field_type` enum('checkbox','multiple','text','date','number') default NULL,
+  PRIMARY KEY  (`field_id`),
+  KEY `active` (`field_active`,`field_ordering`)
 );
 
 -- GROUPS
@@ -72,7 +72,7 @@ CREATE TABLE :::groups::: (
 CREATE TABLE :::groups_criteria::: (
   `criteria_id` int(10) unsigned NOT NULL auto_increment,
   `group_id` int(10) unsigned NOT NULL default '0',
-  `demographic_id` tinyint(3) unsigned NOT NULL default '0',
+  `field_id` tinyint(3) unsigned NOT NULL default '0',
   `logic` enum('is_in','not_in','is_equal','not_equal','is_more','is_less','is_true','not_true') NOT NULL default 'is_in',
   `value` text,
   PRIMARY KEY  (`criteria_id`),
@@ -152,11 +152,11 @@ CREATE TABLE :::pending::: (
 
 CREATE TABLE :::pending_data::: (
   `data_id` bigint(20) unsigned NOT NULL auto_increment,
-  `demographic_id` int(10) unsigned NOT NULL default '0',
+  `field_id` int(10) unsigned NOT NULL default '0',
   `pending_id` int(10) unsigned NOT NULL default '0',
   `value` tinytext,
   PRIMARY KEY  (`data_id`),
-  KEY `demographic_id` (`demographic_id`,`pending_id`)
+  KEY `field_id` (`field_id`,`pending_id`)
 );
 
 -- SUBSCRIBERS
@@ -183,12 +183,12 @@ CREATE TABLE :::subscribers_flagged::: (
 
 CREATE TABLE :::subscribers_data::: (
   `data_id` bigint(20) unsigned NOT NULL auto_increment,
-  `demographic_id` int(10) unsigned NOT NULL default '0',
+  `field_id` int(10) unsigned NOT NULL default '0',
   `subscribers_id` int(10) unsigned NOT NULL default '0',
   `value` varchar(60) NOT NULL default '',
   PRIMARY KEY  (`data_id`),
-  KEY `s_plus_demo_id` (`demographic_id`,`subscribers_id`),
-  KEY `val_plus_demo` (`value`,`demographic_id`),
+  KEY `s_plus_demo_id` (`field_id`,`subscribers_id`),
+  KEY `val_plus_demo` (`value`,`field_id`),
   KEY `subscribers_id` (`subscribers_id`),
   KEY `subscribers_id_2` (`subscribers_id`,`value`)
 );

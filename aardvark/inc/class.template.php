@@ -62,18 +62,18 @@ class bTemplate extends Smarty {
 		*/
 	}
 	
-	// Loads demographic data into template, as well as _POST (or a saved subscribeForm). 
+	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
 	function prepareForSubscribeForm() {
-		require_once (bm_baseDir . '/inc/db_demographics.php');
+		require_once (bm_baseDir . '/inc/db_fields.php');
 		global $dbo;
 		global $poMMo;
 		
-		// Get array of demographics. Key is ID, value is an array of the demo's info
-		$demographics = dbGetDemographics($dbo);
-		if (!empty($demographics))
-			$this->assign('demographics', $demographics);
+		// Get array of fields. Key is ID, value is an array of the demo's info
+		$fields = dbGetFields($dbo);
+		if (!empty($fields))
+			$this->assign('fields', $fields);
 		
-		// assign email & demographic values if they exist in POST
+		// assign email & field values if they exist in POST
 		require_once(bm_baseDir.'/inc/lib.txt.php');
 		
 		// process.php stores form values in Session (so they don't get lost). Attempt to reload them

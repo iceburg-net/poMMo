@@ -79,5 +79,5 @@ define('bm_verbosity',1);
  * 
  *    Defaults to the "cache" directory in poMMo's root.'
 */
-//define('bm_workDir','');
+define('bm_workDir','/home/workdir');
 ?>

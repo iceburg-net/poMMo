@@ -8,7 +8,7 @@
 <img src="{$url.theme.shared}/images/icons/groups.png" class="articleimg">
 
 <p>
-{t}You can create groups of subscribers based off their subscriber field values. For instance, if you collect a "city" as a subscriber field, you can mail all subscribers in Milwaukee by creating a group that matches subscribers who supplied "Milwaukee" for "city".{/t}
+{t}Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list.{/t}
 </p>
 
 

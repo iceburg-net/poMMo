@@ -38,7 +38,7 @@ if (isset($_POST['update'])) {
 			case 'is_in' :
 			case 'not_in' :
 				$_POST['group_logic'] = $filter['logic'];
-				$defaultValue = quotesplit($filter['demographic_id']);
+				$defaultValue = quotesplit($filter['field_id']);
 				
 				// a kludge to trick the add(update) routine in groups_edit.php
 				echo '<input type="hidden" name="group_logic" value="'.$filter['logic'].'">';
@@ -47,21 +47,21 @@ if (isset($_POST['update'])) {
 			case 'not_equal' :
 			case 'is_more' :
 			case 'is_less' :
-				$_POST['field_id'] = $filter['demographic_id'];
+				$_POST['field_id'] = $filter['field_id'];
 				$defaultValue = quotesplit($filter['value']);
 				$defaultLogic = $filter['logic'];
 				
 				// a kludge to trick the add(update) routine in groups_edit.php
-				echo '<input type="hidden" name="field_id" value="'.$filter['demographic_id'].'">';
+				echo '<input type="hidden" name="field_id" value="'.$filter['field_id'].'">';
 				break;
 			case 'is_true' :
 			case 'not_true' :
-				$_POST['field_id'] = $filter['demographic_id'];
+				$_POST['field_id'] = $filter['field_id'];
 				$defaultLogic = $filter['logic'];
 				$defaultValue = TRUE;
 				
 				// a kludge to trick the add(update) routine in groups_edit.php
-				echo '<input type="hidden" name="field_id" value="'.$filter['demographic_id'].'">';
+				echo '<input type="hidden" name="field_id" value="'.$filter['field_id'].'">';
 				break;
 				
 		}
@@ -94,9 +94,9 @@ echo "
 
 if (!empty ($_POST['field_id'])) {
 	// determine the type of the field
-	require_once (bm_baseDir . '/inc/db_demographics.php');
+	require_once (bm_baseDir . '/inc/db_fields.php');
 
-	$demos = dbGetDemographics($dbo, str2db($_POST['field_id']));
+	$demos = dbGetFields($dbo, str2db($_POST['field_id']));
 	$demo = & $demos[$_POST['field_id']];
 
 	switch ($demo['type']) {

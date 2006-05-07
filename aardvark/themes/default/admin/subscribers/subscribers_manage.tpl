@@ -40,7 +40,7 @@
 		<SELECT name="group_id" onChange="document.bForm.submit()">
 			<option value=all>{t}All Subscribers{/t}</option>
 			{foreach from=$groups key=key item=item}
-				<option value="{$key}"{if $group_id == $key} SELECTED{/if}>$item</option>
+				<option value="{$key}"{if $group_id == $key} SELECTED{/if}>{$item}</option>
 			{/foreach}
 		</SELECT>
 	
@@ -49,8 +49,8 @@
 	{t}Order by:{/t}
 		<SELECT name="order" onChange="document.bForm.submit()">
 			<option value="email">{t}email{/t}</option>
-			{foreach from=$demographics key=key item=item}
-				<option value="{$key}"{if $order == $key} SELECTED{/if}>$item</option>
+			{foreach from=$fields key=key item=item}
+				<option value="{$key}"{if $order == $key} SELECTED{/if}>{$item}</option>
 			{/foreach}
 		</SELECT>
 	
@@ -93,7 +93,7 @@
 			{t}email{/t}
 		</td>
 		
-		{foreach from=$demographics key=key item=item}
+		{foreach from=$fields key=key item=item}
 			<td nowrap>{$item.name}</td>
 		{/foreach}
 		
@@ -112,7 +112,7 @@
 				</td>
 		<td nowrap><a href="subscribers_mod.php?sid={$item.email}&action=delete&table={$table}&limit={$limit}&order={$order}&orderType={$orderType}&group_id={$group_id}">{t}delete{/t}</a></td>
 		<td nowrap><strong>{$item.email}</strong></td>
-		{foreach name=demo from=$demographics key=demo_id item=demo}
+		{foreach name=demo from=$fields key=demo_id item=demo}
 			<td nowrap>{$item.data.$demo_id}</td>
 		{/foreach}
 		<td nowrap>{$item.date}</td>
