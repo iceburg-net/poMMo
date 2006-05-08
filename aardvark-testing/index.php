@@ -45,6 +45,10 @@ elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 		'admin_password'
 	));
 	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+		
+		// LOGIN SUCCESS -- PERFORM MAINTENANCE
+		bmMaintenance();
+		
 		$poMMo->setAuthenticated(TRUE);
 		bmRedirect(bm_http . bm_baseUrl . '/admin/admin.php');
 	}

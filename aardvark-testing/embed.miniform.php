@@ -30,5 +30,4 @@ $smarty = & bmSmartyInit();
 $smarty->prepareForSubscribeForm();
 
 $smarty->display('subscribe/form.mini.tpl');
-die();
 ?>
