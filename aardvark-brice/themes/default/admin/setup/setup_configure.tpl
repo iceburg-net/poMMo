@@ -103,7 +103,7 @@
 		<div class="field">
 			<label for="demo_mode">{t}Demonstration Mode:{/t} </label>
 			<input type="radio" name="demo_mode" value="on" {if $demo_mode == 'on'}checked{/if}>on
-			<input type="radio" name="demo_mode" value="" {if $demo_mode != 'on'}checked{/if}>off
+			<input type="radio" name="demo_mode" value="off" {if $demo_mode != 'on'}checked{/if}>off
 			<div class="notes">{t}(Toggle Demonstration Mode){/t}</div>
 		</div>
 		
