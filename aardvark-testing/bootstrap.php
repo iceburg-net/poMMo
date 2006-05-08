@@ -21,12 +21,7 @@ defined('_IS_VALID') or die('Move along...');
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
-define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
 define('pommo_revision', '20');
-
-// get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
-define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
 
 @include(bm_baseDir.'/config.php');
 defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>
@@ -61,7 +56,21 @@ if (!is_dir(bm_workDir.'/pommo/smarty')) {
 			bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo');
 	if (!mkdir(bm_workDir.'/pommo/smarty'))
 		bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo/smarty');
-} 
+}
+
+/**
+ * If bootstrap is called from an "embedded" script, read bm_baseURL from "last known good". 
+ * Otherwise, set it based from REQUEST
+ */
+(defined('_poMMo_embed')) ? require(bm_workDir.'/include.php') :
+	define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+
+define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
+
+
+// get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
+define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
+
 
 // NOTE -> this is meant to be in class.template.php! -- however, it must remain
 // here until smarty migration is complete or str2db is replaced using:
