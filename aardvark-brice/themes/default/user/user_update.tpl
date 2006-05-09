@@ -1,5 +1,4 @@
 {include file="user/inc.header.tpl"}
-
 <div id="header"><h1>{t}Subscriber Update{/t}</h1></div>
 
 <a href="{$config.site_url}">
@@ -29,6 +28,7 @@
 
 <div style="margin-top: 20px; margin-left: 30px;">
 	<form action="" method="post">
+	<input type="hidden" name="original_email" value="{$original_email}">
 	<img src="{$url.theme.shared}/images/icons/nok.png" align="bottom" border='0'>
 	<input type="hidden" name="bm_email" value="{$bm_email}">
 	<input type="submit" name="unsubscribe" value="{t}Click to Unsubscribe{/t}">
