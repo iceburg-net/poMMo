@@ -14,8 +14,6 @@
 </style>
 {/literal}
 
-{debug}
-
 <div id="subscribeForm">
 
 <form action="" method="POST">
