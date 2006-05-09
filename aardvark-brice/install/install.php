@@ -31,6 +31,11 @@ session_start(); // required by smartyValidate. TODO -> move to prepareForForm()
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
+
+// clear the cache
+$smarty->clear_compiled_tpl();
+$smarty->clear_all_cache();
+
 $smarty->prepareForForm();
 
 // Check to make sure poMMo is not already installed.
