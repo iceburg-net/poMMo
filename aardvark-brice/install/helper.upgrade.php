@@ -733,7 +733,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 			
 			if ($dbRev < $revision) {
 
-				$sql = 'ALTER TABLE `' . $dbo->table['demographics'] . '` RENAME `subscriber_fields`;';
+				$sql = 'ALTER TABLE `' . $dbo->table['demographics'] . '` RENAME `' . $dbo->table['subscriber_fields'] . '`';
 				if (!performUpdate($sql, $dbo, 70, 'Renaming demographic table to fields.'))
 					$failed = TRUE;
 
