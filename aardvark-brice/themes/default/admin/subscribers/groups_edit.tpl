@@ -4,6 +4,23 @@
 <script src="{$url.theme.shared}/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="{$url.theme.shared}/scriptaculous/effects.js" type="text/javascript"></script>
 
+{literal}
+<style>
+	/* NECESSARY TO SET STYLING HERE FOR IE6 TO PICKUP ON IT.... */
+	/* BACK BUTTON STYLING FOR FILTER CRITERIA */
+	.goback { 
+		font-size: 120%; 
+		font-weight: bold; 
+		text-decoration: underline;
+		padding: 4px;
+		display: inline;
+		cursor:pointer;
+		cursor:hand;
+	}
+</style>
+{/literal}
+
+
 <div id="mainbar">
 
 <h1>{t}Edit Group{/t}</h1>
@@ -38,7 +55,7 @@
 </form>
 
 
-<form id="filterForm" name="filtertForm" action="" method="POST">
+<form id="filterForm" name="filterForm" action="" method="POST">
 
 <div id="newFilter">
 
@@ -68,7 +85,6 @@
 	
 	</div>	
 </div>
-	
 	<div id="critLogic" style="float: right; background-color: #e6eaff; padding: 7px; border: 1px solid; margin: 2px;"></div>
 </form>
 
@@ -112,6 +128,10 @@
  	<div><br><strong>{t}No filters have been assigned.{/t}</strong></div>
 {/foreach}
 
+</div>
+
+<div>
+<input type="checkbox" id="focusStealer" name="focusStealer">
 </div>
 
 {literal}
@@ -161,6 +181,9 @@ function hide() {
 	Effect.BlindUp('field');
 	Effect.BlindUp('filters');
 	Effect.Appear('critLogic');
+	$('field_id').blur();
+	$('group_logic').blur();
+	$('focusStealer').focus();
 }
 
 function reset(val) {
