@@ -26,6 +26,7 @@ IMMEDIATE (for next release):
    
 SHORT TERM:
 
+  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
   (API) Better mailing send debugging ->
     Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
   (API) Merge validator's is_email rules with lib.txt.php's isEmail
