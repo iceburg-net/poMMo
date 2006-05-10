@@ -17,6 +17,9 @@ elsewhere
 */
 defined('_IS_VALID') or die('Move along...');
 
+// Start Output buffering
+ob_start();
+
 /** 
  * Bootstrapping
 */
@@ -95,7 +98,6 @@ define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',
 
 // note: called by reference so it doesn't make a copy of its return object (held in session)
 function & fireup() {
-
 	
 	// get list of arguments to set preinit, and postinit environment
 	$arg_list = func_get_args(); // can this be copied below in place of $arg_list???
