@@ -24,7 +24,7 @@ ob_start();
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('pommo_revision', '20');
+define('pommo_revision', '21');
 
 @include(bm_baseDir.'/config.php');
 defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>

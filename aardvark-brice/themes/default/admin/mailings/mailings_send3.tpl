@@ -23,6 +23,7 @@
 	{if $fromemail != $frombounce}<p><b>{t}Bounces:{/t} </b>&lt;{$frombounce}&gt;</p>{/if}
 	<p><b>{t}Subject:{/t} </b>{$subject}</p>
 	<p><b>{t}To:{/t} </b>{$groupName}, <i>{$subscriberCount}</i> {t}recipients.{/t}</p>
+	<p><b>{t}Character Set:{/t} </b>{$charset}</p>
 	</td></tr></table>
 	<hr>
 	

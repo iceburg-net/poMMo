@@ -150,6 +150,21 @@
 	
 	<fieldset>
     <legend>{t}Advanced{/t}</legend>
+	
+		<div class="field">
+			<label for="list_charset"><span class="required">{t}Character Set:{/t}</span> </label>
+			<div class="error">{validate id="list_charset" message=$formError.list_charset}</div>
+			<select name="list_charset" id="list_charset">
+				<option value="UTF-8" {if $list_charset == 'UTF-8'}SELECTED{/if}>{t}UTF-8 (recommended){/t}</option>
+				<option value="ISO-8859-1" {if $list_charset == 'ISO-8859-1'}SELECTED{/if}>{t}western (ISO-8859-1){/t}</option>
+				<option value="ISO-8859-15" {if $list_charset == 'ISO-8859-15'}SELECTED{/if}>{t}western (ISO-8859-15){/t}</option>
+				<option value="cp1251" {if $list_charset == 'cp1251'}SELECTED{/if}>{t}cyrillic (Windows-1251){/t}</option>
+				<option value="KOI8-R" {if $list_charset == 'KOI8-R'}SELECTED{/if}>{t}cyrillic (KOI8-R){/t}</option>
+				<option value="GB2312" {if $list_charset == 'GB2312'}SELECTED{/if}>{t}Simplified Chinese (GB2312){/t}</option>
+				<option value="EUC-JP" {if $list_charset == 'EUC-JP'}SELECTED{/if}>{t}Japanese (EUC-JP){/t}</option>
+			</select>
+			<div class="notes">{t}(Select Default Character Set of Mailings){/t}</div>
+		</div>
 
 		<div class="field">
 			<label for="list_exchanger"><span class="required">{t}Mail Exchanger:{/t}</span> </label>
