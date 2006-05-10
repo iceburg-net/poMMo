@@ -49,7 +49,7 @@ require(bm_baseDir.'/inc/class.logger.php');
 if (!defined('bm_workDir'))
 	define('bm_workDir',bm_baseDir.'/cache');
 	
-if (!is_dir(bm_workDir.'/pommo/smarty')) {
+if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
 	if (!is_dir(bm_workDir))
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Work Directory not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'));
 	if (!is_writable(bm_workDir))
