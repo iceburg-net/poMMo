@@ -21,8 +21,9 @@ defined('_IS_VALID') or die('Move along...');
 IMMEDIATE (for next release):
   
    (API) * instatiate ob_start() @ call to common.php ... call end method (flush) @ end of template display / redirection
-lso when I try to test the unsubscribe it never sends the email to completly unsubscribe me. 
-  
+   Group filter creation display issues under IE -- what's neW?!
+ 
+   
 SHORT TERM:
 
   (API) Better mailing send debugging ->
