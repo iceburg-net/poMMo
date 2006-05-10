@@ -37,6 +37,7 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 	$sent = 0;
 	$percent = 100;
 	$status = 'finished';
+	$notices = array();
 }
 
 // end the mailing?

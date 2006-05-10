@@ -17,11 +17,14 @@ elsewhere
 */
 defined('_IS_VALID') or die('Move along...');
 
+// Start Output buffering
+ob_start();
+
 /** 
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('pommo_revision', '20');
+define('pommo_revision', '21');
 
 @include(bm_baseDir.'/config.php');
 defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>
@@ -46,7 +49,7 @@ require(bm_baseDir.'/inc/class.logger.php');
 if (!defined('bm_workDir'))
 	define('bm_workDir',bm_baseDir.'/cache');
 	
-if (!is_dir(bm_workDir.'/pommo/smarty')) {
+if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
 	if (!is_dir(bm_workDir))
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Work Directory not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'));
 	if (!is_writable(bm_workDir))
@@ -95,7 +98,6 @@ define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',
 
 // note: called by reference so it doesn't make a copy of its return object (held in session)
 function & fireup() {
-
 	
 	// get list of arguments to set preinit, and postinit environment
 	$arg_list = func_get_args(); // can this be copied below in place of $arg_list???
