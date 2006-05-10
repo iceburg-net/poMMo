@@ -750,20 +750,39 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					bmBumpVersion($dbo, $revision, "Aardvark PR11.1");
 			}
 
-	
+			$revision = 21;
+
+			break;
+		case 21:
+		
+			if ($dbRev < $revision) {
+				
+				$sqlA = array();
+				$sqlA[] = 'INSERT INTO `' . $dbo->table['config'] . '` (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES (\'list_charset\', \'UTF-8\', \'\', \'off\', \'on\');';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['mailing_current'] . '` ADD `charset` VARCHAR(10) NOT NULL DEFAULT \'UTF-8\';';
+				if (!performUpdate($sqlA, $dbo, 72, 'Enabling mailing character set selection'));
+					$failed = TRUE;
+
+				// bump version
+				if (!$failed)
+					bmBumpVersion($dbo, $revision, "Aardvark PR11.2");
+			}
+			
 			// follows last case
 			if ($failed)
 				return FALSE;
 			return TRUE;
-
+			
 			$revision = 21;
-
+			
+				
 			break;
-
 		default :
 			die('Unknown Revision passed to upgrade function - ' . $revision);
 			break;
+			
 	}
+	
 
 	if ($failed)
 		return FALSE;

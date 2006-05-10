@@ -62,7 +62,7 @@ if (!empty($_POST['testMail'])) {
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
 if (!empty ($_GET['sendaway'])) {
 	
-	$securityCode = dpoMMoingCreate($dbo, $input);
+	$securityCode = dbMailingCreate($dbo, $input);
 	dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
 	
 	dpoMMoingStamp($dbo, "start");

@@ -20,7 +20,6 @@ defined('_IS_VALID') or die('Move along...');
 
 IMMEDIATE (for next release):
   
-   (API) * instatiate ob_start() @ call to common.php ... call end method (flush) @ end of template display / redirection
    Group filter creation display issues under IE -- what's neW?!
  
    

@@ -60,7 +60,7 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 function bmSendTestMailing(&$to, &$input) {
 	require_once (bm_baseDir.'/inc/class.bmailer.php');
 	require_once (bm_baseDir.'/inc/lib.txt.php');
-		$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce']);
+		$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce'],NULL,NULL,$input['charset']);
 		$altbody = NULL;
 		$html = FALSE;
 		if ($input['mailtype'] == 'html')
