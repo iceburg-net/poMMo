@@ -179,4 +179,5 @@ function & fireup() {
 	// returns a copy of the object
 	return $poMMo;
 }
+
 ?>

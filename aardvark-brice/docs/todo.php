@@ -19,9 +19,7 @@ defined('_IS_VALID') or die('Move along...');
 ?>
 
 IMMEDIATE (for next release):
-  
-   Group filter creation display issues under IE -- what's neW?!
- 
+
    
 SHORT TERM:
 
