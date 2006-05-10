@@ -81,6 +81,9 @@ function bmKill($msg = NULL) {
 		bmDebug();
 	}
 	
+	// end output buffer
+	ob_end_flush();
+	
 	if ($msg)
 		die('<div style="float: left;"><img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="bottom"></div>' . $msg);
 	die();

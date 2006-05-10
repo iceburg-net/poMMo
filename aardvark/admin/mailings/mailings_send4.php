@@ -132,7 +132,7 @@ elseif ($row['serial'] != $serial) {
  *********************************/
 
 // checks to see if mailing should be halted (or is in halted state...)
-dpoMMoingPoll($dbo, $serial);
+dbMailingPoll($dbo, $serial);
 
 // spawn script per relay if in multimode
 if ($poMMo->_config['multimode']) {
@@ -200,7 +200,7 @@ function updateDB(& $sentMails, & $timer) {
 	dpoMMoingUpdate($dbo, $sentMails);
 
 	// poll mailing	
-	dpoMMoingPoll($dbo, $serial);
+	dbMailingPoll($dbo, $serial);
 
 	// reset variables
 	$sentMails = array ();

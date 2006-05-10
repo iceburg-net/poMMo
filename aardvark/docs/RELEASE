@@ -1,25 +1,25 @@
-=== Release Notes for Aardvark PR11.1 ===
- <Released May 7th, 2006>
+=== Release Notes for Aardvark PR11.2 ===
+ <Released May 10th, 2006>
  
- Aardvark PR10.2 is a minor bugfix release.
+This is a minor bugfix and feature enhancement release.
+
 [CHANGES]
-  * New AJAX based Group handling
-  * New AJAX based Mailing Status page
-  * Demographics renamed to "subscriber fields"
-  * Dropped legacy support
-  * Changed all instances of bMail to poMMo
-  
+  * Ability to set character set of a mailing
+  * New Support Library to clean Working Directory (support.php)
+  * Group Filter creation now compatible with Internet Explorer
+  * Added Romanian Translation.
+
  [ENHANCEMENTS]
-  * Much improved filter creation
-  * All browser pages updated with new framework
-  * Usability Enhancements
-  * Groups returned in alphabetical order
+  * Output buffering to avoid session and redirect issues with debugging enabled
+  * Multiple Choice fields now have a default "choose selection" (allows for "optional")
+  * Fields are created "hidden" as default to allow production-safe additions
+  * Memorization of BaseURL so embedded forms will work outside poMMo directory tree
   
  [BUG FIXES]
-  * Better protection against null fields
-  * Removed legacy logger (common)
-  * Updated to SmartyValidate 1.8 dev to fix issues
+  * SMARTY Working directory is cleared during install or upgrade
+  * Removed debugging trace from user update
+  * Unsubscribe from user update restored
+  * Editing and deleteing subscribers works again
+  * Embedded Forms no longer kill PHP processing after printing
+  * Fixed demonstration mode detection in mailings
   
- [NOTES]
-  *  Development switched to Subversion, with three branches;
-      aardvark(stable), aardvark-testing(semi-stable), aardvark-brice(bleeding edge)

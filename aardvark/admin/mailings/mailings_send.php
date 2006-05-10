@@ -30,6 +30,21 @@ $dbo = & $poMMo->openDB();
 $smarty = & bmSmartyInit();
 $smarty->prepareForForm();
 
+function check_charset($value, $empty, & $params, & $formvars) {
+	$validCharsets = array (
+		'UTF-8',
+		'ISO-8859-1',
+		'ISO-8859-15',
+		'cp1251',
+		'KOI8-R',
+		'GB2312',
+		'EUC-JP'
+	);
+
+	return in_array($value, $validCharsets);
+}
+
+
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
 	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>'));
@@ -46,6 +61,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
 	SmartyValidate :: connect($smarty, true);
+	
+	// register custom criteria
+	SmartyValidate::register_criteria('isCharSet','check_charset');
 
 	SmartyValidate :: register_validator('fromname', 'fromname', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('subject', 'subject', 'notEmpty', false, false, 'trim');
@@ -53,6 +71,11 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('frombounce', 'frombounce', 'isEmail', false, false, 'trim');
 	SmartyValidate :: register_validator('mailtype', 'mailtype:/(html|plain)/i', 'isRegExp', false, false, 'trim');
 	SmartyValidate :: register_validator('group_id', 'group_id:/(all|\d+)/i', 'isRegExp', false, false, 'trim');
+	
+	SmartyValidate :: register_validator('charset', 'charset', 'isCharSet', false, false, 'trim');
+	
+	$formError['charset'] = _T('Invalid Character Set');
+	
 
 	$formError = array ();
 	$formError['fromname'] = $formError['subject'] = _T('Cannot be empty.');
@@ -71,7 +94,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$dbvalues = $poMMo->getConfig(array (
 			'list_fromname',
 			'list_fromemail',
-			'list_frombounce'
+			'list_frombounce',
+			'list_charset'
 		));
 		if (!isset ($_POST['fromname']))
 			$_POST['fromname'] = $dbvalues['list_fromname'];
@@ -79,6 +103,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			$_POST['fromemail'] = $dbvalues['list_fromemail'];
 		if (!isset ($_POST['frombounce']))
 			$_POST['frombounce'] = $dbvalues['list_frombounce'];
+		if (!isset ($_POST['charset']))
+			$_POST['charset'] = $dbvalues['list_charset'];
 	}
 } else {
 	// ___ USER HAS SENT FORM ___

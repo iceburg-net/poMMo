@@ -66,7 +66,7 @@ function & dbQueueGet(& $dbo, $id = '1', $limit = 100) {
 	return $retArray;
 }
 
-function dpoMMoingCreate(& $dbo, & $input) {
+function dbMailingCreate(& $dbo, & $input) {
 	// generate security code
 	$code = md5(rand(0, 5000) . time());
 
@@ -88,7 +88,8 @@ function dpoMMoingCreate(& $dbo, & $input) {
 	'fromemail=\'' . str2db($input['fromemail']) . '\', frombounce=\'' . str2db($input['frombounce']) . '\', ' .
 	'subject=\'' . str2db($input['subject']) . '\', body=\'' . str2db($input['body']) . '\',' . $altbody . ' ishtml=\'' . $html . '\', ' .
 	'mailgroup=\'' . str2db($input['group_id']) . '\', subscriberCount=\'' . str2db($input['subscriberCount']) . '\', ' .
-	'sent=\'0\', command=\'none\', status=\'stopped\', serial=NULL, securityCode=\'' . $code . '\'';
+	'sent=\'0\', command=\'none\', status=\'stopped\', serial=NULL, securityCode=\'' . $code . '\', ' .
+	'charset=\'' . str2db($input['charset']) . '\'';
 	$dbo->query($sql);
 	
 	// clear background processing scripts
@@ -116,7 +117,7 @@ function dpoMMoingStamp(& $dbo, $arg) {
 }
 
 // checks the status or if a "command" has been issued for a mailing
-function dpoMMoingPoll($dbo, $serial = '') {
+function dbMailingPoll($dbo, $serial = '') {
 	
 	$sql = 'SELECT command, status, serial FROM ' . $dbo->table['mailing_current'];
 	$dbo->query($sql);
@@ -174,7 +175,7 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 	global $poMMo;
 	global $logger;
 
-	$sql = "SELECT ishtml,fromname,fromemail,frombounce,subject,body,altbody FROM " . $dbo->table['mailing_current'];
+	$sql = "SELECT ishtml,fromname,fromemail,frombounce,subject,body,altbody,charset FROM " . $dbo->table['mailing_current'];
 	$dbo->query($sql);
 	$row = mysql_fetch_assoc($dbo->_result);
 
@@ -187,7 +188,7 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 	}
 
 	// load new bMailer into session
-	$_SESSION["bMailer_" . $relay_id] = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce']);
+	$_SESSION["bMailer_" . $relay_id] = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce'], NULL, NULL, $row['charset']);
 
 	// reference it as $Mail
 	$bmMailer = & $_SESSION["bMailer_" . $relay_id];

@@ -24,6 +24,8 @@ require_once (bm_baseDir . '/inc/lib.txt.php');
 // create bMailer class (an extension of PHPMailer)
 class bMailer extends PHPMailer {
 
+	var $_charset;
+	
 	var $_fromname;
 	var $_fromemail;
 	var $_frombounce;
@@ -43,13 +45,14 @@ class bMailer extends PHPMailer {
 
 	// called like $pommo = new bMailer(fromname,fromemail,frombounce, exchanger)
 	//  If an argument is not supplied, resorts to default value (from setup/config.php).
-	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL) {
+	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL, $charset = NULL) {
 
 		$listConfig = $_SESSION['poMMo']->getConfig(array (
 			'list_fromname',
 			'list_fromemail',
 			'list_frombounce',
-			'list_exchanger'
+			'list_exchanger',
+			'list_charset'
 		));
 		if (empty ($fromname))
 			$fromname = $listConfig['list_fromname'];
@@ -65,6 +68,9 @@ class bMailer extends PHPMailer {
 
 		if (empty ($demonstration))
 			$demonstration = $_SESSION["poMMo"]->_config['demo_mode'];
+			
+		if (empty($charset))
+			$charset = $listConfig['list_charset'];
 
 		// initialize object's values
 
@@ -73,6 +79,7 @@ class bMailer extends PHPMailer {
 		$this->_frombounce = $frombounce;
 		$this->_exchanger = $exchanger;
 		$this->_demonstration = $demonstration;
+		$this->_charset = $charset;
 
 		$this->_subject = NULL;
 		$this->_body = NULL;
@@ -173,6 +180,9 @@ class bMailer extends PHPMailer {
 			}
 			// TODO -> should I just set PHPMailer parameters in the 1st place & skip $this->_paramName ?
 			// TODO -> pass these by reference ??
+			
+			// set the character set
+			$this->CharSet = $this->_charset;
 
 			$this->FromName = $this->_fromname;
 			$this->From = $this->_fromemail;
@@ -207,6 +217,8 @@ class bMailer extends PHPMailer {
 				if (!empty ($altbody))
 					$this->AltBody = $altbody;
 			}
+			
+			
 
 			$this->Body = $this->_body;
 

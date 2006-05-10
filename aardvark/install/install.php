@@ -1,5 +1,4 @@
 <?php
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -21,16 +20,23 @@ require ('../bootstrap.php');
 require_once (bm_baseDir . '/install/helper.install.php');
 require_once (bm_baseDir . '/install/helper.upgrade.php');
 
+session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
+
 $poMMo = & fireup('install');
 $logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
 $dbo->dieOnQuery(FALSE);
-session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
+
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
+
+// clear the cache
+$smarty->clear_compiled_tpl();
+$smarty->clear_all_cache();
+
 $smarty->prepareForForm();
 
 // Check to make sure poMMo is not already installed.

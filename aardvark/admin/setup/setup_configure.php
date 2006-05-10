@@ -1,5 +1,6 @@
 <?php
 
+
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -30,11 +31,29 @@ $dbo = & $poMMo->openDB();
 $smarty = & bmSmartyInit();
 $smarty->prepareForForm();
 
+// ADD CUSTOM VALIDATOR FOR CHARSET
+
+function check_charset($value, $empty, & $params, & $formvars) {
+	$validCharsets = array (
+		'UTF-8',
+		'ISO-8859-1',
+		'ISO-8859-15',
+		'cp1251',
+		'KOI8-R',
+		'GB2312',
+		'EUC-JP'
+	);
+
+	return in_array($value, $validCharsets);
+}
+
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
 	SmartyValidate :: connect($smarty, true);
-
+	
+	// register custom criteria
+	SmartyValidate::register_criteria('isCharSet','check_charset');
 
 	SmartyValidate :: register_validator('admin_username', 'admin_username', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('site_name', 'site_name', 'notEmpty', false, false, 'trim');
@@ -45,25 +64,26 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('site_success', 'site_success', 'isURL', TRUE);
 	SmartyValidate :: register_validator('site_confirm', 'site_confirm', 'isURL', TRUE);
 
-	SmartyValidate :: register_validator('admin_password2', 'admin_password:admin_password2', 'isEqual',TRUE);
+	SmartyValidate :: register_validator('admin_password2', 'admin_password:admin_password2', 'isEqual', TRUE);
 
 	SmartyValidate :: register_validator('admin_email', 'admin_email', 'isEmail');
 	SmartyValidate :: register_validator('list_fromemail', 'list_fromemail', 'isEmail');
 	SmartyValidate :: register_validator('list_frombounce', 'list_frombounce', 'isEmail');
-
+	
+	SmartyValidate :: register_validator('list_charset', 'list_charset', 'isCharSet', false, false, 'trim');
+	
 
 	$formError = array ();
-	$formError['admin_username'] = $formError['sitename'] = 
-	$formError['list_name'] = $formError['list_fromname'] = _T('Cannot be empty.');
+	$formError['admin_username'] = $formError['sitename'] = $formError['list_name'] = $formError['list_fromname'] = _T('Cannot be empty.');
 
-	$formError['admin_email'] = $formError['list_fromemail'] = 
-	$formError['list_frombounce'] = _T('Invalid email address');
+	$formError['admin_email'] = $formError['list_fromemail'] = $formError['list_frombounce'] = _T('Invalid email address');
 
 	$formError['admin_password2'] = _T('Passwords must match.');
 
-	$formError['site_url'] = $formError['site_success'] = 
-	$formError['site_confirm'] = _T('Must be a valid URL');
+	$formError['site_url'] = $formError['site_success'] = $formError['site_confirm'] = _T('Must be a valid URL');
 
+	$formError['list_charset'] = _T('Invalid Character Set');
+	
 	$smarty->assign('formError', $formError);
 
 	// populate _POST with info from database (fills in form values...) 
@@ -75,7 +95,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		'list_fromemail',
 		'list_frombounce',
 		'list_exchanger',
-		'list_confirm'
+		'list_confirm',
+		'list_charset'
 	));
 
 	$dbVals['demo_mode'] = (!empty ($poMMo->_config['demo_mode']) && ($poMMo->_config['demo_mode'] == "on")) ? 'on' : 'off';
@@ -98,13 +119,13 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			$_POST['admin_password'] = md5($_POST['admin_password']);
 
 		$oldDemo = $poMMo->_config['demo_mode'];
-		
+
 		dbUpdateConfig($dbo, $_POST);
 
 		$poMMo->loadConfig();
-		
+
 		$logger->addMsg(_T('Configuration Updated.'));
-		
+
 		// refresh page to reflect demonstration mode changes
 		if ($oldDemo != $poMMo->_config['demo_mode'])
 			bmRedirect('setup_configure.php');

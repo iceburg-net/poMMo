@@ -17,16 +17,14 @@ elsewhere
 */
 defined('_IS_VALID') or die('Move along...');
 
+// Start Output buffering
+ob_start();
+
 /** 
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
-define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
-define('pommo_revision', '20');
-
-// get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
-define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
+define('pommo_revision', '21');
 
 @include(bm_baseDir.'/config.php');
 defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>
@@ -51,7 +49,7 @@ require(bm_baseDir.'/inc/class.logger.php');
 if (!defined('bm_workDir'))
 	define('bm_workDir',bm_baseDir.'/cache');
 	
-if (!is_dir(bm_workDir.'/pommo/smarty')) {
+if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
 	if (!is_dir(bm_workDir))
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Work Directory not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'));
 	if (!is_writable(bm_workDir))
@@ -61,7 +59,21 @@ if (!is_dir(bm_workDir.'/pommo/smarty')) {
 			bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo');
 	if (!mkdir(bm_workDir.'/pommo/smarty'))
 		bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo/smarty');
-} 
+}
+
+/**
+ * If bootstrap is called from an "embedded" script, read bm_baseURL from "last known good". 
+ * Otherwise, set it based from REQUEST
+ */
+(defined('_poMMo_embed')) ? require(bm_workDir.'/include.php') :
+	define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+
+define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
+
+
+// get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
+define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
+
 
 // NOTE -> this is meant to be in class.template.php! -- however, it must remain
 // here until smarty migration is complete or str2db is replaced using:
@@ -86,7 +98,6 @@ if (!is_dir(bm_workDir.'/pommo/smarty')) {
 
 // note: called by reference so it doesn't make a copy of its return object (held in session)
 function & fireup() {
-
 	
 	// get list of arguments to set preinit, and postinit environment
 	$arg_list = func_get_args(); // can this be copied below in place of $arg_list???
