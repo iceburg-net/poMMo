@@ -50,7 +50,9 @@ class Common {
 
 		$this->_dbo = new dbo($bmdb['username'], $bmdb['password'], $bmdb['database'], $bmdb['hostname'], $bmdb['prefix']);
 		
-		// TODO --> add enable debugging here if set .. ONCE output buffering is called...
+		if (bm_debug == 'on') {
+			$this->_dbo->debug(TRUE);
+		}
 		
 		return $this->_dbo;
 	}

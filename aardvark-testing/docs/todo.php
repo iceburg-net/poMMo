@@ -19,12 +19,11 @@ defined('_IS_VALID') or die('Move along...');
 ?>
 
 IMMEDIATE (for next release):
-  
-   (API) * instatiate ob_start() @ call to common.php ... call end method (flush) @ end of template display / redirection
 
-  
+   
 SHORT TERM:
 
+  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
   (API) Better mailing send debugging ->
     Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
   (API) Merge validator's is_email rules with lib.txt.php's isEmail
@@ -56,8 +55,6 @@ MEDIUM TERM:
   (API) Use smartyvalidator + custom validation rules for subscription/subscriber update forms!
      + get rid of isEmail()?
 		
-
-  
   (feature) add ability to send "comments" to list administrator upon successfull subscription
   (feature) add personalization to messages
   (feature) Add search capability to subscriber management

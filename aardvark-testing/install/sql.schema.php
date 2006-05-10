@@ -35,9 +35,10 @@ INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
+INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
 
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11.1', 'poMMo Version', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '20', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11.2', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '21', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
@@ -98,6 +99,7 @@ CREATE TABLE :::mailing_current::: (
   `serial` varchar(20) default NULL,
   `securityCode` varchar(35) default NULL,
   `notices` longtext default NULL,
+  `charset` varchar(10) NOT NULL default 'UTF-8',
   PRIMARY KEY  (`id`)
 );
 

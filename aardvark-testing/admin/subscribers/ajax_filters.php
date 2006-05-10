@@ -79,18 +79,6 @@ function checkValue($check) {
 		return (in_array($check, $defaultValue)) ? ' SELECTED' : null;
 }
 
-echo "
-<style>
-	.goback { 
-		font-size: 120%; 
-		font-weight: bold; 
-		text-decoration: underline;
-		padding: 4px;
-		display: inline;
-		cursor:pointer;
-		cursor:hand;
-	}
-</style>";
 
 if (!empty ($_POST['field_id'])) {
 	// determine the type of the field
@@ -241,15 +229,19 @@ if ($output) {
 	$output .= '
 				<br><br>' . $buttonStr . '
 				<span style="margin-left: 50px;">
-					<div onClick="reset()" class="goback">
-						<img src="' . bm_baseUrl . '/themes/shared/images/icons/left.png" align="absmiddle">' . _T('Go Back') . '
+					<div class="goback">
+						<a href="javascript:reset();">
+							<img src="' . bm_baseUrl . '/themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
+						</a>
 					</div>
 				</span>';
 } else {
 	$output = '
 				<br>
-				<div onClick="reset()" class="goback">
-					<img src="' . bm_baseUrl . '/themes/shared/images/icons/left.png" align="absmiddle">' . _T('Go Back') . '
+				<div  class="goback">
+					<a href="javascript:reset();">
+						<img src="' . bm_baseUrl . '/themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
+					</a>
 				</div>';
 }
 
