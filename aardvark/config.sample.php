@@ -38,7 +38,7 @@ $bmdb['prefix'] = 'pommo_';
  * ::: Language Information :::
  *   Set this to your desired locale  -- this is a work in progress
  * 
- *	en - English
+ *	en - English				ro - Romanian
  *	fr - French
  *	de - German
 */

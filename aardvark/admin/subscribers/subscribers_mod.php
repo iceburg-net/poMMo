@@ -35,6 +35,8 @@ $smarty->assign('returnStr', _T('Subscribers Manage'));
 // sanity check
 if ($_REQUEST['table'] != 'subscribers' && $_REQUEST['table'] != 'pending' || empty ($_REQUEST['sid']) || empty ($_REQUEST['action']))
 	bmRedirect('subscribers_manage');
+
+$table = $_REQUEST['table'];
 	
 $appendUrl = "limit=".$_REQUEST['limit']."&order=".$_REQUEST['order']."&orderType=".$_REQUEST['orderType']."&group_id=".$_REQUEST['group_id']."&table=".$_REQUEST['table'];
 
