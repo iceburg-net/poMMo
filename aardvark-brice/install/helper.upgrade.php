@@ -760,7 +760,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				$sqlA = array();
 				$sqlA[] = 'INSERT INTO `' . $dbo->table['config'] . '` (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES (\'list_charset\', \'UTF-8\', \'\', \'off\', \'on\');';
 				$sqlA[] = 'ALTER TABLE `' . $dbo->table['mailing_current'] . '` ADD `charset` VARCHAR(10) NOT NULL DEFAULT \'UTF-8\';';
-				if (!performUpdate($sqlA, $dbo, 72, 'Enabling mailing character set selection'));
+				if (!performUpdate($sqlA, $dbo, 72, 'Enabling mailing character set selection'))
 					$failed = TRUE;
 
 				// bump version
@@ -773,7 +773,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				return FALSE;
 			return TRUE;
 			
-			$revision = 21;
+			$revision = 22;
 			
 				
 			break;
