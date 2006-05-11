@@ -243,7 +243,7 @@ class bMailer extends PHPMailer {
 
 		$errors = array ();
 
-		if ($this->_demonstration == "off") { // If poMMo is not in set in demonstration mode, SEND MAILS...
+		if ($this->_demonstration != 'on') { // If poMMo is not in set in demonstration mode, SEND MAILS...
 
 			// if $to is not an array (single email address has been supplied), simply send the mail.
 			if (!is_array($to)) {
@@ -279,8 +279,7 @@ class bMailer extends PHPMailer {
 
 			}
 		} else {
-			require_once ('lib.txt.php');
-			$errors[] = "Mail to: " . array2csv($to)." not sent: Demonstration active.";
+			$errors[] = "Mail to: " . $to ." not sent: Demonstration active.";
 		}
 
 		// if message(s) exist, return false. (Sending failed w/ error messages)
