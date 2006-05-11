@@ -53,7 +53,7 @@ define('bm_lang','de');
 
 // enable (on) or disable (off) debug mode. Set this to 'on' to provide debugging information
 //  to the developers. Make sure to set it to 'off' when you are finished collecting information.
-define('bm_debug','off');
+define('bm_debug','on');
 
 // set the verbosity level of logging.
 //  1: Debugging
