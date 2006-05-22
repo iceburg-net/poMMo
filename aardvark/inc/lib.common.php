@@ -19,6 +19,30 @@ elsewhere
 */
 defined('_IS_VALID') or die('Move along...');
 
+// called upon successful login (index.php)... cleanup tasks, etc. 
+function bmMaintenance() {
+	
+	/** 
+	 * MEMORIZE current baseURL (for embedded forms/application) 
+	 *		embedded scripts define _poMMo_embed, causing bm_workDir/include.php to
+	 *		be loaded, and thus "remember" the last known working baseUrl 
+	 **/
+	 
+   if (!$handle = fopen(bm_workDir.'/include.php', 'w')) {
+        bmKill(_T('Unable to perform maintenance'));
+   }
+ 
+   $fileContent = '
+	<?php defined(\'_IS_VALID\') or die(\'Move along...\'); 
+	define(\'bm_baseUrl\',\''.bm_baseUrl.'\'); ?>';
+   if (fwrite($handle, $fileContent) === FALSE) {
+      bmKill(_T('Unable to perform maintenance'));
+   }
+  
+   fclose($handle);
+}
+
+
 // deeply (recursive) strip an array of slashes added by magic quotes. --  usually called on _GET && _POST
 //  when a HTML Form is prepared (via class.template.php)
 function bmStripper($input) {

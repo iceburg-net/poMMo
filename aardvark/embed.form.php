@@ -15,6 +15,7 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_IS_VALID', TRUE);
+define('_poMMo_embed', TRUE);
 
 require('bootstrap.php');
 
@@ -31,5 +32,4 @@ $smarty = & bmSmartyInit();
 $smarty->prepareForSubscribeForm();
 
 $smarty->display('subscribe/form.subscribe.tpl');
-die();
 ?>

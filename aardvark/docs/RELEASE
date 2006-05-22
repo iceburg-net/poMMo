@@ -1,7 +1,7 @@
 === Release Notes for Aardvark PR11.2 ===
- <Released May 10th, 2006>
+ <Released May 22nd, 2006>
  
-This is a minor bugfix and feature enhancement release.
+This is a minor bugfix release.
 
 [CHANGES]
   * Ability to set character set of a mailing
@@ -10,16 +10,8 @@ This is a minor bugfix and feature enhancement release.
   * Added Romanian Translation.
 
  [ENHANCEMENTS]
-  * Output buffering to avoid session and redirect issues with debugging enabled
-  * Multiple Choice fields now have a default "choose selection" (allows for "optional")
-  * Fields are created "hidden" as default to allow production-safe additions
-  * Memorization of BaseURL so embedded forms will work outside poMMo directory tree
+  * Added Dutch Translation
   
  [BUG FIXES]
-  * SMARTY Working directory is cleared during install or upgrade
-  * Removed debugging trace from user update
-  * Unsubscribe from user update restored
-  * Editing and deleteing subscribers works again
-  * Embedded Forms no longer kill PHP processing after printing
-  * Fixed demonstration mode detection in mailings
+  * Improved support for embedded forms
   
