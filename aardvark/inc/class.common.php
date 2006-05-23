@@ -45,11 +45,11 @@ class Common {
 		//if (is_resource($this->_dbo->_link) && mysql_ping($this->_dbo->_link))  
 		if (is_resource($this->_dbo->_link))
 			return $this->_dbo;
-			
-		global $bmdb;
-
-		$this->_dbo = new dbo($bmdb['username'], $bmdb['password'], $bmdb['database'], $bmdb['hostname'], $bmdb['prefix']);
 		
+		global $bmdb;
+					
+		$this->_dbo = new dbo($bmdb['username'], $bmdb['password'], $bmdb['database'], $bmdb['hostname'], $bmdb['prefix']);
+			
 		if (bm_debug == 'on') {
 			$this->_dbo->debug(TRUE);
 		}
@@ -61,6 +61,7 @@ class Common {
 	function loadConfig() {
 		$dbo = & $this->openDB();
 		$dbo->dieOnQuery(FALSE);	
+	
 
 		$sql = 'SELECT * FROM '.$dbo->table['config'].' WHERE autoload=\'on\'';
 		if ($dbo->query($sql)) {
