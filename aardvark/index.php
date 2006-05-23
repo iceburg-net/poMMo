@@ -23,6 +23,9 @@ $poMMo = & fireup();
 $logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
 
+
+
+
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/

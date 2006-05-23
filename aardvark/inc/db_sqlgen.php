@@ -69,6 +69,8 @@ function & dbGetGroupSubscribers(& $dbo, $table, $group_id, $returnType = 'list'
 		if (!$sqlArray) {
 			// no group criteria exist?
 			$group_id = 'all';
+			$sortTbl = ' INNER JOIN ' . $dbo->table[$table] . ' sort ON (s.' . $table . '_id=sort.' . $table . '_id)';
+			$orderSQL = ' ORDER BY sort.email,s.' . $table . '_id ' . $order_type;
 		}
 		elseif ($sqlArray['include'][1]) {
 			for ($i = 2; $i <= $sqlArray['include'][0]; $i++)

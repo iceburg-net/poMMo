@@ -1,17 +1,15 @@
-=== Release Notes for Aardvark PR11.2 ===
- <Released May 22nd, 2006>
+=== Release Notes for Aardvark PR11.2c ===
+ <Released May 23rd, 2006>
  
 This is a minor bugfix release.
 
 [CHANGES]
-  * Ability to set character set of a mailing
-  * New Support Library to clean Working Directory (support.php)
-  * Group Filter creation now compatible with Internet Explorer
-  * Added Romanian Translation.
+ * Detection of frozen mailings with ability to dethaw or cancel
 
  [ENHANCEMENTS]
   * Added Dutch Translation
   
  [BUG FIXES]
   * Improved support for embedded forms
-  
+  * Drag and Drop Subscriber Field Sorting fixed under IE
+  * Sorting by group with no criteria no longer produces fatal error

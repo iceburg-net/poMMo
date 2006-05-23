@@ -29,6 +29,10 @@
 			<em>({t}Mailing Finished{/t})</em>
 		</div>
 		
+		<div class="stacked" id="frozen" style="z-index: 4; visibility: hidden;">
+			<em>({t}Mailing Frozen{/t})</em>
+		</div>
+		
 		<br>
 		<hr>
 		
@@ -52,6 +56,21 @@
 				<a href="mailing_status2.php?command=restart">
 					<img src="{$url.theme.shared}/images/icons/restart-small.png" border="0" align="absmiddle">
 					{t}Resume Mailing{/t}
+				</a> 
+			</span>
+			<span style="position: absolute; right: 0;">
+				<a href="mailing_status2.php?command=kill">
+					{t}Cancel Mailing{/t}
+					<img src="{$url.theme.shared}/images/icons/stopped-small.png" border="0" align="absmiddle">
+				</a>
+			</span>
+		</div>
+		
+		<div class="stacked" id="frozenCmd" style="z-index: 5; visibility: hidden;">
+			<span style="position: absolute; left: 0;">
+				<a href="mailing_status2.php?command=restart">
+					<img src="{$url.theme.shared}/images/icons/restart-small.png" border="0" align="absmiddle">
+					{t}Dethaw Mailing{/t}
 				</a> 
 			</span>
 			<span style="position: absolute; right: 0;">
@@ -127,50 +146,74 @@ var pb = {
     $('pbText').innerHTML = json.percent + "%";
     $('pbBar').setStyle({width: json.percent + '%' });
     
-     if (json.status == 'finished') { 
+     if (json.status == 'frozen') {
+     	this.updater.stop(); 
+     	setTimeout(pb.stopper,300);
+     	
+     	$('started').style.visibility = 'hidden';
+    	$('stopped').style.visibility = 'hidden';
+    	$('finished').style.visibility = 'hidden';
+    	$('frozen').style.visibility = 'visible';
+    	
+    	$('startedCmd').style.visibility = 'hidden';
+    	$('stoppedCmd').style.visibility = 'hidden';
+    	$('waitCmd').style.visibility = 'hidden';
+    	$('finishedCmd').style.visibility = 'hidden';
+    	$('frozenCmd').style.visibility = 'visible';
+     }
+    
+     else if (json.status == 'finished') { 
      	this.updater.stop(); 
      	setTimeout(pb.stopper,300);
 
      	$('started').style.visibility = 'hidden';
     	$('stopped').style.visibility = 'hidden';
+    	$('frozen').style.visibility = 'hidden';
     	$('finished').style.visibility = 'visible';
     	
     	$('startedCmd').style.visibility = 'hidden';
     	$('stoppedCmd').style.visibility = 'hidden';
     	$('waitCmd').style.visibility = 'hidden';
+    	$('frozenCmd').style.visibility = 'hidden';
     	$('finishedCmd').style.visibility = 'visible';
     	
     	$('pbTimer').style.visibility = 'hidden';
      }
     else if (json.status == 'stopped') {
     	$('started').style.visibility = 'hidden';
+    	$('frozen').style.visibility = 'hidden';
     	$('stopped').style.visibility = 'visible';
     	
     	 if (json.command == 'none') {
     	 	$('startedCmd').style.visibility = 'hidden';
     	 	$('waitCmd').style.visibility = 'hidden';
+    	 	$('frozenCmd').style.visibility = 'hidden';
     		$('stoppedCmd').style.visibility = 'visible';
     	 }
     	 else {
     	 	$('startedCmd').style.visibility = 'hidden';
     		$('stoppedCmd').style.visibility = 'hidden';
+    		$('frozenCmd').style.visibility = 'hidden';
     		$('waitCmd').style.visibility = 'visible';
     	 }
     	 
     }
     else {
     	$('stopped').style.visibility = 'hidden';
+    	$('frozen').style.visibility = 'hidden';
     	$('started').style.visibility = 'visible';
     	
     	
     	if (json.command == 'none') {
     	 	$('stoppedCmd').style.visibility = 'hidden';
     	 	$('waitCmd').style.visibility = 'hidden';
+    	 	$('frozenCmd').style.visibility = 'hidden';
     		$('startedCmd').style.visibility = 'visible';
     	 }
     	 else {
     	 	$('startedCmd').style.visibility = 'hidden';
     		$('stoppedCmd').style.visibility = 'hidden';
+    		$('frozenCmd').style.visibility = 'hidden';
     		$('waitCmd').style.visibility = 'visible';
     	 }
     }
