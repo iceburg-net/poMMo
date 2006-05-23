@@ -122,8 +122,8 @@ class dbo {
 
 		// connect to mysql database using config variables from poMMo class (set in setup/config.php). 
 		// supress errors to hide login information...
-		$this->_link = @ mysql_connect($hostname, $username, $password);
-
+		$this->_link = mysql_connect($hostname, $username, $password);
+			
 		if (!$this->_link)
 			die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">Could not establish database connection. Verify your config.php settings in the setup directory. <br><br>&nbsp;&nbsp;See the <a href="'.bm_baseUrl.'/docs/readme.html">README</a> file for help.');
 
