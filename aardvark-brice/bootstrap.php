@@ -42,7 +42,6 @@ require(bm_baseDir.'/inc/class.common.php');
 require(bm_baseDir.'/inc/class.dbo.php');
 require(bm_baseDir.'/inc/class.logger.php');
 
-
 /** 
  * Test basic functionalities
 */
@@ -69,7 +68,6 @@ if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
 	define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
 
 define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
-
 
 // get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
@@ -137,7 +135,6 @@ function & fireup() {
 		$poMMo = new Common();
 		$poMMo->loadConfig();
 	}	
-
 	// check that config has been loaded
 	if (empty($poMMo->_config) || count($poMMo->_config) < 5) {
 		$poMMo->loadConfig();
