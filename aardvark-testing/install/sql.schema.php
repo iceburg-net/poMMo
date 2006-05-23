@@ -37,8 +37,8 @@ INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
 
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11.2', 'poMMo Version', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '21', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11.2c', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '22', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 

@@ -40,33 +40,43 @@
 		</select>
 		<input class="button" type="submit" value="{t}Add{/t}" />
 	</div>
-</form>
+</form>	
 
-<div width="100%" id="demoOrder">
-<span>{t}Delete{/t}</span>
-<span style="margin-left: 20px;">{t}Edit{/t}</span>
-<span style="margin-left: 20px; margin-right: 20px;">{t}Order{/t}</span>
-<span style="text-align:left; margin-left: 5px;">{t}Field Name{/t}</span>
+{literal}
+<style>
+.handle {
+	cursor: move;
+}
+</style>
+{/literal}
 
-{foreach name=demos from=$fields key=key item=demo}
-<div id="demo_{$key}">
-	<a href="{$smarty.server.PHP_SELF}?field_id={$key}&delete=TRUE&field_name={$demo.name}">
- 	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0"></a>
-	<span style="margin-left: 25px;">
-	<a href="fields_edit.php?field_id={$key}">
-			<img src="{$url.theme.shared}/images/icons/edit.png" border="0"></a>
-	</span>
-	<span style="cursor:move; margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
-	<span style="text-align:left; margin-left: 12px;">
-	{if $demo.active == 'on'}<b>{$demo.name}</b>{else}{$demo.name}{/if}
-			 ({$demo.type})
-	</span>
+<br>
+	<span>{t}Delete{/t}</span>
+	<span style="margin-left: 20px;">{t}Edit{/t}</span>
+	<span style="margin-left: 20px; margin-right: 20px;">{t}Order{/t}</span>
+	<span style="text-align:left; margin-left: 5px;">{t}Field Name{/t}</span>
+	
+<div id="demoOrder">
+	{foreach name=demos from=$fields key=key item=demo}
+	<div id="demo_{$key}">
+		<a href="{$smarty.server.PHP_SELF}?field_id={$key}&delete=TRUE&field_name={$demo.name}">
+	 	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0"></a>
+		<span style="margin-left: 25px;">
+		<a href="fields_edit.php?field_id={$key}">
+				<img src="{$url.theme.shared}/images/icons/edit.png" border="0"></a>
+		</span>
+		<span style="cursor:move; margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
+		<span style="text-align:left; margin-left: 12px;">
+		{if $demo.active == 'on'}<b>{$demo.name}</b>{else}{$demo.name}{/if}
+				 ({$demo.type})
+		</span>
+	</div>	
+
+	{foreachelse}
+	 	<div><br><strong>{t}No fields have been assigned.{/t}</strong></div>
+	{/foreach}
 </div>
-{foreachelse}
- 	<div><br><strong>{t}No fields have been assigned.{/t}</strong></div>
-{/foreach}
 
-</div>
 <br>
 <div><li>{t escape=no}Names in <strong>bold</strong> are active.{/t}</li></div>
 <div><li>{t}Change the ordering of fields on the subscription form by dragging and dropping the order icon{/t}</li></div>
@@ -77,7 +87,10 @@
 {literal}
 <script type="text/javascript">
 // <![CDATA[
-Sortable.create('demoOrder',{tag:'div', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_demoOrder.php', {onComplete:function(request){new Effect.Highlight('demoOrder',{});}, parameters:Sortable.serialize('demoOrder'), evalScripts:true, asynchronous:true})}});
+
+Sortable.create('demoOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_demoOrder.php', {onComplete:function(request){new Effect.Highlight('demoOrder',{});}, parameters:Sortable.serialize('demoOrder'), evalScripts:true, asynchronous:true})}});
+
+
 // ]]>
 </script>
 {/literal}

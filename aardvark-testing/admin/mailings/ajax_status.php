@@ -30,8 +30,21 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 	$subscriberCount = $row['subscriberCount'];
 	$sent = $row['sent'];
 	$notices = quotesplit($row['notices']);
-	$status = $row['status'];
 	$command = $row['command'];
+	$status = $row['status']; 
+	
+	if ($command != 'none') {
+		if (isset($poMMo->_data['commandTimer'])) {
+			$commandTimer = $poMMo->_data['commandTimer'];
+		}
+		else {
+			$commandTimer = time();
+			$poMMo->_data['commandTimer'] = $commandTimer;
+		}
+		
+		if ((time() - $commandTimer) > 19) 
+			$status = 'frozen'; 
+	}
 } else {
 	$subscriberCount = 0;
 	$sent = 0;
