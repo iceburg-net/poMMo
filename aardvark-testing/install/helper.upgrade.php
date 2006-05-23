@@ -768,15 +768,28 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					bmBumpVersion($dbo, $revision, "Aardvark PR11.2");
 			}
 			
+			$revision = 22;
+				
+			break;
+			
+		case 22:
+		
+			if ($dbRev < $revision) {
+			
+				// bump version
+				if (!$failed)
+					bmBumpVersion($dbo, $revision, "Aardvark PR11.2c");
+			}
+			
 			// follows last case
 			if ($failed)
 				return FALSE;
 			return TRUE;
 			
-			$revision = 22;
-			
+			$revision = 23;
 				
 			break;
+			
 		default :
 			die('Unknown Revision passed to upgrade function - ' . $revision);
 			break;
