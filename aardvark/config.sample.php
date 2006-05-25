@@ -1,4 +1,4 @@
-l<?php 
+<?php 
 /**
  * poMMo Configuration File:
  *   This file sets up your database, language, and debugging options.
