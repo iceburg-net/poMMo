@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pommo\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-05-15 19:16-0500\n"
+"PO-Revision-Date: 2006-05-31 22:10-0500\n"
 "Last-Translator: Brice Burgess <bhb@iceburg.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -725,7 +725,7 @@ msgstr "Toevoeg Optie(s)"
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:465
 msgid "NOTE: You can multiple options by separating each with a comma. To include special characters such as quote marks and commas, prefix them with a backslash (\\)."
-msgstr "OPMERKING: U kan meerder opties gebruiken door ze te scheiden dmv een comma. Om speciale karakters te gebruiken dient u ze vooraf te laten gaan door een backslash (\\)."
+msgstr "OPMERKING: U kunt meerder opties gebruiken door ze te scheiden dmv een comma. Om speciale karakters te gebruiken dient u ze vooraf te laten gaan door een backslash (\\)."
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:468
@@ -856,7 +856,7 @@ msgstr "Voeg nog een Relais toe"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:555
 msgid "Use this page to configure poMMo. You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system."
-msgstr "Gebruik deze pagina om poMMo te configureren. U kan de inlog informatie wijzigen, de website en mailing parameters instellen, en de demonstratie modus inschakelen. Wanneer u de demo mode inschakeld worden er geen e-mails door het systeem verzonden."
+msgstr "Gebruik deze pagina om poMMo te configureren. U kunt de inlog informatie wijzigen, de website en mailing parameters instellen, en de demonstratie modus inschakelen. Wanneer u de demo mode inschakeld worden er geen e-mails door het systeem verzonden."
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:558
@@ -906,7 +906,7 @@ msgstr "(Pagina die de leden zien wanneer de aanmelding gelukt is. Leeg laten om
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:606
 msgid "Confirm URL:"
-msgstr "Bevestig URL:"
+msgstr "Bevestigings URL:"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:609
@@ -1061,12 +1061,12 @@ msgstr "Bekijk of Maak het aanmeldings formulier voor uw website."
 #: pommo_theme_lang.php:708
 #: poMMo/admin/subscribers/groups_edit.php:33
 msgid "Groups Page"
-msgstr "Groep Pagina"
+msgstr "Groepen Pagina"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_groups.tpl
 #: pommo_theme_lang.php:711
 msgid "Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list."
-msgstr "Maak groepen van leden gebaseerd op op de waarden van de leden velden. U kan dan leden mailen die tot een groep behoren ipv de hele lijst te mailen."
+msgstr "Maak groepen van leden gebaseerd op op de waarden van de leden velden. U kunt dan leden mailen die tot een groep behoren ipv de hele lijst te mailen."
 
 #. poMMo/themes/default/admin/subscribers/subscribers_groups.tpl
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
@@ -1237,12 +1237,12 @@ msgstr "Importeer"
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
 #: pommo_theme_lang.php:846
 msgid "Subscribers.  You can import large amounts of subscribers using files stored on your computer."
-msgstr "Leden. U kan hier in een keer grote aantallen leden importeren uit bestanden die opgeslagen zijn op uw computer."
+msgstr "Leden. U kunt hier in een keer grote aantallen leden importeren uit bestanden die opgeslagen zijn op uw computer."
 
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
 #: pommo_theme_lang.php:852
 msgid "Manage \"mailing groups\" from this area. Mailing groups allow you to mail subsets of your subscribers, rather than just the entire list."
-msgstr "Onderhoud \"leden groepen\" vanaf hier. Met mailing groepen kan u leden groepen mailen in plaats van naar de hele lijst."
+msgstr "Onderhoud \"leden groepen\" vanaf hier. Met mailing groepen kunt u leden groepen mailen in plaats van naar de hele lijst."
 
 #. poMMo/themes/default/admin/subscribers/subscribers_import.tpl
 #: pommo_theme_lang.php:855
@@ -1433,7 +1433,7 @@ msgstr "Uploaden Gelukt"
 #. poMMo/themes/default/admin/subscribers/subscribers_import2.tpl
 #: pommo_theme_lang.php:990
 msgid "Optionally, you may match the values to a subscriber field. If an imported subscriber is missing a value for a required field, they will be %1 flagged %2 to update their information."
-msgstr "Optioneel, kan u de waarden refereren aan een leden veld. Wanneer een geimporteerd lid een waarde mist voor een verplicht veld, krijgt deze een %1 indicatie %2 om zijn/haar profiel te updaten."
+msgstr "Optioneel, kunt u de waarden refereren aan een leden veld. Wanneer een geimporteerd lid een waarde mist voor een verplicht veld, krijgt deze een %1 indicatie %2 om zijn/haar profiel te updaten."
 
 #. poMMo/themes/default/admin/subscribers/subscribers_import2.tpl
 #: pommo_theme_lang.php:993
@@ -1592,7 +1592,7 @@ msgstr "Gebruik Plain Text Editor"
 #. poMMo/themes/default/admin/mailings/mailings_send2.tpl
 #: pommo_theme_lang.php:1110
 msgid "Include alternative text body?"
-msgstr "Alternatief tekstbody invoegen?"
+msgstr "Alternatieve tekstbody invoegen?"
 
 #. poMMo/themes/default/admin/mailings/mailings_send2.tpl
 #. poMMo/themes/default/admin/confirm.tpl
@@ -1677,7 +1677,7 @@ msgstr "HTML Bericht:"
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
 #: pommo_theme_lang.php:1173
 msgid "Click here %1 to view in a new browser window."
-msgstr "Klik hiet %1 om in een nieuw venster te bekijken."
+msgstr "Klik hier %1 om in een nieuw venster te bekijken."
 
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
 #: pommo_theme_lang.php:1176
@@ -1702,7 +1702,7 @@ msgstr "De mailing vindt plaats in de achtergrond, dus u kan uw browser sluiten,
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1188
 msgid "Sending message to %1 subscribers."
-msgstr "Vestuur bericht naar %1 leden."
+msgstr "Verstuur bericht naar %1 leden."
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1191
@@ -1729,7 +1729,7 @@ msgstr "Pauzeer Mailing"
 #: pommo_theme_lang.php:1203
 #: pommo_theme_lang.php:1206
 msgid "Resume Mailing"
-msgstr "Ga verder met Mailing"
+msgstr "Ga verder met de Mailing"
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1209
@@ -1791,7 +1791,7 @@ msgstr "Status"
 #. poMMo/themes/default/admin/mailings/admin_mailings.tpl
 #: pommo_theme_lang.php:1248
 msgid "A mailing is currently taking place. You can not create a mailing until this one completes. Visit this page to check on the status of this mailing."
-msgstr "Er wordt op dit moment een mailing verzonden. U kan niet eerder"
+msgstr "Er wordt op dit moment een mailing verzonden. U kunt niet eerder een nieuwe mailing maken tot deze compleet is. Bezoek deze pagina om de status van deze mailing te bekijken."
 
 #. poMMo/themes/default/admin/mailings/admin_mailings.tpl
 #: pommo_theme_lang.php:1254
@@ -1816,12 +1816,12 @@ msgstr "Administratie Menu"
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1272
 msgid "This area allows you to configure poMMo and its default behavior. Set mailing list parameters, choose the information you'd like to collect from subscribers, and generate subscription forms from here."
-msgstr "Hier kan u poMMO configureren. Stel mailing lijst parameters in, kies de informatie die u wil verzamelen van uw leden, en maak hier tevens aanmeldings formulieren."
+msgstr "Hier kunt u poMMO configureren. Stel mailing lijst parameters in, kies de informatie die u wil verzamelen van uw leden, en maak hier tevens aanmeldings formulieren."
 
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1278
 msgid "Here you can list, add, delete, import, export, and update your subscribers. You can also create groups (subsets) of your subsribers from here."
-msgstr "Hier kan u leden bekijken, toevoegen,verwijderen,importeren,exporteren en wijzigen. U kan hier ook ledengroepen maken."
+msgstr "Hier kunt u leden bekijken, toevoegen,verwijderen,importeren,exporteren en wijzigen. U kan hier ook ledengroepen maken."
 
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1284
@@ -2375,7 +2375,7 @@ msgstr "Verwijder Groep"
 #: poMMo/admin/subscribers/subscribers_groups.php:53
 #, php-format
 msgid "%1$s filters belong this group . Are you sure you want to remove %2$s?"
-msgstr "%1$s filters behoren tot deze groep. Weet u zeker dat u %2$s wil vewrijderen?"
+msgstr "%1$s filters behoren tot deze groep. Weet u zeker dat u %2$s wil verwijderen?"
 
 #: poMMo/admin/subscribers/subscribers_groups.php:59
 #, php-format
@@ -2428,7 +2428,7 @@ msgstr "Verkeerde Ingave"
 #: poMMo/admin/mailings/mailings_send4.php:34
 #, php-format
 msgid "Background script with serial %d spawned"
-msgstr "Achtergrond script met serienr %d verwerkt"
+msgstr "Achtergrondscript met serienr %d verwerkt"
 
 #: poMMo/admin/admin.php:31
 msgid "poMMo Aardvark"
@@ -2489,7 +2489,7 @@ msgstr "Moet een geldig e-mailadres zijn"
 
 #: poMMo/install/install.php:100
 msgid "Installation Complete! You may now login and setup poMMo."
-msgstr "Installatie Gereed! U kan nu inloggen om poMMol te configureren."
+msgstr "Installatie Gereed! U kan nu inloggen om poMMo te configureren."
 
 #: poMMo/install/install.php:101
 msgid "Login Username: "
@@ -2507,7 +2507,7 @@ msgstr "poMMo lijkt up to date. Indien u een upgrade wil forceren, %s klik dan h
 #: poMMo/install/upgrade.php:50
 #, php-format
 msgid "poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade."
-msgstr "poMMO is niet geinstalleerd! AUB eerst %s INSTALLEREN %s voordat u probeert te upgraden."
+msgstr "poMMo is niet geinstalleerd! AUB eerst %s INSTALLEREN %s voordat u probeert te upgraden."
 
 #: poMMo/install/upgrade.php:52
 #, php-format
