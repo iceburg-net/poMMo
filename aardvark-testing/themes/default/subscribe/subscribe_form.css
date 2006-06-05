@@ -26,9 +26,9 @@
 }
 
 #subscribeForm input.text.highlight,
-  textarea.highlight,
-  input.text:focus,
-  textarea:focus
+#subscribeForm textarea.highlight,
+#subscribeForm input.text:focus,
+#subscribeForm textarea:focus
   {
     background-color:#ffffff;
     border-color:#000000;

@@ -16,7 +16,8 @@
  *********************************/
 define('_IS_VALID', TRUE);
 
-require('bootstrap.php');
+$dirname = dirname(__FILE__);
+require($dirname.'/bootstrap.php');
 
 $poMMo = & fireup('install');
 $dbo = & $poMMo->openDB();

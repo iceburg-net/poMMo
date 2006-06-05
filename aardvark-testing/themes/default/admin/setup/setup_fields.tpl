@@ -65,7 +65,7 @@
 		<a href="fields_edit.php?field_id={$key}">
 				<img src="{$url.theme.shared}/images/icons/edit.png" border="0"></a>
 		</span>
-		<span style="cursor:move; margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
+		<span class="handle" style="margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
 		<span style="text-align:left; margin-left: 12px;">
 		{if $demo.active == 'on'}<b>{$demo.name}</b>{else}{$demo.name}{/if}
 				 ({$demo.type})
