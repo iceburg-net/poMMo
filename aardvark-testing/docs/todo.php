@@ -19,8 +19,11 @@ defined('_IS_VALID') or die('Move along...');
 ?>
 
 IMMEDIATE (for next release):
+	(API) - Embedded subscription form should remember values (if error occurs)!
 
-   
+	
+EDIT: after finishing mailing ... database entry in mailing_current would not switch to mailing_history
+
 SHORT TERM:
 
   (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
