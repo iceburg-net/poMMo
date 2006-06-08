@@ -79,4 +79,14 @@ LONG TERM:
   
   (feature) Allow seperate language selection for admin and user section. Include "auto" language selection based from client browser
   (feature) Bounced mail reading
+  
+  
+  -----
+  
+  UNCAT
+  
+  REGEX group filtering
+  Admin notification on subscriber changes/unsubscribes/additions/etc.
+  
+  P.S. : I also get another issue - when users type any special character (umlaut, accent, etc.) in the name field (I added it to the form), the name appears buggy in the admin interface. It is correct in DB but it's a bit annoying because all colums are scrambled in the interface. Any idea???
  
