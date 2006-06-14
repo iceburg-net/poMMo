@@ -83,8 +83,8 @@ class bmLogger {
 	}
 	
 	function clear() {
-		$this->_messages = NULL;
-		$this->_errors = NULL;
+		$this->_messages = array();
+		$this->_errors = array();
 		return true;		
 	}
 }
