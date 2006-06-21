@@ -17,6 +17,10 @@
 <div id="subscribeForm">
 
 <form action="{$url.base}/user/process.php" method="POST">
+	{if $referer}
+		<input type="hidden" name="bmReferer" value="{$referer}">
+	{/if}
+	
 	<fieldset style="width: 75%; margin: 0px; padding: 0px;">
 		<legend>{t}Your Information{/t}</legend>
 	
