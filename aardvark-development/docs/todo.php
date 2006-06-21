@@ -85,6 +85,12 @@ LONG TERM:
   
   UNCAT
   
+  when we want to set up a mailing in ISO-8859-15 encoding, this mailing is sent as ISO-8859-1 ...
+I got the reason : the xxx_mailing_current table is created with a column charset varchar(10) and ISO-8859-15 is 11 char's long...
+
+For me it's now corrected with this SQL line :
+- alter table pommo_mailing_current change charset charset varchar(30) not null;
+
   REGEX group filtering
   Admin notification on subscriber changes/unsubscribes/additions/etc.
   
