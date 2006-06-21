@@ -30,5 +30,8 @@ $smarty = & bmSmartyInit();
 // subscription forms will be activated from this template
 $smarty->prepareForSubscribeForm();
 
+// assign referer since this is an embedded form
+$smarty->assign('referer',htmlspecialchars($_SERVER['PHP_SELF']));
+
 $smarty->display('subscribe/form.mini.tpl');
 ?>

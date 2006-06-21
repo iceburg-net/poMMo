@@ -25,6 +25,7 @@ $poMMo = & fireup();
 $logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
 
+
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
@@ -43,6 +44,14 @@ if (empty ($_POST['pommo_signup']))
 // check if errors exist, if so print results and die.
 if (!validateSubscribeForm()) {
 	$smarty->assign('back', TRUE);
+	
+	// attempt to detect if referer was set 
+	if (!empty($_POST['referer'])) {
+		
+	}
+	$referer = (!empty($_POST['referer'])) ? $_POST['referer'] : bm_http.bm_baseUrl.'/user/subscribe.php';
+	$smarty->assign('referer',$referer);
+	
 	$smarty->display('user/process.tpl');
 	bmKill();
 }
@@ -69,7 +78,7 @@ $config = $poMMo->getConfig(array (
 $redirectURL = FALSE;
 if (!empty ($config['site_confirm']) && $config['list_confirm'] == 'on')
 	$redirectURL = $config['site_confirm'];
-elseif (!empty ($config['site_success']) && $config['list_confirm'] == 'off') 
+elseif (!empty ($config['site_success']) && $config['list_confirm'] != 'on') 
 	$redirectURL = $config['site_success'];
 
 if ($config['list_confirm'] == 'on') { // email confirmation required

@@ -27,7 +27,7 @@ define('bm_baseDir', dirname(__FILE__));
 define('pommo_revision', '22');
 
 @include(bm_baseDir.'/config.php');
-defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>
+defined('bm_lang') or die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>
 Language not defined! Have you installed the config.php file? See the included config.sample.php for an example.
 <br><br>
 DE translation, etc.

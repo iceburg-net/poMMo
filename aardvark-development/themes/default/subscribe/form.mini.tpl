@@ -3,6 +3,9 @@
 
 <div id="subscribeForm">
 <form  action="{$url.base}/user/subscribe.php" method="POST">
+	{if $referer}
+		<input type="hidden" name="bmReferer" value="{$referer}">
+	{/if}
 		<span style="margin-right: 17px">
 			{t}Your Email:{/t}
 		</span>
