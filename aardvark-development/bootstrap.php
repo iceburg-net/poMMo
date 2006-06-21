@@ -99,7 +99,7 @@ function & fireup() {
 	
 	// get list of arguments to set preinit, and postinit environment
 	$arg_list = func_get_args(); // can this be copied below in place of $arg_list???
-	$skip = FALSE;
+
 	foreach (array_keys($arg_list) as $key) {
 		$arg = & $arg_list[$key];
 		switch ($arg) {
@@ -128,13 +128,18 @@ function & fireup() {
 		session_id($bm_sessionName);
 	session_start();
 	
-	// load common class. If $bm_preInit exists, the common class in $_SESSION is overwritten
-	if (isset ($_SESSION["poMMo"])) 
+	// load common class. Attempt to load from session
+	if (isset ($_SESSION["poMMo"])) {
 		$poMMo = & $_SESSION["poMMo"];
+	}
 	else {
 		$poMMo = new Common();
 		$poMMo->loadConfig();
+		
+		// load common class into session
+		$_SESSION["poMMo"] = & $poMMo;
 	}	
+	
 	// check that config has been loaded
 	if (empty($poMMo->_config) || count($poMMo->_config) < 5) {
 		$poMMo->loadConfig();
@@ -143,7 +148,7 @@ function & fireup() {
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
 	}
-		
+	
 	// checks version of DB against file version
 	$dbo = $poMMo->openDB();
 	$dbo->dieOnQuery(FALSE);
@@ -153,14 +158,12 @@ function & fireup() {
 		bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
-	elseif (pommo_revision != $dbo->query($sql,0))
+	elseif (pommo_revision != $revision)
 		bmKill(sprintf(_T('Version Mismatch. Have you %s upgraded %s ?'),
 		'<a href="'.bm_baseUrl.'/install/upgrade.php">',
 		'</a>'));
 	$dbo->dieOnQuery(TRUE);
 	
-	// load common class into session
-	$_SESSION["poMMo"] = & $poMMo;
 
 	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
 		bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
