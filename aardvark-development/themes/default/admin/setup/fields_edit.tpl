@@ -122,7 +122,7 @@
 		<input class="button" id="dVal-add" name="dVal-add" type="submit" value="{t}Add Option(s){/t}" />
 	</div>
 	<div class="msgdisplay">
-		{t}NOTE: You can multiple options by separating each with a comma. To include special characters such as quote marks and commas, prefix them with a backslash (\\).{/t}
+		{t}NOTE: You can add multiple options by separating each with a comma. To include special characters such as quote marks and commas, prefix them with a backslash (\\).{/t}
 	</div>
 	<br><br>
 
