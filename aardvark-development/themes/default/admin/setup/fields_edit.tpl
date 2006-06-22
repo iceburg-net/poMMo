@@ -30,38 +30,38 @@
 
 	<div class="field">
 		<div class="error">{validate id="field_name" message=$formError.field_name}</div>
-		<label for="field_name"><span class="required">{t}Name:{/t} </span></label>
+		<label for="field_name"><span class="required">{t}Short Name:{/t} </span></label>
 		<input type="text" class="text" maxlength="60" size="32"
 		  name="field_name" value="{$field_name|escape}" id="field_name" />
-		<div class="notes">{t}A descriptive name to help you identify this field. End users will never see this.{/t}</div>
+		<div class="notes">{t}Identifying name. NOT displayed on Subscription Form or seen by users.{/t}</div>
 	</div>
 	
 	<br />
 		
 	<div class="field">
 		<div class="error">{validate id="field_prompt" message=$formError.field_prompt}</div>
-		<label for="field_prompt"><span class="required">{t}Prompt:{/t} </span></label>
+		<label for="field_prompt"><span class="required">{t}Form Name:{/t} </span></label>
 		<input type="text" class="text" maxlength="60" size="32"
 		  name="field_prompt" value="{$field_prompt|escape}" id="field_prompt" />
-		<div class="notes">{t}The prompt for this field on the subscription form. ie. 'Type your city'{/t}</div>
+		<div class="notes">{t}Prompt for field on the Subscription Form. e.g. 'Type your city'{/t}</div>
 	</div>
 	
 	<br />
 
 	<div class="field">
 		<label for="field_required">{t}Required:{/t} </label>
-		<input type="checkbox" class="checkbox" {if $field_required == 'on'}checked{/if}
-		  name="field_required" id="field_required"  />
-		<div class="notes">{t}Check to require this field on the subscription form. ie. user cannot leave blank.{/t}</div>
+		<input type="radio" name="field_required" value="on" {if $field_required == 'on'}checked{/if}>on
+		<input type="radio" name="field_required" value="off" {if $field_required != 'on'}checked{/if}>off
+		<div class="notes">{t}Toggle ON to require field on Subscription Form (user cannot leave blank){/t}</div>
 	</div>
 
 	<br />
 
 	<div class="field">
-		<label for="field_active">{t}Hidden:{/t} </label>
-		<input type="checkbox" class="checkbox" {if $field_active != 'on'}checked{/if}
-		 name="field_active" id="field_active"/>
-	<div class="notes">{t}Check to hide this field from the subscription form.{/t}</div>
+		<label for="field_active">{t}Active:{/t} </label>
+		<input type="radio" name="field_active" value="on" {if $field_active == 'on'}checked{/if}>on
+		<input type="radio" name="field_active" value="off" {if $field_active != 'on'}checked{/if}>off
+	<div class="notes">{t}Toggle OFF to HIDE field from Subscription Form{/t}</div>
 	</div>
 	
 	<br />
@@ -72,7 +72,7 @@
 		<label for="field_normally">{t}Default:{/t} </label>
 		<input type="text" class="text" maxlength="60" size="32"
 		name="field_normally" value="{$field_normally|escape}"  id="field_normally" />
-		<div class="notes">{t}If provided, this value will be pre-filled in on the subscription form{/t}</div>
+		<div class="notes">{t}If provided, this value will appear pre-filled on the subscription form{/t}</div>
 	</div>
 	
 	{elseif $field.type == 'checkbox'}
@@ -83,7 +83,7 @@
 			<option value="on" {if $field_normally}SELECTED{/if}>Checked</option>
 			<option value="off" {if !$field_normally}SELECTED{/if}>Not Checked</option>
 		</select>
-		<div class="notes">{t}The initial state of the checkbox on the subscription form{/t}</div>
+		<div class="notes">{t}If provided, this value will appear pre-filled on the subscription form{/t}</div>
 	</div>
 	
 	{elseif $field.type == 'multiple'}
@@ -98,7 +98,7 @@
     			{/foreach}
  			{/if}
 		</select>
-		<div class="notes">{t}Initial value selected on the subscription form{/t}</div>
+		<div class="notes">{t}If provided, this value will appear pre-filled on the subscription form{/t}</div>
 	</div>
 	
 	{/if}
