@@ -37,7 +37,7 @@ if (!empty ($_POST['field_name'])) {
 		bmRedirect('fields_edit.php?field_id=' .
 		$dbo->lastId());
 	else
-		$logger->addMsg('{t}Unable to add field?{/t}');
+		$logger->addMsg(_T('Unable to add field'));
 }
 
 // check for a deletion request

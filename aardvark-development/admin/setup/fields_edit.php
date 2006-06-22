@@ -104,9 +104,6 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID
 
-		// reverse effect of active
-		@$_POST['field_active'] = ($_POST['field_active'] == 'on') ? 'off' : 'on';
-		
 		dbFieldUpdate($dbo, $_POST);
 		$logger->addMsg(_T('Settings updated.'));
 
