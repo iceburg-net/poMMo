@@ -46,9 +46,6 @@ if (!validateSubscribeForm()) {
 	$smarty->assign('back', TRUE);
 	
 	// attempt to detect if referer was set 
-	if (!empty($_POST['referer'])) {
-		
-	}
 	$referer = (!empty($_POST['referer'])) ? $_POST['referer'] : bm_http.bm_baseUrl.'/user/subscribe.php';
 	$smarty->assign('referer',$referer);
 	
