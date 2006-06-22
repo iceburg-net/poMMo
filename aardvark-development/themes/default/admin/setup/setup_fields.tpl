@@ -52,9 +52,17 @@
 
 <br>
 	<span>{t}Delete{/t}</span>
-	<span style="margin-left: 20px;">{t}Edit{/t}</span>
+	<span style="margin-left: 20px; width: 25px;">{t}Edit{/t}</span>
 	<span style="margin-left: 20px; margin-right: 20px;">{t}Order{/t}</span>
 	<span style="text-align:left; margin-left: 5px;">{t}Field Name{/t}</span>
+	
+	<div style="background-color: #cccccc; padding: 3px;">
+		---
+	 	<span style="margin-left: 40px;">---</span>
+		<span style="margin-left: 40px; margin-right: 20px;">---</span>
+		<span style="text-align:left; margin-left: 20px;"><strong>E-Mail</strong></span>
+	 	
+	</div>	
 	
 <div id="demoOrder">
 	{foreach name=demos from=$fields key=key item=demo}
@@ -67,7 +75,7 @@
 		</span>
 		<span class="handle" style="margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
 		<span style="text-align:left; margin-left: 12px;">
-		{if $demo.active == 'on'}<b>{$demo.name}</b>{else}{$demo.name}{/if}
+		{if $demo.active == 'on'}<strong>{$demo.name}</strong>{else}{$demo.name}{/if}
 				 ({$demo.type})
 		</span>
 	</div>	
