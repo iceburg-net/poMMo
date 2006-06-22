@@ -1,5 +1,4 @@
 <?php
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -30,9 +29,11 @@ echo<<<EOF
 	<hr>
 </div>
 
-<br>
-<a href="support.php?clearWork=TRUE">Clear Work Directory</a>
-<br>
+<ul>
+	<li><a href="support.php?clearWork=TRUE">Clear Work Directory</a></li>
+	<br>
+	<li><a href="support.php?checkSpawn=TRUE">Test Mailing Processor</a></li>
+</ul>
 <hr>
 
 <div style="width: 100%; text-align: center;">
@@ -67,6 +68,20 @@ if (isset($_GET['clearWork'])) {
 	}
 	
 	echo (delDir(bm_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
+}
+elseif (isset($_GET['checkSpawn'])) {
+	
+	echo 'Attempting to spawn a background script... please wait.<br><br>';
+	ob_flush();
+	flush();
+	
+	// call background script. Script writes time() as $testTime to workdir/test.php. Include file to compare.
+	bmHttpSpawn(bm_baseUrl.'/inc/sup.testmailer.php');
+	sleep(5);
+	@include(bm_workDir.'/test.php');
+	echo (isset($testTime) && ((time() - $testTime) < 6))? 'Background Spawning SUCCESS' :
+		'Background Spawning FAILED, mailings will not process. Seek support.';
+	
 }
 
 bmKill();
