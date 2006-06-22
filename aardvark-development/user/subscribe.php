@@ -18,7 +18,7 @@ define('_IS_VALID', TRUE);
 
 require('../bootstrap.php');
 
-$poMMo = & fireup('keep');
+$poMMo = & fireup();
 $logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
 

@@ -31,8 +31,8 @@ $dbo = & $poMMo->openDB();
  *********************************/
 $smarty = & bmSmartyInit();
 
-// STORE input
-$poMMo->set(array('saveSubscribeForm' => $_POST));
+// STORE user input. Input is appended to referer URL via HTTP_GET
+$input = urlencode(serialize($_POST));
 
 /**********************************
 	VALIDATE INPUT
@@ -46,8 +46,10 @@ if (!validateSubscribeForm()) {
 	$smarty->assign('back', TRUE);
 	
 	// attempt to detect if referer was set 
-	$referer = (!empty($_POST['referer'])) ? $_POST['referer'] : bm_http.bm_baseUrl.'/user/subscribe.php';
-	$smarty->assign('referer',$referer);
+	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : bm_http.bm_baseUrl.'/user/subscribe.php';
+	
+	// append stored input
+	$smarty->assign('referer',$referer.'?input='.$input);
 	
 	$smarty->display('user/process.tpl');
 	bmKill();
