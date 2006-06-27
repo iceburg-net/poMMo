@@ -114,8 +114,14 @@ function & csvPrepareFile(& $uploadFile) {
 // csvPrepareImport: <array> returns an array of dbGetSubscriber style subscribers to import. 
 // The array consists of 2 arrays, 'valid' and 'invalid'. If a subscriber is in 'invalid', they will be flagged to
 //  update their records.
-function csvPrepareImport(& $poMMo, & $dbo, & $fields, & $csvFile, & $fieldAssign) {
+
+// fields: dbGetFields 
+// csvFile: 2D array of fields [lines of file]
+// fieldAssign - array of field assignments; e.g. array(2) { [0]=>  string(5) "email" [1]=>  string(2) "13" } 
+function csvPrepareImport(& $fields, & $csvFile, $fieldAssign) {
 	
+	global $poMMo;
+	global $dbo;
 	global $logger;
 	require_once (bm_baseDir.'/inc/db_subscribers.php');
 
@@ -170,8 +176,8 @@ function csvPrepareImport(& $poMMo, & $dbo, & $fields, & $csvFile, & $fieldAssig
 			continue;
 
 		// assign the field_id to this field
-		$field_id = & $fieldAssign[$field_num];
-		$field = & $fields[$field_id];
+		$field_id = $fieldAssign[$field_num];
+		$field = $fields[$field_id];
 
 		// validate this field
 		switch ($field['type']) {
