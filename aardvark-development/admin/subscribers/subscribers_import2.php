@@ -78,8 +78,6 @@ if (!empty($_GET['import'])) { // check to see if we should import
 	
 }
 elseif (!empty($_POST['preview'])) { // check to see if a preview has been requested
-
-	var_dump($_POST['field']);
 	
 	// prepare csvArray for import
 	$importArray = csvPrepareImport($fields,$csvArray['csvFile'],$_POST['field']);
@@ -87,8 +85,6 @@ elseif (!empty($_POST['preview'])) { // check to see if a preview has been reque
 	// get count of subscribers to be imported
 	$totalImported = count($importArray['valid'])+count($importArray['invalid']);
 	$totalInvalid = count($importArray['invalid']);
-	
-	var_dump($importArray);
 	
 	$totalDuplicate = count($importArray['duplicate']);
 	if ($totalDuplicate)
