@@ -17,6 +17,11 @@ elsewhere
 */
 defined('_IS_VALID') or die('Move along...');
 
+// Cool DB Query Wrapper from Monte Ohrt
+require_once (bm_baseDir . '/inc/safesql/SafeSQL.class.php');
+
+
+
 // reads in an array of email addresses and inserts them into the queue table
 function dbQueueCreate(& $dbo, & $input) {
 	if (!is_array($input))
@@ -228,4 +233,44 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 	$_SESSION["bThrottle_" . $relay_id] = new bThrottler(time(), $queue, $config['throttle_MPS'], intval($config['throttle_BPS'] * 1024), $config['throttle_DP'], $config['throttle_DMPP'], intval($config['throttle_DBPP'] * 1024));
 	return $_SESSION["bThrottle_" . $relay_id];
 }
+
+
+
+//ct not used at the moment
+/* Write a Mail that is being sent to the mailing history */
+function & dbInsertToMailingHistory($dbo, $input) {
+
+	// We habe in input
+	//$input[fromname]	$input[fromemail]	$input[frombounce]	$input[subject] 	$input[mailtype]		$input[group_id]
+	//$input[charset]	$input[body]		$input[altbody]		$input[submit]		$input[subscriberCount]	$input[groupName]
+	// To insert: id, fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent
+
+	// Correct this -> get right data!!!
+	$ishtml = "on";
+
+	//print_r($input) . "<BR><br>";
+
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, 
+		ishtml, mailgroup, subscriberCount, sent) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+		array($dbo->table['mailing_history'], $input['fromname'], $input['fromemail'], $input['frombounce'], 
+		$input['subject'], $input['body'], $input['altbody'], $ishtml, $input['groupName'], 
+		$input['subscriberCount'], $input['submit']) );
+
+	echo $sql;
+
+	$dbo->query($sql);
+	 /*{
+		$retstring = _T("Mailing written to Mailing History.");
+	} else {
+		$retstring = _T("Error while writing Mailing History.");
+	}*/
+
+	//return $retstring;
+	
+} //dbInsertToMailingHistory
+//endct
+
+
+
 ?>

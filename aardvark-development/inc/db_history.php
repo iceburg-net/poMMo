@@ -11,19 +11,23 @@
  * 
  ** [END HEADER]**/
 
-//(ct)
 
 /** 
  * Don't allow direct access to this file. Must be called from elsewhere
  */
 defined('_IS_VALID') or die('Move along...');
 
+// Cool DB Query Wrapper from Monte Ohrt
+require_once (bm_baseDir.'/inc/safesql/SafeSQL.class.php');
+
+
 
 
 /* Get the number of mailings in the table mailing_history of the database */
 function & dbGetMailingCount(& $dbo) {
 
-	$sql = 'SELECT count(id) FROM ' . $dbo->table['mailing_history'];
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("SELECT count(id) FROM %s ", array($dbo->table['mailing_history']) );
 
 	if ($dbo->query($sql)) {
 		if ($row = mysql_fetch_row($dbo->_result)) {
@@ -45,11 +49,11 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 
 	/*id, fromname, fromemail, frombounce, subject, body, ishtml, mailgroup, subscriberCount, started, finished, sent*/
 	//$countmailings = $dbo->records();
-
-	$sql = 'SELECT id, fromname, fromemail, frombounce, ishtml, mailgroup, subscriberCount, started, finished, sent';
-	$sql .= ' FROM ' . $dbo->table['mailing_history'];
-	$sql .= " ORDER BY " . $order . " " . $orderType . " LIMIT " . $start . " , " . $limit;
-
+	
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("SELECT id, fromname, fromemail, frombounce, subject, ishtml, mailgroup, 
+		subscriberCount, started, finished, sent FROM %s ORDER BY %s %s LIMIT %s, %s ", 
+		array($dbo->table['mailing_history'], $order, $orderType, $start, $limit) );
 
 	if ($dbo->query($sql)) {
 
@@ -74,7 +78,7 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 				$mailings[$i]['fromname'] = $row['fromname'];
 				$mailings[$i]['fromemail'] = $row['fromemail'];
 				$mailings[$i]['frombounce'] = $row['frombounce'];
-				//$mailings[$i]['subject'] = $row['subject']; 
+				$mailings[$i]['subject'] = $row['subject']; 
 				//$mailings[$i]['body'] = $row['body']; 
 				$mailings[$i]['ishtml'] = $row['ishtml']; 
 				$mailings[$i]['mailgroup'] = $row['mailgroup']; 
@@ -82,6 +86,7 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 				$mailings[$i]['started'] = $row['started']; 
 				$mailings[$i]['finished'] = $row['finished']; 
 				$mailings[$i]['sent'] = $row['sent']; 
+				$mailings[$i]['duration'] = $row['started']-$row['finished']; 
 			
 				$i++;
 			
@@ -92,7 +97,7 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 	}
 
 	$dbo->dieOnQuery(FALSE);
-
+	
 	return $mailings;
 
 } //dbGetMailingHistory
@@ -107,9 +112,10 @@ function & dbGetMailingInfo(& $dbo, $selid) {
 	// Do the selection from database
 	if (is_numeric($selid)) {
 	
-		$sql = "SELECT id, fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent";
-		$sql .= " FROM " . $dbo->table['mailing_history'];
-		$sql .= " WHERE id = " . $selid;
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("SELECT id, fromname, fromemail, frombounce, subject, body, altbody, 
+			ishtml, mailgroup, subscriberCount, started, finished, sent FROM %s WHERE id = %i ",
+			array($dbo->table['mailing_history'], $selid) );
 			
 		if ($dbo->query($sql)) {
 	
@@ -120,26 +126,31 @@ function & dbGetMailingInfo(& $dbo, $selid) {
 				$mailings[0]['fromemail'] = $row['fromemail'];
 				$mailings[0]['frombounce'] = $row['frombounce'];
 				$mailings[0]['subject'] = $row['subject']; 
-				$mailings[0]['body'] = $row['body']; 
-				$mailings[0]['altbody'] = $row['altbody']; 
 				$mailings[0]['ishtml'] = $row['ishtml']; 
+				// If Mail is HTML Body we get only the Altbody, else we get the body
+				if ($row['ishtml'] == 'on') {
+					//$mailings[0]['body'] = $row['body']; //This we get later when we choose tho see the HTML body
+					$mailings[0]['altbody'] = $row['altbody']; 
+				} elseif ($row['ishtml'] == 'off') {
+					$mailings[0]['body'] = $row['body']; 				
+				}
 				$mailings[0]['mailgroup'] = $row['mailgroup']; 
 				$mailings[0]['subscriberCount'] = $row['subscriberCount']; 
 				$mailings[0]['started'] = $row['started']; 
 				$mailings[0]['finished'] = $row['finished']; 
 				$mailings[0]['sent'] = $row['sent']; 
-							
-				$i++;
-
+					
 			} //while
 			
 		} //if
 		
 	} elseif (is_array($selid)) {
 	
-		$sql = "SELECT id, fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent";
-		$sql .= " FROM " . $dbo->table['mailing_history'];
-		$sql .= " WHERE id IN (" . implode(',', $selid).")";
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("SELECT id, fromname, fromemail, frombounce, subject, body, altbody, 
+			ishtml, mailgroup, subscriberCount, started, finished, sent FROM %s WHERE id IN (%q)", 
+			array($dbo->table['mailing_history'], $selid) );
+
 			
 		if ($dbo->query($sql)) {
 	
@@ -151,7 +162,13 @@ function & dbGetMailingInfo(& $dbo, $selid) {
 				$mailings[$i]['fromemail'] = $row['fromemail'];
 				$mailings[$i]['frombounce'] = $row['frombounce'];
 				$mailings[$i]['subject'] = $row['subject']; 
-				$mailings[$i]['body'] = $row['body']; 
+				// If Mail is HTML Body we get only the Altbody, else we get the body
+				if ($row['ishtml'] == 'on') {
+					//$mailings[$i]['body'] = $row['body']; //This we get later when we choose tho see the HTML body
+					$mailings[$i]['altbody'] = $row['altbody']; 
+				} elseif ($row['ishtml'] == 'off') {
+					$mailings[$i]['body'] = $row['body']; 				
+				}
 				$mailings[$i]['altbody'] = $row['altbody']; 
 				$mailings[$i]['ishtml'] = $row['ishtml']; 
 				$mailings[$i]['mailgroup'] = $row['mailgroup']; 
@@ -185,7 +202,8 @@ function & dbRemoveMailFromHistory($dbo, $delid) {
 	if (is_numeric($delid)) {
 		
 		// delete from mailing_history table
-		$sql = 'DELETE FROM '.$dbo->table['mailing_history'].' WHERE id = '.$delid;
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("DELETE FROM %s WHERE id = %i ", array($dbo->table['mailing_history'], $delid) );
 		$dbo->query($sql);
 		$ret = "Mailing with ID: " . $delid . " deleted.";
 		return $ret;
@@ -193,7 +211,8 @@ function & dbRemoveMailFromHistory($dbo, $delid) {
 	} elseif (is_array($delid)) {
 	
 		// delete array of mails from mailing_history table
-		$sql = 'DELETE FROM '.$dbo->table['mailing_history'].' WHERE id IN ('.implode(',', $delid).')';
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("DELETE FROM %s WHERE id IN (%q) ", array($dbo->table['mailing_history'], $delid) );
 		$dbo->query($sql);
 		$ret = "Mailing with ID: " . implode(',', $delid) . " deleted.";
 		return $ret;
@@ -209,10 +228,36 @@ function & dbRemoveMailFromHistory($dbo, $delid) {
 
 
 
+function & dbGetHTMLBody(& $dbo, $selid) {
 
+	$dbo->dieOnQuery(TRUE);
+	
+	// Do the selection from database
+	if (is_numeric($selid)) {
+	
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("SELECT body, ishtml FROM %s WHERE id = %i ",
+			array($dbo->table['mailing_history'], $selid) );
+			
+		if ($dbo->query($sql)) {
+	
+			while ($row = mysql_fetch_assoc($dbo->_result)) {
 
+				$mailbody['id'] = $row['id'];		
+				$mailbody['body'] = $row['body']; 
+					
+			} //while
 
+		} //if
+	
+	} else {
+		echo "Something wrong"; //LOGGER!!!!!!!!
+	}
+	
+	$dbo->dieOnQuery(TRUE);
+	
+	return $mailbody;
+		
+} //dbGetHTMLBody
 
-
-
-
+ 
