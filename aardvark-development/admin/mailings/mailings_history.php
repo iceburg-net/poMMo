@@ -17,7 +17,7 @@
 	INITIALIZATION METHODS
 *********************************/
 define('_IS_VALID', TRUE);
- 
+
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_history.php');		// Mailing History Database Handling
 require_once (bm_baseDir.'/inc/class.pager.php');
@@ -32,12 +32,12 @@ $dbo = & $poMMo->openDB();
 	 * limit		- Nr. of Mailings displayed per Pager-Site
 	 * mailcount	- Nr. of Mailings in mailing_history table
 	 */
-	//$action = 		str2db($_REQUEST['action']);		echo "ACTION:".$action."<br>";
+	//$appendUrl = 	'&limit='.$limit."&order=".$order."&orderType=".$orderType; // for pager class // get rid of this ONLY $_POST
 	$limit = 		(empty ($_REQUEST['limit'])) ? '10' : str2db($_REQUEST['limit']);
 	$orderType = 	(empty ($_REQUEST['orderType'])) ? 'ASC' : str2db($_REQUEST['orderType']);
 	$order = 		(empty ($_REQUEST['order'])) ? 'id' : str2db($_REQUEST['order']);
-	$appendUrl = 	'&limit='.$limit."&order=".$order."&orderType=".$orderType;
-	$mailcount =	dbGetMailingCount($dbo);		// in inc/db_history.php
+	$mailcount =	dbGetMailingCount($dbo);											// func in inc/db_history.php
+
 
 
 	/* Instantiate Pager class (Using modified template from author) */
@@ -55,16 +55,15 @@ $dbo = & $poMMo->openDB();
 
 
 	// Fetch Mailings
-	$mailings = & dbGetMailingHistory($dbo, $start, $limit, $order, $orderType);		// in inc/db_history.php
+	$mailings = & dbGetMailingHistory($dbo, $start, $limit, $order, $orderType);		// func in inc/db_history.php
 	$mailsdisplayed = $dbo->records();
-
+	
 	if (empty($mailings)) {
 
 		// There are no mailings present in the mailing history, or some query malfunction
+		//$dberror = sprintf(_T('Database Query Error. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>');
 		
 		$nomailing = true;
-		//$dberror = sprintf(_T('Database Query Error. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>');
-
 
 		/**********************************
 				SETUP TEMPLATE PAGE
@@ -79,7 +78,6 @@ $dbo = & $poMMo->openDB();
 
 		$smarty->display('admin/mailings/mailings_history.tpl');
 		bmKill();
-		
 		
 	} else {	
 
@@ -100,6 +98,7 @@ $dbo = & $poMMo->openDB();
 		if (!empty($errorstr)) { $smarty->assign('errorstr', $errorstr); }
 
 		$smarty->display('admin/mailings/mailings_history.tpl');
+
 		bmKill();
 
 	}

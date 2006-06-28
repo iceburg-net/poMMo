@@ -26,6 +26,8 @@ $poMMo = & fireup('secure', 'keep');
 $logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
 
+//print_r($poMMo->dataGet());
+
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
@@ -33,7 +35,7 @@ $smarty = & bmSmartyInit();
 
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
-	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>'));
+	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 
 $input = $poMMo->get();
