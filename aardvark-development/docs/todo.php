@@ -24,15 +24,6 @@ defined('_IS_VALID') or die('Move along...');
 	IMMEDIATE (for next release):
 		(API) - Embedded subscription form should remember values (if error occurs)!
 		
-		(feature) - Pretty up Mailing History; 
-			fix paging class 
-			Overview page (mailings_history) display:  ID, Subject, Sent Date+Time, Duration (in H:M:Seconds) [sent time - finished time], Group Sent To + Subscriber Count, Mails Sent
-				ID	SUBJECT	DATE	DURATION(H:M:S)	GROUP(#Subscribers)	MAILS SENT
-				"1" "New poMMo Announcement"	"2006/06/10 7:30pm" "1:05:57"	"All Subscribers(7907)"	"7908"
-			View Page (mailings_mod): Ability to "load" message -- copy body, group, subject, from, etc. to a new Mailing.	
-		
-	EDIT: after finishing mailing ... database entry in mailing_current would not switch to mailing_history
-	
 	SHORT TERM:
 	
 	  (API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + get rid of appendURL problem!
@@ -104,12 +95,46 @@ defined('_IS_VALID') or die('Move along...');
 	
 	  REGEX group filtering
 	  Admin notification on subscriber changes/unsubscribes/additions/etc.
-	  
-	  P.S. : I also get another issue - when users type any special character (umlaut, accent, etc.) in the name field (I added it to the form), the name appears buggy in the admin interface. It is correct in DB but it's a bit annoying because all colums are scrambled in the interface. Any idea???
 	 
+	 
+	 
+	 ----- 
+	  P.S. : I also get another issue - when users type any special character (umlaut, accent, etc.) in the name field (I added it to the form), the name appears buggy in the admin interface. It is correct in DB but it's a bit annoying because all colums are scrambled in the interface. Any idea???
+	  
+	  corinna: Somtimes i get pages with little "?" for umlaut also.
+	  corinna: when i switch to some ISO 8859 or so then it works
+	  corinna: maybe it is a firefox browser problem or has to do with this (?) ->
+	  corinna: http://www.w3.org/International/O-HTTP-charset
+	  			-> For PHP, use the header() function before generating any content, e.g.: header("Content-type: text/html; charset=utf-8");
 	 
 
 [CORINNA]
 
-  Feel free to add what you're working on / move one of my tasks down here.
+	(feature)	fix paging class 
+	
+	(feature) View Page (mailings_mod): Ability to "load" message -- copy body, group, subject, from, 
+			etc. to a new Mailing.	
+
+	(feature)	add + refactor http://www.phpinsider.com/php/code/SafeSQL/
+	(feature)	alter database design -> merge tables mailings &mailings_history and refactor
+
+	EDIT: after finishing mailing ... database entry in mailing_current would not switch to mailing_history
+
+	(feature)	Mailing History 		Mailing History -> Database insertion of Mailings
+	(feature)	Numeric types/sets for Demographics
+
+	(feature)	Change Radio Button Labels
+				<label for="r1"><input type="radio" name="group1" id="r1" value="1" /> button one</label> 
+				so that a click on a label activates the radio button and not a click on the mini-button
+
+	(module) 	User Administration (3 tier achitecture)
+	(module)	LDAP Support, ADS
+
+
+	
+	
+	(to think about) DB Scheme for Mailings current/history(ideas?)
+
+
+  
  
