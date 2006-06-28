@@ -290,5 +290,7 @@ else
 
 bmMKill('Respawned... Max exec time likely reached.');
 
+dbInsertToMailingHistory($dbo, $input);
+
 //echo 'Ready to respawn <a href="mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode'].'">here</a>';
 ?>

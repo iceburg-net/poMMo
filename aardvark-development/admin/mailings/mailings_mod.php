@@ -23,7 +23,6 @@ $poMMo =& fireup("secure");
 $logger = & $poMMo->logger;
 $dbo = & $poMMo->openDB();
  
-
  	// vars
 	$appendUrl = "limit=".$_REQUEST['limit']."&order=".$_REQUEST['order']."&orderType=".$_REQUEST['orderType']; 
 
@@ -42,27 +41,35 @@ $dbo = & $poMMo->openDB();
 	// Decide what we yet want to do 	
 	$action = $_REQUEST['action'];
 	$mailid = $_REQUEST['mailid'];
-
+	$order = $_REQUEST['order'];
+	$orderType = $_REQUEST['orderType'];
+	$limit = $_REQUEST['limit'];
 
 	//$typ = gettype($mailid);
 
 
-	// To delete we wait for user confirmation and then return to mailings history
-	if (!empty ($_POST['deleteEmails'])) {
+	if (!empty($_REQUEST['submitone'])) {
 
+		$delid = $_REQUEST['submitone'];
+		$retstr = dbRemoveMailFromHistory($dbo, $delid);
+
+	} elseif (!empty($_REQUEST['submitall'])) {
+
+		// To delete we wait for user confirmation and then return to mailings history
 		if (!empty($_REQUEST['deleteEmails'])) { 
-				$delid = $_REQUEST['deleteEmails']; 
-				$retstr = dbRemoveMailFromHistory($dbo, $delid);
+			$delid = $_REQUEST['deleteEmails']; 
+			$retstr = dbRemoveMailFromHistory($dbo, $delid);
 		} else {
-				$errorstr .= "Delete: Mail ID is empty.<br>";
+			echo "<i>Delete: Mail ID is empty.</i><br>";
 		}
+		
 		// Decide where oder IF we display the errorstr, returnstring?
 		// echo $errorstr; echo $retstr;
 		bmRedirect('mailings_history.php?'.$appendUrl);
+
 	}
- 
- 
- 
+
+
  	// ACTIONS -> choose what we want to do.
  	switch ($action) {
 	
@@ -74,6 +81,16 @@ $dbo = & $poMMo->openDB();
 					$smarty->assign('actionStr', _T('Mailing View'));
 					$smarty->assign('mailings',$mailings);
 					$smarty->assign('numbertodisplay', $numbertodisplay);
+
+					// Save for later retrieval in $poMMo CANCELLED -> do it in mailng_preview.php
+/*					if (($mailings[0]['ishtml'] == "on") && (is_numeric($mailid)) ) {
+						$htmltext['body'] = $mailings[0]['body'];
+						$poMMo->set($htmltext);
+					}
+					$mailbodies = dbGetHTMLBody($dbo, $mailid);
+					print_r($mailbodies);*/
+	
+
 					
 					break;
 					
@@ -86,40 +103,21 @@ $dbo = & $poMMo->openDB();
 					$smarty->assign('mailings',$mailings);
 					$smarty->assign('numbertodisplay', $numbertodisplay);
 					break;
-	
+				
 	} //switch
 	
  
-/*
-
-From subscriber table management
-
-switch ($_REQUEST['action']) {
-	case "edit" :
-
-		if (is_array($_REQUEST['sid']) && count($_REQUEST['sid']) > 15) {
-			
+/* Taken From subscriber table management
 			//-----
 			// I dont do this:
 			// What if 1 ID is not found in the DB, eg it has been deleted from DB 
 			// in the time between the selection and the displaying
 			//------
-		
+			if (is_array($_REQUEST['sid']) && count($_REQUEST['sid']) > 15) {
 			$_REQUEST['sid'] = array_slice($_REQUEST['sid'], 0, 15);
 			$subCount = 15;
 			$smarty->assign('cropped', TRUE);
-		}
-		$subscribers = dbGetSubscriber($dbo, $_REQUEST['sid'], 'detailed', $table);
-		$smarty->assign('subscribers',$subscribers);
-		break;
 
-	case "delete" :
-	
-		$emails = dbGetSubscriber($dbo, $_REQUEST['sid'], 'email', $table);
-		$smarty->assign('emails',$emails);
-		break;
-
-}
 */
 
 
@@ -136,6 +134,16 @@ switch ($_REQUEST['action']) {
 
 	$smarty->display('admin/mailings/mailings_mod.tpl');
 	bmKill();
+
+
+
+
+/*	GET:{$smarty.get.page}<br>
+	POST: {$smarty.post.page}<br>
+	echo "POSTDATA"; print_r($_POST); echo "<br><br>";
+	echo "REQUEST:"; print_r($_REQUEST);  echo "<br><br>";
+*/
+
 
 
 ?>

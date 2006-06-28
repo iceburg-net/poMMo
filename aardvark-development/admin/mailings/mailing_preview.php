@@ -11,15 +11,40 @@
  * 
  ** [END HEADER]**/
  
-  define('_IS_VALID', TRUE);
+	define('_IS_VALID', TRUE);
+
+	require('../../bootstrap.php');
+	require_once (bm_baseDir.'/inc/db_history.php'); // for DB retrieval of body
+
+	$poMMo =& fireup("secure","dataSave");
+	$logger = & $poMMo->logger;	//ct
+	$dbo = & $poMMo->openDB();	//ct
+
+
+	//ct
+	//print_r($poMMo); 
+
+	// if there is a specific id given get the database record from DB.mailing_history
+	// i choosed this approach, so i don't  $POST around Body Data in the mailings_history.php and mailings_mod.php
+	if ((!empty($_REQUEST['viewid'])) && (!empty($_REQUEST['action']))) {
+
+		// if action = viewhtml
+		$viewid = $_REQUEST['viewid'];
+		$text = dbGetHTMLBody($dbo, $viewid);
+		$mailbody['body'] = $text['body'];
+		
+		$poMMo->set($mailbody);
+		
+	} //end ct
+	
+	
+	$html =& $poMMo->dataGet();
  
- require('../../bootstrap.php');
- $poMMo =& fireup("secure","dataSave");
- 
- $html =& $poMMo->dataGet();
- 
- if (get_magic_quotes_gpc())
- 	echo stripslashes($html['body']);
- else
- 	echo $html['body'];
+	if (get_magic_quotes_gpc()) {
+		echo stripslashes($html['body']);
+	} else {
+		echo $html['body'];
+	}
+		
+
 ?>
