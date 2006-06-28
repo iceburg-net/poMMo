@@ -16,17 +16,17 @@
 		<hr>
 	</p>
 
-	<form method="POST" action="">
-	<input type="hidden" name="order" value="{$order}">
-	<input type="hidden" name="orderType" value="{$orderType}">
-	<input type="hidden" name="limit" value="{$limit}">
-	<input type="hidden" name="action" value="{$action}">
-	<input type="hidden" name="mailid" value="{$mailid}">
 
 
 
 	{if $action == 'view'}
 	<!----------------- View Mail Action ----------------->
+
+	<form name="aForm" id="aForm" method="POST" action="">
+		<input type="hidden" name="action" value="{$action}">
+		<input type="hidden" name="order" value="{$order}">
+		<input type="hidden" name="orderType" value="{$orderType}">
+		<input type="hidden" name="limit" value="{$limit}">
 		
 		<p>	
 			<span style="text-align: center;">{t 1=$numbertodisplay}Displaying %1 mailings.{/t}</span>
@@ -59,7 +59,7 @@
 							{if $mailitem.ishtml == 'on'}{*'html'*}
 								<p>
 									<b>{t}HTML Body:{/t} </b>
-										 <a href="mailing_preview.php" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
+										 <a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.id}" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
 								</p>
 								{if $mailitem.altbody}
 									<p>
@@ -87,10 +87,20 @@
 		
 		{/foreach}
 		
+	</form>
 
-		
+
+
 	{elseif $action == 'delete'}
 	<!----------------- Delete Mail Action ----------------->
+
+		
+	<form name="aForm" id="aForm" method="POST" action="">
+		<input type="hidden" name="action" value="{$action}">
+		<input type="hidden" name="order" value="{$order}">
+		<input type="hidden" name="orderType" value="{$orderType}">
+		<input type="hidden" name="limit" value="{$limit}">
+		
 
 		<p>	
 			<span style="text-align: center;">{t 1=$numbertodisplay}The following %1 mailings will be deleted{/t}:</span>
@@ -98,22 +108,21 @@
 
 		{if $numbertodisplay > 1}
 		<p>
-			<input type="submit" name="submit" value="{t}Delete All{/t}">
+			<input type="submit" name="submitall" value="{t}Delete All{/t}">
 		</p>
-		{*{elseif $numbertodisplay == 1}
-		<p>
-			<input type="submit" name="submit" value="{t}Click to Delete{/t}">
-		</p>*}
 		{/if}
 
 
 		<div style="width: 60%;">
 		
 			{foreach name=delloop from=$mailings key=key item=mailitem}
-				<table border="0" cellpadding="0" cellspacing="0" style=" background-color: #F6F8F1; width: 80%; text-align:left; padding:10px; margin:10px;">
+				<table border="0" cellpadding="0" cellspacing="0" style="background-color: #E6ECDA; width: 80%; text-align:left; padding:10px; margin:10px 10px 0px 10px;">
 					<tr>
 						<td>
+
 							<input type="hidden" name="deleteEmails[]" value="{$mailitem.id}">
+							<input type="hidden" name="mailid[]" value="{$mailitem.id}">
+							
 							<p><b>{t}ID:{/t} </b>{$mailitem.id}</p>
 							<p><b>{t}From:{/t} </b>{$mailitem.fromname} &lt;{$mailitem.fromemail}&gt;</p>
 							{if $mailitem.fromemail != $mailitem.frombounce}<p><b>{t}Bounces:{/t} </b>&lt;{$mailitem.frombounce}&gt;</p>{/if}
@@ -123,11 +132,42 @@
 							<p><b>{t}Subject:{/t} {$mailitem.subject}</b></p>
 						</td>
 						{if $numbertodisplay > 1}
-						<td style="vertical-align:bottom; text-align:right;">
-							<input type="submit" name="submit" value="{t}Click to Delete{/t}">
-						</td>
+							<td style="vertical-align:bottom; text-align:right;">
+									
+								{* This is ugly, i had no other idea at the moment :D, maybe AJAX or i remember some trick *}
+								<label for="sub">{t}Click to delete email with ID:{/t} <input type="submit" id="sub" name="submitone" value="{$mailitem.id}"></label>
+
+							</td>
 						{/if}
+
 					</tr>
+				</table>
+				<table border="0" cellpadding="0" cellspacing="0" style="background-color: #F6F8F1; width: 80%; text-align:left; padding:10px; margin:0px 10px 10px 10px;">
+					<tr>
+						<td valign="top">
+							{if $mailitem.ishtml == 'on'}{*'html'*}
+								<p>
+									<b>{t}HTML Body:{/t} </b>
+										 <a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.id}" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
+								</p>
+								{if $mailitem.altbody}
+									<p>
+									<b>{t}Alt Body:{/t} </b>
+									<br>
+									<pre>{$mailitem.altbody}</pre>
+									</p>
+								{/if}
+							{else}
+								<p>
+								<b>{t}Body:{/t} </b>
+								<br>
+								<pre>{$mailitem.body}</pre>
+								</p>
+							{/if}
+
+						</td>
+					</tr>
+					</div>
 				</table>
 			
 			{/foreach}
@@ -136,11 +176,11 @@
 				<div style="text-align:center;"><!--float: right;-->
 					{if $numbertodisplay > 1}
 						<p>
-							<input type="submit" name="submit" value="{t}Delete All{/t}">
+							<input type="submit" name="submitall" value="{t}Delete All{/t}">
 						</p>
 					{elseif $numbertodisplay == 1}
 						<p>
-							<input type="submit" name="submit" value="{t}Click to Delete{/t}">
+							<input type="submit" name="submitall" value="{t}Click to Delete{/t}">
 						</p>
 					{/if}
 				</div>
@@ -148,7 +188,7 @@
 		</div>
 		</ul>
 
-
+	</form>
 
 	{else}
 	<!----------------- In Case something goes wrong ----------------->
@@ -159,7 +199,6 @@
 
 	{/if}
 
-	</form>
 
 
 {include file="admin/inc.footer.tpl"}
