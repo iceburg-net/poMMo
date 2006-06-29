@@ -63,16 +63,18 @@ if (!empty($_POST['testMail'])) {
 
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
 if (!empty ($_GET['sendaway'])) {
-	
-	$securityCode = dbMailingCreate($dbo, $input);
-	dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
-	
-	dpoMMoingStamp($dbo, "start");
-	
-	bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
-	sleep(1); // allows mailing to begin...
-	bmRedirect('mailing_status.php');
+	if (intval($subscriberCount) >= 1) {
+		$securityCode = dbMailingCreate($dbo, $input);
+		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
+		dbMailingStamp($dbo, "start");
+		bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
+		sleep(1); // allows mailing to begin...
+		bmRedirect('mailing_status.php');
 	}
+	else {
+		$logger->addMsg(_T('Cannot send a mailing to 0 subscribers!'));
+	}
+}
 
 $smarty->assign($input);
 $smarty->display('admin/mailings/mailings_send3.tpl');
