@@ -104,7 +104,7 @@ function dbMailingCreate(& $dbo, & $input) {
 	return $code;
 }
 
-function dpoMMoingStamp(& $dbo, $arg) {
+function dbMailingStamp(& $dbo, $arg) {
 	switch ($arg) {
 		case 'start' :
 			$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET started=NOW()';
@@ -142,7 +142,7 @@ function dbMailingPoll($dbo, $serial = '') {
 	return true;
 }
 
-function dpoMMoingUpdate(& $dbo, & $sentMails) {
+function dbMailingUpdate(& $dbo, & $sentMails) {
 	global $logger;
 	
 	// update DB
@@ -157,12 +157,12 @@ function dpoMMoingUpdate(& $dbo, & $sentMails) {
 	return;
 }
 
-function dpoMMoingEnd(&$dbo) {
+function dbMailingEnd(&$dbo) {
  	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM '.$dbo->table['mailing_current'].' LIMIT 1';
  	$dbo->query($sql);
  	
- 	$sql = 'TRUNCATE TABLE '.$dbo->table['mailing_current'];
-	$dbo->query($sql);
+ 	//$sql = 'TRUNCATE TABLE '.$dbo->table['mailing_current'];
+	//$dbo->query($sql);
 	$sql = 'TRUNCATE TABLE '.$dbo->table['queue'];
 	$dbo->query($sql);
  }

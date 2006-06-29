@@ -197,7 +197,7 @@ function updateDB(& $sentMails, & $timer) {
 	global $logger;
 
 	// update mailing status in database and flush sent mails from queue
-	dpoMMoingUpdate($dbo, $sentMails);
+	dbMailingUpdate($dbo, $sentMails);
 
 	// poll mailing	
 	dbMailingPoll($dbo, $serial);
@@ -268,7 +268,7 @@ while (proccessQueue()) {
 
 	// if queue is empty, end mailing and kill script.	
 	if (empty ($bmQueue)) {
-		dpoMMoingStamp($dbo, "finished");
+		dbMailingStamp($dbo, "finished");
 		if ($bmMailer->SMTPKeepAlive == TRUE)
 			$bmMailer->SmtpClose();
 		bmMKill('Mailing finished!');

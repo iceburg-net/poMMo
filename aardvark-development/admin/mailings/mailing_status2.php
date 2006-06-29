@@ -21,16 +21,16 @@ $dbo = & $poMMo->openDB();
 if (!empty ($_GET['command'])) {
 	switch ($_GET['command']) {
 		case "pause" :
-			dpoMMoingStamp($dbo, "stop");
+			dbMailingStamp($dbo, "stop");
 			break;
 		case "restart" :
-			dpoMMoingStamp($dbo, "restart");
+			dbMailingStamp($dbo, "restart");
 			$sql = 'SELECT securityCode FROM '.$dbo->table['mailing_current'];
   			$code = $dbo->query($sql,0,0);
   			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$code);
 			break;
 		case "kill" :
-			dpoMMoingEnd($dbo);
+			dbMailingEnd($dbo);
 			break;
 		case "clear" :
 			$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET notices=NULL';
