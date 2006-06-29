@@ -23,6 +23,7 @@ defined('_IS_VALID') or die('Move along...');
 	
 	IMMEDIATE (for next release):
 		(API) - Embedded subscription form should remember values (if error occurs)!
+		(Prevent mailings continuing if subscriberCount == 0)
 		
 	SHORT TERM:
 	

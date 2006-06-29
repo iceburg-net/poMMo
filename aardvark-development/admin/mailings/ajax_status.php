@@ -57,8 +57,8 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 if ($sent >= $subscriberCount  || $status == 'finished') {
 		$status = 'finished';
 		require_once (bm_baseDir . '/inc/db_mailing.php');
-		if (!mailingQueueEmpty($dbo)) {
-			dpoMMoingEnd($dbo);
+		if (mailingQueueEmpty($dbo)) {
+			dbMailingEnd($dbo);
 		}
 }
 

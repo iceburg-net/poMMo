@@ -37,8 +37,8 @@ INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
 
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR11.2c', 'poMMo Version', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '22', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR12', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '23', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
@@ -91,8 +91,8 @@ CREATE TABLE :::mailing_current::: (
   `ishtml` enum('on','off') NOT NULL default 'off',
   `mailgroup` varchar(60) NOT NULL default 'Unknown',
   `subscriberCount` int(10) unsigned NOT NULL default '0',
-  `started` timestamp(12) NOT NULL,
-  `finished` timestamp(12) NOT NULL,
+  `started` datetime NOT NULL,
+  `finished` datetime NOT NULL,
   `sent` int(10) unsigned NOT NULL default '0',
   `status` enum('started','stopped') NOT NULL default 'stopped',
   `command` enum('none','restart','stop') NOT NULL default 'none',
@@ -116,8 +116,8 @@ CREATE TABLE :::mailing_history::: (
   `ishtml` enum('on','off') NOT NULL default 'off',
   `mailgroup` varchar(60) NOT NULL default 'Unknown',
   `subscriberCount` int(10) unsigned NOT NULL default '0',
-  `started` timestamp(12) NOT NULL,
-  `finished` timestamp(12) NOT NULL,
+  `started` datetime NOT NULL,
+  `finished` datetime NOT NULL,
   `sent` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 );
