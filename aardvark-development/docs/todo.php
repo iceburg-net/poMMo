@@ -24,6 +24,8 @@ defined('_IS_VALID') or die('Move along...');
 	IMMEDIATE (for next release):
 		(API) - Embedded subscription form should remember values (if error occurs)!
 		(Prevent mailings continuing if subscriberCount == 0)
+		Workaround for session_auto_start enabled in php.ini -- http://www.iceburg.net/pommo/community/viewtopic.php?pid=238#p238
+		
 		
 	SHORT TERM:
 	
@@ -79,6 +81,8 @@ defined('_IS_VALID') or die('Move along...');
 	  (design) New default theme
 	  (design) New Installer & Upgrade script - Realtime flushing of output.
 	  (design) AJAX forms processing
+	  
+	  (module) Visual Verrification / CAPTCHA @ subscribe form
 	  
 	  (feature) Allow seperate language selection for admin and user section. Include "auto" language selection based from client browser
 	  (feature) Bounced mail reading
