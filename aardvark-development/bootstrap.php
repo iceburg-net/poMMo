@@ -53,10 +53,20 @@ if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Work Directory not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'));
 	if (!is_writable(bm_workDir))
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Webserver cannot write to Work Directory. Make sure it has the proper permissions.'));
-	if (!is_dir(bm_workDir.'/pommo'))
-		if (!mkdir(bm_workDir.'/pommo'))
+	
+	if (!is_dir(bm_workDir.'/pommo')) {
+		
+		if (ini_get('safe_mode') == "1") { 
+			bmKill(_T('Working Directory cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'));
+		}
+		elseif (!mkdir(bm_workDir.'/pommo'))
 			bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo');
-	if (!mkdir(bm_workDir.'/pommo/smarty'))
+	}
+	
+	if (ini_get('safe_mode') == "1") { 
+			bmKill(_T('Working Directory cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'));
+	}
+	elseif (!mkdir(bm_workDir.'/pommo/smarty'))
 		bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo/smarty');
 }
 
