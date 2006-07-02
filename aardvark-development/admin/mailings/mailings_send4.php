@@ -14,6 +14,8 @@
 /**********************************
 	STARTUP ROUTINES
  *********************************/
+ 
+ $skipSecurity = FALSE;
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
@@ -26,11 +28,11 @@ $bm_sessionName = $serial;
 
 $poMMo = & fireup('sessionName');
 $poMMo->loadConfig();
-$dbo = & $poMMo->openDB();
+$dbo = & $poMMo->_dbo;
 $dbo->dieOnQuery(FALSE);
 
 
-$logger = & $poMMo->logger;
+$logger = & $poMMo->_logger;
 $logger->addMsg(sprintf(_T('Background script with serial %d spawned'), $serial), 3);
 
 if (empty ($poMMo->_config['list_exchanger'])) {

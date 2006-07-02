@@ -18,7 +18,7 @@
  require('../../bootstrap.php');
  require_once(bm_baseDir.'/inc/db_fields.php');
  $poMMo =& fireup("secure");
- $dbo = & $poMMo->openDB();
+ $dbo = & $poMMo->_dbo;
 
  
 // URL which processes the form input + adds (or warns) subscriber to pending table.

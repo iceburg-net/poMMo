@@ -23,8 +23,8 @@ require_once (bm_baseDir . '/install/helper.upgrade.php');
 session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
 
 $poMMo = & fireup('install');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 $dbo->dieOnQuery(FALSE);
 
 

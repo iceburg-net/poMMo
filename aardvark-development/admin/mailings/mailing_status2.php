@@ -16,7 +16,7 @@ require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_mailing.php');
 
 $poMMo = fireup('secure');
-$dbo = & $poMMo->openDB();
+$dbo = & $poMMo->_dbo;
 
 if (!empty ($_GET['command'])) {
 	switch ($_GET['command']) {

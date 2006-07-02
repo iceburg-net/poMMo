@@ -17,7 +17,7 @@ require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_subscribers.php');
 require_once (bm_baseDir.'/inc/db_fields.php');
 $poMMo =& fireup("secure");
-$dbo = & $poMMo->openDB();
+$dbo = & $poMMo->_dbo;
 
 
 if (empty($_GET['group_id']) || empty($_GET['table']))

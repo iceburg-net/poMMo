@@ -23,8 +23,8 @@ require_once (bm_baseDir . '/inc/lib.txt.php');
 require_once (bm_baseDir.'/inc/db_sqlgen.php');
 
 $poMMo = & fireup('secure', 'keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 //print_r($poMMo->dataGet());
 

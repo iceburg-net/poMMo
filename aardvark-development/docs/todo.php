@@ -22,11 +22,13 @@ defined('_IS_VALID') or die('Move along...');
 [BRICE]
 	
 	IMMEDIATE (for next release):
-		(API) - Embedded subscription form should remember values (if error occurs)!
-		(Prevent mailings continuing if subscriberCount == 0)
 		Workaround for session_auto_start enabled in php.ini -- http://www.iceburg.net/pommo/community/viewtopic.php?pid=238#p238
-		
-		
+		***Caution
+
+If you do turn on session.auto_start then you cannot put objects into your sessions since the class definition has to be loaded before starting the session in order to recreate the objects in your session. 
+
+***
+
 	SHORT TERM:
 	
 	  (API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + get rid of appendURL problem!

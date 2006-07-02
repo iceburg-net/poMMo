@@ -22,8 +22,8 @@ require ('../bootstrap.php');
 require_once (bm_baseDir . '/install/helper.upgrade.php');
 
 $poMMo = & fireup('install');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 $dbo->dieOnQuery(FALSE);
 
 /**********************************

@@ -17,8 +17,8 @@
 	require_once (bm_baseDir.'/inc/db_history.php'); // for DB retrieval of body
 
 	$poMMo =& fireup("secure","dataSave");
-	$logger = & $poMMo->logger;	//ct
-	$dbo = & $poMMo->openDB();	//ct
+	$logger = & $poMMo->_logger;	//ct
+	$dbo = & $poMMo->_dbo;	//ct
 
 
 	//ct
