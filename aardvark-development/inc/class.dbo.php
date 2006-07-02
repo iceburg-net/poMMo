@@ -155,7 +155,7 @@ class dbo {
 	 * 
 	 * Example invocations from partent script:
 	 * 
-	 *   $dbo = & $poMMo->openDB();
+	 *   $dbo = & $poMMo->_dbo;
 	 *   $dbo->dieOnQuery(TRUE);
 	 *   $dbo->debug(TRUE);
 	 * 

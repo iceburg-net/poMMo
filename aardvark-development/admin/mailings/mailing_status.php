@@ -22,8 +22,8 @@ define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
 
 $poMMo = & fireup('secure','keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE

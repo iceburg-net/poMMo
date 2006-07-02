@@ -22,8 +22,8 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_procedures.php');
 
 $poMMo = & fireup('secure');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE

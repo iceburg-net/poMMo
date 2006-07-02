@@ -19,6 +19,9 @@ defined('_IS_VALID') or die('Move along...');
 
 // TODO -> class will eventually extend to act as error handler
 // TODO -> implement get limit @ some point.... ;)
+
+// NOTE: messages are cleared upon page load (as class.common.php calls new constructor)
+// TODO -> add message "revival" from SESSION (if ever deemed necessary)
 class bmLogger {
 	
 	var $_errors;

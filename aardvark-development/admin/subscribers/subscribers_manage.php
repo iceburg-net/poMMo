@@ -27,8 +27,8 @@ require_once (bm_baseDir.'/inc/db_fields.php');
 require_once (bm_baseDir.'/inc/class.pager.php');
 
 $poMMo = & fireup('secure');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /** Setup Variables
  * 

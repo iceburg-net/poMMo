@@ -36,10 +36,10 @@ class bTemplate extends Smarty {
 				$resource_name = $this->_themeDir.'default/'.$resource_name;
 		
 		global $poMMo;
-		if ($poMMo->logger->isMsg()) 
-			$this->assign('messages',$poMMo->logger->getMsg());
-		if ($poMMo->logger->isErr())
-			$this->assign('errors',$poMMo->logger->getErr());
+		if ($poMMo->_logger->isMsg()) 
+			$this->assign('messages',$poMMo->_logger->getMsg());
+		if ($poMMo->_logger->isErr())
+			$this->assign('errors',$poMMo->_logger->getErr());
 		
 		return parent::display($resource_name, $cache_id = null, $compile_id = null, $display = false);;
 	}

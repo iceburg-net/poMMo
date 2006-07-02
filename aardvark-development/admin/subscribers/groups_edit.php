@@ -22,8 +22,8 @@ require_once (bm_baseDir . '/inc/db_fields.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
 $poMMo = & fireup('secure');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE

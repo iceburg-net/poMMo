@@ -116,7 +116,6 @@ function & fireup() {
 			case 'secure' :
 				$bm_secure = TRUE;
 				break;
-			case 'dataSave' : // PHASE OUT -> dataSave
 			case 'keep' :
 				$bm_dataSave = TRUE;
 				break;
@@ -138,32 +137,28 @@ function & fireup() {
 		session_id($bm_sessionName);
 	session_start();
 	
-	// load common class. Attempt to load from session
-	if (isset ($_SESSION["poMMo"])) {
-		$poMMo = & $_SESSION["poMMo"];
+	// create placeholder for $_SESSION['pommo'] if this is a new session
+	if (empty($_SESSION['pommo'])) {
+		$_SESSION['pommo'] = array();
 	}
-	else {
-		$poMMo = new Common();
-		$poMMo->loadConfig();
-		
-		// load common class into session
-		$_SESSION["poMMo"] = & $poMMo;
-	}	
 	
-	// check that config has been loaded
+	// create common class
+	$poMMo = new Common();
+	
+	// read configuration data
+	(isset($bm_loadConfig)) ? $poMMo->loadConfig(TRUE) : $poMMo->loadConfig();
+	
+	// ensure valid configuration data
 	if (empty($poMMo->_config) || count($poMMo->_config) < 5) {
-		$poMMo->loadConfig();
-		if (count($poMMo->_config) < 5)
 			bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
 	}
 	
 	// checks version of DB against file version
-	$dbo = $poMMo->openDB();
-	$dbo->dieOnQuery(FALSE);
-	$sql = 'SELECT config_value FROM '.$dbo->table['config'].' WHERE config_name=\'revision\'';
-	$revision = $dbo->query($sql,0);
+	$poMMo->_dbo->dieOnQuery(FALSE);
+	$sql = 'SELECT config_value FROM '.$poMMo->_dbo->table['config'].' WHERE config_name=\'revision\'';
+	$revision = $poMMo->_dbo->query($sql,0);
 	if (!$revision)
 		bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
@@ -172,7 +167,7 @@ function & fireup() {
 		bmKill(sprintf(_T('Version Mismatch. Have you %s upgraded %s ?'),
 		'<a href="'.bm_baseUrl.'/install/upgrade.php">',
 		'</a>'));
-	$dbo->dieOnQuery(TRUE);
+	$poMMo->_dbo->dieOnQuery(TRUE);
 	
 
 	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
@@ -181,11 +176,8 @@ function & fireup() {
 		'</a>'));
 		
 	if (!isset($bm_dataSave)) // PHASE OUT -> when _messages gone, perform actual dataClear func..
-		$poMMo->dataClear();
+		$poMMo->clear();
 		
-	if (isset($bm_loadConfig))
-		$poMMo->loadConfig();
-
 	// returns a copy of the object
 	return $poMMo;
 }

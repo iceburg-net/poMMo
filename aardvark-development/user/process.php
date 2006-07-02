@@ -22,8 +22,8 @@ require_once (bm_baseDir . '/inc/db_fields.php');
 require(bm_baseDir.'/inc/lib.validate_subscriber.php');
 
 $poMMo = & fireup();
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 
 /**********************************

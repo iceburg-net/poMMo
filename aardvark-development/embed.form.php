@@ -21,7 +21,7 @@ $dirname = dirname(__FILE__);
 require($dirname.'/bootstrap.php');
 
 $poMMo = & fireup('install');
-$dbo = & $poMMo->openDB();
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE

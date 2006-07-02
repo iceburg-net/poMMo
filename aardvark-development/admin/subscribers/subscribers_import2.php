@@ -23,8 +23,8 @@ require_once (bm_baseDir.'/inc/lib.import.php');
 require_once (bm_baseDir.'/inc/db_fields.php');
 
 $poMMo = & fireup('secure','keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -92,7 +92,7 @@ elseif (!empty($_POST['preview'])) { // check to see if a preview has been reque
 		
 	// save Array to session
 	$sessionArray['importArray'] = & $importArray;
-	$poMMo->dataSet($sessionArray);
+	$poMMo->set($sessionArray);
 		
 
 	$confirm = array('nourl' => 'subscribers_import2.php','yesurl' => 'subscribers_import2.php?import=TRUE');

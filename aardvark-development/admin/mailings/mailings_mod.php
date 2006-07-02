@@ -20,8 +20,8 @@ require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_history.php');
 
 $poMMo =& fireup("secure");
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
  
  	// vars
 	$appendUrl = "limit=".$_REQUEST['limit']."&order=".$_REQUEST['order']."&orderType=".$_REQUEST['orderType']; 
