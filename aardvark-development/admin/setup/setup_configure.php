@@ -122,7 +122,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		dbUpdateConfig($dbo, $_POST);
 
-		$poMMo->loadConfig();
+		$poMMo->loadConfig('TRUE');
 
 		$logger->addMsg(_T('Configuration Updated.'));
 
