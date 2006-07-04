@@ -308,8 +308,8 @@ bmMKill('Respawned... Max exec time likely reached.');
 /* 
  *  WHAT IS THIS CALL? cannot call after bmMkill. Also, I believe insertion into mailing history 
  *  should be handled by dbMailingEnd? ~ Brice
+ *  ct: Its a remain from some testing of mine, old, should be deleted
  */
-dbInsertToMailingHistory($dbo, $input);
 
 //echo 'Ready to respawn <a href="mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode'].'">here</a>';
 ?>

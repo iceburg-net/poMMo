@@ -88,9 +88,64 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 	// populate _POST with info from database (fills in form values...) or historic input if set...
 	$historic = $poMMo->get();
-	if (isset ($historic['fromname']))
+	if (isset ($historic['fromname'])) {
 		$_POST = $historic;
-	else {
+
+//ct
+
+		// Mailtype specific loading -> difference in html: body=html / altbody=text; plain: body=text
+		// mailtype is set through mailtype plain/html (in DB its on/off)
+		if ($historic['ishtml'] == 'on') {
+		
+			$_POST['mailtype'] = 'html';
+			$_POST['body'] = $historic['body'];
+			$_POST['altbody'] = $historic['altbody'];
+		
+		} elseif ($historic['ishtml'] == 'off') {
+		
+			$_POST['mailtype'] = 'plain';
+			$_POST['body'] = $historic['body'];
+		
+		}
+		
+		// Mailgroup loading
+		// Since the Mailgroup is saved in the DB at the date of sending and can change during time (new name,
+		// other name, other subscribers, other rules) and we need to preserve the data at the time the mailng 
+		// was sent we try to select the name from the actual groups, if its there it will be selected through
+		// the ID
+		// 'all' has extra handling, since its not a ID
+		if (isset($historic['mailgroup'])) {
+
+			// If mailgroup is numeric, its an id, else if its a string, get the group ID from it if it exists
+			if (is_numeric($historic['mailgroup'])){
+
+				$_POST['group_id'] = $historic['mailgroup'];
+
+			} elseif (is_string($historic['mailgroup'])) {
+
+				if ($historic['mailgroup'] == "all") {
+					$_POST['group_id'] = "all";
+				} else {
+					$mailgroupid = getGroupID($dbo, $historic['mailgroup']);
+					if (isset($mailgroupid)) {
+						$_POST['group_id'] = $mailgroupid;
+					} else {
+						$logger->addMsg(_T("Reloaded mailgroup not valid. Select a actual one."));
+					}
+				}			
+
+			} else {
+				// In case the mailgroup is deprecated, out of date, ...
+				$logger->addMsg(_T("This is not a valid mailgroup."));
+			}
+			
+		} else {
+			$logger->addMsg(_T("Mailgroup not set. The mailgroup 'All subscribers' is selected until you choose another one."));
+		}
+
+//ct
+
+	} else {
 		$dbvalues = $poMMo->getConfig(array (
 			'list_fromname',
 			'list_fromemail',
@@ -125,7 +180,11 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$logger->addMsg(_T('Please review and correct errors with your submission.'));
 	}
 }
+
 $smarty->assign($_POST);
 $smarty->display('admin/mailings/mailings_send.tpl');
 bmKill();
+
+
+
 ?>
