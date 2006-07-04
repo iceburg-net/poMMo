@@ -115,13 +115,10 @@ defined('_IS_VALID') or die('Move along...');
 
 	(feature)	fix paging class 
 	
-	(feature) View Page (mailings_mod): Ability to "load" message -- copy body, group, subject, from, 
-			etc. to a new Mailing.	
-
 	(feature)	add + refactor http://www.phpinsider.com/php/code/SafeSQL/
 	(feature)	alter database design -> merge tables mailings &mailings_history and refactor
 
-	EDIT: after finishing mailing ... database entry in mailing_current would not switch to mailing_history
+				EDIT: after finishing mailing ... database entry in mailing_current would not switch to mailing_history
 
 	(feature)	Mailing History 		Mailing History -> Database insertion of Mailings
 	(feature)	Numeric types/sets for Demographics
@@ -129,18 +126,26 @@ defined('_IS_VALID') or die('Move along...');
 	(feature)	Change Radio Button Labels
 				<label for="r1"><input type="radio" name="group1" id="r1" value="1" /> button one</label> 
 				so that a click on a label activates the radio button and not a click on the mini-button
+				e.g we have "O on" and want it to activate with a click on "on" and not only the "O"
+				
+				-> problem because fields_edit.php LABEL is the Description of the entire field
+				-> css alterations with inner labels
 
 	(module) 	User Administration (3 tier achitecture)
 	(module)	LDAP Support, ADS
 
 
 	
-	
-	(to think about) DB Scheme for Mailings current/history(ideas?) -- 
+	LONG TERM:
+	DB Scheme for Mailings current/history(ideas?) -- 
 		* Eventually I think they should be merged into one table as we discussed. At this time,
 			lets focus elsewhere as there are bigger fish to fry ;). Mark this as long/medium term? 
 			~ Brice
+		-> OK! 
 
 
+	DONE: 
+	(done) 	(feature) View Page (mailings_mod): Ability to "load" message -- copy body, group, subject, from, 
+			etc. to a new Mailing.	
   
  
