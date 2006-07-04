@@ -16,13 +16,9 @@
 	require('../../bootstrap.php');
 	require_once (bm_baseDir.'/inc/db_history.php'); // for DB retrieval of body
 
-	$poMMo =& fireup("secure","dataSave");
-	$logger = & $poMMo->_logger;	//ct
+	$poMMo = & fireup('secure');
+	$logger = & $poMMo->_logger; //ct
 	$dbo = & $poMMo->_dbo;	//ct
-
-
-	//ct
-	//print_r($poMMo); 
 
 	// if there is a specific id given get the database record from DB.mailing_history
 	// i choosed this approach, so i don't  $POST around Body Data in the mailings_history.php and mailings_mod.php
@@ -36,10 +32,9 @@
 		$poMMo->set($mailbody);
 		
 	} //end ct
-	
-	
-	$html =& $poMMo->dataGet();
- 
+
+	$html =& $poMMo->get();		//ct: changed dataGet() to get
+
 	if (get_magic_quotes_gpc()) {
 		echo stripslashes($html['body']);
 	} else {

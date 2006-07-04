@@ -19,9 +19,9 @@
 define('_IS_VALID', TRUE);
 
 require('../../bootstrap.php');
+
 require_once (bm_baseDir.'/inc/db_history.php');		// Mailing History Database Handling
 require_once (bm_baseDir.'/inc/class.pager.php');
-
 
 $poMMo =& fireup("secure");
 $logger = & $poMMo->_logger;
@@ -57,10 +57,11 @@ $dbo = & $poMMo->_dbo;
 	// Fetch Mailings
 	$mailings = & dbGetMailingHistory($dbo, $start, $limit, $order, $orderType);		// func in inc/db_history.php
 	$mailsdisplayed = $dbo->records();
-	
+
+
 	if (empty($mailings)) {
 
-		// There are no mailings present in the mailing history, or some query malfunction
+		//There are no mailings present in the mailing history, or some query malfunction
 		//$dberror = sprintf(_T('Database Query Error. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>');
 		
 		$nomailing = true;
@@ -73,8 +74,6 @@ $dbo = & $poMMo->_dbo;
 		$smarty->assign('returnStr', _T('Mailings Page'));
 		$smarty->assign('returnStr2', _T('Mailings History'));
 		$smarty->assign('nomailing', $nomailing);
-
-		if (!empty($errorstr)) { $smarty->assign('errorstr', $errorstr); }
 
 		$smarty->display('admin/mailings/mailings_history.tpl');
 		bmKill();
@@ -94,8 +93,6 @@ $dbo = & $poMMo->_dbo;
 		$smarty->assign('orderType',$orderType);
 		$smarty->assign('pagelist',$pagelist);
 		$smarty->assign('rowsinset', $mailcount);
-
-		if (!empty($errorstr)) { $smarty->assign('errorstr', $errorstr); }
 
 		$smarty->display('admin/mailings/mailings_history.tpl');
 

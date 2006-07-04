@@ -22,6 +22,7 @@ require_once (bm_baseDir.'/inc/db_history.php');
 $poMMo =& fireup("secure");
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
+
  
  	// vars
 	$appendUrl = "limit=".$_REQUEST['limit']."&order=".$_REQUEST['order']."&orderType=".$_REQUEST['orderType']; 
@@ -32,42 +33,51 @@ $dbo = & $poMMo->_dbo;
 	$smarty->assign('returnStr', _T('Mailing History'));
 
 
-	// if mailid and action are empty - redirect
+	// if mailid or action are empty - redirect
 	if (empty ($_REQUEST['mailid']) || empty ($_REQUEST['action'])) {
 		bmRedirect('mailings_history.php?'.$appendUrl);
 	}
 
 	// Actions with a record
-	// Decide what we yet want to do 	
 	$action = $_REQUEST['action'];
 	$mailid = $_REQUEST['mailid'];
 	$order = $_REQUEST['order'];
 	$orderType = $_REQUEST['orderType'];
 	$limit = $_REQUEST['limit'];
 
-	//$typ = gettype($mailid);
 
 
 	if (!empty($_REQUEST['submitone'])) {
 
 		$delid = $_REQUEST['submitone'];
-		$retstr = dbRemoveMailFromHistory($dbo, $delid);
+		if (dbRemoveMailFromHistory($dbo, $delid)) {
+			$logger->addMsg(_T('Delete mailing: Delete successful.'));
+		} else {
+			$logger->addErr(_T("Could not delete Mailing with ID: ". $delid));
+		}
 
 	} elseif (!empty($_REQUEST['submitall'])) {
 
 		// To delete we wait for user confirmation and then return to mailings history
 		if (!empty($_REQUEST['deleteEmails'])) { 
+			
 			$delid = $_REQUEST['deleteEmails']; 
-			$retstr = dbRemoveMailFromHistory($dbo, $delid);
+			if (dbRemoveMailFromHistory($dbo, $delid)) {
+				$logger->addMsg(_T('Delete mailing: Delete successful.'));
+				bmRedirect('mailings_history.php?'.$appendUrl);
+			} else {
+				$logger->addErr(_T("Could not delete Mailing with ID: ". $delid));
+			}
+			
 		} else {
-			echo "<i>Delete: Mail ID is empty.</i><br>";
+			$logger->addErr(_T('Could not delete mailing. The supplied ID is not valid.'));
 		}
-		
-		// Decide where oder IF we display the errorstr, returnstring?
-		// echo $errorstr; echo $retstr;
-		bmRedirect('mailings_history.php?'.$appendUrl);
 
-	}
+		// maybe some better redirecting?	
+		// All submits empty
+		bmRedirect('mailings_history.php?'.$appendUrl);
+				
+	} 
 
 
  	// ACTIONS -> choose what we want to do.
@@ -81,17 +91,6 @@ $dbo = & $poMMo->_dbo;
 					$smarty->assign('actionStr', _T('Mailing View'));
 					$smarty->assign('mailings',$mailings);
 					$smarty->assign('numbertodisplay', $numbertodisplay);
-
-					// Save for later retrieval in $poMMo CANCELLED -> do it in mailng_preview.php
-/*					if (($mailings[0]['ishtml'] == "on") && (is_numeric($mailid)) ) {
-						$htmltext['body'] = $mailings[0]['body'];
-						$poMMo->set($htmltext);
-					}
-					$mailbodies = dbGetHTMLBody($dbo, $mailid);
-					print_r($mailbodies);*/
-	
-
-					
 					break;
 					
 			case 'delete': 
@@ -102,6 +101,26 @@ $dbo = & $poMMo->_dbo;
 					$smarty->assign('actionStr', _T('Mailing Delete'));
 					$smarty->assign('mailings',$mailings);
 					$smarty->assign('numbertodisplay', $numbertodisplay);
+					
+					break;
+
+			case 'reload': 
+
+					//Mailid can only be numeric because reloading of multiple Mailings doesn't make sense
+					if (is_numeric($mailid)) {
+
+						// Get Mail Data and put in the $pommo variable for the send procedure in mailings_send1,2,3,4.php
+						$mailings = dbGetMailingInfo($dbo, $mailid);
+						$body = dbGetHTMLBody($dbo, $mailid);
+						$mailings[0]['body'] = $body['body'];
+						$poMMo->set($mailings[0]);
+					
+						bmRedirect('mailings_send.php');
+						
+					} else {
+						$logger->addMsg(_T('Could not reload mailing. The supplied ID is not valid.'));
+					}
+					
 					break;
 				
 	} //switch
@@ -134,16 +153,6 @@ $dbo = & $poMMo->_dbo;
 
 	$smarty->display('admin/mailings/mailings_mod.tpl');
 	bmKill();
-
-
-
-
-/*	GET:{$smarty.get.page}<br>
-	POST: {$smarty.post.page}<br>
-	echo "POSTDATA"; print_r($_POST); echo "<br><br>";
-	echo "REQUEST:"; print_r($_REQUEST);  echo "<br><br>";
-*/
-
 
 
 ?>
