@@ -100,7 +100,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				dbUpdateConfig($dbo, $_POST);
 
 				// load configuration, set message defaults.
-				$poMMo->loadConfig();
+				$poMMo->loadConfig('TRUE');
 				dbResetMessageDefaults('all');
 
 				$logger->addMsg(_T('Installation Complete! You may now login and setup poMMo.'));

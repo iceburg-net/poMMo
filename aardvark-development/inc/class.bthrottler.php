@@ -176,7 +176,7 @@ class bThrottler {
 	// ------------------------------
 
 	// bThrottler() - simple initialization of class variables.
-	function bThrottler($genesis, & $queue, $targetMPS = 0, $targetBPS = 0, $domPeriod = 0, $domMPP = 0, $domBPP = 0) {
+	function bThrottler($genesis, & $queue, $targetMPS = 0, $targetBPS = 0, $domPeriod = 0, $domMPP = 0, $domBPP = 0, $domainHistory = array()) {
 
 		// Use the standard poMMo logger for output
 		global $logger;
@@ -198,7 +198,7 @@ class bThrottler {
 		$this->_targetBPS = $targetBPS;
 
 		$this->_quarantine = array ();
-		$this->_domain = array ();
+		$this->_domain = $domainHistory; // NOTE - this is now a reference to an array in $_SESSION
 		$this->_domPeriod = $domPeriod;
 		$this->_domMPP = $domMPP;
 		$this->_domBPP = $domBPP;

@@ -37,7 +37,7 @@ $smarty->clear_all_cache();
 
 $smarty->prepareForForm();
 
-$poMMo->loadConfig();
+$poMMo->loadConfig('TRUE');
 
 // Check to make sure poMMo is not already installed.
 if ($poMMo->_config['revision'] == pommo_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {

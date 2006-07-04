@@ -262,6 +262,12 @@ class dbo {
 
 	// returns an array representing 1 row in a resultset. Returns an assosiative array by default
 	//  this function pushes its result on a seperate stack, and is therefore intended for LOOPs (while) ONLY
+	
+	/* useful for stuff like; 
+		while ($row = $dbo->getRows($sql)) 
+				$config[$row['config_name']] = $row['config_value'];
+	*/
+	
 	function & getRows($sql = NULL, $enumerated = FALSE, $uniqueId = NULL) {
 
 			// check for uniqueIdentifier (used to seperate result stacks when embedding loops within loops)
