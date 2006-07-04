@@ -5,6 +5,25 @@
 
 
 	<h1>{$actionStr}</h1>
+	
+		{* Display a eventual error message *}
+		{if $messages}
+			<div class="msgdisplay">
+				{foreach from=$messages item=msg}
+					<div>* {$msg}</div>
+				{/foreach}
+			</div>
+		{/if}
+		{if $errors}
+			<br>
+			<div class="errdisplay">
+				{foreach from=$errors item=msg}
+					<div>* {$msg}</div>
+				{/foreach}
+			</div>
+		{/if}
+	
+	
 
 	<div style="width:100%;">
 		<span style="float: right; margin-right: 30px;">
@@ -56,7 +75,7 @@
 
 					<tr>
 						<td valign="top">
-							{if $mailitem.ishtml == 'on'}{*'html'*}
+							{if $mailitem.ishtml == 'on'}
 								<p>
 									<b>{t}HTML Body:{/t} </b>
 										 <a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.id}" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
@@ -145,7 +164,7 @@
 				<table border="0" cellpadding="0" cellspacing="0" style="background-color: #F6F8F1; width: 80%; text-align:left; padding:10px; margin:0px 10px 10px 10px;">
 					<tr>
 						<td valign="top">
-							{if $mailitem.ishtml == 'on'}{*'html'*}
+							{if $mailitem.ishtml == 'on'}
 								<p>
 									<b>{t}HTML Body:{/t} </b>
 										 <a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.id}" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
