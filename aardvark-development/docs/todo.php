@@ -23,12 +23,16 @@ defined('_IS_VALID') or die('Move along...');
 	
 	IMMEDIATE (for next release):
 		merge corinna's mailing history code
-		
+			+ Examine mailing_preview
+			+ Examine the loading of mails (mailings_send.php)
+			
 
 	SHORT TERM:
 	
 	  (API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + get rid of appendURL problem!
 	
+	  (API) - secure "included" files under cache -- don't include them.. rather run them through specialized parser? e.g. for embed.forms & httpSpawn tester
+	  
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  (API) Better mailing send debugging ->
 	    Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
