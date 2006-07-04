@@ -22,12 +22,8 @@ defined('_IS_VALID') or die('Move along...');
 [BRICE]
 	
 	IMMEDIATE (for next release):
-		Workaround for session_auto_start enabled in php.ini -- http://www.iceburg.net/pommo/community/viewtopic.php?pid=238#p238
-		***Caution
-
-If you do turn on session.auto_start then you cannot put objects into your sessions since the class definition has to be loaded before starting the session in order to recreate the objects in your session. 
-
-***
+		merge corinna's mailing history code
+		
 
 	SHORT TERM:
 	
@@ -140,7 +136,10 @@ If you do turn on session.auto_start then you cannot put objects into your sessi
 
 	
 	
-	(to think about) DB Scheme for Mailings current/history(ideas?)
+	(to think about) DB Scheme for Mailings current/history(ideas?) -- 
+		* Eventually I think they should be merged into one table as we discussed. At this time,
+			lets focus elsewhere as there are bigger fish to fry ;). Mark this as long/medium term? 
+			~ Brice
 
 
   
