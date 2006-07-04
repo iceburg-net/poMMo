@@ -16,7 +16,8 @@
 	STARTUP ROUTINES
  *********************************/
 
-$skipSecurity = TRUE;
+// skips serial and security code checking. For debbuing this script.
+$skipSecurity = FALSE;
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
@@ -304,12 +305,6 @@ else
 	'/admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 
 bmMKill('Respawned... Max exec time likely reached.');
-
-/* 
- *  WHAT IS THIS CALL? cannot call after bmMkill. Also, I believe insertion into mailing history 
- *  should be handled by dbMailingEnd? ~ Brice
- *  ct: Its a remain from some testing of mine, old, should be deleted
- */
 
 //echo 'Ready to respawn <a href="mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode'].'">here</a>';
 ?>
