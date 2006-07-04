@@ -47,7 +47,7 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 
 	$dbo->dieOnQuery(TRUE);
 
-	/*id, fromname, fromemail, frombounce, subject, body, ishtml, mailgroup, subscriberCount, started, finished, sent*/
+	//id, fromname, fromemail, frombounce, subject, body, ishtml, mailgroup, subscriberCount, started, finished, sent
 	//$countmailings = $dbo->records();
 	
 	$safesql =& new SafeSQL_MySQL;
@@ -56,10 +56,6 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 		array($dbo->table['mailing_history'], $order, $orderType, $start, $limit) );
 
 	if ($dbo->query($sql)) {
-
-		// already checked in DBO class
-		// if (!$dbo->_result) { $smarty = & bmSmartyInit();
-		// bmKill(sprintf(_T('Database Query Error. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>'));exit;		}
 
 		if (mysql_num_rows($dbo->_result) == 0) {
 
@@ -75,9 +71,9 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 			while ($row = mysql_fetch_assoc($dbo->_result)) {
 		
 				$mailings[$i]['mailid'] = $row['id'];
-				$mailings[$i]['fromname'] = $row['fromname'];
-				$mailings[$i]['fromemail'] = $row['fromemail'];
-				$mailings[$i]['frombounce'] = $row['frombounce'];
+				//$mailings[$i]['fromname'] = $row['fromname'];
+				//$mailings[$i]['fromemail'] = $row['fromemail'];
+				//$mailings[$i]['frombounce'] = $row['frombounce'];
 				$mailings[$i]['subject'] = $row['subject']; 
 				//$mailings[$i]['body'] = $row['body']; 
 				$mailings[$i]['ishtml'] = $row['ishtml']; 
@@ -86,7 +82,8 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 				$mailings[$i]['started'] = $row['started']; 
 				$mailings[$i]['finished'] = $row['finished']; 
 				$mailings[$i]['sent'] = $row['sent']; 
-				$mailings[$i]['duration'] = $row['started']-$row['finished']; 
+				$mailings[$i]['duration'] = $row['started']-$row['finished'];
+				$mailings[$i]['mpm'] = ($row['started']-$row['finished']) / $row['sent'];
 			
 				$i++;
 			
@@ -106,6 +103,8 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 
 // Get Infos on a Mailing from a Array or numeric ID Information
 function & dbGetMailingInfo(& $dbo, $selid) {
+
+	global $logger;
 
 	$dbo->dieOnQuery(TRUE);
 	
@@ -184,7 +183,11 @@ function & dbGetMailingInfo(& $dbo, $selid) {
 		} //if
 
 	} else {
-		//Something wrong
+	
+		//Something wrong with the selid / selid Array
+		$logger->addErr(_T("Problem during mailing details selection. The supplied ID has wrong format."));
+		$mailings = NULL;
+		
 	}
 	
 	$dbo->dieOnQuery(TRUE);
@@ -197,7 +200,7 @@ function & dbGetMailingInfo(& $dbo, $selid) {
 
 // Removes one or more data records from the mailing_history table
 // $delid can be numeric oder a Array
-function & dbRemoveMailFromHistory($dbo, $delid) {
+function & dbRemoveMailFromHistory(& $dbo, $delid) {
 
 	if (is_numeric($delid)) {
 		
@@ -205,8 +208,9 @@ function & dbRemoveMailFromHistory($dbo, $delid) {
 		$safesql =& new SafeSQL_MySQL;
 		$sql = $safesql->query("DELETE FROM %s WHERE id = %i ", array($dbo->table['mailing_history'], $delid) );
 		$dbo->query($sql);
-		$ret = "Mailing with ID: " . $delid . " deleted.";
-		return $ret;
+
+		//$logger->addMsg(_T("Mailing deleted: ". $delid));
+		return true;
 		
 	} elseif (is_array($delid)) {
 	
@@ -214,16 +218,18 @@ function & dbRemoveMailFromHistory($dbo, $delid) {
 		$safesql =& new SafeSQL_MySQL;
 		$sql = $safesql->query("DELETE FROM %s WHERE id IN (%q) ", array($dbo->table['mailing_history'], $delid) );
 		$dbo->query($sql);
-		$ret = "Mailing with ID: " . implode(',', $delid) . " deleted.";
-		return $ret;
+
+		//$logger->addMsg(_T("Mailing deleted: ". implode(',', $delid)));
+		return true;
 
 	} else {
-	
-		$ret = "Could not delete Mailing with ID: " . $delid . "ID Format Error.";
-		return $ret;
+		
+		// There is a ID Format Error (not numeric, and no Array)
+		// $logger->addErr(_T("Could not delete Mailing with ID: ". $delid));
+		return false;
 		
 	}
-
+	
 } //dbRemoveMailFromHistory
 
 
@@ -232,27 +238,20 @@ function & dbGetHTMLBody(& $dbo, $selid) {
 
 	$dbo->dieOnQuery(TRUE);
 	
-	// Do the selection from database
-	if (is_numeric($selid)) {
-	
-		$safesql =& new SafeSQL_MySQL;
-		$sql = $safesql->query("SELECT body, ishtml FROM %s WHERE id = %i ",
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("SELECT body, ishtml FROM %s WHERE id = %i ",
 			array($dbo->table['mailing_history'], $selid) );
 			
-		if ($dbo->query($sql)) {
+	if ($dbo->query($sql)) {
 	
-			while ($row = mysql_fetch_assoc($dbo->_result)) {
+		while ($row = mysql_fetch_assoc($dbo->_result)) {
 
-				$mailbody['id'] = $row['id'];		
-				$mailbody['body'] = $row['body']; 
+			$mailbody['id'] = $row['id'];		
+			$mailbody['body'] = $row['body']; 
 					
-			} //while
+		} //while
 
-		} //if
-	
-	} else {
-		echo "Something wrong"; //LOGGER!!!!!!!!
-	}
+	} //if
 	
 	$dbo->dieOnQuery(TRUE);
 	

@@ -158,9 +158,47 @@ function dbMailingUpdate(& $dbo, & $sentMails) {
 	return;
 }
 
+
+// Write a Mail that is being sent to the mailing history
 function dbMailingEnd(&$dbo) {
- 	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM '.$dbo->table['mailing_current'].' LIMIT 1';
+
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("SELECT mailgroup FROM %s LIMIT 1", array( $dbo->table['mailing_current'] ) );
+  	$dbo->query($sql);
+	$row = mysql_fetch_assoc($dbo->_result);
+ 
+ 	if ($row['mailgroup'] == "all") {
+
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
+			mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, 
+			body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM %s LIMIT 1",
+			array ($dbo->table['mailing_history'], $dbo->table['mailing_current']) );
+ 	
+ 	} elseif (is_numeric($row['mailgroup'])) {
+ 
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
+			mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, 
+			body, altbody, ishtml, (SELECT group_name FROM %s WHERE group_id=(SELECT mailgroup FROM %s LIMIT 1 ) 
+			LIMIT 1 ), subscriberCount, started, finished, sent FROM %s LIMIT 1",
+			array ($dbo->table['mailing_history'], $dbo->table['groups'], $dbo->table['mailing_current'], 
+			$dbo->table['mailing_current']) );
+
+	} else {
+		//Not numeric and not ALL
+		//logger
+	}
+
+/* 	Brice:
+ 	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, 
+ 	altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, 
+ 	subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent 
+ 	FROM '.$dbo->table['mailing_current'].' LIMIT 1';
+ */
+ 	
  	$dbo->query($sql);
+
  	
  	$sql = 'TRUNCATE TABLE '.$dbo->table['mailing_current'];
 	$dbo->query($sql);
@@ -260,42 +298,20 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 }
 
 
-
-//ct not used at the moment
-/* Write a Mail that is being sent to the mailing history */
-function & dbInsertToMailingHistory($dbo, $input) {
-
-	// We habe in input
-	//$input[fromname]	$input[fromemail]	$input[frombounce]	$input[subject] 	$input[mailtype]		$input[group_id]
-	//$input[charset]	$input[body]		$input[altbody]		$input[submit]		$input[subscriberCount]	$input[groupName]
-	// To insert: id, fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent
-
-	// Correct this -> get right data!!!
-	$ishtml = "on";
-
-	//print_r($input) . "<BR><br>";
+//ct Get the ID for a group_name
+function & getGroupID($dbo, $groupname) {
 
 	$safesql =& new SafeSQL_MySQL;
-	$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, 
-		ishtml, mailgroup, subscriberCount, sent) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-		array($dbo->table['mailing_history'], $input['fromname'], $input['fromemail'], $input['frombounce'], 
-		$input['subject'], $input['body'], $input['altbody'], $ishtml, $input['groupName'], 
-		$input['subscriberCount'], $input['submit']) );
-
-	echo $sql;
-
+	$sql = $safesql->query("SELECT group_id FROM %s WHERE group_name='%s' LIMIT 1",
+		array ($dbo->table['groups'], $groupname) );
+		
 	$dbo->query($sql);
-	 /*{
-		$retstring = _T("Mailing written to Mailing History.");
-	} else {
-		$retstring = _T("Error while writing Mailing History.");
-	}*/
-
-	//return $retstring;
+	$row = mysql_fetch_assoc($dbo->_result);
 	
-} //dbInsertToMailingHistory
-//endct
+	return $row['group_id'];
 
+} //getGroupID
+//end ct
 
 
 ?>
