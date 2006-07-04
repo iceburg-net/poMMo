@@ -7,17 +7,27 @@
 	<h1>{t}Mailings History{/t}</h1>
 
 		{* Display a eventual error message *}
-		{if $errorstr}
-		<div class="msgdisplay">
-			{$errorstr}
-		</div>
+		{if $messages}
+			<div class="msgdisplay">
+				{foreach from=$messages item=msg}
+					<div>* {$msg}</div>
+				{/foreach}
+			</div>
 		{/if}
+		{if $errors}
+			<br>
+			<div class="errdisplay">
+				{foreach from=$errors item=msg}
+					<div>* {$msg}</div>
+				{/foreach}
+			</div>
+		{/if}
+
 
 	{if $nomailing == true } 
 
 		<div style="width:100%;">
 
-		{*<!--Decide what actions -> export,...-->*}
 			<span style="float: right; margin-right: 30px;">
 				<a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a>
 			</span>
@@ -33,11 +43,8 @@
 
 	
 	{else}
+	{* There are mailings to display *}
 	
-		{*<!--Decide what can we do with the mailings, export,...-->*}
-		{*<!--<span style="float: right;"><a href="subscribers_export.php?table={$table}&group_id={$group_id}">{t}Export to CSV{/t}</a> 
-			</span>-->*}
-
 		<div style="width:100%;">
 			<span style="float: right; margin-right: 30px;">
 				<a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a>
@@ -65,11 +72,10 @@
 	
 				{t}Order by:{/t}
 				<SELECT name="order" onChange="document.bForm.submit()">
-					<option value="id"{if $order == 'id'} SELECTED{/if}>id</option>
-					<option value="fromname"{if $order == 'fromname'} SELECTED{/if}>From Name</option>
+					{*<option value="id"{if $order == 'id'} SELECTED{/if}>id</option>*}
+					<option value="subject"{if $order == 'subject'} SELECTED{/if}>subject</option>
 					<option value="started"{if $order == 'started'} SELECTED{/if}>Start Date</option>
 					<option value="finished"{if $order == 'finished'} SELECTED{/if}>Finish Date</option>
-					<option value="subject"{if $order == 'subject'} SELECTED{/if}>subject</option>
 					<option value="mailgroup"{if $order == 'mailgroup'} SELECTED{/if}>Mail group</option>
 					<option value="sent"{if $order == 'sent'} SELECTED{/if}>Mails Sent</option>
 					<option value="ishtml"{if $order == 'ishtml'} SELECTED{/if}>HTML Mail</option>
@@ -106,19 +112,16 @@
 
 					<tr>
 							<td nowrap style="text-align:center;">{t}select{/t}</td>
-							<td nowrap style="text-align:center;">{t}view{/t}</td>
 							<td nowrap style="text-align:center;">{t}delete{/t}</td>
-  	{* <!--ID, From, Email, Bounce, Subject, Body, Is HTML, Mail Group,Subscribers, Started, Finished, Sent -->*}
-					  		<td nowrap style="text-align:center;"><b>{t}ID{/t}</b></td>
-					  		<td nowrap style="text-align:center;"><b>{t}Sender{/t}</b></td>
+							<td nowrap style="text-align:center;">{t}view{/t}</td>
+							<td nowrap style="text-align:center;">{t}reload{/t}</td>
 					  		<td nowrap style="text-align:center;"><b>{t}Subject{/t}</b></td>
-				  			<td nowrap style="text-align:center;"><b>{t}Send Date{/t}</b></td>
-					  		<td nowrap style="text-align:center;"><b>{t}Duration{/t}</b></td>
-					  		<td nowrap style="text-align:center;"><b>{t}Mailgroup{/t}</b></td>
-					  		<td nowrap style="text-align:center;"><b>{t}Subscribers{/t}</b></td>
+					  		<td nowrap style="text-align:center;"><b>{t}Mailgroup (Subscribers){/t}</b></td>
 					  		<td nowrap style="text-align:center;"><b>{t}Sent{/t}</b></td>
+				  			<td nowrap style="text-align:center;"><b>{t}Started{/t}</b></td>
+				  			<td nowrap style="text-align:center;"><b>{t}Finished{/t}</b></td>
+					  		<td nowrap style="text-align:center;"><b>{t}Duration{/t}</b></td>
 					  		<td nowrap style="text-align:center;"><b>{t}HTML{/t}</b></td>
- 	
 					</tr>
 
 			
@@ -131,25 +134,31 @@
 							</td>
 						
 							<td style="text-align:center;" nowrap>
-									<a href="mailings_mod.php?mailid={$mailitem.mailid}&action=view&limit={$limit}&order={$order}&orderType={$orderType}">{t}view{/t}</a>
+									<a href="mailings_mod.php?mailid={$mailitem.mailid}&action=delete">{t}delete{/t}</a>
 							</td>
 
 							<td style="text-align:center;" nowrap>
-									<a href="mailings_mod.php?mailid={$mailitem.mailid}&action=delete&limit={$limit}&order={$order}&orderType={$orderType}">{t}delete{/t}</a>
+									<a href="mailings_mod.php?mailid={$mailitem.mailid}&action=view">{t}view{/t}</a>
 							</td>
 
-							<td style="text-align:center;" nowrap>{$mailitem.mailid}</td>
-							<td nowrap>{$mailitem.fromname} &lt;{$mailitem.fromemail}&gt;</td>
+							<td style="text-align:center;" nowrap>
+									<a href="mailings_mod.php?mailid={$mailitem.mailid}&action=reload">
+									<img src="{$url.theme.shared}/images/icons/reload-small.png" border="0" alt="{t}Reload, edit and resend Mail{/t}"></a>{*<!--{t}reload{/t}-->*}
+							</td>
+
 							<td nowrap><i>{$mailitem.subject}</i></td>
-							<td style="text-align:center;" nowrap>{$mailitem.started}</td>
-							<td style="text-align:center;" nowrap>{$mailitem.duration|date_format:"%H:%M:%S"}</td>
-							<td style="text-align:center;" nowrap>{$mailitem.mailgroup}</td>
-							<td style="text-align:center;" nowrap>{$mailitem.subscriberCount}</td>
+							<td nowrap>{$mailitem.mailgroup} ({$mailitem.subscriberCount})</td>
 							<td style="text-align:center;" nowrap>{$mailitem.sent}</td>
+							<td style="text-align:center;" nowrap>{$mailitem.started|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+							<td style="text-align:center;" nowrap>{$mailitem.finished|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+							<td nowrap>{$mailitem.duration|date_format:"%H:%M:%S"} 
+							{if $mailitem.mpm}
+								({$mailitem.mpm} {t}mails p. minute{/t})</td>
+							{/if}
 							<td style="text-align:center;">
 							{if $mailitem.ishtml == 'on'}
 								<a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.mailid}" target="_blank">
-								<img src="{$url.theme.shared}/images/icons/viewhtml.png" border="0"></a>
+								<img src="{$url.theme.shared}/images/icons/viewhtml.png" border="0" alt="{t}View HTML in new browser window{/t}"></a>
 							{/if}
 							</td>
 							
