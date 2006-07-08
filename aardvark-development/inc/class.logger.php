@@ -34,7 +34,6 @@ class bmLogger {
 		$this->_messages = array();
 		$this->_log = FALSE;
 		$this->_verbosity = (defined('bm_verbosity'))? bm_verbosity : 3;
-		var_dump($this->_verbosity,bm_verbosity);
 	}
 	
 	function toggleLogging($toggle = TRUE) {
