@@ -116,8 +116,6 @@
 	</div>
 	{/if}
 	
-	{debug}
-	
  </form>
 
 </div>
