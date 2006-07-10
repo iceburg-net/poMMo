@@ -278,10 +278,11 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 			));
 	}
 	if (empty($_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id])) {
-		$_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id] = array();
-		$_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id]['genesis'] = time();
-		$_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id]['domainHistory'] = array();
+		$_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id] = array(
+			'genesis' => time(), 'domainHistory' => array()
+		);
 	}
+
 	
 	$throttler = & $_SESSION['pommo']['mailing']['throttler'];
 	
