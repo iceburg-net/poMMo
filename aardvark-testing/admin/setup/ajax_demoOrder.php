@@ -19,8 +19,8 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_fields.php');
 
 $poMMo = & fireup('secure');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 // key is order, value is demo ID
 function updateList($array) {

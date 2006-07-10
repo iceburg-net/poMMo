@@ -23,8 +23,8 @@ require_once (bm_baseDir . '/inc/lib.txt.php');
 require_once (bm_baseDir . '/inc/lib.mailings.php');
 
 $poMMo = & fireup('keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE

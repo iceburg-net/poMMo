@@ -18,64 +18,75 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 
 /** 
- * Common class. Stored in session. Holds Configuration values, authentication state, etc..
+ * Common class. Holds Configuration values, authentication state, etc.. (revived from session)
 */
 
 class Common {
-
-	var $_dbo; // the database object
-
+	
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_authenticated; // TRUE if user has successfully logged on.
-	var $_data; // Used to hold temporary data (such as an uploaded file's contents).. accessed via dataSet (sets), dataGet (returns), dataClear (deletes)
-	var $logger; // holds the logger class object
+	var $_data; // Used to hold temporary data (such as an uploaded file's contents).. accessed via set (sets), get (returns), clear(deletes)
+	var $_logger; // holds the logger class object
+	var $_dbo; // the database object
 	
 	// default constructor
-	function Common($arg = NULL) {
-		$this->_dbo = FALSE;
+	function Common() {
 		$this->_config = array ();
-		$this->_authenticated = FALSE;
-		$this->logger = new bmLogger();
-	}
-
-	// opens a connection to the database, returns the object. *removed* If TRUE is passed, a new connection will be made. Else, it will attempt to open an old one.
-	function & openDB() {
-		// don't create a new link if one already exists that we can use. Useful for pconnects + assigning dbo after fireup() -- as fireup loads a dbo to check versions
-		// drop mysql_ping.. PHP 4.3 required
-		//if (is_resource($this->_dbo->_link) && mysql_ping($this->_dbo->_link))  
-		if (is_resource($this->_dbo->_link))
-			return $this->_dbo;
 		
+		if (empty($_SESSION['pommo']['authenticated'])) {
+			$_SESSION['pommo']['authenticated'] = FALSE;
+		}
+		$this->_authenticated = & $_SESSION['pommo']['authenticated'];
+		
+		if (empty($_SESSION['pommo']['data'])) {
+			$_SESSION['pommo']['data'] = array();
+		}
+		$this->_data = & $_SESSION['pommo']['data'];
+		
+		// initialize logger
+		$this->_logger = new bmLogger(); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
+		
+		// initialize database object
 		global $bmdb;
-					
 		$this->_dbo = new dbo($bmdb['username'], $bmdb['password'], $bmdb['database'], $bmdb['hostname'], $bmdb['prefix']);
-			
+		
+		// if debugging is set in config.php, enable debugging on the database.
 		if (bm_debug == 'on') {
-			$this->_dbo->debug(TRUE);
+			$this->dbo->debug(TRUE);
+		}
+	}
+
+	// Loads configuration data from SESSION. If optional argument is supplied, configuration will be loaded from
+	// the database & stored in SESSION.
+	
+	// NOTE: must be called after a proper session_start
+	function loadConfig($fromDB = FALSE) {
+		
+		// if fromDB is passed, or config data is not in SESSION, attempt to load.
+		if ($fromDB || empty($_SESSION['pommo']['config'])) {
+			
+			$_SESSION['pommo']['config'] = array();
+			$dbo = & $this->_dbo;
+			
+			$dbo->dieOnQuery(FALSE);	
+			$sql = 'SELECT * FROM '.$dbo->table['config'].' WHERE autoload=\'on\'';
+			if ($dbo->query($sql)) {
+				while ($row = mysql_fetch_assoc($dbo->_result))
+					$_SESSION['pommo']['config'][$row['config_name']] = $row['config_value'];
+			}
+			$dbo->dieOnQUery(TRUE);		
 		}
 		
-		return $this->_dbo;
-	}
-
-	// Loads all autoloading config data from DB. Returns true if configuration data has been set to _config array
-	function loadConfig() {
-		$dbo = & $this->openDB();
-		$dbo->dieOnQuery(FALSE);	
-	
-
-		$sql = 'SELECT * FROM '.$dbo->table['config'].' WHERE autoload=\'on\'';
-		if ($dbo->query($sql)) {
-			while ($row = mysql_fetch_assoc($dbo->_result))
-				$this->_config[$row['config_name']] = $row['config_value'];
-		}
-		$dbo->dieOnQUery(TRUE);
+		$this->_config = & $_SESSION['pommo']['config'];
+		
 		return (!empty ($this->_config['version'])) ? true : bmKill('poMMo does not appear to be set up.' .
-				'Have you <a href="'.bm_baseUrl.'/install/install.php">Installed?</a>');
+					'Have you <a href="'.bm_baseUrl.'/install/install.php">Installed?</a>');
 	}
 	
-	// Gets specified config value(s) from the DB. Pass a single or array of config_names
+	// Gets specified config value(s) from the DB. 
+	// Pass a single or array of config_names, returns array of their name>value.
 	function getConfig($arg) {
-		$dbo = & $this->openDB();
+		$dbo = & $this->_dbo;
 		$dbo->dieOnQuery(FALSE);
 		if (!is_array($arg))
 			$arg = array($arg);
@@ -99,26 +110,19 @@ class Common {
 	}
 
 	// Set's authentication variable. TRUE = authenticated, FALSE/NULL = NOT... 
+	// NOTE: must be called after proper session_start()
+	// $this->_authenticated references $_SESSION['pommo']['authenticated'] in class constructor
 	function setAuthenticated($var) {
 		return ($this->_authenticated = $var) ? true : false;
 	}
 
-	// PHASE OUT data*()   -- favor > store(), get(), keep()
-	function dataSet($val) {
-		return ($this->_data = $val) ? true : false;
-	}
-	
-	function & dataGet() {
-		if (empty ($this->_data))
-			$this->_data = NULL;
-		return $this->_data;
-	}
 
-	// PHASE OUT -> rename to clear  when all references to data*() are gone
-	function dataClear() {
+	// deletes stored data in SESSION [not authentication state or config values]
+	function clear() {
 		return ($this->_data = array()) ? true : false;
 	}
 	
+	// merges data into SESSION ($this->_data references $_SESSION['pommo']['data'] in class constructor)
 	function set($value) {
 		if (!is_array($value))
 			$value = array($value);

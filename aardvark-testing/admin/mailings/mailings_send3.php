@@ -23,8 +23,10 @@ require_once (bm_baseDir . '/inc/lib.txt.php');
 require_once (bm_baseDir.'/inc/db_sqlgen.php');
 
 $poMMo = & fireup('secure', 'keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
+
+//print_r($poMMo->dataGet());
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -33,7 +35,7 @@ $smarty = & bmSmartyInit();
 
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
-	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>'));
+	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 
 $input = $poMMo->get();
@@ -61,16 +63,18 @@ if (!empty($_POST['testMail'])) {
 
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
 if (!empty ($_GET['sendaway'])) {
-	
-	$securityCode = dbMailingCreate($dbo, $input);
-	dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
-	
-	dpoMMoingStamp($dbo, "start");
-	
-	bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
-	sleep(1); // allows mailing to begin...
-	bmRedirect('mailing_status.php');
+	if (intval($subscriberCount) >= 1) {
+		$securityCode = dbMailingCreate($dbo, $input);
+		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
+		dbMailingStamp($dbo, "start");
+		bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
+		sleep(1); // allows mailing to begin...
+		bmRedirect('mailing_status.php');
 	}
+	else {
+		$logger->addMsg(_T('Cannot send a mailing to 0 subscribers!'));
+	}
+}
 
 $smarty->assign($input);
 $smarty->display('admin/mailings/mailings_send3.tpl');

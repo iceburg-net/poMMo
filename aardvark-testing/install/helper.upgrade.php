@@ -781,15 +781,36 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					bmBumpVersion($dbo, $revision, "Aardvark PR11.2c");
 			}
 			
+			$revision = 23;
+				
+			break;
+			
+		case 23: // AARDVARK PR12
+		
+			if ($dbRev < $revision) {
+				
+				$sqlA = array();
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['mailing_history'] . '` CHANGE `started` `started` DATETIME NOT NULL , CHANGE `finished` `finished` DATETIME NOT NULL ';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['mailing_current'] . '` CHANGE `started` `started` DATETIME NOT NULL , CHANGE `finished` `finished` DATETIME NOT NULL ';
+				if (!performUpdate($sqlA, $dbo, 73, 'Updating mailing timestamps'))
+					$failed = TRUE;
+					
+			
+				// bump version
+				if (!$failed)
+					bmBumpVersion($dbo, $revision, "Aardvark PR12");
+			}
+			
 			// follows last case
 			if ($failed)
 				return FALSE;
 			return TRUE;
 			
-			$revision = 23;
-				
 			break;
 			
+			$revision = 24;
+			
+		
 		default :
 			die('Unknown Revision passed to upgrade function - ' . $revision);
 			break;

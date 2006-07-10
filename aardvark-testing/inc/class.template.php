@@ -36,10 +36,10 @@ class bTemplate extends Smarty {
 				$resource_name = $this->_themeDir.'default/'.$resource_name;
 		
 		global $poMMo;
-		if ($poMMo->logger->isMsg()) 
-			$this->assign('messages',$poMMo->logger->getMsg());
-		if ($poMMo->logger->isErr())
-			$this->assign('errors',$poMMo->logger->getErr());
+		if ($poMMo->_logger->isMsg()) 
+			$this->assign('messages',$poMMo->_logger->getMsg());
+		if ($poMMo->_logger->isErr())
+			$this->assign('errors',$poMMo->_logger->getErr());
 		
 		return parent::display($resource_name, $cache_id = null, $compile_id = null, $display = false);;
 	}
@@ -76,14 +76,12 @@ class bTemplate extends Smarty {
 		// assign email & field values if they exist in POST
 		require_once(bm_baseDir.'/inc/lib.txt.php');
 		
-		// process.php stores form values in Session (so they don't get lost). Attempt to reload them
-		$input = $poMMo->get();
-		if (isset($input['saveSubscribeForm'])) {
-			$_POST = $input['saveSubscribeForm'];
-			$poMMo->dataClear(); // TODO -> should poMMo data be cleared once "gotten" --> like the logger..?
+		// process.php appends serialized values to _GET['input']
+		if (isset($_GET['input'])) {
+			$this->assign(unserialize($_GET['input']));
 		}
+		
 		$this->assign($_POST);
-
 	}
 }
 ?>

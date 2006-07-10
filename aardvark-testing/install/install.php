@@ -23,8 +23,8 @@ require_once (bm_baseDir . '/install/helper.upgrade.php');
 session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
 
 $poMMo = & fireup('install');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 $dbo->dieOnQuery(FALSE);
 
 
@@ -100,7 +100,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				dbUpdateConfig($dbo, $_POST);
 
 				// load configuration, set message defaults.
-				$poMMo->loadConfig();
+				$poMMo->loadConfig('TRUE');
 				dbResetMessageDefaults('all');
 
 				$logger->addMsg(_T('Installation Complete! You may now login and setup poMMo.'));

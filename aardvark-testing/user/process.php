@@ -22,16 +22,17 @@ require_once (bm_baseDir . '/inc/db_fields.php');
 require(bm_baseDir.'/inc/lib.validate_subscriber.php');
 
 $poMMo = & fireup();
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
+
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
 
-// STORE input
-$poMMo->set(array('saveSubscribeForm' => $_POST));
+// STORE user input. Input is appended to referer URL via HTTP_GET
+$input = urlencode(serialize($_POST));
 
 /**********************************
 	VALIDATE INPUT
@@ -43,6 +44,13 @@ if (empty ($_POST['pommo_signup']))
 // check if errors exist, if so print results and die.
 if (!validateSubscribeForm()) {
 	$smarty->assign('back', TRUE);
+	
+	// attempt to detect if referer was set 
+	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : bm_http.bm_baseUrl.'/user/subscribe.php';
+	
+	// append stored input
+	$smarty->assign('referer',$referer.'?input='.$input);
+	
 	$smarty->display('user/process.tpl');
 	bmKill();
 }
@@ -69,7 +77,7 @@ $config = $poMMo->getConfig(array (
 $redirectURL = FALSE;
 if (!empty ($config['site_confirm']) && $config['list_confirm'] == 'on')
 	$redirectURL = $config['site_confirm'];
-elseif (!empty ($config['site_success']) && $config['list_confirm'] == 'off') 
+elseif (!empty ($config['site_success']) && $config['list_confirm'] != 'on') 
 	$redirectURL = $config['site_success'];
 
 if ($config['list_confirm'] == 'on') { // email confirmation required

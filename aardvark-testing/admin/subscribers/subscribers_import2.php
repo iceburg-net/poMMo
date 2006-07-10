@@ -23,8 +23,8 @@ require_once (bm_baseDir.'/inc/lib.import.php');
 require_once (bm_baseDir.'/inc/db_fields.php');
 
 $poMMo = & fireup('secure','keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -78,14 +78,13 @@ if (!empty($_GET['import'])) { // check to see if we should import
 	
 }
 elseif (!empty($_POST['preview'])) { // check to see if a preview has been requested
-
+	
 	// prepare csvArray for import
-	$importArray = csvPrepareImport($poMMo, $dbo, $fields,$csvArray['csvFile'],$_POST['field']);
+	$importArray = csvPrepareImport($fields,$csvArray['csvFile'],$_POST['field']);
 	
 	// get count of subscribers to be imported
 	$totalImported = count($importArray['valid'])+count($importArray['invalid']);
 	$totalInvalid = count($importArray['invalid']);
-	
 	
 	$totalDuplicate = count($importArray['duplicate']);
 	if ($totalDuplicate)
@@ -93,7 +92,7 @@ elseif (!empty($_POST['preview'])) { // check to see if a preview has been reque
 		
 	// save Array to session
 	$sessionArray['importArray'] = & $importArray;
-	$poMMo->dataSet($sessionArray);
+	$poMMo->set($sessionArray);
 		
 
 	$confirm = array('nourl' => 'subscribers_import2.php','yesurl' => 'subscribers_import2.php?import=TRUE');

@@ -22,8 +22,8 @@ require ('../bootstrap.php');
 require_once (bm_baseDir . '/install/helper.upgrade.php');
 
 $poMMo = & fireup('install');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 $dbo->dieOnQuery(FALSE);
 
 /**********************************
@@ -37,7 +37,7 @@ $smarty->clear_all_cache();
 
 $smarty->prepareForForm();
 
-$poMMo->loadConfig();
+$poMMo->loadConfig('TRUE');
 
 // Check to make sure poMMo is not already installed.
 if ($poMMo->_config['revision'] == pommo_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {

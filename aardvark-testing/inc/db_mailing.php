@@ -17,6 +17,11 @@ elsewhere
 */
 defined('_IS_VALID') or die('Move along...');
 
+// Cool DB Query Wrapper from Monte Ohrt
+// TODO -> merge this into class.dbo.php ( or rewrite $dbo->query() to use this class)-- DO NOT require it here
+require_once (bm_baseDir . '/inc/safesql/SafeSQL.class.php');
+
+
 // reads in an array of email addresses and inserts them into the queue table
 function dbQueueCreate(& $dbo, & $input) {
 	if (!is_array($input))
@@ -38,7 +43,7 @@ function dbQueueCreate(& $dbo, & $input) {
 	return $dbo->query($sql);
 }
 
-// Returns an array of emails + their domain from the queue. 
+// Returns an array of emails + their domain from the queue. defaults to 100 at a time 
 function & dbQueueGet(& $dbo, $id = '1', $limit = 100) {
 
 	// purge our working queue
@@ -99,7 +104,7 @@ function dbMailingCreate(& $dbo, & $input) {
 	return $code;
 }
 
-function dpoMMoingStamp(& $dbo, $arg) {
+function dbMailingStamp(& $dbo, $arg) {
 	switch ($arg) {
 		case 'start' :
 			$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET started=NOW()';
@@ -123,21 +128,22 @@ function dbMailingPoll($dbo, $serial = '') {
 	$dbo->query($sql);
 	$row = mysql_fetch_row($dbo->_result);
 	
-	if ($row[2] != $serial) {
-		bmMKill('Serials do not match, a different process has taken control?');
+	global $skipSecurity;
+	if ($row[2] != $serial && !$skipSecurity) {
+		bmMKill('Serials do not match, a different process has taken control?',TRUE);
 	}
 	if ($row[0] == "stop") { // if script was sent the "stop" command...
 		$sql = "UPDATE {$dbo->table['mailing_current']} SET status='stopped', command='none'";
 		$dbo->query($sql);
-		bmMKill('Mail processing has stopped as per Administrator\'s request');
+		bmMKill('Mail processing has stopped as per Administrator\'s request',TRUE);
 	}
 	elseif ($row[1] == "stopped") { // if mailing is in "stopped" status...
-		bmMKill('Mail processing is in halted state. You must restart the mailing...');
+		bmMKill('Mail processing is in halted state. You must restart the mailing...',TRUE);
 	}
 	return true;
 }
 
-function dpoMMoingUpdate(& $dbo, & $sentMails) {
+function dbMailingUpdate(& $dbo, & $sentMails) {
 	global $logger;
 	
 	// update DB
@@ -152,9 +158,47 @@ function dpoMMoingUpdate(& $dbo, & $sentMails) {
 	return;
 }
 
-function dpoMMoingEnd(&$dbo) {
- 	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM '.$dbo->table['mailing_current'].' LIMIT 1';
+
+// Write a Mail that is being sent to the mailing history
+function dbMailingEnd(&$dbo) {
+
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("SELECT mailgroup FROM %s LIMIT 1", array( $dbo->table['mailing_current'] ) );
+  	$dbo->query($sql);
+	$row = mysql_fetch_assoc($dbo->_result);
+ 
+ 	if ($row['mailgroup'] == "all") {
+
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
+			mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, 
+			body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM %s LIMIT 1",
+			array ($dbo->table['mailing_history'], $dbo->table['mailing_current']) );
+ 	
+ 	} elseif (is_numeric($row['mailgroup'])) {
+ 
+		$safesql =& new SafeSQL_MySQL;
+		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
+			mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, 
+			body, altbody, ishtml, (SELECT group_name FROM %s WHERE group_id=(SELECT mailgroup FROM %s LIMIT 1 ) 
+			LIMIT 1 ), subscriberCount, started, finished, sent FROM %s LIMIT 1",
+			array ($dbo->table['mailing_history'], $dbo->table['groups'], $dbo->table['mailing_current'], 
+			$dbo->table['mailing_current']) );
+
+	} else {
+		//Not numeric and not ALL
+		//logger
+	}
+
+/* 	Brice:
+ 	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, 
+ 	altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, 
+ 	subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent 
+ 	FROM '.$dbo->table['mailing_current'].' LIMIT 1';
+ */
+ 	
  	$dbo->query($sql);
+
  	
  	$sql = 'TRUNCATE TABLE '.$dbo->table['mailing_current'];
 	$dbo->query($sql);
@@ -168,16 +212,23 @@ function mailingQueueEmpty(& $dbo) {
 	return ($dbo->query($sql,0)) ? false : true;
 }
 
+// TODO -> don't pass $dbo to the following 2 functions...
+	
 function & bmInitMailer(& $dbo, $relay_id = 1) {
+	/*
 	if (isset ($_SESSION["bMailer_" . $relay_id]))
 		return $_SESSION["bMailer_" . $relay_id];
-
+	*/
+	
+	if (empty($_SESSION['pommo']['mailing'])) {
+		$sql = "SELECT ishtml,fromname,fromemail,frombounce,subject,body,altbody,charset FROM " . $dbo->table['mailing_current'];
+		$dbo->query($sql);
+		$_SESSION['pommo']['mailing'] = $dbo->getRows($sql);
+	}
+	$row = & $_SESSION['pommo']['mailing'];
+	
 	global $poMMo;
 	global $logger;
-
-	$sql = "SELECT ishtml,fromname,fromemail,frombounce,subject,body,altbody,charset FROM " . $dbo->table['mailing_current'];
-	$dbo->query($sql);
-	$row = mysql_fetch_assoc($dbo->_result);
 
 	$html = FALSE;
 	$altbody = NULL;
@@ -187,45 +238,81 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 			$altbody = db2mail($row['altbody']);
 	}
 
-	// load new bMailer into session
-	$_SESSION["bMailer_" . $relay_id] = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce'], NULL, NULL, $row['charset']);
-
-	// reference it as $Mail
-	$bmMailer = & $_SESSION["bMailer_" . $relay_id];
+	$bMailer = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce'], $poMMo->_config['list_exchanger'], NULL, $row['charset']);
 	
 	$logger->addMsg('bmMailer initialized with relay ID #'.$relay_id,1);
 
 	// prepare the Mail with prepareMail()	-- if it fails, stop the mailing & report errors.
-	if (!$bmMailer->prepareMail(db2mail($row['subject']), db2mail($row['body']), $html, $altbody)) {
-		$logger->addMsg(_T('Error Sending Mail'));
+	if (!$bMailer->prepareMail(db2mail($row['subject']), db2mail($row['body']), $html, $altbody)) {
+		$logger->addMsg(_T('prepareMail() returned errors.'));
 		$sql = 'UPDATE '.$dbo->table['mailing_current'].' SET status=\'stopped\', notices=CONCAT_WS(\',\',notices,\''. mysql_real_escape_string(array2csv($logger->getMsg())) .'\')';
 		$dbo->query($sql);
-		bmMKill('prepareMail() returned errors.');
+		bmMKill('prepareMail() returned errors.',TRUE);
 	}
 
 	// Set the appropriate SMTP relay and keep SMTP connection up
 	if ($poMMo->_config['list_exchanger'] == 'smtp') {
-		$bmMailer->setRelay($poMMo->_config['smtp_' . $relay_id]);
-		$bmMailer->SMTPKeepAlive = TRUE;
+		$bMailer->setRelay($poMMo->_config['smtp_' . $relay_id]);
+		$bMailer->SMTPKeepAlive = TRUE;
 	}
-	return $bmMailer;
+	return $bMailer;
 }
 
 function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
+	
+	/*
 	if (isset ($_SESSION["bThrottle_" . $relay_id]))
 		return $_SESSION["bThrottle_" . $relay_id];
+	*/
 
 	global $poMMo;
+	
+	if (empty($_SESSION['pommo']['mailing']['throttler'])) {
+		$_SESSION['pommo']['mailing']['throttler'] = 
+			$poMMo->getConfig(array (
+				'throttle_MPS',
+				'throttle_BPS',
+				'throttle_DP',
+				'throttle_DMPP',
+				'throttle_DBPP'
+			));
+	}
+	if (empty($_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id])) {
+		$_SESSION['pommo']['mailing']['throttler']['relay'.$relay_id] = array(
+			'genesis' => time(), 'domainHistory' => array()
+		);
+	}
 
-	$config = $poMMo->getConfig(array (
-		'throttle_MPS',
-		'throttle_BPS',
-		'throttle_DP',
-		'throttle_DMPP',
-		'throttle_DBPP'
-	));
-
-	$_SESSION["bThrottle_" . $relay_id] = new bThrottler(time(), $queue, $config['throttle_MPS'], intval($config['throttle_BPS'] * 1024), $config['throttle_DP'], $config['throttle_DMPP'], intval($config['throttle_DBPP'] * 1024));
-	return $_SESSION["bThrottle_" . $relay_id];
+	
+	$throttler = & $_SESSION['pommo']['mailing']['throttler'];
+	
+	return new bThrottler(
+		$throttler['relay'.$relay_id]['genesis'],
+		$queue,
+		$throttler['throttle_MPS'],
+		intval($throttler['throttle_BPS'] * 1024),
+		$throttler['throttle_DP'],
+		$throttler['throttle_DMPP'],
+		intval($throttler['throttle_DBPP'] * 1024),
+		$throttler['relay'.$relay_id]['domainHistory']
+		);
 }
+
+
+//ct Get the ID for a group_name
+function & getGroupID($dbo, $groupname) {
+
+	$safesql =& new SafeSQL_MySQL;
+	$sql = $safesql->query("SELECT group_id FROM %s WHERE group_name='%s' LIMIT 1",
+		array ($dbo->table['groups'], $groupname) );
+		
+	$dbo->query($sql);
+	$row = mysql_fetch_assoc($dbo->_result);
+	
+	return $row['group_id'];
+
+} //getGroupID
+//end ct
+
+
 ?>

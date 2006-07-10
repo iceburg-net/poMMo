@@ -20,9 +20,8 @@ require('../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_subscribers.php');
 
 $poMMo = & fireup();
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
-$poMMo->loadConfig();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
