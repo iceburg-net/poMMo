@@ -22,8 +22,8 @@ require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_procedures.php');
 
 $poMMo = & fireup('secure');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -122,7 +122,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		dbUpdateConfig($dbo, $_POST);
 
-		$poMMo->loadConfig();
+		$poMMo->loadConfig('TRUE');
 
 		$logger->addMsg(_T('Configuration Updated.'));
 

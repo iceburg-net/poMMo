@@ -1,4 +1,5 @@
 <?php
+
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -12,21 +13,22 @@
  ** [END HEADER]**/
 
 /**********************************
-	INITIALIZATION METHODS
+	STARTUP ROUTINES
  *********************************/
+
 define('_IS_VALID', TRUE);
+require ('../bootstrap.php');
 
-require('../../bootstrap.php');
+$poMMo = & fireup('install');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+// Tests the background Mail processor. Spawned via httpspawn. Write the time to cache directory
 
-/**********************************
-	SETUP TEMPLATE, PAGE
- *********************************/
-$smarty = & bmSmartyInit();
-	
-$smarty->display('admin/subscribers/admin_subscribers.tpl');
-bmKill();
+if (!$handle = fopen(bm_workDir . '/test.php', 'w')) {
+	die();
+}
+
+$fileContent = '<?php $testTime=' . time() . '; ?>';
+
+fwrite($handle, $fileContent);
+fclose($handle);
 ?>

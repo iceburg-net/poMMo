@@ -15,6 +15,12 @@
 	STARTUP ROUTINES
  *********************************/
 
+// skips serial and security code checking. For debbuing this script.
+$skipSecurity = TRUE;
+
+// # of mails to fetch from the queue at a time
+$queueSize = 3;
+
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
 require (bm_baseDir . '/inc/class.bmailer.php');
@@ -25,15 +31,15 @@ $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $bm_sessionName = $serial;
 
 $poMMo = & fireup('sessionName');
-$poMMo->loadConfig();
-$dbo = & $poMMo->openDB();
-$dbo->dieOnQuery(FALSE);
+$dbo = & $poMMo->_dbo;
+$dbo->dieOnQuery(FALSE); // TODO -> what was this for? isn't it somewhat dangerous?
 
+// load from config -- DOS protection, throttle values...
 
-$logger = & $poMMo->logger;
-$logger->addMsg(sprintf(_T('Background script with serial %d spawned'), $serial), 3);
+$logger = & $poMMo->_logger;
 
 if (empty ($poMMo->_config['list_exchanger'])) {
+	$logger->addMsg(sprintf(_T('Mailing processor with serial %d spawned'), $serial), 3);
 	// get list exchanger & smtp values. If more than 1 smtp relay exist, enter "multimode"
 	$config = $poMMo->getConfig(array (
 		'list_exchanger',
@@ -55,25 +61,30 @@ if (empty ($poMMo->_config['list_exchanger'])) {
 		if (!empty ($config['smtp_2'])) {
 			$poMMo->_config['multimode'] = true;
 			$poMMo->_config['smtp_2'] = unserialize($config['smtp_2']);
-			$logger->addMsg('SMTP Relay #2 detected, multimode enabled.', 1);
+			$logger->addMsg('SMTP Relay #2 detected', 1);
 		}
 		if (!empty ($config['smtp_3'])) {
 			$poMMo->_config['multimode'] = true;
 			$poMMo->_config['smtp_3'] = unserialize($config['smtp_3']);
-			$logger->addMsg('SMTP Relay #3 detected, multimode enabled.', 1);
+			$logger->addMsg('SMTP Relay #3 detected', 1);
 		}
 		if (!empty ($config['smtp_4'])) {
 			$poMMo->_config['multimode'] = true;
 			$poMMo->_config['smtp_4'] = unserialize($config['smtp_4']);
-			$logger->addMsg('SMTP Relay #4 detected, multimode enabled.', 1);
+			$logger->addMsg('SMTP Relay #4 detected', 1);
 		}
 		if ($config['throttle_SMTP'] == 'individual')
 			$poMMo->_config['throttler'] = 'individual';
 		$logger->addMsg('SMTP Throttle control set to: ' . $poMMo->_config['throttler'], 1);
+		if ($poMMo->_config['multimode'])
+			$logger->addMsg('multimode enabled', 1);
 	}
+} else {
+	$logger->addMsg(sprintf(_T('Mailing processor with serial %d spawned'), $serial), 2);
 }
 
-function bmMKill($reason) {
+// cleanup function called just before script termination
+function bmMKill($reason, $killSession = FALSE) {
 	global $logger;
 	global $dbo;
 
@@ -82,23 +93,23 @@ function bmMKill($reason) {
 	// deduct value (this script) from DOS mail processor protection.
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=config_value-1 WHERE config_name=\'dos_processors\' LIMIT 1';
 	$dbo->query($sql);
-	
-	$x = $logger->getMsg();
-	
+
 	// update DB notices
-	$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET notices=CONCAT_WS(\',\',notices,\'' . mysql_real_escape_string(array2csv($x)) . '\')';
+	$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET notices=CONCAT_WS(\',\',notices,\'' . mysql_real_escape_string(array2csv($logger->getMsg())) . '\')';
 	$dbo->query($sql);
+	
+	if ($killSession)
+		session_destroy();
 
 	bmKill($reason);
 }
-
 
 /**********************************
 	SECURITY ROUTINES
  *********************************/
 
 // DOS prevention
-if ($poMMo->_config['dos_processors'] > 5)
+if ($poMMo->_config['dos_processors'] > 5 && !$skipSecurity)
 	die();
 else {
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=config_value+1 WHERE config_name=\'dos_processors\' LIMIT 1';
@@ -110,22 +121,27 @@ $sql = 'SELECT serial,securityCode,command,finished FROM ' . $dbo->table['mailin
 $dbo->query($sql);
 $row = mysql_fetch_assoc($dbo->_result);
 
-if (empty ($row['securityCode']) || $_GET['securityCode'] != $row['securityCode'])
-	bmMKill('Script stopped for security reasons.');
-elseif ($row['finished'] > 0) bmMKill('Mailing has completed.');
-elseif (empty ($row['serial'])) { // if no serial has yet been entered for this mailing... serialize & start the mailing...
+if ($row['finished'] > 0)
+	bmMKill('Mailing has completed.',TRUE);
+	
+
+if (empty ($row['serial'])) { // if no serial has yet been entered for this mailing... serialize & start the mailing...
 	$sql = "UPDATE {$dbo->table['mailing_current']} SET serial='" . $serial . "', status='started', command='none'";
 	$dbo->query($sql);
 }
+
+if (!$skipSecurity && (empty($row['securityCode']) || $_GET['securityCode'] != $row['securityCode']))
+	bmMKill('Script stopped for security reasons.',TRUE);
 elseif ($row['serial'] != $serial) {
 	// if this script's serial & the mailings don't match, check if a restart command was given, or else kill the script.
 	if ($row['command'] == 'restart') {
 		$sql = "UPDATE {$dbo->table['mailing_current']} SET serial='" . $serial . "', command='none', status='started'";
 		$dbo->query($sql);
 		$logger->addMsg('Mailing resumed under script with serial ' . $serial, 3);
-	} else
-		bmMKill('Serials do not match. Another script is probably processing this mailing. To take control, stop and restart the mailing.');
+	} elseif (!$skipSecurity)
+		bmMKill('Serials do not match. Another script is probably processing this mailing. To take control, stop and restart the mailing.',TRUE);
 }
+
 
 /**********************************
  * MAILING INITIALIZATION
@@ -138,22 +154,26 @@ dbMailingPoll($dbo, $serial);
 if ($poMMo->_config['multimode']) {
 	if (empty ($_GET['relay_id'])) {
 		if (!empty ($poMMo->_config['smtp_1']))
-			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=1&serial=' .
+			bmHttpSpawn(bm_baseUrl .
+			'/admin/mailings/mailings_send4.php?relay_id=1&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
-		sleep(1); // delay to help prevent "shared" throttlers racing to create queue
+		sleep(2); // delay to help prevent "shared" throttlers racing to create queue
 		if (!empty ($poMMo->_config['smtp_2']))
-			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=2&serial=' .
+			bmHttpSpawn(bm_baseUrl .
+			'/admin/mailings/mailings_send4.php?relay_id=2&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		if (!empty ($poMMo->_config['smtp_3']))
-			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=3&serial=' .
+			bmHttpSpawn(bm_baseUrl .
+			'/admin/mailings/mailings_send4.php?relay_id=3&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		if (!empty ($poMMo->_config['smtp_4']))
-			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=4&serial=' .
+			bmHttpSpawn(bm_baseUrl .
+			'/admin/mailings/mailings_send4.php?relay_id=4&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		bmMKill('Multimode detected. Spawning background scripts for SMTP relays.');
 	}
 	$bmMailer = & bmInitMailer($dbo, $_GET['relay_id']);
-	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id']);
+	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id'], $queueSize);
 
 	if ($poMMo->_config['throttler'] == 'individual')
 		$bmThrottler = & bmInitThrottler($dbo, $bmQueue, $_GET['relay_id']);
@@ -161,16 +181,16 @@ if ($poMMo->_config['multimode']) {
 		$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
 } else {
 	$bmMailer = & bmInitMailer($dbo);
-	$bmQueue = & dbQueueGet($dbo);
+	$bmQueue = & dbQueueGet($dbo, 1, $queueSize);
 	$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
 }
 
-// set maximum runtime of this script in seconds
+// set maximum runtime of this script in seconds. If unable to set, set max runtime to 7 seconds less than current max.
 $maxRunTime = 110;
 if (ini_get('safe_mode'))
-	$maxRunTime = ini_get('max_execution_time') - 7;
+	$maxRunTime = ini_get('max_execution_time') - 3;
 else
-	set_time_limit($maxRunTime +7);
+	set_time_limit($maxRunTime +3);
 
 // start throttler's timer
 $bmThrottler->startScript($maxRunTime);
@@ -193,11 +213,9 @@ $timer = time();
 function updateDB(& $sentMails, & $timer) {
 	global $serial;
 	global $dbo;
-	global $bmThrottler;
-	global $logger;
 
 	// update mailing status in database and flush sent mails from queue
-	dpoMMoingUpdate($dbo, $sentMails);
+	dbMailingUpdate($dbo, $sentMails);
 
 	// poll mailing	
 	dbMailingPoll($dbo, $serial);
@@ -236,7 +254,7 @@ function proccessQueue() {
 				$bmThrottler->updateBytes($bytes, $mail[1]);
 			else
 				$bmThrottler->updateBytes($bytes);
-			$logger->addMsg('Added ' . $bytes . ' to throttler.', 1);
+			$logger->addMsg('Added ' . $bytes . ' bytes to throttler.', 1);
 		}
 
 		// add email to sent mail array
@@ -247,7 +265,7 @@ function proccessQueue() {
 
 	// Every 10-ish seconds, or to prevent MySQL update "flood", launch updateDB() which; 
 	// updates mailing status in database, removes sent mails from queue, and perform a "poll" 
-	if ((time() - $timer) > 10 || count($sentMails) > 40 || $logger->isMsg() > 40)
+	if ((time() - $timer) > 9 || count($sentMails) > 40 || $logger->isMsg() > 40)
 		updateDB($sentMails, $timer);
 
 	// recurisve call to processQueue()
@@ -261,32 +279,43 @@ while (proccessQueue()) {
 
 	// fetch emails from queue
 	$bmQueue = array ();
-	if (!empty ($_GET['relay_id']))
-		$bmQueue = & dbQueueGet($dbo, $_GET['relay_id']);
-	else
-		$bmQueue = & dbQueueGet($dbo);
+	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id'], $queueSize);
+	
 
 	// if queue is empty, end mailing and kill script.	
-	if (empty ($bmQueue)) {
-		dpoMMoingStamp($dbo, "finished");
+	if (empty($bmQueue)) {
+		if ($poMMo->_config['multimode']) {
+			// before killing check to see if we're in multimode and queue is truly empty
+			$sql = 'SELECT COUNT(*) FROM ' . $dbo->table['queue'] . ' LIMIT 1';
+			if ($dbo->query($sql,0)) {
+				// the queue is not empty, another relay is working on it. Sleep 10 seconds then break (respawn)
+				sleep(10);
+				break;
+			}
+		}
+		
+		dbMailingStamp($dbo, "finished");
 		if ($bmMailer->SMTPKeepAlive == TRUE)
 			$bmMailer->SmtpClose();
-		bmMKill('Mailing finished!');
+		bmMKill('Mailing finished!',TRUE);
 	}
-
+	else {
 	// else, repopulate throttler's queue
 	$bmThrottler->loadQueue($bmQueue);
 	$logger->addMsg('Adding more mails to the throttler queue.', 1);
+	}
 }
 
 updateDB($sentMails, $timer);
 
 // kill signal sent from throttler (max exec time likely reached), respawn.	
 if (!empty ($_GET['relay_id']))
-	bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?relay_id=' .
+	bmHttpSpawn(bm_baseUrl .
+	'/admin/mailings/mailings_send4.php?relay_id=' .
 	$_GET['relay_id'] . '&serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 else
-	bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
+	bmHttpSpawn(bm_baseUrl .
+	'/admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 
 bmMKill('Respawned... Max exec time likely reached.');
 

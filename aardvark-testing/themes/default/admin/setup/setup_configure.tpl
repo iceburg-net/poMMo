@@ -103,14 +103,14 @@
 		<div class="field">
 			<label for="demo_mode">{t}Demonstration Mode:{/t} </label>
 			<input type="radio" name="demo_mode" value="on" {if $demo_mode == 'on'}checked{/if}>on
-			<input type="radio" name="demo_mode" value="" {if $demo_mode != 'on'}checked{/if}>off
+			<input type="radio" name="demo_mode" value="off" {if $demo_mode != 'on'}checked{/if}>off
 			<div class="notes">{t}(Toggle Demonstration Mode){/t}</div>
 		</div>
 		
 		<div class="field">
 			<label for="list_confirm">{t}Email Confirmation:{/t} </label>
 			<input type="radio" name="list_confirm" value="on" {if $list_confirm == 'on'}checked{/if}>on
-			<input type="radio" name="list_confirm" value="" {if $list_confirm != 'on'}checked{/if}>off
+			<input type="radio" name="list_confirm" value="off" {if $list_confirm != 'on'}checked{/if}>off
 			<div class="notes">{t}(Set to validate email upon subscription attempt.){/t}</div>
 		</div>
 		

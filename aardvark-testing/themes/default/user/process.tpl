@@ -3,7 +3,7 @@
 <div id="header"><h1>{t}Subscription Review{/t}</h1></div>
 
 {if $back}
-<a href="#" onclick="history.back()">
+<a href="{$referer}">
 		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t website=$config.site_name}Back to Subscription Form{/t}</a>
 {else}

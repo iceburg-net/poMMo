@@ -21,8 +21,8 @@ require_once (bm_baseDir . '/inc/db_mailing.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
 $poMMo = & fireup('secure', 'keep');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -32,7 +32,7 @@ $smarty->prepareForForm();
 
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
-	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php"', '</a>'));
+	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 	
 // check if altBody should be imported from HTML

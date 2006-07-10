@@ -22,7 +22,7 @@ require_once (bm_baseDir . '/inc/class.json.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 
 $poMMo = & fireup('secure','keep');
-$dbo = & $poMMo->openDB();
+$dbo = & $poMMo->_dbo;
 
 $sql = 'SELECT subscriberCount, sent, notices, status, command FROM ' . $dbo->table['mailing_current'];
 $dbo->query($sql);
@@ -57,8 +57,8 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 if ($sent >= $subscriberCount  || $status == 'finished') {
 		$status = 'finished';
 		require_once (bm_baseDir . '/inc/db_mailing.php');
-		if (!mailingQueueEmpty($dbo)) {
-			dpoMMoingEnd($dbo);
+		if (mailingQueueEmpty($dbo)) {
+			dbMailingEnd($dbo);
 		}
 }
 

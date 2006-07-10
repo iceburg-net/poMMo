@@ -19,6 +19,9 @@ defined('_IS_VALID') or die('Move along...');
 
 // TODO -> class will eventually extend to act as error handler
 // TODO -> implement get limit @ some point.... ;)
+
+// NOTE: messages are cleared upon page load (as class.common.php calls new constructor)
+// TODO -> add message "revival" from SESSION (if ever deemed necessary)
 class bmLogger {
 	
 	var $_errors;
@@ -30,7 +33,7 @@ class bmLogger {
 		$this->_errors = array();
 		$this->_messages = array();
 		$this->_log = FALSE;
-		$this->_verbosity = (defined(bm_verbosity))? bm_verbosity : 3;
+		$this->_verbosity = (defined('bm_verbosity'))? bm_verbosity : 3;
 	}
 	
 	function toggleLogging($toggle = TRUE) {
@@ -83,8 +86,8 @@ class bmLogger {
 	}
 	
 	function clear() {
-		$this->_messages = NULL;
-		$this->_errors = NULL;
+		$this->_messages = array();
+		$this->_errors = array();
 		return true;		
 	}
 }

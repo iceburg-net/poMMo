@@ -24,7 +24,7 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 		return false;
 	
 	global $poMMo;
-	$logger = & $poMMo->logger;
+	$logger = & $poMMo->_logger;
 		
 	$dbvalues = $poMMo->getConfig(array('messages'));
 	$messages = unserialize($dbvalues['messages']);

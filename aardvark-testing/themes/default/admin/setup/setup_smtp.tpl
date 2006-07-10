@@ -77,7 +77,7 @@
 			<div class="field">
 				<label for="auth[1]">{t}SMTP Authentication:{/t} </label>
 				<input type="radio" name="auth[{$id}]" value="on" {if $smtp[$id].auth == 'on'}checked{/if}>on
-				<input type="radio" name="auth[{$id}]" value="" {if $smtp[$id].auth != 'on'}checked{/if}>off
+				<input type="radio" name="auth[{$id}]" value="off" {if $smtp[$id].auth != 'on'}checked{/if}>off
 				<div class="notes">{t}(Toggle SMTP Authentication [usually off]){/t}</div>
 			</div>
 			
@@ -115,8 +115,6 @@
 		value="{t}Add Another Relay{/t}">
 	</div>
 	{/if}
-	
-	{debug}
 	
  </form>
 

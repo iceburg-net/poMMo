@@ -47,13 +47,19 @@ class bMailer extends PHPMailer {
 	//  If an argument is not supplied, resorts to default value (from setup/config.php).
 	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL, $charset = NULL) {
 
-		$listConfig = $_SESSION['poMMo']->getConfig(array (
+		global $poMMo;
+		
+		// TODO -> only make this call if passed values don't exist ..'
+		
+		$listConfig = $poMMo->getConfig(array (
 			'list_fromname',
 			'list_fromemail',
 			'list_frombounce',
 			'list_exchanger',
 			'list_charset'
 		));
+		
+		
 		if (empty ($fromname))
 			$fromname = $listConfig['list_fromname'];
 
@@ -67,7 +73,7 @@ class bMailer extends PHPMailer {
 			$exchanger = $listConfig['list_exchanger'];
 
 		if (empty ($demonstration))
-			$demonstration = $_SESSION["poMMo"]->_config['demo_mode'];
+			$demonstration = $poMMo->_config['demo_mode'];
 			
 		if (empty($charset))
 			$charset = $listConfig['list_charset'];
@@ -99,11 +105,12 @@ class bMailer extends PHPMailer {
 
 	// toggles demonstration mode on or off if sepcified, or else uses the configured mode. Returns value.
 	function toggleDemoMode($val = NULL) {
+		global $poMMo;
 		if ($val == "on")
 			$this->_demonstration = "on";
 		elseif ($val == "off") $this->_demonstration = "off";
 		else
-			$this->_demonstration = $_SESSION["poMMo"]->_config['demo_mode'];
+			$this->_demonstration = $poMMo->_config['demo_mode'];
 		return $this->_demonstration;
 	}
 
@@ -167,6 +174,8 @@ class bMailer extends PHPMailer {
 	// TODO -> pass by reference??
 	function prepareMail($subject = NULL, $body = NULL, $HTML = FALSE, $altbody = NULL) {
 
+		global $poMMo;
+		
 		$this->_subject = $subject;
 		$this->_body = $body;
 
@@ -195,7 +204,7 @@ class bMailer extends PHPMailer {
 			$this->Mailer = $this->_exchanger;
 
 			if ($this->Mailer == 'smtp') { // loads the default relay (#1) -- use setRelay() to change.
-				$config = $_SESSION['poMMo']->getConfig(array('smtp_1'));
+				$config = $poMMo->getConfig(array('smtp_1'));
 				$smtp = unserialize($config['smtp_1']);
 	
 				if (!empty ($smtp['host']))

@@ -24,10 +24,10 @@ ob_start();
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('pommo_revision', '22');
+define('pommo_revision', '23');
 
 @include(bm_baseDir.'/config.php');
-defined('bm_lang') or die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle"><br><br>
+defined('bm_lang') or die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>
 Language not defined! Have you installed the config.php file? See the included config.sample.php for an example.
 <br><br>
 DE translation, etc.
@@ -53,10 +53,20 @@ if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Work Directory not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'));
 	if (!is_writable(bm_workDir))
 		bmKill('<strong>'.bm_workDir.'</strong> : '._T('Webserver cannot write to Work Directory. Make sure it has the proper permissions.'));
-	if (!is_dir(bm_workDir.'/pommo'))
-		if (!mkdir(bm_workDir.'/pommo'))
+	
+	if (!is_dir(bm_workDir.'/pommo')) {
+		
+		if (ini_get('safe_mode') == "1") { 
+			bmKill(_T('Working Directory cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'));
+		}
+		elseif (!mkdir(bm_workDir.'/pommo'))
 			bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo');
-	if (!mkdir(bm_workDir.'/pommo/smarty'))
+	}
+	
+	if (ini_get('safe_mode') == "1") { 
+			bmKill(_T('Working Directory cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'));
+	}
+	elseif (!mkdir(bm_workDir.'/pommo/smarty'))
 		bmKill(_T('Could not create directory'). ' '.bm_workDir.'/pommo/smarty');
 }
 
@@ -99,14 +109,13 @@ function & fireup() {
 	
 	// get list of arguments to set preinit, and postinit environment
 	$arg_list = func_get_args(); // can this be copied below in place of $arg_list???
-	$skip = FALSE;
+
 	foreach (array_keys($arg_list) as $key) {
 		$arg = & $arg_list[$key];
 		switch ($arg) {
 			case 'secure' :
 				$bm_secure = TRUE;
 				break;
-			case 'dataSave' : // PHASE OUT -> dataSave
 			case 'keep' :
 				$bm_dataSave = TRUE;
 				break;
@@ -128,39 +137,38 @@ function & fireup() {
 		session_id($bm_sessionName);
 	session_start();
 	
-	// load common class. If $bm_preInit exists, the common class in $_SESSION is overwritten
-	if (isset ($_SESSION["poMMo"])) 
-		$poMMo = & $_SESSION["poMMo"];
-	else {
-		$poMMo = new Common();
-		$poMMo->loadConfig();
-	}	
-	// check that config has been loaded
+	// create placeholder for $_SESSION['pommo'] if this is a new session
+	if (empty($_SESSION['pommo'])) {
+		$_SESSION['pommo'] = array();
+	}
+	
+	// create common class
+	$poMMo = new Common();
+	
+	// read configuration data
+	(isset($bm_loadConfig)) ? $poMMo->loadConfig(TRUE) : $poMMo->loadConfig();
+	
+	// ensure valid configuration data
 	if (empty($poMMo->_config) || count($poMMo->_config) < 5) {
-		$poMMo->loadConfig();
-		if (count($poMMo->_config) < 5)
 			bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
 	}
-		
+	
 	// checks version of DB against file version
-	$dbo = $poMMo->openDB();
-	$dbo->dieOnQuery(FALSE);
-	$sql = 'SELECT config_value FROM '.$dbo->table['config'].' WHERE config_name=\'revision\'';
-	$revision = $dbo->query($sql,0);
+	$poMMo->_dbo->dieOnQuery(FALSE);
+	$sql = 'SELECT config_value FROM '.$poMMo->_dbo->table['config'].' WHERE config_name=\'revision\'';
+	$revision = $poMMo->_dbo->query($sql,0);
 	if (!$revision)
 		bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
 			'<a href="'.bm_baseUrl.'/install/install.php">',
 			'</a>'));
-	elseif (pommo_revision != $dbo->query($sql,0))
+	elseif (pommo_revision != $revision)
 		bmKill(sprintf(_T('Version Mismatch. Have you %s upgraded %s ?'),
 		'<a href="'.bm_baseUrl.'/install/upgrade.php">',
 		'</a>'));
-	$dbo->dieOnQuery(TRUE);
+	$poMMo->_dbo->dieOnQuery(TRUE);
 	
-	// load common class into session
-	$_SESSION["poMMo"] = & $poMMo;
 
 	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
 		bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
@@ -168,11 +176,8 @@ function & fireup() {
 		'</a>'));
 		
 	if (!isset($bm_dataSave)) // PHASE OUT -> when _messages gone, perform actual dataClear func..
-		$poMMo->dataClear();
+		$poMMo->clear();
 		
-	if (isset($bm_loadConfig))
-		$poMMo->loadConfig();
-
 	// returns a copy of the object
 	return $poMMo;
 }

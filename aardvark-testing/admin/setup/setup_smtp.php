@@ -22,8 +22,8 @@ require_once (bm_baseDir . '/inc/phpmailer/class.phpmailer.php');
 require_once (bm_baseDir . '/inc/phpmailer/class.smtp.php');
 
 $poMMo = & fireup('secure');
-$logger = & $poMMo->logger;
-$dbo = & $poMMo->openDB();
+$logger = & $poMMo->_logger;
+$dbo = & $poMMo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
