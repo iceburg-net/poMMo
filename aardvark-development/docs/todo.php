@@ -26,8 +26,11 @@ defined('_IS_VALID') or die('Move along...');
 			+ Examine mailing_preview
 			+ Examine the loading of mails (mailings_send.php)
 			
+		DEBUG SESSION HANDLING of MULTIPLE SMTP SERVER
+			
 
 	SHORT TERM:
+	
 	
 	  (API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + get rid of appendURL problem!
 	
@@ -42,8 +45,39 @@ defined('_IS_VALID') or die('Move along...');
 	  (API) Allow fetching of field id, names, + types -- NOT OPTIONS, etc... too much data being passed around manage/groups/import/etc.
 	  
 	  (feature) Add ability to view emails in queue (from mailing status)
-	  (feature) Mail hanging prevention --  if command recieves > 20 seconds, prompt to restart/cancel.
-	  
+
+	  (feature) add personalization to messages
+	  	+ personalization algorithm ->
+	  		[queue is grabbed per page] (TODO defaults to 100, make easier to set @ file header)
+	  			+ adjust queue to also return subscriberID, stored in $queue variable w/ email
+	  		[body is loaded into session] 
+	  			+ if body contains personalization, ENABLE personalization
+	  				+ get position of personalizations & assosiated demographic_id & "default" into PERSONALIZATIONS array
+	  				
+	  				
+	  		[mail leavs throttler to send]
+	  			+ IF _SESSION[PERSONALIZATION] PERSONALIZATION
+	  					+ personalizeBody(subId)
+	  			SEND MAIL
+	  		
+	  		[personalizeBody]	
+	  		personalizeBody(subId)
+	  			IF subId !IN SESSION_BUFFER {
+	  				add to buffer(queue,email)	
+	  			}
+	  			
+	  			alter mailer body... original stored in session, posistions are cached
+	  			
+	  		
+	  		[ADD TO BUFFER]
+	  			+ GRAB FIRST 15 (set in header) sub IDs from subscriber_values -- make sure to include subscriber ID passed
+	  			ADD VALUES to SESSION as ARRAY [subID] [demoID => value || default]
+	  			
+	  			
+	  			}
+	  				
+	  		
+	  				  
 	  (feature) Add test "suite" to check httpspawn, create temporary tables, etc. etc.
 	  
 	  (feature) add mailing history
@@ -66,7 +100,6 @@ defined('_IS_VALID') or die('Move along...');
 	     + get rid of isEmail()?
 			
 	  (feature) add ability to send "comments" to list administrator upon successfull subscription
-	  (feature) add personalization to messages
 	  (feature) Add search capability to subscriber management
 	  (feature) Add OR to group filtering
 	  (feature) Enhanced subscriber import
