@@ -21,31 +21,17 @@ defined('_IS_VALID') or die('Move along...');
 require_once (bm_baseDir.'/inc/safesql/SafeSQL.class.php');
 
 
-
-
 /* Get the number of mailings in the table mailing_history of the database */
 function & dbGetMailingCount(& $dbo) {
-
 	$safesql =& new SafeSQL_MySQL;
 	$sql = $safesql->query("SELECT count(id) FROM %s ", array($dbo->table['mailing_history']) );
-
-	if ($dbo->query($sql)) {
-		if ($row = mysql_fetch_row($dbo->_result)) {
-			return $row[0];
-			exit;
-		}
-	}
-	return 0;
-
+	$count = $dbo->query($sql,0); // note, this will return "false" if no row returned -- though count always returns 0 (mySQL)!
+	return ($count) ? $count : 0;
 } //dbGetMailingCount
-
-
 
 
 /* Get the mailings history matrix */
 function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
-
-	$dbo->dieOnQuery(TRUE);
 
 	//id, fromname, fromemail, frombounce, subject, body, ishtml, mailgroup, subscriberCount, started, finished, sent
 	//$countmailings = $dbo->records();
@@ -55,46 +41,37 @@ function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 		subscriberCount, started, finished, sent FROM %s ORDER BY %s %s LIMIT %s, %s ", 
 		array($dbo->table['mailing_history'], $order, $orderType, $start, $limit) );
 
-	if ($dbo->query($sql)) {
-
-		if (mysql_num_rows($dbo->_result) == 0) {
-
-			// No Rows found:
-			$mailings = NULL;
-		
-		} else {
-
-			// get data from db
-		
-			$i = 1;
-		
-			while ($row = mysql_fetch_assoc($dbo->_result)) {
-		
-				$mailings[$i]['mailid'] = $row['id'];
-				//$mailings[$i]['fromname'] = $row['fromname'];
-				//$mailings[$i]['fromemail'] = $row['fromemail'];
-				//$mailings[$i]['frombounce'] = $row['frombounce'];
-				$mailings[$i]['subject'] = $row['subject']; 
-				//$mailings[$i]['body'] = $row['body']; 
-				$mailings[$i]['ishtml'] = $row['ishtml']; 
-				$mailings[$i]['mailgroup'] = $row['mailgroup']; 
-				$mailings[$i]['subscriberCount'] = $row['subscriberCount']; 
-				$mailings[$i]['started'] = $row['started']; 
-				$mailings[$i]['finished'] = $row['finished']; 
-				$mailings[$i]['sent'] = $row['sent']; 
-				$mailings[$i]['duration'] = $row['started']-$row['finished'];
-				$mailings[$i]['mpm'] = ($row['started']-$row['finished']) / $row['sent'];
-			
-				$i++;
-			
-			} //while 
-
-		}
-
-	}
-
-	$dbo->dieOnQuery(FALSE);
+	$mailings = array();
 	
+	while ($row = $dbo->getRows($sql)) {
+	 		
+	 		// calculate duration and mails per minute
+	 		$started = strtotime($row['started']);
+	 		$finished = strtotime($row['finished']);
+	 		
+	 		if (is_numeric($started) && ($started < $finished)) {
+	 			$duration = $finished - $started;
+	 			$durationStr = ''.round((($duration/60)/60)).':'.round(($duration/60)).':'.($duration%60);
+	 			$mps = round($row['sent'] / $duration,2);
+	 		}
+	 		else {
+	 			$duration = 0;
+	 			$mpm = FALSE;
+	 		}
+	 		
+	 		$mailings[] = array(
+	 			'mailid' => $row['id'],
+	 			'subject' => $row['subject'],
+	 			'ishtml' => $row['ishtml'],
+	 			'mailgroup' => $row['mailgroup'],
+	 			'subscriberCount' => $row['subscriberCount'],
+	 			'started' => $row['started'],
+	 			'finished' => $row['finished'],
+	 			'sent' => $row['sent'],
+	 			'duration' => $durationStr,
+	 			'mps' => $mps	 			
+	 		);
+	 }
 	return $mailings;
 
 } //dbGetMailingHistory
