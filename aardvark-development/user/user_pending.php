@@ -31,7 +31,9 @@ $dbo = & $poMMo->_dbo;
  *********************************/
 $smarty = & bmSmartyInit();
 
-$input = $poMMo->get();
+if (isset($_GET['input'])) {
+	$input = (unserialize($_GET['input']));
+}
 
 if (!isEmail($input['email']))
 	bmRedirect('login.php');
@@ -65,9 +67,6 @@ if (!empty ($_POST)) {
 			$logger->addErr(_T('Error cancelling your request. Contact the administrator.'));
 	}
 	
-	// PHASE OUT!!
-	$poMMo->dataClear();
-
 	$smarty->assign('nodisplay',TRUE);
 
 } else {

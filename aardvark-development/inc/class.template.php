@@ -41,7 +41,7 @@ class bTemplate extends Smarty {
 		if ($poMMo->_logger->isErr())
 			$this->assign('errors',$poMMo->_logger->getErr());
 		
-		return parent::display($resource_name, $cache_id = null, $compile_id = null, $display = false);;
+		return parent::display($resource_name, $cache_id = null, $compile_id = null, $display = false);
 	}
 	
 	function prepareForForm() {
@@ -72,9 +72,6 @@ class bTemplate extends Smarty {
 		$fields = dbGetFields($dbo,'active');
 		if (!empty($fields))
 			$this->assign('fields', $fields);
-		
-		// assign email & field values if they exist in POST
-		require_once(bm_baseDir.'/inc/lib.txt.php');
 		
 		// process.php appends serialized values to _GET['input']
 		if (isset($_GET['input'])) {
