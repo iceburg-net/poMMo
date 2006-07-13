@@ -34,6 +34,7 @@ function bmDebug() {
 		echo "\nRevision: " . pommo_revision . "<br>\n";
 		echo "\nSection: " . bm_section . "<br>\n";
 
+
 		echo "\n\n<br><br><b>CONFIG DEBUG</b><hr><br>\n\n";
 		global $poMMo;
 		if (is_object($poMMo)) {
@@ -55,10 +56,11 @@ function bmDebug() {
 
 		echo "\n\n<br><br><b>OBJECT DEBUG</b><hr><br>\n\n";
 		
+/* commented out.. segfaults PHP5 
 		if (bm_verbosity > 1)
 			show_vars(FALSE, TRUE);
 		else
-			show_vars(FALSE, TRUE, 0);
+			show_vars(FALSE, TRUE, 0); */
 }
 
 function bmBacktrace() {
@@ -113,7 +115,7 @@ function bmBacktrace() {
 
 	/************************************************ 
 	** Title.........: PHP4+ Debug Helper
-	** Author........: Thomas Schüßler <code at atomar dot de> 
+	** Author........: Thomas Schï¿½ï¿½ler <code at atomar dot de> 
 	** Filename......: debuglib.php(s)
 	** Last changed..: 12.07.2004 14:13
 	** License.......: Free to use. Postcardware ;)
@@ -760,7 +762,7 @@ function bmBacktrace() {
 		/* remove whitespace at end of the string */
 		$string = preg_replace('/\s*$/', '', $string);
 
-		# kleinste Anzahl von führenden TABS zählen
+		# kleinste Anzahl von fï¿½hrenden TABS zï¿½hlen
 		preg_match_all('/^\t+/', $string, $matches);
 		$minTabCount = strlen(@ min($matches[0]));
 

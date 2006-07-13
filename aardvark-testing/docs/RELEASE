@@ -1,14 +1,11 @@
 === Release Notes for Aardvark PR12 ===
- <Released July ??, 2006>
- 
- Coming to a theatre near you!
+ <Released July 13, 2006>
  
 [Additions]
 Added Bulgarian translation
 Mailings History Added (Maintained by Corinna Thoeni)
 Added testing of background script spawner to support library.
 Session.auto_start compliant, objects are no longer stored in session
-
 
 [Enhancements]
 Updated Italian, German translations
@@ -19,7 +16,6 @@ Better SAFE_MODE compatibility, warning is thrown to manually set up working dir
 Reduced general session size by @ 80% (from @ 1.3k to 300 bytes)
 Subscription Processor no longer uses javascript history.back()
 CSS styling improvements (widened form prompts)
-
 
 [Fixes]
 Drastically improved session management during mailings, much less memory usage.
