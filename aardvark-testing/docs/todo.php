@@ -25,10 +25,15 @@ defined('_IS_VALID') or die('Move along...');
 		merge corinna's mailing history code
 			+ Examine mailing_preview
 			+ Examine the loading of mails (mailings_send.php)
-			
-		DEBUG SESSION HANDLING of MULTIPLE SMTP SERVER
-			
 
+
+	[BEFORE 1.0]
+		+ Personalization
+		+ Rewritten Import
+		+ Rewritten Subscriber Manage
+		+ Message Templating
+		+
+	
 	SHORT TERM:
 	
 	
@@ -76,10 +81,6 @@ defined('_IS_VALID') or die('Move along...');
 	  			
 	  			}
 	  				
-	  		
-	  				  
-	  (feature) Add test "suite" to check httpspawn, create temporary tables, etc. etc.
-	  
 	  (feature) add mailing history
 	  (feature) add message templating
 	  (feature) Add Date + Numeric types  [[[{html_select_date}]]]

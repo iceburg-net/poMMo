@@ -23,27 +23,6 @@
 			</div>
 		{/if}
 
-
-	{if $nomailing == true } 
-
-		<div style="width:100%;">
-
-			<span style="float: right; margin-right: 30px;">
-				<a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a>
-			</span>
-			<span style="float: right; margin-right: 30px;">
-				<a href="mailings_history.php">{t 1=$returnStr2}Return to %1{/t}</a> 
-			</span>
-			
-		</div>
-		<p style="clear: both;"></p>
-		<hr>
-		<br>	
-		<p><b>{t}No mailing found.{/t}</b></p><br>
-
-	
-	{else}
-	{* There are mailings to display *}
 	
 		<div style="width:100%;">
 			<span style="float: right; margin-right: 30px;">
@@ -59,7 +38,7 @@
 	
 			<form name="bForm" id="bForm" method="POST" action="">
 		
-				{t}Subscribers per Page:{/t} 
+				{t}Mailings per Page:{/t} 
 			
 				<SELECT name="limit" onChange="document.bForm.submit()">
 					<option value="10"{if $limit == '10'} SELECTED{/if}>10</option>
@@ -116,7 +95,7 @@
 							<td nowrap style="text-align:center;">{t}view{/t}</td>
 							<td nowrap style="text-align:center;">{t}reload{/t}</td>
 					  		<td nowrap style="text-align:center;"><b>{t}Subject{/t}</b></td>
-					  		<td nowrap style="text-align:center;"><b>{t}Mailgroup (Subscribers){/t}</b></td>
+					  		<td nowrap style="text-align:center;"><b>{t}Group (count){/t}</b></td>
 					  		<td nowrap style="text-align:center;"><b>{t}Sent{/t}</b></td>
 				  			<td nowrap style="text-align:center;"><b>{t}Started{/t}</b></td>
 				  			<td nowrap style="text-align:center;"><b>{t}Finished{/t}</b></td>
@@ -149,11 +128,11 @@
 							<td nowrap><i>{$mailitem.subject}</i></td>
 							<td nowrap>{$mailitem.mailgroup} ({$mailitem.subscriberCount})</td>
 							<td style="text-align:center;" nowrap>{$mailitem.sent}</td>
-							<td style="text-align:center;" nowrap>{$mailitem.started|date_format:"%Y-%m-%d %H:%M:%S"}</td>
-							<td style="text-align:center;" nowrap>{$mailitem.finished|date_format:"%Y-%m-%d %H:%M:%S"}</td>
-							<td nowrap>{$mailitem.duration|date_format:"%H:%M:%S"} 
-							{if $mailitem.mpm}
-								({$mailitem.mpm} {t}mails p. minute{/t})</td>
+							<td style="text-align:center;" nowrap>{$mailitem.started}</td>
+							<td style="text-align:center;" nowrap>{$mailitem.finished}</td>
+							<td nowrap>{$mailitem.duration} 
+							{if $mailitem.mps}
+								({$mailitem.mps} {t}mails/second{/t})</td>
 							{/if}
 							<td style="text-align:center;">
 							{if $mailitem.ishtml == 'on'}
@@ -168,7 +147,16 @@
 				
 				
 					</tr>				
+				{foreachelse}
+					<tr>
+						<td colspan="11">
+							{t}No mailing found.{/t}
+						</td>
+					</tr>
+				
 				{/foreach}
+				
+				
 
 					<tr>
 							<td colspan="12" style="text-align:left;">
@@ -223,11 +211,6 @@
 	// ]]>
 	</script>
 	{/literal}
-	
-
-{/if} {* END if *}
-
-
 
 {include file="admin/inc.footer.tpl"}
 

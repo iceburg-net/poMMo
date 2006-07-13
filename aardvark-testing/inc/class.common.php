@@ -52,7 +52,7 @@ class Common {
 		
 		// if debugging is set in config.php, enable debugging on the database.
 		if (bm_debug == 'on') {
-			$this->dbo->debug(TRUE);
+			$this->_dbo->debug(TRUE);
 		}
 	}
 

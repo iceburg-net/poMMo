@@ -36,6 +36,8 @@ $smarty = & bmSmartyInit();
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
 $smarty->prepareForSubscribeForm(); 
 
+$_POST['bm_email'] = $smarty->get_template_vars('bm_email');
+
 if (empty($_POST['bm_email']))
 		bmRedirect('login.php');
 
