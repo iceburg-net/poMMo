@@ -1,5 +1,11 @@
 {include file="admin/inc.header.tpl"}
 
+<div style="position: relative; width: 100%; z-index: 1;">
+	<a href="#">Insert Personalization</a>
+	<div style="z-index: 2; position: absolute; top: 0; left: 0; width: 100%; background-color: grey;">
+		
+	</div>
+</div>
 <form id="bForm" name="bForm" action="" method="POST">
 
 {if $mailtype == 'html'}
@@ -14,14 +20,11 @@
 		</script>
 	{else}
 		<script type="text/javascript" language="javascript">
-		function xinhaSubmit() {ldelim}
-			document.bForm.onsubmit();
-			document.bForm.submit();
-			return true;
-		{rdelim}
-		</script>
-		
-		<script type="text/javascript">
+			function xinhaSubmit() {ldelim}
+				document.bForm.onsubmit();
+				document.bForm.submit();
+				return true;
+			{rdelim}
 			 _editor_url  = "{$url.theme.shared}/xinha/"; 
 			 _editor_lang = "en";
 		</script>
