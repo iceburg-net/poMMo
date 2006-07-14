@@ -1,4 +1,7 @@
-{include file="admin/inc.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}/js/scriptaculous/slider.js" type="text/javascript"></script>
+{/capture}{include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
 	
 <div id="mainbar">
@@ -25,8 +28,7 @@
  	{/if}
 
 
-<script src="{$url.theme.shared}/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/scriptaculous/slider.js" type="text/javascript"></script>
+
 
 <style>
 #track1 {ldelim}background:url({$url.theme.shared}/images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}

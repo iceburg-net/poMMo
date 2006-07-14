@@ -3,10 +3,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{t}poMMo Installation{/t}</title>
-	<link href="{$url.theme.this}/admin/style.css" type="text/css" rel="STYLESHEET">
+	<link href="{$url.theme.this}/inc/admin.css" type="text/css" rel="STYLESHEET">
 {* The following fixes transparent PNG issues in IE < 7 *}
 	<!--[if lt IE 7.]>
-		<script defer type="text/javascript" src="{$url.theme.shared}/pngfix.js"></script>
+		<script defer type="text/javascript" src="{$url.theme.shared}/js/pngfix.js"></script>
 	<![endif]-->
 </head>
 <body>

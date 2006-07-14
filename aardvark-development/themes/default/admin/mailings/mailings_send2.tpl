@@ -1,4 +1,7 @@
-{include file="admin/inc.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
+{/capture}{include file="admin/inc.header.tpl"}
 
 <div style="position: relative; width: 100%; z-index: 1;">
 	<a href="#">Insert Personalization</a>
@@ -28,8 +31,6 @@
 			 _editor_url  = "{$url.theme.shared}/xinha/"; 
 			 _editor_lang = "en";
 		</script>
-		<script type="text/javascript" src="{$url.theme.shared}/xinha/htmlarea.js"></script>
-		<script type="text/javascript" src="{$url.theme.shared}/xinha/config.js"></script>
 	{/if}
 
 

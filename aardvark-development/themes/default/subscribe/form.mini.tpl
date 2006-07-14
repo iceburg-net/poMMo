@@ -1,5 +1,5 @@
 {* Include form CSS styling *}
-<link href="{$url.theme.this}/subscribe/subscribe_form.css" type="text/css" rel="STYLESHEET">
+<link href="{$url.theme.this}/inc/subscribe_form.css" type="text/css" rel="STYLESHEET">
 
 <div id="subscribeForm">
 <form  action="{$url.base}/user/subscribe.php" method="POST">

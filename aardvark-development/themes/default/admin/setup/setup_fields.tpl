@@ -1,11 +1,13 @@
-{include file="admin/inc.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}/js/scriptaculous/effects.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}/js/scriptaculous/dragdrop.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}/js/scriptaculous/controls.js" type="text/javascript"></script>
+{/capture}{include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
 
 
-<script src="{$url.theme.shared}/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/scriptaculous/effects.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/scriptaculous/dragdrop.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/scriptaculous/controls.js" type="text/javascript"></script>
+
 
 <div id="mainbar">
 

@@ -1,9 +1,9 @@
 {* Include form CSS styling *}
-<link href="{$url.theme.this}/subscribe/subscribe_form.css" type="text/css" rel="STYLESHEET">
+<link href="{$url.theme.this}/inc/subscribe_form.css" type="text/css" rel="STYLESHEET">
 
 {* Include javascript to "stripe" the table by alternating row background color. 
 	This can be also done via CSS on alternating table rows w/o the need for javascript... *}
-<script src="{$url.theme.this}/subscribe/stripe_table_rows.js" type="text/javascript"></script>
+<script src="{$url.theme.this}/inc/stripe_table_rows.js" type="text/javascript"></script>
 
 {literal}
 <style>

@@ -1,8 +1,10 @@
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}/js/lightbox.js" type="text/javascript"></script>
+{/capture}
+
 {include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
-
-<script src="{$url.theme.shared}/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/lightbox.js" type="text/javascript"></script>
 
 <div id="mainbar">
 

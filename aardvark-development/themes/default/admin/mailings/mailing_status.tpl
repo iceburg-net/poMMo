@@ -1,6 +1,8 @@
-{include file="admin/inc.header.tpl"}
-<link href="{$url.theme.this}/admin/status.css" type="text/css" rel="STYLESHEET">
-<script src="{$url.theme.shared}/scriptaculous/prototype.js" type="text/javascript"></script>
+{capture name=head}{* used to inject content into the HTML <head> *}
+<link href="{$url.theme.this}/inc/mailing_status.css" type="text/css" rel="STYLESHEET">
+<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
+{/capture}{include file="admin/inc.header.tpl"}
+
 
 <div>
 <img src="{$url.theme.shared}/images/icons/alert.png" align="middle" style="float: left;">
