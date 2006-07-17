@@ -19,8 +19,9 @@ define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_mailing.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
+require_once (bm_baseDir . '/inc/db_fields.php');
 
-$poMMo = & fireup('secure', 'keep');
+$poMMo = & fireup( 'keep');
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
@@ -41,6 +42,12 @@ if (isset($_POST['altGen'])) {
 	$h2t = & new html2text($_POST['body']);
 	$_POST['altbody'] = $h2t->get_text();
 }
+
+// fetch subscriber fields for use with personaliztion selector
+// Get array of fields. Key is ID, value is an array of the demo's info
+$fields = dbGetFields($dbo);
+if (!empty($fields))
+	$smarty->assign('fields', $fields);
 
 if (empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___

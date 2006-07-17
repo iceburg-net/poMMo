@@ -1,14 +1,39 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
+<script src="{$url.theme.shared}/js/jquery.js" type="text/javascript"></script>
 {/capture}{include file="admin/inc.header.tpl"}
 
+
 <div style="position: relative; width: 100%; z-index: 1;">
-	<a href="#">Insert Personalization</a>
-	<div style="z-index: 2; position: absolute; top: 0; left: 0; width: 100%; background-color: grey;">
-		
-	</div>
+	<a class="pommoOpen" href="#">{t}Add Personalization{/t}</a>
+		<div id="selectField" style="z-index: 2; display: none; position: absolute; top: -5px; left: -5px; width: 90%; background-color: #e6eaff; padding: 7px; border: 1px solid;">
+			<div class="pommoHelp">
+				<img src="{$url.theme.shared}/images/icons/help.png" align="absmiddle" border="0" style="float: right; margin-left: 10px;">
+				<span style="font-weight: bold;">{t}Add Personalization{/t}: </span>
+				<span class="pommoHelp">
+				{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. If no default is supplied and no value exists for the field, [[...]] will be replaced with a empty (blank) string, allowing mailings to start with "Dear [[firstName|Friend]] [[lastName]]," (example assumes firstName and lastName are collected fields).{/t}
+				</span>
+				<hr style="clear: both;">
+			</div>
+			
+			<select id="field">
+				<option value="">{t}choose field{/t}</option>
+				{foreach from=$fields key=id item=field}
+				<option value="{$field.name}">{$field.name}</option>
+				{/foreach}
+			</select>
+			
+			<span style="margin-left: 20px; margin-right: 20px;"> Default: <input type="text" id="default"></span>
+			
+			<input id="insert" type="submit" value="{t}Insert{/t}">
+			
+			<br>
+			
+			<a class="pommoClose" href="#" style="float: right;">
+					<img src="{$url.theme.shared}/images/icons/left.png" align="absmiddle" border="0">{t}Go Back{/t}
+			</a>				
+		</div>
 </div>
+
 <form id="bForm" name="bForm" action="" method="POST">
 
 {if $mailtype == 'html'}
@@ -31,6 +56,8 @@
 			 _editor_url  = "{$url.theme.shared}/xinha/"; 
 			 _editor_lang = "en";
 		</script>
+		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
+		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
 	{/if}
 
 
@@ -82,5 +109,47 @@
 {/if}
  
 </form>
+
+{literal}
+<script type="text/javascript">
+
+/*
+$("#personalize").click(function() {
+	$("#selectField").slideDown('slow', function() {
+		$(this).find("a.pommoClose").click(function() {
+				$("#selectField").slideUp('slow', function() { $(this).unclick(); });
+				return false;
+			});
+		});
+	return false;
+	});
+*/
+
+$("a.pommoOpen").click(function() { $(this).siblings("div").slideDown(); return false; });
+	
+$("a.pommoClose").click(function() { $(this).parent().slideUp(); return false; });
+
+$("div.pommoHelp img").click(function() {
+	$(this).parent().find("span.pommoHelp").toggle(); return false;
+	});
+	
+$("#insert").click(function() {
+	
+	if ($("#field").val() == '') { 
+		alert ('{/literal}{t}You must choose a field{/t}{literal}'); 
+		return false; 
+		}
+	
+	var str = '[['+($("#field").val())+(($("#default").val() == '')? '' : '|'+$("#default").val())+']]';
+	$("#body").get(0).value += (str);
+	
+	$("#field").add("#default").val("");
+	$(this).parent().hide();
+	
+	return false;
+	});
+</script>
+{/literal}
+
 
 {include file="admin/inc.footer.tpl"}

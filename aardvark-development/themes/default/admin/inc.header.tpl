@@ -17,13 +17,10 @@
 		is prepared to include a form from the parent PHP script *}    
 	{if $isForm}
 	<link href="{$url.theme.shared}/css/bform.css" type="text/css" rel="STYLESHEET">
-	<script src="{$url.theme.shared}/js/bform.js" type="text/javascript"></script>
 	{/if}
 
 {* The following fixes transparent PNG issues in IE < 7 *}
-	<!--[if lt IE 7.]>
-		<script defer type="text/javascript" src="{$url.theme.shared}/js/pngfix.js"></script>
-	<![endif]-->
+
 	
 </head>
 
