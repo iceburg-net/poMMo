@@ -14,32 +14,14 @@
 	define('_IS_VALID', TRUE);
 
 	require('../../bootstrap.php');
-	require_once (bm_baseDir.'/inc/db_history.php'); // for DB retrieval of body
-
-	$poMMo = & fireup('secure');
-	$logger = & $poMMo->_logger; //ct
-	$dbo = & $poMMo->_dbo;	//ct
-
-	// if there is a specific id given get the database record from DB.mailing_history
-	// i choosed this approach, so i don't  $POST around Body Data in the mailings_history.php and mailings_mod.php
-	if ((!empty($_REQUEST['viewid'])) && (!empty($_REQUEST['action']))) {
-
-		// if action = viewhtml
-		$viewid = $_REQUEST['viewid'];
-		$text = dbGetHTMLBody($dbo, $viewid);
-		$mailbody['body'] = $text['body'];
-		
-		$poMMo->set($mailbody);
-		
-	} //end ct
-
-	$html =& $poMMo->get();		//ct: changed dataGet() to get
-
+	$poMMo = & fireup('secure', 'keep');
+	
+	// TODO --> rewrite corinna's method to use mailingData['body'] (get rid of requestr, etc. dbGetHTMLBody(), etc.)
+	
+	$mailingData =& $poMMo->get('mailingData');
 	if (get_magic_quotes_gpc()) {
-		echo stripslashes($html['body']);
+		echo stripslashes($mailingData['body']);
 	} else {
-		echo $html['body'];
+		echo $mailingData['body'];
 	}
-		
-
 ?>

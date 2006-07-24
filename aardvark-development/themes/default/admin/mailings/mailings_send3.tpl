@@ -49,7 +49,7 @@
 	</a>
 	<td>
 	
-	{if $mailtype == 'html'}
+	{if $ishtml == 'html'}
 		<p>
 			<b>{t}HTML Body:{/t} </b>
 			 <a href="mailing_preview.php" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}

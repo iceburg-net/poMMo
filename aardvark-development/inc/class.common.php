@@ -129,7 +129,10 @@ class Common {
 		return (empty($this->_data)) ? $this->_data = $value : $this->_data = array_merge($this->_data,$value);
 	}
 	
-	function &get() {
+	function &get($name = NULL) {
+		if ($name) {
+			return (empty($this->_data[$name])) ? false : $this->_data[$name];
+		}
 		return $this->_data;
 	}
 }

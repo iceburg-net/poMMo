@@ -26,7 +26,6 @@ $poMMo = & fireup('secure', 'keep');
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
-//print_r($poMMo->dataGet());
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -38,16 +37,16 @@ if (!mailingQueueEmpty($dbo)) {
 	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 
-$input = $poMMo->get();
+$input = $poMMo->get('mailingData');
 
-$groupName = dbGroupName($dbo, $input['group_id']);
-$subscriberCount = dbGroupTally($dbo, $input['group_id']);
+$groupName = dbGroupName($dbo, $input['mailgroup']);
+$subscriberCount = dbGroupTally($dbo, $input['mailgroup']);
 $input['subscriberCount'] = $subscriberCount;
 $input['groupName'] = $groupName;
 
 
 // redirect (restart) if body or group id are null...
-if (empty($input['group_id']) || empty($input['body'])) {
+if (empty($input['mailgroup']) || empty($input['body'])) {
 	bmRedirect('mailings_send.php');
 }
 
@@ -65,7 +64,7 @@ if (!empty($_POST['testMail'])) {
 if (!empty ($_GET['sendaway'])) {
 	if (intval($subscriberCount) >= 1) {
 		$securityCode = dbMailingCreate($dbo, $input);
-		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['group_id'], 'email'));
+		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['mailgroup'], 'email'));
 		dbMailingStamp($dbo, "start");
 		bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
 		sleep(1); // allows mailing to begin...
