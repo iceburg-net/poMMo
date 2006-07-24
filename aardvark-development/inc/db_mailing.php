@@ -82,7 +82,7 @@ function dbMailingCreate(& $dbo, & $input) {
 	// determine if this mailing is a HTML one or not..
 	$html = "off";
 	$altbody = '';
-	if ($input['mailtype'] == "html") {
+	if ($input['ishtml'] == "html") {
 		$html = "on";
 		if ($input['altInclude'] == 'yes' && !empty ($input['altbody']))
 			$altbody = ' altbody=\'' . str2db($input['altbody']) . '\',';
@@ -92,7 +92,7 @@ function dbMailingCreate(& $dbo, & $input) {
 	$sql = 'INSERT INTO ' . $dbo->table['mailing_current'] . ' SET fromname=\'' . str2db($input['fromname']) . '\', ' .
 	'fromemail=\'' . str2db($input['fromemail']) . '\', frombounce=\'' . str2db($input['frombounce']) . '\', ' .
 	'subject=\'' . str2db($input['subject']) . '\', body=\'' . str2db($input['body']) . '\',' . $altbody . ' ishtml=\'' . $html . '\', ' .
-	'mailgroup=\'' . str2db($input['group_id']) . '\', subscriberCount=\'' . str2db($input['subscriberCount']) . '\', ' .
+	'mailgroup=\'' . str2db($input['mailgroup']) . '\', subscriberCount=\'' . str2db($input['subscriberCount']) . '\', ' .
 	'sent=\'0\', command=\'none\', status=\'stopped\', serial=NULL, securityCode=\'' . $code . '\', ' .
 	'charset=\'' . str2db($input['charset']) . '\'';
 	$dbo->query($sql);
@@ -301,15 +301,12 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 
 //ct Get the ID for a group_name
 function & getGroupID($dbo, $groupname) {
-
 	$safesql =& new SafeSQL_MySQL;
 	$sql = $safesql->query("SELECT group_id FROM %s WHERE group_name='%s' LIMIT 1",
 		array ($dbo->table['groups'], $groupname) );
 		
-	$dbo->query($sql);
-	$row = mysql_fetch_assoc($dbo->_result);
-	
-	return $row['group_id'];
+	// bb Simplified return (note: the 0 says get first row. False if none returned)
+	return $dbo->query($sql,0);
 
 } //getGroupID
 //end ct
