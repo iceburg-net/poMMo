@@ -49,22 +49,22 @@
 		</div>
 		
 		<div class="field">
-			<div class="error">{validate id="mailtype" message=$formError.mailtype}</div>
-			<label for="mailtype"><span class="required">{t}Mail Format:{/t}</span></label>
-			<select name="mailtype" id="mailtype">
-				<option value="plain" {if $mailtype == 'plain'}SELECTED{/if}>{t}Plain Text Mailing{/t}</option>
-				<option value="html" {if $mailtype == 'html'}SELECTED{/if}>{t}HTML Mailing{/t}</option>
+			<div class="error">{validate id="ishtml" message=$formError.ishtml}</div>
+			<label for="ishtml"><span class="required">{t}Mail Format:{/t}</span></label>
+			<select name="ishtml" id="ishtml">
+				<option value="plain" {if $ishtml == 'plain'}SELECTED{/if}>{t}Plain Text Mailing{/t}</option>
+				<option value="html" {if $ishtml == 'html'}SELECTED{/if}>{t}HTML Mailing{/t}</option>
 			</select>
 			<div class="notes">{t}(Select the format of this mailing){/t}</div>
 		</div>
 		
 		<div class="field">
-			<div class="error">{validate id="group_id" message=$formError.group_id}</div>
-			<label for="group_id"><span class="required">{t}Send Mail To:{/t}</span></label>
-			<select name="group_id" id="group_id">
-				<option value="all" {if $group_id == 'all'}SELECTED{/if}>{t}All subscribers{/t}</option>
+			<div class="error">{validate id="mailgroup" message=$formError.mailgroup}</div>
+			<label for="mailgroup"><span class="required">{t}Send Mail To:{/t}</span></label>
+			<select name="mailgroup" id="mailgroup">
+				<option value="all" {if $mailgroup == 'all'}SELECTED{/if}>{t}All subscribers{/t}</option>
 				{foreach from=$groups item=group_name key=key}
-					<option value="{$key}" {if $group_id == $key}SELECTED{/if}>{$group_name}</option>
+					<option value="{$key}" {if $mailgroup == $key}SELECTED{/if}>{$group_name}</option>
 				{/foreach}
 			</select>
 			<div class="notes">{t}(Select who should recieve the mailing){/t}</div>

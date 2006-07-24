@@ -22,9 +22,8 @@ defined('_IS_VALID') or die('Move along...');
 [BRICE]
 	
 	IMMEDIATE (for next release):
-		merge corinna's mailing history code
-			+ Examine mailing_preview
-			+ Examine the loading of mails (mailings_send.php)
+		+ fix corinna's reloading of mails to use mailingData[]
+		+ fix prepareForForm() in SMARTY TEMPLATE (must load proper JS, CSS!)
 
 
 	[BEFORE 1.0]

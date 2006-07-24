@@ -21,7 +21,7 @@ require_once (bm_baseDir . '/inc/db_mailing.php');
 require_once (bm_baseDir . '/inc/lib.txt.php');
 require_once (bm_baseDir . '/inc/db_fields.php');
 
-$poMMo = & fireup( 'keep');
+$poMMo = & fireup('secure','keep');
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
@@ -49,6 +49,13 @@ $fields = dbGetFields($dbo);
 if (!empty($fields))
 	$smarty->assign('fields', $fields);
 
+// Get MailingData from SESSION.
+$mailingData = $poMMo->get('mailingData');
+if (!$mailingData) {
+	$mailingData = array ();
+}
+@$smarty->assign('ishtml', $mailingData['ishtml']);
+
 if (empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	
@@ -56,14 +63,20 @@ if (empty ($_POST)) {
 	$formError['fromname'] = $formError['body'] = _T('Cannot be empty.');
 	$smarty->assign('formError', $formError);
 	
-	$_POST = $poMMo->get();
-
+	// load mailing data from session
+	@$_POST['body'] = $mailingData['body'];
+	@$_POST['altbody'] = $mailingData['altbody'];
+	
+	
 } elseif(isset($_POST['preview'])) {
 	// ___ USER HAS SENT FORM ___
 	
 		// __ FORM IS VALID
 		unset($_POST['preview']);
-		$poMMo->set($_POST);
+		$mailingData['body'] = $_POST['body'];
+		$mailingData['altbody'] = $_POST['altbody'];
+		$poMMo->set(array('mailingData' => $mailingData));
+		
 		bmRedirect('mailings_send3.php');
 }
 

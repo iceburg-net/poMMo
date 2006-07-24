@@ -36,7 +36,7 @@
 
 <form id="bForm" name="bForm" action="" method="POST">
 
-{if $mailtype == 'html'}
+{if $ishtml == 'html'}
 <input type="hidden" name="mailtype" value="html">
 
 	{if $editorType == 'text'}

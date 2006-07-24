@@ -63,7 +63,7 @@ function bmSendTestMailing(&$to, &$input) {
 		$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce'],NULL,NULL,$input['charset']);
 		$altbody = NULL;
 		$html = FALSE;
-		if ($input['mailtype'] == 'html')
+		if ($input['ishtml'] == 'html')
 			$html = TRUE;
 		if (!empty($input['altbody']) && $input['altInclude'] == 'yes')
 			$altbody = str2str($input['altbody']);
