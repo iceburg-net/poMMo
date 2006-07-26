@@ -18,7 +18,6 @@ define('_IS_VALID', TRUE);
 
 require ('../bootstrap.php');
 require_once (bm_baseDir . '/install/helper.install.php');
-require_once (bm_baseDir . '/install/helper.upgrade.php');
 
 session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
 
@@ -40,7 +39,7 @@ $smarty->clear_all_cache();
 $smarty->prepareForForm();
 
 // Check to make sure poMMo is not already installed.
-if (bmIsInstalled($dbo)) {
+if (bmIsInstalled()) {
 	$logger->addErr(_T('poMMo appears to already by installed. If you would like to clear all data and re-install poMMo, delete your database.'));
 	$smarty->assign('installed', TRUE);
 	$smarty->display('install.tpl');
