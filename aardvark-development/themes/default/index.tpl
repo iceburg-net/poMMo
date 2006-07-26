@@ -72,6 +72,8 @@
 	
 	<form method="post" action="">
 	
+	<input type="hidden" name="referer" value="{$referer}">
+	
 	{t}USERNAME{/t}  <input type="text" name="username"><br>
 	{t}PASSWORD{/t}  <input type="password" name="password"><br><br>
 	 
