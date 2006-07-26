@@ -47,11 +47,11 @@ elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 	));
 	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
 		
-		// LOGIN SUCCESS -- PERFORM MAINTENANCE
+		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 		bmMaintenance();
 		
 		$poMMo->setAuthenticated(TRUE);
-		bmRedirect(bm_http . bm_baseUrl . '/admin/admin.php');
+		bmRedirect(bm_http . $_POST['referer']);
 	}
 	else {
 		$logger->addMsg(_T('Failed login attempt. Try again.'));
@@ -95,6 +95,9 @@ elseif (!empty ($_POST['resetPassword'])) {
 		$logger->addMsg(_T('Captcha did not match. Try again.'));
 	}
 }
+
+// referer (used to return user to requested page upon login success)
+$smarty->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : bm_baseUrl . '/admin/admin.php'));
 
 $smarty->display('index.tpl');
 die();

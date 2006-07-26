@@ -172,7 +172,7 @@ function & fireup() {
 
 	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
 		bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
-		 '<a href="'.bm_baseUrl.'/index.php">',
+		 '<a href="'.bm_baseUrl.'/index.php?referer='.$_SERVER['PHP_SELF'].'">',
 		'</a>'));
 		
 	if (!isset($bm_dataSave)) // PHASE OUT -> when _messages gone, perform actual dataClear func..
