@@ -18,8 +18,18 @@ define('_IS_VALID', TRUE);
 define('_IS_SUPPORT', TRUE);
 
 require ('bootstrap.php');
+require (bm_baseDir . '/install/helper.install.php');
 
-$poMMo = & fireup('secure');
+$poMMo = & fireup();
+$dbo = & $poMMo->_dbo;
+
+// allow access to this page if not installed 
+if (bmIsInstalled() && !$poMMo->isAuthenticated()) {
+	bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
+		 '<a href="'.bm_baseUrl.'/index.php?referer='.$_SERVER['PHP_SELF'].'">',
+		'</a>'));
+	die();
+}
 
 echo<<<EOF
 

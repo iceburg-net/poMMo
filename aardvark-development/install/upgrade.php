@@ -19,7 +19,7 @@
 define('_IS_VALID', TRUE);
 
 require ('../bootstrap.php');
-require_once (bm_baseDir . '/install/helper.upgrade.php');
+require_once (bm_baseDir . '/install/helper.install.php');
 
 $poMMo = & fireup('install');
 $logger = & $poMMo->_logger;
@@ -51,7 +51,7 @@ if (isset ($_REQUEST['disableDebug']))
 elseif (isset ($_REQUEST['debugInstall'])) $smarty->assign('debug', TRUE);
 
 if (empty ($_REQUEST['continue'])) {
-	if (!bmIsInstalled($dbo))
+	if (!bmIsInstalled())
 		$logger->addErr(sprintf(_T('poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . bm_baseUrl . '/install/install.php">', '</a>'));
 	else
 		$logger->addErr(sprintf(_T('To upgrade poMMo, %s click here %s'), '<a href="' . bm_baseUrl . '/install/upgrade.php?continue=TRUE">', '</a>'));
