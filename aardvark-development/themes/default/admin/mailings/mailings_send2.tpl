@@ -1,5 +1,35 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script src="{$url.theme.shared}/js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+ _editor_url  = "{$url.theme.shared}/js/xinha/"; 
+ _editor_lang = "en";
+</script>
+
+{if $ishtml == 'html'}
+	{if $editorType == 'text'}
+		<script type="text/javascript" language="javascript">
+		function xinhaSubmit() {ldelim}
+			document.bForm.submit();
+			return true;
+		{rdelim}
+		</script>
+	{else}
+		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
+		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
+		<script type="text/javascript" language="javascript">
+			function xinhaSubmit() {ldelim}
+				document.bForm.onsubmit();
+				document.bForm.submit();
+				return true;
+			{rdelim}
+			 $(function() {ldelim}
+			 	xinha_init();
+			 {rdelim});
+		</script>
+		
+	{/if}
+{/if}
+	
 {/capture}{include file="admin/inc.header.tpl"}
 
 
@@ -37,30 +67,6 @@
 <form id="bForm" name="bForm" action="" method="POST">
 
 {if $ishtml == 'html'}
-<input type="hidden" name="mailtype" value="html">
-
-	{if $editorType == 'text'}
-		<script type="text/javascript" language="javascript">
-		function xinhaSubmit() {ldelim}
-			document.bForm.submit();
-			return true;
-		{rdelim}
-		</script>
-	{else}
-		<script type="text/javascript" language="javascript">
-			function xinhaSubmit() {ldelim}
-				document.bForm.onsubmit();
-				document.bForm.submit();
-				return true;
-			{rdelim}
-			 _editor_url  = "{$url.theme.shared}/xinha/"; 
-			 _editor_lang = "en";
-		</script>
-		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
-		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
-	{/if}
-
-
 	<SELECT name="editorType" onChange="xinhaSubmit()">
 		<option value="wysiwyg">{t}Use WYSIWYG Editor{/t}</option>
 		<option value="text" {if $editorType == 'text'}SELECTED{/if}>{t}Use Plain Text Editor{/t}</option>
@@ -86,7 +92,7 @@
 		<legend>{t}Text Message{/t}</legend>
 		
 		<img src="{$url.theme.shared}/images/icons/down.png" align="absmiddle">&nbsp; &nbsp; 
-		<input type="submit" name="altGen" value="{t}Copy text from HTML Message{/t}">
+		<input type="submit" name="altGen" id="altGen" value="{t}Copy text from HTML Message{/t}" onClick="xinhaSubmit()">
 		
 		<textarea  rows="10" cols="80" name="altbody" id="altbody">{$altbody}</textarea>
 	</fieldset>
@@ -113,41 +119,56 @@
 {literal}
 <script type="text/javascript">
 
-/*
-$("#personalize").click(function() {
-	$("#selectField").slideDown('slow', function() {
-		$(this).find("a.pommoClose").click(function() {
-				$("#selectField").slideUp('slow', function() { $(this).unclick(); });
-				return false;
+$(function() {
+
+	
+	/********
+	
+	$("#altGen").click(function(){
+		$("#altbody").val(xinha_editors.body.getHTML());
+		return false;
+	});
+	
+	
+	$("#personalize").click(function() {
+		$("#selectField").slideDown('slow', function() {
+			$(this).find("a.pommoClose").click(function() {
+					$("#selectField").slideUp('slow', function() { $(this).unclick(); });
+					return false;
+				});
 			});
+		return false;
 		});
-	return false;
+	***********/
+	
+	/*
+	
+	$("a.pommoOpen").click(function() { $(this).siblings("div").slideDown(); return false; });
+		
+	$("a.pommoClose").click(function() { $(this).parent().slideUp(); return false; });
+	
+	$("div.pommoHelp img").click(function() {
+		$(this).parent().find("span.pommoHelp").toggle(); return false;
+		});
+		
+	$("#insert").click(function() {
+		
+		if ($("#field").val() == '') { 
+			alert ('{/literal}{t}You must choose a field{/t}{literal}'); 
+			return false; 
+			}
+		
+		var str = '[['+($("#field").val())+(($("#default").val() == '')? '' : '|'+$("#default").val())+']]';
+		$("#body").get(0).value += (str);
+		
+		$("#field").add("#default").val("");
+		$(this).parent().hide();
+		
+		return false;
 	});
-*/
-
-$("a.pommoOpen").click(function() { $(this).siblings("div").slideDown(); return false; });
 	
-$("a.pommoClose").click(function() { $(this).parent().slideUp(); return false; });
-
-$("div.pommoHelp img").click(function() {
-	$(this).parent().find("span.pommoHelp").toggle(); return false;
-	});
-	
-$("#insert").click(function() {
-	
-	if ($("#field").val() == '') { 
-		alert ('{/literal}{t}You must choose a field{/t}{literal}'); 
-		return false; 
-		}
-	
-	var str = '[['+($("#field").val())+(($("#default").val() == '')? '' : '|'+$("#default").val())+']]';
-	$("#body").get(0).value += (str);
-	
-	$("#field").add("#default").val("");
-	$(this).parent().hide();
-	
-	return false;
-	});
+	*/
+});
 </script>
 {/literal}
 

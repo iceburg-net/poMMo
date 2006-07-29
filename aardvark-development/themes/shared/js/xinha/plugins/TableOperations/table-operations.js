@@ -10,7 +10,7 @@
 // Version 3.0 developed by Mihai Bazon for InteractiveTools.
 //   http://dynarch.com/mishoo
 //
-// $Id$
+// $Id: table-operations.js 499 2006-04-30 10:19:10Z gogo $
 
 // Object that will encapsulate all the table operations provided by
 // HTMLArea-3.0 (except "insert table" which is included in the main file)
@@ -23,8 +23,11 @@ function TableOperations(editor) {
 
 	// register the toolbar buttons provided by this plugin
 
+  // Remove existing inserttable and toggleborders, we will replace it in our group  
+  cfg.removeToolbarElement(' inserttable toggleborders '); 
+  
+	var toolbar = ["linebreak", "inserttable", "toggleborders"];
     
-	var toolbar = ["linebreak"];
 	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
 		if (!btn) {
