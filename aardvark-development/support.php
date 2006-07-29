@@ -20,7 +20,7 @@ define('_IS_SUPPORT', TRUE);
 require ('bootstrap.php');
 require (bm_baseDir . '/install/helper.install.php');
 
-$poMMo = & fireup();
+$poMMo = & fireup('install');
 $dbo = & $poMMo->_dbo;
 
 // allow access to this page if not installed 

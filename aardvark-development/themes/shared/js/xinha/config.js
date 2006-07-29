@@ -3,6 +3,7 @@
     xinha_config  = null;
     xinha_plugins = null;
 
+    // This contains the names of textareas we will make into Xinha editors
     xinha_init = xinha_init ? xinha_init : function()
     {
       xinha_plugins = xinha_plugins ? xinha_plugins :
@@ -34,4 +35,4 @@
       HTMLArea.startEditors(xinha_editors);
     }
 
-    window.onload = xinha_init;
+    // moved to mailings_send2.tpl window.onload = xinha_init;
