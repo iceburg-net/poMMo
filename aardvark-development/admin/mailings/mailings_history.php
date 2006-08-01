@@ -25,14 +25,32 @@ $poMMo = & fireup("secure");
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
-/* Setup Vars
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+$smarty = & bmSmartyInit();
+$smarty->assign('returnStr', _T('Mailings Page'));
+
+/* SET PAGE STATE
  * limit		- Nr. of Mailings displayed per Pager-Site
  * mailcount	- Nr. of Mailings in mailing_history table
  */
-//$appendUrl = 	'&limit='.$limit."&order=".$order."&orderType=".$orderType; // for pager class // get rid of this ONLY $_POST
-$limit = (empty ($_REQUEST['limit'])) ? '10' : str2db($_REQUEST['limit']);
-$orderType = (empty ($_REQUEST['orderType'])) ? 'ASC' : str2db($_REQUEST['orderType']);
-$order = (empty ($_REQUEST['order'])) ? 'id' : str2db($_REQUEST['order']);
+ 
+// default key/value pairs of this page's state
+$pmState = array(
+	'limit' => '10',
+	'sortOrder' => 'ASC',
+	'sortBy' => 'id'
+);
+$poMMo->stateInit('mailings_history',$pmState);
+
+$limit = $poMMo->stateVar('limit',$_REQUEST['limit']);
+echo '<br><br>LEE'.$limit;
+$sortOrder = $poMMo->stateVar('sortOrder',$_REQUEST['sortOrder']);
+$sortBy = $poMMo->stateVar('sortBy',$_REQUEST['sortBy']);
+
+$smarty->assign('state',$poMMo->_state);
+
 $mailcount = dbGetMailingCount($dbo); // func in inc/db_history.php
 
 /* Instantiate Pager class (Using modified template from author) */
@@ -41,26 +59,17 @@ $mailcount = dbGetMailingCount($dbo); // func in inc/db_history.php
 // eg. limit=5, 3 pages, go to page 3 -> then choose limit=10 
 // -> no mailings found because of start = 20 
 // its doing right, but less user friendly it it says no mailing, but its only that there are no mailings in this range
-$p = new Pager($appendUrl);
+$p = new Pager();
 $start = $p->findStart($limit); //echo "<br>START: " . $start . "<br>";
 $pages = $p->findPages($mailcount, $limit); //echo "<br>PAGES: " . $pages . "<br>";
 // $pagelist : echo to print page navigation. -- TODO: adding appendURL to every link gets VERY LONG!!! come up w/ new plan!
 $pagelist = $p->pageList($_GET['page'], $pages);
 
 // Fetch Mailings
-$mailings = & dbGetMailingHistory($dbo, $start, $limit, $order, $orderType); // func in inc/db_history.php
+$mailings = & dbGetMailingHistory($dbo, $start, $limit, $sortBy, $sortOrder); // func in inc/db_history.php
 
 // If there are mailings display them
-
-/**********************************
-		SETUP TEMPLATE PAGE
- *********************************/
-$smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Mailings Page'));
 $smarty->assign('mailings', $mailings);
-$smarty->assign('limit', $limit);
-$smarty->assign('order', $order);
-$smarty->assign('orderType', $orderType);
 $smarty->assign('pagelist', $pagelist);
 $smarty->assign('rowsinset', $mailcount);
 
@@ -68,4 +77,3 @@ $smarty->display('admin/mailings/mailings_history.tpl');
 
 bmKill();
 ?>
-

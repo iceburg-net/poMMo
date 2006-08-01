@@ -12,33 +12,35 @@
  ** [END HEADER]**/
 
 //(ct)
+// TODO -> Review and cleanup.
 
+/**********************************
+	INITIALIZATION METHODS
+ *********************************/
 define('_IS_VALID', TRUE);
  
 require('../../bootstrap.php');
-
 require_once (bm_baseDir.'/inc/db_history.php');
 
 $poMMo =& fireup("secure");
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+
+$smarty = & bmSmartyInit();
+$smarty->assign('returnStr', _T('Mailing History'));
  
- 	// vars
-	$appendUrl = "limit=".$_REQUEST['limit']."&order=".$_REQUEST['order']."&orderType=".$_REQUEST['orderType']; 
-
  
- 	// Smarty Init
-	$smarty = & bmSmartyInit();
-	$smarty->assign('returnStr', _T('Mailing History'));
+// if mailid or action are empty - redirect
+if (empty ($_REQUEST['mailid']) || empty ($_REQUEST['action'])) {
+	bmRedirect('mailings_history.php?');
+}
 
-
-	// if mailid or action are empty - redirect
-	if (empty ($_REQUEST['mailid']) || empty ($_REQUEST['action'])) {
-		bmRedirect('mailings_history.php?'.$appendUrl);
-	}
-
-	// Actions with a record
+	// Actions with a record -- same as appendURL but used as hidden form value in the template
+	
 	$action = $_REQUEST['action'];
 	$mailid = $_REQUEST['mailid'];
 	$order = $_REQUEST['order'];
@@ -64,7 +66,7 @@ $dbo = & $poMMo->_dbo;
 			$delid = $_REQUEST['deleteEmails']; 
 			if (dbRemoveMailFromHistory($dbo, $delid)) {
 				$logger->addMsg(_T('Delete mailing: Delete successful.'));
-				bmRedirect('mailings_history.php?'.$appendUrl);
+				bmRedirect('mailings_history.php?');
 			} else {
 				$logger->addErr(_T("Could not delete Mailing with ID: ". $delid));
 			}
@@ -75,7 +77,7 @@ $dbo = & $poMMo->_dbo;
 
 		// maybe some better redirecting?	
 		// All submits empty
-		bmRedirect('mailings_history.php?'.$appendUrl);
+		bmRedirect('mailings_history.php?');
 				
 	} 
 
@@ -146,11 +148,6 @@ $dbo = & $poMMo->_dbo;
 
 	$smarty->assign('mailid',$mailid);
 	$smarty->assign('action',$action);
-
-	$smarty->assign('limit',$limit);
-	$smarty->assign('order',$order);
-	$smarty->assign('orderType',$orderType);
-
 	$smarty->display('admin/mailings/mailings_mod.tpl');
 	bmKill();
 

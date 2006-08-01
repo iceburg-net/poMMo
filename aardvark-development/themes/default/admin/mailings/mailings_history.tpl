@@ -3,6 +3,7 @@
 </div>
 <!-- begin content -->
 
+{debug}
 
 	<h1>{t}Mailings History{/t}</h1>
 
@@ -41,30 +42,29 @@
 				{t}Mailings per Page:{/t} 
 			
 				<SELECT name="limit" onChange="document.bForm.submit()">
-					<option value="10"{if $limit == '10'} SELECTED{/if}>10</option>
-					<option value="20"{if $limit == '20'} SELECTED{/if}>20</option>
-					<option value="50"{if $limit == '50'} SELECTED{/if}>50</option>
-					<option value="100"{if $limit == '100'} SELECTED{/if}>100</option>
+					<option value="10"{if $state.limit == '10'} SELECTED{/if}>10</option>
+					<option value="20"{if $state.limit == '20'} SELECTED{/if}>20</option>
+					<option value="50"{if $state.limit == '50'} SELECTED{/if}>50</option>
+					<option value="100"{if $state.limit == '100'} SELECTED{/if}>100</option>
 				</SELECT>
 		
 				<span style="width: 30px;"></span>
 	
 				{t}Order by:{/t}
-				<SELECT name="order" onChange="document.bForm.submit()">
-					{*<option value="id"{if $order == 'id'} SELECTED{/if}>id</option>*}
-					<option value="subject"{if $order == 'subject'} SELECTED{/if}>subject</option>
-					<option value="started"{if $order == 'started'} SELECTED{/if}>Start Date</option>
-					<option value="finished"{if $order == 'finished'} SELECTED{/if}>Finish Date</option>
-					<option value="mailgroup"{if $order == 'mailgroup'} SELECTED{/if}>Mail group</option>
-					<option value="sent"{if $order == 'sent'} SELECTED{/if}>Mails Sent</option>
-					<option value="ishtml"{if $order == 'ishtml'} SELECTED{/if}>HTML Mail</option>
+				<SELECT name="sortBy" onChange="document.bForm.submit()">
+					<option value="subject"{if $state.sortBy == 'subject'} SELECTED{/if}>subject</option>
+					<option value="started"{if $state.sortBy == 'started'} SELECTED{/if}>Start Date</option>
+					<option value="finished"{if $state.sortBy == 'finished'} SELECTED{/if}>Finish Date</option>
+					<option value="mailgroup"{if $state.sortBy == 'mailgroup'} SELECTED{/if}>Mail group</option>
+					<option value="sent"{if $state.sortBy == 'sent'} SELECTED{/if}>Mails Sent</option>
+					<option value="ishtml"{if $state.sortBy == 'ishtml'} SELECTED{/if}>HTML Mail</option>
 				</SELECT>
 
 				<span style="width: 15px;"></span>
 	
-				<SELECT name="orderType" onChange="document.bForm.submit()">
-					<option value="ASC"{if $orderType == 'ASC'} SELECTED{/if}>{t}ascending{/t}</option>
-					<option value="DESC"{if $orderType == 'DESC'} SELECTED{/if}>{t}descending{/t}</option>
+				<SELECT name="sortOrder" onChange="document.bForm.submit()">
+					<option value="ASC"{if $state.sortOrder == 'ASC'} SELECTED{/if}>{t}ascending{/t}</option>
+					<option value="DESC"{if $state.sortOrder == 'DESC'} SELECTED{/if}>{t}descending{/t}</option>
 				</SELECT>
 	
 			</form>
@@ -213,7 +213,3 @@
 	{/literal}
 
 {include file="admin/inc.footer.tpl"}
-
-
-
-
