@@ -46,11 +46,13 @@ if ($poMMo->_config['revision'] == pommo_revision && !isset ($_REQUEST['forceUpg
 	bmKill();
 }
 
+require(bm_baseDir . '/install/helper.upgrade.php');
+
 if (isset ($_REQUEST['disableDebug']))
 	unset ($_REQUEST['debugInstall']);
 elseif (isset ($_REQUEST['debugInstall'])) $smarty->assign('debug', TRUE);
 
-if (empty ($_REQUEST['continue'])) {
+if (empty($_REQUEST['continue'])) {
 	if (!bmIsInstalled())
 		$logger->addErr(sprintf(_T('poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . bm_baseUrl . '/install/install.php">', '</a>'));
 	else
