@@ -26,6 +26,7 @@ class Common {
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_authenticated; // TRUE if user has successfully logged on.
 	var $_data; // Used to hold temporary data (such as an uploaded file's contents).. accessed via set (sets), get (returns), clear(deletes)
+	var $_state; // Used to hold the state of pages -- e.g. variables that should be stored like 'limit, order, etc'
 	var $_logger; // holds the logger class object
 	var $_dbo; // the database object
 	
@@ -134,6 +135,24 @@ class Common {
 			return (empty($this->_data[$name])) ? false : $this->_data[$name];
 		}
 		return $this->_data;
+	}
+	
+	function stateInit($name = 'default', $state = array()) {
+		if (empty($_SESSION['state_'.$name])) {
+			$_SESSION['state_'.$name] = $state;
+		}
+		$this->_state =& $_SESSION['state_'.$name];
+		return;
+	}
+	
+	// used to access or set state Vars
+	// TODO -> remove str2db when queries are made safe by DB abstraction class
+	function stateVar($varName, $varValue = NULL) {
+		echo 'called name: '.$varName.' val: '.$varValue;
+		if (!empty($varValue)) {
+			$this->_state[$varName] = str2db($varValue);
+		}
+		return (isset($this->_state[$varName])) ? $this->_state[$varName] : false;
 	}
 }
 ?>
