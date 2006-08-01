@@ -43,9 +43,6 @@
 
 	<form name="aForm" id="aForm" method="POST" action="">
 		<input type="hidden" name="action" value="{$action}">
-		<input type="hidden" name="order" value="{$order}">
-		<input type="hidden" name="orderType" value="{$orderType}">
-		<input type="hidden" name="limit" value="{$limit}">
 		
 		<p>	
 			<span style="text-align: center;">{t 1=$numbertodisplay}Displaying %1 mailings.{/t}</span>
@@ -58,7 +55,6 @@
 				<table border="0" cellpadding="0" cellspacing="0" style="text-align:left; padding:10px;">
 					<tr>
 						<td>
-							<p><b>{t}ID:{/t} </b>{$mailitem.id}</p>
 							<p><b>{t}From:{/t} </b>{$mailitem.fromname} &lt;{$mailitem.fromemail}&gt;</p>
 							{if $mailitem.fromemail != $mailitem.frombounce}<p><b>{t}Bounces:{/t} </b>&lt;{$mailitem.frombounce}&gt;</p>{/if}
 							<p><b>{t}To:{/t} </b>{$mailitem.mailgroup}, <i>{$mailitem.subscriberCount}</i> {t}recipients.{/t}</p>
@@ -78,7 +74,7 @@
 							{if $mailitem.ishtml == 'on'}
 								<p>
 									<b>{t}HTML Body:{/t} </b>
-										 <a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.id}" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
+										 <a href="mailing_preview.php" target="_blank">{t escape=no 1='</a>'}Click here %1 to view in a new browser window.{/t}
 								</p>
 								{if $mailitem.altbody}
 									<p>
@@ -111,16 +107,12 @@
 
 
 	{elseif $action == 'delete'}
-	<!----------------- Delete Mail Action ----------------->
+	<!----------------- Delete Mail Action --------------- --> 
 
 		
 	<form name="aForm" id="aForm" method="POST" action="">
 		<input type="hidden" name="action" value="{$action}">
-		<input type="hidden" name="order" value="{$order}">
-		<input type="hidden" name="orderType" value="{$orderType}">
-		<input type="hidden" name="limit" value="{$limit}">
 		
-
 		<p>	
 			<span style="text-align: center;">{t 1=$numbertodisplay}The following %1 mailings will be deleted{/t}:</span>
 		</p>
@@ -210,7 +202,7 @@
 	</form>
 
 	{else}
-	<!----------------- In Case something goes wrong ----------------->
+	<!----------------- In Case something goes wrong --------------- -->
 	
 		<div>
 			<span>{t}Problem during processing your request.{/t}
