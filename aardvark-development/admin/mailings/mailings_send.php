@@ -1,6 +1,4 @@
 <?php
-
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -98,31 +96,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$_POST['subject'] = $mailingData['subject'];
 		$_POST['ishtml'] = ($mailingData['ishtml'] == 'on' || $mailingData['ishtml'] == 'html') ? 'html' : 'plain';
 		$_POST['charset'] = $mailingData['charset'];
-
-		/* CT
-		 * Mailgroup loading
-		 * Since the Mailgroup is saved in the DB at the date of sending and can change during time (new name,
-		 * other name, other subscribers, other rules) and we need to preserve the data at the time the mailng 
-		 * was sent we try to select the name from the actual groups, if its there it will be selected through
-		 * the ID
-		 * 'all' has extra handling, since its not a ID
-		 */
-
-		// CT; If mailgroup is numeric, its an id, else if its a string, get the group ID from it if it exists
-
-		if (empty ($mailingData['mailgroup']) || is_numeric($mailingData['mailgroup']) || $mailingData['mailgroup'] == 'all') {
-			$_POST['mailgroup'] = $mailingData['mailgroup'];
-		} else { // mailgroup is a string (loaded through mailing history), check if exists
-
-			$mailgroupid = getGroupID($dbo, $historic['mailgroup']);
-			if ($mailgroupid) {
-				$_POST['mailgroup'] = $mailgroupid;
-			} else {
-				$_POST['mailgroup'] = 'all';
-				$logger->addMsg(_T("Reloaded mailgroup no longer active. Select a valid one."));
-			}
-		}
-
+		$_POST['mailgroup'] = $mailingData['mailgroup'];
 	} else { // mailingData Empty. Load default values from DB
 		$dbvalues = $poMMo->getConfig(array (
 			'list_fromname',

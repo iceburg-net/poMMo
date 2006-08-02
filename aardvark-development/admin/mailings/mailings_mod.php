@@ -12,7 +12,6 @@
  ** [END HEADER]**/
 
 //(ct)
-// TODO -> Review and cleanup.
 
 /**********************************
 	INITIALIZATION METHODS
@@ -30,127 +29,91 @@ $dbo = & $poMMo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 
-$smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Mailing History'));
- 
- 
+// default key/value pairs of this page's state
+$pmState = array(
+	'mailid' => NULL,
+	'action' => NULL
+);
+$poMMo->stateInit('mailings_mod',$pmState);
+
+$action = $poMMo->stateVar('action',$_REQUEST['action']);
+$mailid = $poMMo->stateVar('mailid',$_REQUEST['mailid']);
+
 // if mailid or action are empty - redirect
-if (empty ($_REQUEST['mailid']) || empty ($_REQUEST['action'])) {
-	bmRedirect('mailings_history.php?');
+// TODO -> perhaps perform better validation of action/mailID here
+//  e.g. have a validType($var,'rule') function? i.e. validType($mailid,numeirc)
+if (empty($action) || empty($mailid)) {
+	var_dump($action,$mailid,$_REQUEST);
+	die();
+	bmRedirect('mailings_history.php');
 }
 
-	// Actions with a record -- same as appendURL but used as hidden form value in the template
-	
-	$action = $_REQUEST['action'];
-	$mailid = $_REQUEST['mailid'];
-	$order = $_REQUEST['order'];
-	$orderType = $_REQUEST['orderType'];
-	$limit = $_REQUEST['limit'];
+$smarty = & bmSmartyInit();
+$smarty->assign('returnStr', _T('Mailing History'));
+$smarty->assign('mailid',$mailid);
+$smarty->assign('action',$action);
 
+// perform deletions if requested
+if (!empty($_REQUEST['deleteMailings']) && !empty($_REQUEST['delid'])) {
+	if (dbRemoveMailFromHistory($dbo, $_REQUEST['delid']))
+		bmRedirect('mailings_history.php?');
+	else
+		$logger->addErr(_T('Trouble deleteing mailgs'));
+}
 
+// ACTIONS -> choose what we want to do.
+switch ($action) {
 
-	if (!empty($_REQUEST['submitone'])) {
-
-		$delid = $_REQUEST['submitone'];
-		if (dbRemoveMailFromHistory($dbo, $delid)) {
-			$logger->addMsg(_T('Delete mailing: Delete successful.'));
-		} else {
-			$logger->addErr(_T("Could not delete Mailing with ID: ". $delid));
+	case 'view': 
+		$smarty->assign('actionStr', _T('Mailing View'));
+		$noassign = TRUE;					
+	case 'delete': 
+		$mailings = dbGetMailingInfo($dbo, $mailid);
+		if (!isset($noassign))
+			$smarty->assign('actionStr', _T('Mailing Delete'));
+		$smarty->assign('mailings',$mailings);
+		
+		// assign body to session mailing_data
+		foreach ($mailings as $key=>$mailing) {
+			if ($mailing['ishtml'] == 'on')
+				$poMMo->set(array(
+					'mailingData'.$key => array (
+						'body' => $mailing['body']
+						)
+					));
 		}
+		
+		break;
 
-	} elseif (!empty($_REQUEST['submitall'])) {
-
-		// To delete we wait for user confirmation and then return to mailings history
-		if (!empty($_REQUEST['deleteEmails'])) { 
-			
-			$delid = $_REQUEST['deleteEmails']; 
-			if (dbRemoveMailFromHistory($dbo, $delid)) {
-				$logger->addMsg(_T('Delete mailing: Delete successful.'));
-				bmRedirect('mailings_history.php?');
+	case 'reload': 
+			//Mailid can only be numeric because reloading of multiple Mailings doesn't make sense
+			if (is_numeric($mailid)) {
+				// Get Mail Data and put in the $pommo variable for the send procedure in mailings_send1,2,3,4.php
+				$mailing = current(dbGetMailingInfo($dbo, $mailid));
+				$poMMo->set(array(
+					'mailingData' => array (
+						'fromname' => $mailing['fromname'],
+						'fromemail' => $mailing['fromemail'],
+						'frombounce' => $mailing['frombounce'],
+						'subject' => $mailing['subject'],
+						'ishtml' => $mailing['ishtml'],
+						'charset' => $mailing['charset'],
+						'mailgroup' => ($mailing['mailgroup'] == 'all')? 'all' :
+							getGroupId($dbo,$mailing['mailgroup']),
+						'altbody' => $mailing['altbody'],
+						'body' => $mailing['body']
+						)
+					));
+				bmRedirect('mailings_send.php');
 			} else {
-				$logger->addErr(_T("Could not delete Mailing with ID: ". $delid));
+				bmRedirect('mailings_history.php');
 			}
 			
-		} else {
-			$logger->addErr(_T('Could not delete mailing. The supplied ID is not valid.'));
-		}
-
-		// maybe some better redirecting?	
-		// All submits empty
-		bmRedirect('mailings_history.php?');
-				
-	} 
-
-
- 	// ACTIONS -> choose what we want to do.
- 	switch ($action) {
+			break;
+	default:
+		bmKill('Error; unknown action.');
+} //switch
 	
-			case 'view': 
-
-					// Get Mailing Data from DB
-					$mailings = dbGetMailingInfo($dbo, $mailid);			//print_r($mailings);
-					$numbertodisplay = count($mailings);
-					$smarty->assign('actionStr', _T('Mailing View'));
-					$smarty->assign('mailings',$mailings);
-					$smarty->assign('numbertodisplay', $numbertodisplay);
-					break;
-					
-			case 'delete': 
-
-					// Get Mailing data from Mails that are to be deleted
-					$mailings = dbGetMailingInfo($dbo, $mailid);			//print_r($mailings);
-					$numbertodisplay = count($mailings);
-					$smarty->assign('actionStr', _T('Mailing Delete'));
-					$smarty->assign('mailings',$mailings);
-					$smarty->assign('numbertodisplay', $numbertodisplay);
-					
-					break;
-
-			case 'reload': 
-
-					//Mailid can only be numeric because reloading of multiple Mailings doesn't make sense
-					if (is_numeric($mailid)) {
-
-						// Get Mail Data and put in the $pommo variable for the send procedure in mailings_send1,2,3,4.php
-						$mailings = dbGetMailingInfo($dbo, $mailid);
-						$body = dbGetHTMLBody($dbo, $mailid);
-						$mailings[0]['body'] = $body['body'];
-						$poMMo->set($mailings[0]);
-					
-						bmRedirect('mailings_send.php');
-						
-					} else {
-						$logger->addMsg(_T('Could not reload mailing. The supplied ID is not valid.'));
-					}
-					
-					break;
-				
-	} //switch
-	
- 
-/* Taken From subscriber table management
-			//-----
-			// I dont do this:
-			// What if 1 ID is not found in the DB, eg it has been deleted from DB 
-			// in the time between the selection and the displaying
-			//------
-			if (is_array($_REQUEST['sid']) && count($_REQUEST['sid']) > 15) {
-			$_REQUEST['sid'] = array_slice($_REQUEST['sid'], 0, 15);
-			$subCount = 15;
-			$smarty->assign('cropped', TRUE);
-
-*/
-
-
-	/**********************************
-		SETUP/COMPLETE TEMPLATE PAGE
-	 *********************************/
-
-	$smarty->assign('mailid',$mailid);
-	$smarty->assign('action',$action);
-	$smarty->display('admin/mailings/mailings_mod.tpl');
-	bmKill();
-
-
+$smarty->display('admin/mailings/mailings_mod.tpl');
+bmKill();
 ?>
-

@@ -45,7 +45,6 @@ $pmState = array(
 $poMMo->stateInit('mailings_history',$pmState);
 
 $limit = $poMMo->stateVar('limit',$_REQUEST['limit']);
-echo '<br><br>LEE'.$limit;
 $sortOrder = $poMMo->stateVar('sortOrder',$_REQUEST['sortOrder']);
 $sortBy = $poMMo->stateVar('sortBy',$_REQUEST['sortBy']);
 

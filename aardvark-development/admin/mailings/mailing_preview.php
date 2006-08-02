@@ -18,7 +18,11 @@
 	
 	// TODO --> rewrite corinna's method to use mailingData['body'] (get rid of requestr, etc. dbGetHTMLBody(), etc.)
 	
-	$mailingData =& $poMMo->get('mailingData');
+	
+	$append = NULL;
+	if (isset($_GET['viewid'])) // coming from mailings_history
+		$append = $_GET['viewid']; 
+	$mailingData =& $poMMo->get('mailingData'.$append);
 	if (get_magic_quotes_gpc()) {
 		echo stripslashes($mailingData['body']);
 	} else {
