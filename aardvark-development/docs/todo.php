@@ -18,13 +18,11 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
-
 [BRICE]
 	
 	IMMEDIATE (for next release):
-		+ fix corinna's reloading of mails to use mailingData[]
 		+ fix prepareForForm() in SMARTY TEMPLATE (must load proper JS, CSS!)
-
+			-  test w/ group adding ("type group name" not cleared on focus)
 
 	[BEFORE 1.0]
 		+ Personalization
