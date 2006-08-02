@@ -3,8 +3,6 @@
 </div>
 <!-- begin content -->
 
-{debug}
-
 	<h1>{t}Mailings History{/t}</h1>
 
 		{* Display a eventual error message *}
@@ -81,10 +79,6 @@
 		<div style="text-align: center; width: 100%;" id="mailingtable" >
 	
 		<form name="oForm" id="oForm" method="POST" action="mailings_mod.php">
-			<input type="hidden" name="order" value="{$order}">
-			<input type="hidden" name="orderType" value="{$orderType}">
-			<input type="hidden" name="limit" value="{$limit}">
-
 			<table cellspacing="0" cellpadding="5" border="0" style="text-align: left; margin: 10px; margin-left:auto; margin-right:auto; ">
 
 					<!--Table headers-->
