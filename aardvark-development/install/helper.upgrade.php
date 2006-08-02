@@ -679,8 +679,16 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 		
 			if ($dbRev < $revision) {
 				
-				 $sql = 'ALTER TABLE `' . $dbo->table['mailing_current'] . '` CHANGE `started` `started` DATETIME NULL, CHANGE `finished` `finished` DATETIME NULL';
+				$sql = 'ALTER TABLE `' . $dbo->table['mailing_current'] . '` CHANGE `started` `started` DATETIME NULL, CHANGE `finished` `finished` DATETIME NULL';
 				if (!performUpdate($sql, $dbo, 74, 'Allowing NULL times for mailings'))
+					$failed = TRUE;
+					
+				$sql = 'ALTER TABLE `' . $dbo->table['mailing_current'] . '` CHANGE `charset` `charset` VARCHAR(15) NOT NULL DEFAULT \'UTF-8\'';
+				if (!performUpdate($sql, $dbo, 75, 'Allowing longer encoding names'))
+					$failed = TRUE;
+					
+				$sql = 'ALTER TABLE `' . $dbo->table['mailing_history'] . '`` ADD `charset` VARCHAR(15) NOT NULL DEFAULT \'UTF-8\';';
+				if (!performUpdate($sql, $dbo, 75, 'Saving encoding to mailing history'))
 					$failed = TRUE;
 					
 				// bump version

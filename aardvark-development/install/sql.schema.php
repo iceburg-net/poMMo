@@ -99,7 +99,7 @@ CREATE TABLE :::mailing_current::: (
   `serial` varchar(20) default NULL,
   `securityCode` varchar(35) default NULL,
   `notices` longtext default NULL,
-  `charset` varchar(10) NOT NULL default 'UTF-8',
+  `charset` varchar(15) NOT NULL default 'UTF-8',
   PRIMARY KEY  (`id`)
 );
 
@@ -119,6 +119,7 @@ CREATE TABLE :::mailing_history::: (
   `started` datetime NOT NULL,
   `finished` datetime NOT NULL,
   `sent` int(10) unsigned NOT NULL default '0',
+  `charset` varchar(15) NOT NULL default 'UTF-8',
   PRIMARY KEY  (`id`)
 );
 

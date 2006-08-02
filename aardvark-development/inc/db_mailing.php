@@ -171,17 +171,17 @@ function dbMailingEnd(&$dbo) {
 
 		$safesql =& new SafeSQL_MySQL;
 		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
-			mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, 
-			body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent FROM %s LIMIT 1",
+			mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
+			body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
 			array ($dbo->table['mailing_history'], $dbo->table['mailing_current']) );
  	
  	} elseif (is_numeric($row['mailgroup'])) {
  
 		$safesql =& new SafeSQL_MySQL;
 		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
-			mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, subject, 
+			mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
 			body, altbody, ishtml, (SELECT group_name FROM %s WHERE group_id=(SELECT mailgroup FROM %s LIMIT 1 ) 
-			LIMIT 1 ), subscriberCount, started, finished, sent FROM %s LIMIT 1",
+			LIMIT 1 ), subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
 			array ($dbo->table['mailing_history'], $dbo->table['groups'], $dbo->table['mailing_current'], 
 			$dbo->table['mailing_current']) );
 
@@ -297,19 +297,4 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 		$throttler['relay'.$relay_id]['domainHistory']
 		);
 }
-
-
-//ct Get the ID for a group_name
-function & getGroupID($dbo, $groupname) {
-	$safesql =& new SafeSQL_MySQL;
-	$sql = $safesql->query("SELECT group_id FROM %s WHERE group_name='%s' LIMIT 1",
-		array ($dbo->table['groups'], $groupname) );
-		
-	// bb Simplified return (note: the 0 says get first row. False if none returned)
-	return $dbo->query($sql,0);
-
-} //getGroupID
-//end ct
-
-
 ?>
