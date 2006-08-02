@@ -146,11 +146,10 @@ class Common {
 	}
 	
 	// used to access or set state Vars
-	// TODO -> remove str2db when queries are made safe by DB abstraction class
+	// TODO -> remove str2db (dbSanitize) when queries are made safe by DB abstraction class
 	function stateVar($varName, $varValue = NULL) {
-		echo 'called name: '.$varName.' val: '.$varValue;
 		if (!empty($varValue)) {
-			$this->_state[$varName] = str2db($varValue);
+			$this->_state[$varName] = dbSanitize($varValue);
 		}
 		return (isset($this->_state[$varName])) ? $this->_state[$varName] : false;
 	}
