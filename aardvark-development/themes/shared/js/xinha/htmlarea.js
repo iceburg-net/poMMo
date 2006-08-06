@@ -27,8 +27,8 @@
     --     included in the top 10 lines of the file (see the embedded edit mode)
     --
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $
-    --  $LastChangedDate: 2006-07-23 03:16:26 +1200 (Sun, 23 Jul 2006) $
-    --  $LastChangedRevision: 536 $
+    --  $LastChangedDate: 2006-08-06 01:54:50 +1200 (Sun, 06 Aug 2006) $
+    --  $LastChangedRevision: 544 $
     --  $LastChangedBy: mokhet $
     --------------------------------------------------------------------------*/
 
@@ -36,8 +36,8 @@ HTMLArea.version =
 {
   'Release'   : 'Trunk',
   'Head'      : '$HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'Date'      : '$LastChangedDate: 2006-07-23 03:16:26 +1200 (Sun, 23 Jul 2006) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision: 536 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'Date'      : '$LastChangedDate: 2006-08-06 01:54:50 +1200 (Sun, 06 Aug 2006) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision: 544 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
   'RevisionBy': '$LastChangedBy: mokhet $'.replace(/^[^:]*: (.*) \$$/, '$1')
 };
 
@@ -6711,35 +6711,22 @@ HTMLArea.freeLater = function(obj,prop)
 
 /**
  * Release memory properties from object
- * @param {object} O (Object)   The object to free memory
- * @param (string} P (Property) The property to release (optional)
+ * @param {object} object The object to free memory
+ * @param (string} prop   The property to release (optional)
  * @private
  */
-HTMLArea.free = function(O, P)
+HTMLArea.free = function(obj, prop)
 {
-  if ( O && !P )
+  if ( obj && !prop )
   {
-    for ( var p in O )
+    for ( var p in obj )
     {
-      HTMLArea.free(O, p);
+      HTMLArea.free(obj, p);
     }
   }
-  else if ( O )
+  else if ( obj )
   {
-    // is the try...catch really required here ?
-    try
-    {
-      // if it is the innerHTML property, just do nothing
-      if ( P !== 'innerHTML' )
-      {
-        // need to unhide TD cells before delete them or they will leak in IE
-        if ( O[P] && O[P].tagName && O[P].tagName.toLowerCase() == 'td' )
-        {
-          O[P].style.display = '';
-        }
-        O[P] = null;
-      }
-    } catch(x) {}
+    try { obj[prop] = null; } catch(x) {}
   }
 };
 
