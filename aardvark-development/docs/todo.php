@@ -18,6 +18,12 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
+Personally I would also like to see a "chain" in place for the unsubscribe, eg. it calls the unsuscribe as it does now but then continies onto another php file, by default empty. But this would allow users (admins) to implement any further processing that they wanted to do, i would imagine that the persons email address should be "posted" to this php chainer. This could make the integration of this to any other installation of anything else, eg site registration removal, so much easier.
+
+Add validation of subscriber field name (via AJAX?) with personalization -- check on form submit of mailings_send2.php 
+  + Ensure that server side algorithim during mailing_send4.php will not choke on invalid subscriber field name
+  
+  
 [BRICE]
 	
 	IMMEDIATE (for next release):
