@@ -8,15 +8,17 @@
 {if $ishtml == 'html'}
 	{if $editorType == 'text'}
 		<script type="text/javascript" language="javascript">
-		function xinhaSubmit() {ldelim}
-			document.bForm.submit();
-			return true;
-		{rdelim}
+			var xinha_enabled = false;
+			function xinhaSubmit() {ldelim}
+				document.bForm.submit();
+				return true;
+			{rdelim}
 		</script>
 	{else}
 		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
 		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
 		<script type="text/javascript" language="javascript">
+			var xinha_enabled = true;
 			function xinhaSubmit() {ldelim}
 				document.bForm.onsubmit();
 				document.bForm.submit();
@@ -141,8 +143,6 @@ $(function() {
 		});
 	***********/
 	
-	/*
-	
 	$("a.pommoOpen").click(function() { $(this).siblings("div").slideDown(); return false; });
 		
 	$("a.pommoClose").click(function() { $(this).parent().slideUp(); return false; });
@@ -151,23 +151,31 @@ $(function() {
 		$(this).parent().find("span.pommoHelp").toggle(); return false;
 		});
 		
-	$("#insert").click(function() {
-		
+	$("#insert").click(function() {		
 		if ($("#field").val() == '') { 
 			alert ('{/literal}{t}You must choose a field{/t}{literal}'); 
 			return false; 
 			}
 		
+		// sting to append
 		var str = '[['+($("#field").val())+(($("#default").val() == '')? '' : '|'+$("#default").val())+']]';
-		$("#body").get(0).value += (str);
 		
+		if (!xinha_enabled) {
+			// append to plain text editor (regular textarea)
+			$("#body").get(0).value += (str);
+		}
+		else {
+			// append to xinha editor
+			xinha_editors.body.insertHTML(str);
+		}
+		
+		
+		// hide dialog
 		$("#field").add("#default").val("");
 		$(this).parent().hide();
 		
 		return false;
 	});
-	
-	*/
 });
 </script>
 {/literal}
