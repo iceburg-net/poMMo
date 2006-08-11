@@ -75,7 +75,7 @@ if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
  * Otherwise, set it based from REQUEST
  */
 (defined('_poMMo_embed')) ? require(bm_workDir.'/include.php') :
-	define('bm_baseUrl', preg_replace('@/(/inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+	define('bm_baseUrl', preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
 
 define('bm_http', (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST']);
 

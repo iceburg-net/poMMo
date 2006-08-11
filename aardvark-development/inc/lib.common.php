@@ -63,8 +63,12 @@ function bmHttpSpawn($page) {
 	$cbSock = fsockopen($_SERVER['HTTP_HOST'], $_SERVER['SERVER_PORT'], $errno, $errstr, 5);
 	if ($cbSock) {
 		fwrite($cbSock, "GET " . $page . " HTTP/1.0\r\n" . "Host: {$_SERVER['HTTP_HOST']}\r\n\r\n");
-	} else
+	} else {
+		global $logger;
+		$logger->addErr(_T('Error Spawning Page').'<br>Errno - Errstr: '.$errno.' - '.$errstr);
 		return false;
+	}
+		
 	return true;
 		/*die('Could not spawn background page. Errno = ' .
 		$errno . ', Errstr = ' . $errstr); */

@@ -1,5 +1,6 @@
 <?php
 
+
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -15,20 +16,30 @@
 /**********************************
 	STARTUP ROUTINES
  *********************************/
+// Tests the background Mail processor. Spawned via httpspawn. Write the time to cache directory
 
 define('_IS_VALID', TRUE);
 require ('../bootstrap.php');
 
 $poMMo = & fireup('install');
+$logger = & $poMMo->_logger;
 
-// Tests the background Mail processor. Spawned via httpspawn. Write the time to cache directory
-
+// open file handle
 if (!$handle = fopen(bm_workDir . '/test.php', 'w')) {
 	die();
 }
 
-$fileContent = '<?php $testTime=' . time() . '; ?>';
+$fileContent = '<?php $testTime=' . time() . '; $respawnHost=' . $_SERVER['HTTP_HOST'] . '; $respawnPort=' . $_SERVER['SERVER_PORT'] . '; ?>';
 
+// if this is the second attempt
+if (isset ($_GET['respawn'])) {
+	$fileContent .= '<?php $respawnAttempt=TRUE; ?>';
+} else {
+	$fileContent .= '<?php $respawnAttempt=FALSE; ?>';
+	bmHttpSpawn(bm_baseUrl . '/inc/sup.testmailer.php?respawn=xxx');
+}
+
+// write to file
 fwrite($handle, $fileContent);
 fclose($handle);
 ?>
