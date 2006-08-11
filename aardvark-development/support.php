@@ -21,10 +21,13 @@ require ('bootstrap.php');
 require (bm_baseDir . '/install/helper.install.php');
 
 $poMMo = & fireup('install');
+session_start();
+
+$logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
 // allow access to this page if not installed 
-if (bmIsInstalled() && !$poMMo->isAuthenticated()) {
+if (bmIsInstalled() && !$_SESSION['pommo']['authenticated']) {
 	bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
 		 '<a href="'.bm_baseUrl.'/index.php?referer='.$_SERVER['PHP_SELF'].'">',
 		'</a>'));
@@ -80,18 +83,32 @@ if (isset($_GET['clearWork'])) {
 	echo (delDir(bm_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
 }
 elseif (isset($_GET['checkSpawn'])) {
-	
-	echo 'Attempting to spawn a background script... please wait.<br><br>';
+	echo 'Attempting to spawn initial background script (HOST: '.$_SERVER['HTTP_HOST'].' PORT: '.$_SERVER['SERVER_PORT'].')... please wait.<br><br>';
 	ob_flush();
 	flush();
 	
 	// call background script. Script writes time() as $testTime to workdir/test.php. Include file to compare.
-	bmHttpSpawn(bm_baseUrl.'/inc/sup.testmailer.php');
+	bmHttpSpawn(bm_baseUrl.'/inc/sup.testmailer.php?xxx=yyy');
 	sleep(5);
 	@include(bm_workDir.'/test.php');
-	echo (isset($testTime) && ((time() - $testTime) < 6))? 'Background Spawning SUCCESS' :
-		'Background Spawning FAILED, mailings will not process. Seek support.';
 	
+	if (isset($testTime) && ((time() - $testTime) < 7)) {
+		echo 'Initial Background Spawning SUCCESS<br><br>';
+		if ($respawnAttempt) {
+			echo 'Respawn Attempt (HOST: '.$respawnHost.' PORT: '.$respawnPort.')... SUCCESS';
+		}
+		else {
+			echo 'Respawn Attempt (HOST: '.$respawnHost.' PORT: '.$respawnPort.')... FAILED';
+			echo '<br>Log: ';
+				foreach($logger->getErr() as $msg)
+					echo $msg.' ';
+		}
+	}
+	else {
+		echo 'Initial Background Spawning FAILED, mailings will not process. Seek support.';
+		echo '<br>Log: ';
+				foreach($logger->getErr() as $msg)
+					echo $msg.' ';
+	}
 }
-
 bmKill();
