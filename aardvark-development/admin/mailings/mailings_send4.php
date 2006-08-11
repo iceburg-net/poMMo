@@ -16,10 +16,17 @@
  *********************************/
 
 // skips serial and security code checking. For debbuing this script.
-$skipSecurity = TRUE;
+$skipSecurity = FALSE;
 
 // # of mails to fetch from the queue at a time
-$queueSize = 3;
+$queueSize = 100;
+
+// set maximum runtime of this script in seconds. If unable to set, set max runtime to 7 seconds less than current max.
+$maxRunTime = 110;
+if (ini_get('safe_mode'))
+	$maxRunTime = ini_get('max_execution_time') - 3;
+else
+	set_time_limit($maxRunTime +3);
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
@@ -185,12 +192,6 @@ if ($poMMo->_config['multimode']) {
 	$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
 }
 
-// set maximum runtime of this script in seconds. If unable to set, set max runtime to 7 seconds less than current max.
-$maxRunTime = 110;
-if (ini_get('safe_mode'))
-	$maxRunTime = ini_get('max_execution_time') - 3;
-else
-	set_time_limit($maxRunTime +3);
 
 // start throttler's timer
 $bmThrottler->startScript($maxRunTime);
