@@ -60,9 +60,9 @@ function bmStripper($input) {
 function bmHttpSpawn($page) {
 	$errno = "";
 	$errstr = "";
-	$cbSock = fsockopen($_SERVER['HTTP_HOST'], $_SERVER['SERVER_PORT'], $errno, $errstr, 5);
+	$cbSock = fsockopen((defined('bm_hostname')) ? bm_hostname :$_SERVER['HTTP_HOST'], (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'], $errno, $errstr, 5);
 	if ($cbSock) {
-		fwrite($cbSock, "GET " . $page . " HTTP/1.0\r\n" . "Host: {$_SERVER['HTTP_HOST']}\r\n\r\n");
+		fwrite($cbSock, "GET " . $page . " HTTP/1.0\r\n" . "Host: ".(defined('bm_hostname')) ? bm_hostname :$_SERVER['HTTP_HOST']."\r\n\r\n");
 	} else {
 		global $logger;
 		$logger->addErr(_T('Error Spawning Page').'<br>Errno - Errstr: '.$errno.' - '.$errstr);

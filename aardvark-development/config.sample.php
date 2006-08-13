@@ -34,16 +34,22 @@ $bmdb['database'] = 'pommo';
 // * Set the table prefix  (change if you intend to have multiple poMMos running from the same database)
 $bmdb['prefix'] = 'pommo_';
 
+
 /************************************************************************
  * ::: Language Information :::
  *   Set this to your desired locale  -- this is a work in progress
  * 
- *	en - English				ro - Romanian
+ *	bg - Bulgarian					it - Italian
+ *	br - Brazilian Portugese		nl - Dutch
+ *	de - German						ro - Romanian
+ *	en - English
  *	fr - French
- *	de - German
-*/
+************************************************************************/
 define('bm_lang','en');
 
+
+/******************[ OPTIONAL CONFIGURATION ]*******************/
+// (Below options intended for debugging and overriding automatic configuration) 
 
 /************************************************************************
  * ::: Debugging Information :::
@@ -80,4 +86,37 @@ define('bm_verbosity',3);
  * 
 */
 //define('bm_workDir','/path/to/pommoCache');
+
+
+/************************************************************************
+ * ::: Base URL :::
+ * 
+ * This is the path to pommo relative to the WEB.
+ * For example, if poMMo is http://newsletter.mydomain.com/, the baseURL
+ * would be '/'. If poMMo is http://www.mydomain.com/mysite/pommo, the
+ * baseURL would be '/mysite/pommo'
+ * 
+ * Default: Automatically Detected
+ */
+//define('bm_baseUrl', '/mysite/newsletter');
+
+
+/************************************************************************
+ * ::: Webserver Hostname :::
+ * 
+ * This is the hostname of the webserver running poMMo
+ * 
+ * Default: Automatically Detected
+ */
+//define('bm_hostname','www.mysite.com');
+ 
+ 
+ /************************************************************************
+ * ::: Webserver Port :::
+ * 
+ * This is the port number of the webserver running poMMo
+ * 
+ * Default: Automatically Detected [Usually 80, 8080, or 443]
+ */
+//define('bm_hostport','8080'); 
 ?>
