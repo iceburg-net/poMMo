@@ -28,8 +28,8 @@ $logger = & $poMMo->_logger;
 if (!$handle = fopen(bm_workDir . '/test.php', 'w')) {
 	die();
 }
-
-$fileContent = '<?php $testTime=' . time() . '; $respawnHost=' . $_SERVER['HTTP_HOST'] . '; $respawnPort=' . $_SERVER['SERVER_PORT'] . '; ?>';
+$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
+$fileContent = '<?php $testTime=' . time() . '; $respawnHost=' . bm_hostname . '; $respawnPort=' . $port . '; ?>';
 
 // if this is the second attempt
 if (isset ($_GET['respawn'])) {

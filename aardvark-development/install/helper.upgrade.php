@@ -687,7 +687,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				if (!performUpdate($sql, $dbo, 75, 'Allowing longer encoding names'))
 					$failed = TRUE;
 					
-				$sql = 'ALTER TABLE `' . $dbo->table['mailing_history'] . '`` ADD `charset` VARCHAR(15) NOT NULL DEFAULT \'UTF-8\';';
+				$sql = 'ALTER TABLE `' . $dbo->table['mailing_history'] . '` ADD `charset` VARCHAR(15) NOT NULL DEFAULT \'UTF-8\';';
 				if (!performUpdate($sql, $dbo, 76, 'Saving encoding to mailing history'))
 					$failed = TRUE;
 					
