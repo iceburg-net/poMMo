@@ -83,7 +83,8 @@ if (isset($_GET['clearWork'])) {
 	echo (delDir(bm_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
 }
 elseif (isset($_GET['checkSpawn'])) {
-	echo 'Attempting to spawn initial background script (HOST: '.$_SERVER['HTTP_HOST'].' PORT: '.$_SERVER['SERVER_PORT'].')... please wait.<br><br>';
+	$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
+	echo 'Attempting to spawn initial background script (HOST: '.bm_hostname.' PORT: '.$port.')... please wait.<br><br>';
 	ob_flush();
 	flush();
 	

@@ -25,7 +25,7 @@ ob_start();
 */
 define('bm_baseDir', dirname(__FILE__));
 define('pommo_revision', '24');
-var_dump(bm_baseDir);
+
 
 @include(bm_baseDir.'/config.php');
 defined('bm_lang') or die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>
