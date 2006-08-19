@@ -58,21 +58,34 @@ function bmStripper($input) {
 
 // spawns a page in the background, used by mail processor.
 function bmHttpSpawn($page) {
-	$errno = "";
-	$errstr = "";
+	
+	/* Convert illegal characters in url */
+	$page = str_replace(' ', '%20', $page);
+	
+	$errno = '';
+	$errstr = '';
 	$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
-	$cbSock = fsockopen(bm_hostname, $port, $errno, $errstr, 5);
-	if ($cbSock) {
-		fwrite($cbSock, "GET " . $page . " HTTP/1.0\r\n" . "Host: ".bm_hostname."\r\n\r\n");
+	$host = (defined('bm_hostname')) ? bm_hostname : $_SERVER['HTTP_HOST'];
+
+	$out = "GET $page HTTP/1.1\r\n";
+	$out .= "Host: ".$host."\r\n";
+	
+	// to allow for basic .htaccess http authentication, uncomment the following;
+	// $out .= "Authorization: Basic " . base64_encode('username:password')."\r\n";
+	
+	$out .= "\r\n";
+	
+	$socket = fsockopen($host, $port, $errno, $errstr, 10);
+	
+	if ($socket) {
+		fwrite($socket,$out);
 	} else {
 		global $logger;
-		$logger->addErr(_T('Error Spawning Page').'<br>Errno - Errstr: '.$errno.' - '.$errstr);
+		$logger->addErr(_T('Error Spawning Page').' ** Errno : Errstr: '.$errno.' : '.$errstr);
 		return false;
 	}
-		
+	
 	return true;
-		/*die('Could not spawn background page. Errno = ' .
-		$errno . ', Errstr = ' . $errstr); */
 }
 
 function bmRedirect($url, $msg = NULL, $kill = true) {
