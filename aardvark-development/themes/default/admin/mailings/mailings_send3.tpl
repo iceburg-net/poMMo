@@ -9,6 +9,15 @@
     {/foreach}
     </div>
  {/if}
+ 
+ {if $errors}
+ 	<br>
+	<div class="errdisplay">
+	{foreach from=$errors item=msg}
+	<div>* {$msg}</div>
+	{/foreach}
+	</div>
+ {/if}
 
 <div style="background-color: #E6ECDA;">
 
