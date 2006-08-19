@@ -18,15 +18,15 @@
 // skips serial and security code checking. For debbuing this script.
 $skipSecurity = FALSE;
 
-// # of mails to fetch from the queue at a time
-$queueSize = 100;
+// # of mails to fetch from the queue at a time (Default: 100)
+$queueSize = 3;
 
-// set maximum runtime of this script in seconds. If unable to set, set max runtime to 7 seconds less than current max.
-$maxRunTime = 110;
+// set maximum runtime of this script in seconds (Default: 110). If unable to set (SAFE MODE,etc.), max runtime will default to 3 seconds less than current max.
+$maxRunTime = 5;
 if (ini_get('safe_mode'))
 	$maxRunTime = ini_get('max_execution_time') - 3;
 else
-	set_time_limit($maxRunTime +3);
+	set_time_limit($maxRunTime +5);
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
@@ -102,13 +102,19 @@ function bmMKill($reason, $killSession = FALSE) {
 	$dbo->query($sql);
 
 	// update DB notices
-	$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET notices=CONCAT_WS(\',\',notices,\'' . mysql_real_escape_string(array2csv($logger->getMsg())) . '\')';
+	$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET notices=CONCAT_WS(\',\',notices,\'' . mysql_real_escape_string(array2csv($logger->getAll())) . '\')';
 	$dbo->query($sql);
 	
 	if ($killSession)
 		session_destroy();
 
 	bmKill($reason);
+}
+
+function bmSpawn($url) {
+	global $logger;
+	$logger->addMsg('Attempting to spawn: '.$url,1);
+	(bmHttpSpawn($url)) ? $logger->addMsg($url.' spawned.',1) : $logger->addMsg('ERROR SPAWNING: '.$url,1);
 }
 
 /**********************************
@@ -123,15 +129,15 @@ else {
 	$dbo->query($sql);
 }
 
-// check to see if the mailing has been serialized (serial exists). If not, set the current mailing's serial to this scripts.
-$sql = 'SELECT serial,securityCode,command,finished FROM ' . $dbo->table['mailing_current'] . ' LIMIT 1';
+
+// check to see if mailing is finished, has been serialized, and security code
+$sql = 'SELECT serial,securityCode,finished FROM ' . $dbo->table['mailing_current'] . ' LIMIT 1';
 $dbo->query($sql);
 $row = mysql_fetch_assoc($dbo->_result);
 
 if ($row['finished'] > 0)
 	bmMKill('Mailing has completed.',TRUE);
 	
-
 if (empty ($row['serial'])) { // if no serial has yet been entered for this mailing... serialize & start the mailing...
 	$sql = "UPDATE {$dbo->table['mailing_current']} SET serial='" . $serial . "', status='started', command='none'";
 	$dbo->query($sql);
@@ -139,42 +145,32 @@ if (empty ($row['serial'])) { // if no serial has yet been entered for this mail
 
 if (!$skipSecurity && (empty($row['securityCode']) || $_GET['securityCode'] != $row['securityCode']))
 	bmMKill('Script stopped for security reasons.',TRUE);
-elseif ($row['serial'] != $serial) {
-	// if this script's serial & the mailings don't match, check if a restart command was given, or else kill the script.
-	if ($row['command'] == 'restart') {
-		$sql = "UPDATE {$dbo->table['mailing_current']} SET serial='" . $serial . "', command='none', status='started'";
-		$dbo->query($sql);
-		$logger->addMsg('Mailing resumed under script with serial ' . $serial, 3);
-	} elseif (!$skipSecurity)
-		bmMKill('Serials do not match. Another script is probably processing this mailing. To take control, stop and restart the mailing.',TRUE);
-}
-
 
 /**********************************
  * MAILING INITIALIZATION
  *********************************/
 
 // checks to see if mailing should be halted (or is in halted state...)
-dbMailingPoll($dbo, $serial);
+dbMailingPoll($serial);
 
 // spawn script per relay if in multimode
 if ($poMMo->_config['multimode']) {
 	if (empty ($_GET['relay_id'])) {
 		if (!empty ($poMMo->_config['smtp_1']))
-			bmHttpSpawn(bm_baseUrl .
+			bmSpawn(bm_baseUrl .
 			'/admin/mailings/mailings_send4.php?relay_id=1&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		sleep(2); // delay to help prevent "shared" throttlers racing to create queue
 		if (!empty ($poMMo->_config['smtp_2']))
-			bmHttpSpawn(bm_baseUrl .
+			bmSpawn(bm_baseUrl .
 			'/admin/mailings/mailings_send4.php?relay_id=2&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		if (!empty ($poMMo->_config['smtp_3']))
-			bmHttpSpawn(bm_baseUrl .
+			bmSpawn(bm_baseUrl .
 			'/admin/mailings/mailings_send4.php?relay_id=3&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		if (!empty ($poMMo->_config['smtp_4']))
-			bmHttpSpawn(bm_baseUrl .
+			bmSpawn(bm_baseUrl .
 			'/admin/mailings/mailings_send4.php?relay_id=4&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		bmMKill('Multimode detected. Spawning background scripts for SMTP relays.');
@@ -219,7 +215,7 @@ function updateDB(& $sentMails, & $timer) {
 	dbMailingUpdate($dbo, $sentMails);
 
 	// poll mailing	
-	dbMailingPoll($dbo, $serial);
+	dbMailingPoll($serial);
 
 	// reset variables
 	$sentMails = array ();
@@ -311,11 +307,11 @@ updateDB($sentMails, $timer);
 
 // kill signal sent from throttler (max exec time likely reached), respawn.	
 if (!empty ($_GET['relay_id']))
-	bmHttpSpawn(bm_baseUrl .
+	bmSpawn(bm_baseUrl .
 	'/admin/mailings/mailings_send4.php?relay_id=' .
 	$_GET['relay_id'] . '&serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 else
-	bmHttpSpawn(bm_baseUrl .
+	bmSpawn(bm_baseUrl .
 	'/admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 
 bmMKill('Respawned... Max exec time likely reached.');

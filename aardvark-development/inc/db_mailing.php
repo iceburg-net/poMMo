@@ -122,23 +122,35 @@ function dbMailingStamp(& $dbo, $arg) {
 }
 
 // checks the status or if a "command" has been issued for a mailing
-function dbMailingPoll($dbo, $serial = '') {
+function dbMailingPoll($serial = '') {
+	global $dbo;
+	global $skipSecurity;
+	global $logger;
 	
 	$sql = 'SELECT command, status, serial FROM ' . $dbo->table['mailing_current'];
 	$dbo->query($sql);
 	$row = mysql_fetch_row($dbo->_result);
 	
-	global $skipSecurity;
-	if ($row[2] != $serial && !$skipSecurity) {
-		bmMKill('Serials do not match, a different process has taken control?',TRUE);
-	}
-	if ($row[0] == "stop") { // if script was sent the "stop" command...
-		$sql = "UPDATE {$dbo->table['mailing_current']} SET status='stopped', command='none'";
-		$dbo->query($sql);
-		bmMKill('Mail processing has stopped as per Administrator\'s request',TRUE);
-	}
-	elseif ($row[1] == "stopped") { // if mailing is in "stopped" status...
-		bmMKill('Mail processing is in halted state. You must restart the mailing...',TRUE);
+	switch ($row[0]) {
+		case 'restart':
+				$sql = "UPDATE {$dbo->table['mailing_current']} SET serial='" . $serial . "', command='none', status='started'";
+				$dbo->query($sql);
+				$logger->addMsg('Mailing resumed under script with serial ' . $serial, 3);
+			break;
+	
+		case 'stop':
+				$sql = "UPDATE {$dbo->table['mailing_current']} SET status='stopped', command='none'";
+				$dbo->query($sql);
+				bmMKill('Mail processing has stopped as per Administrator\'s request',TRUE);
+			break;
+			
+		default :
+			if ($row[2] != $serial && !$skipSecurity) 
+				bmMKill('Serials do not match. Another script is probably processing this mailing. To take control, stop and restart the mailing.',TRUE);
+			
+			if ($row[1] == "stopped")  // if mailing is in "stopped" status...
+				bmMKill('Mail processing is in halted state. You must restart the mailing...',TRUE);			
+			break;
 	}
 	return true;
 }
