@@ -77,6 +77,10 @@ class bmLogger {
 		return $this->Get($limit,$clear,$this->_errors);
 	}
 	
+	function & getAll($limit = FALSE, $clear = TRUE) {
+		return array_merge($this->Get($limit,$clear,$this->_errors),$this->Get($limit,$clear,$this->_messages));
+	}
+	
 	function isMsg() {
 		return count($this->_messages);	
 	}
