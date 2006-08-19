@@ -19,10 +19,10 @@
 $skipSecurity = FALSE;
 
 // # of mails to fetch from the queue at a time (Default: 100)
-$queueSize = 3;
+$queueSize = 100;
 
 // set maximum runtime of this script in seconds (Default: 110). If unable to set (SAFE MODE,etc.), max runtime will default to 3 seconds less than current max.
-$maxRunTime = 5;
+$maxRunTime = 110;
 if (ini_get('safe_mode'))
 	$maxRunTime = ini_get('max_execution_time') - 3;
 else
