@@ -58,8 +58,7 @@ echo<<<EOF
 EOF;
 
 if (isset ($_GET['cmd'])) {
-
-	switch ($cmd) {
+	switch ($_GET['cmd']) {
 		case 'clearWork' :
 
 			function delDir($dirName) {
