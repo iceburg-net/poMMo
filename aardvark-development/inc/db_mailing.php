@@ -174,6 +174,7 @@ function dbMailingUpdate(& $dbo, & $sentMails) {
 // Write a Mail that is being sent to the mailing history
 function dbMailingEnd(&$dbo) {
 
+	// TODO -- redo this function, maintain similar functionality
 	$safesql =& new SafeSQL_MySQL;
 	$sql = $safesql->query("SELECT mailgroup FROM %s LIMIT 1", array( $dbo->table['mailing_current'] ) );
   	$dbo->query($sql);
@@ -197,9 +198,10 @@ function dbMailingEnd(&$dbo) {
 			array ($dbo->table['mailing_history'], $dbo->table['groups'], $dbo->table['mailing_current'], 
 			$dbo->table['mailing_current']) );
 
-	} else {
+	} else {$cmd
 		//Not numeric and not ALL
 		//logger
+		// no mailing
 	}
 
 /* 	Brice:
