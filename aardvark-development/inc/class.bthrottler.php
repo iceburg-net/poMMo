@@ -184,7 +184,7 @@ class bThrottler {
 			bmKill('Logger not available to throttler.');
 		$this->logger =& $logger;
 		
-		$this->logger->addMsg('bThrottler initialized. [Genesis] ' . $genesis . ' [Queue Size] ' . $queue . ' [Target MPS] ' . $targetMPS . ' [Target BPS] ' . $targetBPS . ' [Domain Period] ' . $domPeriod . ' [Domain MPP] ' . $domMPP . ' [Domain BPP] ' . $domBPP, 1);
+		$this->logger->addMsg('bThrottler initialized. [Genesis] ' . $genesis . ' [Queue Size] ' . count($queue) . ' [Target MPS] ' . $targetMPS . ' [Target BPS] ' . $targetBPS . ' [Domain Period] ' . $domPeriod . ' [Domain MPP] ' . $domMPP . ' [Domain BPP] ' . $domBPP, 1);
 
 		$this->_genesis = $genesis;
 		$this->_startTime = time();
