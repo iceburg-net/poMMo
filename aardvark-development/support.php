@@ -1,4 +1,5 @@
 <?php
+
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -28,9 +29,8 @@ $dbo = & $poMMo->_dbo;
 
 // allow access to this page if not installed 
 if (bmIsInstalled() && !$_SESSION['pommo']['authenticated']) {
-	bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
-		 '<a href="'.bm_baseUrl.'/index.php?referer='.$_SERVER['PHP_SELF'].'">',
-		'</a>'));
+	bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
+	bm_baseUrl . '/index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
 	die();
 }
 
@@ -38,14 +38,16 @@ echo<<<EOF
 
 <hr>
 <div style="width: 100%; text-align: center;">
-	poMMo support v0.01
+	poMMo support v0.02
 	<hr>
 </div>
 
 <ul>
-	<li><a href="support.php?clearWork=TRUE">Clear Work Directory</a></li>
+	<li><a href="support.php?cmd=clearWork">Clear Work Directory</a></li>
 	<br>
-	<li><a href="support.php?checkSpawn=TRUE">Test Mailing Processor</a></li>
+	<li><a href="support.php?cmd=checkSpawn">Test Mailing Processor</a></li>
+	<br>
+	<li><a href="support.php?cmd=killMail">Terminate Mailing</a></li>
 </ul>
 <hr>
 
@@ -55,61 +57,77 @@ echo<<<EOF
 </div>
 EOF;
 
-if (isset($_GET['clearWork'])) {
-	function delDir($dirName) {
-		if (empty ($dirName)) {
-			return true;
-		}
-		if (file_exists($dirName)) {
-			$dir = dir($dirName);
-			while ($file = $dir->read()) {
-				if ($file != '.' && $file != '..') {
-					if (is_dir($dirName . '/' . $file)) {
-						delDir($dirName . '/' . $file);
-					} else {
-						@ unlink($dirName . '/' . $file) or die('File ' . $dirName . '/' . $file . ' couldn\'t be deleted!');
-					}
+if (isset ($_GET['cmd'])) {
+
+	switch ($cmd) {
+		case 'clearWork' :
+
+			function delDir($dirName) {
+				if (empty ($dirName)) {
+					return true;
 				}
+				if (file_exists($dirName)) {
+					$dir = dir($dirName);
+					while ($file = $dir->read()) {
+						if ($file != '.' && $file != '..') {
+							if (is_dir($dirName . '/' . $file)) {
+								delDir($dirName . '/' . $file);
+							} else {
+								@ unlink($dirName . '/' . $file) or die('File ' . $dirName . '/' . $file . ' couldn\'t be deleted!');
+							}
+						}
+					}
+					$dir->close();
+					if ($dirName != bm_workDir)
+						@ rmdir($dirName) or die('Folder ' . $dirName . ' couldn\'t be deleted!');
+				} else {
+					return false;
+				}
+				return true;
 			}
-			$dir->close();
-			if ($dirName != bm_workDir)
-				@ rmdir($dirName) or die('Folder ' . $dirName . ' couldn\'t be deleted!');
-		} else {
-			return false;
-		}
-		return true;
+
+			echo (delDir(bm_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
+
+			break;
+			
+		case 'checkSpawn' :
+
+			$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
+			echo 'Attempting to spawn initial background script (HOST: ' . bm_hostname . ' PORT: ' . $port . ')... please wait.<br><br>';
+			ob_flush();
+			flush();
+
+			// call background script. Script writes time() as $testTime to workdir/test.php. Include file to compare.
+			bmHttpSpawn(bm_baseUrl . '/inc/sup.testmailer.php?xxx=yyy');
+			sleep(5);
+			@ include (bm_workDir . '/test.php');
+
+			if (isset ($testTime) && ((time() - $testTime) < 7)) {
+				echo 'Initial Background Spawning SUCCESS<br><br>';
+				if ($respawnAttempt) {
+					echo 'Respawn Attempt (HOST: ' . $respawnHost . ' PORT: ' . $respawnPort . ')... SUCCESS';
+				} else {
+					echo 'Respawn Attempt (HOST: ' . $respawnHost . ' PORT: ' . $respawnPort . ')... FAILED';
+					echo '<br>Log: ';
+					foreach ($logger->getErr() as $msg)
+						echo $msg . ' ';
+				}
+			} else {
+				echo 'Initial Background Spawning FAILED, mailings will not process. Seek support.';
+				echo '<br>Log: ';
+				foreach ($logger->getErr() as $msg)
+					echo $msg . ' ';
+			}
+			break;
+			
+		case 'killMail' :
+				require (bm_baseDir . '/inc/db_mailing.php');
+				dbMailingEnd($dbo);
+				echo 'Mailing Terminated';
+			break;
+		default :
+			break;
 	}
-	
-	echo (delDir(bm_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
 }
-elseif (isset($_GET['checkSpawn'])) {
-	$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
-	echo 'Attempting to spawn initial background script (HOST: '.bm_hostname.' PORT: '.$port.')... please wait.<br><br>';
-	ob_flush();
-	flush();
-	
-	// call background script. Script writes time() as $testTime to workdir/test.php. Include file to compare.
-	bmHttpSpawn(bm_baseUrl.'/inc/sup.testmailer.php?xxx=yyy');
-	sleep(5);
-	@include(bm_workDir.'/test.php');
-	
-	if (isset($testTime) && ((time() - $testTime) < 7)) {
-		echo 'Initial Background Spawning SUCCESS<br><br>';
-		if ($respawnAttempt) {
-			echo 'Respawn Attempt (HOST: '.$respawnHost.' PORT: '.$respawnPort.')... SUCCESS';
-		}
-		else {
-			echo 'Respawn Attempt (HOST: '.$respawnHost.' PORT: '.$respawnPort.')... FAILED';
-			echo '<br>Log: ';
-				foreach($logger->getErr() as $msg)
-					echo $msg.' ';
-		}
-	}
-	else {
-		echo 'Initial Background Spawning FAILED, mailings will not process. Seek support.';
-		echo '<br>Log: ';
-				foreach($logger->getErr() as $msg)
-					echo $msg.' ';
-	}
-}
+
 bmKill();

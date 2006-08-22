@@ -36,9 +36,8 @@ INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on')
 INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
-
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR12', 'poMMo Version', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '23', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR13', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '24', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
