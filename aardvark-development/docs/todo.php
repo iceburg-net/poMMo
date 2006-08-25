@@ -18,6 +18,21 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
+I'd like to add a "comment" to the field types which would output a text area on the subscriber form that could be limited to a certain number of characters, and who's styling would be defined within themes/default/subscribe/form.subscribe.tpl (of course). Perhaps there's a better word for "comment" as a field type?
+
+----
+(18:17:49) comporder1: hey man
+(18:18:01) bricecubed: hey
+(18:18:03) comporder1: i had to resume one time this afternoon.
+(18:18:21) comporder1: i found this in the error log - [23-Aug-2006 16:04:57] PHP Fatal error:  Maximum execution time of 10 seconds exceeded in D:\webs\ebcmain\pt\inc\phpmailer\class.smtp.php on line 1018
+
+(18:18:40) bricecubed: excellent!
+(18:19:00) comporder1: i take it that is good?
+(18:19:14) bricecubed: what's your SMTP server?
+(18:19:28) comporder1: cable isp
+(18:19:42) bricecubed: from what I can tell; the SMTP server is not responding to the call... thus causing the script to timeout
+----
+
 Personally I would also like to see a "chain" in place for the unsubscribe, eg. it calls the unsuscribe as it does now but then continies onto another php file, by default empty. But this would allow users (admins) to implement any further processing that they wanted to do, i would imagine that the persons email address should be "posted" to this php chainer. This could make the integration of this to any other installation of anything else, eg site registration removal, so much easier.
 
 Add validation of subscriber field name (via AJAX?) with personalization -- check on form submit of mailings_send2.php 

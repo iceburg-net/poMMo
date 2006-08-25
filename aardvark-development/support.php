@@ -48,6 +48,8 @@ echo<<<EOF
 	<li><a href="support.php?cmd=checkSpawn">Test Mailing Processor</a></li>
 	<br>
 	<li><a href="support.php?cmd=killMail">Terminate Mailing</a></li>
+	<br>
+	<li><a href="support.php?cmd=testTime">Test ability to set Maximum Exec Time</a></li>
 </ul>
 <hr>
 
@@ -120,10 +122,23 @@ if (isset ($_GET['cmd'])) {
 			break;
 			
 		case 'killMail' :
-				require (bm_baseDir . '/inc/db_mailing.php');
-				dbMailingEnd($dbo);
+					$sql = 'TRUNCATE TABLE '.$dbo->table['mailing_current'];
+					$dbo->query($sql);
+					$sql = 'TRUNCATE TABLE '.$dbo->table['queue'];
+					$dbo->query($sql);
 				echo 'Mailing Terminated';
 			break;
+			
+		case 'testTime' :
+			$maxRunTime = 110;
+			echo 'Initial Run Time: '.ini_get('max_execution_time').' seconds <br>';
+			if (ini_get('safe_mode')) {
+				$maxRunTime = ini_get('max_execution_time') - 3;
+				echo 'Safe mode is enabled<br>';
+			}
+			set_time_limit($maxRunTime +5);
+			echo 'End Run Time: '.ini_get('max_execution_time').' seconds <br>';
+	
 		default :
 			break;
 	}
