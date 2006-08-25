@@ -26,7 +26,7 @@ $maxRunTime = 110;
 if (ini_get('safe_mode'))
 	$maxRunTime = ini_get('max_execution_time') - 3;
 else
-	set_time_limit($maxRunTime +5);
+	set_time_limit($maxRunTime +7);
 
 define('_IS_VALID', TRUE);
 require ('../../bootstrap.php');
