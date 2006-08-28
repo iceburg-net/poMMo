@@ -18,6 +18,11 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
++++ Implement Passwords on user information (login.php). Include customizable question/answer pair.
+
++++ Merge subscribers/pending table.
+
+
 I'd like to add a "comment" to the field types which would output a text area on the subscriber form that could be limited to a certain number of characters, and who's styling would be defined within themes/default/subscribe/form.subscribe.tpl (of course). Perhaps there's a better word for "comment" as a field type?
 
 ----
@@ -32,6 +37,16 @@ I'd like to add a "comment" to the field types which would output a text area on
 (18:19:28) comporder1: cable isp
 (18:19:42) bricecubed: from what I can tell; the SMTP server is not responding to the call... thus causing the script to timeout
 ----
+
+1. when i try to import some subscribers from a CSV file, the script does inject them into the database alright, but the success page doesn't come up (subscribers_import2.php ),
+in firefox it's a blank page and in IE it's a "server not found page". there are 650 subscribers in the csv file if that matters.
+
+2.In the subscribers admin section, the default subscribers number per page is 50. When i try to select a bigger number, it also leads to a blank page.
+
+3. mailings_send.php redirects me to /admin/admin/mailings_send2.php which doesn't exist the same with mailings_send3.php
+
+4. do not forget to put a blank index in all the directories that do not have an index of their own
+
 
 Personally I would also like to see a "chain" in place for the unsubscribe, eg. it calls the unsuscribe as it does now but then continies onto another php file, by default empty. But this would allow users (admins) to implement any further processing that they wanted to do, i would imagine that the persons email address should be "posted" to this php chainer. This could make the integration of this to any other installation of anything else, eg site registration removal, so much easier.
 
