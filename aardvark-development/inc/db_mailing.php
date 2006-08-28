@@ -197,12 +197,8 @@ function dbMailingEnd(&$dbo) {
 			LIMIT 1 ), subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
 			array ($dbo->table['mailing_history'], $dbo->table['groups'], $dbo->table['mailing_current'], 
 			$dbo->table['mailing_current']) );
-
-	} else {$cmd
-		//Not numeric and not ALL
-		//logger
-		// no mailing
-	}
+ 	}
+ 	
 
 /* 	Brice:
  	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, 
