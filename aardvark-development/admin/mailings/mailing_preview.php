@@ -18,7 +18,6 @@
 	
 	// TODO --> rewrite corinna's method to use mailingData['body'] (get rid of requestr, etc. dbGetHTMLBody(), etc.)
 	
-	
 	$append = NULL;
 	if (isset($_GET['viewid'])) // coming from mailings_history
 		$append = $_GET['viewid']; 
@@ -28,4 +27,6 @@
 	} else {
 		echo $mailingData['body'];
 	}
+	
+	var_dump($mailingData['body']);
 ?>
