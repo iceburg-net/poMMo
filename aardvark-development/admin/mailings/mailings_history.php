@@ -37,10 +37,11 @@ $smarty->assign('returnStr', _T('Mailings Page'));
  */
  
 // default key/value pairs of this page's state
+// default maybe the last sent mail on top? and not ASC id
 $pmState = array(
 	'limit' => '10',
-	'sortOrder' => 'ASC',
-	'sortBy' => 'id'
+	'sortOrder' => 'DESC',
+	'sortBy' => 'started'
 );
 $poMMo->stateInit('mailings_history',$pmState);
 
@@ -53,16 +54,12 @@ $smarty->assign('state',$poMMo->_state);
 $mailcount = dbGetMailingCount($dbo); // func in inc/db_history.php
 
 /* Instantiate Pager class (Using modified template from author) */
-// This seems to not handle the case, that when we are on the last page of multiple pages,
-// and then choose to increase the diplay number then the start value is too great
-// eg. limit=5, 3 pages, go to page 3 -> then choose limit=10 
-// -> no mailings found because of start = 20 
-// its doing right, but less user friendly it it says no mailing, but its only that there are no mailings in this range
 $p = new Pager();
-$start = $p->findStart($limit); //echo "<br>START: " . $start . "<br>";
-$pages = $p->findPages($mailcount, $limit); //echo "<br>PAGES: " . $pages . "<br>";
-// $pagelist : echo to print page navigation. -- TODO: adding appendURL to every link gets VERY LONG!!! come up w/ new plan!
+if ($p->findStart($limit) > $mailcount) $_GET['page'] = '1';
+$pages = $p->findPages($mailcount, $limit);
+$start = $p->findStart($limit); 
 $pagelist = $p->pageList($_GET['page'], $pages);
+
 
 // Fetch Mailings
 $mailings = & dbGetMailingHistory($dbo, $start, $limit, $sortBy, $sortOrder); // func in inc/db_history.php
