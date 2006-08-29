@@ -56,7 +56,7 @@ $smarty->assign('action',$action);
 // perform deletions if requested
 if (!empty($_REQUEST['deleteMailings']) && !empty($_REQUEST['delid'])) {
 	if (dbRemoveMailFromHistory($dbo, $_REQUEST['delid']))
-		bmRedirect('mailings_history.php?');
+		bmRedirect('mailings_history.php');
 	else
 		$logger->addErr(_T('Trouble deleteing mailgs'));
 }
