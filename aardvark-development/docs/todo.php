@@ -70,8 +70,6 @@ Add validation of subscriber field name (via AJAX?) with personalization -- chec
 	SHORT TERM:
 	
 	
-	  (API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + get rid of appendURL problem!
-	
 	  (API) - secure "included" files under cache -- don't include them.. rather run them through specialized parser? e.g. for embed.forms & httpSpawn tester
 	  
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
@@ -114,7 +112,7 @@ Add validation of subscriber field name (via AJAX?) with personalization -- chec
 	  			
 	  			}
 	  				
-	  (feature) add mailing history
+	  //(feature) add mailing history
 	  (feature) add message templating
 	  (feature) Add Date + Numeric types  [[[{html_select_date}]]]
 	  
@@ -167,6 +165,8 @@ Add validation of subscriber field name (via AJAX?) with personalization -- chec
 	For me it's now corrected with this SQL line :
 	- alter table pommo_mailing_current change charset charset varchar(30) not null;
 	
+	-> if it was this, it was a nasty problem :)
+	
 	  REGEX group filtering
 	  Admin notification on subscriber changes/unsubscribes/additions/etc.
 	 
@@ -181,42 +181,80 @@ Add validation of subscriber field name (via AJAX?) with personalization -- chec
 	  corinna: http://www.w3.org/International/O-HTTP-charset
 	  			-> For PHP, use the header() function before generating any content, e.g.: header("Content-type: text/html; charset=utf-8");
 	 
+	 
 
 [CORINNA]
 
-	(feature)	fix paging class 
-	
-	(feature)	add + refactor http://www.phpinsider.com/php/code/SafeSQL/
-	(feature)	alter database design -> merge tables mailings &mailings_history and refactor
-
-				EDIT: after finishing mailing ... database entry in mailing_current would not switch to mailing_history
-
-	(feature)	Mailing History 		Mailing History -> Database insertion of Mailings
-	(feature)	Numeric types/sets for Demographics
-
-	(feature)	Change Radio Button Labels
-				<label for="r1"><input type="radio" name="group1" id="r1" value="1" /> button one</label> 
-				so that a click on a label activates the radio button and not a click on the mini-button
-				e.g we have "O on" and want it to activate with a click on "on" and not only the "O"
+		(feature)	add + refactor http://www.phpinsider.com/php/code/SafeSQL/
+			 	-> all but the Strings with escaped ''.
+			 	
+			 	$whereStr = ' WHERE group_id=\''.$where.'\'';
+			 	[..]
+			 	$safesql =& new SafeSQL_MySQL;
+				$sql = $safesql->query("SELECT group_id, group_name FROM %s %s ORDER BY group_name",
+					array($dbo->table['groups'], $whereStr) );
+					
+				Brice, what do you want for standard? SafeSQL wants "QUERY STRING in double QUOTES and the parameters in 'this quotes'"
+				Also should i use always %s oder %i for the ids? Because you used 'id', but i think numbers can be without ''
+				Can i convert all to this format? $stringvar = "abc'de'fgh"
+				See his README in inc/safesql
 				
-				-> problem because fields_edit.php LABEL is the Description of the entire field
-				-> css alterations with inner labels
+				
+		DB Scheme for Mailings current/history(ideas?) -- 
+				* Eventually I think they should be merged into one table as we discussed. 
+				At this time, lets focus elsewhere as there are bigger fish to fry ;). Mark this as long/medium term? 
 
-	(module) 	User Administration (3 tier achitecture)
-	(module)	LDAP Support, ADS
+				-> OK!
+				-> You requested this in the poMMo forum
 
 
+
+
+	SHORT TERM
 	
-	LONG TERM:
-	DB Scheme for Mailings current/history(ideas?) -- 
-		* Eventually I think they should be merged into one table as we discussed. At this time,
-			lets focus elsewhere as there are bigger fish to fry ;). Mark this as long/medium term? 
-			~ Brice
-		-> OK! 
+		(API) 		get rid of appendURL problem!
+					+ convert to $poMMo->_state + save there
+	
+		(feature)	alter database design -> merge tables mailings &mailings_history and refactor
+					EDIT: after finishing mailing ... database entry in mailing_current would not 
+					switch to mailing_history
+	
+		(arch)		module integration architecture
+					how hook in the modules?
+		
+		
+		(module) 	User Administration (3 tier achitecture)
+		
+		(module)	LDAP Support, ADS
+		
+		(module)	Bounce management would be cool, as module
+					Filter incoming Mails, if there is a mailer-daemon replied to 1 of 
+					our mails report it to the administrator
+		
+		(feature)	Numeric types/sets for Demographics
+		
+	MIDDLE TERM
+	
+		(UI)		Manual, FAQ, User Doku
+	
+	
+
+	LONG TERM
 
 
-	DONE: 
-	(done) 	(feature) View Page (mailings_mod): Ability to "load" message -- copy body, group, subject, from, 
-			etc. to a new Mailing.	
-  
+
+  -----------------------------------------------
+ 	[DONE]
+
+
  
+  	(API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + 
+	// This seems to not handle the case, that when we are on the last page of multiple pages,
+	// and then choose to increase the diplay number then the start value is too great
+	// eg. limit=5, 3 pages, go to page 3 -> then choose limit=10 
+	// -> no mailings found because of start = 20 
+	// its doing right, but less user friendly it it says no mailing, but its only that there are no mailings in this range
+	// $pagelist : echo to print page navigation. -- 
+	// TODO: adding appendURL to every link gets VERY LONG!!! come up w/ new plan!
+	-> i started from the beginning in the case of $start geater then number of mails -> simple :/
+
