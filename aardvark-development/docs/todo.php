@@ -205,13 +205,15 @@ Add validation of subscriber field name (via AJAX?) with personalization -- chec
 				At this time, lets focus elsewhere as there are bigger fish to fry ;). Mark this as long/medium term? 
 
 				-> OK!
-				-> You requested this in the poMMo forum
+				-> You requested this in the poMMo forum if the execution times will be longer..
+				With little data it is no problem and when one has a lot of data he can always 
+				make a index on them (Indices).
 
 
 
 
 	SHORT TERM
-	
+		
 		(API) 		get rid of appendURL problem!
 					+ convert to $poMMo->_state + save there
 	
