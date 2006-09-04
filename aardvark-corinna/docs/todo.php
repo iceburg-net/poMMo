@@ -185,6 +185,8 @@ Add validation of subscriber field name (via AJAX?) with personalization -- chec
 
 [CORINNA]
 
+		TEST the branch
+
 		(feature)	add + refactor http://www.phpinsider.com/php/code/SafeSQL/
 			 	-> all but the Strings with escaped ''.
 			 	
