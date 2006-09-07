@@ -30,8 +30,12 @@
 		</script>
 		
 	{/if}
+{else}
+	<script type="text/javascript" language="javascript">
+		var xinha_enabled = false;
+	</script>
 {/if}
-	
+
 {/capture}{include file="admin/inc.header.tpl"}
 
 
@@ -49,6 +53,7 @@
 			
 			<select id="field">
 				<option value="">{t}choose field{/t}</option>
+				<option value="Email">Email</option>
 				{foreach from=$fields key=id item=field}
 				<option value="{$field.name}">{$field.name}</option>
 				{/foreach}
