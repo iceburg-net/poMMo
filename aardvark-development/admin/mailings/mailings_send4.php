@@ -16,7 +16,7 @@
  *********************************/
 
 // skips serial and security code checking. For debbuing this script.
-$skipSecurity = FALSE;
+$skipSecurity = TRUE;
 
 // # of mails to fetch from the queue at a time (Default: 100)
 $queueSize = 100;
@@ -117,6 +117,14 @@ function bmSpawn($url) {
 	(bmHttpSpawn($url)) ? $logger->addMsg($url.' spawned.',1) : $logger->addMsg('ERROR SPAWNING: '.$url,1);
 }
 
+// checks a message for personalization
+function isPersonalized(&$msg) {
+	$matches = array();
+	$pattern = '/\[\[[^\]]+]]/';
+	preg_match($pattern, $msg, $matches);
+	return (empty($matches)) ? FALSE : TRUE;
+}
+
 /**********************************
 	SECURITY ROUTINES
  *********************************/
@@ -128,7 +136,6 @@ else {
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=config_value+1 WHERE config_name=\'dos_processors\' LIMIT 1';
 	$dbo->query($sql);
 }
-
 
 // check to see if mailing is finished, has been serialized, and security code
 $sql = 'SELECT serial,securityCode,finished FROM ' . $dbo->table['mailing_current'] . ' LIMIT 1';

@@ -23,10 +23,8 @@
 		$append = $_GET['viewid']; 
 	$mailingData =& $poMMo->get('mailingData'.$append);
 	if (get_magic_quotes_gpc()) {
-		echo stripslashes($mailingData['body']);
+		echo trim(stripslashes($mailingData['body']));
 	} else {
-		echo $mailingData['body'];
+		echo trim($mailingData['body']);
 	}
-	
-	var_dump($mailingData['body']);
 ?>
