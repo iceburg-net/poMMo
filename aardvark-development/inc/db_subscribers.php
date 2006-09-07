@@ -54,7 +54,7 @@ function isDupeEmail(& $dbo, $email, $table = NULL) {
 //				101 => 'Milwaukee'
 //				)
 //		)
-function & dbGetSubscriber(& $dbo, & $input, $retunType = 'detailed', $table = 'subscribers') {
+function & dbGetSubscriber(& $dbo, $input, $retunType = 'detailed', $table = 'subscribers') {
 	
 	if (!is_array($input))
 		$input = array ($input);
