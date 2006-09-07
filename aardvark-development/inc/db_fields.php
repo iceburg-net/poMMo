@@ -52,6 +52,13 @@ function & dbGetFields(& $dbo, $where = NULL) {
 	return (!empty($demos)) ? $demos : array();
 }
 
+// returns a field ID based off name
+function dbGetFieldId($name) {
+	global $dbo;
+	$sql = 'SELECT field_id FROM '.$dbo->table['subscriber_fields'].' WHERE field_name=\''.$name.'\'';
+	return ($dbo->query($sql, 0));
+}
+
 // dbfieldCheck: <bool> - Returns true if a name/id field exists
 function dbFieldCheck(& $dbo, $fieldId) {
 
