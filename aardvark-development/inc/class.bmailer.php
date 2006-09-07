@@ -25,6 +25,7 @@ require_once (bm_baseDir . '/inc/lib.txt.php');
 class bMailer extends PHPMailer {
 
 	var $_charset;
+	var $_personalize;
 	
 	var $_fromname;
 	var $_fromemail;
@@ -45,7 +46,7 @@ class bMailer extends PHPMailer {
 
 	// called like $pommo = new bMailer(fromname,fromemail,frombounce, exchanger)
 	//  If an argument is not supplied, resorts to default value (from setup/config.php).
-	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL, $charset = NULL) {
+	function bMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL, $charset = NULL, $personalize = FALSE) {
 
 		global $poMMo;
 		
@@ -86,6 +87,7 @@ class bMailer extends PHPMailer {
 		$this->_exchanger = $exchanger;
 		$this->_demonstration = $demonstration;
 		$this->_charset = $charset;
+		$this->_personalize = $personalize;
 
 		$this->_subject = NULL;
 		$this->_body = NULL;
@@ -97,7 +99,6 @@ class bMailer extends PHPMailer {
 		global $logger;
 		$this->logger =& $logger;
 		
-
 		$langPath = bm_baseDir . '/inc/phpmailer/language/';
 		if (!$this->SetLanguage('en', $langPath))
 			bmKill('bMailer(): Unable to set language.');
@@ -228,7 +229,6 @@ class bMailer extends PHPMailer {
 			}
 			
 			
-
 			$this->Body = $this->_body;
 
 			// passed all sanity checks...
@@ -257,6 +257,13 @@ class bMailer extends PHPMailer {
 			// if $to is not an array (single email address has been supplied), simply send the mail.
 			if (!is_array($to)) {
 				$this->AddAddress($to);
+				
+				// check for personalization personaliztion and override message body
+				if ($this->_personalize) {
+					$this->Body = personalizeBody($this->_body,$to,$_SESSION['pommo']['personalization']);
+					if (!empty($this->AltBody))
+						$this->AltBody = personalizeBody($this->_body,$to,$_SESSION['pommo']['personalization']);
+				}
 
 				// send the mail. If unsucessful, add error message.
 				if (!$this->Send())
@@ -281,6 +288,14 @@ class bMailer extends PHPMailer {
 				foreach (array_keys($to) as $key) {
 					$this->ClearAddresses();
 					$this->AddAddress($to[$key]);
+					
+					// check for personalization personaliztion and override message body
+					if ($this->_personalize) {
+						$this->Body = personalizeBody($this->_body,$to[$key],$_SESSION['pommo']['personalization']);
+						if (!empty($this->AltBody))
+							$this->AltBody = personalizeBody($this->_body,$to[$key],$_SESSION['pommo']['personalization']);
+					}
+					
 					// send the mail. If unsucessful, add error message.
 					if (!$this->Send())
 						$errors[] = 'Sending to: ' . $to[$key] . ', Error: ' . $this->ErrorInfo;

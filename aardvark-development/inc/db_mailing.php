@@ -174,40 +174,25 @@ function dbMailingUpdate(& $dbo, & $sentMails) {
 // Write a Mail that is being sent to the mailing history
 function dbMailingEnd(&$dbo) {
 
+	require_once (bm_baseDir . '/inc/db_groups.php');
+	
 	// TODO -- redo this function, maintain similar functionality
+	// get group name
 	$safesql =& new SafeSQL_MySQL;
 	$sql = $safesql->query("SELECT mailgroup FROM %s LIMIT 1", array( $dbo->table['mailing_current'] ) );
-  	$dbo->query($sql);
-	$row = mysql_fetch_assoc($dbo->_result);
- 
- 	if ($row['mailgroup'] == "all") {
-
-		$safesql =& new SafeSQL_MySQL;
-		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
-			mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
-			body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
-			array ($dbo->table['mailing_history'], $dbo->table['mailing_current']) );
- 	
- 	} elseif (is_numeric($row['mailgroup'])) {
- 
-		$safesql =& new SafeSQL_MySQL;
-		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
-			mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
-			body, altbody, ishtml, (SELECT group_name FROM %s WHERE group_id=(SELECT mailgroup FROM %s LIMIT 1 ) 
-			LIMIT 1 ), subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
-			array ($dbo->table['mailing_history'], $dbo->table['groups'], $dbo->table['mailing_current'], 
-			$dbo->table['mailing_current']) );
- 	}
- 	
-
-/* 	Brice:
- 	$sql = 'INSERT INTO '.$dbo->table['mailing_history'].' (fromname, fromemail, frombounce, subject, body, 
- 	altbody, ishtml, mailgroup, subscriberCount, started, finished, sent) SELECT fromname, fromemail, frombounce, 
- 	subject, body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent 
- 	FROM '.$dbo->table['mailing_current'].' LIMIT 1';
- */
- 	
- 	$dbo->query($sql);
+  	$group = dbGroupName($dbo,$dbo->query($sql,0));
+  	
+  	// copy mailing to history table
+	$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
+		mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
+		body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
+		array ($dbo->table['mailing_history'], $dbo->table['mailing_current']) );
+	$dbo->query($sql);
+	
+	// update mailing group with actual name
+	// TODO : this is kind of ugly.. can we have a more complicated INSERT statement while keeping MySQL 3.23 compatibility?
+	$sql = $safesql->query("UPDATE %s SET mailgroup='%s' WHERE id='%s'", array($dbo->table['mailing_history'],$group,$dbo->lastId()));
+	$dbo->query($sql);
 
  	
  	$sql = 'TRUNCATE TABLE '.$dbo->table['mailing_current'];
@@ -234,8 +219,20 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 		$sql = "SELECT ishtml,fromname,fromemail,frombounce,subject,body,altbody,charset FROM " . $dbo->table['mailing_current'];
 		$dbo->query($sql);
 		$_SESSION['pommo']['mailing'] = $dbo->getRows($sql);
+		
+		// detect personalization
+		$_SESSION['pommo']['mailing']['personal'] = isPersonalized($_SESSION['pommo']['mailing']['body']);
 	}
 	$row = & $_SESSION['pommo']['mailing'];
+	
+	// require personalization library if needed
+	if ($row['personal']) {
+		require_once (bm_baseDir . '/inc/lib.personalization.php');
+		// cache personalization data into session if not already
+		if(empty($_SESSION['pommo']['personalization'])) {
+			$_SESSION['pommo']['personalization'] = getPersonalizations($row['body']);
+		}
+	}
 	
 	global $poMMo;
 	global $logger;
@@ -248,7 +245,7 @@ function & bmInitMailer(& $dbo, $relay_id = 1) {
 			$altbody = db2mail($row['altbody']);
 	}
 
-	$bMailer = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce'], $poMMo->_config['list_exchanger'], NULL, $row['charset']);
+	$bMailer = new bMailer(db2mail($row['fromname']), $row['fromemail'], $row['frombounce'], $poMMo->_config['list_exchanger'], NULL, $row['charset'], $row['personal']);
 	
 	$logger->addMsg('bmMailer initialized with relay ID #'.$relay_id,1);
 

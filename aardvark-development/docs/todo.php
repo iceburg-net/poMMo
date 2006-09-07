@@ -18,25 +18,21 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
+
+With template, add predefined support. E.G. ++ADD UNSUBSCRIBE LINK++ SEE; http://www.iceburg.net/pommo/community/viewtopic.php?id=108
+
+
 +++ Implement Passwords on user information (login.php). Include customizable question/answer pair.
 
-+++ Merge subscribers/pending table.
++++ Merge subscribers/pending table. ??
+
++++ Merge current/history mailing table.
+
+(19:40:01) comporder1: on my emails i do not include alternate text... so i turn it off. then i go to mailings_send3 and preview and then need to make a change. when i click edit and it goes back to mailings_send2 it reverts back to alternate text=YES.  Its not a big deal... just one extra click. maybe there is an easy fix?
 
 
 I'd like to add a "comment" to the field types which would output a text area on the subscriber form that could be limited to a certain number of characters, and who's styling would be defined within themes/default/subscribe/form.subscribe.tpl (of course). Perhaps there's a better word for "comment" as a field type?
 
-----
-(18:17:49) comporder1: hey man
-(18:18:01) bricecubed: hey
-(18:18:03) comporder1: i had to resume one time this afternoon.
-(18:18:21) comporder1: i found this in the error log - [23-Aug-2006 16:04:57] PHP Fatal error:  Maximum execution time of 10 seconds exceeded in D:\webs\ebcmain\pt\inc\phpmailer\class.smtp.php on line 1018
-
-(18:18:40) bricecubed: excellent!
-(18:19:00) comporder1: i take it that is good?
-(18:19:14) bricecubed: what's your SMTP server?
-(18:19:28) comporder1: cable isp
-(18:19:42) bricecubed: from what I can tell; the SMTP server is not responding to the call... thus causing the script to timeout
-----
 
 1. when i try to import some subscribers from a CSV file, the script does inject them into the database alright, but the success page doesn't come up (subscribers_import2.php ),
 in firefox it's a blank page and in IE it's a "server not found page". there are 650 subscribers in the csv file if that matters.
