@@ -66,6 +66,9 @@ function bmHttpSpawn($page) {
 	$errstr = '';
 	$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
 	$host = (defined('bm_hostname')) ? bm_hostname : $_SERVER['HTTP_HOST'];
+	
+	// NOTE: fsockopen() SSL Support requires PHP 4.3+ with OpenSSL compiled in
+	$ssl = (strpos(bm_http,'https://')) ? 'ssl://' : '';
 
 	$out = "GET $page HTTP/1.1\r\n";
 	$out .= "Host: ".$host."\r\n";
@@ -75,7 +78,7 @@ function bmHttpSpawn($page) {
 	
 	$out .= "\r\n";
 	
-	$socket = fsockopen($host, $port, $errno, $errstr, 10);
+	$socket = fsockopen($ssl.$host, $port, $errno, $errstr, 10);
 	
 	if ($socket) {
 		fwrite($socket,$out);
