@@ -675,7 +675,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 			
 			break;
 		
-		case 24: // AARDVARK -DEV
+		case 24: // AARDVARK PR13
 		
 			if ($dbRev < $revision) {
 				
@@ -693,7 +693,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					
 				// bump version
 				if (!$failed)
-					bmBumpVersion($dbo, $revision, "Aardvark -DEV");
+					bmBumpVersion($dbo, $revision, "Aardvark PR13");
 			}
 			
 			// follows last case
