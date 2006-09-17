@@ -1,4 +1,61 @@
-=== Release Notes for Aardvark PR11 ===
- <Released April ??, 2010>
+=== Release Notes for Aardvark PR13 ===
+ <Released September 17, 2006>
  
- Coming to a theatre near you!
+[Additions]
+
+  * Mailing Personalization
+  * Dialog to select personalization fields + default value added to mailing composition page
+  
+  * Added ability to inject CSS/JS into HTML <head> via SMARTY capture
+    -- see themes/default/mailings/mailing_status.tpl for example.
+    
+  * Support library can now force terminate mailings
+  * Support library can now test setting maximum runtime
+  
+  * Allow overriding of base URL, Webserver Port/Hostname via config.php
+
+[Improvements]
+
+  * Logging in now returns to the referal page (e.g. page that threw denied access message)
+  
+   * Background spawner more reliable
+    -- hostname/port can be set via config.php
+    -- support for SSL
+    -- support for .htaccess and HTTP Authentication
+    -- added support for spawning indication if verbosity set to 1
+
+  * Improved protection against frozen mailings
+  
+  * Organized CSS/JS includes in theme templates
+  * Included jQuery, the new base JS library
+  * Updated Mailing Creation session storage. 
+  
+  * (api) Cleaned up GetGroupID(). 
+  * (api) Added support for page states
+    -- this effectively removes the tedious and inefficient $appendURL model.
+  * (api) Easier customization of mailing processor
+    
+  * Revamped Mailings History page
+  
+  * Updated Xinha (WYSIWYG editor)
+  
+  * Access granted to support library (support.php) on non setup poMMo installations.
+  * Support library spawn testing is more robust
+  
+  * State of including alternitive text body is now remembered
+  
+
+[Bug Fixes]
+
+  * Fixed issue where mailings would not start automatically
+  
+  * DB Schema Changes* Fixed issue where mailings would not start automatically
+    -- fixed encoding issue on character sets > 10 characters in name
+    -- fixed the NOT NULL bug upon copying mailing to history on completion
+  
+  * Mailing encoding (character set) now stored in history table.
+  * Fixed issue with upgrade step 76
+  
+  * Pagination indicators converted to HTML iso 8859
+  
+  * Forms JS now propery loads
