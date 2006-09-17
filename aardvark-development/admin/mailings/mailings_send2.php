@@ -66,6 +66,7 @@ if (empty ($_POST)) {
 	// load mailing data from session
 	@$_POST['body'] = $mailingData['body'];
 	@$_POST['altbody'] = $mailingData['altbody'];
+	@$_POST['altInclude'] = $mailingData['altInclude'];
 	
 	
 } elseif(isset($_POST['preview'])) {
@@ -75,6 +76,7 @@ if (empty ($_POST)) {
 		unset($_POST['preview']);
 		$mailingData['body'] = $_POST['body'];
 		$mailingData['altbody'] = $_POST['altbody'];
+		$mailingData['altInclude'] = $_POST['altInclude'];
 		$poMMo->set(array('mailingData' => $mailingData));
 		
 		bmRedirect('mailings_send3.php');
