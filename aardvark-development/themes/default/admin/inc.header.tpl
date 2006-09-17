@@ -17,6 +17,7 @@
 		is prepared to include a form from the parent PHP script *}    
 	{if $isForm}
 	<link href="{$url.theme.shared}/css/bform.css" type="text/css" rel="STYLESHEET">
+	<script type="text/javascript" src="{$url.theme.shared}/js/bform.js"></script>
 	{/if}
 
 {* The following fixes transparent PNG issues in IE < 7 *}

@@ -10,14 +10,10 @@
 defined('_IS_VALID') or die('Move along...');
 
 /************************************************************************
- * BEGIN CHANGING VALUES --> 
- *     (values are between quotes - do not remove them or semicolons)
- *     (only alter values after the = sign)
- * 
  * ::: MySQL Database Information :::
  *   in order to use poMMo, you must have access to a valid MySQL database.
  *   Contact your webhost for details if you are unsure of its details.
-*/
+************************************************************************/
 
 // * Set your MySQL username
 $bmdb['username'] = 'pommo';
@@ -48,8 +44,10 @@ $bmdb['prefix'] = 'pommo_';
 define('bm_lang','en');
 
 
-/******************[ OPTIONAL CONFIGURATION ]*******************/
-// (Below options intended for debugging and overriding automatic configuration) 
+/******************[ OPTIONAL CONFIGURATION ]*******************
+ * (Below options intended for debugging and overriding 
+ * automatic configuration)
+*/
 
 /************************************************************************
  * ::: Debugging Information :::
@@ -67,6 +65,22 @@ define('bm_debug','off');
 //  3: Important (default)
 define('bm_verbosity',3);
 
+/************************************************************************
+ * Uncomment (remove leading "//") and define the following 
+ * to override the default setting
+ */
+
+/************************************************************************
+ * ::: Base URL :::
+ * 
+ * This is the path to pommo relative to the WEB.
+ * For example, if poMMo is http://newsletter.mydomain.com/, the baseURL
+ * would be '/'. If poMMo is http://www.mydomain.com/mysite/pommo, the
+ * baseURL would be '/mysite/pommo'
+ * 
+ * Default: Automatically Detected
+ */
+//define('bm_baseUrl', '/mysite/newsletter');
 
 /************************************************************************
  * ::: Cache Directory :::
@@ -87,20 +101,6 @@ define('bm_verbosity',3);
 */
 //define('bm_workDir','/path/to/pommoCache');
 
-
-/************************************************************************
- * ::: Base URL :::
- * 
- * This is the path to pommo relative to the WEB.
- * For example, if poMMo is http://newsletter.mydomain.com/, the baseURL
- * would be '/'. If poMMo is http://www.mydomain.com/mysite/pommo, the
- * baseURL would be '/mysite/pommo'
- * 
- * Default: Automatically Detected
- */
-//define('bm_baseUrl', '/mysite/newsletter');
-
-
 /************************************************************************
  * ::: Webserver Hostname :::
  * 
@@ -109,7 +109,6 @@ define('bm_verbosity',3);
  * Default: Automatically Detected
  */
 //define('bm_hostname','www.mysite.com');
- 
  
  /************************************************************************
  * ::: Webserver Port :::
