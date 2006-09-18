@@ -58,7 +58,7 @@ if (!empty($_REQUEST['deleteMailings']) && !empty($_REQUEST['delid'])) {
 	if (dbRemoveMailFromHistory($dbo, $_REQUEST['delid']))
 		bmRedirect('mailings_history.php');
 	else
-		$logger->addErr(_T('Trouble deleteing mailgs'));
+		$logger->addErr(_T('Trouble deleteing mails'));
 }
 
 // ACTIONS -> choose what we want to do.

@@ -176,6 +176,7 @@ function & fireup() {
 	
 
 	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
+		//corinna: Set to (baseDir . "/index.php");
 		bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
 		 '<a href="'.bm_baseUrl.'/index.php?referer='.$_SERVER['PHP_SELF'].'">',
 		'</a>'));

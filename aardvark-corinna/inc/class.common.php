@@ -75,7 +75,7 @@ class Common {
 				while ($row = mysql_fetch_assoc($dbo->_result))
 					$_SESSION['pommo']['config'][$row['config_name']] = $row['config_value'];
 			}
-			$dbo->dieOnQUery(TRUE);		
+			$dbo->dieOnQuery(TRUE);		
 		}
 		
 		$this->_config = & $_SESSION['pommo']['config'];

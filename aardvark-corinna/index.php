@@ -19,6 +19,7 @@ define('_IS_VALID', TRUE);
 
 require ('bootstrap.php');
 
+
 $poMMo = & fireup();
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
@@ -40,22 +41,93 @@ elseif ($poMMo->isAuthenticated()) {
 	bmRedirect(bm_http . bm_baseUrl . '/admin/admin.php');
 }
 elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
-	// Check if user submitted correct username & password. If so, Authenticate.
-	$auth = $poMMo->getConfig(array (
-		'admin_username',
-		'admin_password'
-	));
-	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+
+
+	//<corinna>
+	// TODO Think of some mechanism to check if LDAP is activated
+	// in PluginRegistry there is a array with activated plugins
+	// wenn dort AuthMethod=SIMPLE -> SimpleLdapAuth
+	// sonst QUERY LDAP Auth
+	// evtl 2 verschiedene Konfigurationszeuger
+	if ($authmethod == "LDAP") {
+
+		// LDAP AUTHENTICATION		
+
+		if ( !empty ($_POST['username']) && !empty ($_POST['password']) ) {
+
+				//Load LDAP Auth Class
+				include_once(bm_baseDir.'/plugins/auth/class.simpleldapauth.php');
+						
+				$auth = new SimpleLdapAuth($dbo);
+				
+				echo "<b style='color:red;'>Auth method: {$auth->getAuthMethod()}</b><br>";
+				$auth->setVariable('user', $_POST['username']);
+				$auth->setVariable('pass', $_POST['password']);
+				//$auth->setVariable('pass', md5($_POST['password']));
+
+				//echo $auth;
+
+				if ( $auth->execute() == TRUE ) {
+				
+					// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+					bmMaintenance();
+									
+					$poMMo->setAuthenticated(TRUE);
+					bmRedirect(bm_http . $_POST['referer']);
+				} else {
+					$logger->addMsg(_T('Failed login attempt. Try again. (User not accepted.)'));
+				}
+				
+		} else {
+			$logger->addMsg(_T('Failed login attempt. Try again. (Field missing.)'));
+		}
 		
-		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
-		bmMaintenance();
-		
-		$poMMo->setAuthenticated(TRUE);
-		bmRedirect(bm_http . $_POST['referer']);
-	}
-	else {
-		$logger->addMsg(_T('Failed login attempt. Try again.'));
-	}
+	}/* else {*/
+
+		/* Normal Authentication */
+		/* ALWAY check for Administrator login -> else some problems when config changes */
+
+		// Check if user submitted correct username & password. If so, Authenticate.
+		$auth = $poMMo->getConfig(array (
+			'admin_username',
+			'admin_password'
+		));
+		if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+			
+			// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+			bmMaintenance();
+			
+			$poMMo->setAuthenticated(TRUE);
+			bmRedirect(bm_http . $_POST['referer']);
+		}
+		else {
+			$logger->addMsg(_T('Failed login attempt. Try again.'));
+		}
+
+
+	//}
+	
+	//</corinna>
+
+/*
+		// Check if user submitted correct username & password. If so, Authenticate.
+		$auth = $poMMo->getConfig(array (
+			'admin_username',
+			'admin_password'
+		));
+		if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+			
+			// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+			bmMaintenance();
+			
+			$poMMo->setAuthenticated(TRUE);
+			bmRedirect(bm_http . $_POST['referer']);
+		}
+		else {
+			$logger->addMsg(_T('Failed login attempt. Try again.'));
+		}
+*/
+
 }
 elseif (!empty ($_POST['resetPassword'])) {
 	// Check if a reset password request has been received
