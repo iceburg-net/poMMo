@@ -30,6 +30,28 @@
 			{t}Send mailings to the entire list or to a subset of subscribers. Mailing status and history can also be viewed from here.{/t}
 		</p>
  
+ {* corinna *}
+ {* Display this only if its activated *}<br>
+	{if $showuser}
+ 		<p>
+			<a href="{$url.base}/plugins/usermanager/usermanager.php">
+			<img src="{$url.theme.shared}/images/icons/settings.png" class="navimage" />
+			{t}Usermanager{/t}</a> - 
+			{t}Use more Users in Pommo!{/t}
+		</p><br><br>
+	{/if}
+	{if $showplugin}
+		<p>
+			<a href="{$url.base}/pluginadmin/plugins.php">
+			<img src="{$url.theme.shared}/images/icons/subscribers.png" class="navimage" />
+			{t}Setup Plugins{/t}</a> - 
+			{t}Set up Plugins... bla bla{/t}
+		</p><br>
+	{/if}
+	<br><br>
+ {* /corinna *}
+ 
+ 
  </div>
 <!-- end mainbar -->
 
