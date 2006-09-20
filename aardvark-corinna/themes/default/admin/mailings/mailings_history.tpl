@@ -182,7 +182,7 @@
 
 		<!-- End Table of Mailings -->
 
-
+<br><br><h3>{$url.theme.this}<br>{$url.theme.shared}<br>{$url.base}</h3>
 
 	<!-- end mainbar -->
 
