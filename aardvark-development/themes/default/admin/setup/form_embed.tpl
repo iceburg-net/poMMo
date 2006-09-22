@@ -1,6 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/js/lightbox.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/lightbox.js" type="text/javascript"></script>
 {/capture}
 
 {include file="admin/inc.header.tpl"}
@@ -9,16 +9,16 @@
 <div id="mainbar">
 
 	<h1>{t}Embedded Subscription Forms{/t}</h1>
-	<img src="{$url.theme.shared}/images/icons/embed.png" class="articleimg">
+	<img src="{$url.theme.shared}images/icons/embed.png" class="articleimg">
 
 	<p>
 		{t}Subscription forms can easily be added to your website using a line of code. You can use the PHP include listed below, or embed the actual HTML. Remember, you can also direct subscribers to the {/t}
-		<a href="{$url.base}/user/subscribe.php">{t}Default Subscribe Form{/t}</a>.
+		<a href="{$url.base}user/subscribe.php">{t}Default Subscribe Form{/t}</a>.
 	</p>
 	
 
 <a href="setup_form.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" border='0'>
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" border='0'>
 		{t}Return to Subscription Forms{/t}</a>
 
 <br><br>
@@ -79,7 +79,7 @@
 				<a href="#miniPreview" rel="miniPreview" class="lbOn">{t}Preview{/t}</a>
 			</span>
 			<span style="margin-right: 20px;">
-				<a href="{$url.base}/embed.miniform.php">{t}URL{/t}</a>
+				<a href="{$url.base}embed.miniform.php">{t}URL{/t}</a>
 			</span> 
 		</strong>
 	</td>
@@ -88,7 +88,7 @@
 	<td>{t}This prints a form which prompts for a user's email address. If the inputted email exists as a registered subscriber, it redirects to the subscriber update page. If not, it redirects to the the default subscription form.{/t}</td>
 </tr>
 <tr class="bgOdd">
-	<td><strong>PHP</strong> -> include('{$url.base}/embed.miniform.php');</td>
+	<td><strong>PHP</strong> -> include('{$url.base}embed.miniform.php');</td>
 </tr>
 <tr>
 <td style="height: 20px"></td>
@@ -103,7 +103,7 @@
 				<a href="#fullPreview" rel="fullPreview" class="lbOn">{t}Preview{/t}</a>
 			</span> 
 			<span style="margin-right: 20px;">
-				<a href="{$url.base}/embed.form.php">{t}URL{/t}</a>
+				<a href="{$url.base}embed.form.php">{t}URL{/t}</a>
 			</span> 
 		</strong>
 	</td>
@@ -112,7 +112,7 @@
 	<td>{t}This prints the entire subscription form.{/t}</td>
 </tr>
 <tr class="bgOdd">
-	<td><strong>PHP</strong> -> include('{$url.base}/embed.form.php');</td>
+	<td><strong>PHP</strong> -> include('{$url.base}embed.form.php');</td>
 </tr>
 </table>
 
@@ -125,7 +125,7 @@
 	<br>
 	<strong>PHP Include</strong>
 	<br>
-	"include('{$url.base}/embed.mini.php');"
+	"include('{$url.base}embed.mini.php');"
 	
 	<br><br>
 	<strong>HTML Source</strong>
@@ -152,7 +152,7 @@
 	<br>
 	<strong>PHP Include</strong>
 	<br>
-	"include('{$url.base}/embed.form.php');"
+	"include('{$url.base}embed.form.php');"
 	
 	<br><br>
 	<strong>HTML Source</strong>

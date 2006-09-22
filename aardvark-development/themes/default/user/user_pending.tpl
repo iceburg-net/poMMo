@@ -3,7 +3,7 @@
 <div id="header"><h1>{t}Pending Changes{/t}</h1></div>
 
 <a href="{$config.site_url}">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t website=$config.site_name}Return to %1{/t}</a>
 <br>
     {if $messages}

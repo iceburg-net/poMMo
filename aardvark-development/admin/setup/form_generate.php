@@ -22,7 +22,7 @@
 
  
 // URL which processes the form input + adds (or warns) subscriber to pending table.
-$signup_url = "http://" . $_SERVER['HTTP_HOST'] . bm_baseUrl . "/user/process.php";
+$signup_url = "http://" . $_SERVER['HTTP_HOST'] . bm_baseUrl . "user/process.php";
 ?>
 
 

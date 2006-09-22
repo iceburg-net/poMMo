@@ -57,8 +57,8 @@
 		<h2>{t}Import Complete!{/t}</h2>
 		<br>
 		
-		<a href="{$url.base}/admin/subscribers/admin_subscribers.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+		<a href="{$url.base}admin/subscribers/admin_subscribers.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t 1=$returnStr}Return to %1{/t}</a>
 	
 {elseif $page == 'assign'}
@@ -120,7 +120,7 @@
 		
 		{t 1=$csvArray.csvFile|@count}%1 subscribers to import.{/t}
 		<br>
-		<img src="{$url.theme.shared}/images/icons/download.png"><br>
+		<img src="{$url.theme.shared}images/icons/download.png"><br>
 		<input type="submit" name="preview" value="{t}Click to Preview{/t}">
 
 	</form>

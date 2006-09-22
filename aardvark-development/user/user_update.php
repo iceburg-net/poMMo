@@ -66,7 +66,7 @@ if (!empty ($_POST['update'])) {
 		$code = dbPendingAdd($dbo, 'change', $_POST['original_email'], $_POST['d']);
 		if (empty ($code)) {
 			$logger->addMsg(_T('The system could not process your request. Perhaps you already have requested a change?') . 
-			sprintf(_T('%s Click Here %s to try again.'),'<a href="'.bm_baseUrl.'/user/login.php">','</a>'));
+			sprintf(_T('%s Click Here %s to try again.'),'<a href="'.bm_baseUrl.'user/login.php">','</a>'));
 		} else {
 			bmSendConfirmation($_POST['original_email'], $code, "update");
 			$logger->addMsg(_T('Update request received.') . ' ' . _T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
@@ -77,7 +77,7 @@ elseif (!empty ($_POST['unsubscribe'])) {
 	$code = dbPendingAdd($dbo, "del", $_POST['original_email']);
 	if (empty ($code))
 		$logger->addMsg(_T('The system could not process your request. Perhaps you already have requested a change?') .
-		sprintf(_T('%s Click Here %s to try again.'),'<a href="'.bm_baseUrl.'/user/login.php">','</a>'));
+		sprintf(_T('%s Click Here %s to try again.'),'<a href="'.bm_baseUrl.'user/login.php">','</a>'));
 	else {
 		bmSendConfirmation($_POST['original_email'], $code, "unsubscribe");
 		$logger->addMsg(_T('Unsubscribe request received.') . ' ' . _T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));

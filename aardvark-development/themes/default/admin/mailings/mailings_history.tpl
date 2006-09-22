@@ -116,7 +116,7 @@
 
 							<td style="text-align:center;" nowrap>
 									<a href="mailings_mod.php?mailid={$mailitem.mailid}&action=reload">
-									<img src="{$url.theme.shared}/images/icons/reload-small.png" border="0" alt="{t}Reload, edit and resend Mail{/t}"></a>{*<!--{t}reload{/t}-->*}
+									<img src="{$url.theme.shared}images/icons/reload-small.png" border="0" alt="{t}Reload, edit and resend Mail{/t}"></a>{*<!--{t}reload{/t}-->*}
 							</td>
 
 							<td nowrap><i>{$mailitem.subject}</i></td>
@@ -131,7 +131,7 @@
 							<td style="text-align:center;">
 							{if $mailitem.ishtml == 'on'}
 								<a href="mailing_preview.php?action=viewhtml&viewid={$mailitem.mailid}" target="_blank">
-								<img src="{$url.theme.shared}/images/icons/viewhtml.png" border="0" alt="{t}View HTML in new browser window{/t}"></a>
+								<img src="{$url.theme.shared}images/icons/viewhtml.png" border="0" alt="{t}View HTML in new browser window{/t}"></a>
 							{/if}
 							</td>
 							

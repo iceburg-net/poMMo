@@ -1,11 +1,11 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<link href="{$url.theme.this}/inc/mailing_status.css" type="text/css" rel="STYLESHEET">
-<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
+<link href="{$url.theme.this}inc/mailing_status.css" type="text/css" rel="STYLESHEET">
+<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
 {/capture}{include file="admin/inc.header.tpl"}
 
 
 <div>
-<img src="{$url.theme.shared}/images/icons/alert.png" align="middle" style="float: left;">
+<img src="{$url.theme.shared}images/icons/alert.png" align="middle" style="float: left;">
 {t}The mailing process takes place in the background, so feel free to close your browser, visit other sites, or work within poMMo. Throttle settings can be adjusted, although you must pause and revive a mailings before the changes take effect.{/t}
 </div>
 
@@ -41,14 +41,14 @@
 		<div class="stacked" id="startedCmd" style="z-index: 1; visibility: hidden;">
 			<span style="position: absolute; left: 0;">
 				<a href="mailing_status2.php?command=pause">
-					<img src="{$url.theme.shared}/images/icons/pause-small.png" border="0" align="absmiddle">
+					<img src="{$url.theme.shared}images/icons/pause-small.png" border="0" align="absmiddle">
 					{t}Pause Mailing{/t}
 				</a> 
 			</span>
 			<span style="position: absolute; right: 0;">
 				<a href="mailing_status2.php?command=restart">
 					{t}Resume Mailing{/t}
-					<img src="{$url.theme.shared}/images/icons/restart-small.png" border="0" align="absmiddle">
+					<img src="{$url.theme.shared}images/icons/restart-small.png" border="0" align="absmiddle">
 				</a>
 			</span>
 		</div>
@@ -56,14 +56,14 @@
 		<div class="stacked" id="stoppedCmd" style="z-index: 2; visibility: hidden;">
 			<span style="position: absolute; left: 0;">
 				<a href="mailing_status2.php?command=restart">
-					<img src="{$url.theme.shared}/images/icons/restart-small.png" border="0" align="absmiddle">
+					<img src="{$url.theme.shared}images/icons/restart-small.png" border="0" align="absmiddle">
 					{t}Resume Mailing{/t}
 				</a> 
 			</span>
 			<span style="position: absolute; right: 0;">
 				<a href="mailing_status2.php?command=kill">
 					{t}Cancel Mailing{/t}
-					<img src="{$url.theme.shared}/images/icons/stopped-small.png" border="0" align="absmiddle">
+					<img src="{$url.theme.shared}images/icons/stopped-small.png" border="0" align="absmiddle">
 				</a>
 			</span>
 		</div>
@@ -71,14 +71,14 @@
 		<div class="stacked" id="frozenCmd" style="z-index: 5; visibility: hidden;">
 			<span style="position: absolute; left: 0;">
 				<a href="mailing_status2.php?command=restart">
-					<img src="{$url.theme.shared}/images/icons/restart-small.png" border="0" align="absmiddle">
+					<img src="{$url.theme.shared}images/icons/restart-small.png" border="0" align="absmiddle">
 					{t}Dethaw Mailing{/t}
 				</a> 
 			</span>
 			<span style="position: absolute; right: 0;">
 				<a href="mailing_status2.php?command=kill">
 					{t}Cancel Mailing{/t}
-					<img src="{$url.theme.shared}/images/icons/stopped-small.png" border="0" align="absmiddle">
+					<img src="{$url.theme.shared}images/icons/stopped-small.png" border="0" align="absmiddle">
 				</a>
 			</span>
 		</div>

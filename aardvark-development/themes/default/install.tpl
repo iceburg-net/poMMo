@@ -3,12 +3,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{t}poMMo Installation{/t}</title>
-	<link href="{$url.theme.this}/inc/admin.css" type="text/css" rel="STYLESHEET">
-	<link href="{$url.theme.shared}/css/bform.css" type="text/css" rel="STYLESHEET">
-	<script src="{$url.theme.shared}/js/bform.js" type="text/javascript"></script>
+	<link href="{$url.theme.this}inc/admin.css" type="text/css" rel="STYLESHEET">
+	<link href="{$url.theme.shared}css/bform.css" type="text/css" rel="STYLESHEET">
+	<script src="{$url.theme.shared}js/bform.js" type="text/javascript"></script>
 {* The following fixes transparent PNG issues in IE < 7 *}
 	<!--[if lt IE 7.]>
-		<script defer type="text/javascript" src="{$url.theme.shared}/js/pngfix.js"></script>
+		<script defer type="text/javascript" src="{$url.theme.shared}js/pngfix.js"></script>
 	<![endif]-->
 </head>
 <body>
@@ -18,7 +18,7 @@
 
 <div id="menu">
 	{$config.app.weblink}
-	<a href="{$url.base}/admin/admin.php">{t}Admin Page{/t}</a>
+	<a href="{$url.base}admin/admin.php">{t}Admin Page{/t}</a>
 </div>
 
 <div id="header">
@@ -32,7 +32,7 @@
 
 
 <div style="font-size: 155%; ">
-<img src="{$url.theme.shared}/images/icons/alert.png" style="float: left;" border='0'>
+<img src="{$url.theme.shared}images/icons/alert.png" style="float: left;" border='0'>
 {t}Welcome to the poMMo online installation process. We have connected to the database and set your language successfully. Fill in the values below, and you'll be on your way!{/t}
 </div>
 
@@ -134,8 +134,8 @@
 {/if}
 
 <br><br>
-<a href="{$url.base}/index.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+<a href="{$url.base}index.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t}Continue to login page{/t}</a>
 <br>
  
