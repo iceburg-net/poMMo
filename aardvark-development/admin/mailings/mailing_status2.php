@@ -27,7 +27,7 @@ if (!empty ($_GET['command'])) {
 			dbMailingStamp($dbo, "restart");
 			$sql = 'SELECT securityCode FROM '.$dbo->table['mailing_current'];
   			$code = $dbo->query($sql,0,0);
-  			bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$code);
+  			bmHttpSpawn(bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code);
 			break;
 		case "kill" :
 			dbMailingEnd($dbo);

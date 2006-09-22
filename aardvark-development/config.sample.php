@@ -76,9 +76,10 @@ define('bm_verbosity',3);
  * This is the path to pommo relative to the WEB.
  * For example, if poMMo is http://newsletter.mydomain.com/, the baseURL
  * would be '/'. If poMMo is http://www.mydomain.com/mysite/pommo, the
- * baseURL would be '/mysite/pommo'
+ * baseURL would be '/mysite/pommo/'
  * 
  * Default: Automatically Detected
+ * NOTE: Include trailing slash
  */
 //define('bm_baseUrl', '/mysite/newsletter');
 

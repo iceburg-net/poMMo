@@ -4,11 +4,11 @@
 
 {if $back}
 <a href="{$referer}">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t website=$config.site_name}Back to Subscription Form{/t}</a>
 {else}
 <a href="{$config.site_url}">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t website=$config.site_name}Return to %1{/t}</a>
 {/if}
 

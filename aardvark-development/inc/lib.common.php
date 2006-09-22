@@ -65,6 +65,9 @@ function bmHttpSpawn($page) {
 	$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
 	$host = (defined('bm_hostname')) ? bm_hostname : $_SERVER['HTTP_HOST'];
 	
+	// strip port information from hostname
+	$host = preg_replace('/:\d+$/i','',$host);
+	
 	// NOTE: fsockopen() SSL Support requires PHP 4.3+ with OpenSSL compiled in
 	$ssl = (strpos(bm_http,'https://')) ? 'ssl://' : '';
 
@@ -96,13 +99,13 @@ function bmRedirect($url, $msg = NULL, $kill = true) {
 	if (!preg_match('@^https*://@i', $url)) {
 		if (!preg_match('@^' . bm_baseUrl . '@i', $url)) {
 			if (substr($url, 0, 1) != '/') {
-				if (bm_section != 'user') {
-					$url = bm_http . bm_baseUrl . '/admin/' . bm_section . '/' . $url;
+				if (bm_section != 'user' && bm_section != 'admin') {
+					$url = bm_http . bm_baseUrl . 'admin/' . bm_section . '/' . $url;
 				} else {
-					$url = bm_http . bm_baseUrl . '/' . bm_section . '/' . $url;
+					$url = bm_http . bm_baseUrl . bm_section . '/' . $url;
 				}
 			} else {
-				$url = bm_http . bm_baseUrl . '/' . $url;
+				$url = bm_http . bm_baseUrl . $url;
 			}
 		} else {
 			$url = bm_http . $url;
@@ -128,7 +131,7 @@ function bmKill($msg = NULL) {
 	ob_end_flush();
 	
 	if ($msg)
-		die('<div style="float: left;"><img src="' . bm_baseUrl . '/themes/shared/images/icons/alert.png" align="bottom"></div>' . $msg);
+		die('<div style="float: left;"><img src="' . bm_baseUrl . 'themes/shared/images/icons/alert.png" align="bottom"></div>' . $msg);
 	die();
 }
 
@@ -203,8 +206,8 @@ function & bmSmartyInit() {
 	// set variables available to template
 	$smarty->assign('url', array (
 		'theme' => array (
-			'shared' => bm_baseUrl . '/themes/shared',
-			'this' => bm_baseUrl . '/themes/' . $theme
+			'shared' => bm_baseUrl . 'themes/shared/',
+			'this' => bm_baseUrl . 'themes/' . $theme . '/'
 		),
 		'base' => bm_baseUrl,
 		'http' => bm_http

@@ -81,7 +81,7 @@ class Common {
 		$this->_config = & $_SESSION['pommo']['config'];
 		
 		return (!empty ($this->_config['version'])) ? true : bmKill('poMMo does not appear to be set up.' .
-					'Have you <a href="'.bm_baseUrl.'/install/install.php">Installed?</a>');
+					'Have you <a href="'.bm_baseUrl.'install/install.php">Installed?</a>');
 	}
 	
 	// Gets specified config value(s) from the DB. 

@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{$title}</title>
 	
-	<link href="{$url.theme.this}/inc/admin.css" type="text/css" rel="STYLESHEET">
+	<link href="{$url.theme.this}inc/admin.css" type="text/css" rel="STYLESHEET">
 	
 	{* If $head has been captured, print its contents here. Capture $head via templates
 		using {capture name=head}..content..{/capture} before including this header file. 
@@ -16,8 +16,8 @@
 	{* Include HTML FORM styling and javascript from shared theme directory when template
 		is prepared to include a form from the parent PHP script *}    
 	{if $isForm}
-	<link href="{$url.theme.shared}/css/bform.css" type="text/css" rel="STYLESHEET">
-	<script type="text/javascript" src="{$url.theme.shared}/js/bform.js"></script>
+	<link href="{$url.theme.shared}css/bform.css" type="text/css" rel="STYLESHEET">
+	<script type="text/javascript" src="{$url.theme.shared}js/bform.js"></script>
 	{/if}
 
 {* The following fixes transparent PNG issues in IE < 7 *}
@@ -31,8 +31,8 @@
 <center>
 
 <div id="menu">
-	<a href="{$url.base}/index.php?logout=TRUE">{t}Logout{/t}</a>
-	<a href="{$url.base}/admin/admin.php">{t}Admin Page{/t}</a>
+	<a href="{$url.base}index.php?logout=TRUE">{t}Logout{/t}</a>
+	<a href="{$url.base}admin/admin.php">{t}Admin Page{/t}</a>
 	<a href="{$config.site_url}">{$config.site_name}</a>
 </div>
 

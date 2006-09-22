@@ -19,18 +19,18 @@
 		
 	<tr>
 		<td nowrap>
-			<img src="{$url.theme.shared}/images/icons/alert.png" align="middle">{t}Confirm your action.{/t}
+			<img src="{$url.theme.shared}images/icons/alert.png" align="middle">{t}Confirm your action.{/t}
 		</td>
 		<td>
 			<p>	
 				<a href="{$confirm.yesurl}">
-				<img src="{$url.theme.shared}/images/icons/ok.png" class="navimage">
+				<img src="{$url.theme.shared}images/icons/ok.png" class="navimage">
 				{t}Yes{/t}</a> {t}I confirm.{/t}
 			</p>
 
 			<p>
 				<a href="{$confirm.nourl}">
-				<img src="{$url.theme.shared}/images/icons/undo.png" class="navimage" align="middle">
+				<img src="{$url.theme.shared}images/icons/undo.png" class="navimage" align="middle">
 				{t}No{/t}</a> {t}Please Return.{/t}
 			</p>
 		  </td>

@@ -4,7 +4,7 @@
 <div id="mainbar">
 
 	<h1>{t}Configure{/t}</h1>
-	<img src="{$url.theme.shared}/images/icons/settings.png" class="articleimg">
+	<img src="{$url.theme.shared}images/icons/settings.png" class="articleimg">
 
 	<p>
 		{t}Use this page to configure poMMo. You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.{/t}
@@ -179,7 +179,7 @@
 		{if $list_exchanger == 'smtp'}
 			<div class="field">
 				<a href="setup_smtp.php">
-					<img src="{$url.theme.shared}/images/icons/right.png" align="center" border="0">
+					<img src="{$url.theme.shared}images/icons/right.png" align="center" border="0">
 				</a>
 				  &nbsp; {t escape=no 1='<a href="setup_smtp.php">' 2='</a>}SMTP Servers: %1 Click Here %2 to setup your relays.{/t}
 				<div class="notes">{t}(configure SMTP relays){/t}</div>
@@ -188,7 +188,7 @@
 		
 		<div class="field">
 			<a href="setup_messages.php">
-				<img src="{$url.theme.shared}/images/icons/right.png" align="center" border="0">
+				<img src="{$url.theme.shared}images/icons/right.png" align="center" border="0">
 			</a>
 			  &nbsp; {t escape=no 1='<a href="setup_messages.php">' 2='</a>}Messages: %1 Click Here %2 to customize mailed messages.{/t}
 			<div class="notes">{t}(define the email messages sent during subscription, updates, etc.){/t}</div>
@@ -198,7 +198,7 @@
 		
 		<div class="field">
 			<a href="setup_throttle.php">
-				<img src="{$url.theme.shared}/images/icons/right.png" align="center" border="0">
+				<img src="{$url.theme.shared}images/icons/right.png" align="center" border="0">
 			</a>
 			  &nbsp; {t escape=no 1='<a href="setup_throttle.php">' 2='</a>}Throttling: %1 Click Here %2 to set mail throttle values.{/t}
 			<div class="notes">{t}(controls mails per second, bytes per second, and domain limits){/t}</div>

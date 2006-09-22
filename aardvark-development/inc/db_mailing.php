@@ -26,7 +26,7 @@ require_once (bm_baseDir . '/inc/safesql/SafeSQL.class.php');
 function dbQueueCreate(& $dbo, & $input) {
 	if (!is_array($input))
 		die('<img src="' .
-		bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">dbQueueCreate() -> Bad Queue Passed.');
+		bm_baseUrl . 'themes/shared/images/icons/alert.png" align="middle">dbQueueCreate() -> Bad Queue Passed.');
 
 	// clear the table
 	$sql = 'TRUNCATE TABLE ' . $dbo->table['queue'];

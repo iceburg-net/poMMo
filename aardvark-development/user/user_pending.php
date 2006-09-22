@@ -79,7 +79,7 @@ if (!empty ($_POST)) {
 			break;
 		default :
 			$url = '';
-			$logger->addErr(sprintf(_T('Please Try Again! %s login %s'), '<a href="' . bm_baseUrl . '/user/login.php">', '</a>'));
+			$logger->addErr(sprintf(_T('Please Try Again! %s login %s'), '<a href="' . bm_baseUrl . 'user/login.php">', '</a>'));
 			$smarty->display('user/user_pending.tpl');
 			bmKill();
 	}

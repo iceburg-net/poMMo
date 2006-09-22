@@ -165,20 +165,20 @@ if ($poMMo->_config['multimode']) {
 	if (empty ($_GET['relay_id'])) {
 		if (!empty ($poMMo->_config['smtp_1']))
 			bmSpawn(bm_baseUrl .
-			'/admin/mailings/mailings_send4.php?relay_id=1&serial=' .
+			'admin/mailings/mailings_send4.php?relay_id=1&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		sleep(2); // delay to help prevent "shared" throttlers racing to create queue
 		if (!empty ($poMMo->_config['smtp_2']))
 			bmSpawn(bm_baseUrl .
-			'/admin/mailings/mailings_send4.php?relay_id=2&serial=' .
+			'admin/mailings/mailings_send4.php?relay_id=2&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		if (!empty ($poMMo->_config['smtp_3']))
 			bmSpawn(bm_baseUrl .
-			'/admin/mailings/mailings_send4.php?relay_id=3&serial=' .
+			'admin/mailings/mailings_send4.php?relay_id=3&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		if (!empty ($poMMo->_config['smtp_4']))
 			bmSpawn(bm_baseUrl .
-			'/admin/mailings/mailings_send4.php?relay_id=4&serial=' .
+			'admin/mailings/mailings_send4.php?relay_id=4&serial=' .
 			$serial . '&securityCode=' . $_GET['securityCode']);
 		bmMKill('Multimode detected. Spawning background scripts for SMTP relays.');
 	}
@@ -315,11 +315,11 @@ updateDB($sentMails, $timer);
 // kill signal sent from throttler (max exec time likely reached), respawn.	
 if (!empty ($_GET['relay_id']))
 	bmSpawn(bm_baseUrl .
-	'/admin/mailings/mailings_send4.php?relay_id=' .
+	'admin/mailings/mailings_send4.php?relay_id=' .
 	$_GET['relay_id'] . '&serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 else
 	bmSpawn(bm_baseUrl .
-	'/admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
+	'admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
 
 bmMKill('Respawned... Max exec time likely reached.');
 

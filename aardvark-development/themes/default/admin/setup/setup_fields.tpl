@@ -1,8 +1,8 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/js/scriptaculous/effects.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/js/scriptaculous/dragdrop.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/js/scriptaculous/controls.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/effects.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/dragdrop.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/controls.js" type="text/javascript"></script>
 {/capture}{include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
 
@@ -13,7 +13,7 @@
 
 <h1>{t}Fields Page{/t}</h1>
 
-<img src="{$url.theme.shared}/images/icons/fields.png" class="articleimg">
+<img src="{$url.theme.shared}images/icons/fields.png" class="articleimg">
 
 {if $intro}<p>{$intro}</p>{/if}
 
@@ -70,12 +70,12 @@
 	{foreach name=demos from=$fields key=key item=demo}
 	<div id="demo_{$key}">
 		<a href="{$smarty.server.PHP_SELF}?field_id={$key}&delete=TRUE&field_name={$demo.name}">
-	 	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0"></a>
+	 	 		<img src="{$url.theme.shared}images/icons/delete.png" border="0"></a>
 		<span style="margin-left: 25px;">
 		<a href="fields_edit.php?field_id={$key}">
-				<img src="{$url.theme.shared}/images/icons/edit.png" border="0"></a>
+				<img src="{$url.theme.shared}images/icons/edit.png" border="0"></a>
 		</span>
-		<span class="handle" style="margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}/images/icons/order.png"></span>
+		<span class="handle" style="margin-left: 25px; margin-right: 20px; "><img src="{$url.theme.shared}images/icons/order.png"></span>
 		<span style="text-align:left; margin-left: 12px;">
 		{if $demo.active == 'on'}<strong>{$demo.name}</strong>{else}{$demo.name}{/if}
 				 ({$demo.type})
