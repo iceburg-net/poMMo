@@ -24,7 +24,7 @@ ob_start();
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('pommo_revision', '24');
+define('pommo_revision', '25');
 
 
 @include(bm_baseDir.'/config.php');
