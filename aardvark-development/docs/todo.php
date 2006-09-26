@@ -32,6 +32,7 @@ defined('_IS_VALID') or die('Move along...');
 		 (feature) Add search capability to subscriber management
 		 (feature) add ability to send messages to list administrator upon successfull subscription/unsubscription/changes
 	
+		 (feature) Store subscribers IP address on subscription
 	
 	SHORT TERM:
 	
