@@ -74,7 +74,8 @@
 </div>
 
 <div style="margin-left: 15%; margin-top: 15px;">
-	<input class="button" type="submit" name="pommo_signup" value="{t}Subscribe{/t}" />
+	<input type="hidden" name="pommo_signup" value="true">
+	<input class="button" type="submit" name="submit" value="{t}Subscribe{/t}" />
 </div>
 		
 </form>

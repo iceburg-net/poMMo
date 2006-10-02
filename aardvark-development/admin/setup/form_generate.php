@@ -127,7 +127,9 @@ foreach (array_keys($fields) as $field_id) {
 
 <!--  *** DO NOT CHANGE name="pommo_signup" ! ***
 	  If you'd like to change the button text change the "value=" text. -->
-<INPUT type="submit" name="pommo_signup" value="Signup"> <INPUT type="reset">
+
+<input type="hidden" name="pommo_signup" value="true">
+<INPUT type="submit" name="submit" value="Signup"/><INPUT type="reset" name="reset"/>
 
 </FORM>
 
@@ -135,3 +137,5 @@ foreach (array_keys($fields) as $field_id) {
 <br>
 <br>
 <hr>
+</body>
+</html>
