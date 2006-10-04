@@ -35,6 +35,7 @@ function check_charset($value, $empty, & $params, & $formvars) {
 	$validCharsets = array (
 		'UTF-8',
 		'ISO-8859-1',
+		'ISO-8859-2',
 		'ISO-8859-15',
 		'cp1251',
 		'KOI8-R',
