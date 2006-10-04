@@ -67,8 +67,9 @@ define('bm_verbosity',3);
 
 /************************************************************************
  * Uncomment (remove leading "//") and define the following 
- * to override the default setting
+ * settings to override default values.
  */
+
 
 /************************************************************************
  * ::: Base URL :::
