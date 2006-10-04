@@ -25,7 +25,7 @@
 	<tr>
 	<td valign="middle">
 		<a href="mailings_send.php">
-			<img src="{$url.theme.shared}/images/icons/left.png" border="0">&nbsp;<br>{t}edit{/t}
+			<img src="{$url.theme.shared}images/icons/left.png" border="0">&nbsp;<br>{t}edit{/t}
 		</a>
 	<td>
 	<p><b>{t}From:{/t} </b>{$fromname} &lt;{$fromemail}&gt;</p>
@@ -54,7 +54,7 @@
 	<td valign="top">
 	<br>
 	<a href="mailings_send2.php">
-		<img src="{$url.theme.shared}/images/icons/left.png" border="0">&nbsp;<br>{t}edit{/t}
+		<img src="{$url.theme.shared}images/icons/left.png" border="0">&nbsp;<br>{t}edit{/t}
 	</a>
 	<td>
 	
@@ -87,7 +87,7 @@
 	<div align="center">
 	<br><br>
 		<a href="mailings_send3.php?sendaway=TRUE\">
-			<img src="{$url.theme.shared}/images/icons/send.png" class="navimage" border="0">
+			<img src="{$url.theme.shared}images/icons/send.png" class="navimage" border="0">
 			<br>{t}Send Mailing{/t}
 		</a>
 	</div>

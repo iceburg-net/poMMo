@@ -5,7 +5,7 @@
 
 <h1>{t}Import Subscribers{/t}</h1>
 
-<img src="{$url.theme.shared}/images/icons/cells.png" class="articleimg">
+<img src="{$url.theme.shared}images/icons/cells.png" class="articleimg">
 
 <p>
 {t escape=no 1='<strong>' 2='</strong>'}poMMo supports importing subscribers from %1 CSV %2 files. Your CSV file should have one subscriber(email) per line with field information seperated by commas(,).{/t}

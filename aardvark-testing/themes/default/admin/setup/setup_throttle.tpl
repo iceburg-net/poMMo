@@ -1,20 +1,20 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/js/scriptaculous/slider.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/slider.js" type="text/javascript"></script>
 {/capture}{include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
 	
 <div id="mainbar">
 
 	<h1>{t}Configure{/t}</h1>
-	<img src="{$url.theme.shared}/images/icons/settings.png" class="articleimg">
+	<img src="{$url.theme.shared}images/icons/settings.png" class="articleimg">
 
 	<p>
 		{t}poMMo can throttle mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be controlled. Additionally, you can limit the mails and kilobytes sent to a single domain during a specified time frame.{/t}
 	</p>
 	
-	<a href="{$url.base}/admin/setup/setup_configure.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+	<a href="{$url.base}admin/setup/setup_configure.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t 1=$returnStr}Return to %1{/t}</a>
 		
 	<h2>{t}Throttling{/t} &raquo;</h2>
@@ -31,16 +31,16 @@
 
 
 <style>
-#track1 {ldelim}background:url({$url.theme.shared}/images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
-#handle1 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}/images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
-#track2 {ldelim}background:url({$url.theme.shared}/images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
-#handle2 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}/images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
-#track3 {ldelim}background:url({$url.theme.shared}/images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
-#handle3 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}/images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
-#track4 {ldelim}background:url({$url.theme.shared}/images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
-#handle4 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}/images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
-#track5 {ldelim}background:url({$url.theme.shared}/images/slider_track2.png) no-repeat; height:26px; width:218px;{rdelim}
-#handle5 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}/images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
+#track1 {ldelim}background:url({$url.theme.shared}images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
+#handle1 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
+#track2 {ldelim}background:url({$url.theme.shared}images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
+#handle2 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
+#track3 {ldelim}background:url({$url.theme.shared}images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
+#handle3 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
+#track4 {ldelim}background:url({$url.theme.shared}images/slider_track.png) no-repeat; height:26px; width:218px;{rdelim}
+#handle4 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
+#track5 {ldelim}background:url({$url.theme.shared}images/slider_track2.png) no-repeat; height:26px; width:218px;{rdelim}
+#handle5 {ldelim}width:18px;height:28px;background:url({$url.theme.shared}images/slider_handle.png) no-repeat bottom center;cursor:move;{rdelim}
 </style>
 
 <form action="" method="POST">

@@ -1,7 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}/js/jquery.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
- _editor_url  = "{$url.theme.shared}/js/xinha/"; 
+ _editor_url  = "{$url.theme.shared}js/xinha/"; 
  _editor_lang = "en";
 </script>
 
@@ -15,8 +15,8 @@
 			{rdelim}
 		</script>
 	{else}
-		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/htmlarea.js"></script>
-		<script type="text/javascript" src="{$url.theme.shared}/js/xinha/config.js"></script>
+		<script type="text/javascript" src="{$url.theme.shared}js/xinha/htmlarea.js"></script>
+		<script type="text/javascript" src="{$url.theme.shared}js/xinha/config.js"></script>
 		<script type="text/javascript" language="javascript">
 			var xinha_enabled = true;
 			function xinhaSubmit() {ldelim}
@@ -43,7 +43,7 @@
 	<a class="pommoOpen" href="#">{t}Add Personalization{/t}</a>
 		<div id="selectField" style="z-index: 2; display: none; position: absolute; top: -5px; left: -5px; width: 90%; background-color: #e6eaff; padding: 7px; border: 1px solid;">
 			<div class="pommoHelp">
-				<img src="{$url.theme.shared}/images/icons/help.png" align="absmiddle" border="0" style="float: right; margin-left: 10px;">
+				<img src="{$url.theme.shared}images/icons/help.png" align="absmiddle" border="0" style="float: right; margin-left: 10px;">
 				<span style="font-weight: bold;">{t}Add Personalization{/t}: </span>
 				<span class="pommoHelp">
 				{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. If no default is supplied and no value exists for the field, [[...]] will be replaced with a empty (blank) string, allowing mailings to start with "Dear [[firstName|Friend]] [[lastName]]," (example assumes firstName and lastName are collected fields).{/t}
@@ -66,7 +66,7 @@
 			<br>
 			
 			<a class="pommoClose" href="#" style="float: right;">
-					<img src="{$url.theme.shared}/images/icons/left.png" align="absmiddle" border="0">{t}Go Back{/t}
+					<img src="{$url.theme.shared}images/icons/left.png" align="absmiddle" border="0">{t}Go Back{/t}
 			</a>				
 		</div>
 </div>
@@ -98,7 +98,7 @@
 	<fieldset>
 		<legend>{t}Text Message{/t}</legend>
 		
-		<img src="{$url.theme.shared}/images/icons/down.png" align="absmiddle">&nbsp; &nbsp; 
+		<img src="{$url.theme.shared}images/icons/down.png" align="absmiddle">&nbsp; &nbsp; 
 		<input type="submit" name="altGen" id="altGen" value="{t}Copy text from HTML Message{/t}" onClick="xinhaSubmit()">
 		
 		<textarea  rows="10" cols="80" name="altbody" id="altbody">{$altbody}</textarea>

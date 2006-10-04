@@ -231,7 +231,7 @@ if ($output) {
 				<span style="margin-left: 50px;">
 					<div class="goback">
 						<a href="javascript:reset();">
-							<img src="' . bm_baseUrl . '/themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
+							<img src="' . bm_baseUrl . 'themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
 						</a>
 					</div>
 				</span>';
@@ -240,7 +240,7 @@ if ($output) {
 				<br>
 				<div  class="goback">
 					<a href="javascript:reset();">
-						<img src="' . bm_baseUrl . '/themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
+						<img src="' . bm_baseUrl . 'themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
 					</a>
 				</div>';
 }

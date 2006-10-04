@@ -5,7 +5,7 @@
 
 <h1>{t}Groups Page{/t}</h1>
 
-<img src="{$url.theme.shared}/images/icons/groups.png" class="articleimg">
+<img src="{$url.theme.shared}images/icons/groups.png" class="articleimg">
 
 <p>
 {t}Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list.{/t}
@@ -40,10 +40,10 @@
 	{foreach from=$groups key=id item=name}
 	<div style="border-top: 1px dotted; padding: 5px;">
 		<a href="{$smarty.server.PHP_SELF}?group_id={$id}&delete=TRUE&group_name={$name}">
-	 	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0" align="absmiddle"></a>
+	 	 		<img src="{$url.theme.shared}images/icons/delete.png" border="0" align="absmiddle"></a>
 		<span style="margin-left: 25px;">
 		<a href="groups_edit.php?group_id={$id}">
-				<img src="{$url.theme.shared}/images/icons/edit.png" border="0" align="absmiddle"></a>
+				<img src="{$url.theme.shared}images/icons/edit.png" border="0" align="absmiddle"></a>
 		</span>
 		<span style="text-align:left; margin-left: 25px;">
 			<strong>{$name}</strong>

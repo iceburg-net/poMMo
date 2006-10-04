@@ -4,14 +4,14 @@
 <div id="mainbar">
 
 	<h1>{t}Configure{/t}</h1>
-	<img src="{$url.theme.shared}/images/icons/settings.png" class="articleimg">
+	<img src="{$url.theme.shared}images/icons/settings.png" class="articleimg">
 
 	<p>
 		{t}poMMo can relay mail through up to 4 SMTP servers simutaneously. Throttle settings can either be shared or individually controlled per SMTP relay (for maximum thoroughput).{/t}
 	</p>
 	
-	<a href="{$url.base}/admin/setup/setup_configure.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+	<a href="{$url.base}admin/setup/setup_configure.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t 1=$returnStr}Return to %1{/t}</a>
 		
 	<h2>{t}SMTP Relays{/t} &raquo;</h2>
@@ -53,9 +53,9 @@
 		 		<label>{t}SMTP Status:{/t} </label>
 		 		<span style="margin-left: 5px;">
 		 			{if $status}
-		 				<img src="{$url.theme.shared}/images/icons/ok.png" align="absmiddle">{t}Connected to SMTP server{/t}
+		 				<img src="{$url.theme.shared}images/icons/ok.png" align="absmiddle">{t}Connected to SMTP server{/t}
 		 			{else}
-		 				<img src="{$url.theme.shared}/images/icons/nok.png" align="absmiddle">{t}Unable to connect to SMTP server{/t}
+		 				<img src="{$url.theme.shared}images/icons/nok.png" align="absmiddle">{t}Unable to connect to SMTP server{/t}
 		 			{/if}
 		 		</span>
 		 	</div>

@@ -4,7 +4,7 @@
 <div id="mainbar">
 
 	<h1>{t}Message Settings{/t}</h1>
-	<img src="{$url.theme.shared}/images/icons/settings.png" class="articleimg">
+	<img src="{$url.theme.shared}images/icons/settings.png" class="articleimg">
 
 	<p>
 		{t}You can configure the messages poMMo sends when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task.{/t}
@@ -16,8 +16,8 @@
 	</p>
 	
 	
-	<a href="{$url.base}/admin/setup/setup_configure.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+	<a href="{$url.base}admin/setup/setup_configure.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t 1=$returnStr}Return to %1{/t}</a>
 		
 	<h2>{t}Messages{/t} &raquo;</h2>

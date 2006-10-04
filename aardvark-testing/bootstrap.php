@@ -24,7 +24,7 @@ ob_start();
  * Bootstrapping
 */
 define('bm_baseDir', dirname(__FILE__));
-define('pommo_revision', '24');
+define('pommo_revision', '25');
 
 
 @include(bm_baseDir.'/config.php');
@@ -75,9 +75,14 @@ if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
  * If bootstrap is called from an "embedded" script, read bm_baseURL from "last known good". 
  * Otherwise, set it based from REQUEST
  */
-if (!defined('bm_baseUrl'))
-	(defined('_poMMo_embed')) ? require(bm_workDir.'/include.php') :
-		define('bm_baseUrl', preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+if (!defined('bm_baseUrl')) {
+	if (defined('_poMMo_embed')) 
+		require(bm_workDir.'/include.php');
+	else {
+		$bm_baseUrl = preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+		define('bm_baseUrl', ($bm_baseUrl == '/')? $bm_baseUrl : $bm_baseUrl . '/');
+	}
+}
 
 if (!defined('bm_hostname'))
 	define('bm_hostname',$_SERVER['HTTP_HOST']);
@@ -85,8 +90,7 @@ if (!defined('bm_hostname'))
 define('bm_http', ''.(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https://' : 'http://').bm_hostname);
 
 // get current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
-define('bm_section',preg_replace('@^/?(admin)?/@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
-
+define('bm_section',preg_replace('@^admin/?@i','',str_replace(bm_baseUrl,'',dirname($_SERVER['PHP_SELF']))));
 
 // NOTE -> this is meant to be in class.template.php! -- however, it must remain
 // here until smarty migration is complete or str2db is replaced using:
@@ -156,7 +160,7 @@ function & fireup() {
 	// ensure valid configuration data
 	if (empty($poMMo->_config) || count($poMMo->_config) < 5) {
 			bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
-			'<a href="'.bm_baseUrl.'/install/install.php">',
+			'<a href="'.bm_baseUrl.'install/install.php">',
 			'</a>'));
 	}
 	
@@ -166,18 +170,18 @@ function & fireup() {
 	$revision = $poMMo->_dbo->query($sql,0);
 	if (!$revision)
 		bmKill(sprintf(_T('Error loading configuration. Have you %s installed %s ?'),
-			'<a href="'.bm_baseUrl.'/install/install.php">',
+			'<a href="'.bm_baseUrl.'install/install.php">',
 			'</a>'));
 	elseif (pommo_revision != $revision)
 		bmKill(sprintf(_T('Version Mismatch. Have you %s upgraded %s ?'),
-		'<a href="'.bm_baseUrl.'/install/upgrade.php">',
+		'<a href="'.bm_baseUrl.'install/upgrade.php">',
 		'</a>'));
 	$poMMo->_dbo->dieOnQuery(TRUE);
 	
 
 	if (isset($bm_secure) && !$poMMo->isAuthenticated() )
 		bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'),
-		 '<a href="'.bm_baseUrl.'/index.php?referer='.$_SERVER['PHP_SELF'].'">',
+		 '<a href="'.bm_baseUrl.'index.php?referer='.$_SERVER['PHP_SELF'].'">',
 		'</a>'));
 		
 	if (!isset($bm_dataSave)) // PHASE OUT -> when _messages gone, perform actual dataClear func..

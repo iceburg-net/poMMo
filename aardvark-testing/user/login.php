@@ -32,7 +32,7 @@ $smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . _T('subscriber l
 
 $smarty->prepareForForm();
 
-if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
+if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	SmartyValidate :: connect($smarty, true);
 	SmartyValidate :: register_validator('email', 'Email', 'isEmail', false, false, 'trim');
@@ -40,6 +40,13 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$formError = array ();
 	$formError['email'] = _T('Invalid email address');
 	$smarty->assign('formError', $formError);
+	
+	// Assign email to form if pre-provided
+	if (isset($_REQUEST['Email']))
+		$smarty->assign('Email',$_REQUEST['Email']);
+	elseif (isset($_REQUEST['email']))
+		$smarty->assign('Email',$_REQUEST['email']);
+		
 } else {
 	// ___ USER HAS SENT FORM ___
 	SmartyValidate :: connect($smarty);

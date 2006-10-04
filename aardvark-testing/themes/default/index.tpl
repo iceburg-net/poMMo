@@ -3,12 +3,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{t}poMMo Installation{/t}</title>
-	<link href="{$url.theme.this}/inc/admin.css" type="text/css" rel="STYLESHEET">
-	<link href="{$url.theme.shared}/css/bform.css" type="text/css" rel="STYLESHEET">
-	<script src="{$url.theme.shared}/js/bform.js" type="text/javascript"></script>
+	<link href="{$url.theme.this}inc/admin.css" type="text/css" rel="STYLESHEET">
+	<link href="{$url.theme.shared}css/bform.css" type="text/css" rel="STYLESHEET">
+	<script src="{$url.theme.shared}js/bform.js" type="text/javascript"></script>
 {* The following fixes transparent PNG issues in IE < 7 *}
 	<!--[if lt IE 7.]>
-		<script defer type="text/javascript" src="{$url.theme.shared}/js/pngfix.js"></script>
+		<script defer type="text/javascript" src="{$url.theme.shared}js/pngfix.js"></script>
 	<![endif]-->
 </head>
 <body>
@@ -25,14 +25,14 @@
 
 <div id="sidebar">
 
-<img src="{$url.theme.shared}/images/pommo.png" alt="poMMo Logo" class="logo" />
+<img src="{$url.theme.shared}images/pommo.png" alt="poMMo Logo" class="logo" />
 <h1>{t}Links{/t}</h1>
 <div class="submenu"><a href="http://www.iceburg.net/pommo/">{t}The poMMo Website{/t}</a> 
 </div>
 
 <!-- end submenu -->	
 
-<p><img src="{$url.theme.shared}/images/icons/security.png" class="sideimg"></p>								
+<p><img src="{$url.theme.shared}images/icons/security.png" class="sideimg"></p>								
 </div>
 <!-- end sidebar -->		
 

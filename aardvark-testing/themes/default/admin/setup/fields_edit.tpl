@@ -5,12 +5,12 @@
 
 <h1>{t}Edit Field{/t}</h1>
 
-<img src="{$url.theme.shared}/images/icons/fields.png" class="articleimg">
+<img src="{$url.theme.shared}images/icons/fields.png" class="articleimg">
 
 {if $intro}<p>{$intro}</p>{/if}
 
-<a href="{$url.base}/admin/setup/setup_fields.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+<a href="{$url.base}admin/setup/setup_fields.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t}Return to Fields Page{/t}</a>
 		<h2>{$field_name} &raquo;</h2>
   

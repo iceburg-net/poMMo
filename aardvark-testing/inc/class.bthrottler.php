@@ -192,7 +192,7 @@ class bThrottler {
 			$this->_queue = $queue;
 		else
 			die('<img src="' .
-			bm_baseUrl . '/themes/shared/images/icons/alert.png" align="middle">bThrottler() - Queue is not an array!');
+			bm_baseUrl . 'themes/shared/images/icons/alert.png" align="middle">bThrottler() - Queue is not an array!');
 
 		$this->_targetMPS = $targetMPS;
 		$this->_targetBPS = $targetBPS;
