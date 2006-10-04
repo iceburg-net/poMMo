@@ -157,6 +157,7 @@
 			<select name="list_charset" id="list_charset">
 				<option value="UTF-8" {if $list_charset == 'UTF-8'}SELECTED{/if}>{t}UTF-8 (recommended){/t}</option>
 				<option value="ISO-8859-1" {if $list_charset == 'ISO-8859-1'}SELECTED{/if}>{t}western (ISO-8859-1){/t}</option>
+				<option value="ISO-8859-2" {if $charset == 'ISO-8859-2'}SELECTED{/if}>{t}Central/Eastern European (ISO-8859-2){/t}</option>
 				<option value="ISO-8859-15" {if $list_charset == 'ISO-8859-15'}SELECTED{/if}>{t}western (ISO-8859-15){/t}</option>
 				<option value="cp1251" {if $list_charset == 'cp1251'}SELECTED{/if}>{t}cyrillic (Windows-1251){/t}</option>
 				<option value="KOI8-R" {if $list_charset == 'KOI8-R'}SELECTED{/if}>{t}cyrillic (KOI8-R){/t}</option>
