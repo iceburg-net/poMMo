@@ -35,11 +35,11 @@ $bmdb['prefix'] = 'pommo_';
  * ::: Language Information :::
  *   Set this to your desired locale  -- this is a work in progress
  * 
- *	bg - Bulgarian					it - Italian
- *	br - Brazilian Portugese		nl - Dutch
- *	de - German						ro - Romanian
- *	en - English
- *	fr - French
+ *	bg - Bulgarian					es - Spanish
+ *	br - Brazilian Portugese		fr - French
+ *	da - Danish						it - Italian
+ *	de - German						nl - Dutch
+ *	en - English						ro - Romanian
 ************************************************************************/
 define('bm_lang','en');
 
@@ -67,8 +67,9 @@ define('bm_verbosity',3);
 
 /************************************************************************
  * Uncomment (remove leading "//") and define the following 
- * to override the default setting
+ * settings to override default values.
  */
+
 
 /************************************************************************
  * ::: Base URL :::
@@ -76,9 +77,10 @@ define('bm_verbosity',3);
  * This is the path to pommo relative to the WEB.
  * For example, if poMMo is http://newsletter.mydomain.com/, the baseURL
  * would be '/'. If poMMo is http://www.mydomain.com/mysite/pommo, the
- * baseURL would be '/mysite/pommo'
+ * baseURL would be '/mysite/pommo/'
  * 
  * Default: Automatically Detected
+ * NOTE: Include trailing slash
  */
 //define('bm_baseUrl', '/mysite/newsletter');
 

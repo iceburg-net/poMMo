@@ -67,11 +67,11 @@ if (!empty ($_GET['sendaway'])) {
 		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['mailgroup'], 'email'));
 		dbMailingStamp($dbo, "start");
 		
-		if (bmHttpSpawn(bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode)) {
+		if (bmHttpSpawn(bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode)) {
 			sleep(1); // allows mailing to begin...
 			bmRedirect('mailing_status.php');
 		}
-		//die (bm_baseUrl.'/admin/mailings/mailings_send4.php?securityCode='.$securityCode);
+		//die (bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode);
 	}
 	else {
 		$logger->addMsg(_T('Cannot send a mailing to 0 subscribers!'));

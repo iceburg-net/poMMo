@@ -78,7 +78,7 @@ function & dbGetSubscriber(& $dbo, $input, $retunType = 'detailed', $table = 'su
 		$addFields = ', s.newEmail';
 
 	if (empty ($dbMatch)) {
-		die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbGetSubscriber() -> Bad Input Passed.');
+		die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbGetSubscriber() -> Bad Input Passed.');
 	}
 	switch ($retunType) {
 		case 'id' :
@@ -108,7 +108,7 @@ function & dbGetSubscriber(& $dbo, $input, $retunType = 'detailed', $table = 'su
 			}
 			return $subscribers;
 	}
-	die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbGetSubscriber() -> Reached end. Bad type sent?.');
+	die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbGetSubscriber() -> Reached end. Bad type sent?.');
 }
 
 // dbPending: Adds an entry to the pending table. Returns the confirmation code generated
@@ -142,7 +142,7 @@ function dbPendingAdd(& $dbo, $type = NULL, $email = NULL, $fields = NULL) {
 			$pending_id = $dbo->lastId();
 
 			if (empty ($pending_id) || !is_numeric($pending_id))
-				die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbAddPending() -> Unable to fetch pending_id. Notify Administrator.');
+				die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbAddPending() -> Unable to fetch pending_id. Notify Administrator.');
 
 			// if fields were given, add them to the pending_data table
 			if (!empty ($fields) && is_array($fields))
@@ -162,7 +162,7 @@ function dbPendingAdd(& $dbo, $type = NULL, $email = NULL, $fields = NULL) {
 			}
 			break;
 		default:
-			die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbAddPending() -> Unknown type passed.');
+			die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbAddPending() -> Unknown type passed.');
 	}
 	return $confirmation_key;
 }
@@ -178,7 +178,7 @@ function dbPendingDel(& $dbo, $input = NULL) {
 		$input = array($input);
 		
 	if (is_numeric($input[0])) // do not allow IDs to be passed to pendingDel...
-		die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbPendingDel() -> Bad Input Passed.');
+		die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbPendingDel() -> Bad Input Passed.');
 
 	// get IDs to purge
 		$purge_ids = dbGetSubscriber($dbo, $input, 'id', 'pending');
@@ -211,7 +211,7 @@ function dbSubscriberAdd(& $dbo, & $arg, $pending = FALSE) {
 	
 	// verify subscriber array is sane
 	if (!is_array($subscriber) || empty ($subscriber['email']) || !isset ($subscriber['data']))
-		die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbSubscriberAdd() -> Subscribers array not sane. Notify Administrator.');
+		die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbSubscriberAdd() -> Subscribers array not sane. Notify Administrator.');
 
 	// set the date to today if it hasn't been provided	
 	if (!isset ($subscriber['date']))
@@ -223,7 +223,7 @@ function dbSubscriberAdd(& $dbo, & $arg, $pending = FALSE) {
 	$subscriber_id = $dbo->lastId();
 
 	if (empty ($subscriber_id) || !is_numeric($subscriber_id))
-		die('<img src="'.bm_baseUrl.'/themes/shared/images/icons/alert.png" align="middle">dbSubscriberAdd() -> Unable to fetch subscriber_id. Notify Administrator.');
+		die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">dbSubscriberAdd() -> Unable to fetch subscriber_id. Notify Administrator.');
 
 	// insert subscriber's data into subscribers_data
 	foreach (array_keys($subscriber['data']) as $field_id) {

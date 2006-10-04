@@ -47,7 +47,7 @@ if (!validateSubscribeForm()) {
 	
 	// attempt to detect if referer was set
 	// TODO; should this default to $_SERVER['HTTP_REFERER']; ? -- for those who have customized the plain html subscriberForm..
-	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : bm_http.bm_baseUrl.'/user/subscribe.php';
+	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : bm_http.bm_baseUrl.'user/subscribe.php';
 	
 	// append stored input
 	$smarty->assign('referer',$referer.'?input='.$input);

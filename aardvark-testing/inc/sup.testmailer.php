@@ -36,7 +36,7 @@ if (isset ($_GET['respawn'])) {
 	$fileContent .= '<?php $respawnAttempt=TRUE; ?>';
 } else {
 	$fileContent .= '<?php $respawnAttempt=FALSE; ?>';
-	bmHttpSpawn(bm_baseUrl . '/inc/sup.testmailer.php?respawn=xxx');
+	bmHttpSpawn(bm_baseUrl . 'inc/sup.testmailer.php?respawn=xxx');
 }
 
 // write to file

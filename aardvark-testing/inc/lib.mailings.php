@@ -31,7 +31,7 @@ function bmSendConfirmation($to, $confirmation_key, $type) {
 	
 	$subject = $messages[$type]['sub'];
 	
-	$url = bm_http.bm_baseUrl.'/user/confirm.php?code='.$confirmation_key;
+	$url = bm_http.bm_baseUrl.'user/confirm.php?code='.$confirmation_key;
 	$body = preg_replace('@\[\[URL\]\]@i',$url,$messages[$type]['msg']);  
 	
 	if (empty($subject) || empty($body))

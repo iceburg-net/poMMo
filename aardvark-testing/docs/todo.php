@@ -18,6 +18,8 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
+When switching language in config.php to "de" I get the following message (same as before in PR12): "*Fatal error*: Call to undefined function: mb_detect_encoding() in */mnt/be2/08/459/00000014/htdocs/pommo13/inc/gettext/gettext.inc* on line *99". 
+
 [BEFORE 1.0]
 	+ Rewritten Import
 	+ Rewritten Subscriber Manage
@@ -32,6 +34,7 @@ defined('_IS_VALID') or die('Move along...');
 		 (feature) Add search capability to subscriber management
 		 (feature) add ability to send messages to list administrator upon successfull subscription/unsubscription/changes
 	
+		 (feature) Store subscribers IP address on subscription
 	
 	SHORT TERM:
 	

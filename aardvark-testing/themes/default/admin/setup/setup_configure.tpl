@@ -4,7 +4,7 @@
 <div id="mainbar">
 
 	<h1>{t}Configure{/t}</h1>
-	<img src="{$url.theme.shared}/images/icons/settings.png" class="articleimg">
+	<img src="{$url.theme.shared}images/icons/settings.png" class="articleimg">
 
 	<p>
 		{t}Use this page to configure poMMo. You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.{/t}
@@ -157,6 +157,7 @@
 			<select name="list_charset" id="list_charset">
 				<option value="UTF-8" {if $list_charset == 'UTF-8'}SELECTED{/if}>{t}UTF-8 (recommended){/t}</option>
 				<option value="ISO-8859-1" {if $list_charset == 'ISO-8859-1'}SELECTED{/if}>{t}western (ISO-8859-1){/t}</option>
+				<option value="ISO-8859-2" {if $charset == 'ISO-8859-2'}SELECTED{/if}>{t}Central/Eastern European (ISO-8859-2){/t}</option>
 				<option value="ISO-8859-15" {if $list_charset == 'ISO-8859-15'}SELECTED{/if}>{t}western (ISO-8859-15){/t}</option>
 				<option value="cp1251" {if $list_charset == 'cp1251'}SELECTED{/if}>{t}cyrillic (Windows-1251){/t}</option>
 				<option value="KOI8-R" {if $list_charset == 'KOI8-R'}SELECTED{/if}>{t}cyrillic (KOI8-R){/t}</option>
@@ -179,7 +180,7 @@
 		{if $list_exchanger == 'smtp'}
 			<div class="field">
 				<a href="setup_smtp.php">
-					<img src="{$url.theme.shared}/images/icons/right.png" align="center" border="0">
+					<img src="{$url.theme.shared}images/icons/right.png" align="center" border="0">
 				</a>
 				  &nbsp; {t escape=no 1='<a href="setup_smtp.php">' 2='</a>}SMTP Servers: %1 Click Here %2 to setup your relays.{/t}
 				<div class="notes">{t}(configure SMTP relays){/t}</div>
@@ -188,7 +189,7 @@
 		
 		<div class="field">
 			<a href="setup_messages.php">
-				<img src="{$url.theme.shared}/images/icons/right.png" align="center" border="0">
+				<img src="{$url.theme.shared}images/icons/right.png" align="center" border="0">
 			</a>
 			  &nbsp; {t escape=no 1='<a href="setup_messages.php">' 2='</a>}Messages: %1 Click Here %2 to customize mailed messages.{/t}
 			<div class="notes">{t}(define the email messages sent during subscription, updates, etc.){/t}</div>
@@ -198,7 +199,7 @@
 		
 		<div class="field">
 			<a href="setup_throttle.php">
-				<img src="{$url.theme.shared}/images/icons/right.png" align="center" border="0">
+				<img src="{$url.theme.shared}images/icons/right.png" align="center" border="0">
 			</a>
 			  &nbsp; {t escape=no 1='<a href="setup_throttle.php">' 2='</a>}Throttling: %1 Click Here %2 to set mail throttle values.{/t}
 			<div class="notes">{t}(controls mails per second, bytes per second, and domain limits){/t}</div>

@@ -30,7 +30,7 @@ $dbo = & $poMMo->_dbo;
 // allow access to this page if not installed 
 if (bmIsInstalled() && !$_SESSION['pommo']['authenticated']) {
 	bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
-	bm_baseUrl . '/index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+	bm_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
 	die();
 }
 
@@ -99,7 +99,7 @@ if (isset ($_GET['cmd'])) {
 			flush();
 
 			// call background script. Script writes time() as $testTime to workdir/test.php. Include file to compare.
-			bmHttpSpawn(bm_baseUrl . '/inc/sup.testmailer.php?xxx=yyy');
+			bmHttpSpawn(bm_baseUrl . 'inc/sup.testmailer.php?xxx=yyy');
 			sleep(5);
 			@ include (bm_workDir . '/test.php');
 

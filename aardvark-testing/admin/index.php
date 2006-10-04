@@ -11,5 +11,5 @@
  */
 define('_IS_VALID', TRUE);
 require('../bootstrap.php');
-bmRedirect(bm_baseUrl.'/admin/admin.php');
+bmRedirect('/admin/admin.php');
 ?>

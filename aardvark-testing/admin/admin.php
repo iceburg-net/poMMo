@@ -28,7 +28,7 @@ $dbo = & $poMMo->_dbo;
 $smarty = & bmSmartyInit();
 
 $smarty->assign('header',array(
-	'main' => _T('poMMo Aardvark').' '.$poMMo->_config['version'],
+	'main' => 'poMMo '.$poMMo->_config['version'],
 	'sub' => _T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
 	));
 	

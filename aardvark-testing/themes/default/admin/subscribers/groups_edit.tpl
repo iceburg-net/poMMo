@@ -1,6 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}/js/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}/js/scriptaculous/effects.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="{$url.theme.shared}js/scriptaculous/effects.js" type="text/javascript"></script>
 {/capture}{include file="admin/inc.header.tpl"}
 {include file="admin/inc.sidebar.tpl"}
 
@@ -25,14 +25,14 @@
 
 <h1>{t}Edit Group{/t}</h1>
 
-<img src="{$url.theme.shared}/images/icons/groups.png" class="articleimg">
+<img src="{$url.theme.shared}images/icons/groups.png" class="articleimg">
 
 <p>
 {t}They are made up of "filters" that match field values or other groups. For instance, if you collect  "age" and "country", you can match subscribers 21 and older living in Japan by creating two filtering critiera; one which matches "age" to a value GREATER THAN 20, and another which matches "country" EQUAL TO "Japan"{/t} 
 <p>
 
-<a href="{$url.base}/admin/subscribers/subscribers_groups.php">
-		<img src="{$url.theme.shared}/images/icons/back.png" align="middle" class="navimage" border='0'>
+<a href="{$url.base}admin/subscribers/subscribers_groups.php">
+		<img src="{$url.theme.shared}images/icons/back.png" align="middle" class="navimage" border='0'>
 		{t 1=$returnStr}Return to %1{/t}</a>
 
 <h2>{$group_name} &raquo;</h2>
@@ -100,9 +100,9 @@
 {foreach from=$filters key=filter_id item=filter}
 <div style="border-top: 1px dotted; padding: 5px;">
 	<a href="{$smarty.server.PHP_SELF}?filter_id={$filter_id}&delete=TRUE&group_id={$group_id}">
- 	 		<img src="{$url.theme.shared}/images/icons/delete.png" border="0" align="absmiddle"></a>
+ 	 		<img src="{$url.theme.shared}images/icons/delete.png" border="0" align="absmiddle"></a>
 	<span style="margin-left: 25px; cursor:pointer; cursor:hand;" onClick="filterUpdate('{$filter_id}','{$group_id}')" >
-			<img src="{$url.theme.shared}/images/icons/edit.png" border="0" align="absmiddle">
+			<img src="{$url.theme.shared}images/icons/edit.png" border="0" align="absmiddle">
 	</span>
 	<span style="text-align:left; margin-left: 12px;">
 		{if $filter.logic == 'is_in'}

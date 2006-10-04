@@ -1,6 +1,6 @@
 
 <div id="sidebar">
-	<img src="{$url.theme.shared}/images/pommo.png" alt="poMMo Logo" class="logo" />
+	<img src="{$url.theme.shared}images/pommo.png" alt="poMMo Logo" class="logo" />
 
 	{if $section == "setup"}
 	<!-- start section nav -->
@@ -33,15 +33,15 @@
 	<!-- begin nav -->
 	<h1>Sections</h1>
 	<div class="submenu">
-		<a href="{$url.base}/admin/mailings/admin_mailings.php">{t}Mailings{/t}</a>
-		<a href="{$url.base}/admin/subscribers/admin_subscribers.php">{t}Subscribers{/t}</a>
-		<a href="{$url.base}/admin/setup/admin_setup.php">{t}Setup{/t}</a>	
+		<a href="{$url.base}admin/mailings/admin_mailings.php">{t}Mailings{/t}</a>
+		<a href="{$url.base}admin/subscribers/admin_subscribers.php">{t}Subscribers{/t}</a>
+		<a href="{$url.base}admin/setup/admin_setup.php">{t}Setup{/t}</a>	
 	</div>
 	<!-- end nav -->
 	{if $config.demo_mode == "on"}
-	<p><img src="{$url.theme.shared}/images/icons/demo.png" class="sideimage">{t}Demonstration mode is ON.{/t}</p>	
+	<p><img src="{$url.theme.shared}images/icons/demo.png" class="sideimage">{t}Demonstration mode is ON.{/t}</p>	
 	{else}
-	<p><img src="{$url.theme.shared}/images/icons/nodemo.png" class="sideimage">{t}Demonstration mode is OFF.{/t}</p>	
+	<p><img src="{$url.theme.shared}images/icons/nodemo.png" class="sideimage">{t}Demonstration mode is OFF.{/t}</p>	
 	{/if}
 
 </div>

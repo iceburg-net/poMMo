@@ -33,11 +33,11 @@ if (isset ($_GET['logout'])) {
 	// if user chose to logout, destroy session and redirect to this page
 	$poMMo->setAuthenticated(FALSE);
 	session_destroy();
-	header('Location: ' . bm_http . bm_baseUrl . '/index.php');
+	header('Location: ' . bm_http . bm_baseUrl . 'index.php');
 }
 elseif ($poMMo->isAuthenticated()) {
 	// If user is authenticated (has logged in), redirect to admin.php
-	bmRedirect(bm_http . bm_baseUrl . '/admin/admin.php');
+	bmRedirect(bm_http . bm_baseUrl . 'admin/admin.php');
 }
 elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 	// Check if user submitted correct username & password. If so, Authenticate.
@@ -78,7 +78,7 @@ elseif (!empty ($_POST['resetPassword'])) {
 			$poMMo->set(array (
 				'email' => $poMMo->_config['admin_email']
 			));
-			bmRedirect(bm_http . bm_baseUrl . '/user/user_pending.php');
+			bmRedirect(bm_http . bm_baseUrl . 'user/user_pending.php');
 		}
 
 		// create a password change request, send confirmation mail
@@ -97,7 +97,7 @@ elseif (!empty ($_POST['resetPassword'])) {
 }
 
 // referer (used to return user to requested page upon login success)
-$smarty->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : bm_baseUrl . '/admin/admin.php'));
+$smarty->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : bm_baseUrl . 'admin/admin.php'));
 
 $smarty->display('index.tpl');
 die();
