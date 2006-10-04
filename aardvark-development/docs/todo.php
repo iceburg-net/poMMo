@@ -18,6 +18,8 @@ elsewhere
 defined('_IS_VALID') or die('Move along...');
 ?>
 
+When switching language in config.php to "de" I get the following message (same as before in PR12): "*Fatal error*: Call to undefined function: mb_detect_encoding() in */mnt/be2/08/459/00000014/htdocs/pommo13/inc/gettext/gettext.inc* on line *99". 
+
 [BEFORE 1.0]
 	+ Rewritten Import
 	+ Rewritten Subscriber Manage
