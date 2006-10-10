@@ -125,10 +125,10 @@ class dbo {
 		$this->_link = mysql_connect($hostname, $username, $password);
 			
 		if (!$this->_link)
-			die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">Could not establish database connection. Verify your config.php settings in the setup directory. <br><br>&nbsp;&nbsp;See the <a href="'.bm_baseUrl.'docs/readme.html">README</a> file for help.');
+			die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" alt="alert icon" />Could not establish database connection. Verify your config.php settings in the setup directory. See the <a href="'.bm_baseUrl.'docs/readme.html">README</a> file for help.');
 
 		if (!@ mysql_select_db($database, $this->_link))
-			die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" align="middle">Connected to database server but could not select database: "'.$database.'". <br><br>&nbsp;&nbsp; Does this database exist? Verify your config.php settings in the setup directory.');
+			die('<img src="'.bm_baseUrl.'themes/shared/images/icons/alert.png" alt="alert icon" />Connected to database server but could not select database: "'.$database.'". Does this database exist? Verify your config.php settings in the setup directory.');
 	}
 
 	function debug($val) {
@@ -194,14 +194,14 @@ class dbo {
 			// get # of records if a non bool was returned..
 			if (!is_bool($this->_result))
 				$numRecords = $this->records();
-			echo '<br> Query received --> "'.$query.'" <br>&nbsp;&nbsp; Query affected '.$this->affected().' rows and returned '.$numRecords.' records.<br>';
+			echo '<br />Query received --> "'.$query.'" <br />Query affected '.$this->affected().' rows and returned '.$numRecords.' records.<br />';
 		}
 
 		// check if query was unsuccessful
 		if (!$this->_result) {
 
 			if ($this->_debug)
-				echo '&nbsp;&nbsp; Query <b>failed</b> with error --> '.mysql_error().'<br><br>';
+				echo '<p>Query <strong>failed</strong> with error --> '.mysql_error().'</p>';
 
 			if ($this->_dieOnQuery)
 				die('MySQL Query Failed.');
