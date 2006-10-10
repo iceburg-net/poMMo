@@ -122,19 +122,26 @@ function bmRedirect($url, $msg = NULL, $kill = true) {
 
 function bmKill($msg = NULL) {
 
+	// if nothing is in the output buffer, create a valid XHTML page.
+	if (!ob_get_length()) {
+		echo('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
+		echo('<title>'._T('poMMo Error').'</title>'); // Very basics added for valid output
+	}
+
+	// output passed message
+	if ($msg)
+		echo '<div class="error fatal"><img src="' . bm_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" />' . $msg . '</div>';
+
+	// output debugging info if enabled (in config.php)
 	if (bm_debug == 'on' && bm_section != 'user') { // don't debug if section == user.'
 		require (bm_baseDir . '/inc/lib.debugger.php');
 		bmDebug();
 	}
-
-	// end output buffer
+	
+	// print and clear output buffer
 	ob_end_flush();
-
-	if ($msg) {
-		echo('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
-		echo('<title>Error</title>'); // Very basics added for valid output
-		die('<div class="error fatal"><img src="' . bm_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" />' . $msg . '</div>');
-	}
+	
+	// kill script
 	die();
 }
 
