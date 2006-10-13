@@ -196,7 +196,7 @@ class bMailer extends PHPMailer {
 
 			$this->FromName = $this->_fromname;
 			$this->From = $this->_fromemail;
-			$this->AddReplyTo = $this->_frombounce;
+			$this->Sender = $this->_frombounce;
 			$this->Subject = $this->_subject;
 
 			// make sure exchanger is valid, DEFAULT to PHP Mail
