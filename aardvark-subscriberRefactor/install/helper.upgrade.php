@@ -721,6 +721,51 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				if (!performUpdate($sql, $dbo, 77, 'Removing Group Tally Cache'))
 					$failed = TRUE;
 					
+				$sqlA = array();	
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['pending'] . '` RENAME `' . $dbo->table['subscribers_pending'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers'] . '` RENAME `' . $dbo->table['subscribers_active'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['pending_data'] . '` RENAME `' . $dbo->table['data_pending'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` RENAME `' . $dbo->table['data_active'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscriber_fields'] . '` RENAME `' . $dbo->table['fields'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_active'] . '` ADD `flagged` ENUM(\'update\') NULL;';
+				if (!performUpdate($sqlA, $dbo, 78, 'Renaming Subscriber Tables'))
+					$failed = TRUE;
+					
+				$sqlA = array();	
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['pending'] . '` RENAME `' . $dbo->table['subscribers_pending'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers'] . '` RENAME `' . $dbo->table['subscribers_active'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['pending_data'] . '` RENAME `' . $dbo->table['data_pending'] . '`';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_data'] . '` RENAME `' . $dbo->table['data_active'] . '`';
+				if (!performUpdate($sqlA, $dbo, 78, 'Renaming Subscriber Tables'))
+					$failed = TRUE;
+				
+				$sqlA = array();
+				$sqlA[] = 'CREATE TABLE `' . $dbo->table['subscribers_inactive'] . '` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `email` VARCHAR(60) NOT NULL, `registered` DATE NOT NULL DEFAULT \'0000-00-00\', `date` DATE NOT NULL DEFAULT \'0000-00-00\', INDEX (`email`))';
+				$sqlA[] =  'ALTER TABLE `' . $dbo->table['subscribers_inactive'] . '` DROP INDEX `email`, ADD INDEX `email` (`email`(30))';
+				$sqlA[] = 'CREATE TABLE `' . $dbo->table['data_inactive'] . '` (`data_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `field_id` INT UNSIGNED NOT NULL, `subscriber_id` INT UNSIGNED NOT NULL, `value` VARCHAR(60) NULL)';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['data_inactive'] . '` ADD INDEX `field_id` (`field_id`,`subscriber_id`)';
+				if (!performUpdate($sqlA, $dbo, 79, 'Adding Unsubscription Tables'))
+					$failed = TRUE;
+				
+				$sqlA = array();
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['data_pending'] . '` CHANGE `pending_id` `subscriber_id` INT(10) UNSIGNED NOT NULL DEFAULT \'0\'';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['data_active'] . '` CHANGE `subscribers_id` `subscriber_id` INT(10) UNSIGNED NOT NULL DEFAULT \'0\'';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_active'] . '` CHANGE `subscribers_id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_pending'] . '` CHANGE `pending_id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_active'] . '` ADD `registered` DATE NOT NULL DEFAULT \'0000-00-00\';';
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_pending'] . '` ADD `registered` DATE NOT NULL DEFAULT \'0000-00-00\';';
+				if (!performUpdate($sqlA, $dbo, 80, 'Normalizing Subscriber & Data Tables'))
+					$failed = TRUE;
+					
+				$sqlA = array();
+				$sqlA[] = 'ALTER TABLE `' . $dbo->table['subscribers_active'] . '` ADD INDEX (`flagged`)';
+				$sql = 'SELECT subscribers_id FROM '.$dbo->table['subscribers_flagged'].' WHERE flagged_type=\'update\'';
+				while ($row = $dbo->getRows($sql)) {
+					$sqlA[] = 'UPDATE '.$dbo->table['subscribers_active'].' SET flagged=\'update\' WHERE id=\''.$row['subscribers_id'].'\'';
+				}
+				if (!performUpdate($sqlA, $dbo, 81, 'Merging Flagged and Active Subscribers table'))
+					$failed = TRUE;
+				
 				// bump version
 				if (!$failed)
 					bmBumpVersion($dbo, $revision, "Aardvark SVN");
