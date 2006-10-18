@@ -60,8 +60,6 @@ CREATE TABLE :::fields::: (
 CREATE TABLE :::groups::: (
   `group_id` smallint(5) unsigned NOT NULL auto_increment,
   `group_name` tinytext  NOT NULL,
-  `group_cacheTally` int(10) unsigned NOT NULL,
-  `group_cacheTime` timestamp(12) NULL,
   PRIMARY KEY  (`group_id`)
 );
 

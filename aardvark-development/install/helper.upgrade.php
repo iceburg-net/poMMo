@@ -709,20 +709,34 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 					bmBumpVersion($dbo, $revision, "Aardvark PR13.1");
 			}
 			
+			
+			$revision = 26;
+			break;
+			
+		case 26: // AARDVARK SVN
+		
+			if ($dbRev < $revision) {
+				
+				$sql = 'ALTER TABLE `' . $dbo->table['groups'] . '` DROP `group_cacheTally` , DROP `group_cacheTime`';
+				if (!performUpdate($sql, $dbo, 77, 'Removing Group Tally Cache'))
+					$failed = TRUE;
+					
+				// bump version
+				if (!$failed)
+					bmBumpVersion($dbo, $revision, "Aardvark SVN");
+			}
+			
 			// follows last case
 			if ($failed)
 				return FALSE;
 			return TRUE;
 			
-			$revision = 26;
+			$revision = 27;
 			break;
-		
-			
 		
 		default :
 			die('Unknown Revision passed to upgrade function - ' . $revision);
 			break;
-			
 	}
 	
 
