@@ -98,22 +98,31 @@ class dbo {
 		$this->table = array ();
 
 		$this->table['config'] = $tablePrefix.'config';
-		$this->table['demographics'] = $tablePrefix.'demographics'; // PHASE OUT
-		$this->table['fields'] = $tablePrefix.'subscriber_fields';
 		$this->table['groups'] = $tablePrefix.'groups';
 		$this->table['groups_criteria'] = $tablePrefix.'groups_criteria';
 		$this->table['mailing_current'] = $tablePrefix.'mailing_current';
 		$this->table['mailing_history'] = $tablePrefix.'mailing_history';
 		$this->table['queue'] = $tablePrefix.'queue';
 		$this->table['queue_working'] = $tablePrefix.'queue_working';
-		$this->table['pending'] = $tablePrefix.'pending';
-		$this->table['pending_data'] = $tablePrefix.'pending_data';
-		$this->table['subscriber_fields'] = $tablePrefix.'subscriber_fields';
-		$this->table['subscribers'] = $tablePrefix.'subscribers';
-		$this->table['old_subscribers_data'] = $tablePrefix.'subscriber_data'; // PHASE OUT
-		$this->table['subscribers_data'] = $tablePrefix.'subscribers_data';
-		$this->table['subscribers_flagged'] = $tablePrefix.'subscribers_flagged';
+		$this->table['pending'] = $tablePrefix.'pending'; // PHASE OUT (from < PR13.2)
+		$this->table['pending_data'] = $tablePrefix.'pending_data'; // PHASE OUT (from < PR13.2)
+		$this->table['subscriber_fields'] = $tablePrefix.'subscriber_fields'; // PHASE OUT (from < PR13.2)
+		$this->table['subscribers'] = $tablePrefix.'subscribers'; // PHASE OUT (from < PR13.2)
+		$this->table['subscribers_data'] = $tablePrefix.'subscribers_data'; // PHASE OUT (from < PR13.2)
+		$this->table['subscribers_flagged'] = $tablePrefix.'subscribers_flagged'; // PHASE OUT (from < PR13.2)
 		$this->table['updates'] = $tablePrefix.'updates';
+		
+		$this->table['fields'] = $tablePrefix.'fields';
+		
+		$this->table['subscribers_active'] = $tablePrefix.'subscribers_active';
+		$this->table['subscribers_inactive'] = $tablePrefix.'subscribers_inactive';
+		$this->table['subscribers_pending'] = $tablePrefix.'subscribers_pending';
+		
+		$this->table['data_active'] = $tablePrefix.'data_active';
+		$this->table['data_inactive'] = $tablePrefix.'data_inactive';
+		$this->table['data_pending'] = $tablePrefix.'data_pending';
+		
+		
 
 		$this->_dieOnQuery = TRUE;
 		$this->_debug = FALSE;

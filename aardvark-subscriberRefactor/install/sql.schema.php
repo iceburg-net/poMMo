@@ -131,65 +131,82 @@ CREATE TABLE :::queue::: (
 );
 
 
--- PENDING
+-- SUBSCRIBERS_PENDING
 
-CREATE TABLE :::pending::: (
-  `pending_id` int(10) unsigned NOT NULL auto_increment,
+CREATE TABLE :::subscribers_pending::: (
+  `id` int(10) unsigned NOT NULL auto_increment,
   `code` varchar(35) NOT NULL default '',
   `type` enum('add','del','change','password') default NULL,
   `email` varchar(60) NOT NULL default '',
   `newEmail` varchar(60) NULL default NULL,
   `date` date NOT NULL default '0000-00-00',
-  PRIMARY KEY  (`pending_id`),
+  `registered` date NOT NULL default '0000-00-00',
+  PRIMARY KEY  (`id`),
   KEY `code` (`code`),
   KEY `type` (`type`),
-  KEY `email` (`email`)
-);
-
--- PENDING_DATA
-
-CREATE TABLE :::pending_data::: (
-  `data_id` bigint(20) unsigned NOT NULL auto_increment,
-  `field_id` int(10) unsigned NOT NULL default '0',
-  `pending_id` int(10) unsigned NOT NULL default '0',
-  `value` tinytext,
-  PRIMARY KEY  (`data_id`),
-  KEY `field_id` (`field_id`,`pending_id`)
-);
-
--- SUBSCRIBERS
-
-CREATE TABLE :::subscribers::: (
-  `subscribers_id` int(10) unsigned NOT NULL auto_increment,
-  `email` varchar(60) NOT NULL default '',
-  `date` date NOT NULL default '0000-00-00',
-  PRIMARY KEY  (`subscribers_id`),
   KEY `email` (`email`(30))
 );
 
--- SUBSCRIBERS_FLAGGED
+--  SUBSCRIBERS_ACTIVE
 
-CREATE TABLE :::subscribers_flagged::: (
-  `flagged_id` int(10) unsigned NOT NULL auto_increment,
-  `subscribers_id` int(10) unsigned NOT NULL default '0',
-  `flagged_type` enum('update') default NULL,
-  PRIMARY KEY  (`flagged_id`),
-  KEY `subscribers_id` (`subscribers_id`,`flagged_type`)
+CREATE TABLE :::subscribers_active::: (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `email` varchar(60) NOT NULL default '',
+  `date` date NOT NULL default '0000-00-00',
+  `registered` date NOT NULL default '0000-00-00',
+  `flagged` enum('update') default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `email` (`email`(30)),
+  KEY `flagged` (`flagged`)
 );
 
--- SUBSCRIBERS_DATA
+--  SUBSCRIBERS_INACTIVE
 
-CREATE TABLE :::subscribers_data::: (
+CREATE TABLE :::subscribers_inactive::: (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `email` varchar(60) NOT NULL default '',
+  `date` date NOT NULL default '0000-00-00',
+  `registered` date NOT NULL default '0000-00-00',
+  PRIMARY KEY  (`id`),
+  KEY `email` (`email`(30))
+);
+
+-- DATA_PENDING
+
+CREATE TABLE :::data_pending::: (
   `data_id` bigint(20) unsigned NOT NULL auto_increment,
   `field_id` int(10) unsigned NOT NULL default '0',
-  `subscribers_id` int(10) unsigned NOT NULL default '0',
+  `subscriber_id` int(10) unsigned NOT NULL default '0',
+  `value` tinytext,
+  PRIMARY KEY  (`data_id`),
+  KEY `field_id` (`field_id`,`subscriber_id`)
+);
+
+-- DATA_ACTIVE
+
+CREATE TABLE :::data_active::: (
+  `data_id` bigint(20) unsigned NOT NULL auto_increment,
+  `field_id` int(10) unsigned NOT NULL default '0',
+  `subscriber_id` int(10) unsigned NOT NULL default '0',
   `value` varchar(60) NOT NULL default '',
   PRIMARY KEY  (`data_id`),
-  KEY `s_plus_demo_id` (`field_id`,`subscribers_id`),
+  KEY `s_plus_demo_id` (`field_id`,`subscriber_id`),
   KEY `val_plus_demo` (`value`,`field_id`),
-  KEY `subscribers_id` (`subscribers_id`),
-  KEY `subscribers_id_2` (`subscribers_id`,`value`)
+  KEY `subscriber_id` (`subscriber_id`),
+  KEY `subscriber_id_2` (`subscriber_id`,`value`)
 );
+
+-- DATA_INACTIVE
+
+CREATE TABLE :::data_inactive::: (
+  `data_id` bigint(20) unsigned NOT NULL auto_increment,
+  `field_id` int(10) unsigned NOT NULL default '0',
+  `subscriber_id` int(10) unsigned NOT NULL default '0',
+  `value` tinytext,
+  PRIMARY KEY  (`data_id`),
+  KEY `field_id` (`field_id`,`subscriber_id`)
+);
+
 
 -- UPDATES
 
