@@ -130,7 +130,7 @@ function bmKill($msg = NULL) {
 
 	// output passed message
 	if ($msg)
-		echo '<div class="error fatal"><img src="' . bm_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" />' . $msg . '</div>';
+		echo '<div class="error fatal"><img src="' . bm_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" /> ' . $msg . '</div>';
 
 	// output debugging info if enabled (in config.php)
 	if (bm_debug == 'on' && bm_section != 'user') { // don't debug if section == user.'

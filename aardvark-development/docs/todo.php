@@ -20,6 +20,24 @@ defined('_IS_VALID') or die('Move along...');
 
 When switching language in config.php to "de" I get the following message (same as before in PR12): "*Fatal error*: Call to undefined function: mb_detect_encoding() in */mnt/be2/08/459/00000014/htdocs/pommo13/inc/gettext/gettext.inc* on line *99". 
 
+SECURITY ISSUE W/ SESSIONS -- e.g. If you login to demo & then acess pommo elsewhere on same domain -- you bypass login.
+
+I'd like to include the toggling of notifications -- in which you can toggle + assign an email address on a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
+
+merge subscribers, pending ... add status field  active, inactive, pending
+
+Just making sure.  In PR13 the bolding of non-required fields has not been fixed, correct?  I too am encountering this bug and just wanted to make sure it wasn't me.  Thanks for the hard work.  Looking forward to future releases.
+
+I *am* thinking about incorporating a sent/unsent list that can be downloaded at any time during the processing of a mailing.
+   +++ Allow ability to manually add members to a list in bulk
+   
+** SANITY CHECKS**
+  gettext support
+  mb_detect_encoding() / MB support
+  temporary_tables
+  safe mode
+
+
 [BEFORE 1.0]
 	+ Rewritten Import
 	+ Rewritten Subscriber Manage
