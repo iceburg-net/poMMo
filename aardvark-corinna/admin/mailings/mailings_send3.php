@@ -26,6 +26,8 @@ $poMMo = & fireup('secure', 'keep');
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
+//TODO
+//print_r($poMMo);
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -59,6 +61,15 @@ if (!empty($_POST['testMail'])) {
 	else
 		$logger->addMsg(_T('Invalid Email Address'));
 }
+//<corinna>
+if (!empty ($_GET['puttoqueue'])) {
+	
+	require_once (bm_baseDir . '/plugins/mailingqueue/class.queuedbhandler.php');
+	$db = new QueueDbHandler($dbo);
+	$db->dbSaveToQueue($input); // if <<BACK link in browser the data['action'] is set to send and we get redirected
+	bmRedirect('../../plugins/mailingqueue/queue_main.php');
+}
+//</corinna>
 
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
 if (!empty ($_GET['sendaway'])) {

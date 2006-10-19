@@ -28,31 +28,22 @@
 			<img src="{$url.theme.shared}/images/icons/mailing.png" class="navimage" />
 			{t}Mailings{/t}</a> - 
 			{t}Send mailings to the entire list or to a subset of subscribers. Mailing status and history can also be viewed from here.{/t}
-		</p>
+		</p><br>
  
- {* corinna *}
- {* Display this only if its activated *}<br>
-	{if $showuser}
- 		<p>
-			<a href="{$url.base}/plugins/usermanager/usermanager.php">
-			<img src="{$url.theme.shared}/images/icons/settings.png" class="navimage" />
-			{t}Usermanager{/t}</a> - 
-			{t}Use more Users in Pommo!{/t}
-		</p><br><br>
-	{/if}
+{* <corinna> Display this only if its activated in config.php *}
 	{if $showplugin}
 		<p>
-			<a href="{$url.base}/pluginadmin/plugins.php">
-			<img src="{$url.theme.shared}/images/icons/subscribers.png" class="navimage" />
+			<a href="{$url.base}/plugins/adminplugins/adminplugins.php">
+			<img src="" class="navimage" width="64" height="64" /> <!--src="{$url.theme.shared}/images/icons/subscribersa.png"-->
 			{t}Setup Plugins{/t}</a> - 
-			{t}Set up Plugins... bla bla{/t}
+			{t}Set up all the Plugins: Authentication methods, Useradministration, and maybe more...{/t}
 		</p><br>
 	{/if}
-	<br><br>
- {* /corinna *}
+{* </corinna> *}
  
- 
- </div>
+<br><br>
+	
+</div>
 <!-- end mainbar -->
 
 {include file="admin/inc.footer.tpl"}

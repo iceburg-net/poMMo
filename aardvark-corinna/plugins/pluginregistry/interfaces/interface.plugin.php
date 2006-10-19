@@ -16,24 +16,25 @@
  * PLUGIN /MODULE Interface PROTOTYPE
  * The hooks and connections to the modules are this functions
  */
+ 
+ 
+ //REDO
 interface iPlugin {
    
 	/**
 	 * PHP Standard "magic" methods
 	 */ 
-	public function __construct();			//overload Constructor
+/*	public function __construct();			//overload Constructor
 	public function __destruct();			//overload Destructor
 	public function __toString();			//overload print/echo routine with custom printout
+*/
+
 
    	/**
 	 * Register the database ion the object
 	 */
 	public function registerdbo($dbo);
- 
-   	/**
-   	 * Init custom stuff here
-   	 */
-	public function initConfig();
+	public function registerlogger($logger);
    
 	/**
 	 * Standard execution method of the plugin -> the HOOK
@@ -41,9 +42,10 @@ interface iPlugin {
 	public function execute();
 
 	/**
-	 * TODO Should print, handle the error messages 
+	 * TODO Should print, handle Messages and error messages 
 	 * write them to the logger, Exception whatever, decide it later and alter only one function
 	 */
+	public function handleMessage($msg);
 	public function handleError($msg);
    
 	public function setVariable($name, $var);
@@ -52,7 +54,7 @@ interface iPlugin {
 
 	/* --------Decide here---------------------------------------------------  */
 
-	public function getIdentity();
+	//public function getIdentity();
 	//public function getHtml($template);
   	//public function getName();
    

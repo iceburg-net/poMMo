@@ -44,70 +44,84 @@ elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 
 
 	//<corinna>
-	// TODO Think of some mechanism to check if LDAP is activated
-	// in PluginRegistry there is a array with activated plugins
-	// wenn dort AuthMethod=SIMPLE -> SimpleLdapAuth
-	// sonst QUERY LDAP Auth
-	// evtl 2 verschiedene Konfigurationszeuger
-	if ($authmethod == "LDAP") {
 
-		// LDAP AUTHENTICATION		
+	if ( !empty ($_POST['username']) && !empty ($_POST['password']) ) {
 
-		if ( !empty ($_POST['username']) && !empty ($_POST['password']) ) {
 
-				//Load LDAP Auth Class
-				include_once(bm_baseDir.'/plugins/auth/class.simpleldapauth.php');
+// Get this from a DB or so...
+$authwithplugin = TRUE;
+
+
+							/* Normal Authentication */
+							// ALWAYS check for Administrator login -> else some problems when config changes
+							// Check if user submitted correct username & password. If so, Authenticate.
+							$auth = $poMMo->getConfig(array (
+								'admin_username',
+								'admin_password'
+							));
+							if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+								// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+								bmMaintenance();
+								$poMMo->setAuthenticated(TRUE);
+								bmRedirect(bm_http . $_POST['referer']);
+								
+							} elseif ($authwithplugin) {
+							
+								// Try to authenticate as user	
+							
+										
+								
+								
+										include_once(bm_baseDir.'/plugins/authentication/class.authfactory.php');
+										include_once(bm_baseDir.'/plugins/authentication/class.auth.php');
 						
-				$auth = new SimpleLdapAuth($dbo);
-				
-				echo "<b style='color:red;'>Auth method: {$auth->getAuthMethod()}</b><br>";
-				$auth->setVariable('user', $_POST['username']);
-				$auth->setVariable('pass', $_POST['password']);
-				//$auth->setVariable('pass', md5($_POST['password']));
-
-				//echo $auth;
-
-				if ( $auth->execute() == TRUE ) {
-				
-					// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
-					bmMaintenance();
-									
-					$poMMo->setAuthenticated(TRUE);
-					bmRedirect(bm_http . $_POST['referer']);
-				} else {
-					$logger->addMsg(_T('Failed login attempt. Try again. (User not accepted.)'));
-				}
-				
-		} else {
-			$logger->addMsg(_T('Failed login attempt. Try again. (Field missing.)'));
-		}
-		
-	}/* else {*/
-
-		/* Normal Authentication */
-		/* ALWAY check for Administrator login -> else some problems when config changes */
-
-		// Check if user submitted correct username & password. If so, Authenticate.
-		$auth = $poMMo->getConfig(array (
-			'admin_username',
-			'admin_password'
-		));
-		if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
-			
-			// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
-			bmMaintenance();
-			
-			$poMMo->setAuthenticated(TRUE);
-			bmRedirect(bm_http . $_POST['referer']);
-		}
-		else {
-			$logger->addMsg(_T('Failed login attempt. Try again.'));
-		}
+										// Factory returns the Object with witch to validate -> Is set in the plugin configuration
+										$authfactory = new AuthFactory($dbo, $logger);
+										$authobj = $authfactory->selectReturnObject();
+										
+						
+										if ($authobj instanceof Auth) {
+											
+											//echo "<h3>Authentication Method: {$authfactory->getAuthMethod()}</h3>";
+											
+												//TODO $_REQUEST  md5
+												if ( $authobj->authenticate($_POST['username'], $_POST['password']) == TRUE ) {
+													// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+													bmMaintenance();
+																	
+													$poMMo->setAuthenticated(TRUE);
+													bmRedirect(bm_http . $_POST['referer']);
+													
+												} else {
+													$logger->addMsg(_T('Failed login attempt. Try again. (User not accepted.)'));
+												}
+											
+											
+										} else {
+											$logger->addErr(_T('Login failed. Check config of auth methods.'));
+										}
+						
 
 
-	//}
+							} else { // else login failed
+								$logger->addMsg(_T('Failed login attempt. Try again.'));
+							}
+
+
+					
+
+					
+
+
 	
-	//</corinna>
+	} else {
+		
+		// if both fields not empty
+		$logger->addMsg(_T('Failed login attempt. Try again. (Field missing.)'));
+	}
+	
+//</corinna>		
+
 
 /*
 		// Check if user submitted correct username & password. If so, Authenticate.

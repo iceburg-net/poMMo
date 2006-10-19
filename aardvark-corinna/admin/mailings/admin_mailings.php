@@ -19,6 +19,7 @@ define('_IS_VALID', TRUE);
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_mailing.php');
 
+
 $poMMo = & fireup('secure');
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
@@ -30,7 +31,19 @@ $smarty = & bmSmartyInit();
 
 if (!mailingQueueEmpty($dbo))
 	$smarty->assign('mailing',TRUE);
-	
+
+
+//corinna
+if ($useplugins) {
+	require_once (bm_baseDir.'/plugins/mailingqueue/class.queueplugin.php');
+	$queueplugin = new QueuePlugin($poMMo);
+	if ($queueplugin->isActive()) {
+		$smarty->assign('mailingqueue',TRUE);
+	}
+}
+///corinna
+
+
 $smarty->display('admin/mailings/admin_mailings.tpl');
 bmKill();
 ?>

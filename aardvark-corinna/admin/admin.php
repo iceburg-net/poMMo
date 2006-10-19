@@ -18,46 +18,56 @@ define('_IS_VALID', TRUE);
 
 require('../bootstrap.php');
 
-//TODO
-include_once('../pluginadmin/utils/db_confighandler.class.php');
-//TODO
-
 $poMMo = & fireup('secure');
 $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
-/**********************************
-	SETUP TEMPLATE, PAGE
- *********************************/
-$smarty = & bmSmartyInit();
 
-$smarty->assign('header',array(
-	'main' => _T('poMMo Aardvark').' '.$poMMo->_config['version'],
-	'sub' => _T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
-	));
 
+//TODO store user information from $poMMo
+$user = 'corinna';
 
 //<corinna>
 // TODO
 // Wenn diese was weiss ich wo defined sind //in $pommo zB
-// NEIN: 
 // array = $pluginregistry->getConfigHTML/SMARTY()
 // oder FÜR ALLE PLugin Registry[$i]->assigndata();
-//oder so was
-//$pluginshow = TRUE;
-//if ($pluginshow) {
-	$smarty->assign('showplugin', TRUE);
-//}
+//TODO ERROR HANDLING-> HAVE YOU INSTALLED PLUGINS?
+// This will have to be enabled in the config file to show this
 
-$handler = new ConfigHandler($dbo);
-$usershow = $handler->dbIsActiveByName('Benutzerverwaltung');
-if ($usershow)  {
-	$smarty->assign('showuser', TRUE);
+//if ($useplugins)
+if (($user != 'admin') AND $useplugins) {	// wenn einer user sich einloggt!
+
+	require_once (bm_baseDir . '/plugins/multiuser/class.multiuser.php'); 
+	$multiuser = new MultiUser();
+	$multiuser->display();
+	
 }
-//</corinna>
 
 
-$smarty->display('admin/admin.tpl');
+if ($user == 'admin') {	// proceed in the normal way
+
+	/**********************************
+		SETUP TEMPLATE, PAGE
+	 *********************************/
+	$smarty = & bmSmartyInit();
+	
+	$smarty->assign('header',array(
+		'main' => _T('poMMo Aardvark').' '.$poMMo->_config['version'],
+		'sub' => _T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
+		));
+	
+	
+	if ($useplugins) {
+		// Show additional functionality from the plugins
+		// Plugin SETUP should be showed
+		$smarty->assign('showplugin', TRUE);
+	}
+	
+	$smarty->display('admin/admin.tpl');
+
+} //corinna
 
 bmKill();
-	
+
+?>

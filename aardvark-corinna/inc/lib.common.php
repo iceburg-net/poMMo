@@ -97,6 +97,11 @@ function bmRedirect($url, $msg = NULL, $kill = true) {
 			if (substr($url, 0, 1) != '/') {
 				if (bm_section != 'user') {
 					$url = bm_http . bm_baseUrl . '/admin/' . bm_section . '/' . $url;
+					/*if (bm_section != 'plugins') {		//TODO corinna added: "plugins" directory check -> integrate in if above
+						$url = bm_http . bm_baseUrl . '/' . bm_section . '/' . $url;
+					} else {
+						$url = bm_http . bm_baseUrl . '/admin/' . bm_section . '/' . $url;
+					}*/
 				} else {
 					$url = bm_http . bm_baseUrl . '/' . bm_section . '/' . $url;
 				}
