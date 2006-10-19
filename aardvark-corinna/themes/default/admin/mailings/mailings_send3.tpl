@@ -81,6 +81,11 @@
 	</td></tr>
 	</table>
 </div>
+<!--<corinna>-->
+	</div>
+	<div style="float:center"><a href="mailings_send3.php?puttoqueue=TRUE\">&raquo Put into Queue</a>
+	</div>
+<!--<corinna>-->
 
 	<br>
 
@@ -90,7 +95,6 @@
 			<img src="{$url.theme.shared}/images/icons/send.png" class="navimage" border="0">
 			<br>{t}Send Mailing{/t}
 		</a>
-	</div>
 	
 
 {include file="admin/inc.footer.tpl"}

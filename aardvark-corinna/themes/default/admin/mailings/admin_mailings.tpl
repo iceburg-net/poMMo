@@ -22,7 +22,19 @@
 			<br>&nbsp;
 		</p>
 	{/if}
-	
+
+	{*<corinna>*}
+	{if $mailingqueue}
+	<p>
+		<a href="{$url.base}/plugins/mailingqueue/queue_main.php">
+		<img src="{$url.theme.shared}/images/icons/mailing.png" class="navimage" />							
+		{t}Queue{/t}</a> - {t}View Mailings Scheduling.{/t}
+		<br>&nbsp;
+	</p>
+	{/if}
+	{*</corinna>*}
+
+
 	<p>
 		<a href="{$url.base}/admin/mailings/mailings_history.php">
 		<img src="{$url.theme.shared}/images/icons/history.png" class="navimage" />							

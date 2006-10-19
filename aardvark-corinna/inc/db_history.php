@@ -34,9 +34,6 @@ function & dbGetMailingCount(& $dbo) {
 /* Get the mailings history matrix */
 function & dbGetMailingHistory(& $dbo, $start, $limit, $order, $orderType) {
 
-	//id, fromname, fromemail, frombounce, subject, body, ishtml, mailgroup, subscriberCount, started, finished, sent
-	//$countmailings = $dbo->records();
-	
 	$safesql =& new SafeSQL_MySQL;
 	$sql = $safesql->query("SELECT id, fromname, fromemail, frombounce, subject, ishtml, mailgroup, 
 		subscriberCount, started, finished, sent FROM %s ORDER BY %s %s LIMIT %s, %s ", 

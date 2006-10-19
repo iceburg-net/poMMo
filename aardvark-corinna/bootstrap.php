@@ -76,8 +76,11 @@ if (!is_dir(bm_workDir.'/pommo/smarty') && !defined('_IS_SUPPORT')) {
  * Otherwise, set it based from REQUEST
  */
 if (!defined('bm_baseUrl'))
-	(defined('_poMMo_embed')) ? require(bm_workDir.'/include.php') :
-		define('bm_baseUrl', preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+	(defined('_poMMo_embed')) ? require(bm_workDir.'/include.php') :	//<corinna>
+		define('bm_baseUrl', preg_replace('@/(inc|setup|user|install|plugins(/adminplugins|/adminplugins(/adminbounce|/adminuser|/adminuser(/usermanagement|/authentication))|/pluginregistry|/auth|/useradmin|/mailingqueue)|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+		//define('bm_baseUrl', preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF'])));
+
+		
 
 if (!defined('bm_hostname'))
 	define('bm_hostname',$_SERVER['HTTP_HOST']);

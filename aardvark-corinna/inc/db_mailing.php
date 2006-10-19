@@ -182,7 +182,6 @@ function dbMailingEnd(&$dbo) {
  
  	if ($row['mailgroup'] == "all") {
 
-		$safesql =& new SafeSQL_MySQL;
 		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
 			mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
 			body, altbody, ishtml, mailgroup, subscriberCount, started, finished, sent, charset FROM %s LIMIT 1",
@@ -190,7 +189,6 @@ function dbMailingEnd(&$dbo) {
  	
  	} elseif (is_numeric($row['mailgroup'])) {
  
-		$safesql =& new SafeSQL_MySQL;
 		$sql = $safesql->query("INSERT INTO %s (fromname, fromemail, frombounce, subject, body, altbody, ishtml, 
 			mailgroup, subscriberCount, started, finished, sent, charset) SELECT fromname, fromemail, frombounce, subject, 
 			body, altbody, ishtml, (SELECT group_name FROM %s WHERE group_id=(SELECT mailgroup FROM %s LIMIT 1 ) 
@@ -307,4 +305,6 @@ function & bmInitThrottler(& $dbo, & $queue, $relay_id = 1) {
 		$throttler['relay'.$relay_id]['domainHistory']
 		);
 }
+
+
 ?>
