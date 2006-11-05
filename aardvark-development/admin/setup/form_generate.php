@@ -25,43 +25,37 @@
 $signup_url = "http://" . $_SERVER['HTTP_HOST'] . bm_baseUrl . "user/process.php";
 ?>
 
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
+<title>Sample form</title>
 </head>
 
 <?php
 $form_name = "signup";
 ?>
-			
-
 <body>
 
-<br>
-<em>VIEW THE SOURCE TO COPY, PASTE, EDIT, AND SAVE THE FORM TO AN APPROPRIATE LOCATION ON YOUR WEBSITE</em>
-<br><br><br>
-
-
+<p><em>VIEW THE SOURCE TO COPY, PASTE, EDIT, AND SAVE THE FORM TO AN APPROPRIATE LOCATION ON YOUR WEBSITE</em></p>
 
 <hr>
-<div align="center"><b><?php echo $poMMo->_config['list_name']; ?> Subscriber Form</b></div>
-<hr>
+
+<h1><?php echo $poMMo->_config['list_name']; ?> Subscriber Form</h1>
 
 <!-- 	Set "ACTION" to the URL of poMMo's process.php
 		process.php located in the "user" directory of your poMMo installation.
 		** poMMo attempted to detect this location, and it may not need to be changed. ** -->
 		
-<form action="<?php echo $signup_url; ?>" method="POST" name="<?php echo $form_name; ?>">
+<form method="post" action="<?php echo $signup_url; ?>"name="<?php echo $form_name; ?>">
 
-<i>Fields in <font color="red">RED</font> are required.</i><br>
+<p><em>Fields in <strong>bold</strong> are required.</em></p>
 
-<br>
-
+<div>
 <!--	Email field must be named "bm_email" -->
-<font color="red"><LABEL for="bm_email">Your Email: </LABEL></font>
-	<input type="text" name="bm_email" maxlength="60">
-<br>
+<label for="email"><strong>Your Email:</strong></label>
+<input type="text" name="bm_email" id="email" maxlength="60">
+</div>
+
 <?php
 
 $fields = & dbGetFields($dbo, 'active');
@@ -69,73 +63,62 @@ foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 	
 	if ($field['required'] == 'on')
-		echo "\n\n <!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." --> \n<p>\n <font color=\"red\"><LABEL for=\"d[".$field_id."]\">".db2str($field['prompt']).": </LABEL></font>\n\t";
+		echo "\n<div>\n<!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." -->\n<label for=\"field".$field_id."\"><strong>".db2str($field['prompt']).":</strong></label>\n";
 	else
-		echo "\n\n <!-- BEGIN INPUT FOR FIELD ".$field['name']." --> \n<p>\n<LABEL for=\"d[".$field_id."]\">".db2str($field['prompt']).": </LABEL>\n\t";
+		echo "\n<div>\n<!-- BEGIN INPUT FOR FIELD ".$field['name']." -->\n<label for=\"field".$field_id."\">".db2str($field['prompt']).":</label>\n";
 	
 	switch ($field['type']) {
 		case "checkbox": // checkbox	
 			if (empty($field['normally']))
-				echo "\t<input type=\"checkbox\" name=\"d[".$field_id."]\">";
+				echo "\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\">";
 			else
-				echo "\t<input type=\"checkbox\" name=\"d[".$field_id."]\" checked>";
+				echo "\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" checked>";
 			break;
 			
 		case "multiple": // select
 		
-			echo "\t<select name=\"d[".$field_id."]\">\n";
+			echo "\n<select name=\"d[".$field_id."]\" id=\"field".$field_id."\">\n";
 			
-			echo "\t  <option value=\"\"> Please Choose...\n";
+			echo "<option value=\"\"> Please Choose...</option>\n";
 			
 			foreach ($field['options'] as $option) {
 				
 				if (!empty($field['normally']) && $option == $field['normally'])
-					echo "\t  <option value=\"".db2str($option)."\" selected> ".db2str($option)."\n";
+					echo "<option value=\"".db2str($option)."\" selected> ".db2str($option)."</option>\n";
 				else
-					echo "\t  <option value=\"".db2str($option)."\"> ".db2str($option)."\n";
+					echo "<option value=\"".db2str($option)."\"> ".db2str($option)."</option>\n";
 			}			
-			echo "</select>";
+			echo "</select>\n";
 					
 			break;
 			
 		case "text": // select
-		
-			if (empty($field['normally']))
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\">";
-			else
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".db2str($field['normally'])."\">";
-			break; 
-			
+		case "number": // select
 		case "date": // select
 		
+			if (empty($field['normally']))
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" maxlength=\"60\">\n";
+			else
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".db2str($field['normally'])."\">\n";
 			break; 
-			
-		case "number": // select
-		
-			break; 
-	
+
 		default:
 			break;
 	}
-	
-	echo "\n</p>\n";
+
+	echo "\n</div>\n";
 }
 
 ?>
-
-<br>
 
 <!--  *** DO NOT CHANGE name="pommo_signup" ! ***
 	  If you'd like to change the button text change the "value=" text. -->
 
 <input type="hidden" name="pommo_signup" value="true">
-<INPUT type="submit" name="submit" value="Signup"/><INPUT type="reset" name="reset"/>
+<input type="submit" name="submit" value="Signup">
+<input type="reset" name="reset">
 
-</FORM>
+</form>
 
-
-<br>
-<br>
-<hr>
 </body>
 </html>
