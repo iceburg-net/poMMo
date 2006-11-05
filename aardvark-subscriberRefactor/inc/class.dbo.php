@@ -14,11 +14,7 @@
 // TODO: $sql should always be passed by reference... look @ ways of doing this. ie. see Affected($sql) function
 // 
 
-/** 
-* Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 /**********************
  * TEXT PROCESSING FUNCTIONS

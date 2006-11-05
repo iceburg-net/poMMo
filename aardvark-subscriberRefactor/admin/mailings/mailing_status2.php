@@ -10,7 +10,7 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
-define('_IS_VALID', TRUE);
+
 
 require('../../bootstrap.php');
 require_once (bm_baseDir.'/inc/db_mailing.php');

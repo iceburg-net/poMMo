@@ -15,11 +15,7 @@
 //  subscribers, their attributes (including pending status, etc.).. so as not to
 //  do so many similar queries (esp. when involving confirmation codes/etc)
 
-/** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 // TODO -> better manage includes via common, etc.  NO MORE require_once [huge performance hit]!!!!
 require_once (bm_baseDir.'/inc/lib.txt.php');

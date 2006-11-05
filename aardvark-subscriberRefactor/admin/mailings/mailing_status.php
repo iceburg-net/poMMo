@@ -17,7 +17,7 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../../bootstrap.php');
 

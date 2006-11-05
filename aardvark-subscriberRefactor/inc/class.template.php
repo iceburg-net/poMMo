@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 require(bm_baseDir.'/inc/smarty/Smarty.class.php');
 		

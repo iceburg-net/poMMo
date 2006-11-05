@@ -12,11 +12,7 @@
  
  // TODO: Combine these mailing confirmation functions... they repeat.
  
- /** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+ 
 
 // send a confirmation email
 function bmSendConfirmation($to, $confirmation_key, $type) {

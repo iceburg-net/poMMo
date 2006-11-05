@@ -15,7 +15,7 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../bootstrap.php');
 require (bm_baseDir . '/inc/lib.validate_subscriber.php');

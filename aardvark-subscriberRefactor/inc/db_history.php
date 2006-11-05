@@ -11,12 +11,6 @@
  * 
  ** [END HEADER]**/
 
-
-/** 
- * Don't allow direct access to this file. Must be called from elsewhere
- */
-defined('_IS_VALID') or die('Move along...');
-
 // Cool DB Query Wrapper from Monte Ohrt
 require_once (bm_baseDir.'/inc/safesql/SafeSQL.class.php');
 

@@ -18,7 +18,7 @@
  *********************************/
 // Tests the background Mail processor. Spawned via httpspawn. Write the time to cache directory
 
-define('_IS_VALID', TRUE);
+
 require ('../bootstrap.php');
 
 $poMMo = & fireup('install');

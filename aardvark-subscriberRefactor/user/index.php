@@ -9,7 +9,7 @@
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
  * SOURCE: http://www.iceburg.net/brice/
  */
-define('_IS_VALID', TRUE);
+
 require('../bootstrap.php');
 bmRedirect('login.php');
 ?>

@@ -1,4 +1,4 @@
--- CONFIG <?php defined('_IS_VALID') or die('Move along...'); ?>
+-- CONFIG <?php die('Move along...'); ?>
 
 CREATE TABLE :::config::: (
   `config_name` varchar(64) NOT NULL default '',

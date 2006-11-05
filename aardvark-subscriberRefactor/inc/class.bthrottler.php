@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 // NOTE: Due to lack of support for usleep in PHP < 5.0 on IIS/Windows, Throttling is limited to *seconds*
 
