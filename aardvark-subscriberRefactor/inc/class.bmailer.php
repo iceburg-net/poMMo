@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 // load the phpmailer class taken from http://phpmailer.sourceforge.net/
 require_once (bm_baseDir . '/inc/phpmailer/class.phpmailer.php');

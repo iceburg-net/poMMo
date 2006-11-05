@@ -13,7 +13,7 @@
  
  // Generates a simple HTML form based from active subscriber criteria
  
- define('_IS_VALID', TRUE);
+ 
  
  require('../../bootstrap.php');
  require_once(bm_baseDir.'/inc/db_fields.php');

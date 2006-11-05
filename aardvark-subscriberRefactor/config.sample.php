@@ -6,8 +6,6 @@
  *   IMPORTANT: File must be named "config.php" and saved in the
  * 	"root" directory of your poMMo installation (where bootstrap.php is)
  */
-// DO NOT REMOVE OR CHANGE THE BELOW LINE
-defined('_IS_VALID') or die('Move along...');
 
 /************************************************************************
  * ::: MySQL Database Information :::

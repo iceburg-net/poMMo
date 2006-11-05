@@ -13,7 +13,7 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../../bootstrap.php');
 require_once (bm_baseDir . '/inc/db_fields.php');

@@ -28,7 +28,7 @@ if (ini_get('safe_mode'))
 else
 	set_time_limit($maxRunTime +7);
 
-define('_IS_VALID', TRUE);
+
 require ('../../bootstrap.php');
 require (bm_baseDir . '/inc/class.bmailer.php');
 require (bm_baseDir . '/inc/class.bthrottler.php');

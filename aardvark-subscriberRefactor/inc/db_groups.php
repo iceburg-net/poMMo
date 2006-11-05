@@ -14,11 +14,7 @@
 // TODO implement tallyCache
 // TODO redo Group object
 
-/** 
-* Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 /** Database Helper file for group management */
 

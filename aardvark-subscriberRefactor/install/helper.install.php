@@ -18,7 +18,6 @@
 //      * ensure program behaves similarly (ignoring 'off') -- ie. user_update2.php removes 'off's
 
 // NOTE TO SELF -- all updates in a upgrade must be serialized, and their serial incremented!
-defined('_IS_VALID') or die('Move along...');
 
 function parse_mysql_dump($ignoreerrors = false) {
 	

@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 // TODO -> class will eventually extend to act as error handler
 // TODO -> implement get limit @ some point.... ;)

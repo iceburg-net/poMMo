@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
-* Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 require_once (bm_baseDir . '/inc/db_fields.php');
 require_once (bm_baseDir . '/inc/db_subscribers.php');

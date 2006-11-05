@@ -14,7 +14,7 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
+
 define('_poMMo_embed', TRUE);
 
 $dirname = dirname(__FILE__);

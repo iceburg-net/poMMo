@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
-* Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 // Cool DB Query Wrapper from Monte Ohrt
 // TODO -> merge this into class.dbo.php ( or rewrite $dbo->query() to use this class)-- DO NOT require it here

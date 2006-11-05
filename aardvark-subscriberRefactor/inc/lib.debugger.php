@@ -12,11 +12,7 @@
  * 
  ** [END HEADER]**/
 
-/** 
-* Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 
 function bmDebug() {
 		echo "\n\n<br><br><b>BASIC DEBUG</b><hr><br>\n\n";

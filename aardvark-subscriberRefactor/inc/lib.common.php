@@ -11,12 +11,6 @@
  * 
  ** [END HEADER]**/
 
-/** 
-* Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
-
 // called upon successful login (index.php)... cleanup tasks, etc. 
 function bmMaintenance() {
 	
@@ -30,8 +24,7 @@ function bmMaintenance() {
         bmKill(_T('Unable to perform maintenance'));
    }
  
-   $fileContent = '
-	<?php defined(\'_IS_VALID\') or die(\'Move along...\'); 
+   $fileContent = '<?php
 	define(\'bm_baseUrl\',\''.bm_baseUrl.'\'); ?>';
    if (fwrite($handle, $fileContent) === FALSE) {
       bmKill(_T('Unable to perform maintenance'));
