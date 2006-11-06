@@ -14,19 +14,19 @@
 ************************************************************************/
 
 // * Set your MySQL username
-$bmdb['username'] = 'pommo';
+$db['username'] = 'pommo';
 
 // * Set your MySQL password
-$bmdb['password'] = 'pommo';
+$db['password'] = 'pommo';
 
 // * Set your MySQL hostname ("localhost" if  your MySQL database is running on the webserver)
-$bmdb['hostname'] = 'localhost';
+$db['hostname'] = 'localhost';
 
 // * Set the name of the MySQL database used by poMMo
-$bmdb['database'] = 'pommo'; 
+$db['database'] = 'pommo'; 
 
 // * Set the table prefix  (change if you intend to have multiple poMMos running from the same database)
-$bmdb['prefix'] = 'pommo_';
+$db['prefix'] = 'pommo_';
 
 
 /************************************************************************
@@ -39,7 +39,7 @@ $bmdb['prefix'] = 'pommo_';
  *	de - German						nl - Dutch
  *	en - English						ro - Romanian
 ************************************************************************/
-define('bm_lang','en');
+$lang = 'en';
 
 
 /******************[ OPTIONAL CONFIGURATION ]*******************
@@ -55,13 +55,13 @@ define('bm_lang','en');
 
 // enable (on) or disable (off) debug mode. Set this to 'on' to provide debugging information
 //  to the developers. Make sure to set it to 'off' when you are finished collecting information.
-define('bm_debug','off');
+$debug = 'off';
 
 // set the verbosity level of logging.
 //  1: Debugging
 //  2: Informational
 //  3: Important (default)
-define('bm_verbosity',3);
+$verbosity = 3;
 
 /************************************************************************
  * Uncomment (remove leading "//") and define the following 
@@ -80,7 +80,7 @@ define('bm_verbosity',3);
  * Default: Automatically Detected
  * NOTE: Include trailing slash
  */
-//define('bm_baseUrl', '/mysite/newsletter');
+// $baseURL = '/mysite/newsletter';
 
 /************************************************************************
  * ::: Cache Directory :::
@@ -99,7 +99,7 @@ define('bm_verbosity',3);
  *   '/home/b/brice/pommoCache'
  * 
 */
-//define('bm_workDir','/path/to/pommoCache');
+// $workDir = '/path/to/pommoCache';
 
 /************************************************************************
  * ::: Webserver Hostname :::
@@ -108,7 +108,7 @@ define('bm_verbosity',3);
  * 
  * Default: Automatically Detected
  */
-//define('bm_hostname','www.mysite.com');
+// $hostname = 'www.mysite.com';
  
  /************************************************************************
  * ::: Webserver Port :::
@@ -117,5 +117,5 @@ define('bm_verbosity',3);
  * 
  * Default: Automatically Detected [Usually 80, 8080, or 443]
  */
-//define('bm_hostport','8080'); 
+// $hostport = 8080;
 ?>
