@@ -48,7 +48,7 @@ class Pager {
 	 * Returns a list of pages in the format of "´ < [pages] > ª" 
 	 ***********************************************************************************/
 	function pageList($curpage, $pages) {
-		$page_list = "";
+		$page_list = '<div class="page_list">';
 
 		/* Print the first and previous page links if necessary */
 		if (($curpage != 1) && ($curpage)) {
@@ -64,7 +64,7 @@ class Pager {
 		/* Print the numeric page list; make the current page unlinked and bold */
 		for ($i = 1; $i <= $pages; $i ++) {
 			if ($i == $curpage) {
-				$page_list .= "<b>".$i."</b>";
+				$page_list .= "<strong>".$i."</strong>";
 			} else {
 				$page_list .= "<a href=\"".$_SERVER['PHP_SELF']."?page=".$i.$this->appendUrl."\" title=\"Page ".$i."\">".$i."</a>";
 			}
@@ -81,6 +81,7 @@ class Pager {
 			//$page_list .= "<a href=\"".$_SERVER['PHP_SELF']."?page=".$pages.$this->appendUrl."\" title=\"Last Page\">ª</a> ";
 			$page_list .= "<a href=\"".$_SERVER['PHP_SELF']."?page=".$pages.$this->appendUrl."\" title=\"Last Page\">&#187;</a> ";
 		}
+			$page_list .= "</div>\n";
 
 		return $page_list;
 	}
