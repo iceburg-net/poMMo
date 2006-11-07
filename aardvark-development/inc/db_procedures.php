@@ -30,13 +30,13 @@ defined('_IS_VALID') or die('Move along...');
 //    array key must be config name
 //    if $force is set to TRUE, all configuration settings will be eligible to change.
 function dbUpdateConfig(& $dbo, & $input, $force = FALSE) {
-	
+
 	// TODO.. if force option given, lookup keys of input, and perform a query where config_name IS IN(key list...)
-	
+
 	// convert $input to an array if it is not one already
 	if (!is_array($input))
 		$input = array ($input);
-		
+
 	// Get list of user changable configuration options
 	if ($force)
 		$sql = "SELECT config_name FROM {$dbo->table['config']}";
@@ -59,7 +59,7 @@ function dbUpdateConfig(& $dbo, & $input, $force = FALSE) {
 function dbResetMessageDefaults($section = 'all') {
 		global $dbo;
 		global $poMMo;
-		
+
 		if ($section != 'all') {
 			$dbvalues = $poMMo->getConfig(array('messages'));
 			$messages = unserialize($dbvalues['messages']);
@@ -68,38 +68,37 @@ function dbResetMessageDefaults($section = 'all') {
 			$messages = array();
 		}
 		
-		
 		if ($section == 'all' || $section == 'subscribe') {
 		$messages['subscribe'] = array();
-		$messages['subscribe']['msg'] = sprintf(_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $poMMo->_config['list_name'])."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['subscribe']['msg'] = sprintf(_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please visit the link below to be added to  %s.'), $poMMo->_config['list_name'])."\n\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['subscribe']['sub'] = _T('Subscription request'); 
 		$messages['subscribe']['suc'] = _T('Welcome to our mailing list. Enjoy your stay.');
 		}
-		
+
 		if ($section == 'all' || $section == 'unsubscribe') {
 		$messages['unsubscribe'] = array();
-		$messages['unsubscribe']['msg'] = sprintf(_T('You have requested to unsubscribe from %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['unsubscribe']['msg'] = sprintf(_T('You have requested to unsubscribe from %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email address by visiting the link below.')."\n\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['unsubscribe']['sub'] = _T('Unsubscription request'); 
-		$messages['unsubscribe']['suc'] = _T('You have successfully unsubscribed. Enjoy your travels.');
+		$messages['unsubscribe']['suc'] = _T('You have successfully unsubscribed. We\'ll miss you.');
 		}
-		
+
 		if ($section == 'all' || $section == 'password') {
 		$messages['password'] = array();
-		$messages['password']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['password']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email address by visiting the link below ->')."\n\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['password']['sub'] = _T('Change Password request'); 
 		$messages['password']['suc'] = _T('Your password has been reset. Enjoy!');
 		}
-		
+
 		if ($section == 'all' || $section == 'update') {
 		$messages['update'] = array();
-		$messages['update']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email by clicking the link below ->')."\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
+		$messages['update']['msg'] =  sprintf(_T('You have requested to change your password for %s.'),$poMMo->_config['list_name'])._T('Before processing this request, you must validate your email address by visiting the link below ->')."\n\n\t[[url]]\n\n"._T('If you have received this message in error, please ignore it.');
 		$messages['update']['sub'] = _T('Update Records request'); 
 		$messages['update']['suc'] = _T('Your records have been updated. Enjoy!');
 		}
-		
+
 		$input = array('messages' => serialize($messages));
 		dbUpdateConfig($dbo, $input, TRUE);
-		
+
 		return $messages;
 }
 ?>
