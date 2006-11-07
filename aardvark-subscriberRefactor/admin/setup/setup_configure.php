@@ -75,15 +75,15 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	
 
 	$formError = array ();
-	$formError['admin_username'] = $formError['sitename'] = $formError['list_name'] = $formError['list_fromname'] = _T('Cannot be empty.');
+	$formError['admin_username'] = $formError['sitename'] = $formError['list_name'] = $formError['list_fromname'] = Pommo::_T('Cannot be empty.');
 
-	$formError['admin_email'] = $formError['list_fromemail'] = $formError['list_frombounce'] = _T('Invalid email address');
+	$formError['admin_email'] = $formError['list_fromemail'] = $formError['list_frombounce'] = Pommo::_T('Invalid email address');
 
-	$formError['admin_password2'] = _T('Passwords must match.');
+	$formError['admin_password2'] = Pommo::_T('Passwords must match.');
 
-	$formError['site_url'] = $formError['site_success'] = $formError['site_confirm'] = _T('Must be a valid URL');
+	$formError['site_url'] = $formError['site_success'] = $formError['site_confirm'] = Pommo::_T('Must be a valid URL');
 
-	$formError['list_charset'] = _T('Invalid Character Set');
+	$formError['list_charset'] = Pommo::_T('Invalid Character Set');
 	
 	$smarty->assign('formError', $formError);
 
@@ -125,15 +125,15 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		$poMMo->loadConfig('TRUE');
 
-		$logger->addMsg(_T('Configuration Updated.'));
+		$logger->addMsg(Pommo::_T('Configuration Updated.'));
 
 		// refresh page to reflect demonstration mode changes
 		if ($oldDemo != $poMMo->_config['demo_mode'])
-			bmRedirect('setup_configure.php');
+			Pommo::redirect('setup_configure.php');
 
 	} else {
 		// __ FORM NOT VALID
-		$logger->addMsg(_T('Please review and correct errors with your submission.'));
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 

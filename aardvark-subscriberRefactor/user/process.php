@@ -39,7 +39,7 @@ $input = urlencode(serialize($_POST));
  *********************************/
 
 if (empty ($_POST['pommo_signup']))
-	bmRedirect('login.php');
+	Pommo::redirect('login.php');
 
 // check if errors exist, if so print results and die.
 if (!validateSubscribeForm()) {
@@ -47,7 +47,7 @@ if (!validateSubscribeForm()) {
 	
 	// attempt to detect if referer was set
 	// TODO; should this default to $_SERVER['HTTP_REFERER']; ? -- for those who have customized the plain html subscriberForm..
-	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : bm_http.bm_baseUrl.'user/subscribe.php';
+	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$pommo->_baseUrl.'user/subscribe.php';
 	
 	// append stored input
 	$smarty->assign('referer',$referer.'?input='.$input);
@@ -85,22 +85,22 @@ if ($config['list_confirm'] == 'on') { // email confirmation required
 	// send subscription confirmation mail
 	require_once (bm_baseDir . '/inc/lib.mailings.php');
 	if (bmSendConfirmation($_POST['bm_email'], $confirmation_key, "subscribe")) {
-		$logger->addMsg(_T('Subscription request received.').' '._T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+		$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 	} else {
-		$logger->addErr(_T('Problem sending mail! Please contact the administrator.'));
+		$logger->addErr(Pommo::_T('Problem sending mail! Please contact the administrator.'));
 	}
 } else { // no email confirmation required... subscribe user
 	if (dbSubscriberAdd($dbo, $confirmation_key)) {
 		$messages = unserialize($config['messages']);
 		$logger->addMsg($messages['subscribe_suc']);
 	} else {
-		$logger->addErr(_T('Problem adding subscriber. Please contact the administrator.'));
+		$logger->addErr(Pommo::_T('Problem adding subscriber. Please contact the administrator.'));
 	}
 }
 
 if (!$logger->isErr() && $redirectURL) {
 	$logger->clear(); // TODO -> maybe message clearing to bmKill??
-	bmRedirect($redirectURL);
+	Pommo::redirect($redirectURL);
 }
 
 $smarty->display('user/process.tpl');

@@ -32,7 +32,7 @@ $dbo = & $poMMo->_dbo;
 $smarty = & bmSmartyInit();
 
 if (empty ($_GET['code'])) {
-	$logger->addMsg(_T('No code given.'));
+	$logger->addMsg(Pommo::_T('No code given.'));
 	$smarty->display('user/confirm.tpl');
 	bmKill();
 }
@@ -42,7 +42,7 @@ $sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE code='" . str
 $row = $row = mysql_fetch_assoc($dbo->query($sql));
 
 if (empty ($row)) {
-	$logger->addMsg(_T('Invalid code! Make sure you copied it correctly from the email.'));
+	$logger->addMsg(Pommo::_T('Invalid code! Make sure you copied it correctly from the email.'));
 	$smarty->display('user/confirm.tpl');
 	bmKill();
 }
@@ -67,7 +67,7 @@ switch ($row['type']) {
 		$logger->addMsg($messages['subscribe']['suc']);
 
 		if (isset ($redirectURL))
-			bmRedirect($redirectURL, _T('Subscription Successful. Redirecting...'));
+			Pommo::redirect($redirectURL, Pommo::_T('Subscription Successful. Redirecting...'));
 
 		break;
 	case "change" :
@@ -89,15 +89,15 @@ switch ($row['type']) {
 			$sql = "UPDATE {$dbo->table['config']} SET config_value='" . md5($newPassword) . "' WHERE config_name='admin_password'";
 			if ($dbo->query($sql)) {
 				$logger->addMsg($messages['password']['suc']);
-				$logger->addErr(sprintf(_T('You may now login with username: %1$s and password: %2$s '), '<span style="font-size: 130%">' . $config['admin_username'] . '</span>', '<span style="font-size: 130%">' . $newPassword . '</span>'));
+				$logger->addErr(sprintf(Pommo::_T('You may now login with username: %1$s and password: %2$s '), '<span style="font-size: 130%">' . $config['admin_username'] . '</span>', '<span style="font-size: 130%">' . $newPassword . '</span>'));
 				dbPendingDel($dbo, $row['code']);
 			} else
-				$logger->addMsg(_T('Could not reset password. Contact Administrator.'));
+				$logger->addMsg(Pommo::_T('Could not reset password. Contact Administrator.'));
 		} else
-			$logger->addMsg(_T('Can only reset the administrator password'));
+			$logger->addMsg(Pommo::_T('Can only reset the administrator password'));
 		break;
 	default :
-		$logger->addMsg(_T('Unknown type. Contact Administrator.'));
+		$logger->addMsg(Pommo::_T('Unknown type. Contact Administrator.'));
 		break;
 }
 

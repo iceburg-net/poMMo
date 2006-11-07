@@ -26,7 +26,7 @@ function parse_mysql_dump($ignoreerrors = false) {
 	
 			$file_content = file(bm_baseDir."/install/sql.schema.php");
 			if (empty ($file_content))
-				bmKill(_T('Error installing. Could not read sql.schema.php'));
+				bmKill(Pommo::_T('Error installing. Could not read sql.schema.php'));
 			$query = '';
 			foreach ($file_content as $sql_line) {
 				$tsl = trim($sql_line);
@@ -39,7 +39,7 @@ function parse_mysql_dump($ignoreerrors = false) {
 							$query = preg_replace('/:::(.+):::/',$dbo->table[$matches[1]], $query);
 							$query = trim($query);
 						if (!$dbo->query($query) && !$ignoreerrors) {
-							$logger->addErr(_T('Database Error: ').$dbo->getError());
+							$logger->addErr(Pommo::_T('Database Error: ').$dbo->getError());
 							return false;
 						}
 						$query = '';
@@ -86,7 +86,7 @@ function getOldVersion(& $dbo) {
 function bmBumpVersion(& $dbo, $revision, $versionStr) {
 	global $logger;
 
-	$logger->addMsg(_T('Bumping poMMo version to: ') . $versionStr);
+	$logger->addMsg(Pommo::_T('Bumping poMMo version to: ') . $versionStr);
 	// TODO : Make array of queries.. send array to dbo->query(); update query function to allow arrays...
 	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=\'' . $revision . '\' WHERE config_name=\'revision\'';
 	$dbo->query($sql);
@@ -134,13 +134,13 @@ function performUpdate(& $sql, & $dbo, $serial, $message = NULL, $check = TRUE, 
 	if ($sqlBool) {
 		$sql = "INSERT INTO {$dbo->table['updates']} (update_serial) VALUES('" . $serial . "')";
 		if ($dbo->affected($sql) != 1) {
-			$logger->addMsg(sprintf(_T('Failed to properly serialize update %s : %s'), $serial, $message));
+			$logger->addMsg(sprintf(Pommo::_T('Failed to properly serialize update %s : %s'), $serial, $message));
 			return false;
 		}
-		$logger->addMsg($serial . '. ' . $message . '... ' . _T('success!'));
+		$logger->addMsg($serial . '. ' . $message . '... ' . Pommo::_T('success!'));
 		return TRUE;
 	} else {
-		$logger->addMsg($serial . '. ' . $message . '... <span style="font-weight: bold; background-color: red; color: white;">' . _T('FAILED!') . '</span>');
+		$logger->addMsg($serial . '. ' . $message . '... <span style="font-weight: bold; background-color: red; color: white;">' . Pommo::_T('FAILED!') . '</span>');
 		return FALSE;
 	}
 }

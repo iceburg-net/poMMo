@@ -30,7 +30,7 @@ $dbo = & $poMMo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Subscribers Page'));
+$smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 
 
 // load data from session
@@ -73,7 +73,7 @@ if (!empty($_GET['import'])) { // check to see if we should import
 		$dbo->query($sql);
 	}
 	
-	$smarty->assign('returnStr', _T('Subscribers Page'));
+	$smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 	$smarty->assign('page','import');
 	
 }

@@ -29,7 +29,7 @@ $dbo = & $poMMo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Mailings Page'));
+$smarty->assign('returnStr', Pommo::_T('Mailings Page'));
 
 /* SET PAGE STATE
  * limit		- Nr. of Mailings displayed per Pager-Site

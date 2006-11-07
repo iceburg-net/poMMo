@@ -11,5 +11,5 @@
  */
 
 require('../bootstrap.php');
-bmRedirect('/index.php');
+Pommo::redirect('/index.php');
 ?>

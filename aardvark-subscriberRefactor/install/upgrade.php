@@ -41,7 +41,7 @@ $poMMo->loadConfig('TRUE');
 
 // Check to make sure poMMo is not already installed.
 if ($poMMo->_config['revision'] == pommo_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {
-	$logger->addErr(sprintf(_T('poMMo appears to be up to date. If you want to force an upgrade, %s click here %s'), '<a href="' . $_SERVER['PHP_SELF'] . '?forceUpgrade=TRUE">', '</a>'));
+	$logger->addErr(sprintf(Pommo::_T('poMMo appears to be up to date. If you want to force an upgrade, %s click here %s'), '<a href="' . $_SERVER['PHP_SELF'] . '?forceUpgrade=TRUE">', '</a>'));
 	$smarty->display('upgrade.tpl');
 	bmKill();
 }
@@ -54,9 +54,9 @@ elseif (isset ($_REQUEST['debugInstall'])) $smarty->assign('debug', TRUE);
 
 if (empty($_REQUEST['continue'])) {
 	if (!bmIsInstalled())
-		$logger->addErr(sprintf(_T('poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . bm_baseUrl . 'install/install.php">', '</a>'));
+		$logger->addErr(sprintf(Pommo::_T('poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
 	else
-		$logger->addErr(sprintf(_T('To upgrade poMMo, %s click here %s'), '<a href="' . bm_baseUrl . 'install/upgrade.php?continue=TRUE">', '</a>'));
+		$logger->addErr(sprintf(Pommo::_T('To upgrade poMMo, %s click here %s'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php?continue=TRUE">', '</a>'));
 } else {
 	$smarty->assign('attempt', TRUE);
 
@@ -65,7 +65,7 @@ if (empty($_REQUEST['continue'])) {
 
 	$dbo->dieOnQuery(FALSE);
 	if (bmUpgrade($dbo)) {
-		$logger->addErr(_T('Upgrade Complete!'));
+		$logger->addErr(Pommo::_T('Upgrade Complete!'));
 
 		// Read in RELEASE Notes -- TODO -> use file_get_contents() one day when everyone has PHP 4.3
 		$filename = bm_baseDir . '/docs/RELEASE';
@@ -76,7 +76,7 @@ if (empty($_REQUEST['continue'])) {
 		$smarty->assign('notes', $x);
 		$smarty->assign('upgraded', TRUE);
 	} else {
-		$logger->addErr(_T('Upgrade Failed!'));
+		$logger->addErr(Pommo::_T('Upgrade Failed!'));
 	}
 }
 

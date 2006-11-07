@@ -33,7 +33,7 @@ $smarty->prepareForForm();
 
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
-	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
+	bmKill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 	
 // check if altBody should be imported from HTML
@@ -66,7 +66,7 @@ if (empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	
 	$formError = array ();
-	$formError['fromname'] = $formError['body'] = _T('Cannot be empty.');
+	$formError['fromname'] = $formError['body'] = Pommo::_T('Cannot be empty.');
 	$smarty->assign('formError', $formError);
 	
 	// load mailing data from session
@@ -85,7 +85,7 @@ if (empty ($_POST)) {
 		$mailingData['altInclude'] = $_POST['altInclude'];
 		$poMMo->set(array('mailingData' => $mailingData));
 		
-		bmRedirect('mailings_send3.php');
+		Pommo::redirect('mailings_send3.php');
 }
 
 $smarty->assign($_POST);

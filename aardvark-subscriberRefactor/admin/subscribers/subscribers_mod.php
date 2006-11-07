@@ -30,11 +30,11 @@ $dbo = & $poMMo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Subscribers Manage'));
+$smarty->assign('returnStr', Pommo::_T('Subscribers Manage'));
 
 // sanity check
 if ($_REQUEST['table'] != 'subscribers' && $_REQUEST['table'] != 'pending' || empty ($_REQUEST['sid']) || empty ($_REQUEST['action']))
-	bmRedirect('subscribers_manage');
+	Pommo::redirect('subscribers_manage');
 
 $table = $_REQUEST['table'];
 	
@@ -45,14 +45,14 @@ if (!empty ($_POST['deleteEmails'])) {
 	// deleteion confirmation recieved...
 	($table == 'pending')? dbPendingDel($dbo, $_POST['deleteEmails']) : dbSubscriberRemove($dbo, $_POST['deleteEmails']);
 
-	bmRedirect('subscribers_manage.php?'.$appendUrl);
+	Pommo::redirect('subscribers_manage.php?'.$appendUrl);
 }
 elseif (!empty ($_POST['addEmails'])) {
 	// add to subscribers recieved (pending -> subscribers)
 	foreach ($_REQUEST['addEmails'] as $email) {
 		dbSubscriberAdd($dbo,$email);
 	}
-	bmRedirect('subscribers_manage.php?'.$appendUrl);
+	Pommo::redirect('subscribers_manage.php?'.$appendUrl);
 }
 elseif (!empty ($_REQUEST['editId'])) {
 	// edit update was recieved...
@@ -80,7 +80,7 @@ elseif (!empty ($_REQUEST['editId'])) {
 		dbSubscriberUpdate($dbo,$subscriber);
 	}
 
-	bmRedirect('subscribers_manage.php?'.$appendUrl);
+	Pommo::redirect('subscribers_manage.php?'.$appendUrl);
 }
 
 
