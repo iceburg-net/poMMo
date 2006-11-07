@@ -30,20 +30,20 @@ $dbo = & $poMMo->_dbo;
  *********************************/
 $smarty = & bmSmartyInit();
 $smarty->prepareForForm();
-$smarty->assign('returnStr', _T('Groups Page'));
+$smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
 // validate group_id before setting it as var
 if (isset ($_REQUEST['group_id']) && dbGroupCheck($dbo, $_REQUEST['group_id']))
 	$group_id = str2db($_REQUEST['group_id']);
 else {
-	bmRedirect('subscribers_groups.php');
+	Pommo::redirect('subscribers_groups.php');
 }
 
 // delete criteria if requested
 if (!empty ($_GET['delete'])) {
 	if (is_numeric($_GET['filter_id']))
 		if (dbGroupFilterDel($dbo, str2db($_GET['filter_id'])))
-			$logger->addMsg(_T('Filter Removed'));
+			$logger->addMsg(Pommo::_T('Filter Removed'));
 }
 
 // change group name  if requested
@@ -132,17 +132,17 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 		if (isset ($_POST['update']) && isset ($_POST['filter_id']) && is_numeric($_POST['filter_id'])) {
 			if (dbGroupFilterDel($dbo, $_POST['filter_id']))
 				if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
-					$logger->addMsg(_T('Filter Updated'));
+					$logger->addMsg(Pommo::_T('Filter Updated'));
 				else
-					$logger->addMsg(_T('Update failed'));
+					$logger->addMsg(Pommo::_T('Update failed'));
 		} else {
 			if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
-				$logger->addMsg(_T('Filter Added'));
+				$logger->addMsg(Pommo::_T('Filter Added'));
 			else
-				$logger->addMsg(_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
+				$logger->addMsg(Pommo::_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
 		}
 	} else {
-		$logger->addMsg(_T('Filter failed validation'));
+		$logger->addMsg(Pommo::_T('Filter failed validation'));
 	}
 }
 

@@ -91,11 +91,11 @@ if (!empty ($_POST['field_id'])) {
 		case 'checkbox' :
 
 			$output = '
-									' . sprintf(_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
 									<br>
-									<input type="radio" name="logic" value="is_true"' . checkLogic('is_true') . '>' . _T('Is Checked') . '
+									<input type="radio" name="logic" value="is_true"' . checkLogic('is_true') . '>' . Pommo::_T('Is Checked') . '
 									<br>
-									<input type="radio" name="logic" value="not_true"' . checkLogic('not_true') . '>' . _T('Is Not Checked') . '
+									<input type="radio" name="logic" value="not_true"' . checkLogic('not_true') . '>' . Pommo::_T('Is Not Checked') . '
 									';
 			break;
 		case 'multiple' :
@@ -106,12 +106,12 @@ if (!empty ($_POST['field_id'])) {
 			}
 
 			$output = '
-									' . sprintf(_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
 									<br>
-									<input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . _T('Is') . '
+									<input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . Pommo::_T('Is') . '
 									<br>
-									<input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . _T('Is Not') . '
-									<div style="float: right">'._T('NOTE: You can select multiple values by holding the SHIFT or CONTROL keys').'</div>
+									<input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . Pommo::_T('Is Not') . '
+									<div style="float: right">'.Pommo::_T('NOTE: You can select multiple values by holding the SHIFT or CONTROL keys').'</div>
 									<br><br>
 										
 									<select multiple name="logic-val[]" size="10">
@@ -124,11 +124,11 @@ if (!empty ($_POST['field_id'])) {
 		case 'text' :
 
 			$output = '
-									' . sprintf(_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
 									<br>
-									<input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . _T('Is') . '
+									<input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . Pommo::_T('Is') . '
 									<br>
-									<input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . _T('Is Not') . '
+									<input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . Pommo::_T('Is Not') . '
 									<br><br>
 									<input type="text" class="text" name="logic-val" size="30" maxlength="65" value="' . $defaultValue[0] . '">
 									';
@@ -138,18 +138,18 @@ if (!empty ($_POST['field_id'])) {
 		case 'date' :
 
 			$output = '
-									' . sprintf(_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
 									<br>
 									<table cellspacing="2" border="0">
 										<tr>
-											<td><input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . _T('Is') . '</td>
+											<td><input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . Pommo::_T('Is') . '</td>
 											<td width="35"></td>
-											<td><input type="radio" name="logic" value="is_less"' . checkLogic('is_less') . '>' . _T('Is Before') . '</td>
+											<td><input type="radio" name="logic" value="is_less"' . checkLogic('is_less') . '>' . Pommo::_T('Is Before') . '</td>
 										</tr>
 										<tr>
-											<td><input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . _T('Is Not') . '</td>
+											<td><input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . Pommo::_T('Is Not') . '</td>
 											<td width="35"></td>
-											<td><input type="radio" name="logic" value="is_more"' . checkLogic('is_more') . '>' . _T('Is After') . '</td>
+											<td><input type="radio" name="logic" value="is_more"' . checkLogic('is_more') . '>' . Pommo::_T('Is After') . '</td>
 										</tr>
 									</table>
 						
@@ -161,18 +161,18 @@ if (!empty ($_POST['field_id'])) {
 		case 'number' :
 
 			$output = '
-									' . sprintf(_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
 									<br>
 									<table cellspacing="2" border="0">
 										<tr>
-											<td><input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . _T('Is') . '</td>
+											<td><input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . Pommo::_T('Is') . '</td>
 											<td width="35"></td>
-											<td><input type="radio" name="logic" value="is_less"' . checkLogic('is_less') . '>' . _T('Is Less Than') . '</td>
+											<td><input type="radio" name="logic" value="is_less"' . checkLogic('is_less') . '>' . Pommo::_T('Is Less Than') . '</td>
 										</tr>
 										<tr>
-											<td><input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . _T('Is Not') . '</td>
+											<td><input type="radio" name="logic" value="not_equal"' . checkLogic('not_equal') . '>' . Pommo::_T('Is Not') . '</td>
 											<td width="35"></td>
-											<td><input type="radio" name="logic" value="is_more"' . checkLogic('is_more') . '>' . _T('Is Greater Than') . '</td>
+											<td><input type="radio" name="logic" value="is_more"' . checkLogic('is_more') . '>' . Pommo::_T('Is Greater Than') . '</td>
 										</tr>
 									</table>
 						
@@ -196,7 +196,7 @@ elseif (!empty ($_POST['group_logic'])) {
 		switch ($_POST['group_logic']) {
 			case 'is_in' :
 				$output = '
-										' . _T('Include subscribers belonging to') . '
+										' . Pommo::_T('Include subscribers belonging to') . '
 										<br><br>
 										<select name="logic-val">
 										' . $options . '
@@ -207,7 +207,7 @@ elseif (!empty ($_POST['group_logic'])) {
 
 			case 'not_in' :
 				$output = '
-										' . _T('Exclude subscribers belonging to') . '
+										' . Pommo::_T('Exclude subscribers belonging to') . '
 										<br><br>
 										<select name="logic-val">
 										' . $options . '
@@ -222,8 +222,8 @@ elseif (!empty ($_POST['group_logic'])) {
 if ($output) {
 
 	$buttonStr = (empty ($defaultValue)) ? 
-	'<input type="submit" name="add" value="' . _T('Add Filter') . '">' : 
-	'<input type="submit" name="update" value="' . _T('Update Filter') . '">
+	'<input type="submit" name="add" value="' . Pommo::_T('Add Filter') . '">' : 
+	'<input type="submit" name="update" value="' . Pommo::_T('Update Filter') . '">
 	<input type="hidden" name="filter_id" value="'.$_POST['filter_id'].'">';
 
 	$output .= '
@@ -231,7 +231,7 @@ if ($output) {
 				<span style="margin-left: 50px;">
 					<div class="goback">
 						<a href="javascript:reset();">
-							<img src="' . bm_baseUrl . 'themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
+							<img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/left.png" align="absmiddle" border="0">' . Pommo::_T('Go Back') . '
 						</a>
 					</div>
 				</span>';
@@ -240,7 +240,7 @@ if ($output) {
 				<br>
 				<div  class="goback">
 					<a href="javascript:reset();">
-						<img src="' . bm_baseUrl . 'themes/shared/images/icons/left.png" align="absmiddle" border="0">' . _T('Go Back') . '
+						<img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/left.png" align="absmiddle" border="0">' . Pommo::_T('Go Back') . '
 					</a>
 				</div>';
 }

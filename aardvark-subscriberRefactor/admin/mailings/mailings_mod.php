@@ -45,32 +45,32 @@ $mailid = $poMMo->stateVar('mailid',$_REQUEST['mailid']);
 if (empty($action) || empty($mailid)) {
 	var_dump($action,$mailid,$_REQUEST);
 	die();
-	bmRedirect('mailings_history.php');
+	Pommo::redirect('mailings_history.php');
 }
 
 $smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Mailing History'));
+$smarty->assign('returnStr', Pommo::_T('Mailing History'));
 $smarty->assign('mailid',$mailid);
 $smarty->assign('action',$action);
 
 // perform deletions if requested
 if (!empty($_REQUEST['deleteMailings']) && !empty($_REQUEST['delid'])) {
 	if (dbRemoveMailFromHistory($dbo, $_REQUEST['delid']))
-		bmRedirect('mailings_history.php');
+		Pommo::redirect('mailings_history.php');
 	else
-		$logger->addErr(_T('Trouble deleteing mailgs'));
+		$logger->addErr(Pommo::_T('Trouble deleteing mailgs'));
 }
 
 // ACTIONS -> choose what we want to do.
 switch ($action) {
 
 	case 'view': 
-		$smarty->assign('actionStr', _T('Mailing View'));
+		$smarty->assign('actionStr', Pommo::_T('Mailing View'));
 		$noassign = TRUE;					
 	case 'delete': 
 		$mailings = dbGetMailingInfo($dbo, $mailid);
 		if (!isset($noassign))
-			$smarty->assign('actionStr', _T('Mailing Delete'));
+			$smarty->assign('actionStr', Pommo::_T('Mailing Delete'));
 		$smarty->assign('mailings',$mailings);
 		
 		// assign body to session mailing_data
@@ -104,9 +104,9 @@ switch ($action) {
 						'body' => $mailing['body']
 						)
 					));
-				bmRedirect('mailings_send.php');
+				Pommo::redirect('mailings_send.php');
 			} else {
-				bmRedirect('mailings_history.php');
+				Pommo::redirect('mailings_history.php');
 			}
 			
 			break;

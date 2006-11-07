@@ -36,7 +36,7 @@ if (isset($_GET['input'])) {
 }
 
 if (!isEmail($input['email']))
-	bmRedirect('login.php');
+	Pommo::redirect('login.php');
 
 $sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE email='" . str2db($input['email']) . "'";
 $dbo->query($sql);
@@ -58,13 +58,13 @@ if (!empty ($_POST)) {
 			case "password" :
 				bmSendConfirmation($row['email'], $row['code'], "password");
 		}
-		$logger->addMsg(sprintf(_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['email']));
+		$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['email']));
 	} else {
 		require_once (bm_baseDir . '/inc/db_subscribers.php');
 		if (dbPendingDel($dbo, $row['code']))
-			$logger->addMsg(_T('Your pending request has been cancelled.'));
+			$logger->addMsg(Pommo::_T('Your pending request has been cancelled.'));
 		else
-			$logger->addErr(_T('Error cancelling your request. Contact the administrator.'));
+			$logger->addErr(Pommo::_T('Error cancelling your request. Contact the administrator.'));
 	}
 	
 	$smarty->assign('nodisplay',TRUE);
@@ -75,11 +75,11 @@ if (!empty ($_POST)) {
 		case "del" :
 		case "change" :
 		case "password" :
-			$logger->addMsg(_T('You have pending changes. Please respond to your confirmation email'));
+			$logger->addMsg(Pommo::_T('You have pending changes. Please respond to your confirmation email'));
 			break;
 		default :
 			$url = '';
-			$logger->addErr(sprintf(_T('Please Try Again! %s login %s'), '<a href="' . bm_baseUrl . 'user/login.php">', '</a>'));
+			$logger->addErr(sprintf(Pommo::_T('Please Try Again! %s login %s'), '<a href="' . $pommo->_baseUrl . 'user/login.php">', '</a>'));
 			$smarty->display('user/user_pending.tpl');
 			bmKill();
 	}

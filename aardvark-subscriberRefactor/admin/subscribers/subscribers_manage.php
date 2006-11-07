@@ -76,7 +76,7 @@ else {
 	SETUP TEMPLATE, PAGE
  *********************************/
 $smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Subscribers Page'));
+$smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 
 $smarty->assign('fields', $fields);
 $smarty->assign('groups',$groups);

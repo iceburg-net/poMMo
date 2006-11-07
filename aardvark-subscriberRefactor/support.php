@@ -16,7 +16,7 @@
 	INITIALIZATION METHODS
  *********************************/
 
-define('_IS_SUPPORT', TRUE);
+define('_poMMo_support', TRUE);
 
 require ('bootstrap.php');
 require (bm_baseDir . '/install/helper.install.php');
@@ -29,8 +29,8 @@ $dbo = & $poMMo->_dbo;
 
 // allow access to this page if not installed 
 if (bmIsInstalled() && !$_SESSION['pommo']['authenticated']) {
-	bmKill(sprintf(_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
-	bm_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+	bmKill(sprintf(Pommo::_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
+	$pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
 	die();
 }
 
@@ -93,13 +93,13 @@ if (isset ($_GET['cmd'])) {
 			
 		case 'checkSpawn' :
 
-			$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
-			echo 'Attempting to spawn initial background script (HOST: ' . bm_hostname . ' PORT: ' . $port . ')... please wait.<br><br>';
+			$port = $AAApommo->_hostport; 
+			echo 'Attempting to spawn initial background script (HOST: ' . $AAApommo->_hostname . ' PORT: ' . $port . ')... please wait.<br><br>';
 			ob_flush();
 			flush();
 
 			// call background script. Script writes time() as $testTime to workdir/test.php. Include file to compare.
-			bmHttpSpawn(bm_baseUrl . 'inc/sup.testmailer.php?xxx=yyy');
+			bmHttpSpawn($pommo->_baseUrl . 'inc/sup.testmailer.php?xxx=yyy');
 			sleep(5);
 			@ include (bm_workDir . '/test.php');
 

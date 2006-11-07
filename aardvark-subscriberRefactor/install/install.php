@@ -40,7 +40,7 @@ $smarty->prepareForForm();
 
 // Check to make sure poMMo is not already installed.
 if (bmIsInstalled()) {
-	$logger->addErr(_T('poMMo appears to already by installed. If you would like to clear all data and re-install poMMo, delete your database.'));
+	$logger->addErr(Pommo::_T('poMMo appears to already by installed. If you would like to clear all data and re-install poMMo, delete your database.'));
 	$smarty->assign('installed', TRUE);
 	$smarty->display('install.tpl');
 	bmKill();
@@ -62,10 +62,10 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('admin_email', 'admin_email', 'isEmail');
 
 	$formError = array ();
-	$formError['list_name'] = $formError['site_name'] = $formError['admin_password'] = _T('Cannot be empty.');
-	$formError['admin_password2'] = _T('Passwords must match.');
-	$formError['site_url'] = _T('Must be a valid URL');
-	$formError['admin_email'] = _T('Must be a valid email');
+	$formError['list_name'] = $formError['site_name'] = $formError['admin_password'] = Pommo::_T('Cannot be empty.');
+	$formError['admin_password2'] = Pommo::_T('Passwords must match.');
+	$formError['site_url'] = Pommo::_T('Must be a valid URL');
+	$formError['admin_email'] = Pommo::_T('Must be a valid email');
 	$smarty->assign('formError', $formError);
 } else {
 	// ___ USER HAS SENT FORM ___
@@ -102,9 +102,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				$poMMo->loadConfig('TRUE');
 				dbResetMessageDefaults('all');
 
-				$logger->addMsg(_T('Installation Complete! You may now login and setup poMMo.'));
-				$logger->addMsg(_T('Login Username: ') . 'admin');
-				$logger->addMsg(_T('Login Password: ') . $pass);
+				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
+				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');
+				$logger->addMsg(Pommo::_T('Login Password: ') . $pass);
 
 				$smarty->assign('installed', TRUE);
 			} else {
@@ -124,7 +124,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		}
 	} else {
 		// __ FORM NOT VALID
-		$logger->addMsg(_T('Please review and correct errors with your submission.'));
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 $smarty->assign($_POST);

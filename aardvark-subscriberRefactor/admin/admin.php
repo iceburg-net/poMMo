@@ -29,7 +29,7 @@ $smarty = & bmSmartyInit();
 
 $smarty->assign('header',array(
 	'main' => 'poMMo '.$poMMo->_config['version'],
-	'sub' => _T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
+	'sub' => Pommo::_T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
 	));
 	
 $smarty->display('admin/admin.tpl');

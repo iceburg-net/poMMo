@@ -11,5 +11,5 @@
  */
 
 require('../bootstrap.php');
-bmRedirect('login.php');
+Pommo::redirect('login.php');
 ?>

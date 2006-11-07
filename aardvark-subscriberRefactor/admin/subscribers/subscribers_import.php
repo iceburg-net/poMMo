@@ -45,7 +45,7 @@ if (!empty($_FILES[$fname]['tmp_name'])) {
 	if (is_array($csvArray)) {
 		$sessionArray['csvArray'] =& $csvArray;
 		$poMMo->set($sessionArray);
-		bmRedirect('subscribers_import2.php');
+		Pommo::redirect('subscribers_import2.php');
 	}
 }
 

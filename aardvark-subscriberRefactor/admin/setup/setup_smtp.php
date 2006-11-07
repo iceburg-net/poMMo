@@ -30,7 +30,7 @@ $dbo = & $poMMo->_dbo;
  *********************************/
 $smarty = & bmSmartyInit();
 $smarty->prepareForForm();
-$smarty->assign('returnStr', _T('Configure'));
+$smarty->assign('returnStr', Pommo::_T('Configure'));
 
 // Read user requested changes	
 if (!empty ($_POST['addSmtpServer'])) {

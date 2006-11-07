@@ -39,7 +39,7 @@ $smarty->prepareForSubscribeForm();
 $_POST['bm_email'] = $smarty->get_template_vars('bm_email');
 
 if (empty($_POST['bm_email']))
-		bmRedirect('login.php');
+		Pommo::redirect('login.php');
 
 // populates form values with subscribers info from DB (called when POST vals not present)
 function bmPopulate() {
@@ -48,7 +48,7 @@ function bmPopulate() {
 	
 	$subscribers = & dbGetSubscriber($dbo, str2db($_POST['bm_email']), 'detailed');
 	if (empty($subscribers))
-		bmRedirect('login.php');
+		Pommo::redirect('login.php');
 	$subscriber_id = & key($subscribers); // subscriber's ID
 	$subscriber = & current($subscribers);
 
@@ -65,22 +65,22 @@ if (!empty ($_POST['update'])) {
 			$_POST['d']['newEmail'] = $_POST['bm_email'];
 		$code = dbPendingAdd($dbo, 'change', $_POST['original_email'], $_POST['d']);
 		if (empty ($code)) {
-			$logger->addMsg(_T('The system could not process your request. Perhaps you already have requested a change?') . 
-			sprintf(_T('%s Click Here %s to try again.'),'<a href="'.bm_baseUrl.'user/login.php">','</a>'));
+			$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') . 
+			sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php">','</a>'));
 		} else {
 			bmSendConfirmation($_POST['original_email'], $code, "update");
-			$logger->addMsg(_T('Update request received.') . ' ' . _T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+			$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 		}
 	}
 }
 elseif (!empty ($_POST['unsubscribe'])) {
 	$code = dbPendingAdd($dbo, "del", $_POST['original_email']);
 	if (empty ($code))
-		$logger->addMsg(_T('The system could not process your request. Perhaps you already have requested a change?') .
-		sprintf(_T('%s Click Here %s to try again.'),'<a href="'.bm_baseUrl.'user/login.php">','</a>'));
+		$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') .
+		sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php">','</a>'));
 	else {
 		bmSendConfirmation($_POST['original_email'], $code, "unsubscribe");
-		$logger->addMsg(_T('Unsubscribe request received.') . ' ' . _T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+		$logger->addMsg(Pommo::_T('Unsubscribe request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 	}
 	bmPopulate();
 } 

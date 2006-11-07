@@ -27,7 +27,7 @@ if (!empty ($_GET['command'])) {
 			dbMailingStamp($dbo, "restart");
 			$sql = 'SELECT securityCode FROM '.$dbo->table['mailing_current'];
   			$code = $dbo->query($sql,0,0);
-  			bmHttpSpawn(bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code);
+  			bmHttpSpawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code);
 			break;
 		case "kill" :
 			dbMailingEnd($dbo);
@@ -55,5 +55,5 @@ if (!empty ($_GET['command'])) {
 			break;
 	}
 	sleep(1);
-  	bmRedirect('mailing_status.php');
+  	Pommo::redirect('mailing_status.php');
 }

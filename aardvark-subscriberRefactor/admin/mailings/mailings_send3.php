@@ -34,7 +34,7 @@ $smarty = & bmSmartyInit();
 
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
-	bmKill(sprintf(_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
+	bmKill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 
 $input = $poMMo->get('mailingData');
@@ -47,7 +47,7 @@ $input['groupName'] = $groupName;
 
 // redirect (restart) if body or group id are null...
 if (empty($input['mailgroup']) || empty($input['body'])) {
-	bmRedirect('mailings_send.php');
+	Pommo::redirect('mailings_send.php');
 }
 
 // send a test mail to an address if requested
@@ -57,7 +57,7 @@ if (!empty($_POST['testMail'])) {
 		$logger->addMsg(bmSendTestMailing($_POST['testTo'],$input));	
 		}
 	else
-		$logger->addMsg(_T('Invalid Email Address'));
+		$logger->addMsg(Pommo::_T('Invalid Email Address'));
 }
 
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
@@ -67,14 +67,14 @@ if (!empty ($_GET['sendaway'])) {
 		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['mailgroup'], 'email'));
 		dbMailingStamp($dbo, "start");
 		
-		if (bmHttpSpawn(bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode)) {
+		if (bmHttpSpawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode)) {
 			sleep(1); // allows mailing to begin...
-			bmRedirect('mailing_status.php');
+			Pommo::redirect('mailing_status.php');
 		}
-		//die (bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode);
+		//die ($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode);
 	}
 	else {
-		$logger->addMsg(_T('Cannot send a mailing to 0 subscribers!'));
+		$logger->addMsg(Pommo::_T('Cannot send a mailing to 0 subscribers!'));
 	}
 }
 

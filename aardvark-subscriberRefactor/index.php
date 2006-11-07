@@ -15,46 +15,49 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('bootstrap.php');
-
-$poMMo = & fireup();
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init(array('authLevel' => 0));
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
-if (isset ($_GET['logout'])) {
-	// if user chose to logout, destroy session and redirect to this page
-	$poMMo->setAuthenticated(FALSE);
-	session_destroy();
-	header('Location: ' . bm_http . bm_baseUrl . 'index.php');
+// log the user out if requested
+if (isset($_GET['logout'])) {
+	if (class_exists('PommoAuth'))
+		$pommo->_auth->logout();
+	header('Location: ' . $pommo->_http . $pommo->_baseUrl . 'index.php');
 }
-elseif ($poMMo->isAuthenticated()) {
+// check if user is already logged in
+elseif (class_exists('PommoAuth') && $pommo->_auth->isAuthenticated()) {
 	// If user is authenticated (has logged in), redirect to admin.php
-	bmRedirect(bm_http . bm_baseUrl . 'admin/admin.php');
+	Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'admin/admin.php');
 }
-elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
-	// Check if user submitted correct username & password. If so, Authenticate.
-	$auth = $poMMo->getConfig(array (
+// Check if user submitted correct username & password. If so, Authenticate.
+elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {	
+	$auth = PommoAPI::getConfig(array (
 		'admin_username',
 		'admin_password'
 	));
 	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
 		
 		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
-		bmMaintenance();
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+		PommoMaintenance::memorizeBaseURL();
+
+		$pommo->_auth->login($_POST['username']);
 		
-		$poMMo->setAuthenticated(TRUE);
-		bmRedirect(bm_http . $_POST['referer']);
+		Pommo::redirect($pommo->_http . $_POST['referer']);
 	}
 	else {
-		$logger->addMsg(_T('Failed login attempt. Try again.'));
+		$logger->addMsg(Pommo::_T('Failed login attempt. Try again.'));
 	}
 }
-elseif (!empty ($_POST['resetPassword'])) {
+elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 	// Check if a reset password request has been received
 
 	// check that captcha matched
@@ -75,7 +78,7 @@ elseif (!empty ($_POST['resetPassword'])) {
 			$poMMo->set(array (
 				'email' => $poMMo->_config['admin_email']
 			));
-			bmRedirect(bm_http . bm_baseUrl . 'user/user_pending.php');
+			Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'user/user_pending.php');
 		}
 
 		// create a password change request, send confirmation mail
@@ -84,17 +87,17 @@ elseif (!empty ($_POST['resetPassword'])) {
 			bmSendConfirmation($poMMo->_config['admin_email'], $code, "password");
 		}
 
-		$logger->addMsg(_T('Password reset request recieved. Check your email.'));
+		$logger->addMsg(Pommo::_T('Password reset request recieved. Check your email.'));
 		$smarty->assign('captcha',FALSE);
 		
 	} else {
 		// captcha did not match
-		$logger->addMsg(_T('Captcha did not match. Try again.'));
+		$logger->addMsg(Pommo::_T('Captcha did not match. Try again.'));
 	}
 }
 
 // referer (used to return user to requested page upon login success)
-$smarty->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : bm_baseUrl . 'admin/admin.php'));
+$smarty->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : $pommo->_baseUrl . 'admin/admin.php'));
 
 $smarty->display('index.tpl');
 die();

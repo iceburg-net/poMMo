@@ -32,7 +32,7 @@ $smarty->prepareForForm();
 if (isset ($_REQUEST['field_id']) && dbFieldCheck($dbo, $_REQUEST['field_id']))
 	$field_id = str2db($_REQUEST['field_id']);
 else {
-	bmRedirect('setup_fields.php');
+	Pommo::redirect('setup_fields.php');
 }
 
 // check if user submitted options to add
@@ -50,10 +50,10 @@ if (!empty ($_REQUEST['dVal-del']) && !empty ($_REQUEST['delOption'])) {
 	
 	if ($affected && empty($_GET['dVal-force'])) {
 		$smarty->assign('confirm',array(
-		 	'title' => _T('Remove Option'),
+		 	'title' => Pommo::_T('Remove Option'),
 		 	'nourl' =>  $_SERVER['PHP_SELF'].'?field_id='.$field_id,
 		 	'yesurl' => $_SERVER['PHP_SELF'].'?field_id='.$field_id.'&dVal-del=TRUE&dVal-force=TRUE&delOption='.$_POST['delOption'],
-		 	'msg' => sprintf(_T('Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records.'), '<b>'.$_POST['delOption'].'</b>', '<em>'.$affected.'</em>')
+		 	'msg' => sprintf(Pommo::_T('Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records.'), '<b>'.$_POST['delOption'].'</b>', '<em>'.$affected.'</em>')
 		 	));
 		 
 		 $smarty->display('admin/confirm.tpl');
@@ -62,7 +62,7 @@ if (!empty ($_REQUEST['dVal-del']) && !empty ($_REQUEST['delOption'])) {
 	else {
 		// delete option, no subscriber is affected || force given.
 		dbFieldOptionDelete($dbo, $field_id, $_REQUEST['delOption']);
-		bmRedirect($_SERVER['PHP_SELF'].'?field_id='.$field_id);
+		Pommo::redirect($_SERVER['PHP_SELF'].'?field_id='.$field_id);
 	}
 }
 
@@ -75,7 +75,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('field_prompt', 'field_prompt', 'notEmpty', false, false, 'trim');
 
 	$formError = array ();
-	$formError['field_name'] = $formError['field_prompt'] = _T('Cannot be empty.');
+	$formError['field_name'] = $formError['field_prompt'] = Pommo::_T('Cannot be empty.');
 	$smarty->assign('formError', $formError);
 	
 	// fetch field info
@@ -104,29 +104,29 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		// __ FORM IS VALID
 
 		dbFieldUpdate($dbo, $_POST);
-		$logger->addMsg(_T('Settings updated.'));
+		$logger->addMsg(Pommo::_T('Settings updated.'));
 
 	} else {
 		// __ FORM NOT VALID
-		$logger->addMsg(_T('Please review and correct errors with your submission.'));
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 
 switch ($field['type']) {
 		case 'text' :
-			$smarty->assign('intro', _T('This is a <b>TEXT</b> based field. Subscribers will be allowed to type in any value in for this field. Text fields are useful for collecting names, cities, and such.'));
+			$smarty->assign('intro', Pommo::_T('This is a <b>TEXT</b> based field. Subscribers will be allowed to type in any value in for this field. Text fields are useful for collecting names, cities, and such.'));
 			break;
 		case 'checkbox' :
-			$smarty->assign('intro', _T('This is a <b>CHECKBOX</b> based field. Subscribers will be allowed to toggle this field ON and OFF. Checkboxes are useful for asking a user if they\'d like to be included or excluded in something.'));
+			$smarty->assign('intro', Pommo::_T('This is a <b>CHECKBOX</b> based field. Subscribers will be allowed to toggle this field ON and OFF. Checkboxes are useful for asking a user if they\'d like to be included or excluded in something.'));
 			break;
 		case 'number' :
-			$smarty->assign('intro', _T('This is a <b>NUMBER</b> based field -- <b>UNSUPPORTED</b>. Support for this type will be added later.'));
+			$smarty->assign('intro', Pommo::_T('This is a <b>NUMBER</b> based field -- <b>UNSUPPORTED</b>. Support for this type will be added later.'));
 			break;
 		case 'date' :
-			$smarty->assign('intro', _T('This is a <b>DATE</b> based field -- <b>UNSUPPORTED</b>. Support for this type will be added later.'));
+			$smarty->assign('intro', Pommo::_T('This is a <b>DATE</b> based field -- <b>UNSUPPORTED</b>. Support for this type will be added later.'));
 			break;
 		case 'multiple' :
-			$smarty->assign('intro', _T('This is a <b>MULTIPLE CHOICE</b> based field. Subscribers will be able to select a value from the options you provide below. Multiple choice fields have reliable values, and are useful for collecting subsscriber Country, income range, and such.'));
+			$smarty->assign('intro', Pommo::_T('This is a <b>MULTIPLE CHOICE</b> based field. Subscribers will be able to select a value from the options you provide below. Multiple choice fields have reliable values, and are useful for collecting subsscriber Country, income range, and such.'));
 			break;
 	}
 	

@@ -27,11 +27,11 @@ function updateList($array) {
 	global $dbo;
 	foreach($array as $key => $value) {
 		if (!is_numeric($key) || !is_numeric($value))
-			die(_T('Error updating order'));
+			die(Pommo::_T('Error updating order'));
 		
 		$sql = 'UPDATE '.$dbo->table['subscriber_fields'].' set field_ordering='.$key.' WHERE field_id='.$value.' LIMIT 1';
 		if (!$dbo->query($sql))
-			die(_T('Error updating order'));
+			die(Pommo::_T('Error updating order'));
 	}
 }
 
