@@ -70,9 +70,10 @@ function & array2csv(&$array) {
  */
 
 function isEmail(& $string) {
-	if (!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $string))
-		return false;
-	return true;
+    $p = '/^[a-z0-9!#$%&*+-=?^_`{|}~]+(\.[a-z0-9!#$%&*+-=?^_`{|}~]+)*';
+    $p.= '@([-a-z0-9]+\.)+([a-z]{2,3}';
+    $p.= '|info|arpa|aero|coop|name|museum)$/ix';
+    return preg_match($p, $string);
 }
 
 function isChecked($string = NULL, $returnArray = NULL) {
