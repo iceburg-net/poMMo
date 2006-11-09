@@ -11,7 +11,7 @@
  * 
  ** [END HEADER]**/
 
-class PommoL10n {
+class PommoHelperL10n {
 	function init($language, $baseDir) {
 
 		if (!is_file($baseDir . 'language/' . $language . '/LC_MESSAGES/pommo.mo'))
@@ -25,7 +25,7 @@ class PommoL10n {
 		}
 
 		// set the locale
-		if (!PommoL10n::_setLocale(LC_MESSAGES, $language)) {
+		if (!PommoHelperL10n::_setLocale(LC_MESSAGES, $language)) {
 			
 			if (!strpos($language,'_')) {
 			$language = $language.'_'.strtoupper($language);

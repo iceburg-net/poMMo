@@ -1,4 +1,5 @@
 <?php
+
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -20,8 +21,7 @@ class PommoAPI {
 
 		// make sure all submitted parameters are "known" by verifying size of final array
 		if (count($p) > count($defaults)) {
-			$backtrace = debug_backtrace();
-			$this->kill('Unknown argument passed to PommoAPI::getParams() from function ' . $backtrace[1]['function'] . ' on line ' . $backtrace[1]['line'] . ' of file ' . $_SERVER['PHP_SELF']);
+			$this->kill('Unknown argument passed to PommoAPI::getParams()', TRUE);
 		}
 
 		return $p;
@@ -29,59 +29,94 @@ class PommoAPI {
 
 	// Returns base configuration data from SESSION. If optional argument is supplied, configuration will be loaded from
 	// the database & stored in SESSION.
-	function getConfigBase($fromDB = FALSE) {
+	function configGetBase($fromDB = FALSE) {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
 
 		if ($fromDB || empty ($_SESSION['pommo']['config'])) {
 			$_SESSION['pommo']['config'] = array ();
-			$sql = 'SELECT * FROM ' . $dbo->table['config'] . ' WHERE autoload=\'on\'';
-			if ($dbo->query($sql)) {
-				while ($row = mysql_fetch_assoc($dbo->_result))
-					$_SESSION['pommo']['config'][$row['config_name']] = $row['config_value'];
-			}
+			$query = "
+				SELECT config_name, config_value
+				FROM ".$dbo->table['config'] ."
+				WHERE autoload='on'";
+			$query = $dbo->prepare($query);
+			
+			while ($row = $dbo->getRows($query))
+				$_SESSION['pommo']['config'][$row['config_name']] = $row['config_value'];
 		}
-
-		// check for valid configuration data & DB against file version. 
-		$sql = 'SELECT config_value FROM ' . $dbo->table['config'] . ' WHERE config_name=\'revision\'';
-		$revision = $dbo->query($sql, 0);
+		
+		if (!$fromDB) { // check file revision against database revision
+		$query = "
+			SELECT config_value
+			FROM ".$dbo->table['config'] ."
+			WHERE config_name='revision'";
+		$query = $dbo->prepare($query);
+		
+		$revision = $dbo->query($query, 0);
 		if (!$revision)
-			$this->kill(sprintf(Pommo::_T('Error loading configuration. Have you %s installed %s ?'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
-		elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo::_T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
-
+			$this->kill(sprintf(Pommo :: _T('Error loading configuration. Have you %s installed %s ?'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
+		elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
+		}
+		
 		$dbo->dieOnQUery(TRUE);
-
 		return $_SESSION['pommo']['config'];
 	}
 
 	// Gets specified config value(s) from the DB. 
 	// Pass a single or array of config_names, returns array of their name>value.
-	function getConfig($arg) {
+	function configGet($arg) {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
 
-		if (!is_array($arg))
-			$arg = array (
-				$arg
-			);
 
-		$config = array ();
-		if ($arg[0] == 'all')
-			$sql = 'SELECT config_name,config_value FROM ' . $dbo->table['config'];
-		else
-			$sql = 'SELECT config_name,config_value FROM ' . $dbo->table['config'] . ' WHERE config_name IN (\'' . implode('\',\'', $arg) . '\')';
-
-		while ($row = $dbo->getRows($sql))
+		if ($arg == 'all')
+			$arg = null;
+			
+		$query = "
+			SELECT config_name,config_value
+			FROM ". $dbo->table['config']."
+			[WHERE config_name IN(%Q)]";
+		$query = $dbo->prepare($query,array($arg));
+		
+		while ($row = $dbo->getRows($query))
 			$config[$row['config_name']] = $row['config_value'];
 
 		$dbo->dieOnQUery(TRUE);
 		return $config;
 	}
 
-	
-	
+	// update the config table. 
+	//  $input must be an array as key:value ([config_name] => config_value)
+	function configUpdate($input, $force = FALSE) {
+		global $pommo;
+		$dbo = & $pommo->_dbo;
+
+		if (!is_array($input))
+			Pommo :: kill('Bad input passed to updateConfig', TRUE);
+
+		// get eligible config rows/options to change
+		$force = ($force) ? null : 'on';
+		$query = "
+			SELECT config_name 
+			FROM " . $dbo->table['config'] . "
+			WHERE config_name IN(%q)
+			[AND user_change='%S']";
+		$query = $dbo->prepare($query, array (array_keys($input), $force));
+
+		// update the row
+		while ($row = $dbo->getRows($query)) {
+			$query = "
+				UPDATE " . $dbo->table['config'] . "
+				SET config_value='%s'
+				WHERE config_name='%s'";
+			$query = $dbo->prepare($query, array ($input[$row['config_name']],$row['config_name']));
+			if (!$dbo->query($query))
+				die("Error updating configuration option: {$row['config_name']}");
+		}
+
+	}
 
 }
 ?>

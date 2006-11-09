@@ -10,9 +10,8 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
-
 // include smarty template class
-Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/smarty/Smarty.class.php');
+Pommo :: requireOnce($GLOBALS['pommo']->_baseDir . 'inc/lib/smarty/Smarty.class.php');
 
 // wrapper class around smarty
 class PommoTemplate extends Smarty {
@@ -90,7 +89,7 @@ class PommoTemplate extends Smarty {
 		global $pommo;
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
-		Pommo :: requireOnce($pommo->_baseDir . 'inc/class.smartyvalidate.php');
+		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
 
 		// assign isForm to TRUE, used by header.tpl to include form CSS/Javascript in HTML HEAD
 		$this->assign('isForm', TRUE);
@@ -107,9 +106,9 @@ class PommoTemplate extends Smarty {
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
 	function prepareForSubscribeForm() {
-		require_once (bm_baseDir . '/inc/db_fields.php');
+		require_once ($pommo->_baseDir . '/inc/db_fields.php');
 		global $dbo;
-		global $poMMo;
+		global $pommo;
 
 		// Get array of fields. Key is ID, value is an array of the demo's info
 		$fields = dbGetFields($dbo, 'active');

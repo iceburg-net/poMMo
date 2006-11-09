@@ -179,6 +179,11 @@ class Pommo {
 
 	}
 	
+	// reload base configuration from database
+	function reloadConfig() {
+		return $this->_config = PommoAPI :: configGetBase(TRUE);
+	}
+	
 	/**
 	 *  Translation (l10n) Function
 	 */
@@ -282,7 +287,7 @@ class Pommo {
 			echo '<div class="error fatal"><img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" /> ' . $msg . '</div>';
 
 		// output debugging info if enabled (in config.php)
-		if ($pommo->_debug == 'on' && $this->_section != 'user') { // don't debug if section == user.'
+		if ($pommo->_debug == 'on' && $pommo->_section != 'user') { // don't debug if section == user.'
 			if (is_object($pommo)) {
 				$pommo->requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
 				$debug = new PommoHelperDebug();

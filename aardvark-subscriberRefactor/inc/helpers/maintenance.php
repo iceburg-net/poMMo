@@ -11,7 +11,7 @@
  * 
  ** [END HEADER]**/
  
- class PommoMaintenance {
+ class PommoHelperMaintenance {
  	
  	// write baseURL to maintenance.php in config file syntax (to be read back by embedded apps)
  	function memorizeBaseURL() {

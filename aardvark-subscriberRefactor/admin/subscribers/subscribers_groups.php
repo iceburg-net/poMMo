@@ -17,16 +17,17 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_groups.php');
+require_once ($pommo->_baseDir.'/inc/db_groups.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 
@@ -52,7 +53,7 @@ if (!empty ($_GET['delete'])) {
 			 'yesurl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'] . '&delete=TRUE&dVal-force=TRUE&group_name='.$_GET['group_name'],
 			  'msg' => sprintf(Pommo::_T('%1$s filters belong this group . Are you sure you want to remove %2$s?'), '<b>' . $affected . '</b>','<b>' . $_GET['group_name'] . '</b>')));
 			$smarty->display('admin/confirm.tpl');
-			bmKill();
+			Pommo::kill();
 		} else {
 			// delete field
 			if (dbGroupDelete($dbo, $_GET['group_id'])) {
@@ -69,5 +70,5 @@ $groups = dbGetGroups($dbo);
 
 $smarty->assign('groups',$groups);
 $smarty->display('admin/subscribers/subscribers_groups.tpl');
-bmKill();
+Pommo::kill();
 ?>

@@ -16,9 +16,9 @@
  
  
  require('../../bootstrap.php');
- require_once(bm_baseDir.'/inc/db_fields.php');
- $poMMo =& fireup("secure");
- $dbo = & $poMMo->_dbo;
+ require_once($pommo->_baseDir.'/inc/db_fields.php');
+ $pommo =& fireup("secure");
+ $dbo = & $pommo->_dbo;
 
  
 // URL which processes the form input + adds (or warns) subscriber to pending table.
@@ -45,7 +45,7 @@ $form_name = "signup";
 
 
 <hr>
-<div align="center"><b><?php echo $poMMo->_config['list_name']; ?> Subscriber Form</b></div>
+<div align="center"><b><?php echo $pommo->_config['list_name']; ?> Subscriber Form</b></div>
 <hr>
 
 <!-- 	Set "ACTION" to the URL of poMMo's process.php

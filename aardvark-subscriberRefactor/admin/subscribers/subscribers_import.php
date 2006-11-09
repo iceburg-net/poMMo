@@ -17,16 +17,17 @@
 
 
 require ('../../bootstrap.php');
-require_once(bm_baseDir.'/inc/lib.import.php');
+require_once($pommo->_baseDir.'/inc/lib.import.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 
 // Maximum File Size (in MB) 
@@ -44,11 +45,11 @@ if (!empty($_FILES[$fname]['tmp_name'])) {
 	
 	if (is_array($csvArray)) {
 		$sessionArray['csvArray'] =& $csvArray;
-		$poMMo->set($sessionArray);
+		$pommo->set($sessionArray);
 		Pommo::redirect('subscribers_import2.php');
 	}
 }
 
 $smarty->display('admin/subscribers/subscribers_import.tpl');
-bmKill();
+Pommo::kill();
 ?>

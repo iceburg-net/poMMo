@@ -36,8 +36,8 @@ INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on')
 INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR13.1', 'poMMo Version', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '25', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark SVN', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '26', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
@@ -48,7 +48,7 @@ CREATE TABLE :::fields::: (
   `field_name` varchar(60) default NULL,
   `field_prompt` varchar(60) default NULL,
   `field_normally` varchar(60) default NULL,
-  `field_options` text,
+  `field_array` text,
   `field_required` enum('on','off') NOT NULL default 'off',
   `field_type` enum('checkbox','multiple','text','date','number') default NULL,
   PRIMARY KEY  (`field_id`),

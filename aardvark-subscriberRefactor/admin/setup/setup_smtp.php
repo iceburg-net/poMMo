@@ -17,18 +17,19 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_procedures.php');
-require_once (bm_baseDir . '/inc/phpmailer/class.phpmailer.php');
-require_once (bm_baseDir . '/inc/phpmailer/class.smtp.php');
+require_once ($pommo->_baseDir . '/inc/db_procedures.php');
+require_once ($pommo->_baseDir . '/inc/phpmailer/class.phpmailer.php');
+require_once ($pommo->_baseDir . '/inc/phpmailer/class.smtp.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 $smarty->assign('returnStr', Pommo::_T('Configure'));
 
@@ -62,7 +63,7 @@ elseif (!empty ($_POST['throttle_SMTP'])) {
 }
 
 // Get the SMTP settings from DB
-$smtpConfig = $poMMo->getConfig(array (
+$smtpConfig = PommoAPI::configGet(array (
 	'smtp_1',
 	'smtp_2',
 	'smtp_3',
@@ -118,5 +119,5 @@ $smarty->assign('smtp', $smtp);
 $smarty->assign('throttle_SMTP', $smtpConfig['throttle_SMTP']);
 
 $smarty->display('admin/setup/setup_smtp.tpl');
-bmKill();
+Pommo::kill();
 ?>

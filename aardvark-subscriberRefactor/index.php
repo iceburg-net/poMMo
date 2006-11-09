@@ -39,7 +39,7 @@ elseif (class_exists('PommoAuth') && $pommo->_auth->isAuthenticated()) {
 }
 // Check if user submitted correct username & password. If so, Authenticate.
 elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {	
-	$auth = PommoAPI::getConfig(array (
+	$auth = PommoAPI::configGet(array (
 		'admin_username',
 		'admin_password'
 	));
@@ -47,7 +47,7 @@ elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 		
 		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
-		PommoMaintenance::memorizeBaseURL();
+		PommoHelperMaintenance::memorizeBaseURL();
 
 		$pommo->_auth->login($_POST['username']);
 		
@@ -70,21 +70,21 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 	elseif ($_POST['captcha'] == $_POST['realdeal']) {
 		// user inputted captcha matched. Reset password
 
-		require_once (bm_baseDir . '/inc/db_subscribers.php');
-		require_once (bm_baseDir . '/inc/lib.mailings.php');
+		require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
+		require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
 
 		// see if there is already a pending request for the administrator
-		if (isDupeEmail($dbo, $poMMo->_config['admin_email'], 'pending')) {
-			$poMMo->set(array (
-				'email' => $poMMo->_config['admin_email']
+		if (isDupeEmail($dbo, $pommo->_config['admin_email'], 'pending')) {
+			$pommo->set(array (
+				'email' => $pommo->_config['admin_email']
 			));
 			Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'user/user_pending.php');
 		}
 
 		// create a password change request, send confirmation mail
-		$code = dbPendingAdd($dbo, "password", $poMMo->_config['admin_email']);
+		$code = dbPendingAdd($dbo, "password", $pommo->_config['admin_email']);
 		if (!empty ($code)) {
-			bmSendConfirmation($poMMo->_config['admin_email'], $code, "password");
+			bmSendConfirmation($pommo->_config['admin_email'], $code, "password");
 		}
 
 		$logger->addMsg(Pommo::_T('Password reset request recieved. Check your email.'));

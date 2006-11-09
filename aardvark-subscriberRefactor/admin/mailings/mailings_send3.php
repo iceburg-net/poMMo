@@ -17,27 +17,28 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_mailing.php');
-require_once (bm_baseDir.'/inc/db_groups.php');
-require_once (bm_baseDir . '/inc/lib.txt.php');
-require_once (bm_baseDir.'/inc/db_sqlgen.php');
+require_once ($pommo->_baseDir . '/inc/db_mailing.php');
+require_once ($pommo->_baseDir.'/inc/db_groups.php');
+require_once ($pommo->_baseDir . '/inc/lib.txt.php');
+require_once ($pommo->_baseDir.'/inc/db_sqlgen.php');
 
-$poMMo = & fireup('secure', 'keep');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure', 'keep');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 // check to see if a mailing is taking place (queue not empty)
 if (!mailingQueueEmpty($dbo)) {
-	bmKill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
+	Pommo::kill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
 }
 
-$input = $poMMo->get('mailingData');
+$input = $pommo->get('mailingData');
 
 $groupName = dbGroupName($dbo, $input['mailgroup']);
 $subscriberCount = dbGroupTally($dbo, $input['mailgroup']);
@@ -53,7 +54,7 @@ if (empty($input['mailgroup']) || empty($input['body'])) {
 // send a test mail to an address if requested
 if (!empty($_POST['testMail'])) {
 	if (isEmail($_POST['testTo'])) {
-		require_once (bm_baseDir.'/inc/lib.mailings.php');
+		require_once ($pommo->_baseDir.'/inc/lib.mailings.php');
 		$logger->addMsg(bmSendTestMailing($_POST['testTo'],$input));	
 		}
 	else

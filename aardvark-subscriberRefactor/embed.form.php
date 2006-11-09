@@ -14,19 +14,17 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
 define('_poMMo_embed', TRUE);
-
-$dirname = dirname(__FILE__);
-require($dirname.'/bootstrap.php');
-
-$poMMo = & fireup('install');
-$dbo = & $poMMo->_dbo;
+require(dirname(__FILE__).'/bootstrap.php');
+$pommo->init(array('authLevel' => 0, 'noInit' => TRUE));
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 
 // subscription forms will be activated from this template

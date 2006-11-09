@@ -17,16 +17,17 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
+require_once ($pommo->_baseDir . '/inc/db_fields.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 $smarty->assign('intro', Pommo::_T('Subscriber fields are used to gather and sort information on your list members. Any number of fields can be assigned to the subscription form.  Each field is categorized as either <em>TEXT</em>, <em>NUMBER</em>, <em>MULTIPLE CHOICE</em>, <em>CHECK BOX</em>, or <em>DATE</em> depending on kind of information it collects.'));
@@ -58,7 +59,7 @@ if (!empty ($_GET['delete'])) {
 			 'yesurl' => $_SERVER['PHP_SELF'] . '?field_id=' . $_GET['field_id'] . '&delete=TRUE&dVal-force=TRUE',
 			  'msg' => sprintf(Pommo::_T('Currently, %1$s subscribers have a non empty value for this field. All Subscriber data relating to this field will be lost. Are you sure you want to remove field %2$s?'), '<b>' . $affected . '</b>','<b>' . $_GET['field_name'] . '</b>')));
 			$smarty->display('admin/confirm.tpl');
-			bmKill();
+			Pommo::kill();
 		} else {
 			// delete field
 			if (dbFieldDelete($dbo, $_REQUEST['field_id']))
@@ -74,5 +75,5 @@ if (!empty($fields))
 	$smarty->assign('fields', $fields);
 	
 $smarty->display('admin/setup/setup_fields.tpl');
-bmKill();
+Pommo::kill();
 ?>

@@ -18,17 +18,18 @@
 
 
 require ('../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_subscribers.php');
+require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
 
-$poMMo = & fireup();
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
-$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+$smarty->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
 
 $smarty->prepareForForm();
 
@@ -72,5 +73,5 @@ if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 	$smarty->assign($_POST);
 }
 $smarty->display('user/login.tpl');
-bmKill();
+Pommo::kill();
 ?>

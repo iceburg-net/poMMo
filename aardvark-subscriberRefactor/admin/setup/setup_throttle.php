@@ -18,16 +18,17 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_procedures.php');
+require_once ($pommo->_baseDir . '/inc/db_procedures.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 $smarty->assign('returnStr',Pommo::_T('Configure'));
 
@@ -43,9 +44,9 @@ elseif(!empty($_POST['throttle-submit'])) {
 	dbUpdateConfig($dbo,$input,TRUE);
 }
 
-$config= $poMMo->getConfig(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
+$config= PommoAPI::configGet(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
 
 $smarty->assign($config);
 $smarty->display('admin/setup/setup_throttle.tpl');
-bmKill();
+Pommo::kill();
 ?>

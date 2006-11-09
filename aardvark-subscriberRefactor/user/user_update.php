@@ -18,20 +18,21 @@
 
 
 require ('../bootstrap.php');
-require (bm_baseDir . '/inc/lib.validate_subscriber.php');
-require_once (bm_baseDir . '/inc/db_subscribers.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
-require_once (bm_baseDir . '/inc/lib.mailings.php');
-require_once (bm_baseDir . '/inc/lib.txt.php');
+require ($pommo->_baseDir . '/inc/lib.validate_subscriber.php');
+require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
+require_once ($pommo->_baseDir . '/inc/db_fields.php');
+require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
+require_once ($pommo->_baseDir . '/inc/lib.txt.php');
 
-$poMMo = & fireup('keep');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('keep');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
 $smarty->prepareForSubscribeForm(); 
@@ -90,5 +91,5 @@ else { // both update + unsubsscribe empty...
 
 
 $smarty->display('user/user_update.tpl');
-bmKill();
+Pommo::kill();
 ?>
