@@ -17,6 +17,37 @@
 /**********************
  * BRICE'S DATABSE CLASS 
  **********************/
+ 
+ /*
+  * PREPARATION NOTES using $this->prepare ||  $dbo->prepare() : (from Monte Ohrt's safeSQL class)
+  * // dummy up values
+    $sec_name = "Fred's place";
+    $section_ids = array("a","b","c's and d's");
+    $location = "Lincoln's best";
+    
+    $query_string = <<< EOQ
+
+        select *
+        from   sections
+        where  SectionName  =  '%s'
+        and    id           in (%q)
+        and    timestamp    >=  %i
+      [ and    Location     =  '%S' ]
+
+    EOQ;
+        
+    $safe_q = $dbo->prepare(
+                $query_string,
+                    array(
+                        $sec_name,
+                        $section_ids,
+                        time(),
+                        $location
+                    )
+                );
+        
+    // $safe_q is now safe to use!
+  */
 
 // Database Connection Class - holds the link, processes queiries, produces repots, etc.
 class PommoDB {
@@ -27,10 +58,16 @@ class PommoDB {
 	var $_database; // name of database
 	var $table; // array of tables. array_key = nickname, value = table name in DB
 
+	var $_safeSQL; // holds Monte's SafeSQL Class , referenced via prepare()
 	var $_results; // array holding unique results (for use with executing queries within loops & not overwriting the loops conditional resultset)
 
 	function PommoDB($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
 
+		// turn off magic quotes runtime
+		if (get_magic_quotes_runtime())
+			if (!set_magic_quotes_runtime(0))
+				Pommo::kill('Could not turn off PHP\'s magic_quotes_runtime');
+		
 		$this->_database = $database;
 		$this->table = array (
 			'config' => $tablePrefix . 'config',
@@ -78,7 +115,9 @@ class PommoDB {
 		$charset_row = mysql_fetch_assoc($db_charset);
 		mysql_query("SET NAMES '" . $charset_row['Value'] . "'", $this->_link);
 		unset ($db_charset, $charset_row);
-
+		
+		// setup safeSQL class
+		$this->_safeSQL = & new SafeSQL_MySQL($this->_link);
 	}
 
 	function debug($val) {
@@ -87,6 +126,15 @@ class PommoDB {
 
 	function dieOnQuery($val) {
 		return ($val) ? $this->_dieOnQuery = TRUE : $this->_dieOnQuery = FALSE;
+	}
+
+	// alias to SafeSQL->Query(); See inc/lib/safesql/README for usage
+	//  if second parameter is not passed, pass a blank one (avoids safeSQL throwing a warning)
+	function & prepare() {
+		$a = func_get_args();
+		if (count($a) < 2)
+			$a[] = array();
+		return call_user_func_array( array($this->_safeSQL,'query'), $a );
 	}
 
 	/** query function. 
@@ -105,7 +153,7 @@ class PommoDB {
 	 * 
 	 * Example invocations from partent script:
 	 * 
-	 *   $dbo = & $poMMo->_dbo;
+	 *   $dbo = & $pommo->_dbo;
 	 *   $dbo->dieOnQuery(TRUE);
 	 *   $dbo->debug(TRUE);
 	 * 
@@ -235,9 +283,12 @@ class PommoDB {
 		// stack is empty, push new result set onto stack
 		if (empty ($set)) {
 			if (!empty ($sql))
-				$this->query($sql);
-			array_push($set, $this->_result);
+				if ($this->query($sql))
+					array_push($set, $this->_result);
+				else
+					return false;
 		}
+		
 
 		// Fetch row from result set at end of result stack
 		 ($enumerated) ? $row = mysql_fetch_row(end($set)) : $row = mysql_fetch_assoc(end($set));
