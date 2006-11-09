@@ -185,18 +185,17 @@ function csvPrepareImport(& $fields, & $csvFile, $fieldAssign) {
 				if ($value == 'on' || $value == 'ON' || $value == 'checked' || $value == 'CHECKED' || $value = 'yes' || $value == 'YES')
 					$subscriber['data'][$field_id] = 'on';
 				break;
-			case 'multiple' :
-				// verify the input matches a selection (for data congruency)
-				$options = quotesplit($field['options']);
-				if (in_array($value, $options)) {
-					$subscriber['data'][$field_id] = mysql_real_escape_string($value);
-				}
-				else {
-					$logger->addMsg(sprintf(_T('Subscriber on line %1$s has an unknown option (%2$s) for field %3$s'),$line + 1,$value, $field['name']));
-					$valid = FALSE;
-				}
-				break;
-			case 'date' : // validate if input is a date
+				case 'multiple' :
+                // verify the input matches a selection (for data congruency)
+                if (in_array($value, $field['options'])) {
+                    $subscriber['data'][$field_id] = mysql_real_escape_string($value);
+                }
+                else {
+                    $logger->addMsg(sprintf(_T('Subscriber on line %1$s has an unknown option (%2$s) for field %3$s'),$line + 1,$value, $field['name']));
+                    $valid = FALSE;
+                }
+                break;
+		case 'date' : // validate if input is a date
 				$date = strtotime($value);
 				if ($date)
 					$subscriber['data'][$field_id] = $date;
