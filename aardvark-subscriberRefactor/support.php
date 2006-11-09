@@ -19,17 +19,17 @@
 define('_poMMo_support', TRUE);
 
 require ('bootstrap.php');
-require (bm_baseDir . '/install/helper.install.php');
+require ($pommo->_baseDir . '/install/helper.install.php');
 
-$poMMo = & fireup('install');
+$pommo = & fireup('install');
 session_start();
 
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 // allow access to this page if not installed 
 if (bmIsInstalled() && !$_SESSION['pommo']['authenticated']) {
-	bmKill(sprintf(Pommo::_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
+	Pommo::kill(sprintf(Pommo::_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
 	$pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
 	die();
 }
@@ -144,4 +144,4 @@ if (isset ($_GET['cmd'])) {
 	}
 }
 
-bmKill();
+Pommo::kill();

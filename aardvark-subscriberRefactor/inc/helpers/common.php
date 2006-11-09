@@ -1,5 +1,4 @@
 <?php
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -22,7 +21,7 @@ class PommoHelper {
 	function slashStrip($input) {
 			if (is_array($input)) {
 				foreach ($input as $key => $value) {
-					$input[$key] =$this->slashStrip($value);
+					$input[$key] = PommoHelper::slashStrip($value);
 				}
 				return $input;
 			} else {

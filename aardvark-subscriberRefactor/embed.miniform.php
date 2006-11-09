@@ -20,13 +20,14 @@ define('_poMMo_embed', TRUE);
 $dirname = dirname(__FILE__);
 require($dirname.'/bootstrap.php');
 
-$poMMo = & fireup('install');
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('install');
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 // subscription forms will be activated from this template
 $smarty->prepareForSubscribeForm();

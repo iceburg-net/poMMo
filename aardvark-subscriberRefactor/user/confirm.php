@@ -20,21 +20,22 @@
 
 
 require ('../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_subscribers.php');
+require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
 
-$poMMo = & fireup('keep');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('keep');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 if (empty ($_GET['code'])) {
 	$logger->addMsg(Pommo::_T('No code given.'));
 	$smarty->display('user/confirm.tpl');
-	bmKill();
+	Pommo::kill();
 }
 
 // lookup code
@@ -44,11 +45,11 @@ $row = $row = mysql_fetch_assoc($dbo->query($sql));
 if (empty ($row)) {
 	$logger->addMsg(Pommo::_T('Invalid code! Make sure you copied it correctly from the email.'));
 	$smarty->display('user/confirm.tpl');
-	bmKill();
+	Pommo::kill();
 }
 
 // Load success messages and redirection URL from config
-$config = $poMMo->getConfig(array (
+$config = PommoAPI::configGet(array (
 	'site_success',
 	'messages',
 	'admin_username',
@@ -102,5 +103,5 @@ switch ($row['type']) {
 }
 
 $smarty->display('user/confirm.tpl');
-bmKill();
+Pommo::kill();
 ?>

@@ -18,17 +18,18 @@
 
 require('../../bootstrap.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 // subscription forms will be activated from this template
 $smarty->prepareForSubscribeForm();
 
 $smarty->display('admin/setup/form_embed.tpl');
-bmKill();
+Pommo::kill();

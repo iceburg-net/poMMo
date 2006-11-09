@@ -20,15 +20,15 @@
 
 
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_subscribers.php');
-require_once (bm_baseDir.'/inc/db_groups.php');
-require_once (bm_baseDir.'/inc/db_sqlgen.php');
-require_once (bm_baseDir.'/inc/db_fields.php');
-require_once (bm_baseDir.'/inc/class.pager.php');
+require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
+require_once ($pommo->_baseDir.'/inc/db_groups.php');
+require_once ($pommo->_baseDir.'/inc/db_sqlgen.php');
+require_once ($pommo->_baseDir.'/inc/db_fields.php');
+require_once ($pommo->_baseDir.'/inc/class.pager.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /** Setup Variables
  * 
@@ -75,7 +75,8 @@ else {
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 
 $smarty->assign('fields', $fields);
@@ -90,5 +91,5 @@ $smarty->assign('pagelist',$pagelist);
 $smarty->assign('groupCount',$groupCount);
 
 $smarty->display('admin/subscribers/subscribers_manage.tpl');
-bmKill();
+Pommo::kill();
 ?>

@@ -19,17 +19,18 @@
 
 
 require ('../bootstrap.php');
-require_once (bm_baseDir . '/inc/lib.txt.php');
-require_once (bm_baseDir . '/inc/lib.mailings.php');
+require_once ($pommo->_baseDir . '/inc/lib.txt.php');
+require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
 
-$poMMo = & fireup('keep');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('keep');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 if (isset($_GET['input'])) {
 	$input = (unserialize($_GET['input']));
@@ -60,7 +61,7 @@ if (!empty ($_POST)) {
 		}
 		$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['email']));
 	} else {
-		require_once (bm_baseDir . '/inc/db_subscribers.php');
+		require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
 		if (dbPendingDel($dbo, $row['code']))
 			$logger->addMsg(Pommo::_T('Your pending request has been cancelled.'));
 		else
@@ -81,9 +82,9 @@ if (!empty ($_POST)) {
 			$url = '';
 			$logger->addErr(sprintf(Pommo::_T('Please Try Again! %s login %s'), '<a href="' . $pommo->_baseUrl . 'user/login.php">', '</a>'));
 			$smarty->display('user/user_pending.tpl');
-			bmKill();
+			Pommo::kill();
 	}
 }
 $smarty->display('user/user_pending.tpl');
-bmKill();
+Pommo::kill();
 ?>

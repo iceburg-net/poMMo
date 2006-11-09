@@ -14,24 +14,22 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require('../bootstrap.php');
-
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 $smarty->assign('header',array(
-	'main' => 'poMMo '.$poMMo->_config['version'],
-	'sub' => Pommo::_T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
+	'main' => 'poMMo '.$pommo->_config['version'],
+	'sub' => sprintf(Pommo::_T('Powerful mailing list software for %s'),$pommo->_config['list_name']) 
 	));
 	
 $smarty->display('admin/admin.tpl');
-bmKill();
+Pommo::kill();
 	

@@ -18,9 +18,9 @@
 
 require ('../../bootstrap.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 $output = FALSE;
 $defaultLogic = null;
@@ -29,8 +29,8 @@ $defaultValue = null;
 // check if this is an update -- assign appropriate defaults
 // NOTE -- the filters values could be passed from parent script also... cleanup! (1 less DB query..)
 if (isset($_POST['update'])) {
-	require_once (bm_baseDir . '/inc/db_groups.php');
-	require_once (bm_baseDir . '/inc/lib.txt.php');
+	require_once ($pommo->_baseDir . '/inc/db_groups.php');
+	require_once ($pommo->_baseDir . '/inc/lib.txt.php');
 	$filters = dbGetGroupFilter($dbo, $group_id = $_POST['group_id'], $_POST['filter_id']);
 	$filter =& $filters[$_POST['filter_id']];
 	if (is_array($filter)) {
@@ -82,7 +82,7 @@ function checkValue($check) {
 
 if (!empty ($_POST['field_id'])) {
 	// determine the type of the field
-	require_once (bm_baseDir . '/inc/db_fields.php');
+	require_once ($pommo->_baseDir . '/inc/db_fields.php');
 
 	$demos = dbGetFields($dbo, str2db($_POST['field_id']));
 	$demo = & $demos[$_POST['field_id']];
@@ -183,7 +183,7 @@ if (!empty ($_POST['field_id'])) {
 
 }
 elseif (!empty ($_POST['group_logic'])) {
-	require_once (bm_baseDir . '/inc/db_groups.php');
+	require_once ($pommo->_baseDir . '/inc/db_groups.php');
 	$groups = & dbGetGroups($dbo);
 
 	if (isset ($_POST['group_id']) && is_numeric($_POST['group_id'])) {

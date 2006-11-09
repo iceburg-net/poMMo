@@ -147,7 +147,7 @@ I *am* thinking about incorporating a sent/unsent list that can be downloaded at
 	SHORT TERM
 		
 		(API) 		get rid of appendURL problem!
-					+ convert to $poMMo->_state + save there
+					+ convert to $pommo->_state + save there
 	
 		(feature)	alter database design -> merge tables mailings &mailings_history and refactor
 					EDIT: after finishing mailing ... database entry in mailing_current would not 

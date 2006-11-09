@@ -13,10 +13,10 @@
 
 
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_mailing.php');
+require_once ($pommo->_baseDir.'/inc/db_mailing.php');
 
-$poMMo = fireup('secure');
-$dbo = & $poMMo->_dbo;
+$pommo = fireup('secure');
+$dbo = & $pommo->_dbo;
 
 if (!empty ($_GET['command'])) {
 	switch ($_GET['command']) {
@@ -38,7 +38,7 @@ if (!empty ($_GET['command'])) {
 			break;
 		
 		case "clear50" :
-			require_once (bm_baseDir.'/inc/lib.txt.php');
+			require_once ($pommo->_baseDir.'/inc/lib.txt.php');
 			$sql = 'SELECT notices FROM ' . $dbo->table['mailing_current'];
 			$notices = quotesplit($dbo->query($sql,0));
 			if (count($notices) > 50) {

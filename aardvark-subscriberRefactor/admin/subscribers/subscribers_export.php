@@ -14,14 +14,14 @@
 
  
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_subscribers.php');
-require_once (bm_baseDir.'/inc/db_fields.php');
-$poMMo =& fireup("secure");
-$dbo = & $poMMo->_dbo;
+require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
+require_once ($pommo->_baseDir.'/inc/db_fields.php');
+$pommo =& fireup("secure");
+$dbo = & $pommo->_dbo;
 
 
 if (empty($_GET['group_id']) || empty($_GET['table']))
-	bmKill('Export failed - no group_id or table supplied.');
+	Pommo::kill('Export failed - no group_id or table supplied.');
 	
 $group_id = str2db($_GET['group_id']);
 $table = str2db($_GET['table']);
@@ -32,11 +32,11 @@ $fields = & dbGetFields($dbo);
 if ($group_id == 'all')
 	$subscribers = & dbGetSubscriber($dbo, $group_id, 'detailed',$table);
 elseif (is_numeric($group_id)) {
-	require_once (bm_baseDir.'/inc/db_sqlgen.php');
+	require_once ($pommo->_baseDir.'/inc/db_sqlgen.php');
 	$subscribers = & dbGetSubscriber($dbo, dbGetGroupSubscribers($dbo, $table, $group_id,'list'),'detailed', $table);
 }
 else
-	bmKill('Bad group sent to export');
+	Pommo::kill('Bad group sent to export');
 
 $encaser = "\"";
 $delim = ", ";

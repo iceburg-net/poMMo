@@ -20,13 +20,13 @@
 // NOTE TO SELF -- all updates in a upgrade must be serialized, and their serial incremented!
 
 function parse_mysql_dump($ignoreerrors = false) {
-	
-	global $dbo;
-	global $logger;
-	
-			$file_content = file(bm_baseDir."/install/sql.schema.php");
+	global $pommo;
+	$dbo =& $pommo->_dbo;
+	$logger =& $pommo->_logger;
+
+			$file_content = @file($pommo->_baseDir."install/sql.schema.php");
 			if (empty ($file_content))
-				bmKill(Pommo::_T('Error installing. Could not read sql.schema.php'));
+				Pommo::kill('Error installing. Could not read '.$pommo->_baseDir.'install/sql.schema.php');
 			$query = '';
 			foreach ($file_content as $sql_line) {
 				$tsl = trim($sql_line);
@@ -52,12 +52,13 @@ function parse_mysql_dump($ignoreerrors = false) {
 
 // <bool> Returns true if the program is installed, false if not. TODO: eventaully allow for table prefixing..
 function bmIsInstalled() {
-	global $dbo;
+	global $pommo;
+	$dbo =& $pommo->_dbo;
 	
 	if (is_object($dbo)) {
-	$sql = 'SHOW TABLES LIKE \'' . $dbo->table['groups'] . '\'';
-	if ($dbo->records($sql))
-		return true;
+		$sql = 'SHOW TABLES LIKE \'' . $dbo->table['groups'] . '\'';
+		if ($dbo->records($sql))
+			return true;
 	}
 	
 	return false;
@@ -144,35 +145,4 @@ function performUpdate(& $sql, & $dbo, $serial, $message = NULL, $check = TRUE, 
 		return FALSE;
 	}
 }
-
-// inserts the default configuration into the DB
-function bmInstallConfig(& $dbo) {
-	$x = TRUE;
-	$queries = array ();
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (1, 'admin_username', 'admin', 'Username', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (2, 'admin_password', 'c40d70861d2b0e48a8ff2daa7ca39727', 'Password', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (3, 'site_name', 'My Website', 'Website Name', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (4, 'site_url', 'http://localhost/', 'Website URL', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (5, 'site_success', 'http://localhost/thanks.html', 'Signup Success URL', 'off', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (6, 'list_name', 'The poMMo Fanclub Mailing List', 'List Name', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (7, 'admin_email', 'admin@pommo.com', 'Administrator Email', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (8, 'list_fromname', 'poMMo Administrative Team', 'From Name', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (9, 'list_fromemail', 'pommo@yourdomain.com', 'From Email', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (10, 'list_frombounce', 'bounces@yourdomain.com', 'Bounces', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (11, 'list_exchanger', 'sendmail', 'List Exchanger', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (12, 'list_confirm', 'on', 'Confirmation Messages', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (13, 'demo_mode', 'on', 'Demonstration Mode', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (14, 'mailMax', '300', 'Mails per refresh', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (15, 'mailNum', '30', 'Mails per error dump', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (16, 'mailSize', '10', 'Mails per bMailer BATCH array', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (17, 'mailDelay', '1000', 'Microsends to delay between batches. A value of 2000000 would be 2 seconds.', 'on', 'on')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (18, 'version', 'Aardvark PR1', 'poMMo Version', 'on', 'off')";
-	$queries[] = "INSERT INTO `{$dbo->table['config']}` VALUES (19, 'revision', '1', 'Internal Revision', 'on', 'off')";
-	foreach ($queries as $sql) {
-		if (!$dbo->query($sql))
-			$x = FALSE;
-	}
-	return $x;
-}
-
 ?>

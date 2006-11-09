@@ -17,19 +17,20 @@
 
 
 require ('../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_subscribers.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
-require(bm_baseDir.'/inc/lib.validate_subscriber.php');
+require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
+require_once ($pommo->_baseDir . '/inc/db_fields.php');
+require($pommo->_baseDir.'/inc/lib.validate_subscriber.php');
 
-$poMMo = & fireup();
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 // STORE user input. Input is appended to referer URL via HTTP_GET
 $input = urlencode(serialize($_POST));
@@ -53,7 +54,7 @@ if (!validateSubscribeForm()) {
 	$smarty->assign('referer',$referer.'?input='.$input);
 	
 	$smarty->display('user/process.tpl');
-	bmKill();
+	Pommo::kill();
 }
 
 /**********************************
@@ -65,10 +66,10 @@ if (empty($_POST['d']))
 	$_POST['d'] = FALSE;
 $confirmation_key = dbPendingAdd($dbo, 'add', str2db($_POST['bm_email']), $_POST['d']);
 if (empty ($confirmation_key))
-	bmKill('dbPendingAdd(): Confirmation key not returned.');
+	Pommo::kill('dbPendingAdd(): Confirmation key not returned.');
 
 // determine if we should bypass output from this page and redirect.
-$config = $poMMo->getConfig(array (
+$config = PommoAPI::configGet(array (
 	'site_success',
 	'site_confirm',
 	'list_confirm',
@@ -83,7 +84,7 @@ elseif (!empty ($config['site_success']) && $config['list_confirm'] != 'on')
 
 if ($config['list_confirm'] == 'on') { // email confirmation required
 	// send subscription confirmation mail
-	require_once (bm_baseDir . '/inc/lib.mailings.php');
+	require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
 	if (bmSendConfirmation($_POST['bm_email'], $confirmation_key, "subscribe")) {
 		$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 	} else {
@@ -104,5 +105,5 @@ if (!$logger->isErr() && $redirectURL) {
 }
 
 $smarty->display('user/process.tpl');
-bmKill();
+Pommo::kill();
 ?>

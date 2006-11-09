@@ -18,18 +18,19 @@
 
 
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_subscribers.php');
-require_once (bm_baseDir.'/inc/db_fields.php');
-require_once (bm_baseDir.'/inc/lib.txt.php');
+require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
+require_once ($pommo->_baseDir.'/inc/db_fields.php');
+require_once ($pommo->_baseDir.'/inc/lib.txt.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->assign('returnStr', Pommo::_T('Subscribers Manage'));
 
 // sanity check
@@ -127,5 +128,5 @@ $smarty->assign('order',$order);
 $smarty->assign('orderType',$orderType);
 
 $smarty->display('admin/subscribers/subscribers_mod.tpl');
-bmKill();
+Pommo::kill();
 ?>

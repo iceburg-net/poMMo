@@ -17,17 +17,18 @@
 
 
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_procedures.php');
+require_once ($pommo->_baseDir.'/inc/db_procedures.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
-//$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+//$smarty->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
 $smarty->prepareForForm();
 $smarty->assign('returnStr',Pommo::_T('Configure'));
 
@@ -78,7 +79,7 @@ if (!SmartyValidate::is_registered_form() || empty($_POST)) {
 	$smarty->assign('formError',$formError);
 	
 	// populate _POST with info from database (fills in form values...)
-	$dbvalues = $poMMo->getConfig(array('messages'));
+	$dbvalues = PommoAPI::configGet(array('messages'));
 	
 	if (empty($dbvalues['messages'])) 
 		$messages = dbResetMessageDefaults(); 
@@ -147,5 +148,5 @@ else {
 }
 $smarty->assign($_POST);
 $smarty->display('admin/setup/setup_messages.tpl');
-bmKill();
+Pommo::kill();
 ?>

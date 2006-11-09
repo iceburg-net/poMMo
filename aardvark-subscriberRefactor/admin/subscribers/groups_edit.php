@@ -17,18 +17,19 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_groups.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
-require_once (bm_baseDir . '/inc/lib.txt.php');
+require_once ($pommo->_baseDir . '/inc/db_groups.php');
+require_once ($pommo->_baseDir . '/inc/db_fields.php');
+require_once ($pommo->_baseDir . '/inc/lib.txt.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 $smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
@@ -160,5 +161,5 @@ $smarty->assign('filterCount', $filterCount);
 $smarty->assign('tally', $tally);
 
 $smarty->display('admin/subscribers/groups_edit.tpl');
-bmKill();
+Pommo::kill();
 ?>

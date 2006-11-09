@@ -13,10 +13,12 @@
 
 // pass database object as argument
 function bmUpgrade(& $dbo) {
-	if (!is_numeric(pommo_revision))
+	global $pommo;
+	
+	if (!is_numeric($pommo->_revision))
 		die('Can not read current revision');
 	$oldRevision = getOldVersion($dbo);
-	if ($oldRevision >= pommo_revision)
+	if ($oldRevision >= $pommo->_revision)
 		return true; // eventually analyze $oldRevision & call an appropriate function name (ie. during a branch)
 
 	return bmUpgradeAardvark($oldRevision, $dbo);
@@ -589,7 +591,7 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				if (!performUpdate($sql, $dbo, 69, 'Adding customizable messages to configuration.'))
 					$failed = TRUE;
 
-				require_once (bm_baseDir . '/inc/db_procedures.php');
+				require_once ($pommo->_baseDir . '/inc/db_procedures.php');
 				dbResetMessageDefaults('all');
 
 				// bump version
@@ -765,6 +767,8 @@ function bmUpgradeAardvark(& $revision, & $dbo, $failed = FALSE) {
 				}
 				if (!performUpdate($sqlA, $dbo, 81, 'Merging Flagged and Active Subscribers table'))
 					$failed = TRUE;
+			
+				// 
 				
 				// bump version
 				if (!$failed)

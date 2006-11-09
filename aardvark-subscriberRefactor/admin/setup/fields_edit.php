@@ -16,17 +16,18 @@
 *********************************/
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
-require_once (bm_baseDir.'/inc/lib.txt.php');
+require_once ($pommo->_baseDir . '/inc/db_fields.php');
+require_once ($pommo->_baseDir.'/inc/lib.txt.php');
 
-$poMMo = & fireup('secure','keep');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure','keep');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 if (isset ($_REQUEST['field_id']) && dbFieldCheck($dbo, $_REQUEST['field_id']))
@@ -57,7 +58,7 @@ if (!empty ($_REQUEST['dVal-del']) && !empty ($_REQUEST['delOption'])) {
 		 	));
 		 
 		 $smarty->display('admin/confirm.tpl');
-		 bmKill();
+		 Pommo::kill();
 	}
 	else {
 		// delete option, no subscriber is affected || force given.
@@ -83,7 +84,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$field = & $fields[$field_id];
 	$field['id'] = $field_id;
 	$smarty->assign('field', $field);
-	$poMMo->set($field);
+	$pommo->set($field);
 
 	// populate _POST with info from database (fills in form values...)
 	@ $_POST['field_name'] = $field['name'];
@@ -94,7 +95,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 } else {
 	
-	$field =& $poMMo->get();
+	$field =& $pommo->get();
 	$smarty->assign('field', $field);
 	
 	// ___ USER HAS SENT FORM ___
@@ -132,4 +133,4 @@ switch ($field['type']) {
 	
 $smarty->assign($_POST);
 $smarty->display('admin/setup/fields_edit.tpl');
-bmKill();
+Pommo::kill();

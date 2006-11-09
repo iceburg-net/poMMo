@@ -12,7 +12,7 @@
  * 
  ** [END HEADER]**/
 
-class PommoDebug {
+class PommoHelperDebug {
 	function bmDebug() {
 		global $pommo;
 		echo "\n\n<br><br><b>BASIC DEBUG</b><hr><br>\n\n";
@@ -31,7 +31,7 @@ class PommoDebug {
 		echo "\nSection: " . $pommo->_section . "<br>\n";
 
 		echo "\n\n<br><br><b>CONFIG DEBUG</b><hr><br>\n\n";
-		$config = PommoAPI :: getConfig('all');
+		$config = PommoAPI :: configGet('all');
 		if (!empty ($config)) {
 			echo "\n\n<br>CONFIG:<br>\n\n";
 			foreach ($config as $name => $value) {

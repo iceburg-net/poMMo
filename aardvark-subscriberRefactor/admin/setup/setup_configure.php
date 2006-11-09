@@ -19,16 +19,17 @@
 
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_procedures.php');
+require_once ($pommo->_baseDir . '/inc/db_procedures.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 // ADD CUSTOM VALIDATOR FOR CHARSET
@@ -88,7 +89,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$smarty->assign('formError', $formError);
 
 	// populate _POST with info from database (fills in form values...) 
-	$dbVals = $poMMo->getConfig(array (
+	$dbVals = PommoAPI::configGet(array (
 		'admin_username',
 		'site_success',
 		'site_confirm',
@@ -100,12 +101,12 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		'list_charset'
 	));
 
-	$dbVals['demo_mode'] = (!empty ($poMMo->_config['demo_mode']) && ($poMMo->_config['demo_mode'] == "on")) ? 'on' : 'off';
+	$dbVals['demo_mode'] = (!empty ($pommo->_config['demo_mode']) && ($pommo->_config['demo_mode'] == "on")) ? 'on' : 'off';
 
-	$dbVals['site_url'] = $poMMo->_config['site_url'];
-	$dbVals['site_name'] = $poMMo->_config['site_name'];
-	$dbVals['admin_email'] = $poMMo->_config['admin_email'];
-	$dbVals['list_name'] = $poMMo->_config['list_name'];
+	$dbVals['site_url'] = $pommo->_config['site_url'];
+	$dbVals['site_name'] = $pommo->_config['site_name'];
+	$dbVals['admin_email'] = $pommo->_config['admin_email'];
+	$dbVals['list_name'] = $pommo->_config['list_name'];
 
 	$smarty->assign($dbVals);
 } else {
@@ -119,16 +120,16 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		if (!empty ($_POST['admin_password']))
 			$_POST['admin_password'] = md5($_POST['admin_password']);
 
-		$oldDemo = $poMMo->_config['demo_mode'];
+		$oldDemo = $pommo->_config['demo_mode'];
 
 		dbUpdateConfig($dbo, $_POST);
 
-		$poMMo->loadConfig('TRUE');
+		$pommo->loadConfig('TRUE');
 
 		$logger->addMsg(Pommo::_T('Configuration Updated.'));
 
 		// refresh page to reflect demonstration mode changes
-		if ($oldDemo != $poMMo->_config['demo_mode'])
+		if ($oldDemo != $pommo->_config['demo_mode'])
 			Pommo::redirect('setup_configure.php');
 
 	} else {
@@ -139,5 +140,5 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 $smarty->assign($_POST);
 $smarty->display('admin/setup/setup_configure.tpl');
-bmKill();
+Pommo::kill();
 ?>
