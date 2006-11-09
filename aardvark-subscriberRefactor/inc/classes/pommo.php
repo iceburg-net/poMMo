@@ -67,7 +67,7 @@ class Pommo {
 		// include translation (l10n) methods if language is not English
 		if ($this->_language != 'en') {
 			$this->requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
-			PommoL10n::init($this->_language, $this->_baseDir);
+			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
 		
 		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
@@ -79,7 +79,7 @@ class Pommo {
 			// Else, set it based off of REQUEST
 			if (defined('_poMMo_embed')) {
 				$this->requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
-				$this->_baseUrl = PommoMaintenance :: rememberBaseURL();
+				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
 			} else {
 				$baseUrl = preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF']));
 				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
@@ -91,6 +91,7 @@ class Pommo {
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
 
 		// initialize database link
+		$this->requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
 		$this->requireOnce($this->_baseDir . 'inc/classes/db.php');
 		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 
@@ -120,8 +121,8 @@ class Pommo {
 		$defaults = array (
 			'authLevel' => 1,
 			'keep' => FALSE,
-			'session' => NULL,
-			'install' => FALSE,
+			'noInit' => FALSE,
+			'sessionID' => NULL,
 			'reloadConf' => FALSE
 		);
 	
@@ -143,13 +144,14 @@ class Pommo {
 				$this->kill($this->_T('Could not create directory') . ' ' . $this->_workDir . '/pommo/smarty');
 		}
 
-		// bypass & return if 'install' passed
-		if ($p['install'])
+		// Bypass SESSION creation, reading of config, authentication checks and return
+		//  if 'noInit' passed
+		if ($p['noInit'])
 			return;
 
 		// start the session
-		if (!empty($p['session']))
-			session_id($p['session']);
+		if (!empty($p['sessionID']))
+			session_id($p['sessionID']);
 		session_start();
 
 		// create placeholder for $_SESSION['pommo'] if this is a new session
@@ -167,7 +169,7 @@ class Pommo {
 		));
 
 		// read configuration data
-		$this->_config = PommoAPI :: getConfigBase($p['reloadConf']);
+		$this->_config = PommoAPI :: configGetBase($p['reloadConf']);
 
 		// clear _data unless 'keep' is true. Create SESSION reference.
 		if (!$p['keep']) {
@@ -182,11 +184,11 @@ class Pommo {
 	 */
 	 
 	 function _T($msg) {
-		return ($GLOBALS['pommol10n']) ? PommoL10n::translate($msg) : $msg;
+		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translate($msg) : $msg;
 	}
 
 	function _TP($msg, $plural, $count) { // for plurals
-		return ($GLOBALS['pommol10n']) ? PommoL10n::translatePlural($msg, $plural, $count) : $msg;
+		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translatePlural($msg, $plural, $count) : $msg;
 	}
 
 
@@ -236,36 +238,39 @@ class Pommo {
 	// redirect, require, kill base Functions
 	
 	function redirect($url, $msg = NULL, $kill = true) {
-
+	global $pommo;
+	
 		// adds http & baseURL if they aren't already provided... allows code shortcuts ;)
 		//  if url DOES NOT start with '/', the section will automatically be appended
-		if (!preg_match('@^https*://@i', $url)) {
-			if (!preg_match('@^' . $this->_baseUrl . '@i', $url)) {
+		
+		if (!preg_match('@^https?://@i', $url)) {
+			if (!strpos($url, $pommo->_baseUrl)) { 
 				if (substr($url, 0, 1) != '/') {
-					if ($this->_section != 'user' && $this->_section != 'admin') {
-						$url = $this->_http . $this->_baseUrl . 'admin/' . $this->_section . '/' . $url;
+					if ($pommo->_section != 'user' && $pommo->_section != 'admin') {
+						$url = $pommo->_http . $pommo->_baseUrl . 'admin/' . $pommo->_section . '/' . $url;
 					} else {
-						$url = $this->_http . $this->_baseUrl . $this->_section . '/' . $url;
+						$url = $pommo->_http . $pommo->_baseUrl . $pommo->_section . '/' . $url;
 					}
 				} else {
-					$url = $this->_http . $this->_baseUrl . $url;
+					$url = $pommo->_http . $pommo->_baseUrl . substr($url,1); 
 				}
 			} else {
-				$url = $this->_http . $url;
+				$url = $pommo->_http . $url;
 			}
 		}
 		header('Location: ' . $url);
 		if ($kill)
 			if ($msg)
-				$this->kill($msg);
+				$pommo->kill($msg);
 			else
-				$this->kill($this->_T('Redirecting, please wait...'));
+				$pommo->kill($pommo->_T('Redirecting, please wait...'));
 		return;
 	}
 	
 	// kill => used to terminate a script
-	function kill($msg = NULL) {
-
+	function kill($msg = NULL, $backtrace = FALSE) {
+		global $pommo;
+		
 		// if nothing is in the output buffer, create a valid XHTML page.
 		if (!ob_get_length()) {
 			echo ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
@@ -274,18 +279,29 @@ class Pommo {
 
 		// output passed message
 		if ($msg)
-			echo '<div class="error fatal"><img src="' . $this->_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" /> ' . $msg . '</div>';
+			echo '<div class="error fatal"><img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" /> ' . $msg . '</div>';
 
 		// output debugging info if enabled (in config.php)
 		if ($pommo->_debug == 'on' && $this->_section != 'user') { // don't debug if section == user.'
-			$this->requireOnce($this->_baseDir . 'inc/helpers/debug.php');
-			$debug = new PommoDebug();
-			$debug->bmDebug();
+			if (is_object($pommo)) {
+				$pommo->requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
+				$debug = new PommoHelperDebug();
+				$debug->bmDebug();
+			}
+		}
+		
+		
+		if ($backtrace) {
+			$backtrace = debug_backtrace();
+			echo @ '<h2>BACKTRACE</h2>'
+				.'<p>'.@str_ireplace($pommo->_baseDir,'',$backtrace[1]['file']).':'.$backtrace[1]['line'].' '.$backtrace[1]['function'].'()</p>'
+				.'<p>'.@str_ireplace($pommo->_baseDir,'',$backtrace[2]['file']).' '.$backtrace[2]['function'].'()</p>'
+				.'<p>'.@str_ireplace($pommo->_baseDir,'',$backtrace[3]['file']).' '.$backtrace[3]['function'].'()</p>';
 		}
 
 		// print and clear output buffer
 		ob_end_flush();
-
+		
 		// kill script
 		die();
 	}
