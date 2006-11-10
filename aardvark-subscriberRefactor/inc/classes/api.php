@@ -1,5 +1,4 @@
 <?php
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -95,28 +94,32 @@ class PommoAPI {
 
 		if (!is_array($input))
 			Pommo :: kill('Bad input passed to updateConfig', TRUE);
+			
+		// if this is password, skip if empty
+		if (isset($input['admin_password']) && empty($input['admin_password']))
+			unset($input['admin_password']);
 
 		// get eligible config rows/options to change
 		$force = ($force) ? null : 'on';
 		$query = "
-			SELECT config_name 
+			SELECT config_name
 			FROM " . $dbo->table['config'] . "
 			WHERE config_name IN(%q)
 			[AND user_change='%S']";
 		$query = $dbo->prepare($query, array (array_keys($input), $force));
 
-		// update the row
-		while ($row = $dbo->getRows($query)) {
-			$query = "
-				UPDATE " . $dbo->table['config'] . "
-				SET config_value='%s'
-				WHERE config_name='%s'";
-			$query = $dbo->prepare($query, array ($input[$row['config_name']],$row['config_name']));
-			if (!$dbo->query($query))
-				die("Error updating configuration option: {$row['config_name']}");
+		// update rows/options
+		while ($row = $dbo->getRows($query)) { // multi-row update in a single query syntax
+			$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($row['config_name'],$input[$row['config_name']])).' ';
+			$where[] = $row['config_name']; // limits multi-row update query to specific rows (vs updating entire table)
 		}
-
+		$query = "
+			UPDATE " . $dbo->table['config'] . "
+			SET config_value =
+				CASE config_name ".$when." ELSE config_name END
+			[WHERE config_name IN(%Q)]";
+		if (!$dbo->query($dbo->prepare($query,array($where))))
+			die('Error updating config');
 	}
-
 }
 ?>
