@@ -19,7 +19,7 @@
 require ('../../bootstrap.php');
 require_once($pommo->_baseDir.'/inc/lib.import.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 

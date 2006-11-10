@@ -19,7 +19,7 @@
 require ('../../bootstrap.php');
 require_once ($pommo->_baseDir.'/inc/db_groups.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -33,7 +33,7 @@ $smarty->prepareForForm();
 
 // add group if requested
 if (!empty ($_POST['group_name'])) {
-	if (dbGroupAdd($dbo, str2db($_POST['group_name'])))
+	if (dbGroupAdd($dbo, $_POST['group_name']))
 		$logger->addMsg(sprintf(Pommo::_T('Group %s Added'),$_POST['group_name']));
 }
 

@@ -12,13 +12,15 @@
  ** [END HEADER]**/
  
  // Generates a simple HTML form based from active subscriber criteria
- 
- 
- 
- require('../../bootstrap.php');
- require_once($pommo->_baseDir.'/inc/db_fields.php');
- $pommo =& fireup("secure");
- $dbo = & $pommo->_dbo;
+/**********************************
+	INITIALIZATION METHODS
+*********************************/
+require ('../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
  
 // URL which processes the form input + adds (or warns) subscriber to pending table.
@@ -64,14 +66,14 @@ $form_name = "signup";
 <br>
 <?php
 
-$fields = & dbGetFields($dbo, 'active');
+$fields = & PommoField::get(TRUE);
 foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 	
 	if ($field['required'] == 'on')
-		echo "\n\n <!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." --> \n<p>\n <font color=\"red\"><LABEL for=\"d[".$field_id."]\">".db2str($field['prompt']).": </LABEL></font>\n\t";
+		echo "\n\n <!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." --> \n<p>\n <font color=\"red\"><LABEL for=\"d[".$field_id."]\">".$field['prompt'].": </LABEL></font>\n\t";
 	else
-		echo "\n\n <!-- BEGIN INPUT FOR FIELD ".$field['name']." --> \n<p>\n<LABEL for=\"d[".$field_id."]\">".db2str($field['prompt']).": </LABEL>\n\t";
+		echo "\n\n <!-- BEGIN INPUT FOR FIELD ".$field['name']." --> \n<p>\n<LABEL for=\"d[".$field_id."]\">".$field['prompt'].": </LABEL>\n\t";
 	
 	switch ($field['type']) {
 		case "checkbox": // checkbox	
@@ -87,12 +89,12 @@ foreach (array_keys($fields) as $field_id) {
 			
 			echo "\t  <option value=\"\"> Please Choose...\n";
 			
-			foreach ($field['options'] as $option) {
+			foreach ($field['array'] as $option) {
 				
 				if (!empty($field['normally']) && $option == $field['normally'])
-					echo "\t  <option value=\"".db2str($option)."\" selected> ".db2str($option)."\n";
+					echo "\t  <option value=\"".htmlspecialchars($option)."\" selected> ".$option."\n";
 				else
-					echo "\t  <option value=\"".db2str($option)."\"> ".db2str($option)."\n";
+					echo "\t  <option value=\"".htmlspecialchars($option)."\"> ".$option."\n";
 			}			
 			echo "</select>";
 					
@@ -103,7 +105,7 @@ foreach (array_keys($fields) as $field_id) {
 			if (empty($field['normally']))
 				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\">";
 			else
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".db2str($field['normally'])."\">";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".htmlspecialchars($field['normally'])."\">";
 			break; 
 			
 		case "date": // select

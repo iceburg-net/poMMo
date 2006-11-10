@@ -106,12 +106,12 @@ class PommoTemplate extends Smarty {
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
 	function prepareForSubscribeForm() {
-		require_once ($pommo->_baseDir . '/inc/db_fields.php');
-		global $dbo;
 		global $pommo;
+		$dbo =& $pommo->_dbo;
+		Pommo :: requireOnce($pommo->_baseDir . 'inc/helpers/fields.php');
 
 		// Get array of fields. Key is ID, value is an array of the demo's info
-		$fields = dbGetFields($dbo, 'active');
+		$fields = PommoField::get(TRUE);
 		if (!empty ($fields))
 			$this->assign('fields', $fields);
 

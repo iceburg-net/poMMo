@@ -18,7 +18,7 @@
 
 require ('../../bootstrap.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -84,7 +84,7 @@ if (!empty ($_POST['field_id'])) {
 	// determine the type of the field
 	require_once ($pommo->_baseDir . '/inc/db_fields.php');
 
-	$demos = dbGetFields($dbo, str2db($_POST['field_id']));
+	$demos = dbGetFields($dbo, $_POST['field_id']);
 	$demo = & $demos[$_POST['field_id']];
 
 	switch ($demo['type']) {

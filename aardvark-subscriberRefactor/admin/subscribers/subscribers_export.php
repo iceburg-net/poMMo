@@ -23,8 +23,8 @@ $dbo = & $pommo->_dbo;
 if (empty($_GET['group_id']) || empty($_GET['table']))
 	Pommo::kill('Export failed - no group_id or table supplied.');
 	
-$group_id = str2db($_GET['group_id']);
-$table = str2db($_GET['table']);
+$group_id = $_GET['group_id'];
+$table = $_GET['table'];
 
 
 $fields = & dbGetFields($dbo);

@@ -39,7 +39,7 @@ if (isset($_GET['input'])) {
 if (!isEmail($input['email']))
 	Pommo::redirect('login.php');
 
-$sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE email='" . str2db($input['email']) . "'";
+$sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE email='" . $input['email'] . "'";
 $dbo->query($sql);
 $row = & mysql_fetch_assoc($dbo->_result);
 

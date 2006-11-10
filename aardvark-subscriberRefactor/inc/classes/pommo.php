@@ -242,8 +242,6 @@ class Pommo {
 	
 	function redirect($url, $msg = NULL, $kill = true) {
 	global $pommo;
-	
-		var_dump($url);
 		// adds http & baseURL if they aren't already provided... allows code shortcuts ;)
 		//  if url DOES NOT start with '/', the section will automatically be appended
 		
@@ -262,7 +260,6 @@ class Pommo {
 				$url = $pommo->_http . $url;
 			}
 		}
-		die('redir to '.$url);
 		header('Location: ' . $url);
 		if ($kill)
 			if ($msg)

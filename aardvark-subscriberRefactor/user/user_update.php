@@ -47,7 +47,7 @@ function bmPopulate() {
 	global $dbo;
 	global $smarty;
 	
-	$subscribers = & dbGetSubscriber($dbo, str2db($_POST['bm_email']), 'detailed');
+	$subscribers = & dbGetSubscriber($dbo, $_POST['bm_email'], 'detailed');
 	if (empty($subscribers))
 		Pommo::redirect('login.php');
 	$subscriber_id = & key($subscribers); // subscriber's ID

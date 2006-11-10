@@ -64,7 +64,7 @@ if (!validateSubscribeForm()) {
  // TODO.. if confirmation is not needed, don't add to pending first...
 if (empty($_POST['d']))
 	$_POST['d'] = FALSE;
-$confirmation_key = dbPendingAdd($dbo, 'add', str2db($_POST['bm_email']), $_POST['d']);
+$confirmation_key = dbPendingAdd($dbo, 'add', $_POST['bm_email'], $_POST['d']);
 if (empty ($confirmation_key))
 	Pommo::kill('dbPendingAdd(): Confirmation key not returned.');
 

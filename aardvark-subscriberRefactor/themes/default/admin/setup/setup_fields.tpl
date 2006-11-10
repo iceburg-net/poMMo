@@ -27,6 +27,14 @@
     {/foreach}
     </div>
  {/if}
+ {if $errors}
+ 		<br>
+    	<div class="errdisplay">
+    	{foreach from=$errors item=msg}
+    	<div>* {$msg}</div>
+    	{/foreach}
+    	</div>
+ 	{/if}
  
  <form action="" method="POST">
 	<div class="field">

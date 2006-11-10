@@ -22,7 +22,7 @@ require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
 require_once ($pommo->_baseDir.'/inc/db_fields.php');
 require_once ($pommo->_baseDir.'/inc/lib.txt.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
