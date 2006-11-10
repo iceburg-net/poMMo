@@ -53,7 +53,7 @@
 			{elseif $demo.type == 'multiple'}
 				<select name="d[{$key}]" id="d[{$key}]">
 						<option value="">{t}Choose Selection{/t}</option>
-					{foreach from=$demo.options item=option}
+					{foreach from=$demo.array item=option}
    						<option {if $d.$key == $option}SELECTED{elseif !isset($d.$key) && $demo.normally == $option}SELECTED{/if}>{$option}</option>
    					{/foreach}
    				</select>
