@@ -111,10 +111,9 @@ class Pommo {
 	 *	valid args [ passed as Pommo::init(array('arg' => val, 'arg2' => val)) ] ->
 	 *		authLevel	:	check that authenticated permission level is at least authLevel (non authenticated == 0). die if not high enough. [default: 1]
 	 *		keep		:	keep data stored in session. [default: false]
-	 *		session	:	explicity set session name. [default: null]
-	 * 	install		:	bypass loading of config/version checking [default: false]
-	 * 	reloadConf:	reload session stored configuration variables from DATABASE [default: false, load from session]
-	*/
+	 *		session		:	explicity set session name. [default: null]
+	 * 		install		:	bypass loading of config/version checking [default: false]
+     */
 
 	function init($args = array ()) {
 
@@ -122,8 +121,7 @@ class Pommo {
 			'authLevel' => 1,
 			'keep' => FALSE,
 			'noInit' => FALSE,
-			'sessionID' => NULL,
-			'reloadConf' => FALSE
+			'sessionID' => NULL
 		);
 	
 		// merge submitted parameters
@@ -169,7 +167,7 @@ class Pommo {
 		));
 
 		// read configuration data
-		$this->_config = PommoAPI :: configGetBase($p['reloadConf']);
+		$this->_config = PommoAPI :: configGetBase();
 
 		// clear _data unless 'keep' is true. Create SESSION reference.
 		if (!$p['keep']) {
@@ -245,6 +243,7 @@ class Pommo {
 	function redirect($url, $msg = NULL, $kill = true) {
 	global $pommo;
 	
+		var_dump($url);
 		// adds http & baseURL if they aren't already provided... allows code shortcuts ;)
 		//  if url DOES NOT start with '/', the section will automatically be appended
 		
@@ -257,12 +256,13 @@ class Pommo {
 						$url = $pommo->_http . $pommo->_baseUrl . $pommo->_section . '/' . $url;
 					}
 				} else {
-					$url = $pommo->_http . $pommo->_baseUrl . substr($url,1); 
+					$url = $pommo->_http . $pommo->_baseUrl . str_replace($pommo->_baseUrl,'',$url); 
 				}
 			} else {
 				$url = $pommo->_http . $url;
 			}
 		}
+		die('redir to '.$url);
 		header('Location: ' . $url);
 		if ($kill)
 			if ($msg)
