@@ -20,7 +20,7 @@ class PommoAPI {
 
 		// make sure all submitted parameters are "known" by verifying size of final array
 		if (count($p) > count($defaults)) {
-			$this->kill('Unknown argument passed to PommoAPI::getParams()', TRUE);
+			Pommo::kill('Unknown argument passed to PommoAPI::getParams()', TRUE);
 		}
 
 		return $p;

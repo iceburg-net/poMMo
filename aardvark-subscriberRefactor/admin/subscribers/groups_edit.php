@@ -21,7 +21,7 @@ require_once ($pommo->_baseDir . '/inc/db_groups.php');
 require_once ($pommo->_baseDir . '/inc/db_fields.php');
 require_once ($pommo->_baseDir . '/inc/lib.txt.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -35,7 +35,7 @@ $smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
 // validate group_id before setting it as var
 if (isset ($_REQUEST['group_id']) && dbGroupCheck($dbo, $_REQUEST['group_id']))
-	$group_id = str2db($_REQUEST['group_id']);
+	$group_id = $_REQUEST['group_id'];
 else {
 	Pommo::redirect('subscribers_groups.php');
 }
@@ -43,13 +43,13 @@ else {
 // delete criteria if requested
 if (!empty ($_GET['delete'])) {
 	if (is_numeric($_GET['filter_id']))
-		if (dbGroupFilterDel($dbo, str2db($_GET['filter_id'])))
+		if (dbGroupFilterDel($dbo, $_GET['filter_id']))
 			$logger->addMsg(Pommo::_T('Filter Removed'));
 }
 
 // change group name  if requested
 if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
-	dbGroupUpdateName($dbo, $group_id, str2db($_POST['group_name']));
+	dbGroupUpdateName($dbo, $group_id, $_POST['group_name']);
 
 // get groups, fields
 $groups = & dbGetGroups($dbo);

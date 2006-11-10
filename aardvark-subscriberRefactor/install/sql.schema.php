@@ -141,6 +141,8 @@ CREATE TABLE :::subscribers_pending::: (
   `newEmail` varchar(60) NULL default NULL,
   `date` date NOT NULL default '0000-00-00',
   `registered` date NOT NULL default '0000-00-00',
+  `flagged` enum('update') default NULL,
+  `ip` varchar(60) default NULL,
   PRIMARY KEY  (`id`),
   KEY `code` (`code`),
   KEY `type` (`type`),
@@ -155,6 +157,7 @@ CREATE TABLE :::subscribers_active::: (
   `date` date NOT NULL default '0000-00-00',
   `registered` date NOT NULL default '0000-00-00',
   `flagged` enum('update') default NULL,
+  `ip` varchar(60) default NULL,
   PRIMARY KEY  (`id`),
   KEY `email` (`email`(30)),
   KEY `flagged` (`flagged`)
@@ -167,6 +170,8 @@ CREATE TABLE :::subscribers_inactive::: (
   `email` varchar(60) NOT NULL default '',
   `date` date NOT NULL default '0000-00-00',
   `registered` date NOT NULL default '0000-00-00',
+  `flagged` enum('update') default NULL,
+  `ip` varchar(60) default NULL,
   PRIMARY KEY  (`id`),
   KEY `email` (`email`(30))
 );

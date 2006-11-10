@@ -14,12 +14,10 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require('../../bootstrap.php');
-require_once ($pommo->_baseDir.'/inc/db_procedures.php');
+Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/configuration.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -33,14 +31,15 @@ $smarty->prepareForForm();
 $smarty->assign('returnStr',Pommo::_T('Configure'));
 
 
+$messages = array();
+
 // Check if user requested to restore defaults
-// TODO: better optimize this.. a lot of DB querying is going on... check w/ debug on!
 if (isset($_POST['restore'])) {
 	switch (key($_POST['restore'])) {
-		case 'subscribe' : dbResetMessageDefaults('subscribe'); break;
-		case 'unsubscribe' : dbResetMessageDefaults('unsubscribe'); break;
-		case 'password' : dbResetMessageDefaults('password'); break;
-		case 'update' : dbResetMessageDefaults('update'); break;
+		case 'subscribe' : $messages = PommoHelperConfig::messageResetDefault('subscribe'); break;
+		case 'unsubscribe' : $messages = PommoHelperConfig::messageResetDefault('unsubscribe'); break;
+		case 'password' : $messages = PommoHelperConfig::messageResetDefault('password'); break;
+		case 'update' : $messages = PommoHelperConfig::messageResetDefault('update'); break;
 	}
 	// reset _POST.
 	$_POST = array(); 
@@ -79,12 +78,14 @@ if (!SmartyValidate::is_registered_form() || empty($_POST)) {
 	$smarty->assign('formError',$formError);
 	
 	// populate _POST with info from database (fills in form values...)
-	$dbvalues = PommoAPI::configGet(array('messages'));
-	
-	if (empty($dbvalues['messages'])) 
-		$messages = dbResetMessageDefaults(); 
-	else
-		$messages = unserialize($dbvalues['messages']);
+	if (empty($messages)) {
+		$dbvalues = PommoAPI::configGet(array('messages'));
+		
+		if (empty($dbvalues['messages'])) 
+			$messages = PommoHelperConfig::messageResetDefault('all'); 
+		else
+			$messages = unserialize($dbvalues['messages']);
+	}
 
 	if (isset($messages['subscribe'])) {
 		$_POST['Subscribe_msg'] = $messages['subscribe']['msg'];
@@ -137,7 +138,7 @@ else {
 		$messages['update']['suc'] = $_POST['Update_suc']; 
 		
 		$input = array('messages' => serialize($messages));
-		dbUpdateConfig($dbo, $input, TRUE);
+		PommoAPI::configUpdate( $input, TRUE);
 		
 		$logger->addMsg(Pommo::_T('Settings updated.'));
 	} 

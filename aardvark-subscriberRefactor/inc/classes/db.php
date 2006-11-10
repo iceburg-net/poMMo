@@ -203,7 +203,6 @@ class PommoDB {
 
 			if ($this->_dieOnQuery)
 				die('MySQL Query Failed.');
-
 			else
 				return false;
 		}

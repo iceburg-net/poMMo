@@ -26,7 +26,7 @@ require_once ($pommo->_baseDir.'/inc/db_sqlgen.php');
 require_once ($pommo->_baseDir.'/inc/db_fields.php');
 require_once ($pommo->_baseDir.'/inc/class.pager.php');
 
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -44,11 +44,11 @@ $dbo = & $pommo->_dbo;
 
 $fields = dbGetFields($dbo);
 $groups = dbGetGroups($dbo);
-$table = (empty ($_REQUEST['table'])) ? 'subscribers' : str2db($_REQUEST['table']);
-$group_id = (empty ($_REQUEST['group_id'])) ? 'all' : str2db($_REQUEST['group_id']);
-$limit = (empty ($_REQUEST['limit'])) ? '50' : str2db($_REQUEST['limit']);
-$order = (empty ($_REQUEST['order'])) ? 'email' : str2db($_REQUEST['order']);
-$orderType = (empty ($_REQUEST['orderType'])) ? 'ASC' : str2db($_REQUEST['orderType']);
+$table = (empty ($_REQUEST['table'])) ? 'subscribers' : $_REQUEST['table'];
+$group_id = (empty ($_REQUEST['group_id'])) ? 'all' : $_REQUEST['group_id'];
+$limit = (empty ($_REQUEST['limit'])) ? '50' : $_REQUEST['limit'];
+$order = (empty ($_REQUEST['order'])) ? 'email' : $_REQUEST['order'];
+$orderType = (empty ($_REQUEST['orderType'])) ? 'ASC' : $_REQUEST['orderType'];
 $appendUrl = '&table='.$table.'&limit='.$limit."&order=".$order."&orderType=".$orderType."&group_id=".$group_id;
 
 // Get a count -- TODO implement group object so this could be made into a 'list',

@@ -14,11 +14,8 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require('../../bootstrap.php');
-
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 

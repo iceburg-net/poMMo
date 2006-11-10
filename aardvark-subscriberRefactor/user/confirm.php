@@ -39,7 +39,7 @@ if (empty ($_GET['code'])) {
 }
 
 // lookup code
-$sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE code='" . str2db($_GET['code']) . "'";
+$sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE code='" . $_GET['code'] . "'";
 $row = $row = mysql_fetch_assoc($dbo->query($sql));
 
 if (empty ($row)) {

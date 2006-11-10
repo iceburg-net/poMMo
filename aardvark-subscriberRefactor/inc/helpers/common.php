@@ -62,8 +62,20 @@ class PommoHelper {
 		}
 		return $a;
 	}
+	
+	// check an email. Function lifted from Monte's SmartyValidate class for consistency.
+	// accepts an email address (str)
+	// returns email legitimacy (bool)
+	function isEmail($_address) {
+		$_is_valid = !(preg_match('!@.*@|\.\.|\,|\;!', $_address) ||
+	        !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address));
+        if(!$_is_valid)
+            return false;
+        return true;
+	}
+	
 
-	// OLD....
+	// TODO: The following are; OLD.... DEPRICATED ... REMOVE!
 	
 	
 	/**********************
@@ -76,7 +88,7 @@ class PommoHelper {
 	}
 
 	//str2db: Formats input for database insertion. Used on POST/GET data before being inserted to DB.
-	function str2db(& $string) {
+	function & str2db($string) {
 		//if (get_magic_quotes_gpc())
 		//	return decode_htmlchars($string);
 		return decode_htmlchars(mysql_real_escape_string($string));
@@ -115,9 +127,9 @@ class PommoHelper {
 				return $entryArray;
 			case 'str' :
 				if (!is_array($entryArray))
-					return str2db($entryArray);
+					return $entryArray;
 				foreach (array_keys($entryArray) as $key)
-					$entryArray[$key] = str2db($entryArray[$key]);
+					$entryArray[$key] = $entryArray[$key];
 				return $entryArray;
 		}
 		die('Unknown type sent to dbSanitize');

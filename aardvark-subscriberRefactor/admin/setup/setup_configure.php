@@ -1,6 +1,4 @@
 <?php
-
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -16,12 +14,8 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_procedures.php');
-
-$pommo = & fireup('secure');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -33,7 +27,6 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 // ADD CUSTOM VALIDATOR FOR CHARSET
-
 function check_charset($value, $empty, & $params, & $formvars) {
 	$validCharsets = array (
 		'UTF-8',
@@ -122,9 +115,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		$oldDemo = $pommo->_config['demo_mode'];
 
-		dbUpdateConfig($dbo, $_POST);
+		PommoAPI::configUpdate($_POST);
 
-		$pommo->loadConfig('TRUE');
+		$pommo->reloadConfig();
 
 		$logger->addMsg(Pommo::_T('Configuration Updated.'));
 
