@@ -7,7 +7,7 @@
 {if $confirm.title}
 	<h1>{$confirm.title}</h1>
 {else}
-	<h1>{t}Confirm{/t}</h1>
+	<h1>{t}Confirm Action{/t}</h1>
 {/if}
 
 <br>
@@ -19,19 +19,19 @@
 		
 	<tr>
 		<td nowrap>
-			<img src="{$url.theme.shared}images/icons/alert.png" align="middle">{t}Confirm your action.{/t}
+			<img src="{$url.theme.shared}images/icons/alert.png" align="middle">{t}Are you sure?{/t}
 		</td>
 		<td>
 			<p>	
 				<a href="{$confirm.yesurl}">
 				<img src="{$url.theme.shared}images/icons/ok.png" class="navimage">
-				{t}Yes{/t}</a> {t}I confirm.{/t}
+				{t}Yes{/t}</a> {t}Continue{/t}
 			</p>
 
 			<p>
 				<a href="{$confirm.nourl}">
 				<img src="{$url.theme.shared}images/icons/undo.png" class="navimage" align="middle">
-				{t}No{/t}</a> {t}Please Return.{/t}
+				{t}No{/t}</a> {t}Go back{/t}
 			</p>
 		  </td>
 		</tr>
