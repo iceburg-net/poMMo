@@ -30,6 +30,12 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
+// Check to make sure poMMo is not already installed.
+if ($pommo->_config['revision'] < 26) {
+	$logger->addErr('Upgrade path unavailable. Cannot upgrade from Aardvark PR13.2 or below!');
+	$smarty->display('upgrade.tpl');
+	Pommo::kill();
+}
 
 // Check to make sure poMMo is not already installed.
 if ($pommo->_config['revision'] == $pommo->_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {
