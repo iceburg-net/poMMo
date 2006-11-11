@@ -50,31 +50,41 @@ class PommoType {
 	 * ==SQL Schema==
 	 *	id				(int)			Database ID/Key
 	 *	email			(str)			Email Address
-	 *	date			(date)			Date last modified (records changed)
-	 *	registered		(date)			Date registered (signed up)
+	 *	time_touched	(date)			Date last modified (records changed)
+	 *	time_registered	(date)			Date registered (signed up)
+	 *	flag			(enum)			('update',NULL) Subscribers flag (def: null)
 	 *	ip				(str)			IP (tcp/ip) used to register
-	 *	flagged			('update','')	Flagged status
+	 *	status			(enum)			'active','inactive','pending' (def: pending)
 	 *
 	 * == Additional columns for Pending ==
-	 *	code			(str)			Default value of field on subscriber form
-	 *	newEmail		(str)			A serialized array of  the field such as the options of multiple choice fields (drop down select)
-	 *	type			(enum)			'add','del','change','password'
+	 *	pending_id		(int)			Database ID/Key
+	 *	subscriber_id	(int)			Subscriber ID in subscribers table
+	 *	pending_code	(str)			Code to complete pending request
+	 *	pending_type	(enum)			'add','del','change','password',NULL (def: null)
+	 *	pending_email	(str)			Pending email change (optional)
+	 *
+	 * == Additional Data Columns ==
+	 *	data_id			(int)			Database ID/Key
+	 *	field_id		(int)			Field ID in fields table
+	 *	subscriber_id	(int)			Subscriber ID in subscribers table
+	 *	value			(str)			Subscriber's field value
 	 */
 	
 	function & subscriber() {
 		return array(
 			'id' => null,
 			'email' => null,
-			'date' => null,
+			'touched' => null,
 			'registered' => null,
+			'flag' => null,
 			'ip' => null,
-			'flagged' => null,
+			'status' => null,
 			'data' => array()
 		);
 	}
 	function & subscriberPending() {
 		$o = PommoType::subscriber();
-		$o['code'] = $o['newEmail'] = $o['type'] = null;
+		$o['pending_code'] = $o['pending_email'] = $o['pending_type'] = null;
 		return $o;
 	}
 }
