@@ -75,35 +75,24 @@ CREATE TABLE :::groups_criteria::: (
   KEY `group_id` (`group_id`)
 );
 
+
 -- MAILING_CURRENT
 
 CREATE TABLE :::mailing_current::: (
-  `id` enum('1') NOT NULL default '1',
-  `fromname` varchar(60) NOT NULL default '',
-  `fromemail` varchar(60) NOT NULL default '',
-  `frombounce` varchar(60) NOT NULL default '',
-  `subject` varchar(60) NOT NULL default '',
-  `body` mediumtext NOT NULL,
-  `altbody` mediumtext default NULL,
-  `ishtml` enum('on','off') NOT NULL default 'off',
-  `mailgroup` varchar(60) NOT NULL default 'Unknown',
-  `subscriberCount` int(10) unsigned NOT NULL default '0',
-  `started` datetime default NULL,
-  `finished` datetime default NULL,
-  `sent` int(10) unsigned NOT NULL default '0',
-  `status` enum('started','stopped') NOT NULL default 'stopped',
+  `current_id` int(10) unsigned NOT NULL,
   `command` enum('none','restart','stop') NOT NULL default 'none',
   `serial` varchar(20) default NULL,
   `securityCode` varchar(35) default NULL,
   `notices` longtext default NULL,
-  `charset` varchar(15) NOT NULL default 'UTF-8',
-  PRIMARY KEY  (`id`)
+  `current_status` enum('started','stopped') NOT NULL default 'stopped',
+  PRIMARY KEY  (`current_id`)
 );
 
--- MAILING_HISTORY
 
-CREATE TABLE :::mailing_history::: (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
+-- MAILINGS
+
+CREATE TABLE :::mailings::: (
+  `mailing_id` int(10) unsigned NOT NULL auto_increment,
   `fromname` varchar(60) NOT NULL default '',
   `fromemail` varchar(60) NOT NULL default '',
   `frombounce` varchar(60) NOT NULL default '',
@@ -117,7 +106,7 @@ CREATE TABLE :::mailing_history::: (
   `finished` datetime NOT NULL,
   `sent` int(10) unsigned NOT NULL default '0',
   `charset` varchar(15) NOT NULL default 'UTF-8',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`mailing_id`)
 );
 
 
@@ -131,65 +120,9 @@ CREATE TABLE :::queue::: (
 );
 
 
--- SUBSCRIBERS_PENDING
+-- SUBSCRIBER_DATA
 
-CREATE TABLE :::subscribers_pending::: (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(35) NOT NULL default '',
-  `type` enum('add','del','change','password') default NULL,
-  `email` varchar(60) NOT NULL default '',
-  `newEmail` varchar(60) NULL default NULL,
-  `date` date NOT NULL default '0000-00-00',
-  `registered` date NOT NULL default '0000-00-00',
-  `flagged` enum('update') default NULL,
-  `ip` varchar(60) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `code` (`code`),
-  KEY `type` (`type`),
-  KEY `email` (`email`(30))
-);
-
---  SUBSCRIBERS_ACTIVE
-
-CREATE TABLE :::subscribers_active::: (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `email` varchar(60) NOT NULL default '',
-  `date` date NOT NULL default '0000-00-00',
-  `registered` date NOT NULL default '0000-00-00',
-  `flagged` enum('update') default NULL,
-  `ip` varchar(60) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `email` (`email`(30)),
-  KEY `flagged` (`flagged`)
-);
-
---  SUBSCRIBERS_INACTIVE
-
-CREATE TABLE :::subscribers_inactive::: (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `email` varchar(60) NOT NULL default '',
-  `date` date NOT NULL default '0000-00-00',
-  `registered` date NOT NULL default '0000-00-00',
-  `flagged` enum('update') default NULL,
-  `ip` varchar(60) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `email` (`email`(30))
-);
-
--- DATA_PENDING
-
-CREATE TABLE :::data_pending::: (
-  `data_id` bigint(20) unsigned NOT NULL auto_increment,
-  `field_id` int(10) unsigned NOT NULL default '0',
-  `subscriber_id` int(10) unsigned NOT NULL default '0',
-  `value` tinytext,
-  PRIMARY KEY  (`data_id`),
-  KEY `field_id` (`field_id`,`subscriber_id`)
-);
-
--- DATA_ACTIVE
-
-CREATE TABLE :::data_active::: (
+CREATE TABLE :::subscriber_data::: (
   `data_id` bigint(20) unsigned NOT NULL auto_increment,
   `field_id` int(10) unsigned NOT NULL default '0',
   `subscriber_id` int(10) unsigned NOT NULL default '0',
@@ -201,15 +134,35 @@ CREATE TABLE :::data_active::: (
   KEY `subscriber_id_2` (`subscriber_id`,`value`)
 );
 
--- DATA_INACTIVE
 
-CREATE TABLE :::data_inactive::: (
-  `data_id` bigint(20) unsigned NOT NULL auto_increment,
-  `field_id` int(10) unsigned NOT NULL default '0',
+-- SUBSCRIBER_PENDING
+
+CREATE TABLE :::subscriber_pending::: (
+  `pending_id` int(10) unsigned NOT NULL auto_increment,
   `subscriber_id` int(10) unsigned NOT NULL default '0',
-  `value` tinytext,
-  PRIMARY KEY  (`data_id`),
-  KEY `field_id` (`field_id`,`subscriber_id`)
+  `pending_code` varchar(35) NOT NULL default '',
+  `pending_type` enum('add','del','change','password') default NULL,
+  `pending_email` varchar(60) NULL default NULL,
+  PRIMARY KEY  (`pending_id`),
+  KEY `code` (`pending_code`),
+  KEY `type` (`pending_type`)
+);
+
+
+--  SUBSCRIBERS
+
+CREATE TABLE :::subscribers::: (
+  `subscriber_id` int(10) unsigned NOT NULL auto_increment,
+  `email` varchar(60) NOT NULL default '',
+  `time_touched` datetime NOT NULL,
+  `time_registered` datetime NOT NULL,
+  `flag` enum('update') default NULL,
+  `ip` varchar(60) default NULL,
+  `status` enum('active','inactive','pending') NOT NULL default 'pending',
+  PRIMARY KEY  (`subscriber_id`),
+  KEY `email` (`email`(30)),
+  KEY `flag` (`flag`),
+  KEY `status` (`status`)
 );
 
 
