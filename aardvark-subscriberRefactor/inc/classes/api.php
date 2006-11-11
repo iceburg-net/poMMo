@@ -20,6 +20,9 @@ class PommoAPI {
 
 		// make sure all submitted parameters are "known" by verifying size of final array
 		if (count($p) > count($defaults)) {
+			global $pommo;
+			if ($pommo->_verbosity < 3)
+				var_dump($defaults,$args);
 			Pommo::kill('Unknown argument passed to PommoAPI::getParams()', TRUE);
 		}
 

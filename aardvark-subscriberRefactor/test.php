@@ -14,17 +14,15 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-require('../../bootstrap.php');
-$pommo->init();
+require ('bootstrap.php');
+$pommo->init(array('authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-/**********************************
-	SETUP TEMPLATE, PAGE
- *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-	
-$smarty->display('admin/subscribers/admin_subscribers.tpl');
-Pommo::kill();
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+
+$x = PommoSubscriber::getAlt();
+
+//var_dump($x);
+
 ?>

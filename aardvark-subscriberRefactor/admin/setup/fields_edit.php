@@ -16,6 +16,7 @@
 *********************************/
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;

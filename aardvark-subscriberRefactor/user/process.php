@@ -14,14 +14,11 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
-require_once ($pommo->_baseDir . '/inc/db_fields.php');
-require($pommo->_baseDir.'/inc/lib.validate_subscriber.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
-$pommo = & fireup();
+$pommo->init(array('authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -41,6 +38,67 @@ $input = urlencode(serialize($_POST));
 
 if (empty ($_POST['pommo_signup']))
 	Pommo::redirect('login.php');
+
+$subscriber = array(
+	
+)
+if (!PommoHelper::isEmail($_POST['bm_email']))
+
+
+
+// ** check for correct email syntax
+	if (!isEmail($_POST['bm_email']))
+		$logger->addErr(_T('Invalid Email Address'));
+		
+	// ** check if confirmation email matches. (if exists)
+	if (isset($_POST['updateForm']) && $_POST['email2'] != $_POST['bm_email'])
+		$logger->addErr(_T('Emails must match.'));
+
+	// ** check if email already exists in DB ("duplicates are bad..")
+	if ($dupeCheck) {
+		if (isDupeEmail($dbo, $_POST['bm_email'])) {
+			$logger->addErr('Email address already exists. Duplicates are not allowed');
+			global $smarty;
+			if (is_object($smarty))
+				$smarty->assign('dupe', TRUE);
+		}
+	}
+
+	// ** validate user submitted fields
+	$fields = & dbGetFields($dbo, 'active');
+	$subscriber_data = array ();
+	
+	if (!empty($fields)) {
+	foreach (array_keys($fields) as $field_id) {
+		$field = & $fields[$field_id];
+
+		// check to make sure a required field is not empty
+		if (empty ($_POST['d'][$field_id]) && $field['required'] == 'on') {
+			$logger->addErr($field['prompt'] . ' ' . _T('was a required field.'));
+			continue;
+		}
+
+		// create field array
+		if (!empty ($_POST['d'][$field_id])) {
+			// TODO : insert validation schemes here (ie. check options, #, date)
+			switch ($field['type']) {
+				case 'checkbox' :
+					if ($_POST['d'][$field_id] == 'on') // don't add to subscriber_data if value is not checked..
+						$subscriber_data[$field_id] = str2db($_POST['d'][$field_id]);
+					break;
+				default :
+					$subscriber_data[$field_id] = str2db($_POST['d'][$field_id]);
+					break;
+			}
+
+		}
+	}
+	}
+	if ($logger->isErr())
+		return false;
+	return true;
+
+
 
 // check if errors exist, if so print results and die.
 if (!validateSubscribeForm()) {
@@ -106,4 +164,16 @@ if (!$logger->isErr() && $redirectURL) {
 
 $smarty->display('user/process.tpl');
 Pommo::kill();
+
+
+
+// returns true if valid.. false if not. Adds errors/messages to logger.
+function validateSubscribeForm($dupeCheck = TRUE) {
+	global $logger;
+	global $dbo;
+	require_once (bm_baseDir . '/inc/lib.txt.php');
+
+	
+}
+
 ?>

@@ -17,37 +17,6 @@
 /**********************
  * BRICE'S DATABSE CLASS 
  **********************/
- 
- /*
-  * PREPARATION NOTES using $this->prepare ||  $dbo->prepare() : (from Monte Ohrt's safeSQL class)
-  * // dummy up values
-    $sec_name = "Fred's place";
-    $section_ids = array("a","b","c's and d's");
-    $location = "Lincoln's best";
-    
-    $query_string = <<< EOQ
-
-        select *
-        from   sections
-        where  SectionName  =  '%s'
-        and    id           in (%q)
-        and    timestamp    >=  %i
-      [ and    Location     =  '%S' ]
-
-    EOQ;
-        
-    $safe_q = $dbo->prepare(
-                $query_string,
-                    array(
-                        $sec_name,
-                        $section_ids,
-                        time(),
-                        $location
-                    )
-                );
-        
-    // $safe_q is now safe to use!
-  */
 
 // Database Connection Class - holds the link, processes queiries, produces repots, etc.
 class PommoDB {
@@ -71,27 +40,16 @@ class PommoDB {
 		$this->_database = $database;
 		$this->table = array (
 			'config' => $tablePrefix . 'config',
+			'fields' => $tablePrefix . 'fields',
 			'groups' => $tablePrefix . 'groups',
 			'groups_criteria' => $tablePrefix . 'groups_criteria',
 			'mailing_current' => $tablePrefix . 'mailing_current',
-			'mailing_history' => $tablePrefix . 'mailing_history',
+			'mailings' => $tablePrefix . 'mailings',
+			'subscriber_data' => $tablePrefix . 'subscriber_data',
+			'subscriber_pending' => $tablePrefix . 'subscriber_pending',
+			'subscribers' => $tablePrefix . 'subscribers',
 			'queue' => $tablePrefix . 'queue',
-			'queue_working' => $tablePrefix . 'queue_working',
-			'pending' => $tablePrefix . 'pending', // PHASE OUT (from < PR13.2)
-			'pending_data' => $tablePrefix . 'pending_data', // PHASE OUT (from < PR13.2)
-			'subscriber_fields' => $tablePrefix . 'subscriber_fields', // PHASE OUT (from < PR13.2)
-			'subscribers' => $tablePrefix . 'subscribers', // PHASE OUT (from < PR13.2)
-			'subscribers_data' => $tablePrefix . 'subscribers_data', // PHASE OUT (from < PR13.2)
-			'subscribers_flagged' => $tablePrefix . 'subscribers_flagged', // PHASE OUT (from < PR13.2)
-			'updates' => $tablePrefix . 'updates',
-			'fields' => $tablePrefix . 'fields',
-			'subscribers_active' => $tablePrefix . 'subscribers_active',
-			'subscribers_inactive' => $tablePrefix . 'subscribers_inactive',
-			'subscribers_pending' => $tablePrefix . 'subscribers_pending',
-			'data_active' => $tablePrefix . 'data_active',
-			'data_inactive' => $tablePrefix . 'data_inactive',
-			'data_pending' => $tablePrefix . 'data_pending',
-		);		
+			'updates' => $tablePrefix . 'updates');		
 
 		$this->_dieOnQuery = TRUE;
 		$this->_debug = FALSE;
