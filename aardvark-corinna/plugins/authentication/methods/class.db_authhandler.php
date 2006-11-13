@@ -31,6 +31,9 @@ class AuthHandler implements iDbHandler {
 		unset($this->dbo);
 	}
 
+	public function & dbPluginIsActive($pluginame) {
+		
+	}
 
 	public function dbVerifyUser($user, $md5pass) {
 		//TODO Das kommt dann weg Das an in db handler!

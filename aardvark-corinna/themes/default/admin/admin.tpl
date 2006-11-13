@@ -30,16 +30,16 @@
 			{t}Send mailings to the entire list or to a subset of subscribers. Mailing status and history can also be viewed from here.{/t}
 		</p><br>
  
-{* <corinna> Display this only if its activated in config.php *}
+	{* Display this only if plugins are activated in config.php *}
 	{if $showplugin}
 		<p>
 			<a href="{$url.base}/plugins/adminplugins/adminplugins.php">
 			<img src="" class="navimage" width="64" height="64" /> <!--src="{$url.theme.shared}/images/icons/subscribersa.png"-->
 			{t}Setup Plugins{/t}</a> - 
-			{t}Set up all the Plugins: Authentication methods, Useradministration, and maybe more...{/t}
+			{t}Set up all the Plugins: Authentication methods, User Administration, and more...{/t}
 		</p><br>
 	{/if}
-{* </corinna> *}
+	{* End additional plugin functionality *}
  
 <br><br>
 	

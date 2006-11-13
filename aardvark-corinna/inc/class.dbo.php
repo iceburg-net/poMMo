@@ -115,6 +115,8 @@ class dbo {
 		$this->table['subscribers_flagged'] = $tablePrefix.'subscribers_flagged';
 		$this->table['updates'] = $tablePrefix.'updates';
 
+		//TODO add plugin tables
+
 		$this->_dieOnQuery = TRUE;
 		$this->_debug = FALSE;
 		

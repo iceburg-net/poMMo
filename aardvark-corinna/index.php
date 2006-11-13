@@ -43,12 +43,12 @@ elseif ($poMMo->isAuthenticated()) {
 elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {
 
 
-	//<corinna>
+	//<corinna> TODO
 
-	if ( !empty ($_POST['username']) && !empty ($_POST['password']) ) {
+	if ( !empty ($_REQUEST['username']) && !empty ($_REQUEST['password']) ) {
 
 
-// Get this from a DB or so...
+//TODO Get this from a DB !!!!
 $authwithplugin = TRUE;
 
 
@@ -59,19 +59,22 @@ $authwithplugin = TRUE;
 								'admin_username',
 								'admin_password'
 							));
-							if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+							if ($_REQUEST['username'] == $auth['admin_username'] && md5($_REQUEST['password']) == $auth['admin_password']) {
 								// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 								bmMaintenance();
 								$poMMo->setAuthenticated(TRUE);
-								bmRedirect(bm_http . $_POST['referer']);
+								
+								// Add username & encrypted password information to session: Use: Authenticate user and his permissions
+								$_SESSION['pommo']['user'] = $_REQUEST['username'];	//corinna
+								$_SESSION['pommo']['md5pass'] = md5($_REQUEST['password']);	//corinna
+													
+								bmRedirect(bm_http . $_REQUEST['referer']);
 								
 							} elseif ($authwithplugin) {
 							
 								// Try to authenticate as user	
 							
 										
-								
-								
 										include_once(bm_baseDir.'/plugins/authentication/class.authfactory.php');
 										include_once(bm_baseDir.'/plugins/authentication/class.auth.php');
 						
@@ -85,12 +88,17 @@ $authwithplugin = TRUE;
 											//echo "<h3>Authentication Method: {$authfactory->getAuthMethod()}</h3>";
 											
 												//TODO $_REQUEST  md5
-												if ( $authobj->authenticate($_POST['username'], $_POST['password']) == TRUE ) {
+												if ( $authobj->authenticate($_REQUEST['username'], $_REQUEST['password']) == TRUE ) {
 													// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 													bmMaintenance();
 																	
 													$poMMo->setAuthenticated(TRUE);
-													bmRedirect(bm_http . $_POST['referer']);
+													
+													// Add username information to session: Use: Authenticate user and his permissions
+													$_SESSION['pommo']['user'] = $_REQUEST['username'];	//corinna
+													$_SESSION['pommo']['md5pass'] = md5($_REQUEST['password']);	//corinna
+													
+													bmRedirect(bm_http . $_REQUEST['referer']);
 													
 												} else {
 													$logger->addMsg(_T('Failed login attempt. Try again. (User not accepted.)'));
@@ -107,8 +115,6 @@ $authwithplugin = TRUE;
 								$logger->addMsg(_T('Failed login attempt. Try again.'));
 							}
 
-
-					
 
 					
 

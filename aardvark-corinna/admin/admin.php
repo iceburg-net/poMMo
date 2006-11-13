@@ -23,11 +23,14 @@ $logger = & $poMMo->_logger;
 $dbo = & $poMMo->_dbo;
 
 
+//<corinna>
 
 //TODO store user information from $poMMo
-$user = 'corinna';
+//echo "<h3>SESSION:"; print_r($_SESSION); echo "</h3>";
+//echo "<h3>poMMo:"; print_r($poMMo); echo "</h3>";
+$loggeduser = & $poMMo->_loggeduser;
+$user = $loggeduser['user'];
 
-//<corinna>
 // TODO
 // Wenn diese was weiss ich wo defined sind //in $pommo zB
 // array = $pluginregistry->getConfigHTML/SMARTY()
@@ -44,7 +47,7 @@ if (($user != 'admin') AND $useplugins) {	// wenn einer user sich einloggt!
 	
 }
 
-
+//else
 if ($user == 'admin') {	// proceed in the normal way
 
 	/**********************************

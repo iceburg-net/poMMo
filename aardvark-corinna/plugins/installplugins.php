@@ -17,6 +17,13 @@ CREATE TABLE `pommomod_mailing_queue` (
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
 
+CREATE TABLE `pommomod_permgroups` (
+`group_id` SMALLINT NOT NULL ,
+`group_name` VARCHAR( 100 ) NOT NULL ,
+`group_perm` VARCHAR( 200 ) NOT NULL ,
+`group_desc` VARCHAR( 200 ) NOT NULL ,
+PRIMARY KEY ( `group_id` )
+) ENGINE = innodb;
 
 
  */
@@ -100,6 +107,7 @@ define('_IS_VALID', TRUE);
 						`data_desc` MEDIUMTEXT NULL
 					) ENGINE = innodb;";
 					
+			//User table make user unique!
 
 			//Install Tables
 			for ($i = 0; $i < count($sqltab); $i++) {

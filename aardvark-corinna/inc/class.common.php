@@ -39,6 +39,12 @@ class Common {
 		}
 		$this->_authenticated = & $_SESSION['pommo']['authenticated'];
 		
+		//corinna
+		//TODO do a user authentication here!!!!!!! user in DB and witch rights
+		$this->_loggeduser['user'] = & $_SESSION['pommo']['user'];
+		$this->_loggeduser['md5pass'] = & $_SESSION['pommo']['md5pass'];
+		///corinna
+		
 		if (empty($_SESSION['pommo']['data'])) {
 			$_SESSION['pommo']['data'] = array();
 		}

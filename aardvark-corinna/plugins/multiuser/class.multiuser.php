@@ -21,7 +21,7 @@ class MultiUser {
 	
 	public function display() {
 		
-		echo "<h1>BLAH</h1>";
+		echo "<h3>MULTIUSER ok</h3>";
 		$smarty = & bmSmartyInit();
 		
 		
