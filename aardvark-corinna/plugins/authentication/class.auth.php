@@ -13,10 +13,10 @@
  ** [END HEADER]**/
 
 
-include_once(bm_baseDir.'/plugins/pluginregistry/interfaces/interface.module.php');
+//include_once(bm_baseDir.'/plugins/pluginregistry/interfaces/interface.module.php');
 
 
-class Auth implements iModule { 
+class Auth { //implements iModule { 
 
 
 	private $dbo = NULL;				// database handle

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>{t}poMMo Installation{/t}</title>
+	<title>{t}poMMo Login{/t}</title>
 	<link href="{$url.theme.this}/inc/admin.css" type="text/css" rel="STYLESHEET">
 	<link href="{$url.theme.shared}/css/bform.css" type="text/css" rel="STYLESHEET">
 	<script src="{$url.theme.shared}/js/bform.js" type="text/javascript"></script>
