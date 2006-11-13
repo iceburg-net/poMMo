@@ -111,7 +111,7 @@ class PommoTemplate extends Smarty {
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/helpers/fields.php');
 
 		// Get array of fields. Key is ID, value is an array of the demo's info
-		$fields = PommoField::get(TRUE);
+		$fields = PommoField::get(array('active' => TRUE));
 		if (!empty ($fields))
 			$this->assign('fields', $fields);
 

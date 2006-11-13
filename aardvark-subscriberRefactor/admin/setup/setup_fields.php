@@ -48,7 +48,7 @@ if (!empty ($_POST['field_name'])) {
 // check for a deletion request
 if (!empty ($_GET['delete'])) {
 
-	$field = PommoField::getByID($_GET['field_id']);
+	$field = PommoField::get(array('id' => $_GET['field_id']));
 	$field =& current($field);
 	
 	if (count($field) === 0) {

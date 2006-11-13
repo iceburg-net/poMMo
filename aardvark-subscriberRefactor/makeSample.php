@@ -14,6 +14,9 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
+
+set_time_limit(300);
+
 require ('bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
@@ -22,11 +25,22 @@ $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 // quick'n'dirty creation of sample data
-
-$count = 8000;
+$count = 50000; // # of subscribers to insert
 $fieldCount = 6; // @ # of required fields
+$clearTable = false; // clear the subscriber, pending, and data tables first?
+
 $pendingCount = intval($count*4/100); // 4% of subscribers are pending
 $unsubscribeCount = intval($count*10/100); // 10% of subscribers are inactive (unsubscribed)
+
+
+if($clearTable) {
+	$query = "DELETE FROM ".$dbo->table['subscribers'];
+	$dbo->query($query);
+	$query = "DELETE FROM ".$dbo->table['subscriber_data'];
+	$dbo->query($query);
+	$query = "DELETE FROM ".$dbo->table['subscriber_pending'];
+	$dbo->query($query);
+}
 
 for ($i = 0; $i < $count; $i++) {
 
@@ -60,9 +74,12 @@ for ($i = 0; $i < $count; $i++) {
 	$subscriber['data'] = makeData($fieldCount);
 	
 	//var_dump($subscriber);
-	//PommoSubscriber::add($subscriber);
+	if(!PommoSubscriber::add($subscriber)) {
+		$pommo->addErr('error adding subscriber');
+	}
 }
 
+var_dump($pommo->_logger);
 
 
 function makeData($count) {
@@ -122,6 +139,8 @@ function makeTime($time = "" , $time2 = "")
    $t .= $s;
   
    $timestamp .= $t." GMT";
+   
+   $timestamp = strtotime($timestamp);
    return $timestamp;
 }
 
