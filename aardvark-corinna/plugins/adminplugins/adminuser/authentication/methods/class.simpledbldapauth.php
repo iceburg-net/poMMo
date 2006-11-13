@@ -13,13 +13,13 @@
  ** [END HEADER]**/
 
 
-include_once(bm_baseDir.'/plugins/pluginregistry/interfaces/interface.authent.php');
-include_once(bm_baseDir.'/plugins/authentication/class.auth.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/interfaces/interface.authent.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/class.auth.php');
 
 //include_once(bm_baseDir.'/plugins/pluginregistry/inc/class.db_confighandler.php');
-include_once(bm_baseDir.'/plugins/authentication/methods/class.db_authhandler.php');
-include_once(bm_baseDir.'/plugins/authentication/methods/class.simpleldapauth.php');
-include_once(bm_baseDir.'/plugins/authentication/methods/class.dbauth.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.db_authhandler.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.simpleldapauth.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.dbauth.php');
 
 class SimpleDbLdapAuth extends Auth implements iAuthent { 
 

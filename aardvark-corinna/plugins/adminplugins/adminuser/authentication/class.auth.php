@@ -13,7 +13,7 @@
  ** [END HEADER]**/
 
 
-include_once(bm_baseDir.'/plugins/pluginregistry/interfaces/interface.module.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/interfaces/interface.module.php');
 
 
 class Auth implements iModule { 

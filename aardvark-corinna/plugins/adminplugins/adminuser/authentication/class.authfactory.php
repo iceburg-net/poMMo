@@ -12,8 +12,8 @@
  * 
  ** [END HEADER]**/
 
-include_once(bm_baseDir.'/plugins/pluginregistry/interfaces/interface.plugin.php');
-include_once(bm_baseDir.'/plugins/authentication/methods/class.db_authhandler.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/interfaces/interface.plugin.php');
+include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.db_authhandler.php');
 
 
 class AuthFactory implements iPlugin {
@@ -47,7 +47,7 @@ class AuthFactory implements iPlugin {
 
 		switch ($this->authmethod) {
 			case 'simpleldapauth':
-					include_once(bm_baseDir.'/plugins/authentication/methods/class.simpleldapauth.php');
+					include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.simpleldapauth.php');
 					$this->handleMessage("Authenticationmethod: {$this->authmethod}");
 					return new SimpleLdapAuth($this->dbo, $this->logger);
 					break;
@@ -58,13 +58,13 @@ class AuthFactory implements iPlugin {
 					break;
 					
 			case 'dbauth':
-					include_once(bm_baseDir.'/plugins/authentication/methods/class.dbauth.php');
+					include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.dbauth.php');
 					$this->handleMessage("Authenticationmethod: {$this->authmethod}");
 					return new DbAuth($this->dbo, $this->logger);
 					break;
 					
 			case 'simpledbldapauth':
-					include_once(bm_baseDir.'/plugins/authentication/methods/class.simpledbldapauth.php');
+					include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.simpledbldapauth.php');
 					$this->handleMessage("Authenticationmethod: this: {$this->authmethod}");
 					return new SimpleDbLdapAuth($this->dbo, $this->logger);
 					break;
@@ -76,7 +76,7 @@ class AuthFactory implements iPlugin {
 					
 			default:
 					//TODO return a standard authentication object, nor none?
-					include_once(bm_baseDir.'/plugins/authentication/methods/class.dbauth.php');
+					include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/methods/class.dbauth.php');
 					$this->handleMessage("Authenticationmethod: DEFAULT {$this->authmethod}<br> No Authentication Method set.");
 					return new DbAuth($this->dbo, $this->logger);
 					break;
