@@ -145,7 +145,7 @@ CREATE TABLE :::subscriber_pending::: (
   `pending_email` varchar(60) NULL default NULL,
   PRIMARY KEY  (`pending_id`),
   KEY `code` (`pending_code`),
-  KEY `type` (`pending_type`)
+  KEY `subscriber_id` (`subscriber_id`)
 );
 
 
@@ -154,7 +154,7 @@ CREATE TABLE :::subscriber_pending::: (
 CREATE TABLE :::subscribers::: (
   `subscriber_id` int(10) unsigned NOT NULL auto_increment,
   `email` varchar(60) NOT NULL default '',
-  `time_touched` datetime NOT NULL,
+  `time_touched` timestamp(14) NOT NULL,
   `time_registered` datetime NOT NULL,
   `flag` enum('update') default NULL,
   `ip` varchar(60) default NULL,

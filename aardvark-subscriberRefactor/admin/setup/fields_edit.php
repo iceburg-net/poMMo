@@ -30,7 +30,7 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 
-$field = PommoField::getById($_REQUEST['field_id']);
+$field = PommoField::get(array('id' => $_REQUEST['field_id']));
 if (count($field) < 1)
 	Pommo::redirect('setup_fields.php');
 $field =& current($field); // reference the first field returned by PommoField::getById

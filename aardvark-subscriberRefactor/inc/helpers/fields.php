@@ -111,45 +111,27 @@ class PommoField {
 	}
 	
 	// fetches fields from the database
-	// accepts toggle (bool) to designate if only active fields should be returned (TRUE)
+	// accepts a filtering array -->
+	//   active (bool) toggle returning of only active fields
+	//   id (array) -> an array of field IDs
 	// returns an array of fields. Array key(s) correlates to field key.
-	function & get($active = false) {
+	function & get($p = array('active' => false, 'id' => null)) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
-		$active = ($active) ? 'on' : null;
+		$p['active'] = ($p['active']) ? 'on' : null;
 		
 		$o = array();
 		
 		$query = "
 			SELECT *
 			FROM " . $dbo->table['fields']."
-			[WHERE field_active='%S']
+			WHERE
+				1
+				[AND field_active='%S']
+				[AND field_id IN(%C)]
 			ORDER BY field_ordering";
-		$query = $dbo->prepare($query,array($active));
-		
-		while ($row = $dbo->getRows($query)) {
-			$o[$row['field_id']] = PommoField::makeDB($row);
-		}
-		
-		return $o;
-	}
-	
-	// fetches fields from the database based off of their ID
-	// accepts a single ID (int) or array of IDs 
-	// returns an array of fields. Array key(s) correlates to field key.
-	function & getByID($id = array()) {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-		
-		$o = array();
-		
-		$query = "
-			SELECT *
-			FROM " . $dbo->table['fields'] . "
-			WHERE field_id IN(%c)
-			ORDER BY field_ordering";
-		$query = $dbo->prepare($query,array($id));
+		$query = $dbo->prepare($query,array($p['active'],$p['id']));
 		
 		while ($row = $dbo->getRows($query)) {
 			$o[$row['field_id']] = PommoField::makeDB($row);
