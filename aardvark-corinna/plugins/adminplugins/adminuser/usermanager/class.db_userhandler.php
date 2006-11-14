@@ -18,7 +18,7 @@
 defined('_IS_VALID') or die('Move along...');
 
 
-require_once (bm_baseDir.'/plugins/pluginregistry/interfaces/interface.dbhandler.php');
+require_once (bm_baseDir.'/plugins/adminplugins/adminuser/interfaces/interface.dbhandler.php');
 
 // Cool DB Query Wrapper from Monte Ohrt
 require_once (bm_baseDir.'/inc/safesql/SafeSQL.class.php');
@@ -49,9 +49,9 @@ class UserDBHandler implements iDbHandler {
 	
 	public function dbFetchUser() {
 
-		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, u.user_pass, u.user_group, g.group_name FROM %s AS g, %s AS u " .
-				"WHERE u.user_group=g.group_id ORDER BY u.user_id",
-			array( 'pommomod_permgroups', 'pommomod_user') );
+		$sql = $this->safesql->query("SELECT user_id, user_name, user_pass, group_name " .
+				"FROM %s LEFT JOIN %s ON user_group=group_id ORDER BY user_id",
+			array( 'pommomod_user', 'pommomod_permgroups' ) );
 		$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
 			$user[$i] = array(

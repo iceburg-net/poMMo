@@ -130,8 +130,9 @@ class UserPlugin { //implements plugin
 		
 
 		// Display USER TABLE -> Get all the available Users from the database $this->showUserMatrix();
-		$user = $this->userdbhandler->dbFetchUser($this->dbo);
+		$user = $this->userdbhandler->dbFetchUser();
 
+		$smarty->assign('nrusers' , count($user)); 
 		$smarty->assign('user' , $user); 							//$smarty->assign('mailings', $this->getMailingQueue($start, $limit, $sortBy, $sortOrder));
 		$smarty->assign($_POST);
 

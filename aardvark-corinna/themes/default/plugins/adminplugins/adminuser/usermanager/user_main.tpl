@@ -127,6 +127,8 @@
 		<div style="text-align: right; clear: both;width: 1px;"></div>
 		<br>
 	
+		<i>({t 1=$nrusers}%1 users{/t})</i>
+		
 		<table style=" float: left; font-size: 12px;" cellpadding="3" cellspacing="0" width="100%">
 
 			<tr class="row" style="background-color:#aaaaaa">
