@@ -10,13 +10,13 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
-define('_IS_VALID', TRUE);
+
 
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_mailing.php');
+require_once ($pommo->_baseDir.'/inc/db_mailing.php');
 
-$poMMo = fireup('secure');
-$dbo = & $poMMo->_dbo;
+$pommo = fireup('secure');
+$dbo = & $pommo->_dbo;
 
 if (!empty ($_GET['command'])) {
 	switch ($_GET['command']) {
@@ -27,7 +27,7 @@ if (!empty ($_GET['command'])) {
 			dbMailingStamp($dbo, "restart");
 			$sql = 'SELECT securityCode FROM '.$dbo->table['mailing_current'];
   			$code = $dbo->query($sql,0,0);
-  			bmHttpSpawn(bm_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code);
+  			bmHttpSpawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code);
 			break;
 		case "kill" :
 			dbMailingEnd($dbo);
@@ -38,7 +38,7 @@ if (!empty ($_GET['command'])) {
 			break;
 		
 		case "clear50" :
-			require_once (bm_baseDir.'/inc/lib.txt.php');
+			require_once ($pommo->_baseDir.'/inc/lib.txt.php');
 			$sql = 'SELECT notices FROM ' . $dbo->table['mailing_current'];
 			$notices = quotesplit($dbo->query($sql,0));
 			if (count($notices) > 50) {
@@ -55,5 +55,5 @@ if (!empty ($_GET['command'])) {
 			break;
 	}
 	sleep(1);
-  	bmRedirect('mailing_status.php');
+  	Pommo::redirect('mailing_status.php');
 }

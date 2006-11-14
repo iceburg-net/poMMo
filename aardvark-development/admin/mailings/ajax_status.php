@@ -15,14 +15,14 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/class.json.php');
-require_once (bm_baseDir . '/inc/lib.txt.php');
+require_once ($pommo->_baseDir . '/inc/class.json.php');
+require_once ($pommo->_baseDir . '/inc/lib.txt.php');
 
-$poMMo = & fireup('secure','keep');
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure','keep');
+$dbo = & $pommo->_dbo;
 
 $sql = 'SELECT subscriberCount, sent, notices, status, command FROM ' . $dbo->table['mailing_current'];
 $dbo->query($sql);
@@ -34,12 +34,12 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 	$status = $row['status']; 
 	
 	if ($command != 'none') {
-		if (isset($poMMo->_data['commandTimer'])) {
-			$commandTimer = $poMMo->_data['commandTimer'];
+		if (isset($pommo->_data['commandTimer'])) {
+			$commandTimer = $pommo->_data['commandTimer'];
 		}
 		else {
 			$commandTimer = time();
-			$poMMo->_data['commandTimer'] = $commandTimer;
+			$pommo->_data['commandTimer'] = $commandTimer;
 		}
 		
 		if ((time() - $commandTimer) > 19) 
@@ -56,7 +56,7 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 // end the mailing?
 if ($sent >= $subscriberCount  || $status == 'finished') {
 		$status = 'finished';
-		require_once (bm_baseDir . '/inc/db_mailing.php');
+		require_once ($pommo->_baseDir . '/inc/db_mailing.php');
 		if (mailingQueueEmpty($dbo)) {
 			dbMailingEnd($dbo);
 		}

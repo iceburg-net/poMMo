@@ -14,41 +14,42 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_groups.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
-require_once (bm_baseDir . '/inc/lib.txt.php');
+require_once ($pommo->_baseDir . '/inc/db_groups.php');
+require_once ($pommo->_baseDir . '/inc/db_fields.php');
+require_once ($pommo->_baseDir . '/inc/lib.txt.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
-$smarty->assign('returnStr', _T('Groups Page'));
+$smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
 // validate group_id before setting it as var
 if (isset ($_REQUEST['group_id']) && dbGroupCheck($dbo, $_REQUEST['group_id']))
-	$group_id = str2db($_REQUEST['group_id']);
+	$group_id = $_REQUEST['group_id'];
 else {
-	bmRedirect('subscribers_groups.php');
+	Pommo::redirect('subscribers_groups.php');
 }
 
 // delete criteria if requested
 if (!empty ($_GET['delete'])) {
 	if (is_numeric($_GET['filter_id']))
-		if (dbGroupFilterDel($dbo, str2db($_GET['filter_id'])))
-			$logger->addMsg(_T('Filter Removed'));
+		if (dbGroupFilterDel($dbo, $_GET['filter_id']))
+			$logger->addMsg(Pommo::_T('Filter Removed'));
 }
 
 // change group name  if requested
 if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
-	dbGroupUpdateName($dbo, $group_id, str2db($_POST['group_name']));
+	dbGroupUpdateName($dbo, $group_id, $_POST['group_name']);
 
 // get groups, fields
 $groups = & dbGetGroups($dbo);
@@ -132,17 +133,17 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 		if (isset ($_POST['update']) && isset ($_POST['filter_id']) && is_numeric($_POST['filter_id'])) {
 			if (dbGroupFilterDel($dbo, $_POST['filter_id']))
 				if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
-					$logger->addMsg(_T('Filter Updated'));
+					$logger->addMsg(Pommo::_T('Filter Updated'));
 				else
-					$logger->addMsg(_T('Update failed'));
+					$logger->addMsg(Pommo::_T('Update failed'));
 		} else {
 			if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
-				$logger->addMsg(_T('Filter Added'));
+				$logger->addMsg(Pommo::_T('Filter Added'));
 			else
-				$logger->addMsg(_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
+				$logger->addMsg(Pommo::_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
 		}
 	} else {
-		$logger->addMsg(_T('Filter failed validation'));
+		$logger->addMsg(Pommo::_T('Filter failed validation'));
 	}
 }
 
@@ -160,5 +161,5 @@ $smarty->assign('filterCount', $filterCount);
 $smarty->assign('tally', $tally);
 
 $smarty->display('admin/subscribers/groups_edit.tpl');
-bmKill();
+Pommo::kill();
 ?>

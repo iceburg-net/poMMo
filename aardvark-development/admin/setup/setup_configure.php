@@ -1,6 +1,4 @@
 <?php
-
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -16,23 +14,19 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
-
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_procedures.php');
-
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 // ADD CUSTOM VALIDATOR FOR CHARSET
-
 function check_charset($value, $empty, & $params, & $formvars) {
 	$validCharsets = array (
 		'UTF-8',
@@ -75,20 +69,20 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	
 
 	$formError = array ();
-	$formError['admin_username'] = $formError['sitename'] = $formError['list_name'] = $formError['list_fromname'] = _T('Cannot be empty.');
+	$formError['admin_username'] = $formError['sitename'] = $formError['list_name'] = $formError['list_fromname'] = Pommo::_T('Cannot be empty.');
 
-	$formError['admin_email'] = $formError['list_fromemail'] = $formError['list_frombounce'] = _T('Invalid email address');
+	$formError['admin_email'] = $formError['list_fromemail'] = $formError['list_frombounce'] = Pommo::_T('Invalid email address');
 
-	$formError['admin_password2'] = _T('Passwords must match.');
+	$formError['admin_password2'] = Pommo::_T('Passwords must match.');
 
-	$formError['site_url'] = $formError['site_success'] = $formError['site_confirm'] = _T('Must be a valid URL');
+	$formError['site_url'] = $formError['site_success'] = $formError['site_confirm'] = Pommo::_T('Must be a valid URL');
 
-	$formError['list_charset'] = _T('Invalid Character Set');
+	$formError['list_charset'] = Pommo::_T('Invalid Character Set');
 	
 	$smarty->assign('formError', $formError);
 
 	// populate _POST with info from database (fills in form values...) 
-	$dbVals = $poMMo->getConfig(array (
+	$dbVals = PommoAPI::configGet(array (
 		'admin_username',
 		'site_success',
 		'site_confirm',
@@ -100,12 +94,12 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		'list_charset'
 	));
 
-	$dbVals['demo_mode'] = (!empty ($poMMo->_config['demo_mode']) && ($poMMo->_config['demo_mode'] == "on")) ? 'on' : 'off';
+	$dbVals['demo_mode'] = (!empty ($pommo->_config['demo_mode']) && ($pommo->_config['demo_mode'] == "on")) ? 'on' : 'off';
 
-	$dbVals['site_url'] = $poMMo->_config['site_url'];
-	$dbVals['site_name'] = $poMMo->_config['site_name'];
-	$dbVals['admin_email'] = $poMMo->_config['admin_email'];
-	$dbVals['list_name'] = $poMMo->_config['list_name'];
+	$dbVals['site_url'] = $pommo->_config['site_url'];
+	$dbVals['site_name'] = $pommo->_config['site_name'];
+	$dbVals['admin_email'] = $pommo->_config['admin_email'];
+	$dbVals['list_name'] = $pommo->_config['list_name'];
 
 	$smarty->assign($dbVals);
 } else {
@@ -119,25 +113,25 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		if (!empty ($_POST['admin_password']))
 			$_POST['admin_password'] = md5($_POST['admin_password']);
 
-		$oldDemo = $poMMo->_config['demo_mode'];
+		$oldDemo = $pommo->_config['demo_mode'];
 
-		dbUpdateConfig($dbo, $_POST);
+		PommoAPI::configUpdate($_POST);
 
-		$poMMo->loadConfig('TRUE');
+		$pommo->reloadConfig();
 
-		$logger->addMsg(_T('Configuration Updated.'));
+		$logger->addMsg(Pommo::_T('Configuration Updated.'));
 
 		// refresh page to reflect demonstration mode changes
-		if ($oldDemo != $poMMo->_config['demo_mode'])
-			bmRedirect('setup_configure.php');
+		if ($oldDemo != $pommo->_config['demo_mode'])
+			Pommo::redirect('setup_configure.php');
 
 	} else {
 		// __ FORM NOT VALID
-		$logger->addMsg(_T('Please review and correct errors with your submission.'));
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 
 $smarty->assign($_POST);
 $smarty->display('admin/setup/setup_configure.tpl');
-bmKill();
+Pommo::kill();
 ?>

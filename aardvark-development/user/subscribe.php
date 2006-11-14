@@ -1,6 +1,6 @@
 <?php
 /** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
+ * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
  * SOURCE: http://pommo.sourceforge.net/
@@ -14,23 +14,21 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
-
 require('../bootstrap.php');
-
-$poMMo = & fireup();
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init(array('authLevel' => 0, 'noSession' => true));
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 // subscription forms will be activated from this template
 $smarty->prepareForSubscribeForm();
 
 $smarty->display('subscribe/subscribe.tpl');
 
-bmKill();
+Pommo::kill();
 ?>

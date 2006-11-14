@@ -14,22 +14,23 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../../bootstrap.php');
 
-require_once (bm_baseDir . '/inc/db_history.php'); // Mailing History Database Handling
-require_once (bm_baseDir . '/inc/class.pager.php');
+require_once ($pommo->_baseDir . '/inc/db_history.php'); // Mailing History Database Handling
+require_once ($pommo->_baseDir . '/inc/class.pager.php');
 
-$poMMo = & fireup("secure");
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup("secure");
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Mailings Page'));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+$smarty->assign('returnStr', Pommo::_T('Mailings Page'));
 
 /* SET PAGE STATE
  * limit		- Nr. of Mailings displayed per Pager-Site
@@ -43,13 +44,13 @@ $pmState = array(
 	'sortOrder' => 'DESC',
 	'sortBy' => 'started'
 );
-$poMMo->stateInit('mailings_history',$pmState);
+$pommo->stateInit('mailings_history',$pmState);
 
-$limit = $poMMo->stateVar('limit',$_REQUEST['limit']);
-$sortOrder = $poMMo->stateVar('sortOrder',$_REQUEST['sortOrder']);
-$sortBy = $poMMo->stateVar('sortBy',$_REQUEST['sortBy']);
+$limit = $pommo->stateVar('limit',$_REQUEST['limit']);
+$sortOrder = $pommo->stateVar('sortOrder',$_REQUEST['sortOrder']);
+$sortBy = $pommo->stateVar('sortBy',$_REQUEST['sortBy']);
 
-$smarty->assign('state',$poMMo->_state);
+$smarty->assign('state',$pommo->_state);
 
 $mailcount = dbGetMailingCount($dbo); // func in inc/db_history.php
 
@@ -71,5 +72,5 @@ $smarty->assign('rowsinset', $mailcount);
 
 $smarty->display('admin/mailings/mailings_history.tpl');
 
-bmKill();
+Pommo::kill();
 ?>
