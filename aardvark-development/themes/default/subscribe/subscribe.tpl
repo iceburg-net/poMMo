@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>{$config.site_name} {t}Subscription{/t}</title>
+{if $datePicker}{include file="`$config.app.path`themes/shared/datepicker/datepicker.tpl"}{/if}
 </head>
 <body>
 

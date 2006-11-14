@@ -38,6 +38,10 @@
 {/foreach}
 </select>
 
+{elseif $field.type == 'date'}
+<input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|escape}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
+
+
 {else}
 {t}Unsupported field type{/t}
 {/if}
