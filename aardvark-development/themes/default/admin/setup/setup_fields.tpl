@@ -65,19 +65,19 @@
 <span class="fieldname"><strong>Email</strong></span>
 </div>
 
-<div id="demoOrder">
+<div id="fieldOrder">
 
-{foreach name=demos from=$fields key=key item=demo}
-<div id="demo_{$key}">
-<span><a href="{$smarty.server.PHP_SELF}?field_id={$key}&amp;delete=TRUE&amp;field_name={$demo.name}"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></a></span>
+{foreach name=fields from=$fields key=key item=field}
+<div id="_{$key}">
+<span><a href="{$smarty.server.PHP_SELF}?field_id={$key}&amp;delete=TRUE&amp;field_name={$field.name}"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></a></span>
 
 <span><a href="fields_edit.php?field_id={$key}"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></a></span>
 
 <span class="handle"><img src="{$url.theme.shared}images/icons/order.png" alt="order icon" /></span>
 
 <span class="fieldname">
-{if $demo.active == 'on'}<strong>{$demo.name}</strong>{else}{$demo.name}{/if}
- ({$demo.type})
+{if $field.active == 'on'}<strong>{$field.name}</strong>{else}{$field.name}{/if}
+ ({$field.type})
 </span>
 </div>	
 
@@ -96,7 +96,7 @@
 <script type="text/javascript">
 // <![CDATA[
 
-Sortable.create('demoOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_demoOrder.php', {onComplete:function(request){new Effect.Highlight('demoOrder',{});}, parameters:Sortable.serialize('demoOrder'), evalScripts:true, asynchronous:true})}});
+Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_fieldOrder.php', {onComplete:function(request){new Effect.Highlight('fieldOrder',{});}, parameters:Sortable.serialize('fieldOrder'), evalScripts:true, asynchronous:true})}});
 
 // ]]>
 </script>

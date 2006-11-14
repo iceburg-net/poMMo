@@ -84,14 +84,14 @@ if (!empty ($_POST['field_id'])) {
 	// determine the type of the field
 	require_once ($pommo->_baseDir . '/inc/db_fields.php');
 
-	$demos = dbGetFields($dbo, $_POST['field_id']);
-	$demo = & $demos[$_POST['field_id']];
+	$fields = dbGetFields($dbo, $_POST['field_id']);
+	$field = & $fields[$_POST['field_id']];
 
-	switch ($demo['type']) {
+	switch ($field['type']) {
 		case 'checkbox' :
 
 			$output = '
-									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $field['name'] . '</strong>') . '
 									<br>
 									<input type="radio" name="logic" value="is_true"' . checkLogic('is_true') . '>' . Pommo::_T('Is Checked') . '
 									<br>
@@ -101,12 +101,12 @@ if (!empty ($_POST['field_id'])) {
 		case 'multiple' :
 
 			$options = '';
-			foreach ($demo['options'] as $val) {
+			foreach ($field['array'] as $val) {
 				$options .= '<option' . checkValue($val) . '>' . $val . '</option>';
 			}
 
 			$output = '
-									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $field['name'] . '</strong>') . '
 									<br>
 									<input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . Pommo::_T('Is') . '
 									<br>
@@ -124,7 +124,7 @@ if (!empty ($_POST['field_id'])) {
 		case 'text' :
 
 			$output = '
-									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $field['name'] . '</strong>') . '
 									<br>
 									<input type="radio" name="logic" value="is_equal"' . checkLogic('is_equal') . '>' . Pommo::_T('Is') . '
 									<br>
@@ -138,7 +138,7 @@ if (!empty ($_POST['field_id'])) {
 		case 'date' :
 
 			$output = '
-									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $field['name'] . '</strong>') . '
 									<br>
 									<table cellspacing="2" border="0">
 										<tr>
@@ -161,7 +161,7 @@ if (!empty ($_POST['field_id'])) {
 		case 'number' :
 
 			$output = '
-									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $demo['name'] . '</strong>') . '
+									' . sprintf(Pommo::_T('Match subscribers where %s'), '<strong>' . $field['name'] . '</strong>') . '
 									<br>
 									<table cellspacing="2" border="0">
 										<tr>

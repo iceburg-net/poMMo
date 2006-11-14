@@ -64,8 +64,8 @@
 <label for="field_normally">{t}Default:{/t}</label>
 <select name="field_normally" id="field_normally">
 <option value="">Select default choice</option>
-{if $field.options}
-{foreach from=$field.options item=option}
+{if $field.array}
+{foreach from=$field.array item=option}
 <option{if $field_normally == $option} selected="selected"{/if}>{$option}</option>
 {/foreach}
 {/if}
@@ -107,8 +107,8 @@
 <div>
 <label for="delOption">Delete:</label>
 <select name="delOption" id="delOption">
-{if $field.options}
-{foreach from=$field.options item=option}
+{if $field.array}
+{foreach from=$field.array item=option}
 <option>{$option}</option>
 {/foreach}
 {/if}

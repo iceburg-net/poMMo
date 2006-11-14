@@ -43,8 +43,8 @@
 
 <select name="field_id" id="field_id" onchange="updateLogic()">
 <option value="">{t}Choose subscriber field{/t}</option>
-{foreach from=$demos key=id item=demo}
-<option value="{$id}">{$demo.name}</option>
+{foreach from=$fields key=id item=field}
+<option value="{$id}">{$field.name}</option>
 {/foreach}
 </select>
 </div>
@@ -87,17 +87,17 @@
 		{elseif $filter.logic == 'not_in'}
 			{t}Exclude subscribers belonging to{/t} <strong>{$groups[$filter.field_id]}</strong>
 		{elseif $filter.logic == 'is_equal'}
-			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
+			{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
 		{elseif $filter.logic == 'not_equal'}
-			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Exclude subscribers who have %1 equal to %2{/t}
+			{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Exclude subscribers who have %1 equal to %2{/t}
 		{elseif $filter.logic == 'is_more'}
-			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 greater than %2{/t}
+			{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 greater than %2{/t}
 		{elseif $filter.logic == 'is_less'}
-			{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 less than %2{/t}
+			{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 less than %2{/t}
 		{elseif $filter.logic == 'not_true'}
-			{t}Exclude subscribers that checked{/t} <strong>{$demos[$filter.field_id].name}</strong>
+			{t}Exclude subscribers that checked{/t} <strong>{$fields[$filter.field_id].name}</strong>
 		{elseif $filter.logic == 'is_true'}
-			{t}Include subscribers that checked{/t} <strong>{$demos[$filter.field_id].name}</strong>
+			{t}Include subscribers that checked{/t} <strong>{$fields[$filter.field_id].name}</strong>
 		{/if}
 	</span>
 </div>
@@ -130,22 +130,22 @@
 {t}Exclude subscribers belonging to{/t} <strong>{$groups[$filter.field_id]}</strong>
 
 {elseif $filter.logic == 'is_equal'}
-{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
+{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 equal to %2{/t}
 
 {elseif $filter.logic == 'not_equal'}
-{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Exclude subscribers who have %1 equal to %2{/t}
+{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Exclude subscribers who have %1 equal to %2{/t}
 
 {elseif $filter.logic == 'is_more'}
-{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 greater than %2{/t}
+{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 greater than %2{/t}
 
 {elseif $filter.logic == 'is_less'}
-{t escape=no 1="<strong>`$demos[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 less than %2{/t}
+{t escape=no 1="<strong>`$fields[$filter.field_id].name`</strong>" 2="<em>`$filter.value`</em>}Include subscribers who have %1 less than %2{/t}
 
 {elseif $filter.logic == 'not_true'}
-{t}Exclude subscribers that checked{/t} <strong>{$demos[$filter.field_id].name}</strong>
+{t}Exclude subscribers that checked{/t} <strong>{$fields[$filter.field_id].name}</strong>
 
 {elseif $filter.logic == 'is_true'}
-{t}Include subscribers that checked{/t} <strong>{$demos[$filter.field_id].name}</strong>
+{t}Include subscribers that checked{/t} <strong>{$fields[$filter.field_id].name}</strong>
 
 {/if}
 </td>

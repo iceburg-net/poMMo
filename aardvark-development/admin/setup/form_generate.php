@@ -64,9 +64,9 @@ foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 	
 	if ($field['required'] == 'on')
-		echo "\n<div>\n<!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." -->\n<label for=\"field".$field_id."\"><strong>".db2str($field['prompt']).":</strong></label>\n";
+		echo "\n<div>\n<!-- BEGIN INPUT FOR REQUIRED FIELD ".$field['name']." -->\n<label for=\"field".$field_id."\"><strong>".$field['prompt'].":</strong></label>\n";
 	else
-		echo "\n<div>\n<!-- BEGIN INPUT FOR FIELD ".$field['name']." -->\n<label for=\"field".$field_id."\">".db2str($field['prompt']).":</label>\n";
+		echo "\n<div>\n<!-- BEGIN INPUT FOR FIELD ".$field['name']." -->\n<label for=\"field".$field_id."\">".$field['prompt'].":</label>\n";
 	
 	switch ($field['type']) {
 		case "checkbox": // checkbox	
@@ -82,12 +82,12 @@ foreach (array_keys($fields) as $field_id) {
 			
 			echo "<option value=\"\"> Please Choose...</option>\n";
 			
-			foreach ($field['options'] as $option) {
+			foreach ($field['array'] as $option) {
 				
 				if (!empty($field['normally']) && $option == $field['normally'])
-					echo "<option value=\"".db2str($option)."\" selected> ".db2str($option)."</option>\n";
+					echo "<option value=\"".htmlspecialchars($option)."\" selected> ".$option."</option>\n";
 				else
-					echo "<option value=\"".db2str($option)."\"> ".db2str($option)."</option>\n";
+					echo "<option value=\"".htmlspecialchars($option)."\"> ".$option."</option>\n";
 			}			
 			echo "</select>\n";
 					
@@ -100,7 +100,7 @@ foreach (array_keys($fields) as $field_id) {
 			if (empty($field['normally']))
 				echo "<input type=\"text\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" maxlength=\"60\">\n";
 			else
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".db2str($field['normally'])."\">\n";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".htmlspecialchars($field['normally'])."\">\n";
 			break; 
 
 		default:
