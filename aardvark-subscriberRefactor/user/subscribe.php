@@ -15,7 +15,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require('../bootstrap.php');
-$pommo->init(array('authLevel' => 0));
+$pommo->init(array('authLevel' => 0, 'noSession' => true));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 

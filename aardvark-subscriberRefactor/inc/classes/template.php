@@ -94,14 +94,6 @@ class PommoTemplate extends Smarty {
 		// assign isForm to TRUE, used by header.tpl to include form CSS/Javascript in HTML HEAD
 		$this->assign('isForm', TRUE);
 
-		// clean user input of slashed added by magic quotes.
-		if (get_magic_quotes_gpc()) {
-			if (!empty ($_POST))
-				$_POST = PommoHelper :: slashStrip($_POST);
-			if (!empty ($_GET))
-				$_GET = PommoHelper :: slashStrip($_GET);
-		}
-
 	}
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
@@ -114,12 +106,12 @@ class PommoTemplate extends Smarty {
 		$fields = PommoField::get(array('active' => TRUE));
 		if (!empty ($fields))
 			$this->assign('fields', $fields);
-
+			
 		// process.php appends serialized values to _GET['input']
 		if (isset ($_GET['input'])) {
 			$this->assign(unserialize($_GET['input']));
 		}
-
+		
 		$this->assign($_POST);
 	}
 }

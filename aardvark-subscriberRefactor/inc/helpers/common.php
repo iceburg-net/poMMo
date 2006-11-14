@@ -67,73 +67,21 @@ class PommoHelper {
 	// accepts an email address (str)
 	// returns email legitimacy (bool)
 	function isEmail($_address) {
-		$_is_valid = !(preg_match('!@.*@|\.\.|\,|\;!', $_address) ||
-	        !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address));
-        if(!$_is_valid)
-            return false;
-        return true;
+		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address))) ? false : true;
 	}
+	
+	// generates a unique code to be used as a confirmation key.
+	// returns code (str)
+	function makeCode() {
+		return md5(rand(0, 5000).time());
+	}
+	
+	
 	
 
 	// TODO: The following are; OLD.... DEPRICATED ... REMOVE!
 	
 	
-	/**********************
-	 * TEXT PROCESSING FUNCTIONS
-	 **********************/
-
-	// decode_htmlchars: removes any htmlspecialchars. PHP4/5 Compatible.
-	function decode_htmlchars($str, $quote_style = ENT_COMPAT) {
-		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
-	}
-
-	//str2db: Formats input for database insertion. Used on POST/GET data before being inserted to DB.
-	function & str2db($string) {
-		//if (get_magic_quotes_gpc())
-		//	return decode_htmlchars($string);
-		return decode_htmlchars(mysql_real_escape_string($string));
-	}
-
-	//db2str: Formats text from DB to be displayed in a browser.
-	//     Used mainly for printing values from a database or populating form values.
-	function db2str(& $string) {
-		if (get_magic_quotes_runtime())
-			return htmlspecialchars(stripslashes($string));
-		return htmlspecialchars($string);
-	}
-
-	//db2mail: Formats text from a DB table to be mailed, or viewed in a non browser.
-	function db2mail(& $string) {
-		if (get_magic_quotes_runtime())
-			return stripslashes($string);
-		return $string;
-	}
-
-	// used to format text being pulled from and reinserted to a database
-	function db2db(& $string) {
-		if (get_magic_quotes_runtime())
-			return $string;
-		return mysql_real_escape_string($string);
-	}
-
-	// takes an array of input to be sanitized. Type is str (user input), or db (db output) 
-	function & dbSanitize(& $entryArray, $type = 'str') {
-		switch ($type) {
-			case 'db' :
-				if (!is_array($entryArray))
-					return db2db($entryArray);
-				foreach (array_keys($entryArray) as $key)
-					$entryArray[$key] = db2db($entryArray[$key]);
-				return $entryArray;
-			case 'str' :
-				if (!is_array($entryArray))
-					return $entryArray;
-				foreach (array_keys($entryArray) as $key)
-					$entryArray[$key] = $entryArray[$key];
-				return $entryArray;
-		}
-		die('Unknown type sent to dbSanitize');
-	}
 
 	// spawns a page in the background, used by mail processor.
 	function bmHttpSpawn($page) {

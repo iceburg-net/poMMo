@@ -120,7 +120,7 @@ class Pommo {
 		$defaults = array (
 			'authLevel' => 1,
 			'keep' => FALSE,
-			'noInit' => FALSE,
+			'noSession' => FALSE,
 			'sessionID' => NULL
 		);
 	
@@ -143,8 +143,8 @@ class Pommo {
 		}
 
 		// Bypass SESSION creation, reading of config, authentication checks and return
-		//  if 'noInit' passed
-		if ($p['noInit'])
+		//  if 'noSession' passed
+		if ($p['noSession'])
 			return;
 
 		// start the session

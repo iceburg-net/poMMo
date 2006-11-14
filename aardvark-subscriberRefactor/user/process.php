@@ -15,13 +15,12 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
-$pommo->init(array('authLevel' => 0));
+$pommo->init(array('authLevel' => 0,'noSession' => true));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
-
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -29,8 +28,6 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-// STORE user input. Input is appended to referer URL via HTTP_GET
-$input = urlencode(serialize($_POST));
 
 /**********************************
 	VALIDATE INPUT
@@ -40,140 +37,86 @@ if (empty ($_POST['pommo_signup']))
 	Pommo::redirect('login.php');
 
 $subscriber = array(
-	
-)
-if (!PommoHelper::isEmail($_POST['bm_email']))
-
-
+	'email' => $_POST['bm_email'],
+	'registered' => time(),
+	'ip' => $_SERVER['REMOTE_ADDR'],
+	'status' => 'active',
+	'data' => $_POST['d'],
+);
 
 // ** check for correct email syntax
-	if (!isEmail($_POST['bm_email']))
-		$logger->addErr(_T('Invalid Email Address'));
+if (PommoHelper::isEmail($subscriber['email']))
+	$logger->addErr(Pommo::_T('Invalid Email Address'));
 		
-	// ** check if confirmation email matches. (if exists)
-	if (isset($_POST['updateForm']) && $_POST['email2'] != $_POST['bm_email'])
-		$logger->addErr(_T('Emails must match.'));
+// ** check if email already exists in DB ("duplicates are bad..")
+if (count(PommoSubscriber::emailExists($subscriber['email'])) > 0) {
+	$logger->addErr('Email address already exists. Duplicates are not allowed');
+	$smarty->assign('dupe', TRUE);
+}
 
-	// ** check if email already exists in DB ("duplicates are bad..")
-	if ($dupeCheck) {
-		if (isDupeEmail($dbo, $_POST['bm_email'])) {
-			$logger->addErr('Email address already exists. Duplicates are not allowed');
-			global $smarty;
-			if (is_object($smarty))
-				$smarty->assign('dupe', TRUE);
-		}
-	}
-
-	// ** validate user submitted fields
-	$fields = & dbGetFields($dbo, 'active');
-	$subscriber_data = array ();
-	
-	if (!empty($fields)) {
-	foreach (array_keys($fields) as $field_id) {
-		$field = & $fields[$field_id];
-
-		// check to make sure a required field is not empty
-		if (empty ($_POST['d'][$field_id]) && $field['required'] == 'on') {
-			$logger->addErr($field['prompt'] . ' ' . _T('was a required field.'));
-			continue;
-		}
-
-		// create field array
-		if (!empty ($_POST['d'][$field_id])) {
-			// TODO : insert validation schemes here (ie. check options, #, date)
-			switch ($field['type']) {
-				case 'checkbox' :
-					if ($_POST['d'][$field_id] == 'on') // don't add to subscriber_data if value is not checked..
-						$subscriber_data[$field_id] = str2db($_POST['d'][$field_id]);
-					break;
-				default :
-					$subscriber_data[$field_id] = str2db($_POST['d'][$field_id]);
-					break;
-			}
-
-		}
-	}
-	}
-	if ($logger->isErr())
-		return false;
-	return true;
-
-
-
-// check if errors exist, if so print results and die.
-if (!validateSubscribeForm()) {
+// check if errors exist with data, if so print results and die.
+if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'])) {
 	$smarty->assign('back', TRUE);
-	
-	// attempt to detect if referer was set
-	// TODO; should this default to $_SERVER['HTTP_REFERER']; ? -- for those who have customized the plain html subscriberForm..
+
+	// attempt to detect if referer was set 
+	//  TODO; enable HTTP_REFERER after stripping out ?input= tags. These will continually repeat
+	//$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $_SERVER['HTTP_REFERER'];
 	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$pommo->_baseUrl.'user/subscribe.php';
 	
 	// append stored input
-	$smarty->assign('referer',$referer.'?input='.$input);
-	
+	$smarty->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
 	$smarty->display('user/process.tpl');
 	Pommo::kill();
 }
+
+var_dump($subscriber);
+die();
 
 /**********************************
 	ADD SUBSCRIBER
  *********************************/
  
- // TODO.. if confirmation is not needed, don't add to pending first...
-if (empty($_POST['d']))
-	$_POST['d'] = FALSE;
-$confirmation_key = dbPendingAdd($dbo, 'add', $_POST['bm_email'], $_POST['d']);
-if (empty ($confirmation_key))
-	Pommo::kill('dbPendingAdd(): Confirmation key not returned.');
-
-// determine if we should bypass output from this page and redirect.
 $config = PommoAPI::configGet(array (
-	'site_success',
-	'site_confirm',
-	'list_confirm',
-	'messages'
+	'site_success', // URL to redirect to on success, null is us (default)
+	'site_confirm', // URL users will see upon subscription attempt, null is us (default)
+	'list_confirm' // Requires email confirmation
 ));
 
-$redirectURL = FALSE;
-if (!empty ($config['site_confirm']) && $config['list_confirm'] == 'on')
-	$redirectURL = $config['site_confirm'];
-elseif (!empty ($config['site_success']) && $config['list_confirm'] != 'on') 
-	$redirectURL = $config['site_success'];
-
-if ($config['list_confirm'] == 'on') { // email confirmation required
-	// send subscription confirmation mail
-	require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
-	if (bmSendConfirmation($_POST['bm_email'], $confirmation_key, "subscribe")) {
-		$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
-	} else {
-		$logger->addErr(Pommo::_T('Problem sending mail! Please contact the administrator.'));
+if ($config['list_confirm'] == 'on') { // email confirmation required. 
+	// add user as "pending"
+	Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+	
+	$subscriber['pending_code'] = PommoHelper::makeCode();
+	$subscriber['pending_type'] = 'add';
+	$subscriber['status'] = 'pending';
+	
+	if (!PommoSubscriber::add($subscriber)) 
+		$logger->addErr('Error adding subscriber! Please contact the administrator.');
+	else {
+		
+		if (PommoHelperMailings::sendConfirmation($subscriber['email'], $subscriber['pending_code'], $subscriber['pending_type'])) {
+			if ($config['site_confirm'])
+				Pommo::redirect($config['site_confirm']);
+			$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+		}
+		else {
+			$logger->addErr(Pommo::_T('Problem sending mail! Please contact the administrator.'));
+		}
 	}
-} else { // no email confirmation required... subscribe user
-	if (dbSubscriberAdd($dbo, $confirmation_key)) {
-		$messages = unserialize($config['messages']);
+}
+else { // no email confirmation required
+	if (!PommoSubscriber::add($subscriber)) 
+		$logger->addErr('Error adding subscriber! Please contact the administrator.');
+	else {
+		if ($config['site_success'])
+			Pommo::redirect($config['site_success']);
+		
+		$messages = unserialize(PommoAPI::configGet('messages'));
 		$logger->addMsg($messages['subscribe_suc']);
-	} else {
-		$logger->addErr(Pommo::_T('Problem adding subscriber. Please contact the administrator.'));
 	}
-}
-
-if (!$logger->isErr() && $redirectURL) {
-	$logger->clear(); // TODO -> maybe message clearing to bmKill??
-	Pommo::redirect($redirectURL);
-}
-
-$smarty->display('user/process.tpl');
-Pommo::kill();
-
-
-
-// returns true if valid.. false if not. Adds errors/messages to logger.
-function validateSubscribeForm($dupeCheck = TRUE) {
-	global $logger;
-	global $dbo;
-	require_once (bm_baseDir . '/inc/lib.txt.php');
-
 	
 }
+$smarty->display('user/process.tpl');
+Pommo::kill();
 
 ?>
