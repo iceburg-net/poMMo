@@ -15,7 +15,7 @@
 define('_IS_VALID', TRUE);
 
 require ('../../../../bootstrap.php');
-require_once (bm_baseDir . '/plugins/adminplugins/adminuser/authmanager/class.AuthPlugin.php');
+require_once (bm_baseDir . '/plugins/adminplugins/adminuser/authmanager/class.authplugin.php');
 
 $poMMo = & fireup("secure");	//$logger	= & $poMMo->_logger; //$dbo	= & $poMMo->_dbo;
 

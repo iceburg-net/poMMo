@@ -12,7 +12,7 @@
 			{t}Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung {/t}
 		</p><br>
 		<p>
-			<a href="{$url.base}/plugins/adminplugins/adminbounce/adminbounce.php">
+			<a href="{$url.base}/plugins/adminplugins/adminbounce/bounce_main.php">
 			<img src="" class="navimage" width="64" height="64" /> <!--src="{$url.theme.shared}/images/icons/subscribersa.png"-->
 			{t}Bounce Mail Settings{/t}</a> - 
 			{t}In Arbeit - I am working on it {/t}
