@@ -107,6 +107,11 @@ class PommoTemplate extends Smarty {
 		if (!empty ($fields))
 			$this->assign('fields', $fields);
 			
+		foreach ($fields as $field) {
+			if ($field['type'] == 'date')
+			$this->assign('datePicker', TRUE);
+		}
+			
 		// process.php appends serialized values to _GET['input']
 		if (isset ($_GET['input'])) {
 			$this->assign(unserialize($_GET['input']));

@@ -98,7 +98,7 @@
 					$in[$id] = strtotime($in[$id]);
 					if($in[$id] == 0 || !$in[$id]) {
 						if ($p['log'])
-							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a date.'),$field['prompt']));
+							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a date (mm/dd/yyyy).'),$field['prompt']));
 						if ($p['ignore'])
 							unset($in[$id]);
 						$valid = false;
