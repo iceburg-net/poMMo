@@ -12,17 +12,18 @@
  ** [END HEADER]**/
  
  // Generates a simple HTML form based from active subscriber criteria
- 
- define('_IS_VALID', TRUE);
- 
- require('../../bootstrap.php');
- require_once(bm_baseDir.'/inc/db_fields.php');
- $poMMo =& fireup("secure");
- $dbo = & $poMMo->_dbo;
+/**********************************
+	INITIALIZATION METHODS
+*********************************/
+require ('../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
  
 // URL which processes the form input + adds (or warns) subscriber to pending table.
-$signup_url = "http://" . $_SERVER['HTTP_HOST'] . bm_baseUrl . "user/process.php";
+$signup_url = "http://" . $_SERVER['HTTP_HOST'] . $pommo->_baseUrl . "user/process.php";
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -40,7 +41,7 @@ $form_name = "signup";
 
 <hr>
 
-<h1><?php echo $poMMo->_config['list_name']; ?> Subscriber Form</h1>
+<h1><?php echo $pommo->_config['list_name']; ?> Subscriber Form</h1>
 
 <!-- 	Set "ACTION" to the URL of poMMo's process.php
 		process.php located in the "user" directory of your poMMo installation.
@@ -58,7 +59,7 @@ $form_name = "signup";
 
 <?php
 
-$fields = & dbGetFields($dbo, 'active');
+$fields = & PommoField::get(array('active' => TRUE));
 foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 	

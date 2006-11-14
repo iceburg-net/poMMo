@@ -15,26 +15,27 @@
  /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
+
 
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_subscribers.php');
-require_once (bm_baseDir.'/inc/db_fields.php');
-require_once (bm_baseDir.'/inc/lib.txt.php');
+require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
+require_once ($pommo->_baseDir.'/inc/db_fields.php');
+require_once ($pommo->_baseDir.'/inc/lib.txt.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Subscribers Manage'));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+$smarty->assign('returnStr', Pommo::_T('Subscribers Manage'));
 
 // sanity check
 if ($_REQUEST['table'] != 'subscribers' && $_REQUEST['table'] != 'pending' || empty ($_REQUEST['sid']) || empty ($_REQUEST['action']))
-	bmRedirect('subscribers_manage');
+	Pommo::redirect('subscribers_manage');
 
 $table = $_REQUEST['table'];
 	
@@ -45,14 +46,14 @@ if (!empty ($_POST['deleteEmails'])) {
 	// deleteion confirmation recieved...
 	($table == 'pending')? dbPendingDel($dbo, $_POST['deleteEmails']) : dbSubscriberRemove($dbo, $_POST['deleteEmails']);
 
-	bmRedirect('subscribers_manage.php?'.$appendUrl);
+	Pommo::redirect('subscribers_manage.php?'.$appendUrl);
 }
 elseif (!empty ($_POST['addEmails'])) {
 	// add to subscribers recieved (pending -> subscribers)
 	foreach ($_REQUEST['addEmails'] as $email) {
 		dbSubscriberAdd($dbo,$email);
 	}
-	bmRedirect('subscribers_manage.php?'.$appendUrl);
+	Pommo::redirect('subscribers_manage.php?'.$appendUrl);
 }
 elseif (!empty ($_REQUEST['editId'])) {
 	// edit update was recieved...
@@ -80,7 +81,7 @@ elseif (!empty ($_REQUEST['editId'])) {
 		dbSubscriberUpdate($dbo,$subscriber);
 	}
 
-	bmRedirect('subscribers_manage.php?'.$appendUrl);
+	Pommo::redirect('subscribers_manage.php?'.$appendUrl);
 }
 
 
@@ -127,5 +128,5 @@ $smarty->assign('order',$order);
 $smarty->assign('orderType',$orderType);
 
 $smarty->display('admin/subscribers/subscribers_mod.tpl');
-bmKill();
+Pommo::kill();
 ?>

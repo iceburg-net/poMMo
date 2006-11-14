@@ -11,11 +11,7 @@
  * 
  ** [END HEADER]**/
  
-/** 
- * Don't allow direct access to this file. Must be called from
-elsewhere
-*/
-defined('_IS_VALID') or die('Move along...');
+
 ?>
 
 FINISH MERGING IN NEW FRAMEWORK.
@@ -159,7 +155,7 @@ I *am* thinking about incorporating a sent/unsent list that can be downloaded at
 	SHORT TERM
 		
 		(API) 		get rid of appendURL problem!
-					+ convert to $poMMo->_state + save there
+					+ convert to $pommo->_state + save there
 	
 		(feature)	alter database design -> merge tables mailings &mailings_history and refactor
 					EDIT: after finishing mailing ... database entry in mailing_current would not 

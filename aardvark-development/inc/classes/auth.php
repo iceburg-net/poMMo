@@ -1,0 +1,70 @@
+<?php
+/** [BEGIN HEADER] **
+ * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
+ * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
+ * AUTHOR: Brice Burgess <bhb@iceburg.net>
+ * SOURCE: http://pommo.sourceforge.net/
+ *
+ *  :: RESTRICTIONS ::
+ *  1. This header must accompany all portions of code contained within.
+ *  2. You must notify the above author of modifications to contents within.
+ * 
+ ** [END HEADER]**/
+
+// authentication object. Handles logged in user, permission level.
+class PommoAuth {
+
+	var $_username;	// current logged in user (default: null|session value)
+	var $_permissionLevel; // permission level of logged in user
+	var $_requiredLevel; // required level of permission (default: 1)
+
+
+	// default constructor. Get current logged in user from session. Check for permissions.
+	function PommoAuth($args = array ()) {
+		$defaults = array (
+			'username' => null,
+			'requiredLevel' => 0
+		);
+
+		$p = PommoAPI :: getParams($defaults, $args);
+		
+		if (empty($_SESSION['pommo']['auth']['username']))
+			$_SESSION['pommo']['auth']['username'] = $p['username'];
+		
+		$this->_username = & $_SESSION['pommo']['auth']['username'];
+		$this->_permissionLevel = $this->getPermissionLevel($this->_username);
+
+		if ($p['requiredLevel'] > $this->_permissionLevel) {
+			global $pommo;
+			Pommo::kill(sprintf(Pommo::_T('Denied access. You must %s logon %s to access this page...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+		}
+
+	}
+
+	// TODO -> extend this when multi-user support is implemented. For now default to 5 if a user
+	// is logged in (successfully authenticated). 5 should be max (administrator/superuser privileges)
+	function getPermissionLevel($username = null) {
+		if ($username)
+			return 5;
+		return 0;
+	}
+	
+	function logout() {
+		$this->_username = null;
+		$this->_permissionLevel = 0;
+		$_SESSION['pommo']['auth'] = array();
+		session_destroy();
+		return;
+	}
+	
+	function login($username) {
+		$this->_username = $username;
+		return;
+	}
+	
+	// Check if a user is authenticated (logged on)
+	function isAuthenticated() {
+		return (empty($this->_username)) ? false : true;
+	}
+}
+?>

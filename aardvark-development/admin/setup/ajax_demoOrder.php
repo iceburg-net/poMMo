@@ -13,27 +13,20 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-define('_IS_VALID', TRUE);
-
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
-
-// key is order, value is demo ID
-function updateList($array) {
-	global $dbo;
-	foreach($array as $key => $value) {
-		if (!is_numeric($key) || !is_numeric($value))
-			die(_T('Error updating order'));
-		
-		$sql = 'UPDATE '.$dbo->table['subscriber_fields'].' set field_ordering='.$key.' WHERE field_id='.$value.' LIMIT 1';
-		if (!$dbo->query($sql))
-			die(_T('Error updating order'));
-	}
+foreach($_POST['demoOrder'] as $val => $id) { // syntax for multi-row updates in in 1 query.
+	$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($id,$val)).' ';
 }
 
-updateList($_POST['demoOrder']);
-?>
+$query = "
+	UPDATE ".$dbo->table['fields']."
+	SET field_ordering = 
+		CASE field_id ".$when." ELSE field_ordering END";
+if (!$dbo->query($dbo->prepare($query)))
+	die('Error updating order');
+			

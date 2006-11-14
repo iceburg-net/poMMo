@@ -14,23 +14,22 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
-
 require ('../../bootstrap.php');
-require_once (bm_baseDir . '/inc/db_procedures.php');
-require_once (bm_baseDir . '/inc/phpmailer/class.phpmailer.php');
-require_once (bm_baseDir . '/inc/phpmailer/class.smtp.php');
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+Pommo::requireOnce($pommo->_baseDir . 'inc/lib/phpmailer/class.phpmailer.php');
+Pommo::requireOnce($pommo->_baseDir . 'inc/lib/phpmailer/class.smtp.php');
+
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 $smarty->prepareForForm();
-$smarty->assign('returnStr', _T('Configure'));
+$smarty->assign('returnStr', Pommo::_T('Configure'));
 
 // Read user requested changes	
 if (!empty ($_POST['addSmtpServer'])) {
@@ -42,27 +41,26 @@ if (!empty ($_POST['addSmtpServer'])) {
 		'pass' => ''
 	);
 	$input['smtp_' . key($_POST['addSmtpServer'])] = serialize($server);
-	dbUpdateConfig($dbo, $input, TRUE);
+	PommoAPI::configUpdate($input, TRUE);
 }
 elseif (!empty ($_POST['updateSmtpServer'])) {
 	$key = key($_POST['updateSmtpServer']);
 	$server = array (
-		'host' => str2db($_POST['host'][$key]
-	), 'port' => str2db($_POST['port'][$key]), 'auth' => str2db($_POST['auth'][$key]), 'user' => str2db($_POST['user'][$key]), 'pass' => str2db($_POST['pass'][$key]));
+		'host' => $_POST['host'][$key], 'port' => $_POST['port'][$key], 'auth' => $_POST['auth'][$key], 'user' => $_POST['user'][$key], 'pass' => $_POST['pass'][$key]);
 	$input['smtp_' . $key] = serialize($server);
-	dbUpdateConfig($dbo, $input, TRUE);
+	PommoAPI::configUpdate( $input, TRUE);
 }
 elseif (!empty ($_POST['deleteSmtpServer'])) {
 	$input['smtp_' . key($_POST['deleteSmtpServer'])] = '';
-	dbUpdateConfig($dbo, $input, TRUE);
+	PommoAPI::configUpdate( $input, TRUE);
 }
 elseif (!empty ($_POST['throttle_SMTP'])) {
-	$input['throttle_SMTP'] = str2db($_POST['throttle_SMTP']);
-	dbUpdateConfig($dbo, $input);
+	$input['throttle_SMTP'] = $_POST['throttle_SMTP'];
+	PommoAPI::configUpdate( $input);
 }
 
 // Get the SMTP settings from DB
-$smtpConfig = $poMMo->getConfig(array (
+$smtpConfig = PommoAPI::configGet(array (
 	'smtp_1',
 	'smtp_2',
 	'smtp_3',
@@ -118,5 +116,5 @@ $smarty->assign('smtp', $smtp);
 $smarty->assign('throttle_SMTP', $smtpConfig['throttle_SMTP']);
 
 $smarty->display('admin/setup/setup_smtp.tpl');
-bmKill();
+Pommo::kill();
 ?>

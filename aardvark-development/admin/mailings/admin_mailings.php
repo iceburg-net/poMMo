@@ -14,23 +14,22 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
-
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_mailing.php');
+require_once ($pommo->_baseDir.'/inc/db_mailing.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
 if (!mailingQueueEmpty($dbo))
 	$smarty->assign('mailing',TRUE);
 	
 $smarty->display('admin/mailings/admin_mailings.tpl');
-bmKill();
+Pommo::kill();
 ?>

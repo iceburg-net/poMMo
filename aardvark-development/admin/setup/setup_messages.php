@@ -14,32 +14,32 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-define('_IS_VALID', TRUE);
-
 require('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/db_procedures.php');
+Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/configuration.php');
 
-$poMMo = & fireup('secure');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
-//$smarty->assign('title', $poMMo->_config['site_name'] . ' - ' . _T('subscriber logon'));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+//$smarty->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
 $smarty->prepareForForm();
-$smarty->assign('returnStr',_T('Configure'));
+$smarty->assign('returnStr',Pommo::_T('Configure'));
 
+
+$messages = array();
 
 // Check if user requested to restore defaults
-// TODO: better optimize this.. a lot of DB querying is going on... check w/ debug on!
 if (isset($_POST['restore'])) {
 	switch (key($_POST['restore'])) {
-		case 'subscribe' : dbResetMessageDefaults('subscribe'); break;
-		case 'unsubscribe' : dbResetMessageDefaults('unsubscribe'); break;
-		case 'password' : dbResetMessageDefaults('password'); break;
-		case 'update' : dbResetMessageDefaults('update'); break;
+		case 'subscribe' : $messages = PommoHelperConfig::messageResetDefault('subscribe'); break;
+		case 'unsubscribe' : $messages = PommoHelperConfig::messageResetDefault('unsubscribe'); break;
+		case 'password' : $messages = PommoHelperConfig::messageResetDefault('password'); break;
+		case 'update' : $messages = PommoHelperConfig::messageResetDefault('update'); break;
 	}
 	// reset _POST.
 	$_POST = array(); 
@@ -68,22 +68,24 @@ if (!SmartyValidate::is_registered_form() || empty($_POST)) {
 	$formError['unsubscribe_sub'] = $formError['unsubscribe_suc'] =
 	$formError['update_sub'] = $formError['update_suc'] =
 	$formError['password_sub'] = $formError['password_suc'] =
-	 _T('Cannot be empty.');
+	 Pommo::_T('Cannot be empty.');
 	 
 	$formError['subscribe_msg'] =
 	$formError['unsubscribe_msg'] =
 	$formError['update_msg'] =
 	$formError['password_msg'] =
-	 _T('You must include "[[URL]]" for the confirm link');
+	 Pommo::_T('You must include "[[URL]]" for the confirm link');
 	$smarty->assign('formError',$formError);
 	
 	// populate _POST with info from database (fills in form values...)
-	$dbvalues = $poMMo->getConfig(array('messages'));
-	
-	if (empty($dbvalues['messages'])) 
-		$messages = dbResetMessageDefaults(); 
-	else
-		$messages = unserialize($dbvalues['messages']);
+	if (empty($messages)) {
+		$dbvalues = PommoAPI::configGet(array('messages'));
+		
+		if (empty($dbvalues['messages'])) 
+			$messages = PommoHelperConfig::messageResetDefault('all'); 
+		else
+			$messages = unserialize($dbvalues['messages']);
+	}
 
 	if (isset($messages['subscribe'])) {
 		$_POST['Subscribe_msg'] = $messages['subscribe']['msg'];
@@ -136,16 +138,16 @@ else {
 		$messages['update']['suc'] = $_POST['Update_suc']; 
 		
 		$input = array('messages' => serialize($messages));
-		dbUpdateConfig($dbo, $input, TRUE);
+		PommoAPI::configUpdate( $input, TRUE);
 		
-		$logger->addMsg(_T('Settings updated.'));
+		$logger->addMsg(Pommo::_T('Settings updated.'));
 	} 
 	else {
 		// __ FORM NOT VALID
-		$logger->addMsg(_T('Please review and correct errors with your submission.'));
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 $smarty->assign($_POST);
 $smarty->display('admin/setup/setup_messages.tpl');
-bmKill();
+Pommo::kill();
 ?>

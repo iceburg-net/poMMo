@@ -16,25 +16,26 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-define('_IS_VALID', TRUE);
+
 
 require ('../../bootstrap.php');
-require_once (bm_baseDir.'/inc/lib.import.php');
-require_once (bm_baseDir.'/inc/db_fields.php');
+require_once ($pommo->_baseDir.'/inc/lib.import.php');
+require_once ($pommo->_baseDir.'/inc/db_fields.php');
 
-$poMMo = & fireup('secure','keep');
-$logger = & $poMMo->_logger;
-$dbo = & $poMMo->_dbo;
+$pommo = & fireup('secure','keep');
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-$smarty = & bmSmartyInit();
-$smarty->assign('returnStr', _T('Subscribers Page'));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+$smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 
 
 // load data from session
-$sessionArray = & $poMMo->get();
+$sessionArray = & $pommo->get();
 $csvArray = & $sessionArray['csvArray'];
 $numFields = count($csvArray['csvFile'][$csvArray['lineWithMostFields']]);
 $fields = dbGetFields($dbo);
@@ -49,7 +50,7 @@ if (!empty($_GET['import'])) { // check to see if we should import
 
 	$importArray =& $sessionArray['importArray'];
 	
-	require_once (bm_baseDir.'/inc/db_subscribers.php');
+	require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
 	
 	foreach($importArray['valid'] as $subscriber)
 		dbSubscriberAdd($dbo,$subscriber);
@@ -73,7 +74,7 @@ if (!empty($_GET['import'])) { // check to see if we should import
 		$dbo->query($sql);
 	}
 	
-	$smarty->assign('returnStr', _T('Subscribers Page'));
+	$smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 	$smarty->assign('page','import');
 	
 }
@@ -92,7 +93,7 @@ elseif (!empty($_POST['preview'])) { // check to see if a preview has been reque
 		
 	// save Array to session
 	$sessionArray['importArray'] = & $importArray;
-	$poMMo->set($sessionArray);
+	$pommo->set($sessionArray);
 		
 
 	$confirm = array('nourl' => 'subscribers_import2.php','yesurl' => 'subscribers_import2.php?import=TRUE');
@@ -115,5 +116,5 @@ else  {
 }
 
 $smarty->display('admin/subscribers/subscribers_import2.tpl');
-bmKill();
+Pommo::kill();
 ?>
