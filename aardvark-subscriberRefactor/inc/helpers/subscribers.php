@@ -11,7 +11,7 @@
  * 
  ** [END HEADER]**/
 
-// include the field prototype object 
+// include the subscriber prototype object 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 
 /**
@@ -82,7 +82,6 @@ class PommoSubscriber {
 	
 	// subscriber validation
 	// accepts a subscriber (array)
-	// accepts a flag (bool) to designate return of a pending subscriber type
 	// returns true if field ($in) is valid, false if not
 	function validate(&$in) {
 		global $pommo;
@@ -127,7 +126,7 @@ class PommoSubscriber {
 		if (!empty($invalid)) {
 			foreach ($invalid as $i)
 				$str .= " [$i] ";
-			$logger->addErr("Field failed validation on; $str",1);
+			$logger->addErr("Subscriber failed validation on; $str",1);
 			return false;
 		}
 		return true;
@@ -524,7 +523,7 @@ class PommoSubscriber {
 	// checks to see if an email address exists in the system
 	// accepts a single email (str) or array of emails
 	// returns an array found emails. (will be empty if none found).
-	function isEmail(&$in) {
+	function & emailExists(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 

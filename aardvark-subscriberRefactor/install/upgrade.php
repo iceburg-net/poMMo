@@ -16,7 +16,7 @@
 *********************************/
 require ('../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
-$pommo->init(array('authLevel' => 0, 'noInit' => TRUE));
+$pommo->init(array('authLevel' => 0, 'noSession' => TRUE));
 $pommo->reloadConfig();
 
 $logger = & $pommo->_logger;

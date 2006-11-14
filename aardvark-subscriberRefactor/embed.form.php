@@ -16,7 +16,7 @@
  *********************************/
 define('_poMMo_embed', TRUE);
 require(dirname(__FILE__).'/bootstrap.php');
-$pommo->init(array('authLevel' => 0, 'noInit' => TRUE));
+$pommo->init(array('authLevel' => 0, 'noSession' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
