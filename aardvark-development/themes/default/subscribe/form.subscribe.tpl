@@ -19,7 +19,7 @@
 
 {foreach name=demos from=$fields key=key item=demo}
 <div>
-<label{if $demo.required} class="required"{/if} for="field{$key}">{$demo.prompt}:</label>
+<label {if $demo.required == 'on'}class="required"{/if}>{$demo.prompt}</label>
 
 {if $demo.type == 'text' || $demo.type == 'number'}
 <input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $demo.normally} value="{$demo.normally|escape}"{/if} />
