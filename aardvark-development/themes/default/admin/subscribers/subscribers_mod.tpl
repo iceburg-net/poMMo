@@ -47,7 +47,7 @@
 
 {elseif $demo.type == 'multiple'}
 <select name="d[{$key}][{$demo_id}]">
-{foreach name=option from=$demo.options item=option}
+{foreach name=option from=$demo.array item=option}
 <option{if $item.data.$demo_id == $option} selected="selected"{/if}>{$option}</option>
 {/foreach}
 </select>

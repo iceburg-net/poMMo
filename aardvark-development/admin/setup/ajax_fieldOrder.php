@@ -19,7 +19,7 @@ $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-foreach($_POST['demoOrder'] as $val => $id) { // syntax for multi-row updates in in 1 query.
+foreach($_POST['fieldOrder'] as $val => $id) { // syntax for multi-row updates in in 1 query.
 	$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($id,$val)).' ';
 }
 

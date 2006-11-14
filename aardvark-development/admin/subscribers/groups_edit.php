@@ -53,13 +53,13 @@ if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
 
 // get groups, fields
 $groups = & dbGetGroups($dbo);
-$demos = & dbGetFields($dbo);
+$fields = & dbGetFields($dbo);
 
 // check if a filter is requested to be added
 if (isset ($_POST['add']) || isset ($_POST['update'])) {
 
 	function validateFilter() {
-		global $demos;
+		global $fields;
 		global $groups;
 
 		if (isset ($_POST['logic'])) {
@@ -69,8 +69,8 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 			// logic: the logic of the comparisson
 
 			// make sure field_id is valid
-			$demo = & $demos[$_POST['field_id']];
-			if (!is_array($demo))
+			$field = & $fields[$_POST['field_id']];
+			if (!is_array($field))
 				return false;
 
 			switch ($_POST['logic']) {
@@ -83,7 +83,7 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 					if (empty($_POST['logic-val']))
 						return false;
 			
-					if ($demo['type'] == 'checkbox')
+					if ($field['type'] == 'checkbox')
 						return false;
 					break;
 
@@ -92,12 +92,12 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 					if (empty($_POST['logic-val']))
 						return false;
 						
-					if ($demo['type'] == 'checkbox' || $demo['type'] == 'multiple')
+					if ($field['type'] == 'checkbox' || $field['type'] == 'multiple')
 						return false;
 					break;
 				case 'is_true' :
 				case 'not_true' :
-					if ($demo['type'] != 'checkbox')
+					if ($field['type'] != 'checkbox')
 						return false;
 					break;
 				default :
@@ -127,17 +127,17 @@ if (isset ($_POST['add']) || isset ($_POST['update'])) {
 	if (validateFilter()) {
 		@$logic = (!empty ($_POST['group_logic'])) ? $_POST['group_logic'] : $_POST['logic'];
 		@$value = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['logic-val'];
-		@$demo_id = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['field_id'];
+		@$field_id = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['field_id'];
 
 		// check if we should update filter
 		if (isset ($_POST['update']) && isset ($_POST['filter_id']) && is_numeric($_POST['filter_id'])) {
 			if (dbGroupFilterDel($dbo, $_POST['filter_id']))
-				if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
+				if (dbGroupFilterAdd($dbo, $group_id, $field_id, $logic, $value))
 					$logger->addMsg(Pommo::_T('Filter Updated'));
 				else
 					$logger->addMsg(Pommo::_T('Update failed'));
 		} else {
-			if (dbGroupFilterAdd($dbo, $group_id, $demo_id, $logic, $value))
+			if (dbGroupFilterAdd($dbo, $group_id, $field_id, $logic, $value))
 				$logger->addMsg(Pommo::_T('Filter Added'));
 			else
 				$logger->addMsg(Pommo::_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
@@ -153,7 +153,7 @@ $filterCount = count($filters);
 $group_name = db2str($groups[$group_id]);
 
 $smarty->assign('group_name', $group_name);
-$smarty->assign('demos', $demos);
+$smarty->assign('fields', $fields);
 $smarty->assign('groups', $groups);
 $smarty->assign('group_id', $group_id);
 $smarty->assign('filters', $filters);

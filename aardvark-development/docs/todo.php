@@ -16,6 +16,8 @@
 
 FINISH MERGING IN NEW FRAMEWORK.
 
+REMOVE ALL REFERENCES to DEMOS (demographics) in favor of fields
+
 Forum quote; Looks like SSL,TLS for SMTP connection not supported. Gmail and etc. only accept SMTP connection this way.
 
 PROCESS.PHP -- Include safe (compare bmReferer/SERVER['HTTP_REFERER'] to bm_http) autodetection

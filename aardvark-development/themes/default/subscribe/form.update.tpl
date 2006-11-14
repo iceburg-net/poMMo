@@ -18,21 +18,21 @@
 <label class="required" for="email2">{t}Verify Email:{/t}</label>
 <input type="text" class="text" size="32" maxlength="60" name="email2" id="email2" value="{$email2}" />
 
-{foreach name=demos from=$fields key=key item=demo}
-<label{if $demo.required} class="required"{/if} for="field{$key}">{$demo.prompt}</label>
+{foreach name=fields from=$fields key=key item=field}
+<label{if $field.required} class="required"{/if} for="field{$key}">{$field.prompt}</label>
 
-{if $demo.type == 'text'}
-<input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key}"{elseif $demo.normally} value="{$demo.normally}"{/if} />
+{if $field.type == 'text'}
+<input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key}"{elseif $field.normally} value="{$field.normally}"{/if} />
 
-{elseif $demo.type == 'checkbox'}
+{elseif $field.type == 'checkbox'}
 <input type="hidden" name="chkSubmitted" value="TRUE" />
-<input type="checkbox" name="d[{$key}]" id="field{$key}" {if $d.$key == "on"} checked="checked"{elseif !isset($chkSubmitted) && $demo.normally == "on"} checked="checked"{/if} />
+<input type="checkbox" name="d[{$key}]" id="field{$key}" {if $d.$key == "on"} checked="checked"{elseif !isset($chkSubmitted) && $field.normally == "on"} checked="checked"{/if} />
 
-{elseif $demo.type == 'multiple'}
+{elseif $field.type == 'multiple'}
 <select name="d[{$key}]" id="field{$key}">
 <option value="">{t}Choose Selection{/t}</option>
-{foreach from=$demo.options item=option}
-<option {if $d.$key == $option} selected="selected"{elseif !isset($d.$key) && $demo.normally == $option} selected="selected"{/if}>{$option}</option>
+{foreach from=$field.array item=option}
+<option {if $d.$key == $option} selected="selected"{elseif !isset($d.$key) && $field.normally == $option} selected="selected"{/if}>{$option}</option>
 {/foreach}
 </select>
 

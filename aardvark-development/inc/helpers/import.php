@@ -327,7 +327,7 @@ function csvPrepareImport(& $fields, & $csvFile, $fieldAssign) {
 				break;
 				case 'multiple' :
                 // verify the input matches a selection (for data congruency)
-                if (in_array($value, $field['options'])) {
+                if (in_array($value, $field['array'])) {
                     $subscriber['data'][$field_id] = mysql_real_escape_string($value);
                 }
                 else {
