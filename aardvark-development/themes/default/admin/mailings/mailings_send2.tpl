@@ -96,7 +96,7 @@
 
 <div>
 <label for="altInclude">Text message:</label>
-<select name="altInclude" id="altInclude" onChange="xinhaSubmit()">
+<select name="altInclude" id="altInclude" onchange="xinhaSubmit()">
 <option value="yes">different to HTML</option>
 <option value="no"{if $altInclude == 'no'} selected="selected"{/if}>same as HTML</option>
 </select>
