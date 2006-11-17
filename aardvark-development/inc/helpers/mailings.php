@@ -32,7 +32,7 @@ class PommoHelperMailings {
 		$url = $pommo->_http.$pommo->_baseUrl.'user/confirm.php?code='.$confirmation_key;
 		$body = preg_replace('@\[\[URL\]\]@i',$url,$messages[$type]['msg']);  
 	
-		if (empty($subject) || empty($body))
+		if (empty($subject) || empty($body)) 
 			return false;
 	
 		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
@@ -46,7 +46,7 @@ class PommoHelperMailings {
 		
 		$ret = true;
 		if (!$mail->bmSendmail($to)) {
-			$logger->addErr(_T('Error Sending Mail'));
+			$logger->addErr(Pommo::_T('Error Sending Mail'));
 			$ret = false;
 		}
 		// reset demo mode to default

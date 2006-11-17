@@ -3,10 +3,10 @@
 <h2>{t}Subscription Review{/t}</h2>
 
 {if $back}
-<p><a href="{$referer}"><img src="{$url.theme.shared}images/icons/back.png" alt="back icon" class="navimage" /> {t website=$config.site_name}Back to Subscription Form{/t}</a></p>
+<p><a href="{$referer}"><img src="{$url.theme.shared}images/icons/back.png" alt="back icon" class="navimage" /> {t}Back to Subscription Form{/t}</a></p>
 
 {else}
-<p><a href="{$config.site_url}"><img src="{$url.theme.shared}images/icons/back.png" alt="back icon" class="navimage" />{t website=$config.site_name}Return to %1{/t}</a></p>
+<p><a href="{$config.site_url}"><img src="{$url.theme.shared}images/icons/back.png" alt="back icon" class="navimage" />{t 1=$config.site_name}Return to %1{/t}</a></p>
 
 {/if}
 

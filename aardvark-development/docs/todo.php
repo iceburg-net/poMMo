@@ -10,13 +10,11 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
- 
-
 ?>
 
 FINISH MERGING IN NEW FRAMEWORK.
 
-REMOVE ALL REFERENCES to DEMOS (demographics) in favor of fields
+USE TABLES IN SUBSCRIPTION FORM? TO BETTER DEAL WITH DATEPICKER?
 
 Forum quote; Looks like SSL,TLS for SMTP connection not supported. Gmail and etc. only accept SMTP connection this way.
 

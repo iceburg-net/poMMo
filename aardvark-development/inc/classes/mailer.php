@@ -141,12 +141,12 @@ class PommoMailer extends PHPMailer {
 			return false;
 		}
 
-		if (!isEmail($this->_fromemail)) {
+		if (!PommoHelper::isEmail($this->_fromemail)) {
 			$this->logger->addMsg("From email must be a valid email address.");
 			return false;	
 		}
 
-		if (!isEmail($this->_frombounce)) {
+		if (!PommoHelper::isEmail($this->_frombounce)) {
 			$this->logger->addMsg("Bounce email must be a valid email address.");
 			return false;	
 		}
@@ -257,7 +257,7 @@ class PommoMailer extends PHPMailer {
 
 				// send the mail. If unsucessful, add error message.
 				if (!$this->Send())
-					$errors[] = "Mailing failed: " . $this->ErrorInfo;
+					$errors[] = Pommo::_T("Sending failed: ") . $this->ErrorInfo;
 				
 				$this->ClearAddresses();
 
@@ -293,8 +293,8 @@ class PommoMailer extends PHPMailer {
 
 			}
 		} else {
-			
-			$errors[] = "Mail to: " . (is_array($to)) ? implode(',', $to) : $to ." not sent: Demonstration active.";
+			$this->logger->addMsg(sprintf(Pommo::_T("Mail to: %s not sent. Demonstration mode is active."),(is_array($to)) ? implode(',', $to) : $to));
+			return true;
 		}
 
 		// if message(s) exist, return false. (Sending failed w/ error messages)

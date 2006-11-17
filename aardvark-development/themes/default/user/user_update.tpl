@@ -9,10 +9,8 @@
 {include file="subscribe/form.update.tpl"}
 
 <form method="post" action="">
-<input type="hidden" name="original_email" value="{$original_email}" />
-
 <img src="{$url.theme.shared}images/icons/nok.png" alt="not ok icon" />
-<input type="hidden" name="bm_email" value="{$bm_email}" />
+<input type="hidden" name="Email" value="{$Email}" />
 
 <div class="buttons">
 

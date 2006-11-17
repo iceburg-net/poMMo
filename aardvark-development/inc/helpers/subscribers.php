@@ -30,7 +30,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  *	subscriber_id	(int)			Subscriber ID in subscribers table
  *	pending_code	(str)			Code to complete pending request
  *	pending_type	(enum)			'add','del','change','password',NULL (def: null)
- *	pending_email	(str)			Pending email change (optional)
+ *	pending_array	(str)			Serialized Subscriber object (for update)
  *
  * == Additional Data Columns ==
  *	data_id			(int)			Database ID/Key
@@ -69,7 +69,7 @@ class PommoSubscriber {
 		if ($pending) {
 			$o = array(
 				'pending_code' => $row['pending_code'],
-				'pending_email' => $row['pending_email'],
+				'pending_array' => $row['pending_array'],
 				'pending_type' => $row['pending_type']);
 			$in = array_merge($o,$in);
 		}
@@ -119,8 +119,6 @@ class PommoSubscriber {
 				default:
 					$invalid[] = 'pending_type'; 
 			}
-			if (!empty($in['pending_email']) && !PommoHelper::isEmail($in['pending_email']))
-				$invalid[] = 'pending_email'; 
 		}
 			
 		if (!empty($invalid)) {
@@ -135,12 +133,13 @@ class PommoSubscriber {
 	// fetches subscribers (and their data) from the databse
 	// accepts filtering array -->
 	//   status (str) ['active','inactive','pending','all'(def)]
+	//   email (str||array) Email address(es)
 	//   sort (str) [email, ip, time_registered, time_touched, status, etc.]
 	//   order (str) "ASC" or "DESC"
 	//   limit (int) limits # subscribers returned
 	//   id (array||str) A single or an array of subscriber IDs
 	// returns an array of subscribers. Array key(s) correlates to subscriber id.
-	function & get($p = array('status' => 'all', 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null, 'id' => null)) {
+	function & get($p = array('status' => 'all', 'email' => null, 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null, 'id' => null)) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 
@@ -156,7 +155,7 @@ class PommoSubscriber {
 			SELECT
 				s.*,
 				p.pending_code,
-				p.pending_email,
+				p.pending_array,
 				p.pending_type
 			FROM 
 				" . $dbo->table['subscribers']." s
@@ -165,9 +164,10 @@ class PommoSubscriber {
 				1
 				[AND s.subscriber_id IN(%C)]
 				[AND s.status='%S']
+				[AND s.email IN (%Q)]
 				[ORDER BY %S] [%S]
 				[LIMIT %I, %I]";
-		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
+		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
 		
 		while ($row = $dbo->getRows($query)) 
 			$o[$row['subscriber_id']] = (empty($row['pending_code'])) ?
@@ -229,6 +229,21 @@ class PommoSubscriber {
 		return $o;
 	}
 	
+	// fetches a subscriber ID from an email
+	// accepts a email address (str)
+	// returns a subscriber ID (int) or false
+	function & getIDByEmail($email) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT subscriber_id
+			FROM " . $dbo->table['subscribers'] . "
+			WHERE email='%s'
+			LIMIT 1";
+		$query = $dbo->prepare($query,array($email));
+		return $dbo->query($query,0);
+	}
 	
 	// fetches subscribers from the database based off their attributes
 	// accepts a ordering array (same as one passed to PommoSubscriber::get())
@@ -377,12 +392,12 @@ class PommoSubscriber {
 			$query = "
 			INSERT INTO " . $dbo->table['subscriber_pending'] . "
 			SET
-			[pending_email='%S',]
+			[pending_array='%S',]
 			subscriber_id=%i,
 			pending_code='%s',
 			pending_type='%s'";
 			$query = $dbo->prepare($query,array(
-				$in['pending_email'],
+				$in['pending_array'],
 				$id,
 				$in['pending_code'],
 				$in['pending_type']
@@ -427,18 +442,20 @@ class PommoSubscriber {
 			FROM " . $dbo->table['subscriber_pending'] . "
 			WHERE subscriber_id IN(%c)";
 		$query = $dbo->prepare($query,array($id));
+		$dbo->query($query);
 		
 		$query = "
 			DELETE
 			FROM " . $dbo->table['subscriber_data'] . "
 			WHERE subscriber_id IN(%c)";
 		$query = $dbo->prepare($query,array($id));
+		$dbo->query($query);
 		
 		return $deleted;
 	}
 	
 	// updates a subscriber in the database
-	// accepts a field (array)
+	// accepts a subscriber (array)
 	// returns success (bool)
 	// NOTE: The passed subscriber field will overwrites all subscriber info 
 	//   (including values in subscriber_pending/subscriber_data). Make sure to pass
@@ -453,48 +470,20 @@ class PommoSubscriber {
 			SET
 			[email='%S',]
 			[time_registered='%S',]
-			[flag='%S',]
 			[ip='%S',]
 			[status='%S',]
-			subscriber_id=subscriber_id
+			flag='%s'
 			WHERE subscriber_id=%i";
 		$query = $dbo->prepare($query,array(
 			$in['email'],
 			$in['registered'],
-			$in['flag'],
 			$in['ip'],
 			$in['status'],
+			$in['flag'],
 			$in['id']
 		));
 		if (!$dbo->query($query))
 				return false;
-		
-		// insert pending (if exists)
-		$query = "
-			DELETE
-			FROM " . $dbo->table['subscriber_pending'] . "
-			WHERE subscriber_id IN(%c)";
-		$query = $dbo->prepare($query,array($in['id']));
-		if (!$dbo->query($query))
-				return false;
-		
-		if ($in['status'] == 'pending') {
-			$query = "
-			INSERT INTO " . $dbo->table['subscriber_pending'] . "
-			SET
-			[pending_email='%S',]
-			subscriber_id=%i,
-			pending_code='%s',
-			pending_type='%s'";
-			$query = $dbo->prepare($query,array(
-				$in['pending_email'],
-				$in['id'],
-				$in['pending_code'],
-				$in['pending_type']
-			));
-			if (!$dbo->query($query))
-				return false;
-		}
 		
 		// insert data
 		$query = "
@@ -519,24 +508,6 @@ class PommoSubscriber {
 		
 		return true;
 	}
-
-	// checks to see if an email address exists in the system
-	// accepts a single email (str) or array of emails
-	// returns an array found emails. (will be empty if none found).
-	function & emailExists(&$in) {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-
-		$query = "
-			SELECT email
-			FROM " . $dbo->table['subscribers'] ."
-			WHERE email IN (%q)";
-		$query = $dbo->prepare($query,array($in));
-		$o = $dbo->getAll($query, 'assoc', 'email');
-
-		return $o;
-	}
-	
 	
 	// flags subscribers to update their records
 	// accepts a single ID (int) or array of IDs 

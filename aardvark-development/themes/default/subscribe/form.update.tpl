@@ -5,41 +5,56 @@
 <fieldset>
 <legend>{t}Your Information{/t}</legend>
 <input type="hidden" name="updateForm" value="true" />
-<input type="hidden" name="original_email" value="{$original_email}" />
+
+<div class="notes">
 
 <p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields in %1bold%2 are required{/t}</p>
 
-<div>
-<label class="required" for="email">{t}Your Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="bm_email" id="email" value="{$bm_email}" />
 </div>
 
 <div>
-<label class="required" for="email2">{t}Verify Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="email2" id="email2" value="{$email2}" />
+<label class="required" for="email">{t}Your Email:{/t}</label>
+<input type="text" class="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" readonly/>
+</div>
+
+<div>
+<label for="email">{t}New Email:{/t}</label>
+<input type="text" class="text" size="32" maxlength="60" name="newemail" id="newemail" value="{$newemail|escape}"/>
+</div>
+
+<div>
+<label for="email">{t}Verify New Email:{/t}</label>
+<input type="text" class="text" size="32" maxlength="60" name="newemail2" id="newemail2" value="{$newemail2|escape}" />
+</div>
 
 {foreach name=fields from=$fields key=key item=field}
-<label{if $field.required} class="required"{/if} for="field{$key}">{$field.prompt}</label>
+<div>
+<label {if $field.required == 'on'}class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 
-{if $field.type == 'text'}
-<input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key}"{elseif $field.normally} value="{$field.normally}"{/if} />
+{if $field.type == 'text' || $field.type == 'number'}
+<input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
 
 {elseif $field.type == 'checkbox'}
 <input type="hidden" name="chkSubmitted" value="TRUE" />
-<input type="checkbox" name="d[{$key}]" id="field{$key}" {if $d.$key == "on"} checked="checked"{elseif !isset($chkSubmitted) && $field.normally == "on"} checked="checked"{/if} />
+<input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{elseif !isset($chkSubmitted) && $field.normally == "on"} checked="checked"{/if} />
 
 {elseif $field.type == 'multiple'}
 <select name="d[{$key}]" id="field{$key}">
 <option value="">{t}Choose Selection{/t}</option>
 {foreach from=$field.array item=option}
-<option {if $d.$key == $option} selected="selected"{elseif !isset($d.$key) && $field.normally == $option} selected="selected"{/if}>{$option}</option>
+<option{if $d.$key == $option} selected="selected"{elseif !isset($d.$key) && $field.normally == $option} selected="selected"{/if}>{$option}</option>
 {/foreach}
 </select>
 
-{else}
-{t}Unsupported Field Type{/t}
+{elseif $field.type == 'date'}
+<input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|date_format:"%m/%d/%Y"}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
 
+
+{else}
+{t}Unsupported field type{/t}
 {/if}
+
+</div>
 
 {/foreach}
 

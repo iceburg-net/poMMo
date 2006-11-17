@@ -142,6 +142,10 @@ class Pommo {
 				$this->kill($this->_T('Could not create directory') . ' ' . $this->_workDir . '/pommo/smarty');
 		}
 
+		// read configuration data
+		$this->_config = PommoAPI :: configGetBase();
+		
+		
 		// Bypass SESSION creation, reading of config, authentication checks and return
 		//  if 'noSession' passed
 		if ($p['noSession'])
@@ -165,9 +169,6 @@ class Pommo {
 		$this->_auth = new PommoAuth(array (
 			'requiredLevel' => $p['authLevel']
 		));
-
-		// read configuration data
-		$this->_config = PommoAPI :: configGetBase();
 
 		// clear _data unless 'keep' is true. Create SESSION reference.
 		if (!$p['keep']) {

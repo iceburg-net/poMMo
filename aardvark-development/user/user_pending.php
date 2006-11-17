@@ -1,6 +1,4 @@
 <?php
-
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -16,13 +14,10 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
+require('../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
 
-
-require ('../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/lib.txt.php');
-require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
-
-$pommo = & fireup('keep');
+$pommo->init(array('authLevel' => 0, 'noSession' => true));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -36,42 +31,37 @@ if (isset($_GET['input'])) {
 	$input = (unserialize($_GET['input']));
 }
 
-if (!isEmail($input['email']))
+$pending = PommoPending::getByEmail($input['Email']);
+if (!$pending) 
 	Pommo::redirect('login.php');
-
-$sql = "SELECT type,code,email FROM {$dbo->table['pending']} WHERE email='" . $input['email'] . "'";
-$dbo->query($sql);
-$row = & mysql_fetch_assoc($dbo->_result);
 
 // check if user wants to reconfirm or cancel their request
 if (!empty ($_POST)) {
 	if (isset ($_POST['reconfirm'])) {
-		switch ($row['type']) {
+		Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+		
+		switch ($pending['type']) {
 			case "add" :
-				bmSendConfirmation($row['email'], $row['code'], "subscribe");
+				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'subscribe');
 				break;
 			case "change" :
-				bmSendConfirmation($row['email'], $row['code'], "update");
+				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'update');
 				break;
 			case "del" :
-				bmSendConfirmation($row['email'], $row['code'], "unsubscribe");
+				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'unsubscribe');
 				break;
 			case "password" :
-				bmSendConfirmation($row['email'], $row['code'], "password");
+				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'password');
+				break;
 		}
-		$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['email']));
-	} else {
-		require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
-		if (dbPendingDel($dbo, $row['code']))
-			$logger->addMsg(Pommo::_T('Your pending request has been cancelled.'));
-		else
-			$logger->addErr(Pommo::_T('Error cancelling your request. Contact the administrator.'));
+		$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['Email']));
+	} elseif (isset($_POST['cancel'])) {
+		PommoPending::cancel($pending);
+		$logger->addMsg(Pommo::_T('Your pending request has been cancelled.'));		
 	}
-	
 	$smarty->assign('nodisplay',TRUE);
-
 } else {
-	switch ($row['type']) {
+	switch ($pending['type']) {
 		case "add" :
 		case "del" :
 		case "change" :
@@ -79,10 +69,7 @@ if (!empty ($_POST)) {
 			$logger->addMsg(Pommo::_T('You have pending changes. Please respond to your confirmation email'));
 			break;
 		default :
-			$url = '';
 			$logger->addErr(sprintf(Pommo::_T('Please Try Again! %s login %s'), '<a href="' . $pommo->_baseUrl . 'user/login.php">', '</a>'));
-			$smarty->display('user/user_pending.tpl');
-			Pommo::kill();
 	}
 }
 $smarty->display('user/user_pending.tpl');

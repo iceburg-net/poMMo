@@ -142,7 +142,7 @@ CREATE TABLE :::subscriber_pending::: (
   `subscriber_id` int(10) unsigned NOT NULL default '0',
   `pending_code` varchar(35) NOT NULL default '',
   `pending_type` enum('add','del','change','password') default NULL,
-  `pending_email` varchar(60) NULL default NULL,
+  `pending_array` text NULL default NULL,
   PRIMARY KEY  (`pending_id`),
   KEY `code` (`pending_code`),
   KEY `subscriber_id` (`subscriber_id`)
@@ -158,7 +158,7 @@ CREATE TABLE :::subscribers::: (
   `time_registered` datetime NOT NULL,
   `flag` enum('update') default NULL,
   `ip` varchar(60) default NULL,
-  `status` enum('active','inactive','pending') NOT NULL default 'pending',
+  `status` enum('active','inactive','pending') NOT NULL default 'active',
   PRIMARY KEY  (`subscriber_id`),
   KEY `email` (`email`(30)),
   KEY `flag` (`flag`),
