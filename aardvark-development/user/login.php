@@ -1,5 +1,4 @@
 <?php
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -14,15 +13,15 @@
 
 /**********************************
 	INITIALIZATION METHODS
- *********************************/
+*********************************/
+require('../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
 
-
-require ('../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
-
-$pommo = & fireup();
+$pommo->init(array('authLevel' => 0, 'noSession' => true));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
+
+session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -53,21 +52,22 @@ if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 	SmartyValidate :: connect($smarty);
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID __
-		
-		if (isDupeEmail($dbo, $_POST['Email'], 'pending')) {
-			// __EMAIL IN PENDING TABLE, REDIRECT
-			$input = urlencode(serialize(array('email' => $_POST['Email'])));
-			SmartyValidate :: disconnect();
-			Pommo::redirect('user_pending.php?input='.$input);
+		if (count(PommoHelper::emailExists($_POST['Email'])) > 0) {
+			if (PommoPending::isEmailPending($_POST['Email'])) {
+				$input = urlencode(serialize(array('Email' => $_POST['Email'])));
+				SmartyValidate :: disconnect();
+				Pommo::redirect('user_pending.php?input='.$input);
+			}
+			else {
+				// __ EMAIL IN SUBSCRIBERS TABLE, REDIRECT
+				$input = urlencode(serialize(array('Email' => $_POST['Email'])));
+				SmartyValidate :: disconnect();
+				Pommo::redirect('user_update.php?input='.$input);
+			}
 		}
-		elseif (isDupeEmail($dbo, $_POST['Email'], 'subscribers')) {
-			// __ EMAIL IN SUBSCRIBERS TABLE, REDIRECT
-			$input = urlencode(serialize(array('bm_email' => $_POST['Email'])));
-			SmartyValidate :: disconnect();
-			Pommo::redirect('user_update.php?input='.$input);
-		} else {
-			// __ REPORT STATUS
-			$logger->addMsg(Pommo::_T('That email address was not found in our system. Please try again.'));
+		else {
+		// __ REPORT STATUS
+		$logger->addMsg(Pommo::_T('Email address not found! Please try again.'));
 		}
 	}
 	$smarty->assign($_POST);

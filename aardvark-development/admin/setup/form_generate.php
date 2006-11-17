@@ -52,9 +52,9 @@ $form_name = "signup";
 <p><em>Fields in <strong>bold</strong> are required.</em></p>
 
 <div>
-<!--	Email field must be named "bm_email" -->
+<!--	Email field must be named "Email" -->
 <label for="email"><strong>Your Email:</strong></label>
-<input type="text" name="bm_email" id="email" maxlength="60">
+<input type="text" name="Email" id="email" maxlength="60">
 </div>
 
 <?php

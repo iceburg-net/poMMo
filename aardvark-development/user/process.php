@@ -28,6 +28,14 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
+// attempt to detect if referer was set 
+//  TODO; enable HTTP_REFERER after stripping out ?input= tags. These will continually repeat
+//$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $_SERVER['HTTP_REFERER'];
+$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$pommo->_baseUrl.'user/subscribe.php';
+
+// append stored input
+$smarty->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
+
 
 /**********************************
 	VALIDATE INPUT
@@ -37,7 +45,7 @@ if (empty ($_POST['pommo_signup']))
 	Pommo::redirect('login.php');
 
 $subscriber = array(
-	'email' => $_POST['bm_email'],
+	'email' => $_POST['Email'],
 	'registered' => time(),
 	'ip' => $_SERVER['REMOTE_ADDR'],
 	'status' => 'active',
@@ -45,11 +53,11 @@ $subscriber = array(
 );
 
 // ** check for correct email syntax
-if (PommoHelper::isEmail($subscriber['email']))
+if (!PommoHelper::isEmail($subscriber['email']))
 	$logger->addErr(Pommo::_T('Invalid Email Address'));
 		
 // ** check if email already exists in DB ("duplicates are bad..")
-if (count(PommoSubscriber::emailExists($subscriber['email'])) > 0) {
+if (count(PommoHelper::emailExists($subscriber['email'])) > 0) {
 	$logger->addErr('Email address already exists. Duplicates are not allowed');
 	$smarty->assign('dupe', TRUE);
 }
@@ -57,20 +65,9 @@ if (count(PommoSubscriber::emailExists($subscriber['email'])) > 0) {
 // check if errors exist with data, if so print results and die.
 if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'])) {
 	$smarty->assign('back', TRUE);
-
-	// attempt to detect if referer was set 
-	//  TODO; enable HTTP_REFERER after stripping out ?input= tags. These will continually repeat
-	//$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $_SERVER['HTTP_REFERER'];
-	$referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$pommo->_baseUrl.'user/subscribe.php';
-	
-	// append stored input
-	$smarty->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
 	$smarty->display('user/process.tpl');
 	Pommo::kill();
 }
-
-var_dump($subscriber);
-die();
 
 /**********************************
 	ADD SUBSCRIBER
@@ -90,23 +87,31 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	$subscriber['pending_type'] = 'add';
 	$subscriber['status'] = 'pending';
 	
-	if (!PommoSubscriber::add($subscriber)) 
+	if (!PommoSubscriber::add($subscriber)) {
 		$logger->addErr('Error adding subscriber! Please contact the administrator.');
+		$smarty->assign('back', TRUE);
+	}
 	else {
 		
-		if (PommoHelperMailings::sendConfirmation($subscriber['email'], $subscriber['pending_code'], $subscriber['pending_type'])) {
+		if (PommoHelperMailings::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
 			if ($config['site_confirm'])
 				Pommo::redirect($config['site_confirm']);
 			$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 		}
 		else {
 			$logger->addErr(Pommo::_T('Problem sending mail! Please contact the administrator.'));
+			$smarty->assign('back', TRUE);
+			
+			// delete the subscriber
+			PommoSubscriber::delete(PommoSubscriber::getIDByEmail($subscriber['email']));
 		}
 	}
 }
 else { // no email confirmation required
-	if (!PommoSubscriber::add($subscriber)) 
+	if (!PommoSubscriber::add($subscriber)) {
 		$logger->addErr('Error adding subscriber! Please contact the administrator.');
+		$smarty->assign('back', TRUE);
+	}
 	else {
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);

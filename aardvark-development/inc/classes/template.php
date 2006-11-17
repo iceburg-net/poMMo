@@ -47,10 +47,13 @@ class PommoTemplate extends Smarty {
 		$this->assign('config', array (
 			'app' => array (
 				'path' => $pommo->_baseDir,
-				'weblink' => '<a href="http://pommo.sourceforge.net/">' . Pommo::_T('poMMo Website'
-			) . '</a>',
-			'version' => (isset ($pommo->_config['version']
-		)) ? $pommo->_config['version'] : 'unknown'), 'site_name' => (empty ($pommo->_config['site_name'])) ? null : $pommo->_config['site_name'], 'site_url' => (empty ($pommo->_config['site_url'])) ? null : $pommo->_config['site_name'], 'list_name' => (empty ($pommo->_config['list_name'])) ? null : $pommo->_config['list_name'], 'admin_email' => (empty ($pommo->_config['admin_email'])) ? null : $pommo->_config['admin_email'], 'demo_mode' => (empty ($pommo->_config['demo_mode'])) ? null : $pommo->_config['demo_mode']));
+				'weblink' => '<a href="http://pommo.sourceforge.net/">' . Pommo::_T('poMMo Website') . '</a>',
+				'version' => $pommo->_config['version']),
+			'site_name' => $pommo->_config['site_name'],
+			'site_url' => $pommo->_config['site_url'], 
+			'list_name' => $pommo->_config['list_name'],
+			'admin_email' => $pommo->_config['admin_email'],
+			'demo_mode' => $pommo->_config['demo_mode']));
 
 		// set gettext overload functions (see block.t.php...)
 		$this->_gettext_func = array('Pommo','_T'); // calls Pommo::_T($str)

@@ -15,8 +15,6 @@
 // basic types used by poMMo -- they are generally fed a row from the database
 //  as an assosciatve array
 
-
- 
 class PommoType {
 	/**
 	 * Field: A SubscriberField
@@ -61,7 +59,7 @@ class PommoType {
 	 *	subscriber_id	(int)			Subscriber ID in subscribers table
 	 *	pending_code	(str)			Code to complete pending request
 	 *	pending_type	(enum)			'add','del','change','password',NULL (def: null)
-	 *	pending_email	(str)			Pending email change (optional)
+	 *	pending_array	(str)			Serialized Subscriber object (for update)
 	 *
 	 * == Additional Data Columns ==
 	 *	data_id			(int)			Database ID/Key
@@ -84,7 +82,17 @@ class PommoType {
 	}
 	function & subscriberPending() {
 		$o = PommoType::subscriber();
-		$o['pending_code'] = $o['pending_email'] = $o['pending_type'] = null;
+		$o['pending_code'] = $o['pending_array'] = $o['pending_type'] = null;
 		return $o;
+	}
+	
+	function & pending() {
+		return array(
+			'id' => null,
+			'subscriber_id' => null,
+			'code' => null,
+			'array' => array(),
+			'type' => null
+		);
 	}
 }

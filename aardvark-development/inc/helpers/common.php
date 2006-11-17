@@ -67,13 +67,34 @@ class PommoHelper {
 	// accepts an email address (str)
 	// returns email legitimacy (bool)
 	function isEmail($_address) {
-		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address))) ? false : true;
+		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address))) ? true : false;
 	}
 	
 	// generates a unique code to be used as a confirmation key.
 	// returns code (str)
 	function makeCode() {
 		return md5(rand(0, 5000).time());
+	}
+	
+	function makePassword() {
+		return substr(md5(rand()), 0, 5);
+	}
+	
+	// checks to see if an email address exists in the system
+	// accepts a single email (str) or array of emails
+	// returns an array found emails. (will be empty if none found).
+	function & emailExists(&$in) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+
+		$query = "
+			SELECT email
+			FROM " . $dbo->table['subscribers'] ."
+			WHERE email IN (%q)";
+		$query = $dbo->prepare($query,array($in));
+		$o = $dbo->getAll($query, 'assoc', 'email');
+
+		return $o;
 	}
 	
 	

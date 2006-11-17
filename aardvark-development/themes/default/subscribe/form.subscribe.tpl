@@ -16,7 +16,7 @@
 
 <div>
 <label class="required" for="email">{t}Your Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="bm_email" id="email" value="{$bm_email|escape}" />
+<input type="text" class="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" />
 </div>
 
 {foreach name=fields from=$fields key=key item=field}

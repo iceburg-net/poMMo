@@ -1,5 +1,4 @@
 <?php
-
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
@@ -15,16 +14,12 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../bootstrap.php');
-require ($pommo->_baseDir . '/inc/lib.validate_subscriber.php');
-require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
-require_once ($pommo->_baseDir . '/inc/db_fields.php');
-require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
-require_once ($pommo->_baseDir . '/inc/lib.txt.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
 
-$pommo = & fireup('keep');
+$pommo->init(array('authLevel' => 0,'noSession' => true));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -37,58 +32,59 @@ $smarty = new PommoTemplate();
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
 $smarty->prepareForSubscribeForm(); 
 
-$_POST['bm_email'] = $smarty->get_template_vars('bm_email');
+$_POST['Email'] = $smarty->get_template_vars('Email');
 
-if (empty($_POST['bm_email']))
-		Pommo::redirect('login.php');
+$subscriber = current(PommoSubscriber::get(array('email' => $_POST['Email'])));
 
-// populates form values with subscribers info from DB (called when POST vals not present)
-function bmPopulate() {
-	global $dbo;
-	global $smarty;
+if (empty($subscriber))
+	Pommo::redirect('login.php');
 	
-	$subscribers = & dbGetSubscriber($dbo, $_POST['bm_email'], 'detailed');
-	if (empty($subscribers))
-		Pommo::redirect('login.php');
-	$subscriber_id = & key($subscribers); // subscriber's ID
-	$subscriber = & current($subscribers);
-
-	$smarty->assign('original_email', $_POST['bm_email']);
-	$smarty->assign('email2', $_POST['bm_email']);
+if (!isset($_POST['d']))
 	$smarty->assign('d', $subscriber['data']); 
-}
+
 
 if (!empty ($_POST['update'])) {
-	// validate new subscriber info
-	if (validateSubscribeForm(FALSE)) {
-		// allow user to change their email address
-		if ($_POST['original_email'] != $_POST['bm_email'])
-			$_POST['d']['newEmail'] = $_POST['bm_email'];
-		$code = dbPendingAdd($dbo, 'change', $_POST['original_email'], $_POST['d']);
-		if (empty ($code)) {
+	// validate new subscriber info (also converts dates to ints)
+	if (!empty($_POST['newemail']) && $_POST['newemail'] != $_POST['newemail2']) {
+		$logger->addErr(Pommo::_T('Emails must match.'));
+	}
+	elseif (PommoValidate::subscriberData($_POST['d'])) {
+		
+		if (!empty($_POST['newemail']) && PommoHelper::isEmail($_POST['newemail']))
+			$subscriber['email'] = $_POST['newemail'];
+		$subscriber['data'] = $_POST['d'];
+		
+		// uses less space in DB if we strip out registered, touched, flag, etc.
+		//  also has MAGIC FUNCTIONALITY of removing update flag (by not remembering it)
+		$newsub = array(
+			'id' => $subscriber['id'],
+			'email' => $subscriber['email'],
+			'data' => $subscriber['data']
+		);
+		
+		$code = PommoPending::add($newsub, 'change');
+		if (empty($code)) {
 			$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') . 
-			sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php">','</a>'));
+			sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
 		} else {
-			bmSendConfirmation($_POST['original_email'], $code, "update");
+			Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+			PommoHelperMailings::sendConfirmation($subscriber['email'], $code, 'update');
 			$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 		}
 	}
 }
 elseif (!empty ($_POST['unsubscribe'])) {
-	$code = dbPendingAdd($dbo, "del", $_POST['original_email']);
+	$code = PommoPending::add($subscriber, 'del');
 	if (empty ($code))
 		$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') .
-		sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php">','</a>'));
+		sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
 	else {
-		bmSendConfirmation($_POST['original_email'], $code, "unsubscribe");
+		Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+		PommoHelperMailings::sendConfirmation($subscriber['email'], $code, 'unsubscribe');
 		$logger->addMsg(Pommo::_T('Unsubscribe request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+	
 	}
-	bmPopulate();
 } 
-else { // both update + unsubsscribe empty...
-	bmPopulate();
-}
-
 
 $smarty->display('user/user_update.tpl');
 Pommo::kill();
