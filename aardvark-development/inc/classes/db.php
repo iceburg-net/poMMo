@@ -41,8 +41,8 @@ class PommoDB {
 		$this->table = array (
 			'config' => $tablePrefix . 'config',
 			'fields' => $tablePrefix . 'fields',
+			'group_criteria' => $tablePrefix . 'group_criteria',
 			'groups' => $tablePrefix . 'groups',
-			'groups_criteria' => $tablePrefix . 'groups_criteria',
 			'mailing_current' => $tablePrefix . 'mailing_current',
 			'mailings' => $tablePrefix . 'mailings',
 			'subscriber_data' => $tablePrefix . 'subscriber_data',

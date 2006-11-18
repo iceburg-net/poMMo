@@ -312,7 +312,7 @@ class PommoField {
 		
 		$query = "
 			SELECT DISTINCT subscriber_id
-			FROM ".$dbo->table['data_active']."
+			FROM ".$dbo->table['subscriber_data']."
 			WHERE field_id IN(%c)
 			[AND value='%S']";
 		$query = $dbo->prepare($query,array($id,$val));

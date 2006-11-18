@@ -1,14 +1,15 @@
 <?php
-/*
- * validate.php
- *
- * PROJECT: aardvark-subscriberRefactor
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL
- *
+/** [BEGIN HEADER] **
+ * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
+ * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://www.iceburg.net/brice/
- */
+ * SOURCE: http://pommo.sourceforge.net/
+ *
+ *  :: RESTRICTIONS ::
+ *  1. This header must accompany all portions of code contained within.
+ *  2. You must notify the above author of modifications to contents within.
+ * 
+ ** [END HEADER]**/
  
  class PommoValidate {
  	// validates supplied subscriber data against fields
@@ -25,6 +26,8 @@
 	//   NOTE: has the MAGIC FUNCTIONALITY of converting date field input 
 	//     to a UNIX TIMESTAMP. This is necessary for quick SQL comparisson of dates, etc.
 	//   NOTE: has the MAGIC FUNCTIONALITY of trimming leading and trailing whitepace
+	
+	// TODO -> should fields be passed by reference? e.g. are they usually already available when subscriberData() is called?
 	function subscriberData(&$in, $p = array('prune' => true, 'active' => true, 'log' => true, 'ignore' => false)) {
 		global $pommo;
 		$pommo->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/fields.php');
@@ -123,5 +126,62 @@
 			
 		return $valid;
 	}
+	
+	function groupCriteria() {
+		
+	}
+	
+	// returns the legal(logical) selections for new filters based off pre-existing criteria
+	// accepts a list of groups
+	// accepts a list of fields
+	// returns an array of legal criteria
+	function getLegalCriteria(&$groups, &$fields) {
+		$c = array();
+		
+		$legalities = array(
+			'checkbox' => array('true','false'),
+			'multiple' => array('is','not'),
+			'text' => array('is','not'),
+			'date' => array('is','not','greater','less'),
+			'number' => array('is','not','greater','less')
+		);
+		
+		
+		foreach ($fields as $field)
+			$c[$field['id']] = $legalities[$field['type']];
+		
+		// subtract illogical selections from $c
+		foreach ($groups as $group)
+			foreach ($group['criteria'] as $criteria) {
+				
+				// create reference to this field's legalities 
+				$l =& $c[$criteria['field_id']];
+				switch($criteria['logic']) {
+					case 'true' :
+					case 'false' :
+						// if criteria is true or false, field cannot be ANYTHING else
+						$l = array();
+						break;
+					case 'is' :
+						unset($l[array_search('not', $l)]);
+						unset($l[array_search('is', $l)]);
+						break;
+					case 'not' :
+						unset($l[array_search('is', $l)]);
+						unset($l[array_search('not', $l)]);
+						break;
+					case 'greater' :
+						unset($l[array_search('greater', $l)]);
+						break;
+					case 'less':
+						unset($l[array_search('less', $l)]);
+						break;
+				}
+			}
+			
+		return $c;
+	}
+	
+	
  }
 ?>

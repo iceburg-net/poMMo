@@ -44,7 +44,7 @@ class PommoSubscriber {
 	// make a subscriber template
 	// accepts a subscriber template (assoc array)
 	// accepts a flag (bool) to designate return of a pending subscriber type
-	// return a subscriber (array)
+	// return a subscriber object (array)
 	function & make($in = array(), $pending = FALSE) {
 		$o = ($pending) ?
 			PommoType::subscriberPending() :
@@ -55,7 +55,7 @@ class PommoSubscriber {
 	// make a subscriber template based off a database row (field schema)
 	// accepts a subscriber template (assoc array)  
 	// accepts a flag (bool) to designate return of a pending subscriber type
-	// return a subscriber (array)
+	// return a subscriber object (array)
 	function & makeDB(&$row, $pending = FALSE) {
 		$in = array(
 		'id' => $row['subscriber_id'],
@@ -81,8 +81,8 @@ class PommoSubscriber {
 	}
 	
 	// subscriber validation
-	// accepts a subscriber (array)
-	// returns true if field ($in) is valid, false if not
+	// accepts a subscriber object (array)
+	// returns true if subscriber ($in) is valid, false if not
 	function validate(&$in) {
 		global $pommo;
 		$logger =& $pommo->_logger;
@@ -246,10 +246,11 @@ class PommoSubscriber {
 	}
 	
 	// fetches subscribers from the database based off their attributes
-	// accepts a ordering array (same as one passed to PommoSubscriber::get())
 	// accepts a attribute filtering array. 
 	//   array_key == filter table (subscriber_pending, subscriber_data, subscribers)
 	//   array_value == array column
+	// accepts filter by status (str) either 'active', 'inactive', 'pending' or NULL (any/default)
+	// Returns an array of subscriber IDs
 	/** EXAMPLE
 	array(
 		'subscriber_pending' => array(
@@ -262,7 +263,7 @@ class PommoSubscriber {
 			'email' => "not: 'bhb@iceburg.net'")
 		);
 	*/
-	function & getIDByAttr($f = array('subscriber_pending' => array(), 'subscriber_data' => array(), 'subscribers' => array()), $order = array()) {
+	function & getIDByAttr($f = array('subscriber_pending' => array(), 'subscriber_data' => array(), 'subscribers' => array()), $status = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -276,7 +277,7 @@ class PommoSubscriber {
 			}
 			else {
 				// extract logic ($matches[1]) + value ($matches[2]) 
-				preg_match('/^(?:(not|is|less|greater):)?(.*)$/i',$val,$matches);
+				preg_match('/^(?:(not|is|less|greater|true|false):)?(.*)$/i',$val,$matches);
 				if (!empty($matches[1])) { 
 					if (empty($filters[$col]))
 						$filters[$col] = array();
@@ -296,7 +297,6 @@ class PommoSubscriber {
 				$where .= " AND (field_id=$field_id ";
 			}
 			
-			// TODO; implement time_is, time_not, time_less, time_greater
 			foreach($in as $logic => $vals) {
 				switch ($logic) {
 					case "is" :
@@ -349,7 +349,21 @@ class PommoSubscriber {
 		if (!empty($f['subscribers']))
 			$o = array_merge($o,getIDs('subscribers',$f));
 		
-		return array_unique($o);
+		$o = array_unique($o);
+		
+		// filter by status if given
+		if ($status) {
+			$query = "
+				SELECT subscriber_id
+				FROM ". $dbo->table['subscribers']."
+				WHERE 
+					subscriber_id IN(%c)
+					AND status='%s'";
+			$query = $dbo->prepare($query,array($o,$status));
+			return $dbo->getAll($query, 'assoc', 'subscriber_id');
+		}
+		
+		return $o;
 	}
 	
 	// adds a subscriber to the database

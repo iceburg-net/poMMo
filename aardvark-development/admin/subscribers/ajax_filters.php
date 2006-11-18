@@ -15,7 +15,6 @@
 	INITIALIZATION METHODS
 *********************************/
 
-
 require ('../../bootstrap.php');
 
 $pommo->init();
