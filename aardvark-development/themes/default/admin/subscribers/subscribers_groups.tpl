@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="admin/inc.header.tpl"}{debug}
 
 <h2>{t}Groups Page{/t}</h2>
 
@@ -37,11 +37,11 @@
 </thead>
 
 <tbody>
-{foreach from=$groups key=id item=name}
+{foreach from=$groups key=id item=group}
 <tr>
-<td>{$name}</td>
+<td>{$group.name}</td>
 <td><button onclick="window.location.href='groups_edit.php?group_id={$id}'; return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button></td>
-<td><button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$id}&amp;delete=TRUE&amp;group_name={$name}'; return false;"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></button></td>
+<td><button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$id}&amp;delete=TRUE'; return false;"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></button></td>
 </tr>
 
 {foreachelse}

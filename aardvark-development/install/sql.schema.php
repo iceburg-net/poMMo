@@ -55,24 +55,24 @@ CREATE TABLE :::fields::: (
   KEY `active` (`field_active`,`field_ordering`)
 );
 
+-- GROUP_CRITERIA  
+
+CREATE TABLE :::group_criteria::: (
+  `criteria_id` int(10) unsigned NOT NULL auto_increment,
+  `group_id` int(10) unsigned NOT NULL default '0',
+  `field_id` tinyint(3) unsigned NOT NULL default '0',
+  `logic` enum('is','not','greater','less','true','false','is_in','not_in') NOT NULL default 'is_in',
+  `value` text,
+  PRIMARY KEY  (`criteria_id`),
+  KEY `group_id` (`group_id`)
+);
+
 -- GROUPS
 
 CREATE TABLE :::groups::: (
   `group_id` smallint(5) unsigned NOT NULL auto_increment,
   `group_name` tinytext  NOT NULL,
   PRIMARY KEY  (`group_id`)
-);
-
--- GROUPS_CRITERIA
-
-CREATE TABLE :::groups_criteria::: (
-  `criteria_id` int(10) unsigned NOT NULL auto_increment,
-  `group_id` int(10) unsigned NOT NULL default '0',
-  `field_id` tinyint(3) unsigned NOT NULL default '0',
-  `logic` enum('is_in','not_in','is_equal','not_equal','is_more','is_less','is_true','not_true') NOT NULL default 'is_in',
-  `value` text,
-  PRIMARY KEY  (`criteria_id`),
-  KEY `group_id` (`group_id`)
 );
 
 

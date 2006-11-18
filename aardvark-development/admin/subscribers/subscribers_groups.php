@@ -14,10 +14,8 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-
-
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir.'/inc/db_groups.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -33,40 +31,43 @@ $smarty->prepareForForm();
 
 // add group if requested
 if (!empty ($_POST['group_name'])) {
-	if (dbGroupAdd($dbo, $_POST['group_name']))
-		$logger->addMsg(sprintf(Pommo::_T('Group %s Added'),$_POST['group_name']));
+	if (PommoGroup::nameExists($_POST['group_name']))
+		$logger->addMsg(sprintf(Pommo::_T('Group name (%s) already exists'),$_POST['group_name']));
+	else {
+		$group = PommoGroup::make(array('name' => $_POST['group_name']));
+		if (PommoGroup::add($group))
+			$logger->addMsg(sprintf(Pommo::_T('Group %s Added'),$_POST['group_name']));
+	}
 }
 
 if (!empty ($_GET['delete'])) {
-	// make sure it is a valid field
-	if (!dbGroupCheck($dbo, $_GET['group_id'])) {
-		$logger->addMsg(Pommo::_T('Group cannot be deleted.'));
-	} else {
-		// See if this change will affect any subscribers, if so, confirm the change.
-		$sql = 'SELECT COUNT(criteria_id) FROM ' . $dbo->table['groups_criteria'] . ' WHERE group_id=\'' . $_GET['group_id'] . '\'';
-		$affected = $dbo->query($sql, 0);
+	// make sure it is a valid group
+	$group = current(PommoGroup::get(array('id' => $_GET['group_id'])));
+	if (empty($group))
+		Pommo::redirect($_SERVER['PHP_SELF']);
 
-		if ($affected > 1 && empty ($_GET['dVal-force'])) {
-			$smarty->assign('confirm', array (
-				'title' => Pommo::_T('Delete Group'
-			), 'nourl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'],
-			 'yesurl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'] . '&delete=TRUE&dVal-force=TRUE&group_name='.$_GET['group_name'],
-			  'msg' => sprintf(Pommo::_T('%1$s filters belong this group . Are you sure you want to remove %2$s?'), '<b>' . $affected . '</b>','<b>' . $_GET['group_name'] . '</b>')));
-			$smarty->display('admin/confirm.tpl');
-			Pommo::kill();
-		} else {
-			// delete field
-			if (dbGroupDelete($dbo, $_GET['group_id'])) {
-				$logger->addMsg(sprintf(Pommo::_T('%s deleted.'),$_GET['group_name']));
-				Pommo::redirect($_SERVER['PHP_SELF']);
-			}
+	$affected = PommoGroup::filtersAffected($group['id']);
+
+	// See if this change will affect any subscribers, if so, confirm the change.
+	if ($affected > 1 && empty ($_GET['dVal-force'])) {
+		$smarty->assign('confirm', array (
+			'title' => Pommo::_T('Confirm Action'),
+			'nourl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'],
+			'yesurl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'] . '&delete=TRUE&dVal-force=TRUE',
+			'msg' => sprintf(Pommo::_T('%1$s filters belong this group . Are you sure you want to remove %2$s?'), '<b>' . $affected . '</b>','<b>' . $group['name'] . '</b>')));
+		$smarty->display('admin/confirm.tpl');
+		Pommo::kill();
+	} else {
+		// delete group
+		if (!PommoGroup::delete($group['id']))
 			$logger->addMsg(Pommo::_T('Group cannot be deleted.'));
-		}
+		else
+			$logger->addMsg(sprintf(Pommo::_T('%s deleted.'),$group['name']));
 	}
 }
 
 // Get array of mailing groups. Key is ID, value is name
-$groups = dbGetGroups($dbo);
+$groups = PommoGroup::get();
 
 $smarty->assign('groups',$groups);
 $smarty->display('admin/subscribers/subscribers_groups.tpl');

@@ -14,12 +14,10 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-
-
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_groups.php');
-require_once ($pommo->_baseDir . '/inc/db_fields.php');
-require_once ($pommo->_baseDir . '/inc/lib.txt.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -33,124 +31,37 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 $smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
-// validate group_id before setting it as var
-if (isset ($_REQUEST['group_id']) && dbGroupCheck($dbo, $_REQUEST['group_id']))
-	$group_id = $_REQUEST['group_id'];
-else {
+$groups = & PommoGroup::get();
+$fields = & PommoField::get();
+$criteria = & PommoValidate::getLegalCriteria($groups, $fields);
+$group =& $groups[$_REQUEST['group_id']];
+if(empty($group))
 	Pommo::redirect('subscribers_groups.php');
-}
+
 
 // delete criteria if requested
 if (!empty ($_GET['delete'])) {
-	if (is_numeric($_GET['filter_id']))
-		if (dbGroupFilterDel($dbo, $_GET['filter_id']))
-			$logger->addMsg(Pommo::_T('Filter Removed'));
+	if (PommoGroup::filterDel($_GET['filter_id']))
+		$logger->addMsg(Pommo::_T('Filter Removed'));
 }
 
-// change group name  if requested
+// change group name if requested
 if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
-	dbGroupUpdateName($dbo, $group_id, $_POST['group_name']);
+	if (PommoGroup::changeName($group['id'], $_POST['group_name']))
+		Pommo::redirect($_SERVER['PHP_SELF']);
 
-// get groups, fields
-$groups = & dbGetGroups($dbo);
-$fields = & dbGetFields($dbo);
-
-// check if a filter is requested to be added
-if (isset ($_POST['add']) || isset ($_POST['update'])) {
-
-	function validateFilter() {
-		global $fields;
-		global $groups;
-
-		if (isset ($_POST['logic'])) {
-
-			// logic-val: what a field should be compared to
-			// field_id: which field_id (field_id) should be compared
-			// logic: the logic of the comparisson
-
-			// make sure field_id is valid
-			$field = & $fields[$_POST['field_id']];
-			if (!is_array($field))
-				return false;
-
-			switch ($_POST['logic']) {
-				case 'is_in' :
-				case 'not_in' :
-					return false; // group inclusion/exclusion should be hanled by section below...
-
-				case 'is_equal' :
-				case 'not_equal' :
-					if (empty($_POST['logic-val']))
-						return false;
-			
-					if ($field['type'] == 'checkbox')
-						return false;
-					break;
-
-				case 'is_more' :
-				case 'is_less' :
-					if (empty($_POST['logic-val']))
-						return false;
-						
-					if ($field['type'] == 'checkbox' || $field['type'] == 'multiple')
-						return false;
-					break;
-				case 'is_true' :
-				case 'not_true' :
-					if ($field['type'] != 'checkbox')
-						return false;
-					break;
-				default :
-					return false;
-					break;
-			}
-
-		}
-		elseif (!empty($_POST['group_logic'])) {
-			switch ($_POST['group_logic']) {
-				case 'is_in' :
-				case 'not_in' :
-					// make sure logic-val is a valid group
-
-					if (!isset ($groups[$_POST['logic-val']]))
-						return false;
-					break;
-			}
-		} else {
-			return false;
-		}
-		// addition passed sanity checks
-		return true;
-	}
-
-	// validate addition
-	if (validateFilter()) {
-		@$logic = (!empty ($_POST['group_logic'])) ? $_POST['group_logic'] : $_POST['logic'];
-		@$value = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['logic-val'];
-		@$field_id = (!empty ($_POST['group_logic'])) ? $_POST['logic-val'] : $_POST['field_id'];
-
-		// check if we should update filter
-		if (isset ($_POST['update']) && isset ($_POST['filter_id']) && is_numeric($_POST['filter_id'])) {
-			if (dbGroupFilterDel($dbo, $_POST['filter_id']))
-				if (dbGroupFilterAdd($dbo, $group_id, $field_id, $logic, $value))
-					$logger->addMsg(Pommo::_T('Filter Updated'));
-				else
-					$logger->addMsg(Pommo::_T('Update failed'));
-		} else {
-			if (dbGroupFilterAdd($dbo, $group_id, $field_id, $logic, $value))
-				$logger->addMsg(Pommo::_T('Filter Added'));
-			else
-				$logger->addMsg(Pommo::_T('Could not add filter. Perhaps it negates the effect of an existing one?'));
-		}
-	} else {
-		$logger->addMsg(Pommo::_T('Filter failed validation'));
-	}
+// add filter if requested
+if (isset ($_POST['add'])) {
+	$logger->addMsg(Pommo::_T('Filter Added'));
+	Pommo::_T('Filter failed validation');
+	
 }
 
-$tally = dbGroupTally($dbo, $group_id);
-$filters = dbGetGroupFilter($dbo, $group_id);
-$filterCount = count($filters);
-$group_name = db2str($groups[$group_id]);
+// update a filter if requested 
+if (isset ($_POST['update'])) {
+	$logger->addMsg(Pommo::_T('Filter Updated'));
+	$logger->addMsg('Update failed');
+}
 
 $smarty->assign('group_name', $group_name);
 $smarty->assign('fields', $fields);
@@ -158,8 +69,9 @@ $smarty->assign('groups', $groups);
 $smarty->assign('group_id', $group_id);
 $smarty->assign('filters', $filters);
 $smarty->assign('filterCount', $filterCount);
-$smarty->assign('tally', $tally);
+$smarty->assign('tally', count(PommoGroup::getMembers($group)));
 
 $smarty->display('admin/subscribers/groups_edit.tpl');
 Pommo::kill();
+
 ?>
