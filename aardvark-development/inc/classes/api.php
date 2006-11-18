@@ -123,6 +123,7 @@ class PommoAPI {
 			[WHERE config_name IN(%Q)]";
 		if (!$dbo->query($dbo->prepare($query,array($where))))
 			die('Error updating config');
+		return true;
 	}
 }
 ?>

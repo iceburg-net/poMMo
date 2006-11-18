@@ -11,6 +11,7 @@
  * 
  ** [END HEADER]**/
 
+// TODO -> homogenize/reduce the get methods -- make more efficient!
 
 // include the pending prototype object 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
@@ -120,6 +121,26 @@ class PommoPending {
 		return (empty($o)) ? false : current($o);
 	}
 	
+	// get a pending entry from a subscriber ID
+	// accepts a subscriber ID (int)
+	// returns pending object (array) or false if not found.
+	function & getBySubID($id = null){
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$o = array();
+		
+		$query = "
+			SELECT *
+			FROM ".$dbo->table['subscriber_pending']."
+			WHERE subscriber_id=%i LIMIT 1";
+		$query = $dbo->prepare($query,array($id));
+		while ($row = $dbo->getRows($query)) 
+			$o[$row['pending_id']] = PommoPending::MakeDB($row);
+		
+		return (empty($o)) ? false : current($o);
+	}
+	
 	// checks to see if a subscriber ID has a pending request
 	// accepts a subscriber ID (int)
 	// returns true if pending exists, false if not (bool)
@@ -167,7 +188,7 @@ class PommoPending {
 	function add(&$subscriber, $type = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		$loger =& $pommo->_logger;
+		$logger =& $pommo->_logger;
 		
 		switch ($type) {
 			case 'add':
@@ -297,23 +318,16 @@ class PommoPending {
 				$pommo->requireOnce($pommo->_baseDir. 'inc/helpers/subscribers.php');
 				$password = PommoHelper::makePassword();
 				
-				$email = current(PommoSubscriber::getEmail(array('id' => $in['subscriber_id'])));
-				
 				$config = PommoAPI::configGet(array(
 					'admin_username',
 					'admin_email'
 				));
-
-				// see if we're updating the administrator's password.				
-				if ($email == $config['admin_email']) {
-					$sql = "UPDATE {$dbo->table['config']} SET config_value='" . md5($password) . "' WHERE config_name='admin_password'";
-				if ($dbo->query($sql)) 
-					$logger->addErr(sprintf(Pommo::_T('You may now login with username: %1$s and password: %2$s '), '<span style="font-size: 130%">' . $config['admin_username'] . '</span>', '<span style="font-size: 130%">' . $password . '</span>'));
-				else {
+				
+				if(!PommoAPI::configUpdate(array('admin_password' => md5($password)),TRUE)) {
 					$logger->addMsg('Error updating password.');
 					return false;
 				}
-				}
+				$logger->addErr(sprintf(Pommo::_T('You may now %1$s login %2$s with username: %3$s and password: %4$s '), '<a href="'.$pommo->_baseUrl.'index.php">','</a>','<span style="font-size: 130%">' . $config['admin_username'] . '</span>', '<span style="font-size: 130%">' . $password . '</span>'));
 				break;
 		}
 		
