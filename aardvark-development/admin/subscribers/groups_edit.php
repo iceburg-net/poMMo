@@ -47,8 +47,8 @@ if (!empty ($_GET['delete'])) {
 
 // change group name if requested
 if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
-	if (PommoGroup::changeName($group['id'], $_POST['group_name']))
-		Pommo::redirect($_SERVER['PHP_SELF']);
+	if (PommoGroup::nameChange($group['id'], $_POST['group_name']))
+		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
 
 // add filter if requested
 if (isset ($_POST['add'])) {
@@ -63,13 +63,12 @@ if (isset ($_POST['update'])) {
 	$logger->addMsg('Update failed');
 }
 
-$smarty->assign('group_name', $group_name);
+$smarty->assign('group',$group);
 $smarty->assign('fields', $fields);
 $smarty->assign('groups', $groups);
-$smarty->assign('group_id', $group_id);
-$smarty->assign('filters', $filters);
-$smarty->assign('filterCount', $filterCount);
+$smarty->assign('criteria', $criteria);
 $smarty->assign('tally', count(PommoGroup::getMembers($group)));
+$smarty->assign('filterCount', count($group['criteria']));
 
 $smarty->display('admin/subscribers/groups_edit.tpl');
 Pommo::kill();

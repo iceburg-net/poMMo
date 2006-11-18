@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="{$url.theme.shared}datepicker/datepicker.css"/>
-<script type="text/javascript" src="{$url.theme.shared}js/jquery.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/dom_creator.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/dom_creator.js"></script>
 <script type="text/javascript">
 /*
  * Date picker plugin for jQuery

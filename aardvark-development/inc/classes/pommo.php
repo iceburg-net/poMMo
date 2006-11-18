@@ -245,9 +245,8 @@ class Pommo {
 	global $pommo;
 		// adds http & baseURL if they aren't already provided... allows code shortcuts ;)
 		//  if url DOES NOT start with '/', the section will automatically be appended
-		
 		if (!preg_match('@^https?://@i', $url)) {
-			if (!strpos($url, $pommo->_baseUrl)) { 
+			if (strpos($url, $pommo->_baseUrl) === false) { 
 				if (substr($url, 0, 1) != '/') {
 					if ($pommo->_section != 'user' && $pommo->_section != 'admin') {
 						$url = $pommo->_http . $pommo->_baseUrl . 'admin/' . $pommo->_section . '/' . $url;
@@ -255,7 +254,7 @@ class Pommo {
 						$url = $pommo->_http . $pommo->_baseUrl . $pommo->_section . '/' . $url;
 					}
 				} else {
-					$url = $pommo->_http . $pommo->_baseUrl . str_replace($pommo->_baseUrl,'',$url); 
+					$url = $pommo->_http . $pommo->_baseUrl . str_replace($pommo->_baseUrl,'',substr($url,1)); 
 				}
 			} else {
 				$url = $pommo->_http . $url;

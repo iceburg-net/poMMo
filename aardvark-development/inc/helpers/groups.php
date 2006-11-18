@@ -93,7 +93,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$query = $dbo->prepare($query,array($p['id']));
 		
 		while ($row = $dbo->getRows($query)) {
-			if (empty($o[$row['group_id']]))
+			if (empty($o[$row['group_group_idid']]))
 				$o[$row['group_id']] = PommoGroup::makeDB($row);
 			
 			if(!empty($row['criteria_id'])) {
@@ -228,6 +228,22 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			WHERE group_name='%s'";
 		$query=$dbo->prepare($query,array($name));
 		return (intval($dbo->query($query,0)) > 0) ? true : false;
-	}	
+	}
+	
+	// renames a group
+	// accepts a group ID (int)
+	// accepts a name (str)
+	// returns success (bool)
+	function nameChange($id, $name) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			UPDATE ".$dbo->table['groups']."
+			SET group_name='%s'
+			WHERE group_id=%i";
+		$query=$dbo->prepare($query,array($name,$id));
+		return ($dbo->affected($query) > 0) ? TRUE : FALSE;
+	}
  }
 ?>
