@@ -1,3 +1,6 @@
+{if $datePicker}{capture name=head}{* used to inject content into the HTML <head> *}
+	{include file="`$config.app.path`themes/shared/datepicker/datepicker.tpl"}
+{/capture}{/if}
 {include file="user/inc.header.tpl"}
 
 <h2>{t}Subscriber Update{/t}</h2>

@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}{debug}
+{include file="admin/inc.header.tpl"}
 
 <h2>{t}Groups Page{/t}</h2>
 
