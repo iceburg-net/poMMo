@@ -26,19 +26,23 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
+
 // log the user out if requested
 if (isset($_GET['logout'])) {
 	if (class_exists('PommoAuth'))
 		$pommo->_auth->logout();
 	header('Location: ' . $pommo->_http . $pommo->_baseUrl . 'index.php');
 }
+
 // check if user is already logged in
-elseif (class_exists('PommoAuth') && $pommo->_auth->isAuthenticated()) {
+if (class_exists('PommoAuth') && $pommo->_auth->isAuthenticated()) {
 	// If user is authenticated (has logged in), redirect to admin.php
 	Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'admin/admin.php');
 }
+
+
 // Check if user submitted correct username & password. If so, Authenticate.
-elseif (!empty ($_POST['username']) || !empty ($_POST['password'])) {	
+elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST['password'])) {	
 	$auth = PommoAPI::configGet(array (
 		'admin_username',
 		'admin_password'
@@ -69,24 +73,21 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 	}
 	elseif ($_POST['captcha'] == $_POST['realdeal']) {
 		// user inputted captcha matched. Reset password
+		
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
+		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
 
-		require_once ($pommo->_baseDir . '/inc/db_subscribers.php');
-		require_once ($pommo->_baseDir . '/inc/lib.mailings.php');
-
-		// see if there is already a pending request for the administrator
-		if (isDupeEmail($dbo, $pommo->_config['admin_email'], 'pending')) {
-			$pommo->set(array (
-				'email' => $pommo->_config['admin_email']
-			));
-			Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'user/user_pending.php');
+		// see if there is already a pending request for the administrator [subscriber id == 0]
+		if (PommoPending::isPending(0)) {
+			$input = urlencode(serialize(array('adminID' => TRUE, 'Email' => $pommo->_config['admin_email'])));
+			Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'user/user_pending.php?input='.$input);
 		}
 
 		// create a password change request, send confirmation mail
-		$code = dbPendingAdd($dbo, "password", $pommo->_config['admin_email']);
-		if (!empty ($code)) {
-			bmSendConfirmation($pommo->_config['admin_email'], $code, "password");
-		}
-
+		$subscriber = array('id' => 0);
+		$code = PommoPending::add($subscriber,'password');
+		PommoHelperMailings::sendConfirmation($pommo->_config['admin_email'], $code, 'password');
+		
 		$logger->addMsg(Pommo::_T('Password reset request recieved. Check your email.'));
 		$smarty->assign('captcha',FALSE);
 		

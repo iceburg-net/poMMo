@@ -31,14 +31,18 @@ if (isset($_GET['input'])) {
 	$input = (unserialize($_GET['input']));
 }
 
-$pending = PommoPending::getByEmail($input['Email']);
-if (!$pending) 
+$pending = (isset($input['adminID'])) ? // check to see if we're resetting admin password
+	PommoPending::getBySubID(0) :
+	PommoPending::getByEmail($input['Email']);
+if (!$pending) {
+	var_dump($input); die();	
 	Pommo::redirect('login.php');
+}
 
 // check if user wants to reconfirm or cancel their request
 if (!empty ($_POST)) {
 	if (isset ($_POST['reconfirm'])) {
-		Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
 		
 		switch ($pending['type']) {
 			case "add" :
