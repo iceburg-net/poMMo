@@ -279,12 +279,7 @@ class PommoField {
 		// remove value from array
 		$key = array_search($value,$field['array']);
 		if (!is_numeric($key)) {
-			$logger->addErr("Option ($value) does not exist in field_array",1);
-			
-			var_dump($value);
-			var_dump($field['array']);
-			var_dump($key);
-			
+			$logger->addErr("Option ($value) does not exist in field_array",1);			
 			return false;
 		}
 		unset($field['array'][$key]);

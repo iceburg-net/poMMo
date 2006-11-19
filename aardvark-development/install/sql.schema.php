@@ -61,7 +61,7 @@ CREATE TABLE :::group_criteria::: (
   `criteria_id` int(10) unsigned NOT NULL auto_increment,
   `group_id` int(10) unsigned NOT NULL default '0',
   `field_id` tinyint(3) unsigned NOT NULL default '0',
-  `logic` enum('is','not','greater','less','true','false','is_in','not_in') NOT NULL default 'is_in',
+  `logic` enum('is','not','greater','less','true','false','is_in','not_in') NOT NULL,
   `value` text,
   PRIMARY KEY  (`criteria_id`),
   KEY `group_id` (`group_id`)

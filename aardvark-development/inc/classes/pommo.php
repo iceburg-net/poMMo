@@ -121,11 +121,18 @@ class Pommo {
 			'authLevel' => 1,
 			'keep' => FALSE,
 			'noSession' => FALSE,
-			'sessionID' => NULL
+			'sessionID' => NULL,
+			'noDebug' => FALSE
 		);
 	
 		// merge submitted parameters
 		$p = PommoAPI :: getParams($defaults, $args);
+		
+		// if debugging is set in config.php, enable debugging on the database.
+		if ($p['noDebug']) {
+			$this->_dbo->debug(FALSE);
+			$this->_debug = 'off';
+		}
 		
 		// make sure workDir is writable
 		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
