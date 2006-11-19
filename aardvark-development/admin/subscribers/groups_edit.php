@@ -17,7 +17,7 @@
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/filters.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -28,15 +28,18 @@ $dbo = & $pommo->_dbo;
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
-$smarty->prepareForForm();
 $smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
 $groups = & PommoGroup::get();
 $fields = & PommoField::get();
-$criteria = & PommoValidate::getLegalCriteria($groups, $fields);
+
 $group =& $groups[$_REQUEST['group_id']];
+
 if(empty($group))
 	Pommo::redirect('subscribers_groups.php');
+	
+$filters = & PommoFilter::getLegalFilters($groups, $fields);
+$gfilters = & PommoFilter::getLegalGroups($group, $groups);
 
 
 // delete criteria if requested
@@ -64,9 +67,8 @@ if (isset ($_POST['update'])) {
 }
 
 $smarty->assign('group',$group);
-$smarty->assign('fields', $fields);
-$smarty->assign('groups', $groups);
-$smarty->assign('criteria', $criteria);
+$smarty->assign('filters', $filters);
+$smarty->assign('gfilters', $gfilters);
 $smarty->assign('tally', count(PommoGroup::getMembers($group)));
 $smarty->assign('filterCount', count($group['criteria']));
 

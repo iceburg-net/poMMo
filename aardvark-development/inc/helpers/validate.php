@@ -64,7 +64,7 @@
 			
 			switch ($field['type']) {
 				case "checkbox":
-					if ($in[$id] != 'on' || $in['id'] != 'off') {
+					if ($in[$id] != 'on' && $in['id'] != '') {
 						if ($p['log'])
 							$logger->addErr(sprintf(Pommo::_T('Illegal input for field %s.'),$field['prompt']));
 						if ($p['ignore'])
@@ -126,62 +126,5 @@
 			
 		return $valid;
 	}
-	
-	function groupCriteria() {
-		
-	}
-	
-	// returns the legal(logical) selections for new filters based off pre-existing criteria
-	// accepts a list of groups
-	// accepts a list of fields
-	// returns an array of legal criteria
-	function getLegalCriteria(&$groups, &$fields) {
-		$c = array();
-		
-		$legalities = array(
-			'checkbox' => array('true','false'),
-			'multiple' => array('is','not'),
-			'text' => array('is','not'),
-			'date' => array('is','not','greater','less'),
-			'number' => array('is','not','greater','less')
-		);
-		
-		
-		foreach ($fields as $field)
-			$c[$field['id']] = $legalities[$field['type']];
-		
-		// subtract illogical selections from $c
-		foreach ($groups as $group)
-			foreach ($group['criteria'] as $criteria) {
-				
-				// create reference to this field's legalities 
-				$l =& $c[$criteria['field_id']];
-				switch($criteria['logic']) {
-					case 'true' :
-					case 'false' :
-						// if criteria is true or false, field cannot be ANYTHING else
-						$l = array();
-						break;
-					case 'is' :
-						unset($l[array_search('not', $l)]);
-						unset($l[array_search('is', $l)]);
-						break;
-					case 'not' :
-						unset($l[array_search('is', $l)]);
-						unset($l[array_search('not', $l)]);
-						break;
-					case 'greater' :
-						unset($l[array_search('greater', $l)]);
-						break;
-					case 'less':
-						unset($l[array_search('less', $l)]);
-						break;
-				}
-			}
-			
-		return $c;
-	}
-	
-	
  }
 ?>

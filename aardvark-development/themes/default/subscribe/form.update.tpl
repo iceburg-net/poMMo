@@ -1,6 +1,7 @@
 <div id="subscribeForm">
 
 <form method="post" action="">
+<input type="hidden" name="formSubmitted" value="1">
 
 <fieldset>
 <legend>{t}Your Information{/t}</legend>
@@ -35,8 +36,7 @@
 <input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
 
 {elseif $field.type == 'checkbox'}
-<input type="hidden" name="chkSubmitted" value="TRUE" />
-<input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{elseif !isset($chkSubmitted) && $field.normally == "on"} checked="checked"{/if} />
+<input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{elseif !$formSubmitted && $field.normally == "on"} checked="checked"{/if} />
 
 {elseif $field.type == 'multiple'}
 <select name="d[{$key}]" id="field{$key}">

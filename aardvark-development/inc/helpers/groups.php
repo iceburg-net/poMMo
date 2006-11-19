@@ -93,19 +93,43 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$query = $dbo->prepare($query,array($p['id']));
 		
 		while ($row = $dbo->getRows($query)) {
-			if (empty($o[$row['group_group_idid']]))
+			if (empty($o[$row['group_id']]))
 				$o[$row['group_id']] = PommoGroup::makeDB($row);
 			
 			if(!empty($row['criteria_id'])) {
 				$c = array (
 					'field_id' => $row['field_id'],
 					'logic' => $row['logic'],
-					'value' => $row['value']
+					'value' => $row['value'],
 				);
 				$o[$row['group_id']]['criteria'][$row['criteria_id']] = $c;
 			}
 		}
 		
+		return $o;
+	}
+	
+	// fetches group name(s) from the database
+	// accepts a filtering array -->
+	//   id (array) -> an array of field IDs
+	// returns an array of group names. Array key(s) correlates to group ID.
+	function & getName($id = array()) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$o = array();
+		
+		$query = "
+			SELECT *
+			FROM " . $dbo->table['groups']."
+			WHERE
+				1
+				[AND group_id IN(%C)]";
+		$query = $dbo->prepare($query,array($id));
+		
+		while ($row = $dbo->getRows($query))
+			$o[$row['group_id']] = $row['group_name'];
+			
 		return $o;
 	}
 	

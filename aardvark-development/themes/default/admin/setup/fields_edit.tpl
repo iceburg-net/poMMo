@@ -53,8 +53,8 @@
 <div>
 <label for="field_normally">{t}Default:{/t}</label>
 <select name="field_normally" id="field_normally">
-<option value="on"{if $field_normally} selected="selected"{/if}>Checked</option>
-<option value="off"{if !$field_normally} selected="selected"{/if}>Not Checked</option>
+<option value="on"{if $field_normally == 'on'} selected="selected"{/if}>Checked</option>
+<option value="off"{if $field_normally == 'off'} selected="selected"{/if}>Not Checked</option>
 </select>
 <div class="notes">{t}If provided, this value will appear pre-filled on the subscription form{/t}</div>
 </div>
