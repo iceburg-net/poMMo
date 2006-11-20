@@ -4,6 +4,25 @@
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
 {literal}
 <script type="text/javascript">
+function fwAjaxCall(id, name, gid, l) {
+	$('#newFilter select').each(function() { $(this).hide(); });
+	
+	var p = (typeof(l) == 'undefined') ?
+		{ID: id, add: name, group: gid} :
+		{ID: id, add: name, group: gid, logic: l};
+		
+	$('#filterWindow div.fwContent').load(
+		'ajax_group.php',
+		p,
+		function() {
+			$('#filterWindow a.fwClose').attr("alt",name);
+			$('#'+name).TransferTo({to:'filterWindow',className:'fwTransfer', duration: 300, complete:function(to){$(to).fadeIn(200)}});
+			PommoValidate.reset();
+			PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
+		}
+	);
+	return false; // don't follow href
+}
 $().ready(function(){ 
 
 	$('#filterWindow a.fwClose').click(function() {
@@ -14,25 +33,14 @@ $().ready(function(){
 	});
 					
 	$('#newFilter select').change(function() {
-		var name = $(this).name();
-		var id = $(this).val();
-		var gid = $(this).attr("alt");
-		if(id != '') {
-			$('#newFilter select').each(function() { $(this).hide(); });
-			
-			$('#filterWindow div.fwContent').load(
-				'ajax_group.php',
-				{ID: id, add: name, group: gid},
-				function() {
-					$('#filterWindow a.fwClose').attr("alt",name);
-					$('#'+name).TransferTo({to:'filterWindow',className:'fwTransfer', duration: 300, complete:function(to){$(to).fadeIn(200)}});
-					PommoValidate.reset();
-					PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
-				}
-			);
-		}
+		var name = $(this).name(); // "field" or "group"
+		var id = $(this).val(); // group or field ID
+		var gid = $(this).attr("alt"); // this group's ID
+		if(id != '') 
+			fwAjaxCall(id, name, gid);
 	});
 });
+
 
 </script>
 
@@ -150,7 +158,6 @@ input.pvInvalid, select.pvInvalid
 <th>{t}Delete{/t}</th>
 </tr>
 </thead>
-{debug}
 <tbody>
 {foreach name=outter from=$filters key=field_id item=logicArray}
 	{foreach name=inner from=$logicArray key=logic item=valArray}
@@ -161,7 +168,7 @@ input.pvInvalid, select.pvInvalid
 	{foreach name=v from=$valArray item=value}
 		<tr>
 		<td colspan="2">
-		<td>{$value}</td>
+		<td>{$groups[$value].name}</td>
 		<td></td>
 		<td>delete</td>
 		</tr>
@@ -169,9 +176,23 @@ input.pvInvalid, select.pvInvalid
 	{else}
 	<td>{$fields[$field_id].name}</td>
 	<td>{$english[$logic]}</td>
-	<td>{foreach from=$valArray item=value}<li>{$value}</li>{/foreach}</td>
-	<td>edit</td>
-	<td>delete</td>
+	<td>
+		<ul>
+		{foreach from=$valArray item=value}<li>{$value}</li>{/foreach}
+		</ul>
+	</td>
+	<td>
+		{if $logic != 'true' && $logic != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
+		<button onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic}'); return false;">
+		<img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" />
+		</button>
+		{/if}
+	</td>
+	<td>
+		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;fieldDelete={$field_id}&amp;logic={$logic|escape}'; return false;">
+		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
+		</button>
+	</td>
 	</tr>
 	{/if}
 	{/foreach}

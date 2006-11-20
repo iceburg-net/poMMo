@@ -16,7 +16,7 @@
 <table cellpadding="5" border="0">
 <tr>
 <td valign="top">
-{t}Match subscribers where{/t} <strong>{$field.name}</strong> 
+{t}Match subscribers where{/t} <strong>{$field.name}</strong>
 <select name="logic" id="fwLogic">
 {foreach from=$logic key=val item=desc}
 <option value="{$val}">{$desc}</option>
@@ -27,29 +27,52 @@
 {if $field.type == 'multiple'}
 
 <td valign="top" id="fwValue">
+
 <select name="v" class="pvEmpty">
 {foreach from=$field.array item=option}
-<option>{$option}</option>
+<option {if $option == $firstVal}SELECTED{/if}>{$option}</option>
 {/foreach}
 </select>
 <input type="button" value="+" id="fwAddValue">
+
+{* If we're editing, add another input populated w/ value *}
+{foreach name=outter from=$values item=val}
+<div>
+<select name="v" class="pvEmpty">
+{foreach name=inner from=$field.array item=option}
+<option {if $option == $val}SELECTED{/if}>{$option}</option>
+{/foreach}
+</select>
+&nbsp;<input type="button" value="-" class="fwDelVal">
+</div>
+{/foreach}
+
 </td>
 
 {elseif $field.type != 'checkbox'}
 
 <td valign="top" id="fwValue">
-<input type="text" name="v" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}">
+
+<input type="text" name="v" value="{$firstVal}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}">
 <input type="button" value="+" id="fwAddValue">
+
+{* If we're editing, add another input populated w/ value *}
+{foreach name=outter from=$values item=val}
+<div>
+<input type="text" name="v" value="{$val}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}">
+&nbsp;<input type="button" value="-" class="fwDelVal">
+</div>
+{/foreach}
+
 </td>
 
 {/if}
-
 
 </tr>
 </table>
 
 <div class="buttons">
-	<input type="button" value="{t}Add{/t}" id="fwSubmit">
+	<input type="button" value="{if $firstVal}{t}Update{/t}{else}{t}Add{/t}{/if}" id="fwSubmit">
 </div>
 <hr>
 
@@ -71,6 +94,14 @@ $('#fwAddValue').click(function() {
 	
 	PommoValidate.reset();
 	PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
+});
+
+$('#fwValue input.fwDelVal').each(function(){
+	$(this).oneclick(function() {
+		$(this).parent().remove();
+		PommoValidate.reset();
+		PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
+	});
 });
 
 $('#fwSubmit').oneclick(function() {

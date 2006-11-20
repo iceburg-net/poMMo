@@ -31,6 +31,7 @@ $smarty = new PommoTemplate();
 // current group
 $group = current(PommoGroup::get(array('id' => $_POST['group'])));
 
+
 if ($_POST['add'] == 'group') {
 	$match = PommoGroup::getName($_POST['ID']);
 	$key = key($match);
@@ -45,21 +46,32 @@ if ($_POST['add'] == 'group') {
 elseif ($_POST['add'] == 'field') {
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/filters.php');
-	$field = current(PommoField::get(array('id' =>$_POST['ID'])));
 	
-	$logic = PommoFilter::getLogic($group, $field);
+	// check to see if we're editing
+	
+	$values = array();
+	if (isset($_POST['logic'])) { // logic is passed only when edit button is clicked..
+		foreach($group['criteria'] as $filter) {
+			if($filter['logic'] == $_POST['logic'] && $filter['field_id'] == $_POST['ID'])
+				$values[] = $filter['value'];
+		}
+	}
+	$firstVal = (empty($values)) ? false : array_shift($values);
+	$smarty->assign('values',$values);
+	$smarty->assign('firstVal',$firstVal);
+	
+	$field = current(PommoField::get(array('id' =>$_POST['ID'])));
+	$logic = (isset($_POST['logic'])) ?
+		array($_POST['logic'] => PommoFilter::getEnglish($_POST['logic'])) :
+		PommoFilter::getLogic($group, $field);
 
 	$smarty->assign('group_id',$group['id']);
 	$smarty->assign('field',$field);
 	$smarty->assign('logic',$logic);
-	
-	
 	
 	$smarty->display('admin/subscribers/ajax_field.tpl');
 	Pommo::kill();
 	
 }
 die();
-	
-
 ?>

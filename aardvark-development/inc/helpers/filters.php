@@ -90,6 +90,21 @@ class PommoFilter {
 		return $c;
 	}
 	
+	function getEnglish($str = null) {
+		$english = array(
+			'is' => Pommo::_T('is'),
+			'not' => Pommo::_T('is not'),
+			'true' => Pommo::_T('is checked'),
+			'false' => Pommo::_T('is not checked'),
+			'greater' => Pommo::_T('is greater than'),
+			'less' => Pommo::_T('is less than'),
+			'is_in' => Pommo::_T('or in group'),
+			'not_in' => Pommo::_T('and not in group')
+		);
+		
+		return (empty($str)) ? $english : $english[$str]; 
+	}
+	
 	// gets the legal (logical) logic dropdowns for a field
 	// accepts a groub object
 	// accepts a field object
@@ -104,15 +119,6 @@ class PommoFilter {
 			'text' => array('is','not'),
 			'date' => array('is','not','greater','less'),
 			'number' => array('is','not','greater','less')
-		);
-		
-		$english = array(
-			'is' => Pommo::_T('is'),
-			'not' => Pommo::_T('is not'),
-			'true' => Pommo::_T('is checked'),
-			'false' => Pommo::_T('is not checked'),
-			'greater' => Pommo::_T('is greater than'),
-			'less' => Pommo::_T('is less than')
 		);
 		
 		$a = $legalities[$field['type']];
@@ -145,7 +151,7 @@ class PommoFilter {
 		}
 		
 		foreach($a as $logic) {
-			$o[$logic] = $english[$logic];
+			$o[$logic] = PommoFilter::getEnglish($logic);
 		}
 		return $o;
 	}
@@ -182,6 +188,9 @@ class PommoFilter {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
+		// remove previous filters
+		PommoFilter::deleteField($group, $match, $logic);
+		
 		foreach($values as $value)
 			$v[] = $dbo->prepare("(%i,%i,'%s','%s')",array($group, $match, $logic, $value));
 			
@@ -191,6 +200,19 @@ class PommoFilter {
 			VALUES ".implode(',', $v);
 		echo $query;
 		return $dbo->affected($query);
+	}
+	
+	function deleteField($group, $field, $logic) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			DELETE FROM " . $dbo->table['group_criteria']."
+			WHERE group_id=%i
+				AND field_id=%i
+				AND logic='%s'";
+		$query = $dbo->prepare($query,array($group, $field, $logic));
+		return ($dbo->affected($query));
 	}
 }
 ?>
