@@ -31,29 +31,6 @@ $smarty = new PommoTemplate();
 $smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
 
-// delete criteria if requested
-if (!empty ($_GET['delete'])) {
-	if (PommoGroup::filterDel($_GET['filter_id']))
-		$logger->addMsg(Pommo::_T('Filter Removed'));
-}
-
-// change group name if requested
-if (isset ($_POST['rename']) && !empty ($_POST['group_name']))
-	if (PommoGroup::nameChange($group['id'], $_POST['group_name']))
-		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
-
-// add filter if requested
-if (isset ($_POST['add'])) {
-	$logger->addMsg(Pommo::_T('Filter Added'));
-	Pommo::_T('Filter failed validation');
-	
-}
-// update a filter if requested 
-if (isset ($_POST['update'])) {
-	$logger->addMsg(Pommo::_T('Filter Updated'));
-	$logger->addMsg('Update failed');
-}
-
 $groups = & PommoGroup::get();
 $fields = & PommoField::get();
 
@@ -62,21 +39,18 @@ $group =& $groups[$_REQUEST['group_id']];
 if(empty($group))
 	Pommo::redirect('subscribers_groups.php');
 	
+
+if(isset($_GET['fieldDelete'])) {
+	PommoFilter::deleteField($group['id'], $_GET['fieldDelete'], $_GET['logic']);
+	Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
+}
+	
 $new = & PommoFilter::getLegalFilters($groups, $fields);
 $gnew = & PommoFilter::getLegalGroups($group, $groups);
 
 // organize existing criteria into fieldID[logic] = array('values','...');
 
-$english = array(
-	'is' => Pommo::_T('is'),
-	'not' => Pommo::_T('is not'),
-	'true' => Pommo::_T('is checked'),
-	'false' => Pommo::_T('is not checked'),
-	'greater' => Pommo::_T('is greater than'),
-	'less' => Pommo::_T('is less than'),
-	'is_in' => Pommo::_T('or in group'),
-	'not_in' => Pommo::_T('and not in group')
-);
+$english = PommoFilter::getEnglish();
 
 $filters = array();
 foreach($group['criteria'] as $crit) {
@@ -88,6 +62,7 @@ foreach($group['criteria'] as $crit) {
 }
 
 $smarty->assign('group',$group);
+$smarty->assign('groups',$groups);
 $smarty->assign('fields',$fields);
 $smarty->assign('new', $new);
 $smarty->assign('gnew', $gnew);
