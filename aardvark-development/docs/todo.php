@@ -65,15 +65,12 @@ I *am* thinking about incorporating a sent/unsent list that can be downloaded at
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  (API) Better mailing send debugging ->
 	    Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
-	  (API) Merge validator's is_email rules with lib.txt.php's isEmail
-	  (API) Add validation schemes to subscription form (process.php)
-	  (API) when inserting into subscribers_flagged, watch for duplicate keys (either add IGNORE or explicity check for flag_type...)
-	  (API) Allow fetching of field id, names, + types -- NOT OPTIONS, etc... too much data being passed around manage/groups/import/etc.
-	  
+	    
 	  (feature) Add ability to view emails in queue (from mailing status)
 	  (feature) add message templating
 	  (feature) Add Date + Numeric types  [[[{html_select_date}]]]
 	  (feature) Display flagged subscribers...
+	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.
 	  
 	
 	MEDIUM TERM:

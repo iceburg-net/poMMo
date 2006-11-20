@@ -2,7 +2,16 @@
 <input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}">
 <input type="hidden" id="fwMatchID" name="field_id" value="{$field.id}">
 
-<div>{t}Add new filter:{/t}</div>
+<div>
+{t}Add new filter:{/t} 
+{if $field.type == 'date'}
+	{t}value must be a date (mm/dd/yyyy){/t}
+{elseif $field.type == 'number'}
+	{t}value must be a number{/t}
+{elseif $field.type == 'text'}
+	{t}value must not be blank{/t}
+{/if}
+</div>
 
 <table cellpadding="5" border="0">
 <tr>
@@ -18,7 +27,7 @@
 {if $field.type == 'multiple'}
 
 <td valign="top" id="fwValue">
-<select name="v">
+<select name="v" class="pvEmpty">
 {foreach from=$field.array item=option}
 <option>{$option}</option>
 {/foreach}
@@ -29,7 +38,7 @@
 {elseif $field.type != 'checkbox'}
 
 <td valign="top" id="fwValue">
-<input type="text" name="v">
+<input type="text" name="v" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}">
 <input type="button" value="+" id="fwAddValue">
 </td>
 
@@ -51,6 +60,8 @@
 $('#fwAddValue').click(function() {
 	x = $('*:first-child', $(this).parent()).get(0);
 	$(this).parent().append('<br>or ').append($(x).clone());
+	PommoValidate.reset();
+	PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
 });
 $('#fwSubmit').oneclick(function() {
 	var _logic = $('#fwLogic').val();
@@ -73,6 +84,5 @@ $('#fwSubmit').oneclick(function() {
 		}
 	);
 });
-
 </script>
 {/literal}
