@@ -53,16 +53,26 @@
 </div>
 <hr>
 
-
 {literal}
 <script type="text/javascript">
 // need these for ie -- IE can't find functions declared here due to scoping??
 $('#fwAddValue').click(function() {
-	x = $('*:first-child', $(this).parent()).get(0);
-	$(this).parent().append('<br>or ').append($(x).clone());
+	$(this).parent().append('<div></div>');
+	e = $('*:first-child', $(this).parent()).get(0);
+	$('div:last-child', $(this).parent()).
+		append($(e).clone().val('')).
+		append('&nbsp;<input type="button" value="-">');
+	
+	$('div:last-child input[@type=button]', $(this).parent()).oneclick(function() {
+		$(this).parent().remove();
+		PommoValidate.reset();
+		PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
+	});
+	
 	PommoValidate.reset();
 	PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
 });
+
 $('#fwSubmit').oneclick(function() {
 	var _logic = $('#fwLogic').val();
 	var _group = $('#fwGroupID').val();
@@ -72,7 +82,6 @@ $('#fwSubmit').oneclick(function() {
 	$.post("ajax_filter_update.php",
 		{ logic: _logic, group: _group, match: _match, value: _value },
 		function(out) {
-			alert(out);
 			var name = $('#filterWindow a.fwClose').attr('alt');
 			$('#newFilter select').each(function() { $(this).show().val(''); });
 			$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({

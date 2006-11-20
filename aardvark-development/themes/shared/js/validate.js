@@ -47,8 +47,7 @@ var PommoValidate = {
 				if (!PommoValidate.checkInput(value, a[i]))
 					valid = false;
 			}
-
-				
+			
 			(valid) ?
 				$(this).removeClass('pvInvalid') :
 				$(this).addClass('pvInvalid');
