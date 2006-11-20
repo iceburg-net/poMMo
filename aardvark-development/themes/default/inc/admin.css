@@ -47,6 +47,7 @@ a:hover .navimage {
 #mainbar p {
 	float: left;
 	clear: left;
+	width: 100%;
 }
 
 #critLogic {/* dynamic group criteria */
