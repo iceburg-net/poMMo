@@ -33,6 +33,7 @@ $().ready(function(){
 		}
 	});
 });
+
 </script>
 
 <style>
@@ -117,7 +118,7 @@ input.pvInvalid, select.pvInvalid
 <label for="field">{t escape=no 1="<strong><a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a></strong>"}Select a %1 field %2 to filter{/t}</label>
 <select name="field" id="field" alt="{$group.id}">
 <option value="">-- {t}Choose subscriber field{/t} --</option>
-{foreach from=$filters key=id item=name}
+{foreach from=$new key=id item=name}
 <option value="{$id}">{$name}</option>
 {/foreach}
 </select>
@@ -127,7 +128,7 @@ input.pvInvalid, select.pvInvalid
 <label for="group">{t escape=no 1="<strong><a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a></strong>"}or, Select a %1 group %2 to{/t}</label>
 <select name="group" id="group" alt="{$group.id}">
 <option value="">-- {t}include or exclude{/t} --</option>
-{foreach from=$gfilters key=id item=name}
+{foreach from=$gnew key=id item=name}
 <option value="{$id}">{$name}</option>
 {/foreach}
 </select>
@@ -139,14 +140,53 @@ input.pvInvalid, select.pvInvalid
 <fieldset>
 <legend>{t}Group Filters{/t}</legend>
 
-<div>
-list..
-</div>
+<table summary="list of filters and controls">
+<thead>
+<tr>
+<th>{t}Field{/t}</th>
+<th>{t}Logic{/t}</th>
+<th>{t}Value(s){/t}</th>
+<th>{t}Edit{/t}</th>
+<th>{t}Delete{/t}</th>
+</tr>
+</thead>
+{debug}
+<tbody>
+{foreach name=outter from=$filters key=field_id item=logicArray}
+	{foreach name=inner from=$logicArray key=logic item=valArray}
+	<tr>
+	{if $field_id == 0}{* group match *}
+	<td colspan="5">{$english[$logic]}</td>
+	</tr>
+	{foreach name=v from=$valArray item=value}
+		<tr>
+		<td colspan="2">
+		<td>{$value}</td>
+		<td></td>
+		<td>delete</td>
+		</tr>
+	{/foreach}
+	{else}
+	<td>{$fields[$field_id].name}</td>
+	<td>{$english[$logic]}</td>
+	<td>{foreach from=$valArray item=value}<li>{$value}</li>{/foreach}</td>
+	<td>edit</td>
+	<td>delete</td>
+	</tr>
+	{/if}
+	{/foreach}
+{foreachelse}
+<tr>
+<td colspan="3"><strong>{t}No groups have been assigned.{/t}</strong></td>
+</tr>
+{/foreach}
+
+</tbody>
+</table>
 </fieldset>
 
 </form>
 
 <p>{t escape=no 1="<em>`$filterCount`</em>" 2="<strong>`$tally`</strong>"}%1 filters match a total of %2 active subscribers{/t}</p>
-
 
 {include file="admin/inc.footer.tpl"}
