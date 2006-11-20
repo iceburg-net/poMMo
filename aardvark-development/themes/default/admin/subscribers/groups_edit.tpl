@@ -1,6 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
 {literal}
 <script type="text/javascript">
 $().ready(function(){ 
@@ -25,6 +26,8 @@ $().ready(function(){
 				function() {
 					$('#filterWindow a.fwClose').attr("alt",name);
 					$('#'+name).TransferTo({to:'filterWindow',className:'fwTransfer', duration: 300, complete:function(to){$(to).fadeIn(200)}});
+					PommoValidate.reset();
+					PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
 				}
 			);
 		}
@@ -60,6 +63,10 @@ $().ready(function(){
 	border-right: 5px dashed #6CAF00;
 }
 
+input.pvInvalid, select.pvInvalid
+{
+	border: 1px solid red;
+}
 </style>
 {/literal}
 {/capture}
@@ -74,6 +81,8 @@ $().ready(function(){
 <p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="articleimg" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Groups can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country", you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to a value GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
 
 {include file="admin/inc.messages.tpl"}
+
+<div class="pvInvalid">asadss</div>
 
 <form method="post" action="" id="nameForm" name="nameForm">
 <fieldset>
