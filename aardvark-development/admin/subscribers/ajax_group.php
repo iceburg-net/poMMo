@@ -61,10 +61,18 @@ elseif ($_POST['add'] == 'field') {
 	$smarty->assign('firstVal',$firstVal);
 	
 	$field = current(PommoField::get(array('id' =>$_POST['ID'])));
-	$logic = (isset($_POST['logic'])) ?
-		array($_POST['logic'] => PommoFilter::getEnglish($_POST['logic'])) :
-		PommoFilter::getLogic($group, $field);
-
+	
+	if (isset($_POST['logic'])) {
+		$logic = array($_POST['logic'] => PommoFilter::getEnglish($_POST['logic']));
+	}
+	else {
+		$logic = array();
+		$f = array($field);
+		foreach(PommoFilter::getLegalFilters($group, $f) as $logics)				
+			foreach ($logics as $l)
+				$logic[$l] = PommoFilter::getEnglish($l);
+	}
+	
 	$smarty->assign('group_id',$group['id']);
 	$smarty->assign('field',$field);
 	$smarty->assign('logic',$logic);

@@ -11,66 +11,18 @@
  * 
  ** [END HEADER]**/
  
- /* TODO --> make cool w/  b) no fields   ,   c) blank fields [edit field creation to auto fill prompt, etc.] */
- // TODO --> enhance w/ AJAX prefetching .... rework[cleanup] this page
- 
  /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
-require('../../bootstrap.php');
-require_once ($pommo->_baseDir.'/inc/db_subscribers.php');
-require_once ($pommo->_baseDir.'/inc/db_groups.php');
-require_once ($pommo->_baseDir.'/inc/db_sqlgen.php');
-require_once ($pommo->_baseDir.'/inc/db_fields.php');
-require_once ($pommo->_baseDir.'/inc/class.pager.php');
+require ('../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.pager.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
-
-/** Setup Variables
- * 
- * fields = array of all fields (key is field_id)
- * groups = array of all groups (key is group_id)
- * table = table to perform lookup on. Either 'subscribers' or 'pending''
- * group_id = The ID of the group being viewed. If none set to "all" for all subscribers
- * limit = The Maximum # of subscribers to show per page
- * order = The field (field_id) to order subscribers by
- * orderType = type of ordering (ascending - ASC /descending - DESC)
- * appendUrl = all the values strung together in HTTP_GET form
- */
-
-$fields = dbGetFields($dbo);
-$groups = dbGetGroups($dbo);
-$table = (empty ($_REQUEST['table'])) ? 'subscribers' : $_REQUEST['table'];
-$group_id = (empty ($_REQUEST['group_id'])) ? 'all' : $_REQUEST['group_id'];
-$limit = (empty ($_REQUEST['limit'])) ? '50' : $_REQUEST['limit'];
-$order = (empty ($_REQUEST['order'])) ? 'email' : $_REQUEST['order'];
-$orderType = (empty ($_REQUEST['orderType'])) ? 'ASC' : $_REQUEST['orderType'];
-$appendUrl = '&table='.$table.'&limit='.$limit."&order=".$order."&orderType=".$orderType."&group_id=".$group_id;
-
-// Get a count -- TODO implement group object so this could be made into a 'list',
-//   and then a partial list of subscribers_ids fed to the 'detailed' query based on start/limit
-//    TODO -> cache this count somehow (group object...)
-$groupCount =  dbGetGroupSubscribers($dbo, $table, $group_id, 'count');
-
-// Instantiate Pager class (Using modified template from author)
-$p = new Pager($appendUrl);
-$start = $p->findStart($limit);
-$pages = $p->findPages($groupCount, $limit);
-// $pagelist : echo to print page navigation. -- TODO: adding appendURL to every link gets VERY LONG!!! come up w/ new plan!
-$pagelist = $p->pageList($_GET['page'], $pages);
-
-// get the subscribers array
-if ($groupCount) {
-	$subscribers = & dbGetSubscriber($dbo, dbGetGroupSubscribers($dbo, $table, $group_id,'list', $order, $orderType, $limit, $start),'detailed', $table);
-}
-else {
-	$groupCount = 0;
-	$subscribers = array();
-}
 	
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -78,6 +30,37 @@ else {
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
+
+
+/** SET PAGE STATE
+ * limit	- The Maximum # of subscribers to show per page
+ * sort		- The subscriber field to sort by (email, ip, time_registered, time_touched, status)
+ * order	- Order Type (ascending - ASC /descending - DESC)
+ * 
+ * status	- Filter by subscriber status (active, inactive, pending, all)
+ * group	- Filter by group members (groupID or 'all')
+ */
+// Initialize page state with default values overriden by those held in $_REQUEST
+$state =& PommoApi::stateInit('subscribers_manage',array(
+	'limit' => 100,
+	'sort' => 'email',
+	'order' => 'ASC',
+	'status' => 'active',
+	'group' => 'all'),
+	$_REQUEST);
+	
+// get subscribers
+
+
+// Instantiate Pager class (Using modified template from author)
+$p = new Pager($appendUrl);
+$start = $p->findStart($limit);
+$pages = $p->findPages($groupCount, $limit);
+// $pagelist : echo to print page navigation.
+$pagelist = $p->pageList($_GET['page'], $pages);
+
+
+
 
 $smarty->assign('fields', $fields);
 $smarty->assign('groups',$groups);

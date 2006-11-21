@@ -225,20 +225,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		return $dbo->query($query,0);
 	}
 	
-	// deletes a group filter/criteria
-	// accepts a single criteria ID (int) or array of criteria IDs
-	// Returns success (bool)
-	function filterDel($id = array()) {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-		
-		$query = "
-			DELETE FROM ".$dbo->table['group_criteria']."
-			WHERE criteria_id IN (%c)";
-		$query = $dbo->prepare($query,array($id));
-		return ($dbo->affected($query) > 0) ? TRUE : FALSE;
-	}
-	
 	// Checks if a group name exists
 	// accepts a name (str)
 	// returns (bool) true if exists, false if not

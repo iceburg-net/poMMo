@@ -35,20 +35,6 @@
 		
 		$fields = PommoField::get(array('active' => $p['active']));
 		
-		// array_intersect_key requires PHP 5.1 +, compat function -->
-		if (!function_exists('array_intersect_key')) {
-			function array_intersect_key() {
-				$arrs = func_get_args();
-				$result = array_shift($arrs);
-				foreach ($arrs as $array) {
-					foreach ($result as $key => $v)
-						if (!array_key_exists($key, $array)) 
-							unset($result[$key]);
-				}		
-				return $result;
-			}
-		}
-		
 		$valid = true;
 		foreach ($fields as $id => $field) {
 			
@@ -122,7 +108,7 @@
 		}
 		// prune
 		if($p['prune'])
-			$in = array_intersect_key($in,$fields);
+			$in = PommoHelper::arrayIntersect($in,$fields);
 			
 		return $valid;
 	}

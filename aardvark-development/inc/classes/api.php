@@ -125,5 +125,44 @@ class PommoAPI {
 			die('Error updating config');
 		return true;
 	}
+	
+	// initializes a page state
+	// accepts name of page state (usually unique per page)
+	// accepts array of default state variables
+	// accepts array of ovverriding variables
+	// returns the current page state (array)
+	function & stateInit($name = 'default', $defaults = array (), $source = array()) {
+		if (empty($_SESSION['pommo']['state'][$name]))
+			$_SESSION['pommo']['state'][$name] = $defaults;
+		
+		$state =& $_SESSION['pommo']['state'][$name];
+		
+		foreach(array_keys($state) as $key)
+			if (array_key_exists($key,$source))
+				$state[$key] = $source[$key];
+		
+		// normalize the page state
+		if (count($state) > count($defaults)) 
+			$state = PommoHelper::arrayIntersect($state, $defaults);
+			
+		return $state;
+	}
+	
+	// clears page state(s)
+	// accepts a page state or array of states to clear
+	//   if not supplied, ALL page states are cleared
+	// returns (bool)
+	function stateReset($state = array()) {
+		if (!is_array($state))
+			$state = array($state);
+		
+		if (empty($state))
+			$_SESSION['pommo']['state'] = array();
+		else
+			foreach($state as $s)
+				unset($_SESSION['pommo']['state'][$s]);
+		
+		return true;
+	}
 }
 ?>

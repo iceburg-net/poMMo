@@ -35,10 +35,10 @@ class PommoFilter {
 	}
 	
 	// returns the legal(logical) selections for new filters based off pre-existing criteria
-	// accepts a list of groups
-	// accepts a list of fields
-	// returns an array of field names. Array key correlates to field_id.
-	function & getLegalFilters(&$groups, &$fields) {
+	// accepts a group object
+	// accepts a array of fields
+	// returns an array of logics. Array key correlates to field_id.
+	function & getLegalFilters(&$group, &$fields) {
 		$c = array();
 		
 		$legalities = array(
@@ -53,38 +53,34 @@ class PommoFilter {
 			$c[$field['id']] = $legalities[$field['type']];
 		
 		// subtract illogical selections from $c
-		foreach ($groups as $group)
-			foreach ($group['criteria'] as $criteria) {
-				
-				// create reference to this field's legalities 
-				$l =& $c[$criteria['field_id']];
-				
-				switch($criteria['logic']) {
-					case 'true' :
-					case 'false' :
-						// if criteria is true or false, field cannot be ANYTHING else
-						unset($l[array_search('true', $l)]);
-						unset($l[array_search('false', $l)]);
-						break;
-					case 'is' :
-					case 'not' :
-						unset($l[array_search('not', $l)]);
-						unset($l[array_search('is', $l)]);
-						break;
-					case 'greater' :
-						unset($l[array_search('greater', $l)]);
-						break;
-					case 'less':
-						unset($l[array_search('less', $l)]);
-						break;
-				}
+		foreach ($group['criteria'] as $criteria) {	
+			// create reference to this field's legalities 
+			$l =& $c[$criteria['field_id']];
+			
+			switch($criteria['logic']) {
+				case 'true' :
+				case 'false' :
+					// if criteria is true or false, field cannot be ANYTHING else
+					unset($l[array_search('true', $l)]);
+					unset($l[array_search('false', $l)]);
+					break;
+				case 'is' :
+				case 'not' :
+					unset($l[array_search('not', $l)]);
+					unset($l[array_search('is', $l)]);
+					break;
+				case 'greater' :
+					unset($l[array_search('greater', $l)]);
+					break;
+				case 'less':
+					unset($l[array_search('less', $l)]);
+					break;
 			}
+		}
 		
 		foreach($c as $key => $val) {
 			if (empty($val))
 				unset($c[$key]);
-			else
-				$c[$key] = $fields[$key]['name'];
 		}
 
 		return $c;
@@ -101,59 +97,7 @@ class PommoFilter {
 			'is_in' => Pommo::_T('or in group'),
 			'not_in' => Pommo::_T('and not in group')
 		);
-		
 		return (empty($str)) ? $english : $english[$str]; 
-	}
-	
-	// gets the legal (logical) logic dropdowns for a field
-	// accepts a groub object
-	// accepts a field object
-	// returns an array whose key is logic, value is "english" logic
-	function & getLogic(&$group, &$field) {
-		
-		$o = array();
-		
-		$legalities = array(
-			'checkbox' => array('true','false'),
-			'multiple' => array('is','not'),
-			'text' => array('is','not'),
-			'date' => array('is','not','greater','less'),
-			'number' => array('is','not','greater','less')
-		);
-		
-		$a = $legalities[$field['type']];
-		// subtract illogical selections from $c
-		foreach ($group['criteria'] as $criteria) {
-			// create reference to this field's legalities 
-			if($criteria['field_id'] == $field['id']) {
-				switch($criteria['logic']) {
-					case 'true' :
-					case 'false' :
-						// if criteria is true or false, field cannot be ANYTHING else
-						$a = array();
-						break;
-					case 'is' :
-						unset($a[array_search('not', $a)]);
-						unset($a[array_search('is', $a)]);
-						break;
-					case 'not' :
-						unset($a[array_search('is', $a)]);
-						unset($a[array_search('not', $a)]);
-						break;
-					case 'greater' :
-						unset($a[array_search('greater', $a)]);
-						break;
-					case 'less':
-						unset($a[array_search('less', $a)]);
-						break;
-				}
-			}
-		}
-		
-		foreach($a as $logic) {
-			$o[$logic] = PommoFilter::getEnglish($logic);
-		}
-		return $o;
 	}
 	
 	function addBoolFilter(&$group, &$match, &$logic) {
@@ -210,6 +154,20 @@ class PommoFilter {
 			DELETE FROM " . $dbo->table['group_criteria']."
 			WHERE group_id=%i
 				AND field_id=%i
+				AND logic='%s'";
+		$query = $dbo->prepare($query,array($group, $field, $logic));
+		return ($dbo->affected($query));
+	}
+	
+	function deleteGroup($group, $field, $logic) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			DELETE FROM " . $dbo->table['group_criteria']."
+			WHERE group_id=%i
+				AND field_id=0
+				AND value=%i
 				AND logic='%s'";
 		$query = $dbo->prepare($query,array($group, $field, $logic));
 		return ($dbo->affected($query));
