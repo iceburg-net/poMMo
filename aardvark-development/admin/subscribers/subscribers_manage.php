@@ -49,9 +49,16 @@ $state =& PommoApi::stateInit('subscribers_manage',array(
 	'group' => 'all'),
 	$_REQUEST);
 	
-// get subscribers
 
-
+// get subscriber count
+$members = array();
+if (is_numeric($state['group'])) {
+	$members =& PommoGroup::getMembers($state['group'], $state['status']);
+	$tally = count($members);
+}
+else {
+	$tally = PommoGroup::tally('all');
+}
 // Instantiate Pager class (Using modified template from author)
 $p = new Pager($appendUrl);
 $start = $p->findStart($limit);

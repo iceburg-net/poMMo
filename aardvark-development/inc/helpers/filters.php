@@ -31,7 +31,6 @@ class PommoFilter {
 		}
 		
 		return $o;
-		
 	}
 	
 	// returns the legal(logical) selections for new filters based off pre-existing criteria
@@ -54,6 +53,10 @@ class PommoFilter {
 		
 		// subtract illogical selections from $c
 		foreach ($group['criteria'] as $criteria) {	
+			
+			if (!isset($c[$criteria['field_id']]))
+				continue;
+			
 			// create reference to this field's legalities 
 			$l =& $c[$criteria['field_id']];
 			
@@ -82,7 +85,7 @@ class PommoFilter {
 			if (empty($val))
 				unset($c[$key]);
 		}
-
+		
 		return $c;
 	}
 	

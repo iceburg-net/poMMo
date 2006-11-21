@@ -78,7 +78,7 @@ $smarty->assign('new', $new);
 $smarty->assign('gnew', $gnew);
 $smarty->assign('filters', $filters);
 $smarty->assign('english', $english);
-$smarty->assign('tally', count(PommoGroup::getMembers($group)));
+$smarty->assign('tally', PommoGroup::tally($group));
 $smarty->assign('filterCount', count($group['criteria']));
 
 $smarty->display('admin/subscribers/groups_edit.tpl');
