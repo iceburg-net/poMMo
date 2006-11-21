@@ -249,8 +249,7 @@ class PommoSubscriber {
 	// accepts a attribute filtering array. 
 	//   array_key == filter table (subscriber_pending, subscriber_data, subscribers)
 	//   array_value == array column
-	// accepts filter by status (str) either 'active', 'inactive', 'pending' or NULL (any/default)
-	// Returns an array of subscriber IDs
+	//  Returns an array of subscriber IDs
 	/** EXAMPLE
 	array(
 		'subscriber_pending' => array(
@@ -260,111 +259,45 @@ class PommoSubscriber {
 			12 => array("not: 'Milwaukee'"), // 12 is alias for field_id=12 ...
 			15 => array("greater: 15")),
 		'subscribers' => array(
-			'email' => "not: 'bhb@iceburg.net'")
+			'email' => "not: 'bhb@iceburg.net'"),
+			'status' => "equal: active"
 		);
+		LEGAL LOGIC: (not|is|less|greater|true|false|equal)
 	*/
-	function & getIDByAttr($f = array('subscriber_pending' => array(), 'subscriber_data' => array(), 'subscribers' => array()), $status = null) {
+	function & getIDByAttr($f = array('subscriber_pending' => array(), 'subscriber_data' => array(), 'subscribers' => array())) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
-		$o = array();
+		$where = null;
 		
-		// get the column(s) logic + value(s)
-		function getLogic(&$col, &$val, &$filters) {
-			if (is_array($val)) {
-				foreach($val as $v)
-					getLogic($col,$v,$filters);
-			}
-			else {
-				// extract logic ($matches[1]) + value ($matches[2]) 
-				preg_match('/^(?:(not|is|less|greater|true|false):)?(.*)$/i',$val,$matches);
-				if (!empty($matches[1])) { 
-					if (empty($filters[$col]))
-						$filters[$col] = array();
-					if (empty($filters[$col][$matches[1]]))
-						$filters[$col][$matches[1]] = array();
-					array_push($filters[$col][$matches[1]],$matches[2]);
-				}
-			}
-		}
-		
-		function getWhere($col, &$in, &$where) { 
-			global $dbo;
-			
-			if (is_numeric($col)) { // "likely" encountered a field_id in subscriber_data... 
-				$field_id = $col;
-				$col = 'value';
-				$where .= " AND (field_id=$field_id ";
-			}
-			
-			foreach($in as $logic => $vals) {
-				switch ($logic) {
-					case "is" :
-						$where .= $dbo->prepare("[ AND $col IN (%Q) ]",array($vals)); 
-						break;
-					case "not":
-						$where .= $dbo->prepare("[ AND $col NOT IN (%Q) ]",array($vals)); break;
-					case "less":
-						$where .= $dbo->prepare("[ AND $col < %I ]",array($vals)); break;
-					case "greater":
-						$where .= $dbo->prepare("[ AND $col > %I ]",array($vals)); break;
-					case "true":
-						$where .= " AND $col = 'on' "; break;
-					case "false":
-						$where .= " AND $col != 'on' "; break;
-				}
-			}
-			
-			if (isset($field_id))
-				$where .= ")";
-		}
-		
-		function & getIDs($table, &$f) {
-			global $dbo;
-			$filters = array();
-			$where = null;
-			
-			foreach ($f[$table] as $col => $val) 
-				getLogic($col,$val,$filters);
-			
-			foreach($filters as $col => $logic) 
-				getWhere($col, $logic, $where);	
-				
-			if (!empty($where)) {
-				$query = "
-					SELECT DISTINCT subscriber_id
-					FROM ". $dbo->table[$table]."
-					WHERE 1 ".$where;
-				$o = $dbo->getAll($query, 'assoc', 'subscriber_id');
-			}
-			return (empty($o)) ? array() : $o;
-		}
-		
-		if (!empty($f['subscriber_pending'])) 
-			$o = array_merge($o,getIDs('subscriber_pending',$f));
-		
-		if (!empty($f['subscriber_data']))
-			$o = array_merge($o,getIDs('subscriber_data',$f));
-			
 		if (!empty($f['subscribers']))
-			$o = array_merge($o,getIDs('subscribers',$f));
+			$where .= PommoAPI::sqlGetWhere($f['subscribers'],'s');
 		
-		$o = array_unique($o);
-		
-		// filter by status if given
-		if ($status) {
-			$query = "
-				SELECT subscriber_id
-				FROM ". $dbo->table['subscribers']."
-				WHERE 
-					subscriber_id IN(%c)
-					AND status='%s'";
-			$query = $dbo->prepare($query,array($o,$status));
-			return $dbo->getAll($query, 'assoc', 'subscriber_id');
+		$d = null;
+		if (!empty($f['subscriber_data'])) {
+			$d = 'd';
+			$where .= PommoAPI::sqlGetWhere($f['subscriber_data'],'d');
 		}
 		
-		return $o;
+		$p = null;
+		if (!empty($f['subscriber_pending'])) {
+			$p = 'p';
+			$where .= PommoAPI::sqlGetWhere($f['subscriber_pending'],'p');
+		}
+		
+		$query = "
+			SELECT DISTINCT s.subscriber_id
+			FROM ". $dbo->table['subscribers']." s
+			[LEFT JOIN ". $dbo->table['subscriber_data']." %S
+				ON (s.subscriber_id = d.subscriber_id)]
+			[LEFT JOIN ". $dbo->table['subscriber_pending']." %S
+				ON (s.subscriber_id = p.subscriber_id)]
+			WHERE 1 ".$where;
+		$query = $dbo->prepare($query,array($d,$p));
+		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
+	
+	
 	
 	// adds a subscriber to the database
 	// accepts a subscriber (array)

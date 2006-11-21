@@ -164,5 +164,80 @@ class PommoAPI {
 		
 		return true;
 	}
+	
+	// returns where clauses as array
+	// accepts a attribute filtering array.
+	//   array_key == column, value is filter table filter table (subscriber_pending, subscriber_data, subscribers)
+	//   e.g. 
+	//   array('pending_code' => array("not: 'abc1234'", "is: 'def123'", "is: '2234'")); 
+	//   array(12 => array("not: 'Milwaukee'")); (12 -- numeric -- is alias for field_id=12)
+	//   array('status' => array('equal: active'))
+	// accepts a table prefix (e.g. WHERE prefix.column = 'value')
+	// returns SQL WHERE clause (str)
+	function & sqlGetWhere(&$in, $p = null) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		// parse column => logic => value from array
+		$filters = array();
+		foreach ($in as $col => $val) 
+			PommoAPI::sqlGetLogic($col,$val,$filters);
+		
+		// get the where
+		$where = null;
+		if(!empty($p))
+			$p = $p.'.';
+			
+		foreach($filters as $col => $l) { 
+			
+			if (is_numeric($col)) { // "likely" encountered a field_id in subscriber_data... 
+				$field_id = $col;
+				$col = 'value';
+				$where .= " AND ({$p}field_id=$field_id ";
+			}
+			
+			foreach($l as $logic => $vals) {
+				switch ($logic) {
+					case "is" :
+						$where .= $dbo->prepare("[ AND $p$col IN (%Q) ]",array($vals)); break;
+					case "not":
+						$where .= $dbo->prepare("[ AND $p$col NOT IN (%Q) ]",array($vals)); break;
+					case "less":
+						$where .= $dbo->prepare("[ AND $p$col < %I ]",array($vals)); break;
+					case "greater":
+						$where .= $dbo->prepare("[ AND $p$col > %I ]",array($vals)); break;
+					case "true":
+						$where .= " AND $p$col = 'on' "; break;
+					case "false":
+						$where .= " AND $p$col != 'on' "; break;
+					case "equal":
+						$where .= $dbo->prepare("[ AND $p$col = '%S' ]", array($vals[0])); break;
+				}
+			}
+			
+			if (isset($field_id))
+				$where .= ")";
+		}
+		return $where;
+	}
+	
+	// get the column(s) logic + value(s)
+	function sqlGetLogic(&$col, &$val, &$filters) {
+		if (is_array($val)) {
+			foreach($val as $v)
+				PommoAPI::sqlGetLogic($col,$v,$filters);
+		}
+		else {
+			// extract logic ($matches[1]) + value ($matches[2]) 
+			preg_match('/^(?:(not|is|less|greater|true|false|equal):)?(.*)$/i',$val,$matches);
+			if (!empty($matches[1])) { 
+				if (empty($filters[$col]))
+					$filters[$col] = array();
+				if (empty($filters[$col][$matches[1]]))
+					$filters[$col][$matches[1]] = array();
+				array_push($filters[$col][$matches[1]],trim($matches[2]));
+			}
+		}
+	}
 }
 ?>

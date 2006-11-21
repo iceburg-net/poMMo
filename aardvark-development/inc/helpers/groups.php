@@ -136,25 +136,68 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// gets the members of a group
 	// accepts a group object (array)
 	// accepts filter by status (str) either 'active' (default), 'inactive', 'pending' or NULL (any/all)
+	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns an array of subscriber IDs
-	function & getMembers($group = null, $status = 'active') {
+	function & getMemberIDs($group, $status = 'active') {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		$pommo->requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 		
-		$o = array();
-		
-		$f = array(
-			'subscriber_data' => array(),
-			'subscriber_pending' => array(),
-			'subscribers' => array()
-		);
+		if (empty($group['criteria']))
+			return array();
 			
+		$f = array();
+		
 		foreach($group['criteria'] as $c) {
-			$f['subscriber_data'][$c['field_id']] = "{$c['logic']}: {$c['value']}";
+			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
 		}
 		
-		return PommoSubscriber::getIdByAttr($f,$status);
+		if (!empty($status)) {
+			if (!isset($f['subscribers']))
+				$f['subscribers'] = array();
+			$f['subscribers']['status'] = array("equal: $status");
+		}
+		
+		return PommoSubscriber::getIDByAttr($f);
+	}
+	
+	// gets a tally of group members
+	// accepts a group object (array)
+	// accepts filter by status (str) either 'active' (default), 'inactive', 'pending' or NULL (any/all)
+	// returns group tally (int)
+	function & tally($group, $status = 'active') {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		if (empty($group['criteria']))
+			return array();
+			
+		$f = array();
+		
+		foreach($group['criteria'] as $c) {
+			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
+		}
+		
+		if (!empty($status)) {
+			if (!isset($f['subscribers']))
+				$f['subscribers'] = array();
+			$f['subscribers']['status'] = array("equal: $status");
+		}
+		
+		// ELSE, return COUNT (Group Tally)
+		$where = null;
+		
+		if (!empty($f['subscribers']))
+			$where .= PommoAPI::sqlGetWhere($f['subscribers'],'s');
+		
+		$where .= PommoAPI::sqlGetWhere($f['subscriber_data'],'d');
+		
+		$query = "
+			SELECT DISTINCT count(s.subscriber_id)
+			FROM ". $dbo->table['subscribers']." s
+			LEFT JOIN ". $dbo->table['subscriber_data']." d
+				ON (s.subscriber_id = d.subscriber_id)
+			WHERE 1 ".$where;
+		return $dbo->query($query,0);
 	}
 	
 	// adds a group to the database
@@ -206,7 +249,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			
 		return $affected;
 	}
-	
 	
 	// Returns the # of filters affected by a group deletion
 	// accepts a single ID (int) or array of IDs.
