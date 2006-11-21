@@ -40,12 +40,22 @@ if(empty($group))
 	Pommo::redirect('subscribers_groups.php');
 	
 
+// change group name if requested
+if (isset ($_GET['rename']) && !empty ($_GET['group_name']))
+	if (PommoGroup::nameChange($group['id'], $_POST['group_name']))
+		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
+
 if(isset($_GET['fieldDelete'])) {
 	PommoFilter::deleteField($group['id'], $_GET['fieldDelete'], $_GET['logic']);
 	Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
 }
+
+if(isset($_GET['groupDelete'])) {
+	PommoFilter::deleteGroup($group['id'], $_GET['groupDelete'], $_GET['logic']);
+	Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
+}
 	
-$new = & PommoFilter::getLegalFilters($groups, $fields);
+$new = & PommoFilter::getLegalFilters($group, $fields);
 $gnew = & PommoFilter::getLegalGroups($group, $groups);
 
 // organize existing criteria into fieldID[logic] = array('values','...');

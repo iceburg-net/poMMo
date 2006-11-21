@@ -87,11 +87,9 @@ input.pvInvalid, select.pvInvalid
 
 <h2>{t}Edit Group{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="articleimg" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Groups can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country", you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to a value GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="articleimg" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Filters can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
 
 {include file="admin/inc.messages.tpl"}
-
-<div class="pvInvalid">asadss</div>
 
 <form method="post" action="" id="nameForm" name="nameForm">
 <fieldset>
@@ -118,24 +116,24 @@ input.pvInvalid, select.pvInvalid
 
 {* filterWindow popup *}
 <div id="filterWindow">
-<a href="#" class="fwClose" alt="field_id">Close window</a>
+<a href="#" class="fwClose" alt="field_id">{t}Close window{/t}</a>
 <div class="fwContent"></div>
 </div>
 
 <div>
 <label for="field">{t escape=no 1="<strong><a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a></strong>"}Select a %1 field %2 to filter{/t}</label>
 <select name="field" id="field" alt="{$group.id}">
-<option value="">-- {t}Choose subscriber field{/t} --</option>
+<option value="">-- {t}Choose Subscriber Field{/t} --</option>
 {foreach from=$new key=id item=name}
-<option value="{$id}">{$name}</option>
+<option value="{$id}">{$fields[$id].name}</option>
 {/foreach}
 </select>
 </div>
 
 <div>
-<label for="group">{t escape=no 1="<strong><a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a></strong>"}or, Select a %1 group %2 to{/t}</label>
+<label for="group">{t escape=no 1="<strong><a href=\"`$url.base`admin/subscribers/subscribers_groups.php\">" 2="</a></strong>"}or, Select a %1 group %2 to include or exclude{/t}</label>
 <select name="group" id="group" alt="{$group.id}">
-<option value="">-- {t}include or exclude{/t} --</option>
+<option value="">-- {t}Choose Group{/t} --</option>
 {foreach from=$gnew key=id item=name}
 <option value="{$id}">{$name}</option>
 {/foreach}
@@ -170,7 +168,11 @@ input.pvInvalid, select.pvInvalid
 		<td colspan="2">
 		<td>{$groups[$value].name}</td>
 		<td></td>
-		<td>delete</td>
+		<td>
+		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;groupDelete={$value}&amp;logic={$logic|escape}'; return false;">
+		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
+		</button>
+		</td>
 		</tr>
 	{/foreach}
 	{else}

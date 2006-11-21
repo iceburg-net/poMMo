@@ -167,7 +167,8 @@ class Pommo {
 		if (empty ($_SESSION['pommo'])) {
 			$_SESSION['pommo'] = array (
 				'auth' => array (),
-				'data' => array ()
+				'data' => array (),
+				'state' => array ()
 			);
 		}
 
@@ -224,28 +225,8 @@ class Pommo {
 		}
 		return $this->_data;
 	}
-
-	/**
-	 *  Page State Functions ==>
-	 */
-
-	function stateInit($name = 'default', $state = array ()) {
-		if (empty ($_SESSION['state_' . $name])) {
-			$_SESSION['state_' . $name] = $state;
-		}
-		$this->_state = & $_SESSION['state_' . $name];
-		return;
-	}
-
-	// used to access or set state Vars
-	// TODO -> remove str2db (dbSanitize) when queries are made safe by DB abstraction class
-	function stateVar($varName, $varValue = NULL) {
-		if (!empty ($varValue)) {
-			$this->_state[$varName] = dbSanitize($varValue);
-		}
-		return (isset ($this->_state[$varName])) ? $this->_state[$varName] : false;
-	}
 	
+
 	// redirect, require, kill base Functions
 	
 	function redirect($url, $msg = NULL, $kill = true) {

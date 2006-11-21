@@ -97,8 +97,18 @@ class PommoHelper {
 		return $o;
 	}
 	
-	
-	
+	// array_intersect_key requires PHP 5.1 +, compat function -->
+	function arrayIntersect() {
+		$arrs = func_get_args();
+		$result = array_shift($arrs);
+		foreach ($arrs as $array) {
+			foreach ($result as $key => $v)
+				if (!array_key_exists($key, $array)) 
+					unset($result[$key]);
+		}		
+		return $result;
+	}
+		
 
 	// TODO: The following are; OLD.... DEPRICATED ... REMOVE!
 	
