@@ -160,7 +160,7 @@ CREATE TABLE :::subscribers::: (
   `ip` varchar(60) default NULL,
   `status` enum('active','inactive','pending') NOT NULL default 'active',
   PRIMARY KEY  (`subscriber_id`),
-  KEY `email` (`email`(30)),
+  KEY `email` (`email`),
   KEY `flag` (`flag`),
   KEY `status` (`status`)
 );
