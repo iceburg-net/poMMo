@@ -16,8 +16,7 @@
  *********************************/
 require ('../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
-$pommo->init(array('authLevel' => 0, 'noSession' => TRUE));
-$pommo->reloadConfig();
+$pommo->init(array('authLevel' => 0, 'install' => TRUE));
 
 session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
 $logger = & $pommo->_logger;
@@ -101,7 +100,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');
 				$logger->addMsg(Pommo::_T('Login Password: ') . $pass);
-
+				
+				$pommo->reloadConfig();
+				
 				$smarty->assign('installed', TRUE);
 			} else {
 				// INSTALL FAILED

@@ -14,6 +14,8 @@
 
 FINISH MERGING IN NEW FRAMEWORK.
 
+PAGER is very ugly when there's > 100 pages... maybe display no more than 20? [ like google ]
+
 USE TABLES IN SUBSCRIPTION FORM? TO BETTER DEAL WITH DATEPICKER?
 
 Forum quote; Looks like SSL,TLS for SMTP connection not supported. Gmail and etc. only accept SMTP connection this way.

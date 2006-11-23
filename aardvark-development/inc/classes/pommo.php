@@ -122,7 +122,8 @@ class Pommo {
 			'keep' => FALSE,
 			'noSession' => FALSE,
 			'sessionID' => NULL,
-			'noDebug' => FALSE
+			'noDebug' => FALSE,
+			'install' => FALSE
 		);
 	
 		// merge submitted parameters
@@ -149,9 +150,13 @@ class Pommo {
 				$this->kill($this->_T('Could not create directory') . ' ' . $this->_workDir . '/pommo/smarty');
 		}
 
+		// Bypass Reading of Config, SESSION creation, and authentication checks and return
+		//  if 'install' passed
+		if ($p['install'])
+			return;
+			
 		// read configuration data
 		$this->_config = PommoAPI :: configGetBase();
-		
 		
 		// Bypass SESSION creation, reading of config, authentication checks and return
 		//  if 'noSession' passed
