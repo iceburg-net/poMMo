@@ -13,9 +13,9 @@
 
 <div class="buttons">
 
-<input type="submit" name="reconfirm" value="{t}Click to *send* another confirmation email{/t}">
+<input type="submit" name="reconfirm" value="{t}SEND another confirmation email{/t}" />
 
-<input type="submit" name="cancel" value="{t}Click to *cancel* your pending request{/t}">
+<input type="submit" name="cancel" value="{t}CANCEL your pending request{/t}" />
 
 </div>
 
