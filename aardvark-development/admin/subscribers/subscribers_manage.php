@@ -42,7 +42,7 @@ $smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
  */
 // Initialize page state with default values overriden by those held in $_REQUEST
 $state =& PommoApi::stateInit('subscribers_manage',array(
-	'limit' => 100,
+	'limit' => 150,
 	'sort' => 'email',
 	'order' => 'ASC',
 	'status' => 'active',
@@ -65,20 +65,15 @@ $subscribers = $group->members(array(
 	'order' => $state['order'],
 	'limit' => $state['limit'],
 	'offset' => $start));
+	
 
 $smarty->assign('pagelist',$pagelist);
-
-
-
-
-
-$smarty->assign('fields', $fields);
-$smarty->assign('groups',$groups);
-$smarty->assign('table',$table);
-$smarty->assign('group_id',$group_id);
-$smarty->assign('limit',$limit);
-$smarty->assign('orderType',$orderType);
+$smarty->assign('state',$state);
 $smarty->assign('subscribers',$subscribers);
+$smarty->assign('tally',$group->_tally);
+$smarty->assign('groups',PommoGroup::get());
+$smarty->assign('fields',PommoField::get());
+
 
 
 $smarty->display('admin/subscribers/subscribers_manage.tpl');

@@ -160,7 +160,7 @@ class PommoHelper {
 			'all' => 'all'
 		);
 		if ($reverse)
-			return array_search($in);
+			return array_search($in,$t);
 		return ($t[$in]);
 	}
 
