@@ -128,19 +128,15 @@ CREATE TABLE :::subscriber_data::: (
   `subscriber_id` int(10) unsigned NOT NULL default '0',
   `value` varchar(60) NOT NULL default '',
   PRIMARY KEY  (`data_id`),
-  KEY `s_plus_demo_id` (`field_id`,`subscriber_id`),
-  KEY `val_plus_demo` (`value`,`field_id`),
-  KEY `subscriber_id` (`subscriber_id`),
-  KEY `subscriber_id_2` (`subscriber_id`,`value`)
+  KEY `subscriber_id` (`subscriber_id`,`field_id`)
 );
-
 
 -- SUBSCRIBER_PENDING
 
 CREATE TABLE :::subscriber_pending::: (
   `pending_id` int(10) unsigned NOT NULL auto_increment,
   `subscriber_id` int(10) unsigned NOT NULL default '0',
-  `pending_code` varchar(35) NOT NULL default '',
+  `pending_code` char(32) collate latin1_general_ci NOT NULL,
   `pending_type` enum('add','del','change','password') default NULL,
   `pending_array` text NULL default NULL,
   PRIMARY KEY  (`pending_id`),
@@ -156,15 +152,17 @@ CREATE TABLE :::subscribers::: (
   `email` varchar(60) NOT NULL default '',
   `time_touched` timestamp(14) NOT NULL,
   `time_registered` datetime NOT NULL,
-  `flag` enum('update') default NULL,
-  `ip` varchar(60) default NULL,
-  `status` enum('active','inactive','pending') NOT NULL default 'active',
+  `status` tinyint(1) NOT NULL default '0' COMMENT '0: NULL, 1-8: REMOVE, 9: UPDATE',
+  `ip` int unsigned NULL default NULL COMMENT 'Stored with INET_ATON(), Fetched with INET_NTOA()',
+  `status` tinyint(1) NOT NULL default '2' COMMENT '0: Inactive, 1: Active, 2: Pending',
   PRIMARY KEY  (`subscriber_id`),
-  KEY `email` (`email`),
-  KEY `flag` (`flag`),
-  KEY `status` (`status`)
+  KEY `status` (`status`,`subscriber_id`),
+  KEY `status_2` (`status`,`email`),
+  KEY `status_3` (`status`,`time_touched`),
+  KEY `status_4` (`status`,`time_registered`),
+  KEY `status_5` (`status`,`ip`),
+  KEY `flag` (`flag`)
 );
-
 
 -- UPDATES
 

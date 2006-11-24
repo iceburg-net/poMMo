@@ -151,6 +151,18 @@ class PommoHelper {
 
 		return true;
 	}
+	
+	function transformStatus($in, $reverse = FALSE) {
+		$t = array(
+			'inactive' => 0,
+			'active' => 1,
+			'pending' => 2,
+			'all' => 'all'
+		);
+		if ($reverse)
+			return array_search($in);
+		return ($t[$in]);
+	}
 
 }
 ?>
