@@ -60,7 +60,7 @@ class PommoSubscriber {
 		$in = array(
 		'id' => $row['subscriber_id'],
 		'email' => $row['email'],
-		'touched' => $row['touched'],
+		'touched' => $row['time_touched'],
 		'registered' => $row['time_registered'],
 		'flag' => $row['flag'],
 		'ip' => $row['ip'],

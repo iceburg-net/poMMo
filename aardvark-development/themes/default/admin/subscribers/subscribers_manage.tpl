@@ -1,116 +1,143 @@
-{include file="admin/inc.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+{/capture}
+{include file="admin/inc.header.tpl" sidebar='off'}
+
+<form method="post" action="" id="orderForm">
 
 <ul class="inpage_menu">
-
-{if $table == 'subscribers'}
-<li><a href="subscribers_manage.php?table=pending">{t}View Pending{/t}</a></li>
-{else}
-<li><a href="subscribers_manage.php?table=subscribers">{t}View Subscribed{/t}</a></li>
-{/if}
-
-<li><a href="subscribers_export.php?table={$table}&amp;group_id={$group_id}">{t}Export to CSV{/t}</a></li>
+	<li>
+	<a href="AJAX">{t}Add Subscribers{/t}</a>
+	</li>
+	
+	<li>
+	<a href="AJAX">{t}Remove Subscribers{/t}</a>
+	</li>
+	
+	<li>
+	<a href="AJAX">{t}Search Subscribers{/t}</a>
+	</li>
+	
+	<li>
+	<a href="subscribers_export.php?status={$state.status}&amp;group={$state.group}">{t}Export to CSV{/t}</a>
+	</li>
 </ul>
 
-<form method="post" action="" name="bForm" id="bForm">
 <fieldset class="sorting">
-<legend>{t}Sorting{/t}</legend>
+	<legend>{t}View{/t}</legend>
+	
+	<div class="inpage_menu">
+	
+	<li>
+	<label for="status">{t}View{/t}</label>
+	<select name="status">
+	<option value="active" {if $state.status == 'active'}SELECTED{/if}>{t}Active Subscribers{/t}</option>
+	<option value="active">------------------</option>
+	<option value="inactive" {if $state.status == 'inactive'}SELECTED{/if}>{t}Unsubscribed{/t}</option>
+	<option value="pending" {if $state.status == 'pending'}SELECTED{/if}>{t}Pending{/t}</option>
+	</select>
+	</li>
+	
+	<li>
+	<label for="group">{t}Belonging to Group{/t}</label>
+	<select name="group">
+	<option value="all" {if $state.group == 'all'}SELECTED{/if}>{t}All Subscribers{/t}</option>
+	<option value="all">---------------</option>
+	{foreach from=$groups key=id item=g}
+	<option value="{$id}" {if $state.group == $id}SELECTED{/if}>{$g.name}</option>
+	{/foreach}
+	</select>
+	</li>
+	
+	<li>
+	<label for="limit">{t}# per page{/t}</label>
+	<select name="limit">
+	<option value="10" {if $state.limit == '10'}SELECTED{/if}>10</option>
+	<option value="50" {if $state.limit == '50'}SELECTED{/if}>50</option>
+	<option value="150" {if $state.limit == '150'}SELECTED{/if}>150</option>
+	<option value="300" {if $state.limit == '300'}SELECTED{/if}>300</option>
+	<option value="500" {if $state.limit == '500'}SELECTED{/if}>500</option>
+	</select>
+	</li>
+	
+	</div>
+</fieldset>
 
-<div>
-<label for="group_id">{t}Belonging to Group:{/t}</label>
-<select name="group_id" id="group_id" onChange="document.bForm.submit()">
-<option value="all">{t}All Subscribers{/t}</option>
-{foreach from=$groups key=key item=item}
-<option value="{$key}"{if $group_id == $key} selected="selected"{/if}>{$item}</option>
-{/foreach}
-</select>
-</div>
-
-<div>
-<label for="order">{t}Order by:{/t}</label>
-<select name="order" id="order" onChange="document.bForm.submit()">
-<option value="email">{t}email{/t}</option>
-{foreach from=$fields key=key item=item}
-<option value="{$key}"{if $order == $key} selected="selected"{/if}>{$item.name}</option>
-{/foreach}
-</select>
-<select name="orderType" onChange="document.bForm.submit()">
-<option value="ASC"{if $orderType == 'ASC'} selected="selected"{/if}>{t}ascending{/t}</option>
-<option value="DESC"{if $orderType == 'DESC'} selected="selected"{/if}>{t}descending{/t}</option>
-</select>
-</div>
-
-<div>
-<label for="limit">{t}Subscribers per page:{/t}</label>
-<select name="limit" id="limit" onChange="document.bForm.submit()">
-<option value="10"{if $limit == '10'} selected="selected"{/if}>10</option>
-<option value="50"{if $limit == '50'} selected="selected"{/if}>50</option>
-<option value="150"{if $limit == '150'} selected="selected"{/if}>150</option>
-<option value="300"{if $limit == '300'} selected="selected"{/if}>300</option>
-<option value="500"{if $limit == '500'} selected="selected"{/if}>500</option>
-</select>
-</div>
-
+<fieldset class="sorting">
+	<legend>{t}Sorting{/t}</legend>
+	
+	<div class="inpage_menu">
+	
+	<li>
+	<label for="sort">{t}Sort by{/t}</label>
+	<select name="sort">
+	<option value="email" {if $state.sort == 'email'}SELECTED{/if}>{t}email{/t}</option>
+	<option value="time_registered" {if $state.sort == 'time_registered'}SELECTED{/if}>{t}time registered{/t}</option>
+	<option value="time_touched" {if $state.sort == 'time_touched'}SELECTED{/if}>{t}time last updated{/t}</option>
+	<option value="ip" {if $state.sort == 'ip'}SELECTED{/if}>{t}IP Address{/t}</option>
+	</select>
+	</li>
+	
+	<li>
+	<label for="sort">{t}Order by{/t}</label>
+	<select name="order">
+	<option value="asc" {if $state.order == 'asc'}SELECTED{/if}>{t}ascending{/t}</option>
+	<option value="desc" {if $state.order == 'desc'}SELECTED{/if}>{t}descending{/t}</option>
+	</select>
+	</li>
+	
+	<li>
+	<label for "search">{t}Quick Search:{/t}</label>
+	<input type="text" name="search">
+	</li>
+	
 </fieldset>
 </form>
 
-<form method="post" action="subscribers_mod.php" name="oForm" id="oForm">
+
 <fieldset>
 <legend>{t}Subscribers{/t}</legend>
 
-<p class="count">({t 1=$groupCount}%1 subscribers{/t})</p>
+<p class="count">({t 1=$tally}%1 subscribers{/t})</p>
 
-<input type="hidden" name="order" value="{$order}" />
-<input type="hidden" name="orderType" value="{$orderType}" />
-<input type="hidden" name="limit" value="{$limit}" />
-<input type="hidden" name="table" value="{$table}" />
-<input type="hidden" name="group_id" value="{$group_id}" />
 
 <table summary="subscriber details">
 <thead>
 <tr>
 
-<th>{t}select{/t}</th>
+<th>EDIT/DEL</th>
 
-<th>
-{if $table == 'subscribers'}
-{t}edit{/t}
-{else}
-{t}add{/t}
-{/if}
-</th>
+<th>EMAIL</th>
 
-<th>{t}delete{/t}</th>
-
-<th>{t}email{/t}</th>
-
-{foreach from=$fields key=key item=item}
-<th>{$item.name}</th>
+{foreach from=$fields key=id item=f}
+<th>{$f.name}</th>
 {/foreach}
+
+<th>Registered</th>
+<th>Updated</th>
+<th>IP Address</th>
 
 </tr>
 </thead>
 
 <tbody>
-{foreach name=sub from=$subscribers key=key item=item}
+
+{foreach from=$subscribers key=sid item=s}
 <tr>
-<td class="multiple"><input type="checkbox" name="sid[]" value="{$item.email}" /></td>
 
 <td>
-{if $table == 'subscribers'}
-<a href="subscribers_mod.php?sid={$item.email}&amp;action=edit&amp;table={$table}&amp;limit={$limit}&amp;order={$order}&amp;orderType={$orderType}&amp;group_id={$group_id}">{t}edit{/t}</a>
-{else}
-<a href="subscribers_mod.php?sid={$item.email}&amp;action=add&amp;table={$table}&amp;limit={$limit}&amp;order={$order}&amp;orderType={$orderType}&amp;group_id={$group_id}">{t}add{/t}</a>
-{/if}
+edit/del
 </td>
 
-<td><a href="subscribers_mod.php?sid={$item.email}&amp;action=delete&amp;table={$table}&amp;limit={$limit}&amp;order={$order}&amp;orderType={$orderType}&amp;group_id={$group_id}">{t}delete{/t}</a></td>
+<td>{$s.email}</td>
 
-<td>{$item.email}</td>
-
-{foreach name=demo from=$fields key=demo_id item=demo}
-<td>{$item.data.$demo_id}</td>
+{foreach name=field from=$fields key=fid item=f}
+<td>{$s.data[$fid]}</td>
 {/foreach}
-<td>{$item.date}</td>
+
+<td>{$s.registered}</td>
+<td>{$s.touched}</td>
+<td>{$s.ip}</td>
 </tr>
 {/foreach}
 
@@ -119,52 +146,15 @@
 
 </fieldset>
 
-<fieldset class="controls">
-<legend>{t}Controls{/t}</legend>
-
-<ul>
-<li><strong><a href="javascript:SetChecked(1,'sid[]')">{t}Check All{/t}</a></strong></li>
-<li><strong><a href="javascript:SetChecked(0,'sid[]')">{t}Clear All{/t}</a></strong></li>
-</ul>
-
-<select name="action">
-<option value="" selected="selected">{t}Ignore{/t} {t}checked subscribers{/t}</option>
-<option value="delete">{t}Delete{/t} {t}checked subscribers{/t}</option>
-	{if $table == 'subscribers'}
-<option value="edit">{t}Edit{/t} {t}checked subscribers{/t}</option>
-	{else}
-<option value="add">{t}Add{/t} {t}checked subscribers{/t}</option>
-	{/if}
-</select>
-
-</fieldset>
-
-<div class="buttons">
-
-<input type="submit" name="send" value="{t}action{/t}" />
-
-</div>
-
-</form>
-
 {$pagelist}
 
 {literal}
 <script type="text/javascript">
-// <![CDATA[
-
-/* The following code is to "check all/check none" NOTE: form name must properly be set */
-var form = 'oForm' //Give the form name here
-function SetChecked(val, chkName) {
-	dml = document.forms[form];
-	len = dml.elements.length;
-	for (i = 0; i < len; i++) {
-		if (dml.elements[i].name == chkName) {
-			dml.elements[i].checked = val;
-		}
-	}
-}
-// ]]>
+$().ready(function() {
+	$('#orderForm select').change(function() {
+		$('#orderForm')[0].submit();
+	});
+});
 </script>
 {/literal}
 

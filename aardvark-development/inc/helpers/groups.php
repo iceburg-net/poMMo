@@ -35,15 +35,17 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	var $_tally; // the group tally
  	var $_status; // subscriber status ('active','inactive','pending','any'/NULL)
  	var $_memberIDs; // array of member IDs (if group is numeric)
+ 	var $_id; // ID of bgroup
  	
  	// ============ NON STATIC METHODS ===================
  	function PommoGroup($groupID = NULL, $status = 'active') {
+ 		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		$this->_status = $status;
  		if (!is_numeric($groupID)) {
- 			$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  			$this->_group = null;
  			$this->_name = Pommo::_T('All Subscribers');
  			$this->_memberIDs = null;
+ 			$this->_id = null;
  			$this->_tally = PommoSubscriber::tally($status);
  			return;
  		}
@@ -51,6 +53,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$this->_name =& $this->_group['name'];
 		$this->_memberIDs = PommoGroup::getMemberIDs($this->_group,$status);
 		$this->_tally = count($this->_memberIDs);
+		$this->_id= $groupID;
 		return;
  	}
  	
@@ -188,20 +191,60 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		
 		if (empty($group['criteria']))
 			return array();
-			
+		
 		$f = array();
 		
-		foreach($group['criteria'] as $c) {
+		foreach($group['criteria'] as $c)
 			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
-		}
-		
+
 		if (!empty($status)) {
 			if (!isset($f['subscribers']))
 				$f['subscribers'] = array();
-			$f['subscribers']['status'] = array("equal: $status");
+			$f['subscribers']['status'] = array("equal: ".PommoHelper::transformStatus($status));
 		}
 		
 		return PommoSubscriber::getIDByAttr($f);
+	}
+	
+	// Returns the # of members in a group
+	// accepts a group object (array)
+	// accepts filter by status (str) either 'active' (default), 'inactive', 'pending' or NULL (any/all)
+	// accepts a toggle (bool) to return IDs or Group Tally
+	// returns a tally (int)
+	function & tally($group, $status = 'active') {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		$pommo->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/sql.gen.php');
+		
+		if (empty($group['criteria']))
+			return array();
+		
+		$f = array();
+		
+		foreach($group['criteria'] as $c)
+			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
+
+		if (!empty($status)) {
+			if (!isset($f['subscribers']))
+				$f['subscribers'] = array();
+			$f['subscribers']['status'] = array("equal: ".PommoHelper::transformStatus($status));
+		}
+		
+		$sql = array('where' => array(), 'join' => array());
+		if (!empty($f['subscribers']))
+			$sql = array_merge_recursive($sql, PommoSQL::fromFilter($f['subscribers'],'s'));
+		
+		$sql = array_merge_recursive($sql, PommoSQL::fromFilter($f['subscriber_data'],'d'));
+		
+		$joins = implode(' ',$sql['join']);
+		$where = implode(' ',$sql['where']);
+		
+		$query = "
+			SELECT count(DISTINCT s.subscriber_id)
+			FROM ". $dbo->table['subscribers']." s
+			".$joins."
+			WHERE 1 ".$where;
+		return $dbo->query($query,0);
 	}
 	
 	// adds a group to the database
