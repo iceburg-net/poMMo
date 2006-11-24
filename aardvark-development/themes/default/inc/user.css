@@ -25,3 +25,54 @@ a img {
 	border: 1px solid #999;
 	color: #000;
 }
+
+.navimage {
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	padding: 5px;
+	border: 1px solid #EEE;
+}
+
+/* Status Messages */
+.alert,
+.warn,
+.error {
+	clear: both;
+	padding: 5px;
+	color: #000;
+}
+#alertmsg {
+	border: 1px solid #A5D768;
+}
+.alert {
+	background: #DDF0BD;
+}
+.alert strong,
+.alert label {
+	color: green;
+}
+#warn {
+	border: 1px solid #FF8000;
+}
+.warn {
+	background: #FFF6E5;
+}
+.warn strong,
+.warn label {
+	color: #FF8000;
+}
+#error {
+	border: 1px solid #F3D5D5;
+}
+.error {
+	background: #FFF1F1;
+}
+.error strong,
+.error label {
+	color: red;
+}
+.error input,
+.error textarea {
+	background: #FFF;
+}

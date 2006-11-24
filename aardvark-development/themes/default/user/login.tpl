@@ -11,7 +11,7 @@
 <legend>{t}Login{/t}</legend>
 
 <div>
-<label for="email"><span class="required">{t}Your Email:{/t}</span> <span class="error">{validate id="email" message=$formError.email}</span></label>
+<label for="email"><span class="required"><strong>{t}Your Email:{/t}</strong></span> <span class="error">{validate id="email" message=$formError.email}</span></label>
 <input type="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" />
 </div>
 

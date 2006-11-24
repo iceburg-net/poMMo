@@ -1,7 +1,7 @@
 <div id="subscribeForm">
 
 <form method="post" action="">
-<input type="hidden" name="formSubmitted" value="1">
+<input type="hidden" name="formSubmitted" value="1" />
 
 <fieldset>
 <legend>{t}Your Information{/t}</legend>
@@ -9,18 +9,18 @@
 
 <div class="notes">
 
-<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields in %1bold%2 are required{/t}</p>
+<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}Fields in %1bold%2 are required{/t}</p>
 
 </div>
 
 <div>
-<label class="required" for="email">{t}Your Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" readonly/>
+<label class="required" for="email"><strong>{t}Your Email:{/t}</strong></label>
+<input type="text" class="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" readonly="readonly" />
 </div>
 
 <div>
 <label for="email">{t}New Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="newemail" id="newemail" value="{$newemail|escape}"/>
+<input type="text" class="text" size="32" maxlength="60" name="newemail" id="newemail" value="{$newemail|escape}" />
 </div>
 
 <div>
@@ -30,7 +30,7 @@
 
 {foreach name=fields from=$fields key=key item=field}
 <div>
-<label {if $field.required == 'on'}class="required"{/if} for="field{$key}">{$field.prompt}:</label>
+<label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{if $field.required == 'on'}<strong>{/if}{$field.prompt}:{if $field.required == 'on'}</strong>{/if}</label>
 
 {if $field.type == 'text' || $field.type == 'number'}
 <input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
@@ -49,9 +49,8 @@
 {elseif $field.type == 'date'}
 <input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|date_format:"%m/%d/%Y"}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
 
-
 {else}
-{t}Unsupported field type{/t}
+<p class="error">{t}Unsupported field type{/t}</p>
 {/if}
 
 </div>

@@ -1,5 +1,6 @@
-{if $datePicker}{capture name=head}{* used to inject content into the HTML <head> *}
-	{include file="`$config.app.path`themes/shared/datepicker/datepicker.tpl"}
+{if $datePicker}{capture name=head}
+{* used to inject content into the HTML <head> *}
+{include file="`$config.app.path`themes/shared/datepicker/datepicker.tpl"}
 {/capture}{/if}
 {include file="user/inc.header.tpl"}
 
@@ -12,15 +13,20 @@
 {include file="subscribe/form.update.tpl"}
 
 <form method="post" action="">
-<img src="{$url.theme.shared}images/icons/nok.png" alt="not ok icon" />
+<fieldset>
+<legend>{t}Unsubscribe{/t}</legend>
+
 <input type="hidden" name="Email" value="{$Email}" />
 
 <div class="buttons">
 
-<input type="submit" name="unsubscribe" value="{t}Click to Unsubscribe{/t}" />
+<button type="submit" name="unsubscribe">
+<img src="{$url.theme.shared}images/icons/nok.png" alt="not ok icon" /> {t}Click to unsubscribe{/t} {$Email}
+</button>
 
 </div>
 
+</fieldset>
 </form>
 
 {include file="user/inc.footer.tpl"}
