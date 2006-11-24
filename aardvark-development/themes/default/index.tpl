@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="admin/inc.header.tpl" sidebar='off'}
 
 {include file="admin/inc.messages.tpl"}
 
