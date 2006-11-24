@@ -48,23 +48,26 @@ $state =& PommoApi::stateInit('subscribers_manage',array(
 	'status' => 'active',
 	'group' => 'all'),
 	$_REQUEST);
-	
 
-// get subscriber count
-$members = array();
-if (is_numeric($state['group'])) {
-	$members =& PommoGroup::getMembers($state['group'], $state['status']);
-	$tally = count($members);
-}
-else {
-	$tally = PommoGroup::tally('all');
-}
+// get the group
+$group = new PommoGroup($state['group'], $state['status']);
+
 // Instantiate Pager class (Using modified template from author)
-$p = new Pager($appendUrl);
-$start = $p->findStart($limit);
-$pages = $p->findPages($groupCount, $limit);
+$p = new Pager();
+$start = $p->findStart($state['limit']);
+$pages = $p->findPages($group->_tally, $state['limit']);
 // $pagelist : echo to print page navigation.
 $pagelist = $p->pageList($_GET['page'], $pages);
+
+// get the subscribers details
+$subscribers = $group->members(array(
+	'sort' => $state['sort'],
+	'order' => $state['order'],
+	'limit' => $state['limit'],
+	'offset' => $start));
+
+$smarty->assign('pagelist',$pagelist);
+
 
 
 
@@ -74,11 +77,9 @@ $smarty->assign('groups',$groups);
 $smarty->assign('table',$table);
 $smarty->assign('group_id',$group_id);
 $smarty->assign('limit',$limit);
-$smarty->assign('order',$order);
 $smarty->assign('orderType',$orderType);
 $smarty->assign('subscribers',$subscribers);
-$smarty->assign('pagelist',$pagelist);
-$smarty->assign('groupCount',$groupCount);
+
 
 $smarty->display('admin/subscribers/subscribers_manage.tpl');
 Pommo::kill();

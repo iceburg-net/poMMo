@@ -72,10 +72,10 @@ class PommoType {
 	 *	email			(str)			Email Address
 	 *	time_touched	(date)			Date last modified (records changed)
 	 *	time_registered	(date)			Date registered (signed up)
-	 *	flag			(enum)			('update',NULL) Subscribers flag (def: null)
-	 *	ip				(str)			IP (tcp/ip) used to register
-	 *	status			(enum)			'active','inactive','pending' (def: pending)
-	 *
+	 *	flag			(enum)			0: NULL, 1-8: REMOVE, 9: UPDATE
+ 	 *	ip				(str)			IP (tcp/ip) used to register - stored as INT via INET_ATON()
+ 	 *	status			(enum)			0: Inactive, 1: Active, 2: Pending
+ 	 *
 	 * == Additional columns for Pending ==
 	 *	pending_id		(int)			Database ID/Key
 	 *	subscriber_id	(int)			Subscriber ID in subscribers table

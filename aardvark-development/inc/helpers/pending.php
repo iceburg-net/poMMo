@@ -284,7 +284,7 @@ class PommoPending {
 			case 'add': // subscribe
 				$query = "
 					UPDATE ".$dbo->table['subscribers']."
-					SET status='active'
+					SET status=1
 					WHERE subscriber_id=%i";
 				$query = $dbo->prepare($query,array($in['subscriber_id']));
 				if (!$dbo->query($query)) {
@@ -296,7 +296,7 @@ class PommoPending {
 			case 'del': // unsubscribe
 				$query = "
 					UPDATE ".$dbo->table['subscribers']."
-					SET status='inactive'
+					SET status=0
 					WHERE subscriber_id=%i";
 				$query = $dbo->prepare($query,array($in['subscriber_id']));
 				if (!$dbo->query($query)) {
