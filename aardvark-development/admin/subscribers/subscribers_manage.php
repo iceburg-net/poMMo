@@ -74,8 +74,6 @@ $smarty->assign('tally',$group->_tally);
 $smarty->assign('groups',PommoGroup::get());
 $smarty->assign('fields',PommoField::get());
 
-
-
 $smarty->display('admin/subscribers/subscribers_manage.tpl');
 Pommo::kill();
 ?>

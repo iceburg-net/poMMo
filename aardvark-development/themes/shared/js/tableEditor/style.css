@@ -1,0 +1,43 @@
+#subs {
+	background-color: #4D4D4D;
+	width: 90%;
+	border: 1px solid #000;
+	text-align: left;
+}
+
+#subs tr td {
+	color: #FFF;
+	padding: 5px;
+}
+
+#subs thead tr th {
+	padding: 5px;
+	background-color: #6E6E6E;
+}
+
+
+#subs thead tr th.header {
+	background-image: url(img-header-bg.png);
+	background-repeat: no-repeat;
+	border: 1px solid #FFF;
+	border-bottom: none;
+	padding: 8px 0 0 30px;
+	height: auto;
+}
+
+#subs thead tr th.headerSortUp {
+	background-image: url(img-header-asc.png);
+}
+
+#subs thead tr th.headerSortDown {
+	background-image: url(img-header-desc.png);
+}	
+
+
+#subs tr.even {
+	background-color: #3D3D3D;
+}
+
+#subs tr.odd {
+	background-color: #6E6E6E;
+}
