@@ -1,5 +1,11 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
+{* Include in-place editing of subscriber table *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
+
+{* Styling of subscriber table *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
 
@@ -101,21 +107,21 @@
 <p class="count">({t 1=$tally}%1 subscribers{/t})</p>
 
 
-<table summary="subscriber details">
+<table summary="subscriber details" id="subs">
 <thead>
 <tr>
 
-<th>EDIT/DEL</th>
+<th name="key">{t}DEL/EDIT{/t}</th>
 
-<th>EMAIL</th>
+<th name="email">EMAIL</th>
 
 {foreach from=$fields key=id item=f}
-<th>{$f.name}</th>
+<th name="{$id}">{$f.name}</th>
 {/foreach}
 
-<th>Registered</th>
-<th>Updated</th>
-<th>IP Address</th>
+<th name="registered">Registered</th>
+<th name="touched">Updated</th>
+<th name="ip">IP Address</th>
 
 </tr>
 </thead>
@@ -125,8 +131,11 @@
 {foreach from=$subscribers key=sid item=s}
 <tr>
 
-<td>
-edit/del
+<td nowrap>
+<button class="delete"><img src="{$url.theme.shared}images/icons/delete.png"></button>
+
+{* edit button -- this switches to {$url.theme.shared}images/icons/yes.png when clicked *}
+<button class="edit"><img src="{$url.theme.shared}images/icons/edit.png"></button>
 </td>
 
 <td>{$s.email}</td>
@@ -154,7 +163,23 @@ $().ready(function() {
 	$('#orderForm select').change(function() {
 		$('#orderForm')[0].submit();
 	});
+	
+	$("#subs").tableSorter({
+		sortClassAsc: 'headerSortUp', 		// class name for ascending sorting action to header
+		sortClassDesc: 'headerSortDown',	// class name for descending sorting action to header
+		headerClass: 'header', 				// class name for headers (th's)
+		disableHeader: 0					// DISABLE Sorting on edit/delete column
+	}).tableEditor({
+		SAVE_HTML: '<img src="{/literal}{$url.theme.shared}images/icons/yes.png{literal}">',
+		EDIT_HTML: '<img src="{/literal}{$url.theme.shared}images/icons/edit.png{literal}">',
+		EVENT_LINK_SELECTOR: 'button.edit',
+		FUNC_UPDATE: 'updateTable'
+	});
 });
+
+function updateTable(o) {
+return;
+}
 </script>
 {/literal}
 
