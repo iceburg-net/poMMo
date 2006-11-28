@@ -41,3 +41,16 @@
 #subs tr.odd {
 	background-color: #6E6E6E;
 }
+
+#subs tr td input[type="text"] {
+	width: 15em;
+}
+
+.key { 
+	display: none;
+}
+
+input.pvInvalid, select.pvInvalid
+{
+	border: 1px solid red;
+}

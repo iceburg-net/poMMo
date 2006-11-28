@@ -49,6 +49,10 @@ I *am* thinking about incorporating a sent/unsent list that can be downloaded at
 	+ Rewritten Subscriber Manage
 	+ Message Templating
 	+ Rewritten Default Theme (CSS, JS, TEMPLATES)
+	
+	+ Remove language from default distribution
+	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
+	+ Rewrite validate.js for scoping by table row
 		
   
 [BRICE]
