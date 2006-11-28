@@ -147,6 +147,8 @@
 <td><input type="checkbox" disabled {if $s.data[$fid] == 'on'}checked{/if}/></td>
 {elseif $fields[$fid].type == 'multiple'}
 <td class="seMultiple" rel="seM{$fid}">{$s.data[$fid]}</td>{* Add class multiple+field ID so editable column is converted to a select input in pre_edit function *}
+{elseif $fields[$fid].type == 'date'}
+<td>{$s.data[$fid]|date_format:"%m/%d/%Y"}</td>
 {else}
 <td>{$s.data[$fid]}</td>
 {/if}
@@ -167,63 +169,6 @@
 
 {literal}
 <script type="text/javascript">
-
-common = {
-	// cleanly prints an array/object for the alert(). TODO; REMOVE -- ONLY FOR DEMO.
-	dump: function (arr,level) {
-		var dumped_text = "";
-		if(!level) level = 0;
-		
-		//The padding given at the beginning of the line.
-		var level_padding = "";
-		for(var j=0;j<level+1;j++) level_padding += "    ";
-		
-		if(typeof(arr) == 'object') { //Array/Hashes/Objects
-		 for(var item in arr) {
-		  var value = arr[item];
-		 
-		  if(typeof(value) == 'object') { //If it is an array,
-		   dumped_text += level_padding + "'" + item + "' ...\n";
-		   dumped_text += dump(value,level+1);
-		  } else {
-		   dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
-		  }
-		 }
-		} else { //Stings/Chars/Numbers etc.
-		 dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
-		}
-		return dumped_text;
-	},
-	
-	sanitize: function(str) {
-		if (typeof str != 'string')
-			return '';
-		str = str.replace(/[^a-zA-Z 0-9]+/g,'');
-		if (str.length > 10)
-			str = str.substr(0,9);
-		return str;
-	},
-		
-	serialize: function(o) { 
-		var a = [];
-		o.find('input, textarea').each(function() {
-			var n = this.name || this.id;
-		   var t = this.type;
-		   
-		   if ( (t == 'checkbox') && !this.checked )
-		   	return;
-		  
-		   a.push({name: n, value: this.value});
-		   	
-		}).end();
-		return a;
-	},
-	
-	trim: function(str) {
-		return str.replace(/^\s*|\s*$/g,"");
-	}
-};
-
 $().ready(function() {
 	$('#orderForm select').change(function() {
 		$('#orderForm')[0].submit();
@@ -272,11 +217,24 @@ function postEdit(o) {
 
 
 function updateTable(o) {
-alert("Update function called!\n === Debug of Passed Object === \n"+
-	"o.row: jQ Object of size: "+o.row.size()+"\n"+
-	"o.key: "+common.dump(o.key)+"\n"+
-	"o.changed: "+common.dump(o.changed)+"\n"+
-	"o.original: "+common.dump(o.original));
+	// check if changed is empty
+	var empty = true;
+	for (key in o.changed) {
+		if (o.changed.hasOwnProperty(key)) {
+			empty = false; break;
+		}
+	}
+	if (empty)
+		return;
+
+	$.post("ajax_subscriber_update.php?key="+o.key, o.changed, function(data) {
+		if (data != '') { // update failed
+			alert(data);
+			// restore row
+			$.tableEditor.lib.restoreRow(o.row,o.original);
+		}
+	});
+
 }
 </script>
 {/literal}

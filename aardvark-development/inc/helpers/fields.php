@@ -115,7 +115,10 @@ class PommoField {
 	//   active (bool) toggle returning of only active fields
 	//   id (array) -> an array of field IDs
 	// returns an array of fields. Array key(s) correlates to field key.
-	function & get($p = array('active' => false, 'id' => null)) {
+	function & get($p = array()) {
+		$defaults = array('active' => false, 'id' => null);
+		$p = PommoAPI :: getParams($defaults, $p);
+		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		

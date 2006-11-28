@@ -58,7 +58,7 @@ if (!PommoHelper::isEmail($subscriber['email']))
 		
 // ** check if email already exists in DB ("duplicates are bad..")
 if (count(PommoHelper::emailExists($subscriber['email'])) > 0) {
-	$logger->addErr('Email address already exists. Duplicates are not allowed');
+	$logger->addErr(Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 	$smarty->assign('dupe', TRUE);
 }
 

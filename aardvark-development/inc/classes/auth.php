@@ -25,7 +25,6 @@ class PommoAuth {
 			'username' => null,
 			'requiredLevel' => 0
 		);
-
 		$p = PommoAPI :: getParams($defaults, $args);
 		
 		if (empty($_SESSION['pommo']['auth']['username']))

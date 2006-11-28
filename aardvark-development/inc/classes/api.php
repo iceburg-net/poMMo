@@ -35,6 +35,9 @@ class PommoAPI {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
+		
+		if($pommo->_verbosity > 2)
+			$dbo->debug(FALSE);
 
 		if ($fromDB || empty ($_SESSION['pommo']['config'])) {
 			$_SESSION['pommo']['config'] = array ();
@@ -60,6 +63,9 @@ class PommoAPI {
 			$this->kill(sprintf(Pommo :: _T('Error loading configuration. Have you %s installed %s ?'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
 		elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
 		}
+		
+		if ($pommo->_debug == 'on')
+			$dbo->debug(TRUE);
 		
 		$dbo->dieOnQUery(TRUE);
 		return $_SESSION['pommo']['config'];
@@ -119,7 +125,7 @@ class PommoAPI {
 		$query = "
 			UPDATE " . $dbo->table['config'] . "
 			SET config_value =
-				CASE config_name ".$when." ELSE config_name END
+				CASE config_name ".$when." ELSE config_value END
 			[WHERE config_name IN(%Q)]";
 		if (!$dbo->query($dbo->prepare($query,array($where))))
 			die('Error updating config');

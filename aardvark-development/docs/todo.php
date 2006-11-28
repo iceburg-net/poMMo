@@ -12,7 +12,10 @@
  ** [END HEADER]**/
 ?>
 
+CHECK subscriber update (self + admin) of UNCHECKING/CHECKING a check field
 FINISH MERGING IN NEW FRAMEWORK.
+
+MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
 
 PAGER is very ugly when there's > 100 pages... maybe display no more than 20? [ like google ]
 
