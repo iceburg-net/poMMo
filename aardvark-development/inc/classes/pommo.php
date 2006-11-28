@@ -38,8 +38,13 @@ class Pommo {
 	// default constructor
 	function Pommo($baseDir) {
 		$this->_baseDir = $baseDir;
-		$this->preInit();
+		
+		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
+		Pommo::requireOnce($this->_baseDir . '/inc/classes/auth.php');
 
+		$this->preInit();
 		$this->_config = array ();
 		$this->_auth = null;
 	}
@@ -66,7 +71,7 @@ class Pommo {
 		
 		// include translation (l10n) methods if language is not English
 		if ($this->_language != 'en') {
-			$this->requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
+			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
 		
@@ -78,7 +83,7 @@ class Pommo {
 			// If we're called from an outside (embedded) script, read baseURL from "last known good".
 			// Else, set it based off of REQUEST
 			if (defined('_poMMo_embed')) {
-				$this->requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
+				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
 				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
 			} else {
 				$baseUrl = preg_replace('@/(inc|setup|user|install|admin(/subscribers|/user|/mailings|/setup)?)$@i', '', dirname($_SERVER['PHP_SELF']));
@@ -91,12 +96,9 @@ class Pommo {
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
 
 		// initialize database link
-		$this->requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
-		$this->requireOnce($this->_baseDir . 'inc/classes/db.php');
 		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 
 		// initialize logger
-		$this->requireOnce($this->_baseDir . 'inc/classes/log.php');
 		$this->_logger = new PommoLog($this->_verbosity); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
 
 		// if debugging is set in config.php, enable debugging on the database.
@@ -178,7 +180,6 @@ class Pommo {
 		}
 
 		// check authentication levels
-		$this->requireOnce($this->_baseDir . '/inc/classes/auth.php');
 		$this->_auth = new PommoAuth(array (
 			'requiredLevel' => $p['authLevel']
 		));
@@ -279,7 +280,7 @@ class Pommo {
 		// output debugging info if enabled (in config.php)
 		if ($pommo->_debug == 'on' && $pommo->_section != 'user') { // don't debug if section == user.'
 			if (is_object($pommo)) {
-				$pommo->requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
+				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
 				$debug = new PommoHelperDebug();
 				$debug->bmDebug();
 			}
