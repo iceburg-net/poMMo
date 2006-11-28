@@ -123,7 +123,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// accepts a filtering array -->
 	//   id (array) -> an array of field IDs
 	// returns an array of groups. Array key(s) correlates to group ID.
-	function & get($p = array('id' => null)) {
+	function & get($p = array()) {
+		$defaults = array('id' => null);
+		$p = PommoAPI :: getParams($defaults, $p);
+		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		

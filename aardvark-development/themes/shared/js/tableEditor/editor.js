@@ -7,7 +7,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * 
  * $Date: 2006-10-24 14:43:23 +0000 
- * $Version: 0.0 (alpha)
+ * $Version: 0.2 (alpha)
  * 
  */
 jQuery.fn.tableEditor = function(o) {
@@ -122,9 +122,8 @@ jQuery.fn.tableEditor = function(o) {
 			// Convert table row cells into editable form fields.
 			row.each(function(i) {
 				var html = jQuery.tableEditor.lib.makeEditable(jQuery(this), defaults.COLUMN_NAMES[i], key);
-					if (html)
+					if (html !== false)
 						jQuery(this).html(html);
-			
 			});
 			
 			if (defaults.FUNC_POST_EDIT)
@@ -143,7 +142,7 @@ jQuery.fn.tableEditor = function(o) {
 			// Make cells non editable, update their value.
 			row.each(function(i) {	
 				var html = jQuery.tableEditor.lib.makeStatic(jQuery(this), defaults.COLUMN_NAMES[i], key);
-				if (html)
+				if (html !== false)
 					jQuery(this).html(html);
 			});
 		
@@ -239,17 +238,19 @@ jQuery.tableEditor = {
 			// determine if html is already a form element
 			if (jQuery("input,select,textarea",html).size() > 0) {			
 				html = html.find("input,select,textarea"); // constrains jQ object to INPUT vs TD			
-				var val = html.val();
+				var val = (html.attr('type') == 'checkbox') ? 
+					html[0].checked :
+					html.val();
 				// add preserve class, remove disabled (if set)
 				html.attr("disabled", false).addClass("tsPreserve");
+				jQuery.tableEditor.cache.add(key, name, val);
 				return false;
 			}			
-			else {
-				var val = html.html().replace(/[\"]+/g,'&quot;'); // replace " with HTML entity to behave within value=""
-				html = '<input type="text" name="'+name+'" value="'+val+'"></input>';
-			}
+			
+			var val = html.html().replace(/[\"]+/g,'&quot;'); // replace " with HTML entity to behave within value=""
+			html = '<input type="text" name="'+name+'" value="'+val+'"></input>';
 			jQuery.tableEditor.cache.add(key, name, val);
-			return html;
+			return html;	
 		},
 		// makes a table cell static (non editable)
 		// accepts a jQ object (content of cell)
@@ -259,14 +260,31 @@ jQuery.tableEditor = {
 		makeStatic: function(html, name, key ) {
 			html = html.find("input,select,textarea"); // constrains jQ object to INPUT vs TD			
 			html.attr('disabled', true);
-			var val = (html.attr("type") == 'checkbox') ?
-				html.is(":checked") :
+			var val = (html.attr('type') == 'checkbox') ? 
+				html[0].checked :
 				html.val();
-			
 			// update the cache with new value.
 			jQuery.tableEditor.cache.update(key, name, val);
 			
 			return (html.is(".tsPreserve")) ? false : val;
+		},
+		// restores a row to original
+		restoreRow: function(row, original) {
+			var values = new Array();
+			for (j in original) 
+				values.push(original[j]);
+			
+			row.each(function(i) { 
+				if (jQuery("input,select,textarea",this).size() > 0) {			
+					html = $(this).find("input,select,textarea");
+					if (html.attr('type') == 'checkbox')
+						html[0].checked = values[i];
+					else
+						html.val(values[i]);
+				}
+				else
+					$(this).html(values[i]);			
+			});
 		},
 		addClasses: function(row, classes) {
 			row.each(function(i) {

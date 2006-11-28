@@ -144,7 +144,18 @@ class PommoSubscriber {
 	//   offset (int) the SQL offset to start at
 	//   id (array||str) A single or an array of subscriber IDs
 	// returns an array of subscribers. Array key(s) correlates to subscriber id.
-	function & get($p = array('status' => 'all', 'email' => null, 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null, 'id' => null)) {
+	function & get($p = array()) {
+		$defaults = array(
+			'status' => 'all', 
+			'email' => null, 
+			'sort' => null, 
+			'order' => null, 
+			'limit' => null, 
+			'offset' => null, 
+			'id' => null);
+		$p = PommoAPI :: getParams($defaults, $p);
+		
+		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 
@@ -210,7 +221,10 @@ class PommoSubscriber {
 	//   id (array||str) A single or an array of subscriber IDs
 	//   limit (int) limits # subscribers returned
 	// returns an array of emails. Array key(s) correlates to subscriber id.
-	function & getEmail($p = array('status' => 'all', 'id' => null)) {
+	function & getEmail($p = array()) {
+		$defaults = array('status' => 'all', 'id' => null);
+		$p = PommoAPI :: getParams($defaults, $p);
+		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 
@@ -412,12 +426,14 @@ class PommoSubscriber {
 	
 	// updates a subscriber in the database
 	// accepts a subscriber (array)
+	// accepts a toggle; TRUE (default) => ALL subscriber_data for this subscriber will be replaced,
+	//   FALSE => only passed data will be replaced
 	// returns success (bool)
 	// NOTE: The passed subscriber field will overwrites all subscriber info 
 	//   (including values in subscriber_pending/subscriber_data). Make sure to pass
 	//   the entire subscriber!
 	// Does not change the subscriber_id -->  paves the path to add manually assign subs to a group?
-	function update(&$in) {
+	function update(&$in, $full = true) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -443,17 +459,23 @@ class PommoSubscriber {
 		if (!$dbo->query($query))
 				return false;
 		
-		// insert data
+		
+		// if this is "full", delete all. otherwise delete FIDs.
+		$select = ($full) ? null : array_keys($in['data']);
+		
 		$query = "
 			DELETE
 			FROM " . $dbo->table['subscriber_data'] . "
-			WHERE subscriber_id IN(%c)";
-		$query = $dbo->prepare($query,array($in['id']));
+			WHERE subscriber_id=%i
+			[AND field_id IN (%C)]";
+		$query = $dbo->prepare($query,array($in['id'], $select));
 		if (!$dbo->query($query))
 				return false;
 		
+		$values = array();
 		foreach ($in['data'] as $field_id => $value)
-			$values[] = $dbo->prepare("(%i,%i,'%s')",array($field_id,$in['id'],$value));
+			if (!empty($value))
+				$values[] = $dbo->prepare("(%i,%i,'%s')",array($field_id,$in['id'],$value));
 			
 		if (!empty($values)) {
 			$query = "
