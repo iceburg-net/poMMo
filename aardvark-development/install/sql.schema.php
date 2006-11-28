@@ -152,7 +152,7 @@ CREATE TABLE :::subscribers::: (
   `email` varchar(60) NOT NULL default '',
   `time_touched` timestamp(14) NOT NULL,
   `time_registered` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL default '0' COMMENT '0: NULL, 1-8: REMOVE, 9: UPDATE',
+  `flag` tinyint(1) NOT NULL default '0' COMMENT '0: NULL, 1-8: REMOVE, 9: UPDATE',
   `ip` int unsigned NULL default NULL COMMENT 'Stored with INET_ATON(), Fetched with INET_NTOA()',
   `status` tinyint(1) NOT NULL default '2' COMMENT '0: Inactive, 1: Active, 2: Pending',
   PRIMARY KEY  (`subscriber_id`),
