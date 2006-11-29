@@ -100,16 +100,15 @@ class PommoHelper {
 		return $o;
 	}
 	
-	// array_intersect_key requires PHP 5.1 +, compat function -->
-	function arrayIntersect() {
-		$arrs = func_get_args();
-		$result = array_shift($arrs);
-		foreach ($arrs as $array) {
-			foreach ($result as $key => $v)
-				if (!array_key_exists($key, $array)) 
-					unset($result[$key]);
-		}		
-		return $result;
+	// array_intersect_key requires PHP 5.1 +, here's a compat function --> (limited to 2 arrs)
+	// returns an array based on a2's values whose keys are present in a1
+	function & arrayIntersect(&$a1, &$a2) {
+		$o = array();
+		foreach(array_keys($a1) as $key) {
+			if (isset($a2[$key]))
+				$o[$key] = $a2[$key];
+		}
+		return $o;
 	}
 		
 
