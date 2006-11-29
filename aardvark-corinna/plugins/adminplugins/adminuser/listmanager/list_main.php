@@ -28,25 +28,28 @@ $listplugin = new ListPlugin($poMMo);
 //GETPOST data
 if ($_REQUEST['action']) {
 	$data['action']	= $_REQUEST['action'];
-	$data['id'] = $_REQUEST['id'];
 	
 	 if ($data['action'] == "delete") {
 		$data['showDelete'] = TRUE;
+		$data['userid'] = $_REQUEST['userid'];
+		$data['listid'] = $_REQUEST['listid'];
 		if (!empty($_REQUEST['deleteList'])) {
-
-			$ret = $listplugin->deleteList($_REQUEST['listid'], $_REQUEST['userid']);
+			$ret = $listplugin->deleteList($data['listid'], $_REQUEST['userid']);
 			if ($ret) $data['showDelete'] = FALSE;	
 		}
 	} elseif ($data['action'] == "edit") {
+		$data['userid'] = $_REQUEST['userid'];
+		$data['listid'] = $_REQUEST['listid'];
 		$data['showEdit'] = TRUE;
 		if (!empty($_REQUEST['editList'])) {
-			$ret = $listplugin->editList($data['id'], $_REQUEST['listname'], $_REQUEST['listdesc'], $_REQUEST['userid']);
+			$ret = $listplugin->editList($data['listid'], $_REQUEST['listname'], $_REQUEST['listdesc']);
 			if ($ret) $data['showEdit'] = FALSE;	
 		}
 	} elseif ($data['action'] == "add") {
+		$data['userid'] = $_REQUEST['userid'];
 		$data['showAdd'] = TRUE;
 		if (!empty($_REQUEST['addList'])) {
-			$ret = $listplugin->addList($_REQUEST['listname'], $_REQUEST['listdesc'], $_REQUEST['userid']);
+			$ret = $listplugin->addList($_REQUEST['listname'], $_REQUEST['listdesc'], $data['userid']);
 			if ($ret) $data['showAdd'] = FALSE;	
 		}
 	}

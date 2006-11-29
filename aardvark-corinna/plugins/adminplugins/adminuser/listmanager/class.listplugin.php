@@ -61,17 +61,23 @@ class ListPlugin {
 		
 		if ($data['showAdd']) {
 			$smarty->assign('showAdd' , 'TRUE');
+			$mailgroups = $this->listdbhandler->dbGetMailGroups();
+			$smarty->assign('mailgroups', $mailgroups);
 		} elseif ($data['showEdit']) {
+			$listdata = $this->listdbhandler->dbGetListInfo($data['listid'], $data['userid']);
+			$mailgroups = $this->listdbhandler->dbGetMailGroups();
+			$smarty->assign('listdata', $listdata);
+			$smarty->assign('mailgroups', $mailgroups);
 			$smarty->assign('showEdit', 'TRUE');
-			$listdata = $this->listdbhandler->dbGetListInfo($data['id'], $data['userid']);
-			echo "LISTDATA:"; print_r($listdata); echo "<br><br>";
 		} elseif ($data['showDelete']) {
+			$listdata = $this->listdbhandler->dbGetListInfo($data['listid'], $data['userid']);
+			$smarty->assign('listdata', $listdata);
 			$smarty->assign('showDelete', 'TRUE');
 		}
 		
 		if ($data['action']) {
 			$smarty->assign('action', $data['action']);
-			$smarty->assign('id', $data['id']);
+			$smarty->assign('showformid', $data['userid']);	//needed for forms
 		}
 		
 		
@@ -87,16 +93,14 @@ class ListPlugin {
 	}
 	
 	
+	//TODO some checks
 	public function addList($name, $desc, $userid) {
-		echo "ADD!!!!!!!!!";
 		return $this->listdbhandler->dbAddList($name, $desc, $userid);
 	}
-	public function editList($id, $name, $desc) {
-		echo "EDIT!!!!!!!!!!!!";
-		return $this->listdbhandler->dbEditList($id, $name, $desc);
+	public function editList($listid, $name, $desc) {
+		return $this->listdbhandler->dbEditList($listid, $name, $desc);
 	}
 	public function deleteList($id, $userid) {
-		echo "DELETE!!!!!!!!!!";
 		return $this->listdbhandler->dbDeleteList($id, $userid);
 	}
 	

@@ -1,5 +1,14 @@
 <?php
 /*
+CREATE TABLE `pommomod_bounces` (
+`bounce_id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`bounce_email_bounced` VARCHAR( 100 ) NOT NULL ,
+`bounce_mail` BLOB NOT NULL ,
+`bounce_reason` VARCHAR( 200 ) NOT NULL ,
+`user_id` MEDIUMINT NOT NULL
+) ENGINE = innodb;
+
+
 CREATE TABLE `pommomod_mailing_queue` (
 `qid` smallint( 5 ) unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT ,
 `fromname` varchar( 60 ) NOT NULL default '',
@@ -25,6 +34,13 @@ CREATE TABLE `pommomod_permgroups` (
 PRIMARY KEY ( `group_id` )
 ) ENGINE = innodb;
 
+
+
+CREATE TABLE LIST
+
+CREATE TABLE LIST_USER
+
+CREATE TABLE ....
 
  */
 

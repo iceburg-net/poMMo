@@ -42,9 +42,9 @@
 			{foreach key=key item=item from=$userlist}
 			<tr style="text-align:left; padding-right: 10px; background-color:{cycle values="#eeeeee,#d0d0d0"}">
 				<td valign="top">
-					{$item.user_name}
+					{$item.name}
 				</td>
-				<td valign="top">{$item.user_group}&nbsp;
+				<td valign="top">{$item.perm}&nbsp;
 				</td>
 				<td valign="top" style="text-align:center;">{if $item.numlist!=0}{$item.numlist}{/if}&nbsp;
 				</td>
@@ -55,9 +55,9 @@
 							<tr>
 								<td width="150px">{$listitem.list_name}&nbsp;
 								</td>
-								<td style="text-align:center;"><a href="list_main.php?action=edit&id={$listitem.user_id}&listid={$listitem.list_id}">edit</a>
+								<td style="text-align:center;"><a href="list_main.php?action=edit&userid={$listitem.user_id}&listid={$listitem.list_id}">edit</a>
 								</td>
-								<td style="text-align:center;"><a href="list_main.php?action=delete&id={$listitem.user_id}&listid={$listitem.list_id}">delete</a>
+								<td style="text-align:center;"><a href="list_main.php?action=delete&userid={$listitem.user_id}&listid={$listitem.list_id}">delete</a>
 								</td>
 							</tr>
 							{/foreach}
@@ -66,20 +66,27 @@
 						-
 					{/if}
 				</td>
-				<td style="vertical-align:top; text-align:center;"><a href="list_main.php?action=add&id={$item.user_id}">&raquo;add List</a>
+				<td style="vertical-align:top; text-align:center;"><a href="list_main.php?action=add&userid={$item.uid}">&raquo;add List</a>
 				</td>
 			</tr>
 
-							{if $showDelete AND $item.user_id==$id}
+							{if $showDelete AND $item.uid==$showformid}
 									<tr>
 									<td colspan="5" align="right">
 										<form style="margin:0px;padding:0px;" action="" method="POST">
-										<input type="hidden" name="userid" value="{$item.user_id}">
-											<table style="width:400px; font-size:11px;margin: left; border: 1px solid silver; background-color:#eeeeee;" style="margin:0px;padding:0px;">
+											<table style="width:400px; font-size:11px;margin: left; border: 1px solid silver; 
+												background-color:#eeeeee;" style="margin:0px;padding:0px;">
 												<tr>
-													<td>Do you really want to delete this:</td>
-													<td>id hier</td>
+													<td align="center" colspan="2"><h3>{t}Delete mailing list{/t}</h3></td>
 												</tr>
+												<tr>
+													<td colspan="2">Do you really want to delete this:</td>
+												</tr>
+												<tr>
+													<td>Listname: <b>{$listdata.list_name}</b><br>
+														Userid: {$listdata.user_id} / Listid: {$listdata.list_id}
+													</td>
+												</tr> 
 												<tr>
 													<td><input type="submit" name="deleteList" value="{t}Delete List{/t}">
 													</td>
@@ -88,29 +95,35 @@
 										</form>
 									</td>
 									</tr>
-							{elseif $showEdit AND $item.user_id==$id}
+							{elseif $showEdit AND $item.uid==$showformid}
 									<tr>
 									<td colspan="5" align="right">
 										<form style="margin:0px;padding:0px;" action="" method="POST">
-										<input type="hidden" name="userid" value="{$item.user_id}">
+										{*<input type="hidden" name="userid" value="{$item.user_id}">*}
 										
-											<table style="width:400px;font-size:11px;margin: left; border: 1px solid silver; background-color:#eeeeee;" style="margin:0px;padding:0px;">
+											<table style="width:400px;font-size:11px;margin: left; border: 1px solid silver; 
+											background-color:#eeeeee;" style="margin:0px;padding:0px;">
+												<tr>
+													<td align="center" colspan="2"><h3>{t}Edit mailing list{/t}</h3></td>
+												</tr>
 												<tr>
 													<td>List Name:</td>
-													<td><input type="text" name="listname" value=""></td>
+													<td><input type="text" name="listname" value="{$listdata.list_name}"></td>
 												</tr>
 												<tr>
 													<td>List Description</td>
-													<td> <input type="text" name="listdesc" value=""></td>
+													<td> <input type="text" name="listdesc" value="{$listdata.list_desc}"></td>
 												</tr>
 												<tr>
 													<td>&nbsp;</td>
-													<td>Person: schon eindeutig</td>
+													<td>Person: {$listdata.user_id}</td>
 												</tr>
 												<tr><td>&nbsp;
 													<td>
 														<select>
-															<option name="mailgroup" value="" selected>hier die mailgruppen</option>
+															{foreach key=groupkey item=groupitem from=$mailgroups}
+															<option name="mailgroup" value="{$groupitem}" {if $groupitem==$mailgroup}selected{/if}>{$groupitem}</option>
+															{/foreach}
 														</select>
 													</td>
 												</tr>
@@ -122,12 +135,14 @@
 										</form>
 									</td>
 									</tr>
-							{elseif $showAdd AND $item.user_id==$id}
+							{elseif $showAdd AND $item.uid==$showformid}
 									<tr>
 									<td colspan="5" align="right">
 										<form style="margin:0px;padding:0px;" action="" method="POST">
-											<input type="hidden" name="userid" value="{$item.user_id}">
 											<table style="width:400px;font-size:11px;margin: left; border: 1px solid silver; background-color:#eeeeee;" style="margin:0px;padding:0px;">
+												<tr>
+													<td align="center" colspan="2"><h3>{t}Add a new mailing list{/t}</h3></td>
+												</tr>
 												<tr>
 													<td>List Name:</td>
 													<td><input type="text" name="listname" value=""></td>
@@ -143,7 +158,9 @@
 												<tr><td>&nbsp;
 													<td>
 														<select>
-															<option name="mailgroup" value="" selected>hier die mailgruppen</option>
+															{foreach key=groupkey item=groupitem from=$mailgroups}
+															<option name="mailgroup" value="{$groupitem}" {if $groupitem==$mailgroup}selected{/if}>{$groupitem}</option>
+															{/foreach}
 														</select>
 													</td>
 												</tr>

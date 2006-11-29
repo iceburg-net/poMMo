@@ -18,7 +18,11 @@
 define('_IS_VALID', TRUE);
 
 require ('bootstrap.php');
-
+//corinna
+if ($useplugins) {
+require ('plugins/multiuser/test.php');
+}
+///corinna
 
 $poMMo = & fireup();
 $logger = & $poMMo->_logger;
@@ -67,6 +71,7 @@ $authwithplugin = TRUE;
 								// Add username & encrypted password information to session: Use: Authenticate user and his permissions
 								$_SESSION['pommo']['user'] = $_REQUEST['username'];	//corinna
 								$_SESSION['pommo']['md5pass'] = md5($_REQUEST['password']);	//corinna
+								$_SESSION['pommo']['perm'] = getPerm($dbo, $_REQUEST['username']);
 													
 								bmRedirect(bm_http . $_REQUEST['referer']);
 								
@@ -97,6 +102,7 @@ $authwithplugin = TRUE;
 													// Add username information to session: Use: Authenticate user and his permissions
 													$_SESSION['pommo']['user'] = $_REQUEST['username'];	//corinna
 													$_SESSION['pommo']['md5pass'] = md5($_REQUEST['password']);	//corinna
+													$_SESSION['pommo']['perm'] = getPerm($dbo, $_REQUEST['username']); //CORINNA
 													
 													bmRedirect(bm_http . $_REQUEST['referer']);
 													

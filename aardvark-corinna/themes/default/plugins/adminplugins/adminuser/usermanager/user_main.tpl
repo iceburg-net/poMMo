@@ -25,7 +25,7 @@
 		
 		
 
-	{* -------------------------- USE CASES ----------------------------------- *}
+	{* -------------------------- [user] USE CASES ----------------------------------- *}
 	
 	{if $showAddForm}
 		<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
@@ -45,15 +45,18 @@
 						<td><input type="password" name="userpasscheck" value="{$userpasscheck}"></td>
 					</tr>
 					<tr>
-						<td>Group:</td>
-						<td>{*<input type="select" name="usergroup" value="{$usergroup}">*}
+						<td>Permission Group:</td>
+						<td>
 							<select name="usergroup">
-								{foreach key=nr item=groupitem from=$usergroups}
-									<option name="group_name" value="{$groupitem.group_id}">{$groupitem.group_name}</option>
-								{/foreach}
+								<!--<option>--Select permission group--</option>-->
+									{foreach key=nr item=groupitem from=$permgroups}
+										<option name="name" value="{$groupitem.id}">{$groupitem.name}</option>
+									{/foreach}
+								
 							</select>
 						</td>
 					</tr>
+					{* Created is generated in DB, last_login will be written in the future *}
 					<tr>
 						<td colspan="2"><input type="submit" name="AddUser" value="Add User">  <input type="reset" name="reset" value="Reset"></td>
 					</tr>
@@ -65,21 +68,23 @@
 		<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
 			<h4>{$actionStr}</h4>
 			<form action="" method="POST">
-				<input type="hidden" name="userid" value="{$userinfo.user_id}">
+				<input type="hidden" name="userid" value="{$userinfo.id}">
 				<table style="font-size: 12px;" cellpadding="3" cellspacing="0">
 					<tr>
 						<td>Username:</td>
-						<td><input type="text" name="username" value="{$userinfo.user_name}"></td>
+						<td><input type="text" name="username" value="{$userinfo.name}"></td>
 					</tr>
 					<tr>
 						<td>Password:</td>
-						<td><input type="password" name="userpass" value="{$userinfo.user_pass}"></td>
+						<td><input type="password" name="userpass" value="{$userinfo.pass}"></td>
 					</tr>
 					<tr>
-						<td>Group:</td>
-						<td><select name="usergroup">
-							{foreach key=nr item=groupitem from=$usergroups}
-									<option name="group_name" value="{$groupitem.group_id}" {if $userinfo.user_group==$groupitem.group_name}selected{/if} >{$groupitem.group_name}</option>
+						<td>Group:({$userinfo.perm})</td>
+						<td><select name="usergroup"><!--TODO --wert-- werte funzen net-->
+									<option name="group_name" value="nogroup" {if $userinfo.perm==""}selected{/if}>--no group--</option>
+							{foreach key=nr item=groupitem from=$permgroups}
+									<option name="group_name" value="{$groupitem.id}" 
+										{if $userinfo.perm==$groupitem.name}selected{/if}>{$groupitem.name}</option>
 							{/foreach}
 							</select>
 						</td>
@@ -96,10 +101,12 @@
 			<h4>{$actionStr}</h4>
 			<form action="" method="POST">
 				Do you really want to delete this user:<br>
-				<input type="hidden" name="userid" value="{$userinfo.user_id}">
-				Userid: {$userinfo.user_id}<br>
-				Username: {$userinfo.user_name}<br>
-				Group: {$userinfo.user_group}<br>
+				<input type="hidden" name="userid" value="{$userinfo.id}">
+				Userid: {$userinfo.id}<br>
+				Username: {$userinfo.name}<br>
+				Permission Group: {$userinfo.perm}<br>
+				Created: {$userinfo.created}<br>
+				Last Login: {$userinfo.lastlogin}<br>
 				<input type="submit" name="DeleteUser" value="Delete">
 			</form>
 		</div>
@@ -114,16 +121,18 @@
 	{/if}
 
 
-
-
 	<br>
-	{* ---------------------- Show User Matrix ------------------------ *}
-
 	
-		<a class="pommoClose" href="../adminuser.php" style="float: left;">
-			<img src="{$url.theme.shared}/images/icons/left.png" align="absmiddle" border="0">&nbsp;
+	
+	
+	
+	{* ---------------------- [user] MATRIX ------------------------ *}
+		<div>
+			<a class="pommoClose" href="../adminuser.php" style="float: left; line-height:18px;">
+			<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
 			{t}Return to User Management Menu{/t}
-		</a>
+			</a>
+		</div>
 		<div style="text-align: right; clear: both;width: 1px;"></div>
 		<br>
 	
@@ -131,74 +140,79 @@
 		
 		<table style=" float: left; font-size: 12px;" cellpadding="3" cellspacing="0" width="100%">
 
-			<tr class="row" style="background-color:#aaaaaa">
-				<td class="cell" style="text-align: center;"><b>ID</b></td>
-				<td class="cell" style="text-align: left;"><b>Name</b></td>
-				<td class="cell" style="text-align: left;"><b>Pass: to md5</b></td>
-				<td class="cell" style="text-align: left;"><b>Group</b></td>
-				<td> </td>
-				<td> </td>
-				<!--<td style="text-align: right; clear: both;width: 1px;"></td>-->
-			</tr>
+				<tr class="row" style="background-color:#AAAAAA">
+					<td class="cell" style="text-align: center;"><b>ID</b></td>
+					<td class="cell" style="text-align: center;"><b>Name</b></td>
+					<td class="cell" style="text-align: center;"><b>Pass: to md5</b></td>
+					<td class="cell" style="text-align: center;"><b>Group</b></td>
+					<td class="cell" style="text-align: center;"><b>created</b></td>
+					<td class="cell" style="text-align: center;"><b>last login</b></td>
+					<td class="cell" style="text-align: center;"><b>login tries</b></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
 		
-		{foreach name=aussen key=nr item=user from=$user}
-			<tr class="row" style="float:top;background-color:{cycle values="#eeeeee,#d0d0d0"}">
-				<!--<form action="" method="POST">-->
-				<td class="cell" style="text-align: center;">{$user.user_id}</td>
-				<td class="cell" style="text-align: left;">{$user.user_name}</td>
-				<td class="cell" style="text-align: left;">{$user.user_pass}</td>
-				<td class="cell" style="text-align: left;">{$user.user_group}</td>
-				<td class="cell" style="text-align: center;"><a href="user_main.php?action=edit&userid={$user.user_id}">edit</a></td>		
-				<td class="cell" style=" text-align: center;"><a href="user_main.php?action=delete&userid={$user.user_id}">delete</a></td>
-				<!--<div class="cell" style="float: left; text-align: center; padding: 5px 10px 5px 10px; min-width: 60px;"><a href="user_main.php?action=setrights&userid={*{$user.user_id}*}">bef&ouml;rdern</a></div>-->
-				<!--<div style="text-align: right; clear: both;width: 1px;"></div>-->
-				<!--</form>-->
-			</tr>
-		{/foreach}
+			{foreach name=aussen key=nr item=user from=$user}
+				<tr class="row"  valign="top" style="float:top;background-color:{cycle values="#eeeeee,#d0d0d0"}">
+					<td class="cell" style="text-align: center;">{$user.id}</td>
+					<td class="cell" style="text-align: left;">{$user.name}</td>
+					<td class="cell" style="text-align: left;">{$user.pass}</td>
+					<td class="cell" style="text-align: left;">{$user.perm}</td>
+					<td class="cell" style="text-align: center;">{$user.created|date_format:"%d.%m.%Y"}</td>{*:"%A, %B %e, %Y"*}
+					<td class="cell" style="text-align: center;">{$user.lastlogin|date_format:"%d.%m.%Y %H:%M"}</td>{*%x*}
+					<td class="cell" style="text-align: center;">{$user.logintries}</td>
+					<td class="cell" style="text-align: center;"><a href="user_main.php?action=edit&userid={$user.id}">edit</a></td>		
+					<td class="cell" style=" text-align: center;"><a href="user_main.php?action=delete&userid={$user.id}">delete</a></td>
+				</tr>
+			{/foreach}
 		
 		</table>
 		
-		<div style="text-align: right; clear: both;width: 1px;"></div>
-			<div style="float:left;"><br>
-				<a href="user_main.php?action=add">Add User</a>
-			</div>
-		<div style="text-align: right; clear: both;width: 1px;"></div>
+		{* --- ADD USER BUTTON -> ICON??? --- *}
+		<div style="text-align: right; clear: both; width: 1px;"></div>
+			<div style="float:left;"><br><a href="user_main.php?action=add">Add User</a></div>
+		<div style="text-align: right; clear: both; width: 1px;"></div>
 
-	<br><br>
+		<br><br>
 
 
-	
-	
-	
-	
-	
-	{* ----------------- GROUP THINGS --------------------- *}
+	{* ----------------- [group] MATRIX --------------------- *}
 	<div>
 		<div style="float:left; width: 65%">
+		
+			<i>({t 1=$nrperm}%1 permission groups{/t})</i>
+		
 			<table style="font-size: 12px; float:left;" cellpadding="3" cellspacing="0" width="95%">
-				<tr style="background-color:#aaaaaa;">
-					<td><b>ID</b></td>
-					<td><b>Groupname</b></td>
-					<td><b>Permissions</b></td>
-					<td><b>Description</b></td>
-					<td> </td>
-					<td> </td>
-				</tr>
+
+					<tr style="background-color:#AAAAAA;">
+						<td><b>ID</b></td>
+						<td><b>Groupname</b></td>
+						<td><b>Permissions</b></td>
+						<td><b>Description</b></td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					
 				{foreach name=gr key=nr item=item from=$permgroups}
-				<tr style="background-color:{cycle values="#eeeeee,#d0d0d0"}">
-					<td>{$item.group_id}</td>
-					<td>{$item.group_name}</td>
-					<td>{$item.group_perm}</td>
-					<td>{$item.group_desc}</td>
-					<td><a href="user_main.php?action=editgroup&groupid={$item.group_id}">edit</a></td>
-					<td><a href="user_main.php?action=delgroup&groupid={$item.group_id}">delete</a></td>
-				</tr>
+					<tr style="background-color:{cycle values="#eeeeee,#d0d0d0"}">
+						<td  valign="top">{$item.id}</td>
+						<td  valign="top">{$item.name}</td>
+						<td  valign="top">{$item.perm}</td>
+						<td  valign="top">{$item.desc}</td>
+						<td  valign="top"><a href="user_main.php?action=editgroup&groupid={$item.id}">edit</a></td>
+						<td  valign="top"><a href="user_main.php?action=delgroup&groupid={$item.id}">delete</a></td>
+					</tr>
 				{/foreach}
+				
 			</table>
 
 		</div>
 	
-		{* ------ Group Use Cases ------- *}
+	
+	
+	
+		{* ------ [permission groups] USE CASES ------- *}
+		
 		<div style="float: right; width: 35%; text-align: left;">
 			{if $showGroupAddForm}
 				<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
@@ -210,44 +224,51 @@
 						<input type="submit" name="AddGroup" value="Add Group">  <input type="reset" name="reset" value="Reset">
 					</form>
 				</div>
+				<div  style="text-align:right;">
+					<a href="user_main.php">Cancel Process</a>
+				</div>
 			{elseif $showGroupDelForm}
 				<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
 					<h4>{t}Delete Group{/t}</h4>
 					{t}Do you really want to delete this group? {/t}
 					<form action="" method="POST">
-						<input type="hidden" name="groupid" value="{$groupinfo.group_id}">
-						{t}Groupname:{/t} {$groupinfo.group_name}<br>
-						{t}Permissions:{/t} {$groupinfo.group_perm}<br>
-						{t}Description:{/t} {$groupinfo.group_desc}<br>
-						<input type="submit" name="DeleteGroup" value="Delete Group">
+						<input type="hidden" name="groupid" value="{$groupinfo.id}">
+						{t}Groupname:{/t} {$groupinfo.name}<br>
+						{t}Permissions:{/t} {$groupinfo.perm}<br>
+						{t}Description:{/t} {$groupinfo.desc}<br>
+						<input type="submit" name="DeleteGroup" value="Delete Permission Group">
 					</form>
+				</div>
+				<div  style="text-align:right;">
+					<a href="user_main.php">Cancel Process</a>
 				</div>
 			{elseif $showGroupEditForm}
 				<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
 					<h4>{t}Edit Group{/t}</h4>
 					<form action="" method="POST">
-						<input type="hidden" name="groupid" value="{$groupinfo.group_id}">
-						{t}Groupname:{/t} <input type="text" name="groupname" value="{$groupinfo.group_name}"><br>
-						{t}Permissions:{/t} <input type="text" name="groupperm" value="{$groupinfo.group_perm}"><br>
-						{t}Description:{/t} <input type="text" name="groupdesc" value="{$groupinfo.group_desc}"><br>
+						<input type="hidden" name="groupid" value="{$groupinfo.id}">
+						{t}Groupname:{/t} <input type="text" name="groupname" value="{$groupinfo.name}"><br>
+						{t}Permissions:{/t} <input type="text" name="groupperm" value="{$groupinfo.perm}"><br>
+						{t}Description:{/t} <input type="text" name="groupdesc" value="{$groupinfo.desc}"><br>
 						<input type="submit" name="EditGroup" value="Edit Group">  <input type="reset" name="reset" value="Reset">
 					</form>
 				</div>
+				<div  style="text-align:right;">
+					<a href="user_main.php">Cancel Process</a>
+				</div>
 			{/if}
 		</div>
-
-
-			<div style="clear:both;"></div>
-			<div style="text-align: left; ">
-				<br><a href="user_main.php?action=addgroup" style="text-align: left; ">{t}Add new group{/t}</a><br><br><br>
-			</div>
+		
+		
+		
+		{* --- TODO ADD PERMISSION GROUP BUTTON -> ICON??? --- *}
+		<div style="clear:both;"></div>
+		<div style="text-align: left; ">
+			<br><a href="user_main.php?action=addgroup" style="text-align: left; ">{t}Add new permission group{/t}</a><br><br><br>
+		</div>
 			
-			<div  style="text-align:right;">
-				<a href="user_main.php">Cancel Process</a>
-			</div>
-
+			
 	</div>
-	
 
 	</div>
 

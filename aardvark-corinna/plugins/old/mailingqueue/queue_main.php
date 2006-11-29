@@ -13,8 +13,8 @@
 
 define('_IS_VALID', TRUE);
 
-require ('../../bootstrap.php');
-require_once (bm_baseDir . '/plugins/mailingqueue/class.QueuePlugin.php');
+require ('../../../bootstrap.php');
+require_once (bm_baseDir . '/plugins/old/mailingqueue/class.QueuePlugin.php');
 
 
 $poMMo = & fireup("secure");

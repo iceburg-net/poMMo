@@ -48,9 +48,9 @@ class ListDBHandler implements iDbHandler {
 	/* Custom DB fetch functions */
 	/*public function dbFetchUser() {
 
-		$sql = $this->safesql->query("SELECT user_id, user_name,  group_name " .	//user_pass,
-				"FROM %s LEFT JOIN %s ON user_group=group_id ORDER BY user_id",
-			array( 'pommomod_user', 'pommomod_permgroups' ) );
+		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, p.perm_name " .	//user_pass,
+				"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
+			array( 'pommomod_user', 'pommomod_perm' ) );
 		$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
 			$user[$i] = array(
@@ -66,12 +66,12 @@ class ListDBHandler implements iDbHandler {
 
 
 	/*public function dbFetchUserLists() {
-		$sql = $this->safesql->query("SELECT u.user_name, g.group_name, l.list_name " .	// count(l.list_id) AS numlist
+		$sql = $this->safesql->query("SELECT u.user_name, p.perm_name, l.list_name " .	// count(l.list_id) AS numlist
 				"FROM %s AS u LEFT JOIN %s AS lu ON u.user_id=lu.user_id " .
 				"LEFT JOIN %s AS l ON lu.list_id=l.list_id " .
-				"LEFT JOIN %s AS g ON u.user_group=g.group_id " .
+				"LEFT JOIN %s AS p ON u.user_perm=p.perm_id " .
 				"ORDER BY u.user_id ",	//GROUP BY u.user_id 
-			array( 'pommomod_user', 'pommomod_list_user', 'pommomod_list', 'pommomod_permgroups' ) );	
+			array( 'pommomod_user', 'pommomod_list_user', 'pommomod_list', 'pommomod_perm' ) );	
 			
 		$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
@@ -90,26 +90,26 @@ class ListDBHandler implements iDbHandler {
 		return $user;
 	}*/
 	public function dbFetchUserLists() {
-		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, g.group_name, count(lu.list_id) AS numlist " .	
+		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, p.perm_name, count(lu.list_id) AS numlist " .	
 				"FROM %s AS u LEFT JOIN %s AS lu ON u.user_id=lu.user_id " .
 				//"LEFT JOIN %s AS l ON lu.list_id=l.list_id " .
-				"LEFT JOIN %s AS g ON u.user_group=g.group_id " .
+				"LEFT JOIN %s AS p ON u.user_perm=p.perm_id " .
 				"GROUP BY u.user_id ORDER BY u.user_id ",
-			array( 'pommomod_user', 'pommomod_list_user', 'pommomod_permgroups' ) );	// als 3. 'pommomod_list'
+			array( 'pommomod_user', 'pommomod_list_user', 'pommomod_perm' ) );	// als 3. 'pommomod_list'
 		$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
 			$user[$i] = array(
-				'user_id'		=> $row['user_id'],
-				'user_name'		=> $row['user_name'],
-				'user_group'	=> $row['group_name'],
-				'numlist'		=> $row['numlist'],
+				'uid'		=> $row['user_id'],
+				'name'		=> $row['user_name'],
+				'perm'		=> $row['perm_name'],
+				'numlist'	=> $row['numlist'],
 			);
 			$i++;
 		}
 		
 		for ($i=0; $i < count($user); $i++) {
 			if ($user[$i]['numlist'] > 0 ) {
-				$user[$i]['lists'] = $this->dbGetListsForUser($user[$i]['user_id']); //$row['list_id']
+				$user[$i]['lists'] = $this->dbGetListsForUser($user[$i]['uid']); //$row['list_id']
 			}
 		}
 		
@@ -162,10 +162,10 @@ class ListDBHandler implements iDbHandler {
 			return ($affected == 0) ? FALSE : $affected;*/
 		}
 	}
-	public function dbEditList($name, $desc) {
+	public function dbEditList($listid, $name, $desc) {
 		$sql = $this->safesql->query("UPDATE %s SET list_name='%s', list_desc='%s'  
 				WHERE list_id=%i",
-			array('pommomod_list', $name, $desc ) );
+			array('pommomod_list', $name, $desc, $listid ) );
 		if (!$this->dbo->query($sql)) {
 			return  $this->_dbo->getError();
 		} else {
@@ -175,20 +175,42 @@ class ListDBHandler implements iDbHandler {
 	}
 	
 	public function dbGetListInfo($listid, $userid) {
-		$sql = $this->safesql->query("SELECT l.list_id, l.list_name, lu.user_id " .
+		/*$sql = $this->safesql->query("SELECT l.list_id, l.list_name, lu.user_id " .
 				"FROM %s AS lu, %s AS l WHERE l.list_id=%i AND lu.user_id=%i", 
-			array('pommomod_list_user', 'pommomod_list', $listid, $userid) );
-		$i=0;
+			array('pommomod_list_user', 'pommomod_list', $listid) );*/
+		$sql = $this->safesql->query("SELECT list_id, list_name, list_desc " .	//user_name
+				"FROM %s WHERE list_id=%i LIMIT 1", 
+			array('pommomod_list', $listid) );
+		//$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
-			$listinfo[$i] = array(
-				'list_id'		=> $row1['list_id'],
-				'list_name'		=> $row1['list_name'],
-				'user_id'		=> $row1['user_id'],
+			$listinfo = array(	//[$i]
+				'list_id'		=> $row['list_id'],
+				'list_name'		=> $row['list_name'],
+				'list_desc'		=> $row['list_desc'],
+				'user_id'		=> $userid,
+				//'user_name'		=> $row['user_name']
 			);
-			$i++;
+			//$i++;
 		}
 		return $listinfo;
 	}
+	
+function & dbGetMailGroups($where = NULL) {
+
+	$whereStr = '';
+	if (is_numeric($where))
+		$whereStr = " WHERE group_id=".$where." ";
+		//$whereStr = ' WHERE group_id=\''.$where.'\'';
+
+	$groups = array ();
+	$sql = $this->safesql->query("SELECT group_id, group_name FROM %s %s ORDER BY group_name",
+		array($this->dbo->table['groups'], $whereStr) );
+		
+	while ($row = $this->dbo->getRows($sql, TRUE)) {
+		$groups[$row[0]] = $row[1];
+	}
+	return $groups;
+}
 
 } //ListDBHandler
 

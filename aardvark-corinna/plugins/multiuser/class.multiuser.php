@@ -15,17 +15,73 @@
 
 class MultiUser {
 	
-	public function __construct() {
-		
+	private $poMMo;
+	private $dbo;
+	private $logger;
+	
+	
+	public function __construct($poMMo) {
+		$this->poMMo = $poMMo;
+		$this->dbo = $poMMo->_dbo;
+		$this->logger = $poMMo->logger;
 	}
+	
 	
 	public function display() {
 		
-		echo "<h3>MULTIUSER ok</h3>";
+		//echo "<h3>MULTIUSER ok</h3>";
+		
 		$smarty = & bmSmartyInit();
+		//Perm
+		
+		$loggeduser = & $this->poMMo->_loggeduser;
+			$user = $loggeduser['user'];
+			$perm = $loggeduser['perm'];
+		/*echo "<h1 style='color:red;'>"; print_r($user); echo "<br>"; print_r($perm);
+		echo "</h1>";*/
+		
+		if (stristr($perm, 'compose')) {
+			$smarty->assign("compose", TRUE);
+			$smarty->assign("options", TRUE);
+		}
+		if (stristr($perm, 'send')) {
+			$smarty->assign("send", TRUE);
+			$smarty->assign("options", TRUE);
+		}
+		if (stristr($perm, 'history')) {
+			$smarty->assign("history", TRUE);
+			$smarty->assign("options", TRUE);
+		}
+		
+		if (stristr($perm, 'maillists')) {
+			$smarty->assign("maillists", TRUE);
+			$smarty->assign("admin", TRUE);
+		}
+		if (stristr($perm, 'bounce')) {
+			$smarty->assign("bounce", TRUE);
+			$smarty->assign("admin", TRUE);
+		}
+		if (stristr($perm, 'useradmin')) {
+			$smarty->assign("useradmin", TRUE);
+			$smarty->assign("admin", TRUE);
+		}
+		if (stristr($perm, 'subscribers')) {
+			$smarty->assign("subscribers", TRUE);
+			$smarty->assign("admin", TRUE);
+		}
+		if (stristr($perm, 'groups')) {
+			$smarty->assign("groups", TRUE);
+			$smarty->assign("admin", TRUE);
+		}
+
+
+		if (stristr($perm, 'blah')) {
+			$smarty->assign("blah", TRUE);
+		}	
 		
 		
-		
+		$smarty->assign("user", $user);
+		$smarty->assign("perm", $perm);
 		
 		$smarty->display('plugins/multiuser/multiuser.tpl');
 		bmKill();

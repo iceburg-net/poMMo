@@ -48,9 +48,10 @@ class AuthHandler { // implements iDbHandler {
 		/*$sql = $safesql->query("SELECT data_value FROM pommomod_plugindata " .
 				"WHERE data_name = 'authentication_method' LIMIT 1",
 				array() );*/
-		$sql = $this->safesql->query("SELECT plugin_uniquename FROM %s " .
-				"WHERE plugin_super=33 AND plugin_active=1 LIMIT 1", 
-				array('pommomod_plugin') );
+		$sql = $this->safesql->query("SELECT plugin_uniquename " .
+					"FROM %s AS p LEFT JOIN %s AS c ON p.cat_id=c.cat_id " .				
+					"WHERE cat_name='auth' AND plugin_active=1 LIMIT 1", 
+				array('pommomod_plugin', 'pommomod_plugincategory') );
 		$method = $this->dbo->query($sql,0);
 		return $method;
 		
@@ -69,7 +70,21 @@ class AuthHandler { // implements iDbHandler {
 	
 	
 
-
+	public function dbWriteLastLogin($username) {
+		$sql = $this->safesql->query("UPDATE %s SET user_last_login=NOW() WHERE user_name='%s' ",
+				array('pommomod_user', $username) );
+			$this->dbo->query($sql);
+		$sql = $this->safesql->query("UPDATE %s SET user_last_login=NOW() WHERE user_name='%s' ",
+				array('pommomod_user', $username) );
+			$this->dbo->query($sql);
+	}
+	
+	public function dbAddLDAPUser($user, $pass) {
+		$sql = $this->safesql->query("INSERT INTO %s (user_name, user_pass, user_perm, user_created) " .
+				"VALUES ('%s', '%s', NULL, NOW()) ",
+				array('pommomod_user', $user, $pass ) );
+			$this->dbo->query($sql);
+	}
 
 	
 	public function registerdbo($dbo) {

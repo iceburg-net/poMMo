@@ -82,23 +82,32 @@ class SimpleDbLdapAuth extends Auth implements iAuthent {
 		}	
 		*/
 		
-		$dba = $this->dbauth->authenticate($user, $md5pass);
-		$ldapa = $this->ldapauth->authenticate($user, $md5pass);
+	
+		$ldapa = $this->ldapauth->authenticate($user, $md5pass);	
+		// if true??
+		$dba = $this->dbauth->authenticate($user, $md5pass);	//$md5pass
 
+		// TRUES!
 		if ($ldapa && $dba) {
 			// LDAP auth ok und db auth auch
 			$this->handleMessage("authenticated with both.");
+			$this->dbhandler->dbWriteLastLogin($user); 
 			return TRUE;
 		} elseif ($ldapa && !$dba) {
 			// LDAP ok aber db nicht
 			$this->handleMessage("with LDAP but not in DB.");
 			// das das fehlt in DB schreiben
-			return FALSE;
+			$this->dbhandler->dbAddLDAPUser($user, $md5pass);	// ein komisches Passwort generieren
+			$this->dbhandler->dbWriteLastLogin($user); 
+			return TRUE;	//!! IF  	dbldap_insertldaptodb aus CONFIG!!!
 		} elseif (!$ldapa && $dba) {
 			//DB ok aber LDAP nicht
 			$this->handleMessage("with DB but not in LDAP.");
 			// das das fehlt in DB schreiben
+			$this->dbhandler->dbWriteLastLogin($user); 
 			return FALSE;
+			
+		// FALSES!
 		} elseif (!$ldapa && !$dba) {
 			$this->handleMessage("both authentication failed.");
 			return FALSE;
@@ -106,6 +115,8 @@ class SimpleDbLdapAuth extends Auth implements iAuthent {
 			$this->handleMessage("both not passed.");
 			return FALSE;
 		}
+		
+
 
 	
 	} //authenticate

@@ -30,6 +30,8 @@ $dbo = & $poMMo->_dbo;
 //echo "<h3>poMMo:"; print_r($poMMo); echo "</h3>";
 $loggeduser = & $poMMo->_loggeduser;
 $user = $loggeduser['user'];
+$perm = $loggeduser['perm'];
+
 
 // TODO
 // Wenn diese was weiss ich wo defined sind //in $pommo zB
@@ -42,7 +44,7 @@ $user = $loggeduser['user'];
 if (($user != 'admin') AND $useplugins) {	// wenn einer user sich einloggt!
 
 	require_once (bm_baseDir . '/plugins/multiuser/class.multiuser.php'); 
-	$multiuser = new MultiUser();
+	$multiuser = new MultiUser($poMMo);
 	$multiuser->display();
 	
 }
