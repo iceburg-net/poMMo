@@ -42,6 +42,18 @@ class PommoAuth {
 
 	// TODO -> extend this when multi-user support is implemented. For now default to 5 if a user
 	// is logged in (successfully authenticated). 5 should be max (administrator/superuser privileges)
+	
+	/*
+	 * corinna: OO Design proposal:
+	 * Classes for the User type instead of a permission level
+	 * interface iUser (maybe add this later -> less administration effort? for all this classes)
+	 * admins are a Object AdminUser(derived from iUser)
+	 * When multi user support is enabled the users are of the type class ExtendedUser, and this class has overloaded existing functions 
+	 * and extended functionality (Permission Handling, ...)
+	 * The problem with PHP is the non persistence, e.g. that the objects are deleted when the 
+	 * requested files are interpreted... With servlets,... the user objects are organzized as i describe
+	 * above but i don't know if there is a standard way for php?
+	 */
 	function getPermissionLevel($username = null) {
 		if ($username)
 			return 5;
