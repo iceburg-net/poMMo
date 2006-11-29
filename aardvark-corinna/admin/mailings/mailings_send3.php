@@ -64,10 +64,10 @@ if (!empty($_POST['testMail'])) {
 //<corinna>
 if (!empty ($_GET['puttoqueue'])) {
 	
-	require_once (bm_baseDir . '/plugins/mailingqueue/class.queuedbhandler.php');
+	require_once (bm_baseDir . '/plugins/old/mailingqueue/class.queuedbhandler.php');
 	$db = new QueueDbHandler($dbo);
 	$db->dbSaveToQueue($input); // if <<BACK link in browser the data['action'] is set to send and we get redirected
-	bmRedirect('../../plugins/mailingqueue/queue_main.php');
+	bmRedirect('../../plugins/old/mailingqueue/queue_main.php');
 }
 //</corinna>
 

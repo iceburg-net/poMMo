@@ -12,7 +12,7 @@
  * 
  ** [END HEADER]**/
 
-require_once (bm_baseDir . '/plugins/mailingqueue/class.db_queuehandler.php'); 
+require_once (bm_baseDir . '/plugins/old/mailingqueue/class.db_queuehandler.php'); 
 require_once (bm_baseDir . '/inc/class.pager.php');
 
 
@@ -58,9 +58,11 @@ class QueuePlugin {
 
 	public function execute($data) {
 
-		echo "<h3 style='color:blue'>Data: ";
+		/*echo "<h3 style='color:blue'>Data: ";
 		print_r($data);
-		echo "</h3>";
+		echo "</h3>";*/
+
+		echo "Dies wird noch angepasst<br>";
 
 		//if (empty($this->poMMo->_state)) {
 			// State initialization for sorting options
@@ -77,9 +79,9 @@ class QueuePlugin {
 
 
 
-		echo "<h3 style='color:blue'>STATE in $ poMMo: ";
+		/*echo "<h3 style='color:blue'>STATE in $ poMMo: ";
 		print_r($this->poMMo->_state);
-		echo "</h3>";
+		echo "</h3>";*/
 
 
 		// Smarty Init
@@ -138,7 +140,7 @@ class QueuePlugin {
 		//unset($action);
 		$this->poMMo->stateVar('action','NULL');
 
-		$smarty->display('plugins/mailingqueue/mailingqueue.tpl');
+		$smarty->display('plugins/mailingqueue/queue_main.tpl');
 		bmKill();
 
 	} //execute

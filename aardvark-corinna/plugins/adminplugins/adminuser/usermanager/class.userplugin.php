@@ -36,6 +36,7 @@ class UserPlugin { //implements plugin
 		
 		$this->userdbhandler = new UserDBHandler($this->dbo);
 	}
+	
 	public function __destruct() {
 		//UNSET
 		//$data['action'] = "etwasanderes";
@@ -58,13 +59,20 @@ class UserPlugin { //implements plugin
 	// But i think execute as main function for this plugin to show all the users is ok.
 	public function execute($data) {	
 		
+		// TODO test this
+		if (!$this->isActive()) {
+			print_r("<b style='color:red;'>NOT ACTIVE!!!</b>");
+			//zurückleiten zu seite vorher??? permissions einfügen und $logger
+			return;
+		}
+		
+		
 		// Smarty Init
 		$smarty = & bmSmartyInit();
 
 		if ($data['showAddForm']) { // == 'addForm') {
 			$smarty->assign('showAddForm', TRUE);
-			$usergroups = $this->userdbhandler->dbFetchGroupNames();
-			$smarty->assign('usergroups', $usergroups);
+			$smarty->assign('usergroups', $this->userdbhandler->dbFetchPermNames());
 			$smarty->assign('actionStr', _T('Add new User'));
 			
 		} elseif ($data['showDelForm']) { // == 'delForm') {
@@ -72,29 +80,29 @@ class UserPlugin { //implements plugin
 			$smarty->assign('actionStr', _T('Delete User'));
 			
 			//Show deletion info
-			$userinfo = $this->userdbhandler->dbFetchUserInfo($data['userid']);
-			$smarty->assign('userinfo', $userinfo);
+			$smarty->assign('userinfo', $this->userdbhandler->dbFetchUserInfo($data['userid']));
 			
 		} elseif ($data['showEditForm']) { // == 'editForm') {
 			$smarty->assign('showEditForm', TRUE);
 			$smarty->assign('actionStr', _T('Edit User'));
 			
+			echo "<div style='color: red'>";
+			print_r($this->userdbhandler->dbFetchUserInfo($data['userid']));
+			echo "</div>";
+			
 			//Show data to edit
 			$smarty->assign('userinfo', $this->userdbhandler->dbFetchUserInfo($data['userid']));
-			$smarty->assign('usergroups',  $this->userdbhandler->dbFetchGroupNames());
+			$smarty->assign('permgroups',  $this->userdbhandler->dbFetchPermNames());
 
 		} elseif ($data['showGroupAddForm']) {
 			$smarty->assign('showGroupAddForm', TRUE);
 		} elseif ($data['showGroupDelForm']) {
 			$smarty->assign('showGroupDelForm', TRUE);
-			$smarty->assign('groupinfo', $this->userdbhandler->dbFetchGroupInfo($data['groupid']));
+			$smarty->assign('groupinfo', $this->userdbhandler->dbFetchPermInfo($data['groupid']));
 		} elseif ($data['showGroupEditForm']) {
 			$smarty->assign('showGroupEditForm', TRUE);
-			$smarty->assign('groupinfo', $this->userdbhandler->dbFetchGroupInfo($data['groupid']));
+			$smarty->assign('groupinfo', $this->userdbhandler->dbFetchPermInfo($data['groupid']));
 		}
-
-		$smarty->assign('showGroups', TRUE);
-		$smarty->assign('permgroups', $this->userdbhandler->dbGetGroups());
 
 
 		/* We need a sorting mechanism here too
@@ -113,7 +121,7 @@ class UserPlugin { //implements plugin
 
 		$smarty->assign('state',$this->poMMo->_state);
 		*/
-	/*	$action = $this->poMMo->stateVar('action',$data['action']);
+		/*	$action = $this->poMMo->stateVar('action',$data['action']);
 		$userid = $this->poMMo->stateVar('userid',$data['userid']);
 		$smarty->assign('action',$action);
 		$smarty->assign('userid',$userid);
@@ -128,12 +136,17 @@ class UserPlugin { //implements plugin
 		 */
 		
 		
+		// Permission Groups Matrix
+		$perm =  $this->userdbhandler->dbFetchPermissionMatrix();
+		$smarty->assign('permgroups', $perm);
+		$smarty->assign('nrperm' , count($perm)); 
 
-		// Display USER TABLE -> Get all the available Users from the database $this->showUserMatrix();
-		$user = $this->userdbhandler->dbFetchUser();
-
+		// User Matrix
+		$user = $this->userdbhandler->dbFetchUserMatrix();		//$smarty->assign('mailings', $this->getMailingQueue($start, $limit, $sortBy, $sortOrder));
+		$smarty->assign('user' , $user); 
 		$smarty->assign('nrusers' , count($user)); 
-		$smarty->assign('user' , $user); 							//$smarty->assign('mailings', $this->getMailingQueue($start, $limit, $sortBy, $sortOrder));
+		
+									
 		$smarty->assign($_POST);
 
 		$smarty->display('plugins/adminplugins/adminuser/usermanager/user_main.tpl');
@@ -143,7 +156,7 @@ class UserPlugin { //implements plugin
 	
 
 
-	/* USE CASES */
+	/* USE CASES user */
 	
 	public function addUser($user, $pass, $passcheck, $group) {
 
@@ -178,7 +191,6 @@ class UserPlugin { //implements plugin
 	} //AddUser
 	
 	
-	
 	public function deleteUser($userid) {
 		if (!empty($userid)) {
 			return $this->userdbhandler->dbDeleteUser($userid);
@@ -191,6 +203,12 @@ class UserPlugin { //implements plugin
 	
 	public function editUser($id, $user, $pass, $group) {
 		//if eines leer -> fehler
+		
+		// Es darf nicht nogroup ausgewählt sein
+		if ($group=='nogroup') {
+			$this->logger->addMsg("No Permissiongroup selected.");
+			return FALSE;
+		}
 		
 		// Nur das ändern das sich geändert hat? oder alle auf einmal
 		$ret = $this->userdbhandler->dbEditUser($id, $user, $pass, $group);
@@ -205,10 +223,13 @@ class UserPlugin { //implements plugin
 		
 	}
 	
+
+	/* USE CASES permission group */
+	//TODO Fehlerbehandlung
 	
-	public function addGroup($name, $perm, $desc) {
+	public function addPermGroup($name, $perm, $desc) {
 		//Checks
-		$ret = $this->userdbhandler->dbAddGroup($name, $perm, $desc);
+		$ret = $this->userdbhandler->dbAddPermGroup($name, $perm, $desc);
 		if ($ret == 1) {
 			//Transaktion ok, 1 data altered
 			return TRUE;
@@ -217,12 +238,13 @@ class UserPlugin { //implements plugin
 			return FALSE;
 		}
 	}
-	//TODO Fehlerbehandlung
-	public function deleteGroup($groupid) {
-		return $this->userdbhandler->dbDeleteGroup($groupid);
+	
+	public function deletePermGroup($groupid) {
+		return $this->userdbhandler->dbDeletePermGroup($groupid);
 	}
-	public function editGroup($groupid, $name, $perm, $desc) {
-		return $this->userdbhandler->dbEditGroup($groupid, $name, $perm, $desc);
+	
+	public function editPermGroup($groupid, $name, $perm, $desc) {
+		return $this->userdbhandler->dbEditPermGroup($groupid, $name, $perm, $desc);
 	}
 	
 	

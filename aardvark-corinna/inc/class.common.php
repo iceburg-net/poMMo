@@ -43,6 +43,7 @@ class Common {
 		//TODO do a user authentication here!!!!!!! user in DB and witch rights
 		$this->_loggeduser['user'] = & $_SESSION['pommo']['user'];
 		$this->_loggeduser['md5pass'] = & $_SESSION['pommo']['md5pass'];
+		$this->_loggeduser['perm'] = & $_SESSION['pommo']['perm'];
 		///corinna
 		
 		if (empty($_SESSION['pommo']['data'])) {

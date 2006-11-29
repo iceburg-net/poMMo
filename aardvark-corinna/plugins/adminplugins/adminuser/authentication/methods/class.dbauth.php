@@ -68,6 +68,7 @@ class DbAuth extends Auth implements iAuthent {
 		
 		// query in database
 		if ($this->dbhandler->dbVerifyUser($user, $md5pass)) {
+			$this->dbhandler->dbWriteLastLogin($user); 
 			$this->handleMessage("User and Pass found in database.");
 			return TRUE;
 		} else {

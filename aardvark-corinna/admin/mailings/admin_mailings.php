@@ -35,11 +35,11 @@ if (!mailingQueueEmpty($dbo))
 
 //corinna
 if ($useplugins) {
-	require_once (bm_baseDir.'/plugins/mailingqueue/class.queueplugin.php');
+	require_once (bm_baseDir.'/plugins/old/mailingqueue/class.queueplugin.php');
 	$queueplugin = new QueuePlugin($poMMo);
-	if ($queueplugin->isActive()) {
+	//if ($queueplugin->isActive()) { //TODO
 		$smarty->assign('mailingqueue',TRUE);
-	}
+	//}
 }
 ///corinna
 

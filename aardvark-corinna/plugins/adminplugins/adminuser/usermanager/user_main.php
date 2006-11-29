@@ -51,27 +51,30 @@ if ($_REQUEST['userid']) {
 
 	if ($data['action'] == 'add') {
 
-		// show form
-		$data['showAddForm'] = TRUE;
+		$data['showAddForm'] = TRUE;	// show form
 		
 		// If the add button is pressed
 		if (!empty($_REQUEST['AddUser'])) {
 			$ret = $userplugin->addUser($_REQUEST['username'], $_REQUEST['userpass'], $_REQUEST['userpasscheck'], $_REQUEST['usergroup']);
-			if ($ret) $data['showAddForm'] = FALSE;	
+			if ($ret) bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/adminuser/usermanager/user_main.php');
+				//$data['showAddForm'] = FALSE;	
+				
 		}
 		
 	} elseif ($data['action'] == 'delete') {
 		$data['showDelForm'] = TRUE;
 		if (!empty($_REQUEST['DeleteUser'])) {
 			$ret = $userplugin->deleteUser($_REQUEST['userid']);
-			if ($ret) $data['showDelForm'] = FALSE;	
-		}
+			if ($ret) bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/adminuser/usermanager/user_main.php');
+				//$data['showDelForm'] = FALSE;	
+		}	
 	
 	} elseif ($data['action'] == 'edit') {
 		$data['showEditForm'] = TRUE;
 		if (!empty($_REQUEST['EditUser'])) {
 			$ret = $userplugin->editUser($_REQUEST['userid'], $_REQUEST['username'], $_REQUEST['userpass'], $_REQUEST['usergroup']);
-			if ($ret) $data['showEditForm'] = FALSE;	
+			if ($ret) bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/adminuser/usermanager/user_main.php');
+				//$data['showEditForm'] = FALSE;	
 		}
 
 	}
@@ -79,20 +82,23 @@ if ($_REQUEST['userid']) {
 	elseif ($data['action'] == 'addgroup') {
 		$data['showGroupAddForm'] = TRUE;
 		if (!empty($_REQUEST['AddGroup'])) {
-			$ret = $userplugin->addGroup($_REQUEST['groupname'], $_REQUEST['groupperm'], $_REQUEST['groupdesc']);
-			if ($ret) $data['showGroupAddForm'] = FALSE;	
+			$ret = $userplugin->addPermGroup($_REQUEST['groupname'], $_REQUEST['groupperm'], $_REQUEST['groupdesc']);
+			if ($ret) bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/adminuser/usermanager/user_main.php');
+				//$data['showGroupAddForm'] = FALSE;	
 		}
 	} elseif ($data['action'] == 'delgroup') {
 		$data['showGroupDelForm'] = TRUE;
 		if (!empty($_REQUEST['DeleteGroup'])) {
-			$ret = $userplugin->deleteGroup($_REQUEST['groupid']);
-			if ($ret) $data['showGroupDelForm'] = FALSE;	
+			$ret = $userplugin->deletePermGroup($_REQUEST['groupid']);
+			if ($ret) bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/adminuser/usermanager/user_main.php');
+				//$data['showGroupDelForm'] = FALSE;	
 		}
 	} elseif ($data['action'] == 'editgroup') {
 		$data['showGroupEditForm'] = TRUE;
 		if (!empty($_REQUEST['EditGroup'])) {
-			$ret = $userplugin->editGroup($_REQUEST['groupid'], $_REQUEST['groupname'], $_REQUEST['groupperm'], $_REQUEST['groupdesc']);
-			if ($ret) $data['showGroupEditForm'] = FALSE;	
+			$ret = $userplugin->editPermGroup($_REQUEST['groupid'], $_REQUEST['groupname'], $_REQUEST['groupperm'], $_REQUEST['groupdesc']);
+			if ($ret) bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/adminuser/usermanager/user_main.php');
+				//$data['showGroupEditForm'] = FALSE;	
 		}
 	}
 	

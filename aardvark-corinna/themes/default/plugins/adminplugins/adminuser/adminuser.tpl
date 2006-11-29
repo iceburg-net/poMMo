@@ -6,10 +6,10 @@
 	{*{if $showplugin}*}
 		<h1>{t}User management menu{/t}</h1>
 		
-		<div style="padding: 12px;">
-			<a class="pommoClose" href="../adminplugins.php" style="float: left;">
-			<img src="{$url.theme.shared}/images/icons/left.png" align="absmiddle" border="0">&nbsp;
-			{t}Return to MultiUser & Bounce Management Menu{/t}
+		<div>
+			<a class="pommoClose" href="../adminplugins.php" style="float: left; line-height:18px; " >
+			<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
+			{t}Return to Plugin Menu{/t}
 			</a>
 		</div>
 		<div style="text-align: right; clear: both;width: 1px;"></div>
