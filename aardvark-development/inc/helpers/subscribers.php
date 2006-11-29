@@ -94,7 +94,7 @@ class PommoSubscriber {
 			$invalid[] = 'email';
 		if (!is_numeric($in['registered']))
 			$invalid[] = 'registered';
-		if (!empty($in['flag']) && ($in['flag'] != 'update' || $in['flag'] != 'remove'))
+		if (!empty($in['flag']) && !is_numeric($in['flag']))
 			$invalid[] = 'flag';
 		if (!is_array($in['data']))
 			$invalid[] = 'data';

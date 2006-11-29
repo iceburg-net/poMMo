@@ -440,3 +440,11 @@ input[type="password"]:hover {
 	text-align: right;
 	margin: 4px 0 3px;
 }
+
+.hidden {
+	display: none;
+}
+
+.required {
+	font-weight: bold;
+}

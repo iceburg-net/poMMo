@@ -14,7 +14,7 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-require ('../../bootstrap.php');
+require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 
 $pommo->init(array('noDebug' => TRUE));
@@ -40,7 +40,7 @@ if ($_POST['add'] == 'group') {
 	$smarty->assign('match_name',$match[$key]);
 	$smarty->assign('match_id',$key);
 	
-	$smarty->display('admin/subscribers/ajax_group.tpl');
+	$smarty->display('admin/subscribers/ajax/group_edit.tpl');
 	Pommo::kill();
 }
 elseif ($_POST['add'] == 'field') {
@@ -77,7 +77,7 @@ elseif ($_POST['add'] == 'field') {
 	$smarty->assign('field',$field);
 	$smarty->assign('logic',$logic);
 	
-	$smarty->display('admin/subscribers/ajax_field.tpl');
+	$smarty->display('admin/subscribers/ajax/group_field.tpl');
 	Pommo::kill();
 	
 }

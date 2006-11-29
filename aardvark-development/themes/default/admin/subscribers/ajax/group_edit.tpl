@@ -25,7 +25,7 @@ $('#fwSubmit').oneclick(function() {
 	var _group = $('#fwGroupID').val();
 	var _match = $('#fwMatchID').val();
 	
-	$.post("ajax_filter_update.php",
+	$.post("ajax/filter_update.php",
 		{ logic: _logic, group: _group, match: _match },
 		function(out) {
 			var name = $('#filterWindow a.fwClose').attr('alt');

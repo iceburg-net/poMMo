@@ -14,7 +14,7 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-require ('../../bootstrap.php');
+require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/filters.php');

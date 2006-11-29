@@ -86,6 +86,9 @@ class PommoHelper {
 	function & emailExists(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
+		
+		if(empty($in))
+			return true;
 
 		$query = "
 			SELECT email

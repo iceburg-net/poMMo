@@ -46,8 +46,14 @@ var PommoValidate = {
 			
 			valid = true;
 			value = $(this).val();
-			
+			value.replace(/^\s*|\s*$/g,""); // trims value
+
 			for (var i = 0; i < a.length; i++) {
+				if (a[i] == 'empty' || value == '') {
+					if (value == '' && a[i] == 'empty') 
+						valid = false;
+					continue;
+				}
 				if (!PommoValidate.checkInput(value, a[i]))
 					valid = false;
 			}
@@ -72,10 +78,6 @@ var PommoValidate = {
 				var regex = /^\d\d?\/\d\d?\/\d{4}$/;
 				return (regex.test(value));
 				break;
-			case 'empty' :
-				value.replace(/^\s*|\s*$/g,"");
-				return (value == '') ? false : true;
-				break;
 			case 'email' :
 				var regex = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
 				return (regex.test(value));
@@ -86,17 +88,14 @@ var PommoValidate = {
 		if (!this.submit)
 			return;
 		
-		this.submit.bind("click",function() { return false; });
-		var e = this.submit.get(0);
-		e.disabled = true;
+		this.submit[0].disabled = true;
 		this.submit.fadeTo(1,0.5);
 	},
 	enable: function() {
 		if (!this.submit)
 			return;
-		this.submit.unbind("click",function() { return false; });
-		var e = this.submit.get(0);
-		e.disabled = false;
+
+		this.submit[0].disabled = false;
 		this.submit.fadeTo(1,1);
 	},
 	reset: function() {

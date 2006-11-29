@@ -12,7 +12,7 @@ function fwAjaxCall(id, name, gid, l) {
 		{ID: id, add: name, group: gid, logic: l};
 		
 	$('#filterWindow div.fwContent').load(
-		'ajax_group.php',
+		'ajax/group_edit.php',
 		p,
 		function() {
 			$('#filterWindow a.fwClose').attr("alt",name);
