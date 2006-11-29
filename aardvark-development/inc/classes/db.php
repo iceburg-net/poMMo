@@ -75,7 +75,7 @@ class PommoDB {
 		unset ($db_charset, $charset_row);
 		
 		// setup safeSQL class
-		$this->_safeSQL = & new SafeSQL_MySQL($this->_link);
+		$this->_safeSQL = new SafeSQL_MySQL($this->_link);
 	}
 
 	function debug($val) {

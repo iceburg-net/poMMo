@@ -21,7 +21,7 @@ require(dirname(__FILE__) . '/inc/classes/pommo.php'); // base object
 
 // Setup the core global. All utility is tucked away within this global to reduce namespace
 // pollution and possible collissions when poMMo is embedded in another application.
-$GLOBALS['pommo'] =& new Pommo(dirname(__FILE__) . '/');
+$GLOBALS['pommo'] = new Pommo(dirname(__FILE__) . '/');
 
 /*
  * Disable session.use_trans_sid to mitigate performance-penalty

@@ -45,7 +45,7 @@ $state =& PommoApi::stateInit('subscribers_manage',array(
 	'limit' => 150,
 	'sort' => 'email',
 	'order' => 'ASC',
-	'status' => 'active',
+	'status' => 1,
 	'group' => 'all'),
 	$_REQUEST);
 

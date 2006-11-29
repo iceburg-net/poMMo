@@ -64,7 +64,7 @@ class PommoSubscriber {
 		'registered' => $row['time_registered'],
 		'flag' => $row['flag'],
 		'ip' => $row['ip'],
-		'status' => PommoHelper::transformStatus($row['status'], TRUE));
+		'status' => $row['status']);
 			
 		if ($pending) {
 			$o = array(
@@ -100,15 +100,15 @@ class PommoSubscriber {
 			$invalid[] = 'data';
 		
 		switch($in['status']) {
-			case 'active':
-			case 'inactive':
-			case 'pending':
+			case 0:
+			case 1:
+			case 2:
 				break;
 			default:
 				$invalid[] = 'status';
 		}
 		
-		if ($in['status'] == 'pending') {
+		if ($in['status'] == 2) {
 			if(empty($in['pending_code']))
 				$invalid[] = 'pending_code';
 			switch ($in['pending_type']) {
@@ -129,14 +129,12 @@ class PommoSubscriber {
 			return false;
 		}
 		
-		// perform magical translation
-		$in['status'] = PommoHelper::transformStatus($in['status']);
 		return true;
 	}
 	
 	// fetches subscribers (and their data) from the databse
 	// accepts filtering array -->
-	//   status (str) ['active','inactive','pending','all'(def)]
+	//   status (str) [0,1,2,'all'(def)]
 	//   email (str||array) Email address(es)
 	//   sort (str) [email, ip, time_registered, time_touched, status, etc.]
 	//   order (str) "ASC" or "DESC"
@@ -155,11 +153,8 @@ class PommoSubscriber {
 			'id' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
-		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-
-		$p['status'] = PommoHelper::transformStatus($p['status']);
 		
 		if ($p['status'] == 'all')
 			$p['status'] = null;
@@ -217,7 +212,7 @@ class PommoSubscriber {
 	
 	// fetches subscriber emails from the databse
 	// accepts filtering array -->
-	//   status (str) ['active','inactive','pending','all'(def)]
+	//   status (str) [0,1,2,'all'(def)]
 	//   id (array||str) A single or an array of subscriber IDs
 	//   limit (int) limits # subscribers returned
 	// returns an array of emails. Array key(s) correlates to subscriber id.
@@ -227,8 +222,6 @@ class PommoSubscriber {
 		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-
-		$p['status'] = PommoHelper::transformStatus($p['status']);
 		
 		if ($p['status'] == 'all')
 			$p['status'] = null;
@@ -437,8 +430,6 @@ class PommoSubscriber {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
-		$in['status'] = PommoHelper::transformStatus($in['status']);
-		
 		$query = "
 			UPDATE " . $dbo->table['subscribers'] . "
 			SET
@@ -506,16 +497,15 @@ class PommoSubscriber {
 	}
 	
 	// gets the number of subscribers
-	// accepts filter by status (str) either 'active' (default), 'inactive', 'pending' or NULL (any/all)
+	// accepts filter by status (str) either either 1 (active) (default), 0 (inactive), 2 (pending) or 'all'/NULL (any/all)
 	// returns subscriber tally (int)
-	function tally($status = 'active') {
+	function tally($status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		
-		$status = PommoHelper::transformStatus($status);
-		if ($status == 'all')
+
+		if ($status === 'all') 
 			$status = null;
-		
+			
 		$query = "
 			SELECT count(subscriber_id)
 			FROM " . $dbo->table['subscribers'] ."

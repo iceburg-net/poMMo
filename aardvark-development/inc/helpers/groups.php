@@ -33,12 +33,12 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	var $_name; // name of group
  	var $_group; // the group object
  	var $_tally; // the group tally
- 	var $_status; // subscriber status ('active','inactive','pending','any'/NULL)
+ 	var $_status; // subscriber status (0(inactive),1(active),2(pending),'any'/NULL)
  	var $_memberIDs; // array of member IDs (if group is numeric)
  	var $_id; // ID of bgroup
  	
  	// ============ NON STATIC METHODS ===================
- 	function PommoGroup($groupID = NULL, $status = 'active') {
+ 	function PommoGroup($groupID = NULL, $status = 1) {
  		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		$this->_status = $status;
  		if (!is_numeric($groupID)) {
@@ -185,10 +185,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	
 	// gets the members of a group
 	// accepts a group object (array)
-	// accepts filter by status (str) either 'active' (default), 'inactive', 'pending' or NULL (any/all)
+	// accepts filter by status (str) either 1 (active) (default), 0 (inactive), 2 (pending) or 'all'/NULL (any/all)
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns an array of subscriber IDs
-	function & getMemberIDs($group, $status = 'active') {
+	function & getMemberIDs($group, $status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -203,7 +203,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		if (!empty($status)) {
 			if (!isset($f['subscribers']))
 				$f['subscribers'] = array();
-			$f['subscribers']['status'] = array("equal: ".PommoHelper::transformStatus($status));
+			$f['subscribers']['status'] = array("equal: ".$status);
 		}
 		
 		return PommoSubscriber::getIDByAttr($f);
@@ -211,10 +211,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	
 	// Returns the # of members in a group
 	// accepts a group object (array)
-	// accepts filter by status (str) either 'active' (default), 'inactive', 'pending' or NULL (any/all)
+	// accepts filter by status (str) either 1 (active) (default), 0 (inactive), 2 (pending) or 'all'/NULL (any/all)
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns a tally (int)
-	function & tally($group, $status = 'active') {
+	function & tally($group, $status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		$pommo->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/sql.gen.php');
@@ -230,7 +230,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		if (!empty($status)) {
 			if (!isset($f['subscribers']))
 				$f['subscribers'] = array();
-			$f['subscribers']['status'] = array("equal: ".PommoHelper::transformStatus($status));
+			$f['subscribers']['status'] = array("equal: ".$status);
 		}
 		
 		$sql = array('where' => array(), 'join' => array());

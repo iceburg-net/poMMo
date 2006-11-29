@@ -48,7 +48,7 @@ $subscriber = array(
 	'email' => $_POST['Email'],
 	'registered' => time(),
 	'ip' => $_SERVER['REMOTE_ADDR'],
-	'status' => 'active',
+	'status' => 1,
 	'data' => $_POST['d'],
 );
 
@@ -85,7 +85,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	
 	$subscriber['pending_code'] = PommoHelper::makeCode();
 	$subscriber['pending_type'] = 'add';
-	$subscriber['status'] = 'pending';
+	$subscriber['status'] = 2;
 	
 	if (!PommoSubscriber::add($subscriber)) {
 		$logger->addErr('Error adding subscriber! Please contact the administrator.');
