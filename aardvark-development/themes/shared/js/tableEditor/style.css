@@ -2,6 +2,7 @@
 	border: 1px solid #000;
 	border-spacing: 0;
 	text-align: left;
+	margin-top: 5px;
 }
 
 #subs tr td {
@@ -23,7 +24,7 @@
 	background-repeat: no-repeat;
 	border-bottom: none;
 	padding: 0 8px 0 35px;
-	border-left: white solid 1px;
+	border-left: #aaa solid 1px;
 	cursor: pointer;
 }
 
@@ -52,3 +53,8 @@ input.pvInvalid, select.pvInvalid
 .r1 { background: #e0e0e0;}
 .r2 { background: #f8ffe5; }
 .r3 { background: #edf5f8; }
+
+.quickSearch {
+	margin-top: 4px;
+	font-weight: bold;
+}

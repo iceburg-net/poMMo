@@ -4,7 +4,9 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript">{literal}
 $().ready(function() {
 	$('#orderForm select').change(function() {
@@ -14,6 +16,7 @@ $().ready(function() {
 {/literal}</script>
 {* Styling of subscriber table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
 
@@ -21,7 +24,8 @@ $().ready(function() {
 
 <ul class="inpage_menu">
 	<li>
-	<a href="AJAX">{t}Add Subscribers{/t}</a>
+	<!-- <a href="#TB_inline?height=400&width=500&inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> -->
+	<a href="ajax/subscriber_add.php?height=400&width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a>
 	</li>
 	
 	<li>
@@ -112,7 +116,7 @@ $().ready(function() {
 
 <th name="key"></th>
 
-<th name="email" class="pvV pvEmail">EMAIL</th>
+<th name="email" class="pvV pvEmail pvEmpty">EMAIL</th>
 
 {foreach from=$fields key=id item=f}
 <th name="{$id}" class="pvV{if $f.required == 'on'} pvEmpty{/if}{if $f.type == 'number'} pvNumber{/if}{if $f.type == 'date'} pvDate{/if}">{$f.name}</th>
@@ -188,6 +192,7 @@ $().ready(function() {
 	$('table#subs tbody tr').quicksearch({
 		attached: "#subs",
 		position: "before",
+		lavelClass: "quicksearch",
 		stripeRowClass: ['r1', 'r2', 'r3'],
 		labelText: "{/literal}{t}Quick Search{/t}{literal}",
 		inputText: "{/literal}{t}search table{/t}{literal}",
@@ -232,7 +237,7 @@ function updateTable(o) {
 	if (empty)
 		return;
 
-	$.post("ajax_subscriber_update.php?key="+o.key, o.changed, function(data) {
+	$.post("ajax/subscriber_update.php?key="+o.key, o.changed, function(data) {
 		if (data != '') { // update failed
 			alert(data);
 			// restore row

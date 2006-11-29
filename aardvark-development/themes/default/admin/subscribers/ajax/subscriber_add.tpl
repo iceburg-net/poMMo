@@ -1,0 +1,90 @@
+<div id="addOut" class="error"></div>
+<div class="warn"></div>
+
+<hr>
+<br/>
+{t escape='no' 1='<a href="subscribers_import.php">' 2='</a>'}Welcome to adding subscribers! You can add subscribers one-by-one here. If you would like to add subscribers in bulk, visit the %1 Subscriber Import %2 page.{/t}
+
+<form method="post" action="" id="addForm">
+
+<div>
+<label class="required" for="email"><strong>{t}Email:{/t}</strong></label>
+<input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email"/>
+</div>
+
+{foreach name=fields from=$fields key=key item=field}
+<div>
+<label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
+
+{if $field.type == 'checkbox'}
+<input type="checkbox" name="d[{$key}]" {if $field.normally == "on"} checked="checked"{/if} {if $field.required == 'on'}class="pvEmpty"{/if}/>
+
+{elseif $field.type == 'multiple'}
+<select name="d[{$key}]">
+{foreach from=$field.array item=option}
+<option{if $field.normally == $option} selected="selected"{/if}>{$option}</option>
+{/foreach}
+</select>
+
+{elseif $field.type == 'date'}
+<input type="text" class="pvDate {if $field.required == 'on'}pvEmpty{/if}" size=12 name="d[{$key}]" value={if $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
+
+{elseif $field.type == 'number'}
+<input type="text" class="pvNumber {if $field.required == 'on'}pvEmpty{/if}" size=12 name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />
+
+{else}
+<input type="text" size="32" {if $field.required == 'on'}class="pvEmpty"{/if} name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />
+{/if}
+
+</div>
+
+{/foreach}
+
+</fieldset>
+
+<div class="buttons">
+
+<input type="submit" value="{t}Add subscriber{/t}"/>
+
+<input type="reset" value="{t}Reset{/t}"/>
+
+<br/><br/>
+<a href="#" id="forceAdd">{t}Force Addition (bypasses validation){/t}</a>
+
+</div>
+
+<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}Fields in %1bold%2 are required{/t}</p>
+
+</form>
+
+{literal}
+<script type="text/javascript">
+$().ready(function(){
+	
+	$('#addForm').submit(function() {
+		var input = $(this).formToArray();
+		
+		url = "ajax/subscriber_add2.php";
+		if($('#forceAdd').is('.force')) {
+			$('#forceAdd').removeClass('force');
+			url = url+"?force=TRUE";
+		}
+		
+		$.post(url, input, function(data) {
+			$('#addOut').html(data);
+		});
+	
+		return false;
+	});
+	
+	$('#forceAdd').click(function() {
+		$(this).addClass('force');
+		$('#addForm').submit();
+		return false;
+	});
+	
+	PommoValidate.reset(); // TODO -- validate must be scoped to this ROW. Modify validate.js
+	PommoValidate.init('input[@type="text"], input[@type="checkbox"], select','input[@type="submit"]', true, $('#addForm'));
+});
+</script>
+{/literal}
