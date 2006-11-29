@@ -1,10 +1,17 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Include in-place editing of subscriber table *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-
+<script type="text/javascript">{literal}
+$().ready(function() {
+	$('#orderForm select').change(function() {
+		$('#orderForm')[0].submit();
+	});
+});
+{/literal}</script>
 {* Styling of subscriber table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
 {/capture}
@@ -38,10 +45,10 @@
 	<li>
 	<label for="status">{t}View{/t}</label>
 	<select name="status">
-	<option value="active" {if $state.status == 'active'}SELECTED{/if}>{t}Active Subscribers{/t}</option>
-	<option value="active">------------------</option>
-	<option value="inactive" {if $state.status == 'inactive'}SELECTED{/if}>{t}Unsubscribed{/t}</option>
-	<option value="pending" {if $state.status == 'pending'}SELECTED{/if}>{t}Pending{/t}</option>
+	<option value="1" {if $state.status == 1}SELECTED{/if}>{t}Active Subscribers{/t}</option>
+	<option value="1">------------------</option>
+	<option value="0" {if $state.status == 0}SELECTED{/if}>{t}Unsubscribed{/t}</option>
+	<option value="2" {if $state.status == 2}SELECTED{/if}>{t}Pending{/t}</option>
 	</select>
 	</li>
 	
@@ -93,25 +100,17 @@
 	</select>
 	</li>
 	
-	<li>
-	<label for="search">{t}Quick Search:{/t}</label>
-	<input type="text" name="search">
-	</li>
-	
 </fieldset>
 </form>
 
-
-<fieldset>
-<legend>{t}Subscribers{/t}</legend>
-
 <p class="count">({t 1=$tally}%1 subscribers{/t})</p>
 
+{if $tally > 0}
 <table summary="subscriber details" id="subs">
 <thead>
 <tr>
 
-<th name="key">{t}EDIT{/t}</th>
+<th name="key"></th>
 
 <th name="email" class="pvV pvEmail">EMAIL</th>
 
@@ -163,17 +162,13 @@
 </tbody>
 </table>
 
-</fieldset>
-
+<div>
 {$pagelist}
+</div>
 
 {literal}
 <script type="text/javascript">
-$().ready(function() {
-	$('#orderForm select').change(function() {
-		$('#orderForm')[0].submit();
-	});
-	
+$().ready(function() {	
 	$("#subs").tableSorter({
 		sortClassAsc: 'headerSortUp', 		// class name for ascending sorting action to header
 		sortClassDesc: 'headerSortDown',	// class name for descending sorting action to header
@@ -188,6 +183,15 @@ $().ready(function() {
 		FUNC_PRE_EDIT: 'preEdit',
 		FUNC_POST_EDIT: 'postEdit',
 		FUNC_UPDATE: 'updateTable'
+	});
+	
+	$('table#subs tbody tr').quicksearch({
+		attached: "#subs",
+		position: "before",
+		stripeRowClass: ['r1', 'r2', 'r3'],
+		labelText: "{/literal}{t}Quick Search{/t}{literal}",
+		inputText: "{/literal}{t}search table{/t}{literal}",
+		loaderImg: '{/literal}{$url.theme.shared}images/loader.gif{literal}'
 	});
 });
 
@@ -206,13 +210,14 @@ function preEdit(o) {
 
 // inject validation
 function postEdit(o) {
-	// add validation & non empty validator to row's input cells
-	o.row.each(function() {
-		var classes = $(this).attr('class');
-		$(this).find('select, input').addClass(classes).end();
-	});
 	PommoValidate.reset(); // TODO -- validate must be scoped to this ROW. Modify validate.js
 	PommoValidate.init('input.pvV, select.pvV','../td button.edit', true, o.row);
+	
+	// remove the preserve class [ added by tableEditor makeEditable() method ]
+	o.row.each(function() {
+		if ($(this).is(".seMultiple"))
+			$(this).find("select").removeClass("tsPreserve");
+	});
 }
 
 
@@ -238,5 +243,6 @@ function updateTable(o) {
 }
 </script>
 {/literal}
+{/if}
 
 {include file="admin/inc.footer.tpl"}

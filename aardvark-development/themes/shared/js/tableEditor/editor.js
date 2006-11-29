@@ -95,7 +95,7 @@ jQuery.fn.tableEditor = function(o) {
 		var row = jQuery("../../td",link);
 		var key = jQuery(defaults.ROW_KEY_SELECTOR,row).text();
 		
-		// add/inherit header classes
+		// add/inherit header classes (to <td>)
 		if (defaults.COL_APPLYCLASS) 
 			jQuery.tableEditor.lib.addClasses(row,defaults.COLUMN_CLASSES);
 		
@@ -124,8 +124,13 @@ jQuery.fn.tableEditor = function(o) {
 				var html = jQuery.tableEditor.lib.makeEditable(jQuery(this), defaults.COLUMN_NAMES[i], key);
 					if (html !== false)
 						jQuery(this).html(html);
+						
+				// add/inherit header classes (from <td>)
+				if (defaults.COL_APPLYCLASS) {
+					jQuery.tableEditor.lib.addClasses(this,false);
+				}
 			});
-			
+				
 			if (defaults.FUNC_POST_EDIT)
 				eval (defaults.FUNC_POST_EDIT+"(o)");
 		}
@@ -268,7 +273,7 @@ jQuery.tableEditor = {
 			
 			return (html.is(".tsPreserve")) ? false : val;
 		},
-		// restores a row to original
+		// restores a row to originalj
 		restoreRow: function(row, original) {
 			var values = new Array();
 			for (j in original) 
@@ -276,20 +281,26 @@ jQuery.tableEditor = {
 			
 			row.each(function(i) { 
 				if (jQuery("input,select,textarea",this).size() > 0) {			
-					html = $(this).find("input,select,textarea");
+					html = jQuery(this).find("input,select,textarea");
 					if (html.attr('type') == 'checkbox')
 						html[0].checked = values[i];
 					else
 						html.val(values[i]);
 				}
 				else
-					$(this).html(values[i]);			
+					jQuery(this).html(values[i]);			
 			});
 		},
 		addClasses: function(row, classes) {
+			if (classes === false) { // inherit from <td>
+				classes = jQuery(row).attr('class');
+				jQuery(row).find("input,select,textarea").addClass(classes);
+				return;
+			}
+			
 			row.each(function(i) {
-				if (typeof(classes[i]) != 'undefined' && classes[i].toString() != '') 
-					$(this).addClass(classes[i]); 
+				if (typeof(classes[i]) != 'undefined' && classes[i].toString() != '')
+					jQuery(this).addClass(classes[i]); 
 			});
 		},
 		filterNoEdit: function(row, noEdits) {
