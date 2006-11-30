@@ -29,7 +29,7 @@ var PommoValidate = {
 				this.inputs.mouseup(function() { PommoValidate.validate(this); });
 				this.inputs.keyup(function() { PommoValidate.validate(this); });
 			}
-
+		this.disabled = false;
 		this.validate();
 	},
 	validate: function(e) {
@@ -38,24 +38,24 @@ var PommoValidate = {
 		
 		var e = (typeof(e) != 'undefined') ? $(e) : this.inputs;
 		e.each(function(){
-			var a = new Array();
-			if ($(this).is('.pvNumber')) a.push('number');
-			if ($(this).is('.pvDate')) a.push('date');
-			if ($(this).is('.pvEmpty')) a.push('empty');
-			if ($(this).is('.pvEmail')) a.push('email');
+			var r = new Array();
+			if ($(this).is('.pvNumber')) r.push('number');
+			if ($(this).is('.pvDate')) r.push('date');
+			if ($(this).is('.pvEmpty')) r.push('empty');
+			if ($(this).is('.pvEmail')) r.push('email');
 			
-			valid = true;
+			var valid = true;
 			value = $(this).val();
 			value.replace(/^\s*|\s*$/g,""); // trims value
 
-			for (var i = 0; i < a.length; i++) {
-				if (a[i] == 'empty' || value == '') {
-					if (value == '' && a[i] == 'empty') 
+			for (var i = 0; i < r.length; i++) {
+				if (r[i] == 'empty' || value == '') {
+					if (value == '' && r[i] == 'empty') 
 						valid = false;
 					continue;
 				}
-				if (!PommoValidate.checkInput(value, a[i]))
-					valid = false;
+				if (!PommoValidate.checkInput(value, r[i]))
+					valid = false;	
 			}
 			
 			(valid) ?
@@ -68,8 +68,8 @@ var PommoValidate = {
 			this.enable();
 		
 	},
-	checkInput: function(value, type) {
-		switch(type) {
+	checkInput: function(value, rule) {
+		switch(rule) {
 			case 'number' :
 				var regex = /^\d+$/;
 				return (regex.test(value));
@@ -85,23 +85,22 @@ var PommoValidate = {
 		}
 	},
 	disable: function() {
-		if (!this.submit)
+		if (!this.submit || this.disabled == true)
 			return;
-		
-		this.submit[0].disabled = true;
-		this.submit.fadeTo(1,0.5);
+		this.disabled = true;	
+		this.submit.attr('disabled', true).css('opacity',0.5);
 	},
 	enable: function() {
-		if (!this.submit)
+		if (!this.submit || this.disabled == false)
 			return;
-
-		this.submit[0].disabled = false;
-		this.submit.fadeTo(1,1);
+		this.disabled = false;
+		this.submit.attr('disabled', false).css('opacity',1);
 	},
 	reset: function() {
 		this.submit = false;
 		this.inputs = false;
 		this.warn = false;
 		this.ranInit = false;
+		this.disabled = false;
 	}
 };

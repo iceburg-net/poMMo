@@ -76,3 +76,7 @@ a img {
 .error textarea {
 	background: #FFF;
 }
+
+.required {
+	font-weight: bold;
+}

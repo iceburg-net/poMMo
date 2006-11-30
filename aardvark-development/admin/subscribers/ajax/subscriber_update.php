@@ -22,14 +22,20 @@ $pommo->init(array('noDebug' => TRUE));
 $dbo = & $pommo->_dbo;
 $logger = & $pommo->_logger;
 
-if (!is_numeric($_GET['key']))
-	die(Pommo::_T('Error updating subscriber').'\n Bad Key');
+function jsonKill($msg, $success = FALSE) {
+	$status = ($success) ? "true" : "false";
+	$json = "{success: $status, msg: \"".$msg."\"}";
+	die($json);
+}
 
+if (!is_numeric($_GET['key']) || $_GET['key'] < 1)
+	jsonKill(Pommo::_T('Error updating subscriber.')." ".'Bad Key');
+	
 if (isset($_POST['email'])) {
 	if (!PommoHelper::isEmail($_POST['email']))
-		die(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Invalid Email.'));
+		jsonKill(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Invalid Email.'));
 	if(count(PommoHelper::emailExists($_POST['email'])) > 0)
-		die(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
+		jsonKill(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 }
 
 $s = array(
@@ -44,11 +50,11 @@ foreach($_POST as $key => $val) {
 }
 
 if (!PommoValidate::subscriberData($data,array('skipReq' => TRUE, 'active' => FALSE)))
-	die(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Fields failed validation')."\n".implode($logger->getAll(), "\n"));
+	jsonKill(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Fields failed validation')." >>> ".implode($logger->getAll(), " : "));
 
 $s['data'] = $data;
 if (!PommoSubscriber::update($s,FALSE))
-	die(Pommo::_T('Error updating subscriber.'));
+	jsonKill(Pommo::_T('Error updating subscriber.'));
 	
-die();
+jsonKill('',TRUE);
 ?>

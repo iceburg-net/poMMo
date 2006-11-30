@@ -53,7 +53,7 @@
 
 </div>
 
-<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}Fields in %1bold%2 are required{/t}</p>
+<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}%1 Fields %2 are required{/t}</p>
 
 </form>
 
@@ -70,8 +70,25 @@ $().ready(function(){
 			url = url+"?force=TRUE";
 		}
 		
-		$.post(url, input, function(data) {
-			$('#addOut').html(data);
+		$.post(url, input, function(json) {
+			eval("var args = " + json);
+		
+			if (typeof(args.success) == 'undefined') {
+				alert('ajax error!');
+				return;	
+			}
+			
+			$('#addOut').html(args.msg);
+			
+			if (args.success === true) {
+				var options = {
+					KEY: args.key, 
+					CLASS: 'newRow', 
+					VALUES: args.data,
+					COPY: false 
+				}
+				jQuery.tableEditor.lib.appendRow(options);
+			}
 		});
 	
 		return false;

@@ -101,12 +101,15 @@ class PommoHelper {
 	}
 	
 	// array_intersect_key requires PHP 5.1 +, here's a compat function --> (limited to 2 arrs)
-	// returns an array based on a2's values whose keys are present in a1
-	function & arrayIntersect(&$a1, &$a2) {
+	// returns an array containing all the values of array1  which have matching keys that are present in a2
+	function & arrayIntersect(&$a1, &$a2) {		
 		$o = array();
+		if (!is_array($a1) || !is_array($a2))
+			return $o;
+			
 		foreach(array_keys($a1) as $key) {
 			if (isset($a2[$key]))
-				$o[$key] = $a2[$key];
+				$o[$key] = $a1[$key];
 		}
 		return $o;
 	}

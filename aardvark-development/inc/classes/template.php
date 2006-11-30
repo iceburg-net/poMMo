@@ -121,8 +121,6 @@ class PommoTemplate extends Smarty {
 		}
 		
 		$this->assign($_POST);
-		
-		
 	}
 }
 ?>

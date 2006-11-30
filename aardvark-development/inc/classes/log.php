@@ -22,16 +22,23 @@ class PommoLog {
 	var $_log;
 	var $_messages;
 	var $_verbosity;
+	var $_escape; // htmlspecialchars escaping (disabled by default)
 	
 	function PommoLog($verbosity) {
 		$this->_errors = array();
 		$this->_messages = array();
 		$this->_log = FALSE;
 		$this->_verbosity = $verbosity;
+		$this->_escape = false; 
 	}
 	
 	function toggleLogging($toggle = TRUE) {
 		$this->_log = $toggle;
+		return $toggle;
+	}
+	
+	function toggleEscaping($toggle = TRUE) {
+		$this->_escape = $toggle;
 		return $toggle;
 	}
 	
@@ -60,6 +67,9 @@ class PommoLog {
 		$msgs = $stack;
 		if ($clear)
 			$stack = array();
+		
+		if ($this->_escape)
+			array_walk($msgs,'htmlspecialchars');
 		return $msgs;
 	}
 	

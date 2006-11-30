@@ -6,8 +6,8 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  * 
- * $Date: 2006-10-24 14:43:23 +0000 
- * $Version: 0.2 (alpha)
+ * $Date: 2006-11-30 03:43:23 +0000 
+ * $Version: 0.4 (alpha)
  * 
  */
 jQuery.fn.tableEditor = function(o) {
@@ -79,133 +79,118 @@ jQuery.fn.tableEditor = function(o) {
 		FUNC_PRE_SAVE: false,
 		FUNC_UPDATE: false,
 		
-		// (should be) non configurable
+		// not to be configured -->
 		COLUMN_NAMES: new Array(), // holds the name (assigned via <th name="...">) of each column
 		COLUMN_NOEDIT: new Array(), // holds the column index of columns to ignore/not edit
 		COLUMN_CLASSES: new Array()
 	};
 	jQuery.extend(defaults, o);
-
-	function editRow(link) {
-		
-		// State of edit row. Either "edit" when converting row to editable fields, or
-		//  "save" when updating the row with changes
-		var action = (jQuery(link).is('.tsToggleEdit')) ? 'save' : 'edit';
-		
-		var row = jQuery("../../td",link);
-		var key = jQuery(defaults.ROW_KEY_SELECTOR,row).text();
-		
-		// add/inherit header classes (to <td>)
-		if (defaults.COL_APPLYCLASS) 
-			jQuery.tableEditor.lib.addClasses(row,defaults.COLUMN_CLASSES);
-		
-		// filter out any noedit links
-		if (defaults.COLUMN_NOEDIT.length > 0) 
-			jQuery.tableEditor.lib.filterNoEdit(row,defaults.COLUMN_NOEDIT);
-		
-		// filter out originating "edit link" column from row
-		//   note; execute this after extracting key.
-		row.not(jQuery(defaults.EVENT_LINK_SELECTOR, row).parent()[0]);
-		
-		// initialize object to be passed to callback functions
-		o = {"row": row, "key" : key };
-		
-		if (action == 'edit') {
-			if (defaults.FUNC_PRE_EDIT)
-				eval (defaults.FUNC_PRE_EDIT+"(o)");
-			
-			jQuery(link).addClass('tsToggleEdit').html(defaults.SAVE_HTML);
-			
-			// Disable sorting on table
-			jQuery.tableSorter.active.set(true);
-			
-			// Convert table row cells into editable form fields.
-			row.each(function(i) {
-				var html = jQuery.tableEditor.lib.makeEditable(jQuery(this), defaults.COLUMN_NAMES[i], key);
-					if (html !== false)
-						jQuery(this).html(html);
-						
-				// add/inherit header classes (from <td>)
-				if (defaults.COL_APPLYCLASS) {
-					jQuery.tableEditor.lib.addClasses(this,false);
-				}
-			});
-				
-			if (defaults.FUNC_POST_EDIT)
-				eval (defaults.FUNC_POST_EDIT+"(o)");
-		}
-		
-		if (action == 'save') {
-			if (defaults.FUNC_PRE_SAVE)
-				eval (defaults.FUNC_PRE_SAVE+"(o)");
-			
-			jQuery(link).removeClass('tsToggleEdit').html(defaults.EDIT_HTML);
-			
-			// Enable sorting on table
-			jQuery.tableSorter.active.set(true);
-			
-			// Make cells non editable, update their value.
-			row.each(function(i) {	
-				var html = jQuery.tableEditor.lib.makeStatic(jQuery(this), defaults.COLUMN_NAMES[i], key);
-				if (html !== false)
-					jQuery(this).html(html);
-			});
-		
-			// Clear tableSorter's cache (so that ir re-reads row's new/updated values)
-			// TODO: RE-DO this using tS's new bind event -- preferably only update cache for only this row
-			jQuery.tableSorter.clearCache.set(true);
-						
-			o.changed = jQuery.tableEditor.cache.row[key];
-			o.original = jQuery.tableEditor.cache.original[key];
-			if (defaults.FUNC_UPDATE)
-				eval (defaults.FUNC_UPDATE+"(o)");	
-		}
-		return;
-		
-	}
 	
 	// DEFAULT CONSTRUCTOR
 	return this.each(function(){
-		// lookup the name values of the header tables
+		
 		var firstRow = this.rows[0];
 		var secondRow = this.rows[1];
 		var l = firstRow.cells.length;
 		
+		// populate names, classes, and noEdit
 		for( var i=0; i < l; i++ ) {		
 			var name = jQuery(firstRow.cells[i]).attr('name');
-			
-			//OLD: defaults.COLUMN_NAMES[i] = (name) ? name : 'column'+i;
-			//NEW: push name on in order it was recieved. this is so the indexes match the columns of the filtered row creaded by editEvent
 			defaults.COLUMN_NAMES.push((name) ? name : 'column'+i);
 			
-			if (jQuery(firstRow.cells[i]).is(defaults.COL_NOEDIT_SELECTOR)) {
-				// check for noEdit selector
-				defaults.COLUMN_NOEDIT.push(i);
-				defaults.COLUMN_NAMES.pop();
-			}
-			else if (
-				typeof(secondRow) != 'undefined' &&
-				jQuery(defaults.EVENT_LINK_SELECTOR, secondRow.cells[i]).size() > 0
-				) {
-				// if this column contains the edi
-				defaults.COLUMN_NAMES.pop();
-			}
-			else if (defaults.COL_APPLYCLASS) { 
-				// check for class inheritance
-				defaults.COLUMN_CLASSES[i] = jQuery(firstRow.cells[i]).attr('class');
-			}
+			// check for noEdit selector
+			if (jQuery(firstRow.cells[i]).is(defaults.COL_NOEDIT_SELECTOR))
+				defaults.COLUMN_NOEDIT[i] = true;
 			
+			// check for class inheritance
+			if (defaults.COL_APPLYCLASS) 
+				defaults.COLUMN_CLASSES[i] = jQuery(firstRow.cells[i]).attr('class');
 		}
+		
+		// store a reference to this table's options -- function sets and returns table ID
+		var id = jQuery.tableEditor.vault.store(defaults,this);
 		
 		// define & assign edit event to each "edit link"
 		jQuery(defaults.EVENT_LINK_SELECTOR, this).each(function() {	
 			jQuery(this).click(function() {				
-				editRow(this);
+				jQuery.editRow(this,id);
 				return false;
 			});
 		});
 	});
 };
+
+jQuery.editRow = function(link, tid) {
+	// get this tables options (defaults)
+	var o = jQuery.tableEditor.vault.get(tid);
+	
+	// initialize row state
+	var action = (jQuery(link).is('.tsToggleEdit')) ? 'save' : 'edit';
+	var row = jQuery("../../td",link);
+	var key = jQuery(o.ROW_KEY_SELECTOR,row).text();
+	
+	// get a row filtered of "noEdit" and "edit link" columns
+	var fRow = jQuery.tableEditor.lib.filterRow(row,o.COLUMN_NOEDIT,o.EVENT_LINK_SELECTOR);
+	
+	// initialize object passed to the callback functions
+	p = {"row": fRow, "key" : key };
+	
+	if (action == 'edit') {
+		if (o.FUNC_PRE_EDIT) eval (o.FUNC_PRE_EDIT+"(p)");
+		
+		jQuery(link).addClass('tsToggleEdit').html(o.SAVE_HTML);
+		
+		// Disable sorting on table
+		//jQuery.tableSorter.active.set(true);
+		
+		// Convert table row cells into editable form fields.
+		row.each(function(i) {
+			if (fRow.index(this) < 0)
+				return;
+					
+			var html = jQuery.tableEditor.lib.makeEditable(jQuery(this), o.COLUMN_NAMES[i], key);
+			if (html !== false)
+				jQuery(this).html(html);
+			
+			if (o.COL_APPLYCLASS)
+				if (typeof(o.COLUMN_CLASSES[i]) != 'undefined' && o.COLUMN_CLASSES[i].toString() != '')
+					jQuery('input, select',this).addClass(o.COLUMN_CLASSES[i]); 
+		});
+		
+		if (o.FUNC_POST_EDIT) eval (o.FUNC_POST_EDIT+"(p)");
+	}
+	
+	if (action == 'save') {
+		if (o.FUNC_PRE_SAVE)
+			eval (o.FUNC_PRE_SAVE+"(p)");
+		
+		jQuery(link).removeClass('tsToggleEdit').html(o.EDIT_HTML);
+		
+		// Enable sorting on table
+		jQuery.tableSorter.active.set(true);
+		
+		// Make cells non editable, update their value.
+		row.each(function(i) {	
+			if (fRow.index(this) < 0)
+				return;
+				
+			var html = jQuery.tableEditor.lib.makeStatic(jQuery(this), o.COLUMN_NAMES[i], key);
+			if (html !== false)
+				jQuery(this).html(html);
+		});
+	
+		// Clear tableSorter's cache (so that ir re-reads row's new/updated values)
+		// TODO: RE-DO this using tS's new bind event -- preferably only update cache for only this row
+		//jQuery.tableSorter.clearCache.set(true);
+					
+		p.changed = jQuery.tableEditor.cache.row[key];
+		p.original = jQuery.tableEditor.cache.original[key];
+		if (o.FUNC_UPDATE)
+			eval (o.FUNC_UPDATE+"(p)");	
+	}
+	return;
+}
+
 
 jQuery.tableEditor = {
 	cache: {
@@ -234,6 +219,18 @@ jQuery.tableEditor = {
 		}
 	},
 	lib: {		
+		// filters a row of "noEdit" and "edit link" columns
+		//   (returns a cloned row)
+		filterRow: function(row, noEdits, editLink) {
+			var o = jQuery(row);
+			var remove = new Array();
+			o.each(function(i) { if(noEdits[i] === true) remove.push(this); });
+			for (i=0; i < remove.length; i++)
+				o.not(remove[i]);
+			o.not(jQuery(editLink, o).parent()[0]);
+			return o;	
+		},
+
 		// makes a table cell editable
 		// accepts a jQ object (content of cell)
 		// accepts a name (str) [will be used as INPUT name attribute]
@@ -291,28 +288,77 @@ jQuery.tableEditor = {
 					jQuery(this).html(values[i]);			
 			});
 		},
-		addClasses: function(row, classes) {
-			if (classes === false) { // inherit from <td>
-				classes = jQuery(row).attr('class');
-				jQuery(row).find("input,select,textarea").addClass(classes);
-				return;
-			}
+		// -- THIS FUNCTION IS OPTIONAL! Not necessary for in place editing.
+		// adds a row to the table (first row)
+		// accepts a table (jQ reference to <table> element)
+		// returns a jQ reference to the blank row (<tr>)
+		appendRow: function(input) {
+			var defaults =  {		
+				TABLE: false, // jQ object containing table, else FALSE (use first tableEditor table)
+				KEY: 0, // the key of newRow
+				CLASS: '', // apply class to newRow (can add multiple "class1 class2")
+				VALUES: { }, // populate newRow with these values
+				COPY: false // keep values from cloned row
+			};
+			jQuery.extend(defaults, input);
 			
-			row.each(function(i) {
-				if (typeof(classes[i]) != 'undefined' && classes[i].toString() != '')
-					jQuery(this).addClass(classes[i]); 
-			});
-		},
-		filterNoEdit: function(row, noEdits) {
-			var remove = new Array();
-			row.each(function(i) {
-				for (z=0; z < noEdits.length; z++) {
-					if (i == noEdits[z]) 
-						remove.push(this);
+			if (defaults.TABLE === false)
+				defaults.TABLE = jQuery.tableEditor.vault.getTableByID(0);
+			var o = jQuery.tableEditor.vault.getTableOptions(defaults.TABLE[0]);
+			
+			// clone second row in table
+			var row = defaults.TABLE[0].rows[1];
+			var newRow = jQuery(row).clone();
+			
+			// bind the event link, change key, add class, update values
+			newRow.find(o.EVENT_LINK_SELECTOR).each(function() { 
+				jQuery(this).click(function() {				
+					jQuery.editRow(this,o.tid);
+					return false;
+				});
+			}).end()
+			.find(o.ROW_KEY_SELECTOR).html(defaults.KEY).end()
+			.addClass(defaults.CLASS)
+			.find('td').each(function(i) { 
+				if (jQuery(o.EVENT_LINK_SELECTOR+','+o.EVENT_LINK_SELECTOR, this).size() > 0)
+					return;
+				if (defaults.COPY === false) {
+					var name = o.COLUMN_NAMES[i];
+					var val = (typeof(defaults.VALUES[name]) == 'undefined') ? '' : defaults.VALUES[name];
+					jQuery(this).html(val);
 				}
-			});
-			for (i=0; i < remove.length; i++)
-				row.not(remove[i]);
+			}).end(); 
+			
+			// add row before secondRow
+			jQuery(row).before(newRow);
+			
+			return;
+		}
+	},
+	vault: {  // TODO -- add some closures here
+		vault: [],
+		// stores the options for a table in a vault (defaults)
+		// returns the ID of storage
+		store: function(options, table) {
+			var id = this.vault.length;
+			jQuery.extend(options, {tid: id});
+			this.vault.push(options);
+			
+			// set the table ID
+			jQuery(table).attr('teID',id.toString());
+			return id;
+		},
+		get: function(id) {
+			return this.vault[id];
+		},
+		getTableID: function(table) {
+			return jQuery(table).attr('teID');
+		},
+		getTableByID: function(id) {
+			return jQuery('table[@teID='+id+']');
+		},
+		getTableOptions: function(table) {
+			return this.get(this.getTableID(table));
 		}
 	}
 };
