@@ -60,6 +60,7 @@
 <option value="UTF-8"{if $charset == 'UTF-8'} selected="selected"{/if}>{t}UTF-8 (recommended){/t}</option>
 <option value="ISO-8859-1"{if $charset == 'ISO-8859-1'} selected="selected"{/if}>{t}western (ISO-8859-1){/t}</option>
 <option value="ISO-8859-2"{if $charset == 'ISO-8859-2'} selected="selected"{/if}>{t}Central/Eastern European (ISO-8859-2){/t}</option>
+<option value="ISO-8859-7"{if $charset == 'ISO-8859-7'} selected="selected"{/if}>{t}Greek (ISO-8859-7){/t}</option>
 <option value="ISO-8859-15"{if $charset == 'ISO-8859-15'} selected="selected"{/if}>{t}western (ISO-8859-15){/t}</option>
 <option value="cp1251"{if $charset == 'cp1251'} selected="selected"{/if}>{t}cyrillic (Windows-1251){/t}</option>
 <option value="KOI8-R"{if $charset == 'KOI8-R'} selected="selected"{/if}>{t}cyrillic (KOI8-R){/t}</option>
