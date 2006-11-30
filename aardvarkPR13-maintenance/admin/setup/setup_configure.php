@@ -2,15 +2,15 @@
 
 
 /** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
+ * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved
+ * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
  * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
  *  2. You must notify the above author of modifications to contents within.
- * 
+ *
  ** [END HEADER]**/
 
 /**********************************
@@ -38,6 +38,7 @@ function check_charset($value, $empty, & $params, & $formvars) {
 		'UTF-8',
 		'ISO-8859-1',
 		'ISO-8859-2',
+		'ISO-8859-7',
 		'ISO-8859-15',
 		'cp1251',
 		'KOI8-R',
@@ -52,7 +53,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
 	SmartyValidate :: connect($smarty, true);
-	
+
 	// register custom criteria
 	SmartyValidate::register_criteria('isCharSet','check_charset');
 
@@ -70,9 +71,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('admin_email', 'admin_email', 'isEmail');
 	SmartyValidate :: register_validator('list_fromemail', 'list_fromemail', 'isEmail');
 	SmartyValidate :: register_validator('list_frombounce', 'list_frombounce', 'isEmail');
-	
+
 	SmartyValidate :: register_validator('list_charset', 'list_charset', 'isCharSet', false, false, 'trim');
-	
+
 
 	$formError = array ();
 	$formError['admin_username'] = $formError['sitename'] = $formError['list_name'] = $formError['list_fromname'] = _T('Cannot be empty.');
@@ -84,10 +85,10 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$formError['site_url'] = $formError['site_success'] = $formError['site_confirm'] = _T('Must be a valid URL');
 
 	$formError['list_charset'] = _T('Invalid Character Set');
-	
+
 	$smarty->assign('formError', $formError);
 
-	// populate _POST with info from database (fills in form values...) 
+	// populate _POST with info from database (fills in form values...)
 	$dbVals = $poMMo->getConfig(array (
 		'admin_username',
 		'site_success',

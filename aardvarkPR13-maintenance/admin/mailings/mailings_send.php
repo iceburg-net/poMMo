@@ -1,14 +1,14 @@
 <?php
 /** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
+ * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved
+ * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
  * SOURCE: http://pommo.sourceforge.net/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
  *  2. You must notify the above author of modifications to contents within.
- * 
+ *
  ** [END HEADER]**/
 
 /**********************************
@@ -36,6 +36,7 @@ function check_charset($value, $empty, & $params, & $formvars) {
 		'UTF-8',
 		'ISO-8859-1',
 		'ISO-8859-2',
+		'ISO-8859-7',
 		'ISO-8859-15',
 		'cp1251',
 		'KOI8-R',
@@ -132,7 +133,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$mailingData['charset'] = $_POST['charset'];
 		$mailingData['mailgroup'] = $_POST['mailgroup'];
 		$poMMo->set(array('mailingData' => $mailingData));
-				
+
 		if (!empty ($mailingData['body']))
 			bmRedirect('mailings_send3.php');
 		else
