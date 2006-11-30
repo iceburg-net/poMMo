@@ -11,7 +11,7 @@
 
 <div class="notes">
 
-<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}Fields in %1bold%2 are required{/t}</p>
+<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}%1 Fields %2 are required{/t}</p>
 
 </div>
 
@@ -22,7 +22,7 @@
 
 {foreach name=fields from=$fields key=key item=field}
 <div>
-<label{if $demo.required} class="required"{/if} for="field{$key}"><strong>{$demo.prompt}:</strong></label>
+<label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 
 {if $field.type == 'text' || $field.type == 'number'}
 <input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />

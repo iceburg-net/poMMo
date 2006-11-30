@@ -36,6 +36,7 @@ $smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
  * limit	- The Maximum # of subscribers to show per page
  * sort		- The subscriber field to sort by (email, ip, time_registered, time_touched, status)
  * order	- Order Type (ascending - ASC /descending - DESC)
+ * info		- (hide/show) Time Registered/Updated, IP address
  * 
  * status	- Filter by subscriber status (active, inactive, pending, all)
  * group	- Filter by group members (groupID or 'all')
@@ -46,8 +47,12 @@ $state =& PommoApi::stateInit('subscribers_manage',array(
 	'sort' => 'email',
 	'order' => 'ASC',
 	'status' => 1,
-	'group' => 'all'),
+	'group' => 'all',
+	'info' => 'hide'),
 	$_REQUEST);
+	
+if($state['sort'] != 'email')
+	$state['info'] = 'show';
 
 // get the group
 $group = new PommoGroup($state['group'], $state['status']);

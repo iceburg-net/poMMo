@@ -97,10 +97,18 @@ $().ready(function() {
 	</li>
 	
 	<li>
-	<label for="sort">{t}Order by{/t}</label>
+	<label for="order">{t}Order by{/t}</label>
 	<select name="order">
 	<option value="asc" {if $state.order == 'asc'}SELECTED{/if}>{t}ascending{/t}</option>
 	<option value="desc" {if $state.order == 'desc'}SELECTED{/if}>{t}descending{/t}</option>
+	</select>
+	</li>
+	
+	<li>
+	<label for="info">{t}Extended Info{/t}</label>
+	<select name="info">
+	<option value="show" {if $state.info == 'show'}SELECTED{/if}>{t}show{/t}</option>
+	<option value="hide" {if $state.info == 'hide'}SELECTED{/if}>{t}hide{/t}</option>
 	</select>
 	</li>
 	
@@ -121,13 +129,15 @@ $().ready(function() {
 {foreach from=$fields key=id item=f}
 <th name="{$id}" class="pvV{if $f.required == 'on'} pvEmpty{/if}{if $f.type == 'number'} pvNumber{/if}{if $f.type == 'date'} pvDate{/if}">{$f.name}</th>
 	{if $f.type == 'multiple'}
-	<select style="display: none;" id="seM{$id}">{foreach name=inner from=$f.array item=option}<option>{$option}</option>{/foreach}</select>
+	<select style="display: none;" id="seM{$id}">{foreach name=inner from=$f.array item=option}<option value="{$option|escape}">{$option}</option>{/foreach}</select>
 	{/if}
 {/foreach}
 
+{if $state.info == 'show'}
 <th name="registered" class="noEdit">Registered</th>
 <th name="touched" class="noEdit">Updated</th>
 <th name="ip" class="noEdit">IP Address</th>
+{/if}
 
 </tr>
 </thead>
@@ -157,9 +167,12 @@ $().ready(function() {
 {/if}
 {/foreach}
 
+{if $state.info == 'show'}
 <td>{$s.registered}</td>
 <td>{$s.touched}</td>
 <td>{$s.ip}</td>
+{/if}
+
 </tr>
 {/foreach}
 
@@ -237,14 +250,17 @@ function updateTable(o) {
 	if (empty)
 		return;
 
-	$.post("ajax/subscriber_update.php?key="+o.key, o.changed, function(data) {
-		if (data != '') { // update failed
-			alert(data);
+	$.post("ajax/subscriber_update.php?key="+o.key, o.changed, function(json) {
+		eval("var args = " + json);
+		if (typeof(args.success) == 'undefined')
+			alert('ajax error!');
+			
+		if (!args.success) {
+			alert(args.msg);
 			// restore row
 			$.tableEditor.lib.restoreRow(o.row,o.original);
 		}
 	});
-
 }
 </script>
 {/literal}

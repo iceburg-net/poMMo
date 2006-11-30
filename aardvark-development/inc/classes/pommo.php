@@ -21,6 +21,7 @@ class Pommo {
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object
 	var $_auth; // holds the authentication object
+	var $_escaping; // (bool) if true, responses from logger and translation functions will be wrapped through htmlspecialchars
 
 	var $_baseDir; // poMMo's base directory (e.g. /home/www/site1/pommo/)
 	var $_baseUrl; // poMMo's base URL (e.g. http://www.site1.com/pommo/) - null = autodetect
@@ -47,6 +48,7 @@ class Pommo {
 		$this->preInit();
 		$this->_config = array ();
 		$this->_auth = null;
+		$this->_escaping = false;
 	}
 
 	// preInit() populates poMMo's core with values from config.php 
@@ -197,15 +199,27 @@ class Pommo {
 		return $this->_config = PommoAPI :: configGetBase(TRUE);
 	}
 	
+	function toggleEscaping($toggle = TRUE) {
+		$this->_escaping = $toggle;
+		$this->_logger->toggleEscaping($this->_escaping);
+		return $toggle;
+	}
+	
 	/**
 	 *  Translation (l10n) Function
 	 */
 	 
 	 function _T($msg) {
+		global $pommo;
+		if($pommo->_escaping)
+			return ($GLOBALS['pommol10n']) ? htmlspecialchars(PommoHelperL10n::translate($msg)) : htmlspecialchars($msg);
 		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translate($msg) : $msg;
 	}
 
 	function _TP($msg, $plural, $count) { // for plurals
+		global $pommo;
+		if($pommo->_escaping)
+			return ($GLOBALS['pommol10n']) ? htmlspecialchars(PommoHelperL10n::translatePlural($msg, $plural, $count)) : htmlspecialchars($msg);
 		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translatePlural($msg, $plural, $count) : $msg;
 	}
 

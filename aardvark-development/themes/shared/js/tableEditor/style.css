@@ -58,3 +58,5 @@ input.pvInvalid, select.pvInvalid
 	margin-top: 4px;
 	font-weight: bold;
 }
+
+.newRow { background: #FFF6E5; }

@@ -22,12 +22,18 @@ $pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
+$pommo->toggleEscaping(); // _T and logger responses will be wrapped in htmlspecialchars
+
+function jsonKill($msg) {
+	$json = "{success: false, msg: \"".$msg."\"}";
+	die($json);
+}
 
 if (!PommoHelper::isEmail($_POST['Email']))
-	die(Pommo::_T('Error adding subscriber.').' '.Pommo::_T('Invalid Email.'));
+	jsonKill(Pommo::_T('Error adding subscriber.').'<br>'.Pommo::_T('Invalid Email.'));
 
 if(count(PommoHelper::emailExists($_POST['Email'])) > 0)
-		die(Pommo::_T('Error adding subscriber.').' '.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
+		jsonKill(Pommo::_T('Error adding subscriber.').'<br>'.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 
 $subscriber = array(
 	'email' => $_POST['Email'],
@@ -39,17 +45,26 @@ $subscriber = array(
 $flag = false;
 if (!PommoValidate::subscriberData($subscriber['data'],array('active' => FALSE, 'ignore' => TRUE))) {
 	if(!isset($_GET['force']))
-		die(Pommo::_T('Error adding subscriber.').' '.Pommo::_T('Invalid or missing information.').'<br>'.implode($logger->getAll(), "<br>"));
+		jsonKill(Pommo::_T('Error adding subscriber.').'<br>'.Pommo::_T('Invalid or missing information.').'<br>'.implode("<br>", $logger->getAll()));
 		
 	$flag = true;
 	$subscriber['flag'] = 9; // 9 for "update"
 }
 
-if (!PommoSubscriber::add($subscriber))
-	die(Pommo::_T('Error adding subscriber.'));
+$key = PommoSubscriber::add($subscriber);
+if (!$key)
+	jsonKill(Pommo::_T('Error adding subscriber.'));
 	
-if ($flag)
-	die(sprintf(Pommo::_T('Subscriber %s added!'),$_POST['Email']).' '.Pommo::_T('Subscriber has been flagged for update due to invalid or missing information.'));
 
-die(sprintf(Pommo::_T('Subscriber %s added!'),$_POST['Email']));
+// some homebrew json.. ;(
+$msg = ($flag) ? 
+	sprintf(Pommo::_T('Subscriber %s added!'),$_POST['Email']).' '.Pommo::_T('Subscriber has been flagged for update due to invalid or missing information.') :
+	sprintf(Pommo::_T('Subscriber %s added!'),$_POST['Email']);
+
+$json = 'email: "'.$subscriber['email'].'",registered: "'.$subscriber['registered'].'",touched: "'.$subscriber['registered'].'",ip: "'.$subscriber['ip'].'"';
+foreach($subscriber['data'] as $key => $val) 
+	$json .= ",$key: \"".htmlspecialchars($val)."\"";
+
+$json = "{success: true, key: $key, msg: \"".$msg."\", data: {".$json."} }";
+die($json);
 ?>
