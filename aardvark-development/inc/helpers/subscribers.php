@@ -247,7 +247,7 @@ class PommoSubscriber {
 	}
 	
 	// fetches a subscriber ID from an email
-	// accepts a email address (str)
+	// accepts a email address (str) or array of email addresses
 	// returns a subscriber ID (int) or false
 	function & getIDByEmail($email) {
 		global $pommo;
@@ -260,6 +260,21 @@ class PommoSubscriber {
 			LIMIT 1";
 		$query = $dbo->prepare($query,array($email));
 		return $dbo->query($query,0);
+	}
+	
+	// fetches subscriber IDs from passed emails
+	// accepts a array of email addresses
+	// returns an array of subscriber IDs
+	function & getIDsByEmails(&$emails) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT subscriber_id
+			FROM " . $dbo->table['subscribers'] . "
+			WHERE email IN (%q)";
+		$query = $dbo->prepare($query,array($emails));
+		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	
 	// fetches subscribers from the database based off their attributes
@@ -437,7 +452,8 @@ class PommoSubscriber {
 			[time_registered='%S',]
 			[ip=INET_ATON('%S'),]
 			[status=%I,]
-			flag=%i
+			[flag=%I,]
+			time_touched=CURRENT_TIMESTAMP
 			WHERE subscriber_id=%i";
 		$query = $dbo->prepare($query,array(
 			$in['email'],
@@ -447,7 +463,7 @@ class PommoSubscriber {
 			$in['flag'],
 			$in['id']
 		));
-		if (!$dbo->query($query))
+		if (!$dbo->query($query) || ($dbo->affected() != 1))
 				return false;
 		
 		

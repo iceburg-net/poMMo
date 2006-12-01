@@ -29,7 +29,7 @@ $().ready(function() {
 	</li>
 	
 	<li>
-	<a href="AJAX">{t}Remove Subscribers{/t}</a>
+	<a href="ajax/subscriber_del.php?height=400&width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a>
 	</li>
 	
 	<li>
@@ -116,6 +116,8 @@ $().ready(function() {
 </form>
 
 <p class="count">({t 1=$tally}%1 subscribers{/t})</p>
+
+<a href="#" id="remove">TREMPOVE</a>
 
 {if $tally > 0}
 <table summary="subscriber details" id="subs">
@@ -211,6 +213,11 @@ $().ready(function() {
 		inputText: "{/literal}{t}search table{/t}{literal}",
 		loaderImg: '{/literal}{$url.theme.shared}images/loader.gif{literal}'
 	});
+	
+	$('#remove').click(function(){
+		jQuery.tableEditor.lib.deleteRow({KEY: 23044}); return false;
+	});
+	
 });
 
 // convert multiple choice fields to their appropriate select

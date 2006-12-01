@@ -290,7 +290,6 @@ jQuery.tableEditor = {
 		},
 		// -- THIS FUNCTION IS OPTIONAL! Not necessary for in place editing.
 		// adds a row to the table (first row)
-		// accepts a table (jQ reference to <table> element)
 		// returns a jQ reference to the blank row (<tr>)
 		appendRow: function(input) {
 			var defaults =  {		
@@ -332,7 +331,36 @@ jQuery.tableEditor = {
 			// add row before secondRow
 			jQuery(row).before(newRow);
 			
-			return;
+			return newRow;
+		},
+		
+		// -- THIS FUNCTION IS OPTIONAL! Not necessary for in place editing.
+		// Removes a row from the table
+		// Returns success (bool)
+		deleteRow: function(input) {
+			var defaults =  {		
+				TABLE: false, // jQ object containing table, else FALSE (use first tableEditor table)
+				KEY: false, // a key or ARRAY of keys to delete
+			};
+			jQuery.extend(defaults, input);
+			
+			if (defaults.TABLE === false)
+				defaults.TABLE = jQuery.tableEditor.vault.getTableByID(0);
+			var o = jQuery.tableEditor.vault.getTableOptions(defaults.TABLE[0]);
+			
+			if (typeof(defaults.KEY) != 'object')
+				defaults.KEY = new Array(defaults.KEY.toString());
+				
+			defaults.TABLE.find('td '+o.ROW_KEY_SELECTOR).each(function() {
+				var v = jQuery(this).text();
+				for(i = 0; i < defaults.KEY.length; i++) {
+					if (v == defaults.KEY[i]) {
+						jQuery(this).parents('tr:first').remove();
+						return;
+					}
+				}
+			});
+			return true;
 		}
 	},
 	vault: {  // TODO -- add some closures here
