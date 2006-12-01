@@ -6,9 +6,11 @@
 {t escape='no' 1='<a href="subscribers_import.php">' 2='</a>'}Welcome to adding subscribers! You can add subscribers one-by-one here. If you would like to add subscribers in bulk, visit the %1 Subscriber Import %2 page.{/t}
 
 <form method="post" action="" id="addForm">
+<fieldset>
+<legend>{t}Add Subscriber{/t}</legend>
 
 <div>
-<label class="required" for="email"><strong>{t}Email:{/t}</strong></label>
+<label class="required" for="email">{t}Email:{/t}</label>
 <input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email"/>
 </div>
 
@@ -44,7 +46,7 @@
 
 <div class="buttons">
 
-<input type="submit" value="{t}Add subscriber{/t}"/>
+<input type="submit" value="{t}Add Subscriber{/t}"/>
 
 <input type="reset" value="{t}Reset{/t}"/>
 
