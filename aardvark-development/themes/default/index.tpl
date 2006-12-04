@@ -30,21 +30,21 @@
 
 <div>
 <label for="username">{t}Username{/t}</label>
-<input type="text" name="username" id="username" value="demo" />
+<input type="text" name="username" id="username" />
 </div>
 
 <div>
 <label for="password">{t}Password{/t}</label>
-<input type="password" name="password" id="password" value="demo" />
+<input type="password" name="password" id="password" />
 </div>
 
 </fieldset> 
 
 <div class="buttons">
 
-<input type="submit" name="resetPassword" id="resetPassword" value="{t}Forgot your password?{/t}" />
-
 <input type="submit" name="submit" value="{t}Log In{/t}" />
+
+<input type="submit" name="resetPassword" id="resetPassword" value="{t}Forgot your password?{/t}" />
 
 </div>
 
