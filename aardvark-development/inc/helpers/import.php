@@ -263,7 +263,7 @@ function csvPrepareImport(& $fields, & $csvFile, $fieldAssign) {
 	global $poMMo;
 	global $dbo;
 	global $logger;
-	require_once (bm_baseDir.'/inc/db_subscribers.php');
+	require_once (bm_baseDir.'inc/db_subscribers.php');
 
 	$outArray = array ('valid' => array (), 'invalid' => array (), 'duplicate' => array ());
 

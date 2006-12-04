@@ -42,4 +42,5 @@ if (get_magic_quotes_gpc()) {
 
 // Assign alias to the core global which can be used by the script calling bootstrap.php
 $pommo =& $GLOBALS['pommo'];
+$pommo->preinit();
 ?>

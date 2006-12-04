@@ -18,8 +18,8 @@
 
 
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/class.json.php');
-require_once ($pommo->_baseDir . '/inc/lib.txt.php');
+require_once ($pommo->_baseDir . 'inc/class.json.php');
+require_once ($pommo->_baseDir . 'inc/lib.txt.php');
 
 $pommo = & fireup('secure','keep');
 $dbo = & $pommo->_dbo;
@@ -56,7 +56,7 @@ if ($row = mysql_fetch_assoc($dbo->_result)) {
 // end the mailing?
 if ($sent >= $subscriberCount  || $status == 'finished') {
 		$status = 'finished';
-		require_once ($pommo->_baseDir . '/inc/db_mailing.php');
+		require_once ($pommo->_baseDir . 'inc/db_mailing.php');
 		if (mailingQueueEmpty($dbo)) {
 			dbMailingEnd($dbo);
 		}

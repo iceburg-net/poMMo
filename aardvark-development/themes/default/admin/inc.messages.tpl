@@ -1,5 +1,5 @@
 {if $messages}
-<div id="warnmsg" class="warn">
+<div id="alertmsg" class="warn">
 
 <ul>
 {foreach from=$messages item=msg}
@@ -11,11 +11,16 @@
 {/if}
 
 {if $errors}
-<div id="errormsg" class="error">
+<div id="alertmsg" class="error">
+
+{if $fatalMsg}<img src="{$url.theme.shared}images/icons/alert.png" alt="Fatal Error" class="fatalMsg" />{/if}
 
 <ul>
 {foreach from=$errors item=msg}
-<li>{$msg}</li>
+<li>
+
+{$msg}
+</li>
 {/foreach}
 </ul>
 

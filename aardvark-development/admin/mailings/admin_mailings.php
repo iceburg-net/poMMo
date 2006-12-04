@@ -15,7 +15,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require('../../bootstrap.php');
-require_once ($pommo->_baseDir.'/inc/db_mailing.php');
+require_once ($pommo->_baseDir.'inc/db_mailing.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;

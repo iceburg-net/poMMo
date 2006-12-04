@@ -80,8 +80,6 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			if (isset ($_REQUEST['debugInstall']))
 				$dbo->debug(TRUE);
 
-			// install poMMo
-			//require_once ($pommo->_baseDir . '/inc/db_procedures.php');
 			$install = parse_mysql_dump();
 
 			if ($install) {

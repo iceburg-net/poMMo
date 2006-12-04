@@ -45,7 +45,7 @@ if ($pommo->_config['revision'] == $pommo->_revision && !isset ($_REQUEST['force
 }
 
 // include the upgrade procedure file
-Pommo::requireOnce($pommo->_baseDir . '/install/helper.upgrade.php');
+Pommo::requireOnce($pommo->_baseDir . 'install/helper.upgrade.php');
 
 if (isset ($_REQUEST['disableDebug']))
 	unset ($_REQUEST['debugInstall']);
@@ -67,7 +67,7 @@ if (empty($_REQUEST['continue'])) {
 		$logger->addErr(Pommo::_T('Upgrade Complete!'));
 
 		// Read in RELEASE Notes -- TODO -> use file_get_contents() one day when everyone has PHP 4.3
-		$filename = $pommo->_baseDir . '/docs/RELEASE';
+		$filename = $pommo->_baseDir . 'docs/RELEASE';
 		$handle = fopen($filename, "r");
 		$x = fread($handle, filesize($filename));
 		fclose($handle);

@@ -32,13 +32,6 @@ $().ready(function() {
 	<a href="ajax/subscriber_del.php?height=400&width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a>
 	</li>
 	
-	<li>
-	<a href="AJAX">{t}Search Subscribers{/t}</a>
-	</li>
-	
-	<li>
-	<a href="subscribers_export.php?status={$state.status}&amp;group={$state.group}">{t}Export to CSV{/t}</a>
-	</li>
 </ul>
 
 <fieldset class="sorting">

@@ -67,7 +67,7 @@ if (!empty ($_POST['update'])) {
 			$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') . 
 			sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
 		} else {
-			Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
 			PommoHelperMailings::sendConfirmation($subscriber['email'], $code, 'update');
 			$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 		}
@@ -79,7 +79,7 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') .
 		sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
 	else {
-		Pommo::requireOnce($pommo->_baseDir . '/inc/helpers/mailings.php');
+		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
 		PommoHelperMailings::sendConfirmation($subscriber['email'], $code, 'unsubscribe');
 		$logger->addMsg(Pommo::_T('Unsubscribe request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 	

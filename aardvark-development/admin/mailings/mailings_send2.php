@@ -17,9 +17,9 @@
 
 
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_mailing.php');
-require_once ($pommo->_baseDir . '/inc/lib.txt.php');
-require_once ($pommo->_baseDir . '/inc/db_fields.php');
+require_once ($pommo->_baseDir . 'inc/db_mailing.php');
+require_once ($pommo->_baseDir . 'inc/lib.txt.php');
+require_once ($pommo->_baseDir . 'inc/db_fields.php');
 
 $pommo = & fireup('secure','keep');
 $logger = & $pommo->_logger;
@@ -39,7 +39,7 @@ if (!mailingQueueEmpty($dbo)) {
 	
 // check if altBody should be imported from HTML
 if (isset($_POST['altGen'])) {
-	require_once ($pommo->_baseDir.'/inc/lib.html2txt.php');
+	require_once ($pommo->_baseDir.'inc/lib.html2txt.php');
 	$h2t = & new html2text($_POST['body']);
 	$_POST['altbody'] = $h2t->get_text();
 }

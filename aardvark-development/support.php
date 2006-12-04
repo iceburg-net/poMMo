@@ -19,7 +19,7 @@
 define('_poMMo_support', TRUE);
 
 require ('bootstrap.php');
-require ($pommo->_baseDir . '/install/helper.install.php');
+require ($pommo->_baseDir . 'install/helper.install.php');
 
 $pommo = & fireup('install');
 session_start();

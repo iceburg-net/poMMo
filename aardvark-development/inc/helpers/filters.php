@@ -34,7 +34,7 @@ class PommoFilter {
 	}
 	
 	// returns the legal(logical) selections for new filters based off pre-existing criteria
-	// accepts a group object
+	// accepts a group object (can be empty -- thus returning all legal field filters)
 	// accepts a array of fields
 	// returns an array of logics. Array key correlates to field_id.
 	function & getLegalFilters(&$group, &$fields) {
@@ -50,6 +50,9 @@ class PommoFilter {
 		
 		foreach ($fields as $field)
 			$c[$field['id']] = $legalities[$field['type']];
+		
+		if(empty($group['criteria']))
+			return $c;
 		
 		// subtract illogical selections from $c
 		foreach ($group['criteria'] as $criteria) {	
