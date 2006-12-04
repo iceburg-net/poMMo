@@ -48,38 +48,7 @@ class Pommo {
 		// initialize logger
 		$this->_logger = new PommoLog($this->_verbosity); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
 		
-	}
-
-	// preInit() populates poMMo's core with values from config.php 
-	//  initializes the logger + database
-	function preInit() {
-		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
-		
-		// read in config.php (configured by user)
-		// TODO -> write a web-based frontend to config.php creation
-		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
-		
-		// check to see if config.php was "properly" loaded
-		if (count($config) < 5) {
-			die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>Could not read config.php');
-		}
-
-		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
-		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
-		$this->_hostname = (empty($config['hostname'])) ? $_SERVER['HTTP_HOST'] : $config['hostname'];
-		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
-		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
-		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
-		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
-		
-		// include translation (l10n) methods if language is not English
-		if ($this->_language != 'en') {
-			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
-			PommoHelperL10n::init($this->_language, $this->_baseDir);
-		}
-		
+	
 		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
 		// TODO -> provide validation of baseURL ?
 		if (isset ($config['baseURL'])) {
@@ -95,7 +64,36 @@ class Pommo {
 				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
 			}
 		}
+	}
+
+	// preInit() populates poMMo's core with values from config.php 
+	//  initializes the logger + database
+	function preInit() {
+		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
 		
+		// read in config.php (configured by user)
+		// TODO -> write a web-based frontend to config.php creation
+		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
+		
+		// check to see if config.php was "properly" loaded
+		if (count($config) < 5)
+			die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>Could not read config.php');
+
+		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
+		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
+		$this->_hostname = (empty($config['hostname'])) ? $_SERVER['HTTP_HOST'] : $config['hostname'];
+		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
+		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
+		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
+		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
+		
+		// include translation (l10n) methods if language is not English
+		if ($this->_language != 'en') {
+			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
+			PommoHelperL10n::init($this->_language, $this->_baseDir);
+		}
 
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
@@ -318,7 +316,7 @@ class Pommo {
 	
 	// faster performance than standard require_once
 	// TODO -> extend function to make "smart" -- auto paths, jail to poMMo directory, etc.
-	function requireOnce($file) { echo $file."\n";
+	function requireOnce($file) {
 		static $files;
 
 		if (!isset ($files[$file])) {

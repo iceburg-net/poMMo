@@ -15,7 +15,6 @@
 SWITCH "phase1" dialogs of subscriber add/delete/search/export to INLINE DISPLAY vs. AJAX POLL 
   + Requires unobtrusive modal window (thickbox destroys event bindings). Keep eye on Gavin's plugin
 
-
 CHECK subscriber update (self + admin) of UNCHECKING/CHECKING a check field
 FINISH MERGING IN NEW FRAMEWORK.
 

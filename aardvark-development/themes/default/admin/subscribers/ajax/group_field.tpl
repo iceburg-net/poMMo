@@ -110,7 +110,7 @@ $('#fwSubmit').oneclick(function() {
 	var _match = $('#fwMatchID').val();
 	var _value = $('#fwValue input[@type=text], #fwValue select').serialize();
 
-	$.post("ajax_filter_update.php",
+	$.post("ajax/filter_update.php",
 		{ logic: _logic, group: _group, match: _match, value: _value },
 		function(out) {
 			var name = $('#filterWindow a.fwClose').attr('alt');

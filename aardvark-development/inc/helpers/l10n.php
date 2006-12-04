@@ -15,14 +15,11 @@ class PommoHelperL10n {
 	function init($language, $baseDir) {
 
 		if (!is_file($baseDir . 'language/' . $language . '/LC_MESSAGES/pommo.mo'))
-			die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>Unknown Language (' .
-			$language . ')');
+			Pommo::kill('Unknown Language (' .$language . ')');
 
 		// check for gettext support
-		if (!function_exists('gettext')) {
-			die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>No PHP Gettext Support for non-English (' .
-			$language . ') translation!');
-		}
+		if (!function_exists('gettext'))
+			Pommo::kill('No PHP Gettext Support for non-English (' .$language . ') translation!');
 
 		// set the locale
 		if (!PommoHelperL10n::_setLocale(LC_MESSAGES, $language)) {
@@ -31,8 +28,7 @@ class PommoHelperL10n {
 			$language = $language.'_'.strtoupper($language);
 			}
 			
-			die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>Locale for (' .
-			$language . ') not supported by system');
+			Pommo::kill('Locale for (' .$language . ') not supported by local system');
 		}
 
 		// set gettext environment

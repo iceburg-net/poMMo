@@ -27,6 +27,7 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
+Pommo::kill('Importing and Exporting is temporarily disabled until PR15');
 
 // Maximum File Size (in MB) 
 $max_file_size = 2;

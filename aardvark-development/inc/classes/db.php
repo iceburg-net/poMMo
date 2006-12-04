@@ -160,7 +160,7 @@ class PommoDB {
 				echo '<p>Query <strong>failed</strong> with error --> ' . mysql_error() . '</p>';
 
 			if ($this->_dieOnQuery)
-				die('MySQL Query Failed.');
+				Pommo::kill('MySQL Query Failed.');
 			else
 				return false;
 		}
