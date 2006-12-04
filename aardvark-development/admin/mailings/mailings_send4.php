@@ -107,8 +107,10 @@ function bmMKill($reason, $killSession = FALSE) {
 	
 	if ($killSession)
 		session_destroy();
-
-	Pommo::kill($reason);
+	
+	// TODO should output really be displayed through the template????
+	//Pommo::kill($reason);
+	Pommo::kill();
 }
 
 function bmSpawn($url) {

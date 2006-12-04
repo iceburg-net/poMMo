@@ -18,11 +18,11 @@
  		global $pommo;
  		
  		if (!$handle = fopen($pommo->_workDir . '/maintenance.php', 'w')) {
-			Pommo::kill(Pommo::_T('Unable to perform maintenance'));
+			Pommo::kill('Unable to perform maintenance');
 		}
 		$fileContent = "<?php die(); ?>\n[baseURL] = \"$pommo->_baseUrl\"\n";
 		if (fwrite($handle, $fileContent) === FALSE) {
-			Pommo::kill(Pommo::_T('Unable to perform maintenance'));
+			Pommo::kill('Unable to perform maintenance');
 		}
 		
 		fclose($handle);

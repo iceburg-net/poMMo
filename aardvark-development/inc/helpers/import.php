@@ -356,7 +356,7 @@ function csvPrepareImport(& $fields, & $csvFile, $fieldAssign) {
 				}
 				break;
 			default :
-				die('Unknown Type in Import Process');
+				Pommo::kill('Unknown Type in Import Process');
 		}
 
 		// tick off this field from the required fields if it was required

@@ -41,9 +41,11 @@ if(empty($group))
 	
 
 // change group name if requested
-if (isset ($_GET['rename']) && !empty ($_GET['group_name']))
+if (isset($_POST['rename']) && !empty ($_POST['group_name']))
 	if (PommoGroup::nameChange($group['id'], $_POST['group_name']))
-		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
+		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id'].'&renamed='.$_POST['group_name']);
+if (isset($_GET['renamed']))
+	$logger->addMsg(Pommo::_T('Group Renamed'));
 
 if(isset($_GET['fieldDelete'])) {
 	PommoFilter::deleteField($group['id'], $_GET['fieldDelete'], $_GET['logic']);

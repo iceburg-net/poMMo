@@ -34,10 +34,8 @@ if (isset($_GET['input'])) {
 $pending = (isset($input['adminID'])) ? // check to see if we're resetting admin password
 	PommoPending::getBySubID(0) :
 	PommoPending::getByEmail($input['Email']);
-if (!$pending) {
-	var_dump($input); die();	
+if (!$pending) 	
 	Pommo::redirect('login.php');
-}
 
 // check if user wants to reconfirm or cancel their request
 if (!empty ($_POST)) {

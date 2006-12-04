@@ -28,5 +28,5 @@ $query = "
 	SET field_ordering = 
 		CASE field_id ".$when." ELSE field_ordering END";
 if (!$dbo->query($dbo->prepare($query)))
-	die('Error updating order');
+	echo('Error updating order');
 			

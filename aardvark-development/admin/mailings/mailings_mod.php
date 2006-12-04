@@ -42,11 +42,8 @@ $mailid = $pommo->stateVar('mailid',$_REQUEST['mailid']);
 // if mailid or action are empty - redirect
 // TODO -> perhaps perform better validation of action/mailID here
 //  e.g. have a validType($var,'rule') function? i.e. validType($mailid,numeirc)
-if (empty($action) || empty($mailid)) {
-	var_dump($action,$mailid,$_REQUEST);
-	die();
+if (empty($action) || empty($mailid))
 	Pommo::redirect('mailings_history.php');
-}
 
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();

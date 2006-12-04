@@ -128,7 +128,7 @@ class PommoAPI {
 				CASE config_name ".$when." ELSE config_value END
 			[WHERE config_name IN(%Q)]";
 		if (!$dbo->query($dbo->prepare($query,array($where))))
-			die('Error updating config');
+			Pommo::kill('Error updating config');
 		return true;
 	}
 	
