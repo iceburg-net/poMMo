@@ -30,9 +30,9 @@ else
 
 
 require ('../../bootstrap.php');
-require ($pommo->_baseDir . '/inc/class.bmailer.php');
-require ($pommo->_baseDir . '/inc/class.bthrottler.php');
-require ($pommo->_baseDir . '/inc/db_mailing.php');
+require ($pommo->_baseDir . 'inc/class.bmailer.php');
+require ($pommo->_baseDir . 'inc/class.bthrottler.php');
+require ($pommo->_baseDir . 'inc/db_mailing.php');
 
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $bm_sessionName = $serial;

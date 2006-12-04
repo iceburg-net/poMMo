@@ -17,10 +17,10 @@
 
 
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_mailing.php');
-require_once ($pommo->_baseDir.'/inc/db_groups.php');
-require_once ($pommo->_baseDir . '/inc/lib.txt.php');
-require_once ($pommo->_baseDir.'/inc/db_sqlgen.php');
+require_once ($pommo->_baseDir . 'inc/db_mailing.php');
+require_once ($pommo->_baseDir.'inc/db_groups.php');
+require_once ($pommo->_baseDir . 'inc/lib.txt.php');
+require_once ($pommo->_baseDir.'inc/db_sqlgen.php');
 
 $pommo = & fireup('secure', 'keep');
 $logger = & $pommo->_logger;
@@ -54,7 +54,7 @@ if (empty($input['mailgroup']) || empty($input['body'])) {
 // send a test mail to an address if requested
 if (!empty($_POST['testMail'])) {
 	if (isEmail($_POST['testTo'])) {
-		require_once ($pommo->_baseDir.'/inc/lib.mailings.php');
+		require_once ($pommo->_baseDir.'inc/lib.mailings.php');
 		$logger->addMsg(bmSendTestMailing($_POST['testTo'],$input));	
 		}
 	else

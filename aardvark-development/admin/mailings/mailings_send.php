@@ -17,8 +17,8 @@
 
 
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . '/inc/db_groups.php');
-require_once ($pommo->_baseDir . '/inc/db_mailing.php');
+require_once ($pommo->_baseDir . 'inc/db_groups.php');
+require_once ($pommo->_baseDir . 'inc/db_mailing.php');
 
 $pommo = & fireup('secure', 'keep');
 $logger = & $pommo->_logger;

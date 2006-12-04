@@ -192,6 +192,11 @@ fieldset {
 #alertmsg {
 	border: 1px solid #A5D768;
 }
+
+#alertmsg img.fatalMsg {
+	float: left;
+	margin-right: 25px;
+}
 .alert {
 	background: #DDF0BD;
 }

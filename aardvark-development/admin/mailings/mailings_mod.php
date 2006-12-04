@@ -19,7 +19,7 @@
 
  
 require('../../bootstrap.php');
-require_once ($pommo->_baseDir.'/inc/db_history.php');
+require_once ($pommo->_baseDir.'inc/db_history.php');
 
 $pommo =& fireup("secure");
 $logger = & $pommo->_logger;

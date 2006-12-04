@@ -56,8 +56,8 @@ class PommoHelperMailings {
 
 	// Sends a "test" mailing to an address, returns <string> status.
 	function bmSendTestMailing(&$to, &$input) {
-		require_once (bm_baseDir.'/inc/class.bmailer.php');
-		require_once (bm_baseDir.'/inc/lib.txt.php');
+		require_once (bm_baseDir.'inc/class.bmailer.php');
+		require_once (bm_baseDir.'inc/lib.txt.php');
 			$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce'],NULL,NULL,$input['charset']);
 			$altbody = NULL;
 			$html = FALSE;

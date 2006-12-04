@@ -40,20 +40,23 @@ class Pommo {
 	function Pommo($baseDir) {
 		$this->_baseDir = $baseDir;
 		
-		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
-		Pommo::requireOnce($this->_baseDir . '/inc/classes/auth.php');
-
-		$this->preInit();
 		$this->_config = array ();
 		$this->_auth = null;
 		$this->_escaping = false;
+		
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
+		// initialize logger
+		$this->_logger = new PommoLog($this->_verbosity); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
+		
 	}
 
 	// preInit() populates poMMo's core with values from config.php 
 	//  initializes the logger + database
 	function preInit() {
+		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
+		
 		// read in config.php (configured by user)
 		// TODO -> write a web-based frontend to config.php creation
 		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
@@ -99,9 +102,6 @@ class Pommo {
 
 		// initialize database link
 		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
-
-		// initialize logger
-		$this->_logger = new PommoLog($this->_verbosity); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
 
 		// if debugging is set in config.php, enable debugging on the database.
 		if ($this->_debug == 'on') {
@@ -280,17 +280,17 @@ class Pommo {
 	// kill => used to terminate a script
 	function kill($msg = NULL, $backtrace = FALSE) {
 		global $pommo;
-		
-		// if nothing is in the output buffer, create a valid XHTML page.
-		if (!ob_get_length()) {
-			echo ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
-			echo ('<title>poMMo Error</title>'); // Very basics added for valid output
-		}
 
 		// output passed message
-		if ($msg)
-			echo '<div class="error fatal"><img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" /> ' . $msg . '</div>';
-
+		if ($msg) {
+			$logger =& $pommo->_logger;
+			Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+			$smarty = new PommoTemplate();
+			$logger->addErr($msg);
+			$smarty->assign('fatalMsg',TRUE);
+			$smarty->display('message.tpl');	
+		}
+		
 		// output debugging info if enabled (in config.php)
 		if ($pommo->_debug == 'on' && $pommo->_section != 'user') { // don't debug if section == user.'
 			if (is_object($pommo)) {
@@ -318,7 +318,7 @@ class Pommo {
 	
 	// faster performance than standard require_once
 	// TODO -> extend function to make "smart" -- auto paths, jail to poMMo directory, etc.
-	function requireOnce($file) {
+	function requireOnce($file) { echo $file."\n";
 		static $files;
 
 		if (!isset ($files[$file])) {

@@ -18,8 +18,8 @@
 
 require ('../../bootstrap.php');
 
-require_once ($pommo->_baseDir . '/inc/db_history.php'); // Mailing History Database Handling
-require_once ($pommo->_baseDir . '/inc/class.pager.php');
+require_once ($pommo->_baseDir . 'inc/db_history.php'); // Mailing History Database Handling
+require_once ($pommo->_baseDir . 'inc/class.pager.php');
 
 $pommo = & fireup("secure");
 $logger = & $pommo->_logger;
