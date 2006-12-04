@@ -113,13 +113,9 @@ class PommoHelper {
 		}
 		return $o;
 	}
-		
-
-	// TODO: The following are; OLD.... DEPRICATED ... REMOVE!
-	
-	
 
 	// spawns a page in the background, used by mail processor.
+	// TODO -> MOVE THIS function out of common
 	function bmHttpSpawn($page) {
 
 		/* Convert illegal characters in url */
