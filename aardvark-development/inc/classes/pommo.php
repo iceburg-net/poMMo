@@ -66,10 +66,10 @@ class Pommo {
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
 		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
 		$this->_hostname = (empty($config['hostname'])) ? $_SERVER['HTTP_HOST'] : $config['hostname'];
-		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
-		$this->_debug = (($config['debug'] == 'on') || ($config['debug'] == 'off')) ? $config['debug'] : 'off';
+		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
+		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
 		
 		// include translation (l10n) methods if language is not English
 		if ($this->_language != 'en') {
