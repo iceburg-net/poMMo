@@ -57,21 +57,13 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		return;
  	}
  	
+ 	// returns ordered / filtered / limited member IDs -- scoped to current group member IDs
  	function & members($p = array()) {
  		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		if(is_array($this->_memberIDs)) 
  			$p['id'] =& $this->_memberIDs;
  		else // status was already passed when fetching IDs
  			$p['status'] = $this->_status;
-		return PommoSubscriber::get($p);
- 	}
- 	
- 	function & memberEmails($p = array()) {
- 		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
- 		if(is_array($this->_memberIDs)) 
- 			$p['id'] =& $this->_memberIDs; 
- 		else // status was already passed when fetching IDs
- 			$p['status'] = $this->_status; 
 		return PommoSubscriber::get($p);
  	}
  	
@@ -111,9 +103,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			$invalid[] = 'criteria';
 			
 		if (!empty($invalid)) {
-			foreach ($invalid as $i)
-				$str .= " [$i] ";
-			$logger->addErr("Group failed validation on; $str",1);
+			$logger->addErr("Group failed validation on; ".implode(',',$invalid),1);
 			return false;
 		}
 		return true;

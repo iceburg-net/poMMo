@@ -123,9 +123,7 @@ class PommoSubscriber {
 		}
 			
 		if (!empty($invalid)) {
-			foreach ($invalid as $i)
-				$str .= " [$i] ";
-			$logger->addErr("Subscriber failed validation on; $str",1);
+			$logger->addErr("Subscriber failed validation on; ".implode(',',$invalid),1);
 			return false;
 		}
 		

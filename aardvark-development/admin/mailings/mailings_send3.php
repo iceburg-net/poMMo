@@ -14,18 +14,14 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . 'inc/db_mailing.php');
-require_once ($pommo->_baseDir.'inc/db_groups.php');
-require_once ($pommo->_baseDir . 'inc/lib.txt.php');
-require_once ($pommo->_baseDir.'inc/db_sqlgen.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
-$pommo = & fireup('secure', 'keep');
+$pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
-
 
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -33,45 +29,40 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-// check to see if a mailing is taking place (queue not empty)
-if (!mailingQueueEmpty($dbo)) {
-	Pommo::kill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
-}
+if (PommoMailing::isCurrent())
+	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %s Status %s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
 $input = $pommo->get('mailingData');
-
-$groupName = dbGroupName($dbo, $input['mailgroup']);
-$subscriberCount = dbGroupTally($dbo, $input['mailgroup']);
-$input['subscriberCount'] = $subscriberCount;
-$input['groupName'] = $groupName;
-
 
 // redirect (restart) if body or group id are null...
 if (empty($input['mailgroup']) || empty($input['body'])) {
 	Pommo::redirect('mailings_send.php');
 }
 
-// send a test mail to an address if requested
-if (!empty($_POST['testMail'])) {
-	if (isEmail($_POST['testTo'])) {
-		require_once ($pommo->_baseDir.'inc/lib.mailings.php');
-		$logger->addMsg(bmSendTestMailing($_POST['testTo'],$input));	
-		}
-	else
-		$logger->addMsg(Pommo::_T('Invalid Email Address'));
-}
+$group = new PommoGroup($input['mailgroup'], 1);
+
+$input['tally'] = $group->_tally;
+$input['group'] = $group->_name;
 
 // if sendaway variable is set (user confirmed mailing parameters), send mailing & redirect.
 if (!empty ($_GET['sendaway'])) {
-	if (intval($subscriberCount) >= 1) {
-		$securityCode = dbMailingCreate($dbo, $input);
-		dbQueueCreate($dbo, dbGetGroupSubscribers($dbo, 'subscribers', $input['mailgroup'], 'email'));
-		dbMailingStamp($dbo, "start");
+	if ($input['tally'] > 0) {
+		$mailing = PommoMailing::make(array(), TRUE);
+		$input['status'] = 1;
+		$input['current_status'] = 'stopped';
+		$input['command'] = 'none';
+		$mailing = PommoHelper::arrayIntersect($input, $mailing);
 		
-		if (bmHttpSpawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode)) {
-			sleep(1); // allows mailing to begin...
-			Pommo::redirect('mailing_status.php');
-		}
+		$code = PommoMailing::add($mailing);
+		if(!PommoMailing::queueMake($group->_memberIDs))
+			Pommo::kill('Unable to populate queue');
+			
+		if (!PommoHelperMailings::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code))
+			Pommo::kill('Unable to spawn background mailer');
+		
+		sleep(1);
+		Pommo::redirect('mailing_status.php');
+		
 		//die ($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode);
 	}
 	else {
@@ -81,5 +72,4 @@ if (!empty ($_GET['sendaway'])) {
 
 $smarty->assign($input);
 $smarty->display('admin/mailings/mailings_send3.tpl');
-
 ?>

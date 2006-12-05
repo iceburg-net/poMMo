@@ -14,13 +14,11 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . 'inc/db_groups.php');
-require_once ($pommo->_baseDir . 'inc/db_mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 
-$pommo = & fireup('secure', 'keep');
+$pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -30,6 +28,9 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
+
+if (PommoMailing::isCurrent())
+	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %s Status %s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
 // SmartyValidate Custom Validation Function
 function check_charset($value, $empty, & $params, & $formvars) {
@@ -44,27 +45,16 @@ function check_charset($value, $empty, & $params, & $formvars) {
 		'GB2312',
 		'EUC-JP'
 	);
-
 	return in_array($value, $validCharsets);
 }
-
-// check to see if a mailing is taking place (queue not empty)
-if (!mailingQueueEmpty($dbo)) {
-	Pommo::kill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
-}
-
-// get groups for select -- key == ID, val == group name
-$groups = dbGetGroups($dbo);
-$smarty->assign('groups', $groups);
 
 if ($pommo->_config['demo_mode'] == 'on')
 	$logger->addMsg(Pommo::_T('Demonstration Mode is on. No Emails will be sent.'));
 
 // Get MailingData from SESSION.
 $mailingData = $pommo->get('mailingData');
-if (!$mailingData) {
-	$mailingData = array ();
-}
+if (empty($mailingData))
+	$mailingData = array();
 
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
@@ -78,7 +68,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('subject', 'subject', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('fromemail', 'fromemail', 'isEmail', false, false, 'trim');
 	SmartyValidate :: register_validator('frombounce', 'frombounce', 'isEmail', false, false, 'trim');
-	SmartyValidate :: register_validator('ishtml', 'ishtml:/(html|plain)/i', 'isRegExp', false, false, 'trim');
+	SmartyValidate :: register_validator('ishtml', 'ishtml:/(on|off)/i', 'isRegExp', false, false, 'trim');
 	SmartyValidate :: register_validator('mailgroup', 'mailgroup:/(all|\d+)/i', 'isRegExp', false, false, 'trim');
 
 	SmartyValidate :: register_validator('charset', 'charset', 'isCharSet', false, false, 'trim');
@@ -97,7 +87,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$_POST['fromemail'] = $mailingData['fromemail'];
 		$_POST['frombounce'] = $mailingData['frombounce'];
 		$_POST['subject'] = $mailingData['subject'];
-		$_POST['ishtml'] = ($mailingData['ishtml'] == 'on' || $mailingData['ishtml'] == 'html') ? 'html' : 'plain';
+		$_POST['ishtml'] = $mailingData['ishtml'];
 		$_POST['charset'] = $mailingData['charset'];
 		$_POST['mailgroup'] = $mailingData['mailgroup'];
 	} else { // mailingData Empty. Load default values from DB
@@ -145,6 +135,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	}
 }
 
+$smarty->assign('groups',PommoGroup::get());
 $smarty->assign($_POST);
 $smarty->display('admin/mailings/mailings_send.tpl');
 Pommo::kill();

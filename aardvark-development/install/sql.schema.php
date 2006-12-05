@@ -33,7 +33,6 @@ INSERT INTO :::config::: VALUES ('throttle_DMPP', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_BPS', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('dos_processors', '0', '', 'on', 'off');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('version', 'Aardvark SVN', 'poMMo Version', 'on', 'off');
@@ -81,8 +80,8 @@ CREATE TABLE :::groups::: (
 CREATE TABLE :::mailing_current::: (
   `current_id` int(10) unsigned NOT NULL,
   `command` enum('none','restart','stop') NOT NULL default 'none',
-  `serial` varchar(20) default NULL,
-  `securityCode` varchar(35) default NULL,
+  `serial` int unsigned default NULL,
+  `securityCode` char(32) default NULL,
   `notices` longtext default NULL,
   `current_status` enum('started','stopped') NOT NULL default 'stopped',
   PRIMARY KEY  (`current_id`)
@@ -106,17 +105,20 @@ CREATE TABLE :::mailings::: (
   `finished` datetime NOT NULL,
   `sent` int(10) unsigned NOT NULL default '0',
   `charset` varchar(15) NOT NULL default 'UTF-8',
-  PRIMARY KEY  (`mailing_id`)
+  `status` tinyint(1) NOT NULL default '1' COMMENT '0: finished, 1: processing, 2: cancelled',
+  PRIMARY KEY  (`mailing_id`),
+  KEY `status` (`status`)
 );
 
 
 -- QUEUE
 
 CREATE TABLE :::queue::: (
-  `email` varchar(60) NOT NULL default '',
-  `smtp_id` enum('0','1','2','3','4') NOT NULL default '0',
-  UNIQUE KEY `email` (`email`),
-  KEY `smtp_id` (`smtp_id`)
+  `subscriber_id` int(10) unsigned NOT NULL,
+  `status` tinyint(1) NOT NULL default '0' COMMENT '0: unsent, 1: sent, 2: failed',
+  `smtp` tinyint(1) NOT NULL default '0' COMMENT '0: none, 1-4: Designated to SMTP relay #',
+  PRIMARY KEY  (`subscriber_id`),
+  KEY `status` (`status`,`smtp`)
 );
 
 

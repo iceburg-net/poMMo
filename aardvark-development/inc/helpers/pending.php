@@ -67,9 +67,7 @@ class PommoPending {
 		}
 			
 		if (!empty($invalid)) {
-			foreach ($invalid as $i)
-				$str .= " [$i] ";
-			$logger->addErr("Pending Object failed validation on; $str",1);
+			$logger->addErr("Pending Object failed validation on; ".implode(',',$invalid),1);
 			return false;
 		}
 		return true;

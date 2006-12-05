@@ -239,7 +239,7 @@ class Pommo {
 
 	function & get($name = NULL) {
 		if ($name) {
-			return (empty ($this->_data[$name])) ? false : $this->_data[$name];
+			return (empty ($this->_data[$name])) ? array() : $this->_data[$name];
 		}
 		return $this->_data;
 	}

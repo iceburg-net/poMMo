@@ -15,7 +15,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require('../../bootstrap.php');
-require_once ($pommo->_baseDir.'inc/db_mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -27,8 +27,8 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-if (!mailingQueueEmpty($dbo))
-	$smarty->assign('mailing',TRUE);
+if (PommoMailing::isCurrent())
+	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %s Status %s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 	
 $smarty->display('admin/mailings/admin_mailings.tpl');
 Pommo::kill();
