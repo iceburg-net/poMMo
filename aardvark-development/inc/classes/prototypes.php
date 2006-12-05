@@ -117,4 +117,61 @@ class PommoType {
 			'type' => null
 		);
 	}
+
+	/**
+	 * Mailing: A poMMo Mailing
+	 * ==SQL Schema==
+	 *	mailing_id		(int)		Database ID/Key
+	 *	fromname		(str)		Header: FROM name<>
+	 *  fromemail		(str)		Header: FROM <email>
+	 *  fromebounce		(str)		Header: RETURN_PATH <email>
+	 *  subject			(str)		Header: SUBJECT
+	 *  body			(str)		Message Body
+	 *  altbody			(str)		Alternative Text Body
+	 *  ishtml			(enum)		'on','off' toggle of HTML mailing
+	 *  mailgroup		(str)		Name of poMMo group mailed
+	 *  subscriberCount	(int)		Number of subscribers in group
+	 *  started			(datetime)	Time mailing started
+	 *  finished		(datetime)	Time mailing ended
+	 *  sent			(int)		Number of mails sent
+	 *  charset			(str)		Encoding of Message
+	 *  status			(bool)		0: finished, 1: processing, 2: cancelled
+	 * 	
+	 * ==Additional Columns for Current Mailing==
+	 * 
+	 *  current_id		(int)		ID of current mailing (from mailing_id)
+	 *  command			(enum)		'none' (default), 'restart', 'stop'
+	 *  serial			(int)		Serial of this mailing
+	 *  securityCode	(char[32])	Security Code of Mailing
+	 *	notices			(str)		Mailing Messages
+	 *  current_status	(enum)		'started', 'stopped' (default)
+	 */
+	 
+	function & mailing() {
+		return array(
+			'id' => null,
+			'fromname' => null,
+			'fromemail' => null,
+			'frombounce' => null,
+			'subject' => null,
+			'body' => null,
+			'altbody' => null,
+			'ishtml' => null,
+			'group' => null,
+			'tally' => null,
+			'start' => null,
+			'end' => null,
+			'sent' => null,
+			'charset' => null,
+			'status' => null
+		);
+	}
+	
+	function & mailingCurrent() {
+		$o = PommoType::mailing();
+		$o['current_id'] = $o['command'] = $o['serial'] = $o['code'] = $o['notices'] = $o['current_status'] = null;
+		return $o;
+	}
+	
+	
 }

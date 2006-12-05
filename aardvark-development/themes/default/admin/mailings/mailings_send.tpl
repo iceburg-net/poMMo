@@ -18,8 +18,8 @@
 <div>
 <label for="ishtml"><span class="required">{t}Mail Format:{/t}</span> <span class="error">{validate id="ishtml" message=$formError.ishtml}</span></label>
 <select name="ishtml" id="ishtml">
-<option value="plain"{if $ishtml == 'plain'} selected="selected"{/if}>{t}Plain Text Mailing{/t}</option>
-<option value="html"{if $ishtml == 'html'} selected="selected"{/if}>{t}HTML Mailing{/t}</option>
+<option value="off"{if $ishtml == 'off'} selected="selected"{/if}>{t}Plain Text Mailing{/t}</option>
+<option value="on"{if $ishtml == 'on'} selected="selected"{/if}>{t}HTML Mailing{/t}</option>
 </select>
 <div class="notes">{t}(Select the format of this mailing){/t}</div>
 </div>
@@ -28,8 +28,8 @@
 <label for="mailgroup"><span class="required">{t}Send Mail To:{/t}</span> <span class="error">{validate id="mailgroup" message=$formError.mailgroup}</span></label>
 <select name="mailgroup" id="mailgroup">
 <option value="all"{if $mailgroup == 'all'} selected="selected"{/if}>{t}All subscribers{/t}</option>
-{foreach from=$groups item=group_name key=key}
-<option value="{$key}"{if $mailgroup == $key} selected="selected"{/if}>{$group_name}</option>
+{foreach from=$groups item=group key=key}
+<option value="{$key}"{if $mailgroup == $key} selected="selected"{/if}>{$group.name}</option>
 {/foreach}
 </select>
 <div class="notes">{t}(Select who should recieve the mailing){/t}</div>
@@ -53,7 +53,6 @@
 <div class="notes">{t}(maximum of 60 characters){/t}</div>
 </div>
 
-{if $advanced}
 <div>
 <label for="charset"><span class="required">{t}Character Set:{/t}</span> <span class="error">{validate id="charset" message=$formError.charset}</span></label>
 <select name="charset" id="charset">
@@ -69,9 +68,7 @@
 </select>
 <div class="notes">{t}(Select Character Set of Mailings){/t}</div>
 </div>
-{else}
-<input type="hidden" name="charset" value="UTF-8" />
-{/if}
+
 
 </fieldset>
 

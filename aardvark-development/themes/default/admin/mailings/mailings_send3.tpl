@@ -12,7 +12,7 @@
 
 <p><strong>{t}Subject:{/t}</strong> <tt>{$subject}</tt></p>
 
-<p><strong>{t}To:{/t}</strong> {$groupName} (<em>{$subscriberCount}</em> {t}recipients{/t})</p>
+<p><strong>{t}To:{/t}</strong> {$group} (<em>{$tally}</em> {t}recipients{/t})</p>
 
 <p><strong>{t}From:{/t}</strong> {$fromname} <tt>&lt;{$fromemail}&gt;</tt></p>
 
@@ -30,7 +30,7 @@
 
 <p class="edit"><a href="mailings_send2.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" />{t}edit{/t}</a></p>
 
-{if $ishtml == 'html'}
+{if $ishtml == 'on'}
 
 <p><strong>{t}HTML Body:{/t}</strong> <a href="mailing_preview.php" target="_blank">{t}View in a new browser window{/t}</a></p>
 
@@ -56,7 +56,7 @@
 
 <form method="post" action="" name="test">
 <fieldset>
-<legend>Test mail</legend>
+<legend>{t}Test mailing{/t}</legend>
 
 <div>
 <label for="testTo">{t}Test address:{/t}</label>

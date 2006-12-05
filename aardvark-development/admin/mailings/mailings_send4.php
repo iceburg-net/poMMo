@@ -11,44 +11,54 @@
  * 
  ** [END HEADER]**/
 
+
+require ('../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/throttler.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+
 /**********************************
 	STARTUP ROUTINES
  *********************************/
-
+ 
 // skips serial and security code checking. For debbuing this script.
-$skipSecurity = TRUE;
+$skipSecurity = FALSE;
 
 // # of mails to fetch from the queue at a time (Default: 100)
 $queueSize = 100;
 
-// set maximum runtime of this script in seconds (Default: 110). If unable to set (SAFE MODE,etc.), max runtime will default to 3 seconds less than current max.
-$maxRunTime = 110;
+// set maximum runtime of this script in seconds (Default: 80). If unable to set (SAFE MODE,etc.), max runtime will default to 3 seconds less than current max.
+$maxRunTime = 80;
 if (ini_get('safe_mode'))
-	$maxRunTime = ini_get('max_execution_time') - 3;
+	$maxRunTime = ini_get('max_execution_time') - 10;
 else
-	set_time_limit($maxRunTime +7);
-
-
-require ('../../bootstrap.php');
-require ($pommo->_baseDir . 'inc/class.bmailer.php');
-require ($pommo->_baseDir . 'inc/class.bthrottler.php');
-require ($pommo->_baseDir . 'inc/db_mailing.php');
+	set_time_limit($maxRunTime +90);
 
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
-$bm_sessionName = $serial;
+$relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID']; 
+if (!$skipSecurity && $relayID < 1 && $relayID > 4)
+	PommoMailing::kill('Mailing stopped. Bad RelayID.', TRUE);
 
-$pommo = & fireup('sessionName');
+
+/**********************************
+	INITIALIZATION METHODS
+ *********************************/
+
+$pommo->init(array('sessionID' => $serial, 'keep' => TRUE));
 $dbo = & $pommo->_dbo;
-$dbo->dieOnQuery(FALSE); // TODO -> what was this for? isn't it somewhat dangerous?
-
-// load from config -- DOS protection, throttle values...
-
 $logger = & $pommo->_logger;
 
-if (empty ($pommo->_config['list_exchanger'])) {
-	$logger->addMsg(sprintf(Pommo::_T('Mailing processor with serial %d spawned'), $serial), 3);
+// don't die on query so we can capture logs'
+// NOTE: Be extra careful to check the success of queries/methods!
+$dbo->dieOnQuery(FALSE); 
+
+$input = $pommo->get('mailingData');
+
+if (empty($input['config'])) {
+	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 3);
+	
 	// get list exchanger & smtp values. If more than 1 smtp relay exist, enter "multimode"
-	$config = PommoAPI::configGet(array (
+	$input['config'] = PommoAPI::configGet(array (
 		'list_exchanger',
 		'smtp_1',
 		'smtp_2',
@@ -56,134 +66,139 @@ if (empty ($pommo->_config['list_exchanger'])) {
 		'smtp_4',
 		'throttle_SMTP'
 	));
-	$pommo->_config['list_exchanger'] = $config['list_exchanger'];
-	$pommo->_config['multimode'] = false;
-	$pommo->_config['throttler'] = 'shared';
+	$config =& $input['config'];
 
 	if ($config['list_exchanger'] == 'smtp') {
+		
+		$config['multimode'] = false;
+		
 		if (!empty ($config['smtp_1'])) {
-			$pommo->_config['smtp_1'] = unserialize($config['smtp_1']);
+			$config['smtp_1'] = unserialize($config['smtp_1']);
 			$logger->addMsg('SMTP Relay #1 detected', 1);
 		}
-		if (!empty ($config['smtp_2'])) {
-			$pommo->_config['multimode'] = true;
-			$pommo->_config['smtp_2'] = unserialize($config['smtp_2']);
-			$logger->addMsg('SMTP Relay #2 detected', 1);
+		
+		for($i = 2; $i < 5; $i++) {
+			if (empty($config['smtp_'.$i])) {
+				$config['multimode'] = true;
+				$config['smtp_'.$i] = unserialize($config['smtp_'.$i]);
+				$logger->addMsg('SMTP Relay #'.$i.' detected', 1);
+			}
 		}
-		if (!empty ($config['smtp_3'])) {
-			$pommo->_config['multimode'] = true;
-			$pommo->_config['smtp_3'] = unserialize($config['smtp_3']);
-			$logger->addMsg('SMTP Relay #3 detected', 1);
-		}
-		if (!empty ($config['smtp_4'])) {
-			$pommo->_config['multimode'] = true;
-			$pommo->_config['smtp_4'] = unserialize($config['smtp_4']);
-			$logger->addMsg('SMTP Relay #4 detected', 1);
-		}
-		if ($config['throttle_SMTP'] == 'individual')
-			$pommo->_config['throttler'] = 'individual';
-		$logger->addMsg('SMTP Throttle control set to: ' . $pommo->_config['throttler'], 1);
+		
+		if($config['throttle_SMTP'] != 'shared' && $config['throttle_SMTP'] != 'individual')
+			PommoMailing::kill('Illegal throttle_SMTP value');
+		
+		$logger->addMsg('SMTP Throttle Mode: ' . $config['throttle_SMTP'], 1);
 		if ($pommo->_config['multimode'])
-			$logger->addMsg('multimode enabled', 1);
+			$logger->addMsg('Multimode enabled', 1);
 	}
 } else {
-	$logger->addMsg(sprintf(Pommo::_T('Mailing processor with serial %d spawned'), $serial), 2);
+	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 2);
 }
 
-// cleanup function called just before script termination
-function bmMKill($reason, $killSession = FALSE) {
-	global $logger;
-	global $dbo;
+$config =& $input['config'];
 
-	$logger->addMsg('Script Ending: ' . $reason, 2);
-
-	// deduct value (this script) from DOS mail processor protection.
-	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=config_value-1 WHERE config_name=\'dos_processors\' LIMIT 1';
-	$dbo->query($sql);
-
-	// update DB notices
-	$sql = 'UPDATE ' . $dbo->table['mailing_current'] . ' SET notices=CONCAT_WS(\',\',notices,\'' . mysql_real_escape_string(array2csv($logger->getAll())) . '\')';
-	$dbo->query($sql);
-	
-	if ($killSession)
-		session_destroy();
-	
-	// TODO should output really be displayed through the template????
-	//Pommo::kill($reason);
-	Pommo::kill();
-}
-
-function bmSpawn($url) {
-	global $logger;
-	$logger->addMsg('Attempting to spawn: '.$url,1);
-	(bmHttpSpawn($url)) ? $logger->addMsg($url.' spawned.',1) : $logger->addMsg('ERROR SPAWNING: '.$url,1);
-}
-
-// checks a message for personalization
-function isPersonalized(&$msg) {
-	$matches = array();
-	$pattern = '/\[\[[^\]]+]]/';
-	preg_match($pattern, $msg, $matches);
-	return (empty($matches)) ? FALSE : TRUE;
-}
-
-/**********************************
-	SECURITY ROUTINES
- *********************************/
-
-// DOS prevention
-if ($pommo->_config['dos_processors'] > 5 && !$skipSecurity)
-	die();
-else {
-	$sql = 'UPDATE `' . $dbo->table['config'] . '` SET config_value=config_value+1 WHERE config_name=\'dos_processors\' LIMIT 1';
-	$dbo->query($sql);
-}
-
-// check to see if mailing is finished, has been serialized, and security code
-$sql = 'SELECT serial,securityCode,finished FROM ' . $dbo->table['mailing_current'] . ' LIMIT 1';
-$dbo->query($sql);
-$row = mysql_fetch_assoc($dbo->_result);
-
-if ($row['finished'] > 0)
-	bmMKill('Mailing has completed.',TRUE);
-	
-if (empty ($row['serial'])) { // if no serial has yet been entered for this mailing... serialize & start the mailing...
-	$sql = "UPDATE {$dbo->table['mailing_current']} SET serial='" . $serial . "', status='started', command='none'";
-	$dbo->query($sql);
-}
-
-if (!$skipSecurity && (empty($row['securityCode']) || $_GET['securityCode'] != $row['securityCode']))
-	bmMKill('Script stopped for security reasons.',TRUE);
 
 /**********************************
  * MAILING INITIALIZATION
  *********************************/
+ 
+$mailing = current(PommoMailing::get(array('code' => $_GET['securityCode'], 'active' => TRUE)));
+if (empty($mailing))
+	PommoMailing::kill('Could not initialize a current mailing.'); 
 
-// checks to see if mailing should be halted (or is in halted state...)
-dbMailingPoll($serial);
 
-// spawn script per relay if in multimode
-if ($pommo->_config['multimode']) {
-	if (empty ($_GET['relay_id'])) {
-		if (!empty ($pommo->_config['smtp_1']))
-			bmSpawn($pommo->_baseUrl .
-			'admin/mailings/mailings_send4.php?relay_id=1&serial=' .
-			$serial . '&securityCode=' . $_GET['securityCode']);
-		sleep(2); // delay to help prevent "shared" throttlers racing to create queue
-		if (!empty ($pommo->_config['smtp_2']))
-			bmSpawn($pommo->_baseUrl .
-			'admin/mailings/mailings_send4.php?relay_id=2&serial=' .
-			$serial . '&securityCode=' . $_GET['securityCode']);
-		if (!empty ($pommo->_config['smtp_3']))
-			bmSpawn($pommo->_baseUrl .
-			'admin/mailings/mailings_send4.php?relay_id=3&serial=' .
-			$serial . '&securityCode=' . $_GET['securityCode']);
-		if (!empty ($pommo->_config['smtp_4']))
-			bmSpawn($pommo->_baseUrl .
-			'admin/mailings/mailings_send4.php?relay_id=4&serial=' .
-			$serial . '&securityCode=' . $_GET['securityCode']);
-		bmMKill('Multimode detected. Spawning background scripts for SMTP relays.');
+// SECURITY ROUTINES...
+if(!empty($mailing['end']) && $mailing['end'] > 0)
+	PommoMailing::kill('Mailing has completed.', TRUE);
+
+if(empty($mailing['serial']))
+	if (!PommoMailing::mark($serial,$mailing['id']))
+		PommoMailing::kill('Unable to serialize Mailing', TRUE);
+		
+if (!$skipSecurity && empty($_GET['securityCode']))
+	PommoMailing::kill('Mailing stopped for security reasons.', TRUE);
+
+	
+// Poll Mailing Status
+PommoMailing::poll($mailing['id']);
+
+
+// If we're in multimode, spawn scripts (unless this is a spawn!)
+if ($config['multimode'] && !isset($_GET['spawn'])) {
+	for ($i = 1; $i < 5; $i++) {
+		if(!empty($config['smtp_'.$i])) {
+			PommoMailing::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
+			sleep(3); // prevent a shared throttler race
+		}
 	}
+	PommoMailing::kill(Pommo::_T('Multimode detected. Spawning a background mailer per SMTP relay'));
+}
+
+// check if message body contains personalizations
+// personalizations are cached in session
+
+if(!isset($_SESSION['pommo']['personalization'])) {
+	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php');
+	
+	$_SESSION['pommo']['personalization'] = FALSE;
+	$matches = array();
+	preg_match('/\[\[[^\]]+]]/', $mailing['body'], $matches);
+	if (!empty($matches))
+		$_SESSION['pommo']['personalization'] = TRUE;
+	preg_match('/\[\[[^\]]+]]/', $mailing['altbody'], $matches);
+	if (!empty($matches))
+		$_SESSION['pommo']['personalization'] = TRUE;
+
+	// cache personalizations in session
+	if ($_SESSION['pommo']['personalization']) {
+		$_SESSION['pommo']['personalization_body'] = PommoHelperPersonalize::get($mailing['body']);
+		$_SESSION['pommo']['personalization_altbody'] = PommoHelperPersonalize::get($mailing['altbody']);
+	}
+}
+
+/**********************************
+ * PREPARE THE MAILER
+ *********************************/
+$html = ($mailing['ishtml'] == 'on') ? TRUE : FALSE;
+
+$mailer = new PommoMailer($mailing['fromname'],$mailing['fromemail'],$mailing['frombounce'], $config['list_exchanger'],NULL,$mailing['charset'], $_SESSION['pommo']['personalization']);
+
+if (!$mailer->prepareMail($mailing['subject'], $mailing['body'], $html, $mailing['altbody']))
+	PommoMailing::kill('prepareMail() returned errors.');
+	
+// Set appropriate SMTP relay
+if ($config['list_exchanger'] == 'smtp') {
+	$mailer->setRelay($config['smtp_' . $relayID]);
+	$mailer->SMTPKeepAlive = TRUE;
+}
+
+$logger->addMsg('Mailer initialized with for Relay # '.$relayID,1);
+
+
+
+/**********************************
+ * INITIALIZE Queue, Throttler
+ *********************************/
+ 
+$queue = PommoMailing::queueGet($relayID, $queueSize);
+
+
+/*
+// seperate emails into array([email],[domain])
+	$retArray = array ();
+	foreach ($emails as $email)
+		$retArray[] = array (
+			$email,
+			substr($email,
+			strpos($email,
+			'@'
+		) + 1));
+
+	return $retArray;
+*/
+	
+
 	$bmMailer = & bmInitMailer($dbo, $_GET['relay_id']);
 	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id'], $queueSize);
 
@@ -195,6 +210,8 @@ if ($pommo->_config['multimode']) {
 	$bmMailer = & bmInitMailer($dbo);
 	$bmQueue = & dbQueueGet($dbo, 1, $queueSize);
 	$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
+}
+
 }
 
 

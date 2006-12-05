@@ -6,7 +6,7 @@
  _editor_lang = "en";
 </script>
 
-{if $ishtml == 'html'}
+{if $ishtml == 'on'}
 	{if $editorType == 'text'}
 		<script type="text/javascript" language="javascript">
 			var xinha_enabled = false;
@@ -38,7 +38,7 @@
 {/if}
 
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="admin/inc.header.tpl" sidebar='off'}
 
 <div style="position: relative; width: 100%; z-index: 1;">
 <a class="pommoOpen" href="#">{t}Add Personalization{/t}</a>
@@ -46,16 +46,16 @@
 <div id="selectField" style="z-index: 2; display: none; position: absolute; top: -5px; left: -5px; width: 90%; background-color: #e6eaff; padding: 7px; border: 1px solid;">
 
 <div class="pommoHelp">
-<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" style="float: right; margin-left: 10px;" /><strong>{t}Add Personalization{/t}:</strong> <span class="pommoHelp">{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. If no default is supplied and no value exists for the field, [[...]] will be replaced with a empty (blank) string, allowing mailings to start with "Dear [[firstName|Friend]] [[lastName]]," (example assumes firstName and lastName are collected fields).{/t}</span>
+<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" style="float: right; margin-left: 10px;" /><strong>{t}Add Personalization{/t}:</strong> <span class="pommoHelp" style="display: none;">{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. The "[[..]]" will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with "Dear [[firstName|Friend]] [[lastName]], ..." providing you collect firstName and lastName fields.{/t}</span>
 
 <hr style="clear: both;" />
 </div>
 
 <div>
-<label for="field">Insert field:</label>
+<label for="field">{t}Insert field{/t}:</label>
 <select id="field">
 <option value="">{t}choose field{/t}</option>
-<option value="Email">Email</option>
+<option value="Email">{t}Email{/t}</option>
 {foreach from=$fields key=id item=field}
 <option value="{$field.name}">{$field.name}</option>
 {/foreach}
@@ -63,7 +63,7 @@
 </div>
 
 <div>
-<label for="insert">Default value:</label>
+<label for="insert">{t}Default value{/t}:</label>
 <input type="text" id="default" />
 </div>
 
@@ -82,23 +82,23 @@
 
 <form method="post" action="" id="bForm" name="bForm">
 
-{if $ishtml == 'html'}
+{if $ishtml == 'on'}
 <fieldset>
-<legend>Formating options</legend>
+<legend>{t}Formating options{/t}</legend>
 
 <div>
-<label for="editorType">Editor type:</label>
+<label for="editorType">{t}Editor type{/t}:</label>
 <select name="editorType" id="editorType" onchange="xinhaSubmit()">
 <option value="wysiwyg" title="What You See Is What You Get">WYSIWYG</option>
-<option value="text"{if $editorType == 'text'} selected="selected"{/if}>plain text</option>
+<option value="text"{if $editorType == 'text'} selected="selected"{/if}>{t}plain text{/t}</option>
 </select>
 </div>
 
 <div>
-<label for="altInclude">Text message:</label>
+<label for="altInclude">{t}Alternative Text Body{/t}</label>
 <select name="altInclude" id="altInclude" onchange="xinhaSubmit()">
-<option value="yes">different to HTML</option>
-<option value="no"{if $altInclude == 'no'} selected="selected"{/if}>same as HTML</option>
+<option value="yes">{t}Include{/t}</option>
+<option value="no"{if $altInclude == 'no'} selected="selected"{/if}>{t}Exclude{/t}</option>
 </select>
 </div>
 
@@ -210,7 +210,8 @@ $(function() {
 		
 		// hide dialog
 		$("#field").add("#default").val("");
-		$(this).parent().hide();
+		
+		$('#selectField').hide();
 		
 		return false;
 	});

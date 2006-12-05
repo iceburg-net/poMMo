@@ -14,14 +14,11 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../../bootstrap.php');
-require_once ($pommo->_baseDir . 'inc/db_mailing.php');
-require_once ($pommo->_baseDir . 'inc/lib.txt.php');
-require_once ($pommo->_baseDir . 'inc/db_fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
-$pommo = & fireup('secure','keep');
+$pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -32,23 +29,16 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
-// check to see if a mailing is taking place (queue not empty)
-if (!mailingQueueEmpty($dbo)) {
-	Pommo::kill(sprintf(Pommo::_T('A mailing is already taking place. Please allow it to finish before creating another. Return to the %s Mailing Page %s'), '<a href="admin_mailings.php">', '</a>'));
-}
+if (PommoMailing::isCurrent())
+	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %s Status %s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
+
 	
 // check if altBody should be imported from HTML
 if (isset($_POST['altGen'])) {
-	require_once ($pommo->_baseDir.'inc/lib.html2txt.php');
+	Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
 	$h2t = & new html2text($_POST['body']);
 	$_POST['altbody'] = $h2t->get_text();
 }
-
-// fetch subscriber fields for use with personaliztion selector
-// Get array of fields. Key is ID, value is an array of the demo's info
-$fields = dbGetFields($dbo);
-if (!empty($fields))
-	$smarty->assign('fields', $fields);
 
 // Get MailingData from SESSION.
 $mailingData = $pommo->get('mailingData');
@@ -89,6 +79,7 @@ if (empty ($_POST)) {
 		Pommo::redirect('mailings_send3.php');
 }
 
+$smarty->assign('fields',PommoField::get());
 $smarty->assign($_POST);
 $smarty->display('admin/mailings/mailings_send2.tpl');
 Pommo::kill();

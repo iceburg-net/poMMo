@@ -12,13 +12,9 @@
  ** [END HEADER]**/
 
 // Progress bar modified from the works of Juha Suni <juha.suni@ilmiantajat.fi>
-
-
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-
 require ('../../bootstrap.php');
 
 $pommo = & fireup('secure','keep');

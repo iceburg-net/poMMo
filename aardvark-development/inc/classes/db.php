@@ -140,7 +140,9 @@ class PommoDB {
 	 */
 
 	function & query(& $query, $row = NULL, $col = NULL) {
-
+		global $pommo;
+		$logger =& $pommo->_logger;
+		
 		// execute query
 		$this->_result = mysql_query($query, $this->_link);
 
@@ -150,14 +152,15 @@ class PommoDB {
 			// get # of records if a non bool was returned..
 			if (!is_bool($this->_result))
 				$numRecords = $this->records();
-			echo '<br />Query received --> "' . $query . '" <br />Query affected ' . $this->affected() . ' rows and returned ' . $numRecords . ' records.<br />';
+		
+			$logger->addMsg('[DB] Received query affecting '.$this->affected().' rows and returning '.$numRecords.' results. Query: '.$query);
 		}
 
 		// check if query was unsuccessful
 		if (!$this->_result) {
 
 			if ($this->_debug)
-				echo '<p>Query <strong>failed</strong> with error --> ' . mysql_error() . '</p>';
+				$logger->addMsg('Query failed with error --> ' . mysql_error()); 
 
 			if ($this->_dieOnQuery)
 				Pommo::kill('MySQL Query Failed.');

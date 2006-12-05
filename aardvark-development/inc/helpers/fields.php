@@ -102,9 +102,7 @@ class PommoField {
 			$invalid[] = 'array';
 			
 		if (!empty($invalid)) {
-			foreach ($invalid as $i)
-				$str .= " [$i] ";
-			$logger->addErr("Field failed validation on; $str",1);
+			$logger->addErr("Field failed validation on; ".implode(',',$invalid),1);
 			return false;
 		}
 		return true;

@@ -10,6 +10,7 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
+die();
 ?>
 
 [BEFORE Aardvark Final]
@@ -25,6 +26,7 @@
 [THEME]
 	USE TABLES IN SUBSCRIPTION FORM? -- DATEPICKER BREAKS FORMATTING
 	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
+	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 		
   
 [BRICE -- "Feel free to inherit any of these ;)" ]
@@ -39,7 +41,8 @@
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  (API) Better mailing send debugging ->
 	    Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
-	    
+	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
+	  
 	  (feature) add message templating
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
 	  (feature) Add OR to group filtering
@@ -58,6 +61,7 @@
 		+ Clear All Subscribers
 		+ Reset Database
 		+ Backup Database
+		+ Ensure max run time is 30 seconds if safe mode is enabled
 
 	  "Test Mailing" enhancements
 		+ send via httpSpawn
@@ -68,7 +72,10 @@
 	
 	  (API) SWITCH "phase1" dialogs of subscriber add/delete/search/export to INLINE DISPLAY vs. AJAX POLL 
  		 + Requires unobtrusive modal window (thickbox destroys event bindings). Keep eye on Gavin's plugin
-			
+	  (API) Rewrite PommoMailer()  [ currently depricated with PR13 functionality ]
+	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
+	  (API) Database debugs & outputs should go to loggger -- see notes under THEME
+	  
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
 	  (feature) Add specific emails to a group
 	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.

@@ -107,50 +107,11 @@ class PommoHelper {
 		if (!is_array($a1) || !is_array($a2))
 			return $o;
 			
-		foreach(array_keys($a1) as $key) {
-			if (isset($a2[$key]))
+		foreach(array_keys($a2) as $key) {
+			if (isset($a1[$key]))
 				$o[$key] = $a1[$key];
 		}
 		return $o;
-	}
-
-	// spawns a page in the background, used by mail processor.
-	// TODO -> MOVE THIS function out of common
-	function bmHttpSpawn($page) {
-
-		/* Convert illegal characters in url */
-		$page = str_replace(' ', '%20', $page);
-
-		$errno = '';
-		$errstr = '';
-		$port = (defined('bm_hostport')) ? bm_hostport : $_SERVER['SERVER_PORT'];
-		$host = (defined('bm_hostname')) ? bm_hostname : $_SERVER['HTTP_HOST'];
-
-		// strip port information from hostname
-		$host = preg_replace('/:\d+$/i', '', $host);
-
-		// NOTE: fsockopen() SSL Support requires PHP 4.3+ with OpenSSL compiled in
-		$ssl = (strpos($this->_http, 'https://')) ? 'ssl://' : '';
-
-		$out = "GET $page HTTP/1.1\r\n";
-		$out .= "Host: " . $host . "\r\n";
-
-		// to allow for basic .htaccess http authentication, uncomment the following;
-		// $out .= "Authorization: Basic " . base64_encode('username:password')."\r\n";
-
-		$out .= "\r\n";
-
-		$socket = fsockopen($ssl . $host, $port, $errno, $errstr, 10);
-
-		if ($socket) {
-			fwrite($socket, $out);
-		} else {
-			global $logger;
-			$logger->addErr(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr);
-			return false;
-		}
-
-		return true;
 	}
 }
 ?>

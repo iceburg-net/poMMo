@@ -72,5 +72,46 @@ class PommoHelperMailings {
 				return _T('Error Sending Mail');
 			return sprintf(_T('Test sent to %s'), $to);
 	}
+	
+	
+	// spawns a page in the background, used by mail processor.
+	function spawn($page) {
+		global $pommo;
+		$logger =& $pommo->_logger;
+		
+		/* Convert illegal characters in url */
+		$page = str_replace(' ', '%20', $page);
+
+		$errno = '';
+		$errstr = '';
+		$port = $pommo->_hostport;
+		$host = $pommo->_hostname;
+
+		// strip port information from hostname
+		$host = preg_replace('/:\d+$/i', '', $host);
+
+		// NOTE: fsockopen() SSL Support requires PHP 4.3+ with OpenSSL compiled in
+		$ssl = (strpos($pommo->_http, 'https://')) ? 'ssl://' : '';
+
+		$out = "GET $page HTTP/1.1\r\n";
+		$out .= "Host: " . $host . "\r\n";
+
+		// to allow for basic .htaccess http authentication, 
+		//   uncomment and fill in the following;
+		// $out .= "Authorization: Basic " . base64_encode('username:password')."\r\n";
+
+		$out .= "\r\n";
+
+		$socket = fsockopen($ssl . $host, $port, $errno, $errstr, 10);
+
+		if ($socket) {
+			fwrite($socket, $out);
+		} else {
+			$logger->addErr(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr);
+			return false;
+		}
+
+		return true;
+	}
 }
 ?>
