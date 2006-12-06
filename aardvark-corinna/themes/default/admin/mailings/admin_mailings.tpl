@@ -26,7 +26,7 @@
 	{*<corinna>*}
 	{if $mailingqueue}
 	<p>
-		<a href="{$url.base}/plugins/mailingqueue/queue_main.php">
+		<a href="{$url.base}/plugins/old/mailingqueue/queue_main.php">
 		<img src="{$url.theme.shared}/images/icons/mailing.png" class="navimage" />							
 		{t}Queue{/t}</a> - {t}View Mailings Scheduling.{/t}
 		<br>&nbsp;
