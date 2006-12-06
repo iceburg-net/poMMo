@@ -21,33 +21,30 @@ $poMMo = & fireup("secure");
 
 $data = NULL;
 
-	// get/post data
+	// get/post dat
+	
 	if ($_REQUEST['viewsetup']) {
 		$data['setupid'] = $_REQUEST['setupid'];
-		
 	}
+	
 	if ($_REQUEST['changesetup']) {
 		//Data to be changed
 		$data['changeid'] = $_REQUEST['changeid'];
 		$data['active'] = $_REQUEST['active'];
 		$data['old'] = $_REQUEST['old'];
 		$data['new'] = $_REQUEST['plugindata'];
-		
 	}
 	
 	if (($_REQUEST['action'] == "switch") AND ($_REQUEST['switchid'])) {
 		$data['switchid'] = $_REQUEST['switchid'];
 		$data['active'] = $_REQUEST['active'];
-		
 	}
 	
 	if ($_REQUEST['switchcid']) { //($_REQUEST['action'] == "switchPlugin") AND 
 		$data['switchcid'] = $_REQUEST['switchcid'];
 		$data['active'] = $_REQUEST['active'];
-		
 	}
 
-	//bmRedirect(bm_http . bm_baseUrl . '/plugins/adminplugins/pluginsetup/plugin_main.php');
 
 $pluginsetup = new PluginSetup($poMMo);
 $pluginsetup->execute($data);

@@ -18,7 +18,7 @@
 defined('_IS_VALID') or die('Move along...');
 
 
-require_once (bm_baseDir.'/plugins/adminplugins/adminuser/interfaces/interface.dbhandler.php');
+require_once (bm_baseDir.'/plugins/adminplugins/lib/interfaces/interface.dbhandler.php');
 
 // Cool DB Query Wrapper from Monte Ohrt
 require_once (bm_baseDir.'/inc/safesql/SafeSQL.class.php');
@@ -37,19 +37,15 @@ class PluginDBHandler implements iDbHandler {
 
 	/** Returns if the Plugin itself is active */
 	public function & dbPluginIsActive($pluginname) {
-		/*$sql = $this->safesql->query("SELECT plugin_active FROM %s " .
-				"WHERE plugin_uniquename='%s' ", 
-			array(pommomod_plugin, $pluginname) );
-		return $this->dbo->query($sql, 0);	//row 0*/
 		return TRUE;
 	}
 	
 
-	/** Get all active Plugins + configuration in a Matrix */
+	/* Get all active Plugins + configuration in a Matrix */
 	public function dbGetPluginMatrix() {
 		$sql = $this->safesql->query("SELECT plugin_id, plugin_uniquename, plugin_name, plugin_desc, plugin_active, " .
-				"p.cat_id, cat_name, cat_active, plugin_version " .
-				"FROM %s AS p LEFT JOIN %s AS c ON p.cat_id=c.cat_id WHERE c.cat_active=1 " .
+				"c.cat_id, cat_name, cat_active, plugin_version " .
+				"FROM %s AS p RIGHT JOIN %s AS c ON p.cat_id=c.cat_id WHERE c.cat_active=1 " .
 				"ORDER BY cat_name",
 			array( 'pommomod_plugin', 'pommomod_plugincategory' ) );
 		$i=0; $plugins = NULL;
@@ -99,50 +95,6 @@ class PluginDBHandler implements iDbHandler {
 
 
 
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/** Get all Plugins in a Matrix */
-	/*public function dbGetPlugins() {
-		$sql = $this->safesql->query("SELECT plugin_id, plugin_uniquename, plugin_name, plugin_desc, plugin_active, " .
-				"plugin_category, plugin_version FROM %s ORDER BY plugin_category",
-			array( 'pommomod_plugin' ) );
-		$i=0; $plugins = NULL;
-		while ($row = $this->dbo->getRows($sql)) {
-			$plugins[$i] = array(
-				'id' 		=> $row['plugin_id'],
-				'uniquename'=> $row['plugin_uniquename'],
-				'name'		=> $row['plugin_name'],
-				'desc'		=> $row['plugin_desc'],
-				'active'	=> $row['plugin_active'],
-				'category'	=> $row['plugin_category'],
-				'version'	=> $row['plugin_version'],
-				);
-			$i++;
-		}
-		return $plugins;
-	}*/
-	
-
 	/** Get the setup values for one given Plugin ID */
 	public function & dbGetPluginSetup($pluginid) {
 		$sql = $this->safesql->query("SELECT data_id, data_name, data_value, data_type, plugin_id " .
@@ -163,69 +115,7 @@ class PluginDBHandler implements iDbHandler {
 	}	
 	
 	
-	/*public function dbGetCategories() {
-	$sql = $this->safesql->query("SELECT plugin_category FROM %s GROUP BY plugin_category",
-			array( 'pommomod_plugin' ) );
-		$i=0; $categories = array();
-		while ($row = $this->dbo->getRows($sql)) {
-			$categories[$i] = $row['plugin_category'];
-			$i++;
-		}
-		return $categories;
-	}*/
 	
-
-	/*
-	public function dbFetchCurrentMethod() {
-		$sql = $this->safesql->query("SELECT plugin_id, plugin_uniquename " .
-				"FROM %s WHERE plugin_category='auth' AND plugin_active=1 LIMIT 1",
-				array('pommomod_plugin') );
-		$data = NULL;
-		while ($row = $this->dbo->getRows($sql)) {
-			$data['plugin_id'] = $row['plugin_id'];
-			$data['plugin_uniquename'] = $row['plugin_uniquename'];
-		}
-		return $data;
-	}*/
-
-
-	/*public function dbFetchAuthPlugins() {		//$pluginid = NULL
-
-		// If there is no id fetch all the plugins
-		$sql = $this->safesql->query("SELECT plugin_id, plugin_uniquename, plugin_name, plugin_desc, plugin_active " .
-				"FROM %s WHERE plugin_category='auth'",
-				array('pommomod_plugin') );
-		$i=0;
-		while ($row = $this->dbo->getRows($sql)) {
-			$data[$i] = array(
-				'id' 			=> $row['plugin_id'],
-				'uniquename'	=> $row['plugin_uniquename'],
-				'name'			=> $row['plugin_name'],
-				'desc'			=> $row['plugin_desc'],
-				'active'		=> $row['plugin_active'],
-				//'plugin_subrelation'=> $row['plugin_subrelation'],
-				);
-			$i++;
-		}
-		return $data;
-
-	} //dbFetchAuthPlugins
-	*/
-	
-	
-
-	/*public function dbGetAuthSetup($pluginid) {
-		$sql = $this->safesql->query("SELECT * FROM %s WHERE plugin_id=%i",
-			array('pommomod_plugindata', $pluginid) );
-		$data = array();
-		$row = NULL;
-		while ($row = $this->dbo->getRows($sql)) {
-			$data["$row[data_name]"] = $row['data_value'];
-		}
-		return $data;	// Should be written in 'data' field of the plugins	
-	}*/
-
-
 	/************************ PLUGIN USE CASES ************************/
 	
 	public function dbSwitchPlugin($pluginid, $setto = NULL) {
@@ -239,6 +129,7 @@ class PluginDBHandler implements iDbHandler {
 				array('pommomod_plugin', $setto, $pluginid ) );
 			$count = $this->dbo->query($sql);
 		}
+		// TODO
 		// Switch all other options from this category. (Mostly we want only 1 configuration active e.g. the authentication method)
 		/*$sql = $this->safesql->query("UPDATE %s SET NOT(plugin_active) WHERE plugin_id!=%i",
 			array('pommomod_plugin', $pluginid ) );
@@ -284,24 +175,7 @@ class PluginDBHandler implements iDbHandler {
 	}
 
 
-	
-	
+
 } //PluginDBHandler
-
-	/*public function dbActivatePlugin($pluginid, $setto) {
-		$safesql =& new SafeSQL_MySQL;
-		$sql = $safesql->query("UPDATE %s SET plugin_active=%i WHERE plugin_id=%i",
-			array('pommomod_plugin', $setto, $pluginid ) );
-		$count = $this->dbo->query($sql);
-		
-		/*$sql = $safesql->query("UPDATE %s SET plugin_active=0 WHERE plugin_id!=%i",
-			array('pommomod_plugin', $pluginid ) );
-		$countoff = $this->dbo->query($sql);
-		
-		$setted = ($setto=='1') ? 'on' : 'off';
-		return "Plugin State changed to {$setted}. ($count set to ON, $countoff set to OFF)<br>";
-	}*/
-
-
 
 ?>
