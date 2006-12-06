@@ -80,8 +80,8 @@ $authwithplugin = TRUE;
 								// Try to authenticate as user	
 							
 										
-										include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/class.authfactory.php');
-										include_once(bm_baseDir.'/plugins/adminplugins/adminuser/authentication/class.auth.php');
+										include_once(bm_baseDir.'/plugins/adminplugins/useradmin/authentication/class.authfactory.php');
+										include_once(bm_baseDir.'/plugins/adminplugins/useradmin/authentication/class.auth.php');
 						
 										// Factory returns the Object with witch to validate -> Is set in the plugin configuration
 										$authfactory = new AuthFactory($dbo, $logger);
