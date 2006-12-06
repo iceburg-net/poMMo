@@ -18,7 +18,7 @@
 defined('_IS_VALID') or die('Move along...');
 
 
-require_once (bm_baseDir.'/plugins/adminplugins/lib/interfaces/interface.dbhandler.php');
+require_once (bm_baseDir.'/plugins/adminplugins/lib/interface.dbhandler.php');
 
 // Cool DB Query Wrapper from Monte Ohrt
 require_once (bm_baseDir.'/inc/safesql/SafeSQL.class.php');
