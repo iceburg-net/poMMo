@@ -78,7 +78,7 @@ class PommoHelperMailings {
 	function spawn($page) {
 		global $pommo;
 		$logger =& $pommo->_logger;
-		
+
 		/* Convert illegal characters in url */
 		$page = str_replace(' ', '%20', $page);
 

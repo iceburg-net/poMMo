@@ -46,7 +46,7 @@ class Pommo {
 		
 		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
 		// initialize logger
-		$this->_logger = new PommoLog($this->_verbosity); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
+		$this->_logger = new PommoLog(); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
 		
 	
 		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
@@ -88,6 +88,9 @@ class Pommo {
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
 		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
+		
+		// set logger verbosity
+		$this->_logger->_verbosity = $this->_verbosity;
 		
 		// include translation (l10n) methods if language is not English
 		if ($this->_language != 'en') {
@@ -189,7 +192,6 @@ class Pommo {
 			$_SESSION['pommo']['data'] = array ();
 		}
 		$this->_data = & $_SESSION['pommo']['data'];
-
 	}
 	
 	// reload base configuration from database
@@ -280,7 +282,7 @@ class Pommo {
 		global $pommo;
 
 		// output passed message
-		if ($msg) {
+		if ($msg || !ob_get_length()) {
 			$logger =& $pommo->_logger;
 			Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 			$smarty = new PommoTemplate();

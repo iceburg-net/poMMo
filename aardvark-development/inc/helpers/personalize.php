@@ -13,7 +13,6 @@
 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/fields.php');
 
-
 class PommoHelperPersonalize {
 	
 	// scans a message body and returns an array of applicable personaliztions
@@ -72,35 +71,29 @@ class PommoHelperPersonalize {
 		}
 		return $matches;
 	}
-
 	
-}
-
-
-
-
-
-// personalizes a message body. Reads in body, email address (person), and personalizations global
-function personalizeBody($body, $person, &$personalizations) {
-
-	global $dbo;
 	
-	// get the subscriber info
-	$subscriber = current(dbGetSubscriber($dbo,$person));
-	
-	foreach($personalizations[0] as $key => $search) {
+	// personalizes a message body
+	// accepts message
+	// accepts subscriber object (single subscriber)
+	// accepts personalization array
+	// returns a personalized body
+	function body(&$msg, &$s, &$p) {
 		
-		// lookup replace string (or if it is Email, replace with email address)
-		$replace = ($personalizations[1][$key] == 'Email') ? $person : 
-			$subscriber['data'][ ($personalizations[3][$key]) ];
+		foreach($p[0] as $key => $search) {
 		
-		// attempt to add default if replacement is empty
-		if (empty($replace))
-			$replace = $personalizations[2][$key];
+			// lookup replace string (or if it is Email, replace with email address)
+			$replace = ($p[1][$key] == 'Email') ? $s['email'] : 
+				$s['data'][ ($p[3][$key]) ];
 			
-		$body = str_replace($search, $replace,$body);
-	}
+			// attempt to add default if replacement is empty
+			if (empty($replace))
+				$replace = $p[2][$key];
+				
+			$body = str_replace($search, $replace,$body);
+		}
 	
 	return $body;
+	}
 }
 ?>
