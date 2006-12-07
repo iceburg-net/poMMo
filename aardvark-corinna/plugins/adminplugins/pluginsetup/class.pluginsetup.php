@@ -69,7 +69,7 @@ class PluginSetup {
 
 		if ($data['changeid']) {
 			$this->editSetup($data['old'],$data['new']);
-			$this->switchPlugin($data['changeid'], $data['active']);
+			//$this->switchPlugin($data['changeid'], $data['active']); remove -> switch is controlled solely by the icon button
 		}
 		if ($data['setupid']) {
 			$setup = $this->plugindbhandler->dbGetPluginSetup($data['setupid']);	 
@@ -91,9 +91,6 @@ class PluginSetup {
 		$smarty->assign('inactive', $this->plugindbhandler->dbGetCategories('inactive'));
 
 
-
-
-		
 		//$smarty->assign('active', $this->plugindbhandler->dbGetCategories('active'));
 		//$smarty->assign('categories', $this->plugindbhandler->dbGetCategories());
 		
@@ -121,33 +118,41 @@ class PluginSetup {
 	
 	/*********** use cases **************/
 	
+	//TODO: make atomic action for data consistency?
+	//$changed[0] = $this->authdbhandler->dbActivatePlugin($pluginid, $active);
 	public function editSetup($old, $new) {
-		
-		//TODO: make atomic action for data consistency
-		
-		//$changed[0] = $this->authdbhandler->dbActivatePlugin($pluginid, $active);
 		
 		//TODO -> prevent WARNING
 		$keyarray = array_keys($new);
 		$valarray = array_values($new);
 		
-		for ($i=1; $i <= count($new); $i++) {
+		for ($i=0; $i <= count($new); $i++) {
 			//Change only if its altered
 			if ($valarray[$i] != $old[$i]) {
-				$changed[$i] = $this->plugindbhandler->dbUpdatePluginData($keyarray[$i], $valarray[$i]);
+				$ret = $this->plugindbhandler->dbUpdatePluginData($keyarray[$i], $valarray[$i]);
+				$changed[$i] = "Dataid: {$keyarray[$i]} altered to: {$valarray[$i]}. ({$ret} records altered.)";
 			}
 		}
-		$this->logger->addMsg(_T('Config altered: ' . implode("<br>", $changed)));
+		if ($changed == NULL) {
+			$this->logger->addMsg(_T('Data altered somehow?'));
+		} else {
+			$this->logger->addMsg(_T('Config altered:<br> ' . implode("<br>", $changed)));
+		}
+		
 	}
 	
 	public function switchPlugin($pluginid, $setto) {
 		$ret = $this->plugindbhandler->dbSwitchPlugin($pluginid, $setto);
-		$this->logger->addMsg($ret);	
+		$setted = ($setto=='1') ? 'on' : 'off';
+		$str = "Plugin id {$pluginid}: State changed to {$setted}. ($ret records altered.)";
+		$this->logger->addMsg($str);	
 	}
 	
 	public function switchCategory($catid, $setto) {
 		$ret = $this->plugindbhandler->dbSwitchCategory($catid, $setto);
-		$this->logger->addMsg($ret);
+		$setted = ($setto=='1') ? 'on' : 'off';
+		$str = "Category id " . $catid . ": " . $ret . " records to " . $setted;
+		$this->logger->addMsg($str);
 	}
 	
 	
