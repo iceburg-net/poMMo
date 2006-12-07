@@ -84,8 +84,8 @@ class PluginDBHandler implements iDbHandler {
 		while ($row = $this->dbo->getRows($sql)) {
 			$cat[$i] = array(
 				'cid' 		=> $row['cat_id'],
-				'name'	=> $row['cat_name'],
-				'desc'	=> $row['cat_desc'],
+				'name'		=> $row['cat_name'],
+				'desc'		=> $row['cat_desc'],
 				'cactive'	=> $row['cat_active'],
 				);
 			$i++;
@@ -97,7 +97,7 @@ class PluginDBHandler implements iDbHandler {
 
 	/** Get the setup values for one given Plugin ID */
 	public function & dbGetPluginSetup($pluginid) {
-		$sql = $this->safesql->query("SELECT data_id, data_name, data_value, data_type, plugin_id " .
+		$sql = $this->safesql->query("SELECT data_id, data_name, data_value, data_type, data_desc, plugin_id " .
 				"FROM %s WHERE plugin_id=%i",
 			array('pommomod_plugindata', $pluginid) );
 		$i=0;
@@ -107,6 +107,7 @@ class PluginDBHandler implements iDbHandler {
 				'data_name'		=> $row['data_name'],
 				'data_value'	=> $row['data_value'],
 				'data_type'		=> $row['data_type'],
+				'data_desc'		=> $row['data_desc'],
 				'plugin_id'		=> $row['plugin_id'],
 				);
 			$i++;
@@ -117,61 +118,51 @@ class PluginDBHandler implements iDbHandler {
 	
 	
 	/************************ PLUGIN USE CASES ************************/
-	
-	public function dbSwitchPlugin($pluginid, $setto = NULL) {
-		
-		if (!setto) {
-			$sql = $this->safesql->query("UPDATE %s SET NOT(plugin_active) WHERE plugin_id=%i",
-				array('pommomod_plugin', $pluginid ) );
-			$count = $this->dbo->query($sql);
-		} else {
-			$sql = $this->safesql->query("UPDATE %s SET plugin_active=%i WHERE plugin_id=%i",
-				array('pommomod_plugin', $setto, $pluginid ) );
-			$count = $this->dbo->query($sql);
-		}
-		// TODO
-		// Switch all other options from this category. (Mostly we want only 1 configuration active e.g. the authentication method)
-		/*$sql = $this->safesql->query("UPDATE %s SET NOT(plugin_active) WHERE plugin_id!=%i",
-			array('pommomod_plugin', $pluginid ) );
-		$countoff = $this->dbo->query($sql);*/
-		
-		$setted = ($setto=='1') ? 'on' : 'off';
-		return "Plugin State changed to {$setted}. ($count set to ON, $countoff set to OFF)<br>";
-	}
 
 	/**
-	 * Update posted changes in the database
+	 * Update posted parameter changes in the database
 	 * $nevval is a array with all the information
+	 * returns the amount of changed "items"
 	 */
 	public function dbUpdatePluginData($id, $newval) {
-		$safesql =& new SafeSQL_MySQL;
 		$sql = $this->safesql->query("UPDATE %s SET data_value='%s' WHERE data_id=%i",
 			array('pommomod_plugindata', $newval, $id ) );
-		$count = $this->dbo->query($sql);
-		return "Data {$id}:{$newval} changed.<br>";
+		return $this->dbo->query($sql);
 	}
+	
+
+	public function dbSwitchPlugin($pluginid, $setto) {	// = NULL
+
+		$sql = NULL;
+		// TODO -> This feature below is not needed. I want to be able to activate the options independently e.g. 
+		//			if one wants to activate db auth and ldap auth he hast du activate both this plugins
+		// Switch all other options from this category. (Mostly we want only 1 configuration active e.g. the authentication method)
+		/*$sql = $this->safesql->query("UPDATE %s SET NOT(plugin_active) WHERE plugin_id!=%i", array('pommomod_plugin', $pluginid ) );
+		$countoff = $this->dbo->query($sql);*/
+		/*if (!setto) {
+			$sql = $this->safesql->query("UPDATE %s SET NOT(plugin_active) WHERE plugin_id=%i",
+				array('pommomod_plugin', $pluginid ) );
+		} else {*/
+			$sql = $this->safesql->query("UPDATE %s SET plugin_active=%i WHERE plugin_id=%i",
+				array('pommomod_plugin', $setto, $pluginid ) );
+		//}
+		return $this->dbo->query($sql);
+	}
+
+
 
 
 	/**************************** CATEGORY USE CASES ******************************/
 	
-	
-	/* TODO: Name toggle better for functions like thios?? */
+	/**
+	 * Updates category data, sets the given category as active/inactive 
+	 * and returns the amaount of changed data values.
+	 */
 	public function dbSwitchCategory($catid, $setto) {
-
-		if ($setto==0) {
-			// Set all plugins in this category to 0?
-			$sql1 = $this->safesql->query("UPDATE %s SET plugin_active=0 WHERE cat_id=%i",
-				array('pommomod_plugin', $catid ) );
-			$count2 = $this->dbo->query($sql1);
-		}
 		$sql = $this->safesql->query("UPDATE %s SET cat_active=%i WHERE cat_id=%i",
 				array('pommomod_plugincategory', $setto, $catid ) );
-		
-		$count = $this->dbo->query($sql);
-		
-		//$setted = ($setto=='1') ? 'on' : 'off';
-		return "Plugin State changed to {$setto}. ($count set to ON, $countoff set to OFF)<br>" .
-			   "Plugin State changed to {$setto}. ($count2 set to OFF)";
+		//returns count of changed data values!
+		return $this->dbo->query($sql);
 	}
 
 

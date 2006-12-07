@@ -1,3 +1,21 @@
+
+
+{*	
+<button class="edit tsToggleEdit">
+<img src="/pommo/aardvark-development/themes/shared/images/icons/yes.png"/>
+</button>
+		
+<button onclick="window.location.href='groups_edit.php?group_id=1'; return false;">
+<img alt="edit icon" src="/pommo/aardvark-development/themes/shared/images/icons/edit.png"/>
+</button>
+
+<button onclick="window.location.href='/pommo/aardvark-development/admin/subscribers/subscribers_groups.php?group_id=1&delete=TRUE'; return false;">
+<img alt="delete icon" src="/pommo/aardvark-development/themes/shared/images/icons/delete.png"/>
+</button>			
+*}
+		
+
+
 {include file="admin/inc.header.tpl"}
 </div>
 <!-- begin content -->
@@ -144,7 +162,7 @@
 																	<input type="hidden" name="old[]" value="{$item.data_value}">
 																	<label for="" style="min-width: 150px; float: left; width: 6em;">{$item.data_name}</label>
 																	<input style="width: 20em; display: inline;" 
-																		name="plugindata[{$item.data_id}]" value="{$item.data_value}">({$item.data_type})<br>
+																		name="plugindata[{$item.data_id}]" value="{$item.data_value}">({$item.data_type}) - Desc <br>
 																{*{elseif $item.data_type == 'ENUM'}
 																		{if  $dropdown}
 																			<label for="" style="min-width: 150px; float: left; width: 6em;">{$item.data_name}</label>
@@ -210,6 +228,58 @@
 
 
 
+		{*
+		
+		<h2>{t}Categories{/t}</h2>
+		<table cellpadding="0" cellspacing="0" border="0">
+			{foreach key= key item=item from=$categories}
+			<tr style="background-color: darkblue; border: 1px solid white; color: white;">
+				<td>{$item.cid}</td>
+				<td>{$item.name}</td>
+				<td>{$item.cactive}</td>
+			</tr>
+			{/foreach}
+		</table>
+
+		<h2>{t}Active Categories{/t}</h2>
+		<table>
+			{foreach key= key item=item from=$active}
+			<tr style="background-color: darkblue; border: 1px solid white; color: white;">
+				<td>{$item.cid}</td>
+				<td>{$item.name}</td>
+				<td>{$item.cactive}</td>
+			</tr>
+			{/foreach}
+		</table>
+		
+		<h2>{t}Inactive Categories{/t}</h2>
+		<table>
+			{foreach key= key item=item from=$inactive}
+			<tr style="background-color: darkblue; border: 1px solid white; color: white;">
+				<td>{$item.cid}</td>
+				<td>{$item.name}</td>
+				<td>{$item.cactive}</td>
+			</tr>
+			{/foreach}
+		</table>
+		*}
+
+		{*
+		JOIN: <table>
+		{foreach key=key item=item from=$plugins}
+			<tr>
+				<td>{$item.pid}</td>
+				<td>{$item.uniquename}</td>
+				<td>{$item.name}</td>	
+				<td>{$item.desc}</td>	
+				<td>{$item.pactive}</td>	
+				<td>{$item.version}</td>	
+				<td>{$item.category}</td>	
+				<td>{$item.cactive}</td>	
+			</tr>
+		{/foreach}
+		</table>
+		*}
 		{*
 		
 		<h2>{t}Categories{/t}</h2>

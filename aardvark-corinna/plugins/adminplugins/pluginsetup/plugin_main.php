@@ -19,6 +19,7 @@ require_once (bm_baseDir . '/plugins/adminplugins/pluginsetup/class.pluginsetup.
 
 $poMMo = & fireup("secure");
 
+
 $data = NULL;
 
 	// get/post dat

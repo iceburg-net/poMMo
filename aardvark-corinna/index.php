@@ -18,9 +18,9 @@
 define('_IS_VALID', TRUE);
 
 require ('bootstrap.php');
-//corinna
+//corinna -> REMOVE
 if ($useplugins) {
-require ('plugins/multiuser/test.php');
+	require_once ('plugins/multiuser/test.php');
 }
 ///corinna
 
