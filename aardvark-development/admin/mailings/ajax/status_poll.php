@@ -18,7 +18,7 @@ require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
 
-$pommo->init(array('noDebug' => TRUE, ));
+$pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -49,14 +49,23 @@ elseif($mailing['current_status'] == 'stopped')
 	$json['status'] = 2;
 else
 	$json['status'] = 1;
-	
-if($mailing['command'] != 'none' && $json['status'] != 4) {
-	$json['incAttempt'] = TRUE;
-	$json['command'] = TRUE;
-	if($_GET['attempt'] > 3 ) 
+
+
+// check for frozen mailing
+$timestamp = $pommo->get('timestamp');
+if (empty($timestamp))
+	$timestamp = $mailing['touched']; // get retuns a blank array -- not false
+
+if ($json['status'] != 4) {
+	if ($mailing['command'] != 'none' || $mailing['touched'] == $timestamp)
+		$json['incAttempt'] = TRUE;
+	if ($mailing['command'] != 'none')
+		$json['command'] = TRUE;
+	if ($_GET['attempt'] > 3)
 		$json['status'] = 3;
 }
 
+$pommo->set(array('timestamp' => $mailing['touched']));
 
 
 $json['statusText'] = $statusText[$json['status']];

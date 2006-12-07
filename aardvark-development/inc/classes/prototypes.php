@@ -169,7 +169,7 @@ class PommoType {
 	
 	function & mailingCurrent() {
 		$o = PommoType::mailing();
-		$o['current_id'] = $o['command'] = $o['serial'] = $o['code'] = $o['notices'] = $o['current_status'] = null;
+		$o['touched'] = $o['current_id'] = $o['command'] = $o['serial'] = $o['code'] = $o['notices'] = $o['current_status'] = null;
 		return $o;
 	}
 	

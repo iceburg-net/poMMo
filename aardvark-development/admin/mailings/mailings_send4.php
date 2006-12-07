@@ -10,7 +10,6 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
-
 // TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
 //		else move $config to $_SESSION...
 require ('../../bootstrap.php');
