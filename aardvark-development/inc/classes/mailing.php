@@ -83,6 +83,7 @@ class PommoMailing {
 				'serial' => $row['serial'],
 				'code' => $row['securityCode'],
 				'notices' => $row['notices'],
+				'touched' => $row['touched'], // TIMESTAMP
 				'current_status' => $row['current_status']);
 			$in = array_merge($o,$in);
 		}

@@ -39,16 +39,26 @@ class Pommo {
 	// default constructor
 	function Pommo($baseDir) {
 		$this->_baseDir = $baseDir;
-		
 		$this->_config = array ();
 		$this->_auth = null;
 		$this->_escaping = false;
-		
+	}
+
+	// preInit() populates poMMo's core with values from config.php 
+	//  initializes the logger + database
+	function preInit() {
 		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
+		
 		// initialize logger
 		$this->_logger = new PommoLog(); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
 		
-	
+		// read in config.php (configured by user)
+		// TODO -> write a web-based frontend to config.php creation
+		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
+		
 		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
 		// TODO -> provide validation of baseURL ?
 		if (isset ($config['baseURL'])) {
@@ -64,22 +74,10 @@ class Pommo {
 				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
 			}
 		}
-	}
-
-	// preInit() populates poMMo's core with values from config.php 
-	//  initializes the logger + database
-	function preInit() {
-		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
-		
-		// read in config.php (configured by user)
-		// TODO -> write a web-based frontend to config.php creation
-		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
 		
 		// check to see if config.php was "properly" loaded
 		if (count($config) < 5)
-			die('<img src="themes/shared/images/icons/alert.png" align="middle"><br><br>Could not read config.php');
+			Pommo::kill('Could not read config.php');
 
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
 		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
@@ -98,6 +96,24 @@ class Pommo {
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
 
+		// make sure workDir is writable
+		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
+			$wd = $this->_workDir; $this->_workDir = null;
+			if (!is_dir($wd))
+				Pommo::kill(sprintf(Pommo::_T('Work Directory (%s) not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'), $this->_workDir));
+			if (!is_writable($wd))
+				Pommo::kill(sprintf(Pommo::_T('Cannot write to Work Directory (%s). Make sure it has the proper permissions.'), $this->_workDir));
+			if (ini_get('safe_mode') == "1")
+				Pommo::kill(sprintf(Pommo::_T('Working Directory (%s) cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'), $this->_workDir));
+			if (!is_dir($wd . '/pommo'))
+				if (!mkdir($wd . '/pommo'))
+					Pommo::kill(Pommo::_T('Could not create directory') . ' ' . $wd . '/pommo');
+			if (!mkdir($wd . '/pommo/smarty'))
+				Pommo::kill(Pommo::_T('Could not create directory') . ' ' . $wd . '/pommo/smarty');
+			$this->_workdir = $wd;
+		}
+			
+
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
 
@@ -114,7 +130,7 @@ class Pommo {
 	/** 
 	 * init -> called by page to load page state, populate config, and track authentication. 
 	 *	valid args [ passed as Pommo::init(array('arg' => val, 'arg2' => val)) ] ->
-	 *		authLevel	:	check that authenticated permission level is at least authLevel (non authenticated == 0). die if not high enough. [default: 1]
+	 *		authLevel	:	check that authenticated permission level is at least authLevel (non authenticated == 0). exit if not high enough. [default: 1]
 	 *		keep		:	keep data stored in session. [default: false]
 	 *		session		:	explicity set session name. [default: null]
 	 * 		install		:	bypass loading of config/version checking [default: false]
@@ -138,21 +154,6 @@ class Pommo {
 		if ($p['noDebug']) {
 			$this->_dbo->debug(FALSE);
 			$this->_debug = 'off';
-		}
-		
-		// make sure workDir is writable
-		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
-			if (!is_dir($this->_workDir))
-				$this->kill(sprintf($this->_T('Work Directory (%s) not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'), $this->_workDir));
-			if (!is_writable($this->_workDir))
-				$this->kill(sprintf($this->_T('Cannot write to Work Directory (%s). Make sure it has the proper permissions.'), $this->_workDir));
-			if (ini_get('safe_mode') == "1")
-				$this->kill(sprintf($this->_T('Working Directory (%s) cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'), $this->_workDir));
-			if (!is_dir($this->_workDir . '/pommo'))
-				if (!mkdir($this->_workDir . '/pommo'))
-					$this->kill($this->_T('Could not create directory') . ' ' . $this->_workDir . '/pommo');
-			if (!mkdir($this->_workDir . '/pommo/smarty'))
-				$this->kill($this->_T('Could not create directory') . ' ' . $this->_workDir . '/pommo/smarty');
 		}
 
 		// Bypass Reading of Config, SESSION creation, and authentication checks and return
@@ -234,14 +235,14 @@ class Pommo {
 	function set($value) {
 		if (!is_array($value))
 			$value = array (
-				$value
+				$value => TRUE
 			);
 		return (empty ($this->_data)) ? $this->_data = $value : $this->_data = array_merge($this->_data, $value);
 	}
 
-	function & get($name = NULL) {
+	function & get($name = FALSE) {
 		if ($name) {
-			return (empty ($this->_data[$name])) ? array() : $this->_data[$name];
+			return (isset($this->_data[$name])) ? $this->_data[$name] : array();
 		}
 		return $this->_data;
 	}
@@ -283,12 +284,20 @@ class Pommo {
 
 		// output passed message
 		if ($msg || !ob_get_length()) {
-			$logger =& $pommo->_logger;
-			Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-			$smarty = new PommoTemplate();
-			$logger->addErr($msg);
-			$smarty->assign('fatalMsg',TRUE);
-			$smarty->display('message.tpl');	
+			
+			if (empty($pommo->_workDir)) {
+				echo ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
+				echo ('<title>poMMo Error</title>'); // Very basics added for valid output
+				echo '<div><img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" style="vertical-align: middle; margin-right: 20px;"/> ' . $msg . '</div>';
+			}
+			else {
+				$logger =& $pommo->_logger;
+				Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+				$smarty = new PommoTemplate();
+				$logger->addErr($msg);
+				$smarty->assign('fatalMsg',TRUE);
+				$smarty->display('message.tpl');
+			}	
 		}
 		
 		// output debugging info if enabled (in config.php)
@@ -299,7 +308,6 @@ class Pommo {
 				$debug->bmDebug();
 			}
 		}
-		
 		
 		if ($backtrace) {
 			$backtrace = debug_backtrace();

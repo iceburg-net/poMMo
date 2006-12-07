@@ -25,7 +25,7 @@
 
 {* Updates via AJAX: Pause/Resume (started), Resume/Cancel (stopped), DeThaw/Cancel (frozen) *}
 <div id="commands">
-	<div class="error">{t}Initializing...{/t}</div>
+	<div class="error init">{t}Initializing...{/t}</div>
 </div>
 
 {* Hidden until mailing is finished *}
@@ -55,9 +55,28 @@
 <div class="pbText" id="pbText"></div>
 
 
-<div>{t}Last 50 notices{/t}</div>
-<hr />
+<fieldset>
+	<legend>{t}Last 50 notices{/t}</legend>
+	
+<div class="inpage_menu">
+	<li>
+	<a href="ajax/status_download.php?type=sent">{t}View{/t} {t}Sent Emails{/t}</a>
+	</li>
+	
+	<li>
+	<a href="ajax/status_download.php?type=unsent">{t}View{/t} {t}Unsent Emails{/t}</a>
+	</li>
+	
+	<li>
+	<a href="ajax/status_download.php?type=error">{t}View{/t} {t}Failed Emails{/t}</a>
+	</li>
+</div>
+
+<br/>
+	
 <div id="notices"></div>
+
+</fieldset>
 
 {* the folowing populate #commands via Javascript, and are here for reference/translation *}
 <div class="hide" id="started">
@@ -119,7 +138,6 @@ pommo = {
 		this.polling = true;
 		$.post("ajax/status_poll.php?attempt="+pommo.attempt, {}, function(out) {
 			pommo.disabled = false; // enable commands after AJAX success
-			
 			eval("var json = " + out);
 				if (typeof(json.status) == 'undefined')
 			alert('ajax error!');
@@ -135,7 +153,7 @@ pommo = {
 			else 
 				$('#pbBarText').find('img.go').css('display', 'none').end().find('img.stop').css('display', 'inline');
 			
-			if(!json.command) {
+			if(!json.command || $('#commands div.init').size() > 0)  {
 				switch(json.status) {
 					case 1: 
 						$('#commands').html($('#started').html());
