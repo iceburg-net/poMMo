@@ -59,7 +59,7 @@ class PommoMailing {
 	// accepts a mailing template (assoc array)  
 	// accepts a flag (bool) to designate return of current mailing type
 	// return a mailing object (array)	
-	function & makeDB(&$row, $current = FALSE) {
+	function & makeDB(&$row) {
 		$in = array(
 		'id' => $row['mailing_id'],
 		'fromname' => $row['fromname'],
@@ -77,7 +77,7 @@ class PommoMailing {
 		'charset' => $row['charset'],
 		'status' => $row['status']);
 			
-		if ($current) {
+		if ($row['status'] == 1) {
 			$o = array(
 				'command' => $row['command'],
 				'serial' => $row['serial'],
@@ -87,7 +87,7 @@ class PommoMailing {
 			$in = array_merge($o,$in);
 		}
 
-		$o = ($current) ?
+		$o = ($row['status'] == 1) ?
 			PommoType::mailingCurrent() :
 			PommoType::mailing();
 		return PommoAPI::getParams($o,$in);
@@ -174,7 +174,7 @@ class PommoMailing {
 		$o = array();
 		
 		$query = "
-			SELECT m.*, c.*
+			SELECT *
 			FROM 
 				" . $dbo->table['mailings']." m
 				LEFT JOIN " . $dbo->table['mailing_current']." c ON (m.mailing_id = c.current_id)
@@ -182,8 +182,7 @@ class PommoMailing {
 				1
 				[AND m.status=%I]
 				[AND m.mailing_id IN(%C)]
-				[AND c.securityCode='%S']
-			ORDER BY field_ordering";
+				[AND c.securityCode='%S']";
 		$query = $dbo->prepare($query,array($p['active'],$p['id'],$p['code']));
 		
 		while ($row = $dbo->getRows($query)) {
@@ -192,60 +191,6 @@ class PommoMailing {
 		
 		return $o;
 	}
-	
-	// Polls a mailings commands, performs any necessary actions
-	function poll($id, $serial) {
-		global $pommo;
-		global $skipSecurity;
-		global $relayID;
-		$dbo =& $pommo->_dbo;
-		$logger =& $pommo->_logger;
-		
-		$query = "
-			SELECT command, status, serial
-			FROM ". $dbo->table['mailing_current']."
-			WHERE current_id=%i";
-		$query = $dbo->prepare($query(array($id)));
-		
-		$row = mysql_fetch_assoc($dbo->query($query));
-		if (empty($row))
-			PommoMailing::kill('Failed to poll mailing.');
-			
-		switch ($row['command']) {
-		case 'restart':
-			$query = "
-				UPDATE ". $dbo->table['mailing_current']."
-				SET
-					serial=%i,
-					command='none',
-					current_status='started'";
-			if (!$dbo->query($query))
-				PommoMailing::kill('Failed to restart mailing');
-			$logger->addMsg(sprintf(Pommo::_T('Mailing resumed under serial %s'),$serial), 3);
-			break;
-	
-		case 'stop':
-			$query = "
-				UPDATE ". $dbo->table['mailing_current']."
-				SET
-					command='none',
-					current_status='stopped'";
-			if (!$dbo->query($query))
-				PommoMailing::kill('Failed to stop mailing');
-			PommoMailing::kill('Mailing stopped',TRUE);
-			break;
-			
-		default :
-			if (!$skipSecurity && $row['serial'] != $serial) 
-				PommoMailing::kill(Pommo::_T('Serials do not match. Another background script is probably processing the mailing.'),TRUE);
-			if ($row['current_status'] == 'stopped')
-				PommoMailing::kill(Pommo::_T('Mailing halted. You must restart the mailing.'), TRUE);			
-			break;
-		}
-		
-		return true;
-	}
-	
 	
 	// adds a mailing to the database
 	// accepts a mailing (array)
@@ -334,35 +279,6 @@ class PommoMailing {
 		return $id;
 	}
 	
-	// cleanup function called just before script termination
-	function kill($reason = null, $killSession = FALSE) {
-		global $pommo;
-		global $relayID;
-		$logger =& $pommo->_logger;
-		$dbo =& $pommo->_dbo;
-	
-		if(!empty($reason))
-			$logger->addMsg('Script Ending: ' . $reason, 2);
-			
-		// release queue items allocated to this relayID
-		PommoMailing::queueRelease($relayID);
-		
-		// update DB notices
-		$query = "[
-			UPDATE ".$dbo->table['mailing_current']."
-			SET notices=CONCAT_WS(',','%Q')]";
-		$query = $dbo->prepare($query, array($logger->getAll()));
-		
-		if(!empty($query))
-			$dbo->query($query);
-			
-		
-		if ($killSession)
-			session_destroy();
-			
-		Pommo::kill();
-	}
-	
 	// populates the queue with subscribers
 	// accepts an array of subscriber IDs
 	// returns (bool) - true if success
@@ -377,7 +293,7 @@ class PommoMailing {
 				
 		if (empty($in)) { // all subscribers
 			$query = "
-				INSERT INTO ".$dbo->table['queue']."
+				INSERT IGNORE INTO ".$dbo->table['queue']."
 				(subscriber_id)
 				SELECT subscriber_id FROM ".$dbo->table['subscribers'];
 			if (!$dbo->query($query))
@@ -397,6 +313,199 @@ class PommoMailing {
 		if (!$dbo->query($query))
 				return false;	
 		return true;
+	}
+	
+	// checks if a mailing is processing
+	// returns (bool) - true if current mailing
+	function isCurrent() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT count(mailing_id)
+			FROM ".$dbo->table['mailings']."
+			WHERE status=1";
+		return ($dbo->query($query,0) > 0) ? true : false;
+	}
+	
+	
+	// Polls a mailings commands, performs any necessary actions
+	function poll() {
+		global $pommo;
+		global $skipSecurity;
+		global $relayID;
+		global $serial;
+		global $mailingID;
+		
+		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
+		
+		$query = "
+			SELECT command, current_status, serial
+			FROM ". $dbo->table['mailing_current']."
+			WHERE current_id=%i";
+		$query = $dbo->prepare($query,array($mailingID));
+		
+		$row = mysql_fetch_assoc($dbo->query($query));
+		if (empty($row))
+			PommoMailing::kill('Failed to poll mailing.');
+			
+		switch ($row['command']) {
+		case 'restart':
+			$query = "
+				UPDATE ". $dbo->table['mailing_current']."
+				SET
+					serial=%i,
+					command='none',
+					current_status='started'
+					WHERE current_id=%i";
+			$query = $dbo->prepare($query,array($serial,$mailingID));
+			if (!$dbo->query($query))
+				PommoMailing::kill('Failed to restart mailing');
+			$logger->addMsg(sprintf(Pommo::_T('Mailing resumed under serial %s'),$serial), 3);
+			
+			$query = "UPDATE ".$dbo->table['queue']." SET smtp=0";
+			if(!$dbo->query($query))
+				PommoMailing::kill('Could not clear relay allocations');
+			
+			break;
+	
+		case 'stop':
+			$query = "
+				UPDATE ". $dbo->table['mailing_current']."
+				SET
+					command='none',
+					current_status='stopped'";
+			if (!$dbo->query($query))
+				PommoMailing::kill('Failed to stop mailing');
+			PommoMailing::kill('Mailing stopped',TRUE);
+			break;
+			
+		default :
+			if (!$skipSecurity && $row['serial'] != $serial) 
+				PommoMailing::kill(Pommo::_T('Serials do not match. Another background script is probably processing the mailing.'),TRUE);
+			if ($row['current_status'] == 'stopped')
+				PommoMailing::kill(Pommo::_T('Mailing halted. You must restart the mailing.'), TRUE);			
+			break;
+		}
+		
+		return true;
+	}
+	
+	// updates the queue and notices
+	// accepts a array of failed emails
+	// accepts a array of sent emails
+	// accepts an hash array (key == email, value == subsriber ID)
+	function update(&$sent, &$failed, &$emailHash) {
+		global $mailingID;
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
+		
+		if (!empty($sent)) {
+			$a = array();
+			foreach($sent as $e)
+				$a[] = $emailHash[$e];
+			
+			$query = "
+				UPDATE ".$dbo->table['queue']."
+				SET status=1
+				WHERE subscriber_id IN(%q)";
+			$query = $dbo->prepare($query,array($a));
+			
+			if (!$dbo->query($query))
+				PommoMailing::kill('Unable to update queue sent');
+				
+		}
+		
+		if (!empty($failed)) {
+			$a = array();
+			foreach($failed as $e)
+				$a[] = $emailHash[$e];
+			
+			$query = "
+				UPDATE ".$dbo->table['queue']."
+				SET status=2
+				WHERE subscriber_id IN(%q)";
+			$query = $dbo->prepare($query,array($a));
+			
+			if (!$dbo->query($query))
+				PommoMailing::kill('Unable to update queue failed');
+		}
+			
+		
+		// update DB notices
+		$notices = $dbo->prepare('[%Q]', array($logger->getAll()));
+		if (!empty($notices)) {
+			$query = "
+				UPDATE ".$dbo->table['mailing_current']."
+				SET notices=CONCAT_WS('||',notices,".$notices.") 
+				WHERE current_id=".$mailingID;
+			$dbo->query($query);
+		}
+		
+	}
+	
+	
+	// end a mailing
+	function finish($id = 0, $cancel = false) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$status = ($cancel) ? 2 : 0;
+		
+		$query = "
+			DELETE FROM ". $dbo->table['mailing_current']."
+			WHERE current_id=%i";
+		$query = $dbo->prepare($query, array($id));
+		if ($dbo->affected($query) < 1)
+			return false;
+			
+			
+		$query = "
+			UPDATE ". $dbo->table['mailings']."
+			SET 
+			finished=FROM_UNIXTIME(%i),
+			status=%i,
+			sent=(SELECT count(subscriber_id) FROM ". $dbo->table['queue']." WHERE status > 0)
+			WHERE mailing_id=%i";
+		$query = $dbo->prepare($query, array(time(), $status, $id));
+		
+		if (!$dbo->query($query))
+			return false;
+		return true;	
+	}
+	
+	// cleanup function called just before script termination
+	function kill($reason = null, $killSession = FALSE) {
+		global $pommo;
+		global $relayID;
+		global $mailingID;
+		
+		$logger =& $pommo->_logger;
+		$dbo =& $pommo->_dbo;
+	
+		if(!empty($reason))
+			$logger->addMsg('Script Ending: ' . $reason, 2);
+			
+		// release queue items allocated to this relayID
+		PommoMailing::queueRelease($relayID);
+		
+		// update DB notices
+		$notices = $dbo->prepare('[%Q]', array($logger->getAll()));
+		if (!empty($notices)) {
+			$query = "
+				UPDATE ".$dbo->table['mailing_current']."
+				SET notices=CONCAT_WS('||',notices,".$notices.") 
+				WHERE current_id=".$mailingID;
+			$dbo->query($query);
+		}
+			
+		
+		if ($killSession)
+			session_destroy();
+			
+		Pommo::kill();
 	}
 	
 	// allocates part of the queue to a relay
@@ -445,6 +554,18 @@ class PommoMailing {
 		return (!$dbo->query($query)) ? false : true;
 	}
 	
+	// returns the # of unsent emails in a queue
+	function queueUnsentCount() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT COUNT(subscriber_id) 
+			FROM ".$dbo->table['queue']."
+			WHERE status=0";
+		return $dbo->query($query,0);
+	}
+	
 	// mark (serialize) a mailing
 	// returns success (bool)
 	function mark($serial, $id) {
@@ -458,30 +579,22 @@ class PommoMailing {
 			UPDATE ".$dbo->table['mailing_current']."
 			SET serial=%i
 			WHERE current_id=%i";
-		$query = $dbo->prepare($query(array($serial, $id)));
+		$query = $dbo->prepare($query,array($serial, $id));
 		return ($dbo->affected($query) > 0) ? true : false;
-	}
-	
-	// checks if a mailing is processing
-	// returns (bool) - true if current mailing
-	function isCurrent() {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-		
-		$query = "
-			SELECT count(mailing_id)
-			FROM ".$dbo->table['mailings']."
-			WHERE status=1";
-		return ($dbo->query($query,0) > 0) ? true : false;
 	}
 	
 	
 	function respawn($p = array()) {
+		global $pommo;
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+		
 		global $relayID;
 		global $serial;
-		$defaults = array('relayID' => $relayID, 'serial' => $serial, 'spawn' => 'TRUE');
+		global $code;
+		$defaults = array('relayID' => $relayID, 'serial' => $serial, 'spawn' => 'TRUE', 'code' => $code);
 		$p = PommoAPI :: getParams($defaults, $p);
-		PommoHelperMailings::spawn('admin/mailings/mailings_send4.php?relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
+		
+		PommoHelperMailings::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$p['code'].'&relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
 	}
 }
 ?>

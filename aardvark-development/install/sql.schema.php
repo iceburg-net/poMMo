@@ -102,7 +102,7 @@ CREATE TABLE :::mailings::: (
   `mailgroup` varchar(60) NOT NULL default 'Unknown',
   `subscriberCount` int(10) unsigned NOT NULL default '0',
   `started` datetime NOT NULL,
-  `finished` datetime NOT NULL,
+  `finished` datetime default NULL,
   `sent` int(10) unsigned NOT NULL default '0',
   `charset` varchar(15) NOT NULL default 'UTF-8',
   `status` tinyint(1) NOT NULL default '1' COMMENT '0: finished, 1: processing, 2: cancelled',

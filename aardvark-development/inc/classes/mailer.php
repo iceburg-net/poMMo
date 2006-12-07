@@ -13,7 +13,8 @@
 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/lib/phpmailer/class.phpmailer.php');
 
-// TODO; class depricated since PR13.2 .. needs overhaul!
+// TODO; class depricated since PR13.2 .. needs major overhaul!
+//  OLDSCHOOL KLUDGE
 //   -- NEEDS TO USE parent:: !!
 
 // create bMailer class (an extension of PHPMailer)
@@ -28,6 +29,7 @@ class PommoMailer extends PHPMailer {
 
 	var $_subject;
 	var $_body;
+	var $_altbody;
 
 	var $_exchanger; // sendmail,mail,smtp ... currently mail or sendmail are used TODO add smtp
 	var $_sentCount; // counter for mails sent sucessfully.
@@ -86,6 +88,7 @@ class PommoMailer extends PHPMailer {
 
 		$this->_subject = NULL;
 		$this->_body = NULL;
+		$this->_altbody = NULL;
 
 		$this->_validated = FALSE;
 
@@ -170,6 +173,7 @@ class PommoMailer extends PHPMailer {
 		
 		$this->_subject = $subject;
 		$this->_body = $body;
+		$this->_altbody = $altbody;
 
 		// ** Set PHPMailer class parameters
 
@@ -215,8 +219,8 @@ class PommoMailer extends PHPMailer {
 			// if altbody exists, set message type to HTML + add alt body
 			if ($HTML) {
 				$this->IsHTML(TRUE);
-				if (!empty ($altbody))
-					$this->AltBody = $altbody;
+				if (!empty ($this->_altbody))
+					$this->AltBody = $this->_altbody;
 			}
 			
 			$this->Body = $this->_body;
@@ -228,7 +232,7 @@ class PommoMailer extends PHPMailer {
 	}
 
 	// ** SEND MAIL FUNCTION --> pass an array of senders, or a single email address for single mode
-	function bmSendmail(& $to) { // TODO rename function send in order to not confuse w/ PHPMailer's Send()?
+	function bmSendmail(& $to, $subscriber = FALSE) { // TODO rename function send in order to not confuse w/ PHPMailer's Send()?
 
 		if ($this->_validated == FALSE) {
 			$this->logger->addMsg("poMMo has not passed sanity checks. has prepareMail been called?");
@@ -250,9 +254,9 @@ class PommoMailer extends PHPMailer {
 				
 				// check for personalization personaliztion and override message body
 				if ($this->_personalize) {
-					$this->Body = personalizeBody($this->_body,$to,$_SESSION['pommo']['personalization']);
-					if (!empty($this->AltBody))
-						$this->AltBody = personalizeBody($this->_body,$to,$_SESSION['pommo']['personalization']);
+					$this->Body = PommoHelperPersonalize::body($this->_body,$subscriber,$_SESSION['pommo']['personalization_body']);
+					if (!empty($this->_altbody))
+						$this->AltBody = PommoHelperPersonalize::body($this->_altbody,$subscriber,$_SESSION['pommo']['personalization_altbody']);
 				}
 
 				// send the mail. If unsucessful, add error message.
@@ -283,7 +287,7 @@ class PommoMailer extends PHPMailer {
 					if ($this->_personalize) {
 						$this->Body = personalizeBody($this->_body,$to[$key],$_SESSION['pommo']['personalization']);
 						if (!empty($this->AltBody))
-							$this->AltBody = personalizeBody($this->_body,$to[$key],$_SESSION['pommo']['personalization']);
+							$this->AltBody = personalizeBody($this->_altbody,$to[$key],$_SESSION['pommo']['personalization']);
 					}
 					
 					// send the mail. If unsucessful, add error message.

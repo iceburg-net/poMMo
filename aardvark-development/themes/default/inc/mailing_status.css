@@ -19,6 +19,7 @@
 	background-image:url(../../shared/images/mailerbar-single.gif);
 	background-repeat: repeat-x;
 	text-align: left; /* the IE sux bug... */
+	width: 0px;
 }
 .pbBarText {
 	text-align: right;
@@ -33,11 +34,38 @@
 	text-align: center;
 }
 
-.stacked {
-	position: absolute;
-	margin: auto;
-	width: 514px;
-	text-align: center;
+.hide {
+    display: none;
+}
+
+hr {
+    clear: right;
+}
+
+img.anim {
+    margin: 2px 10px;
+    vertical-align: middle;
+}
+
+#status {
+    font-weight: bold;
+}
+
+#commands img{
+    vertical-align: middle;
+    border: 0;
+}
+
+#commands a {
+    text-decoration: none;
+}
+
+#commands div.first {
+    float: left;
+}
+
+#commands div.second {
+    float: right;
 }
 
 .notices {

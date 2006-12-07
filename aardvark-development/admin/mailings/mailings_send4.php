@@ -11,18 +11,21 @@
  * 
  ** [END HEADER]**/
 
-
+// TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
+//		else move $config to $_SESSION...
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/throttler.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
 /**********************************
 	STARTUP ROUTINES
  *********************************/
  
 // skips serial and security code checking. For debbuing this script.
-$skipSecurity = FALSE;
+$skipSecurity = TRUE;
 
 // # of mails to fetch from the queue at a time (Default: 100)
 $queueSize = 100;
@@ -34,19 +37,27 @@ if (ini_get('safe_mode'))
 else
 	set_time_limit($maxRunTime +90);
 
+// start the timer
+$start = time();
+
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
-$relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID']; 
+$relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
+$code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
+
 if (!$skipSecurity && $relayID < 1 && $relayID > 4)
 	PommoMailing::kill('Mailing stopped. Bad RelayID.', TRUE);
-
+	
 
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
 
-$pommo->init(array('sessionID' => $serial, 'keep' => TRUE));
+$pommo->init(array('sessionID' => $serial, 'keep' => TRUE, 'authLevel' => 0, 'noDebug' => TRUE));
 $dbo = & $pommo->_dbo;
 $logger = & $pommo->_logger;
+
+//DEBUGGING LINE
+//$query="UPDATE ".$dbo->table['mailing_current']." SET notices='yyy'"; $dbo->query($query); die();
 
 // don't die on query so we can capture logs'
 // NOTE: Be extra careful to check the success of queries/methods!
@@ -64,7 +75,12 @@ if (empty($input['config'])) {
 		'smtp_2',
 		'smtp_3',
 		'smtp_4',
-		'throttle_SMTP'
+		'throttle_SMTP',
+		'throttle_MPS',
+		'throttle_BPS',
+		'throttle_DP',
+		'throttle_DMPP',
+		'throttle_DBPP'
 	));
 	$config =& $input['config'];
 
@@ -78,7 +94,7 @@ if (empty($input['config'])) {
 		}
 		
 		for($i = 2; $i < 5; $i++) {
-			if (empty($config['smtp_'.$i])) {
+			if (!empty($config['smtp_'.$i])) {
 				$config['multimode'] = true;
 				$config['smtp_'.$i] = unserialize($config['smtp_'.$i]);
 				$logger->addMsg('SMTP Relay #'.$i.' detected', 1);
@@ -92,40 +108,46 @@ if (empty($input['config'])) {
 		if ($pommo->_config['multimode'])
 			$logger->addMsg('Multimode enabled', 1);
 	}
-} else {
+
+	$pommo->set(array('mailingData' => array('config' => $config)));
+} 
+else {
 	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 2);
 }
 
 $config =& $input['config'];
 
-
 /**********************************
  * MAILING INITIALIZATION
  *********************************/
- 
-$mailing = current(PommoMailing::get(array('code' => $_GET['securityCode'], 'active' => TRUE)));
-if (empty($mailing))
-	PommoMailing::kill('Could not initialize a current mailing.'); 
 
+//DEBUGGING LINE
+//$query="UPDATE ".$dbo->table['mailing_current']." SET notices='VVVerbosity - ".$logger->_verbosity."'"; $dbo->query($query); 
+
+$mailing = current(PommoMailing::get(array('code' => $code, 'active' => TRUE)));
+if (empty($mailing))
+	PommoMailing::kill('Could not initialize a current mailing.');
+$mailingID = $mailing['id'];
 
 // SECURITY ROUTINES...
 if(!empty($mailing['end']) && $mailing['end'] > 0)
 	PommoMailing::kill('Mailing has completed.', TRUE);
+	
 
 if(empty($mailing['serial']))
 	if (!PommoMailing::mark($serial,$mailing['id']))
 		PommoMailing::kill('Unable to serialize Mailing', TRUE);
-		
-if (!$skipSecurity && empty($_GET['securityCode']))
+
+if (!$skipSecurity && $code != $mailing['code'])
 	PommoMailing::kill('Mailing stopped for security reasons.', TRUE);
 
-	
+
 // Poll Mailing Status
-PommoMailing::poll($mailing['id']);
+PommoMailing::poll();
 
 
 // If we're in multimode, spawn scripts (unless this is a spawn!)
-if ($config['multimode'] && !isset($_GET['spawn'])) {
+if ($config['multimode'] && !empty($_GET['spawn'])) {
 	for ($i = 1; $i < 5; $i++) {
 		if(!empty($config['smtp_'.$i])) {
 			PommoMailing::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
@@ -176,171 +198,133 @@ if ($config['list_exchanger'] == 'smtp') {
 $logger->addMsg('Mailer initialized with for Relay # '.$relayID,1);
 
 
+/**********************************
+ * INITIALIZE Queue : POTENTIAL HALT
+ *********************************/
+$subscribers = PommoSubscriber::get(
+	array('id' => PommoMailing::queueGet($relayID, $queueSize)));
+	
+while(empty($subscribers)) {
+	sleep(10);
+	
+	if((time() - $start) > $maxRunTime) {
+		PommoMailing::respawn();
+		PommoMailing::kill('Max runtime reached. Respawning...');
+	}
+	
+	$subscribers = PommoSubscriber::get(
+		array('id' => PommoMailing::queueGet($relayID, $queueSize)));
+	
+	if(empty($subscribers))
+		if(PommoMailing::queueUnsentCount() < 1)
+			PommoMailing::finish($mailingID);
+}
+	
+// seperate emails into an array ([email],[domain]) to feed to throttler
+$emails = array();
+$emailHash = array(); // used to quickly lookup subscriberID based off email
+foreach($subscribers as $s) {
+	array_push($emails, array(
+		$s['email'],
+		substr($email,strpos($email,'@')+1)
+		)
+	);
+	$emailHash[$s['email']] = $s['id'];
+}
 
 /**********************************
- * INITIALIZE Queue, Throttler
+ * INITIALIZE Throttler
  *********************************/
- 
-$queue = PommoMailing::queueGet($relayID, $queueSize);
+	
+$tid = ($config['throttle_SMTP'] == 'shared') ? 1 : $relayID;
 
-
-/*
-// seperate emails into array([email],[domain])
-	$retArray = array ();
-	foreach ($emails as $email)
-		$retArray[] = array (
-			$email,
-			substr($email,
-			strpos($email,
-			'@'
-		) + 1));
-
-	return $retArray;
-*/
+if(empty($_SESSION['pommo']['throttler'][$tid]))
+	$_SESSION['pommo']['throttler'] = array (
+		$tid => array(
+			'MPS' => $config['throttle_MPS'],
+			'BPS' => $config['throttle_MPS'],
+			'DP' => $config['throttle_DP'],
+			'DMPP' => $config['throttle_DMPP'],
+			'DBPP' => $config['throttle_DBPP'],
+			'domainHistory' => array(),
+			'genesis' => time(),
+			'runtime' => $maxRunTime,
+			'sent' => 0.0,
+			'sentBytes' => 0.0
+			)
+		);
+		
+$throttler =& new PommoThrottler(
+	$_SESSION['pommo']['throttler'][$tid], 
+	$emails, 
+	$_SESSION['pommo']['throttler'][$tid]['domainHistory'], 
+	$_SESSION['pommo']['throttler'][$tid]['sent'],
+	$_SESSION['pommo']['throttler'][$tid]['sentBytes']
+	);
 	
 
-	$bmMailer = & bmInitMailer($dbo, $_GET['relay_id']);
-	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id'], $queueSize);
-
-	if ($pommo->_config['throttler'] == 'individual')
-		$bmThrottler = & bmInitThrottler($dbo, $bmQueue, $_GET['relay_id']);
-	else
-		$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
-} else {
-	$bmMailer = & bmInitMailer($dbo);
-	$bmQueue = & dbQueueGet($dbo, 1, $queueSize);
-	$bmThrottler = & bmInitThrottler($dbo, $bmQueue);
-}
-
-}
-
-
-// start throttler's timer
-$bmThrottler->startScript($maxRunTime);
-
-$logger->addMsg('Mailer+Queue+Throttler Initialized. Queue Size: ' . count($bmQueue) . ' mails.', 1);
-
-$byteMask = $bmThrottler->byteTracking();
+$byteMask = $throttler->byteTracking();
 if ($byteMask > 1) // byte tracking/throttling enabled
-	$bmMailer->trackMessageSize();
+	$mailer->trackMessageSize();
 
 /**********************************
    PROCESS QUEUE
  *********************************/
 
-// TODO -> all these globals seem kludgey.. use iterative, or a sender object.
 
-$sentMails = array ();
+$sent = array();
+$failed = array();
+$die = false;
 $timer = time();
-
-function updateDB(& $sentMails, & $timer) {
-	global $serial;
-	global $dbo;
-
-	// update mailing status in database and flush sent mails from queue
-	dbMailingUpdate($dbo, $sentMails);
-
-	// poll mailing	
-	dbMailingPoll($serial);
-
-	// reset variables
-	$sentMails = array ();
-	$timer = time();
-}
-
-// recursively proccess the throttler, returns true if queue is empty, false if not.
-function proccessQueue() {
-	global $bmThrottler;
-	global $bmMailer;
-	global $logger;
-	global $byteMask;
-	global $sentMails;
-	global $pommo;
-	global $timer;
-
-	// check if there are mails in throttler queue, return true if throttler's queue is empty
-	if (!$bmThrottler->mailsInQueue())
-		return true;
-
+while(!$die) {
+	
 	// attempt to pull email from throttler's queue
-	$mail = $bmThrottler->pullQueue();
-
+	$mail = $throttler->pullQueue();
+	
 	// if an email was returned, send it.
-	if ($mail) {
-		if (!$bmMailer->bmSendmail($mail[0])) // sending failed, write to log  
-			$logger->addMsg(Pommo::_T('Error Sending Mail'));
+	if (!empty($mail)) {
+		
+		// set $personal as subscriber if personalization is enabled 
+		$personal = FALSE;
+		if ($_SESSION['pommo']['personalization'])
+			$personal =& $subscribers[$emailHash[$mail[0]]];
+		
+		if (!$mailer->bmSendmail($mail[0], $personal)) // sending failed, write to log  
+			$failed[] = $mail[0];
+		else
+			$sent[] = $mail[0];
+		
 
 		// If throttling by bytes (bandwith) is enabled, add the size of the message to the throttler
 		if ($byteMask > 1) {
-			$bytes = $bmMailer->GetMessageSize();
+			$bytes = $mailer->GetMessageSize();
 			if ($byteMask > 2)
-				$bmThrottler->updateBytes($bytes, $mail[1]);
+				$throttler->updateBytes($bytes, $mail[1]);
 			else
-				$bmThrottler->updateBytes($bytes);
+				$throttler->updateBytes($bytes);
 			$logger->addMsg('Added ' . $bytes . ' bytes to throttler.', 1);
 		}
-
-		// add email to sent mail array
-		$sentMails[] = $mail[0];
 	}
-	elseif ($bmThrottler->getCommand() == 2) // kill command received
-	return false;
-
-	// Every 10-ish seconds, or to prevent MySQL update "flood", launch updateDB() which; 
-	// updates mailing status in database, removes sent mails from queue, and perform a "poll" 
-	if ((time() - $timer) > 9 || count($sentMails) > 40 || $logger->isMsg() > 40)
-		updateDB($sentMails, $timer);
-
-	// recurisve call to processQueue()
-	return proccessQueue();
-}
-
-// process the queue until it is empty or kill command received
-while (proccessQueue()) {
-
-	updateDB($sentMails, $timer);
-
-	// fetch emails from queue
-	$bmQueue = array ();
-	$bmQueue = & dbQueueGet($dbo, $_GET['relay_id'], $queueSize);
+	elseif ($throttler->getCommand() == 2) // kill command received
+		$die = TRUE;
 	
-
-	// if queue is empty, end mailing and kill script.	
-	if (empty($bmQueue)) {
-		if ($pommo->_config['multimode']) {
-			// before killing check to see if we're in multimode and queue is truly empty
-			$sql = 'SELECT COUNT(*) FROM ' . $dbo->table['queue'] . ' LIMIT 1';
-			if ($dbo->query($sql,0)) {
-				// the queue is not empty, another relay is working on it. Sleep 10 seconds then break (respawn)
-				sleep(10);
-				break;
-			}
-		}
+	// check if there's any mails in the
+	if (!$throttler->mailsInQueue())
+		$die = TRUE;
 		
-		dbMailingStamp($dbo, "finished");
-		if ($bmMailer->SMTPKeepAlive == TRUE)
-			$bmMailer->SmtpClose();
-		bmMKill('Mailing finished!',TRUE);
-	}
-	else {
-	// else, repopulate throttler's queue
-	$bmThrottler->loadQueue($bmQueue);
-	$logger->addMsg('Adding more mails to the throttler queue.', 1);
+	
+	// update & poll every 7 seconds || if logger is large
+	if (((time() - $timer) > 7)) {
+		PommoMailing::update($sent, $failed, $emailHash);
+		PommoMailing::poll();
+		
+		$timer = time();
+		$sent = array();
+		$failed = array();
 	}
 }
 
-updateDB($sentMails, $timer);
-
-// kill signal sent from throttler (max exec time likely reached), respawn.	
-if (!empty ($_GET['relay_id']))
-	bmSpawn($pommo->_baseUrl .
-	'admin/mailings/mailings_send4.php?relay_id=' .
-	$_GET['relay_id'] . '&serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
-else
-	bmSpawn($pommo->_baseUrl .
-	'admin/mailings/mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode']);
-
-bmMKill('Respawned... Max exec time likely reached.');
-
-//echo 'Ready to respawn <a href="mailings_send4.php?serial=' . $serial . '&securityCode=' . $_GET['securityCode'].'">here</a>';
+PommoMailing::update($sent, $failed, $emailHash);
+PommoMailing::respawn();
+PommoMailing::kill('Queue empty or Runtime reached. Respawning...');
 ?>

@@ -16,8 +16,9 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
 
-$pommo = & fireup('secure','keep');
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -27,12 +28,10 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-$sql = 'SELECT subscriberCount FROM ' . $dbo->table['mailing_current'];
-$sc = $dbo->query($sql,0);
-$subscriberCount = ($sc) ? $sc : 0;
-$smarty->assign('subscriberCount', $subscriberCount);
+$mailing = current(PommoMailing::get(array('active' => TRUE)));
 
 
+$smarty->assign('mailing', $mailing);
 $smarty->display('admin/mailings/mailing_status.tpl');
 Pommo::kill();
 ?>

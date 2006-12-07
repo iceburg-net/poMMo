@@ -50,7 +50,7 @@ if (!empty ($_GET['sendaway'])) {
 		$mailing = PommoMailing::make(array(), TRUE);
 		$input['status'] = 1;
 		$input['current_status'] = 'stopped';
-		$input['command'] = 'none';
+		$input['command'] = 'restart';
 		$mailing = PommoHelper::arrayIntersect($input, $mailing);
 		
 		$code = PommoMailing::add($mailing);
