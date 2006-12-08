@@ -16,7 +16,7 @@
  *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));
 $logger = & $pommo->_logger;

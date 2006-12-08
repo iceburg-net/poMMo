@@ -16,7 +16,8 @@
  *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init(array('noDebug' => TRUE, ));
 $logger = & $pommo->_logger;
@@ -30,7 +31,7 @@ $mailing = current(PommoMailing::get(array('active' => TRUE)));
 $json = array('success' => TRUE);
 switch ($_GET['cmd']) {
 	case 'cancel' : // cancel/end mailing
-		PommoMailing::finish($mailing['id'], TRUE);
+		PommoMailCtl::finish($mailing['id'], TRUE);
 		break;
 	case 'restart' : // restart mailing
 	case 'stop' :  // pause mailing
@@ -43,7 +44,7 @@ switch ($_GET['cmd']) {
 			$json['success'] = FALSE;
 		
 		if($_GET['cmd'] == 'restart')
-			PommoMailing::respawn(array('code' => $mailing['code'], 'relayID' => null, 'serial' => null, 'spawn' => null));
+			PommoMailCtl::respawn(array('code' => $mailing['code'], 'relayID' => null, 'serial' => null, 'spawn' => null));
 		break;
 }
 $encoder = new json;

@@ -75,7 +75,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		// user inputted captcha matched. Reset password
 		
 		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
-		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
+		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 
 		// see if there is already a pending request for the administrator [subscriber id == 0]
 		if (PommoPending::isPending(0)) {
@@ -86,7 +86,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		// create a password change request, send confirmation mail
 		$subscriber = array('id' => 0);
 		$code = PommoPending::add($subscriber,'password');
-		PommoHelperMailings::sendConfirmation($pommo->_config['admin_email'], $code, 'password');
+		PommoHelperMessages::sendConfirmation($pommo->_config['admin_email'], $code, 'password');
 		
 		$logger->addMsg(Pommo::_T('Password reset request recieved. Check your email.'));
 		$smarty->assign('captcha',FALSE);

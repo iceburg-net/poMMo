@@ -42,7 +42,7 @@ $smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
  * group	- Filter by group members (groupID or 'all')
  */
 // Initialize page state with default values overriden by those held in $_REQUEST
-$state =& PommoApi::stateInit('subscribers_manage',array(
+$state =& PommoAPI::stateInit('subscribers_manage',array(
 	'limit' => 150,
 	'sort' => 'email',
 	'order' => 'ASC',

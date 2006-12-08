@@ -14,14 +14,11 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-
-
 require ('../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.pager.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
-require_once ($pommo->_baseDir . 'inc/db_history.php'); // Mailing History Database Handling
-require_once ($pommo->_baseDir . 'inc/class.pager.php');
-
-$pommo = & fireup("secure");
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -32,26 +29,20 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->assign('returnStr', Pommo::_T('Mailings Page'));
 
-/* SET PAGE STATE
- * limit		- Nr. of Mailings displayed per Pager-Site
- * mailcount	- Nr. of Mailings in mailing_history table
+
+/** SET PAGE STATE
+ * limit	- # of mailings per page
+ * sort		- Sorting of Mailings [subject, mailgroup, subscriberCount, started, etc.]
+ * order	- Order Type (ascending - ASC /descending - DESC)
  */
- 
-// default key/value pairs of this page's state
-// default maybe the last sent mail on top? and not ASC id
-$pmState = array(
-	'limit' => '10',
-	'sortOrder' => 'DESC',
-	'sortBy' => 'started'
-);
-$pommo->stateInit('mailings_history',$pmState);
-
-$limit = $pommo->stateVar('limit',$_REQUEST['limit']);
-$sortOrder = $pommo->stateVar('sortOrder',$_REQUEST['sortOrder']);
-$sortBy = $pommo->stateVar('sortBy',$_REQUEST['sortBy']);
-
-$smarty->assign('state',$pommo->_state);
-
+// Initialize page state with default values overriden by those held in $_REQUEST
+$state =& PommoAPI::stateInit('mailings_history',array(
+	'limit' => 15,
+	'sort' => 'started',
+	'order' => 'ASC'),
+	$_REQUEST);
+	
+$tally = PommoMailing::tally()
 $mailcount = dbGetMailingCount($dbo); // func in inc/db_history.php
 
 /* Instantiate Pager class (Using modified template from author) */
@@ -67,6 +58,7 @@ $mailings = & dbGetMailingHistory($dbo, $start, $limit, $sortBy, $sortOrder); //
 
 // If there are mailings display them
 $smarty->assign('mailings', $mailings);
+$smarty->assign('state',$state);
 $smarty->assign('pagelist', $pagelist);
 $smarty->assign('rowsinset', $mailcount);
 

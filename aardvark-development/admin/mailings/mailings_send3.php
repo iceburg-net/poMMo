@@ -15,8 +15,8 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init(array('keep' => TRUE));
@@ -59,10 +59,10 @@ if (!empty ($_GET['sendaway'])) {
 		$mailing = PommoHelper::arrayIntersect($input, $mailing);
 		
 		$code = PommoMailing::add($mailing);
-		if(!PommoMailing::queueMake($group->_memberIDs))
+		if(!PommoMailCtl::queueMake($group->_memberIDs))
 			Pommo::kill('Unable to populate queue');
 			
-		if (!PommoHelperMailings::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code))
+		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code))
 			Pommo::kill('Unable to spawn background mailer');
 		
 		sleep(1);

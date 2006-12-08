@@ -93,7 +93,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	}
 	else {
 		
-		if (PommoHelperMailings::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
+		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
 			if ($config['site_confirm'])
 				Pommo::redirect($config['site_confirm']);
 			$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));

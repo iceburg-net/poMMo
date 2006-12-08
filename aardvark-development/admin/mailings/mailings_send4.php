@@ -13,10 +13,10 @@
 // TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
 //		else move $config to $_SESSION...
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/throttler.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
 /**********************************
@@ -45,7 +45,7 @@ $code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
 $test = (empty($_GET['testMailing'])) ? false : true;
 
 if (!$skipSecurity && $relayID < 1 && $relayID > 4)
-	PommoMailing::kill('Mailing stopped. Bad RelayID.', TRUE);
+	PommoMailCtl::kill('Mailing stopped. Bad RelayID.', TRUE);
 	
 
 /**********************************
@@ -102,7 +102,7 @@ if (empty($input['config'])) {
 		}
 		
 		if($config['throttle_SMTP'] != 'shared' && $config['throttle_SMTP'] != 'individual')
-			PommoMailing::kill('Illegal throttle_SMTP value');
+			PommoMailCtl::kill('Illegal throttle_SMTP value');
 		
 		$logger->addMsg('SMTP Throttle Mode: ' . $config['throttle_SMTP'], 1);
 		if ($pommo->_config['multimode'])
@@ -126,35 +126,35 @@ $config =& $input['config'];
 
 $mailing = current(PommoMailing::get(array('code' => $code, 'active' => TRUE)));
 if (empty($mailing))
-	PommoMailing::kill('Could not initialize a current mailing.');
+	PommoMailCtl::kill('Could not initialize a current mailing.');
 $mailingID = $mailing['id'];
 
 // SECURITY ROUTINES...
 if(!empty($mailing['end']) && $mailing['end'] > 0)
-	PommoMailing::kill('Mailing has completed.', TRUE);
+	PommoMailCtl::kill('Mailing has completed.', TRUE);
 	
 
 if(empty($mailing['serial']))
-	if (!PommoMailing::mark($serial,$mailing['id']))
-		PommoMailing::kill('Unable to serialize Mailing', TRUE);
+	if (!PommoMailCtl::mark($serial,$mailing['id']))
+		PommoMailCtl::kill('Unable to serialize Mailing', TRUE);
 
 if (!$skipSecurity && $code != $mailing['code'])
-	PommoMailing::kill('Mailing stopped for security reasons.', TRUE);
+	PommoMailCtl::kill('Mailing stopped for security reasons.', TRUE);
 
 
 // Poll Mailing Status
-PommoMailing::poll();
+PommoMailCtl::poll();
 
 
 // If we're in multimode, spawn scripts (unless this is a spawn!)
 if ($config['multimode'] && !empty($_GET['spawn']) && !$test) {
 	for ($i = 1; $i < 5; $i++) {
 		if(!empty($config['smtp_'.$i])) {
-			PommoMailing::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
+			PommoMailCtl::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
 			sleep(3); // prevent a shared throttler race
 		}
 	}
-	PommoMailing::kill(Pommo::_T('Multimode detected. Spawning a background mailer per SMTP relay'));
+	PommoMailCtl::kill(Pommo::_T('Multimode detected. Spawning a background mailer per SMTP relay'));
 }
 
 // check if message body contains personalizations
@@ -187,7 +187,7 @@ $html = ($mailing['ishtml'] == 'on') ? TRUE : FALSE;
 $mailer = new PommoMailer($mailing['fromname'],$mailing['fromemail'],$mailing['frombounce'], $config['list_exchanger'],NULL,$mailing['charset'], $_SESSION['pommo']['personalization']);
 
 if (!$mailer->prepareMail($mailing['subject'], $mailing['body'], $html, $mailing['altbody']))
-	PommoMailing::kill('prepareMail() returned errors.');
+	PommoMailCtl::kill('prepareMail() returned errors.');
 	
 // Set appropriate SMTP relay
 if ($config['list_exchanger'] == 'smtp') {
@@ -202,23 +202,23 @@ $logger->addMsg('Mailer initialized with for Relay # '.$relayID,1);
  * INITIALIZE Queue : POTENTIAL HALT
  *********************************/
 $subscribers = PommoSubscriber::get(
-	array('id' => PommoMailing::queueGet($relayID, $queueSize)));
+	array('id' => PommoMailCtl::queueGet($relayID, $queueSize)));
 	
 while(empty($subscribers)) {
-	if(PommoMailing::queueUnsentCount() < 1) {
-		PommoMailing::finish($mailingID);
+	if(PommoMailCtl::queueUnsentCount() < 1) {
+		PommoMailCtl::finish($mailingID);
 		die();	
 	}
 			
 	sleep(10);
 	
 	if((time() - $start) > $maxRunTime) {
-		PommoMailing::respawn();
-		PommoMailing::kill('Max runtime reached. Respawning...');
+		PommoMailCtl::respawn();
+		PommoMailCtl::kill('Max runtime reached. Respawning...');
 	}
 	
 	$subscribers = PommoSubscriber::get(
-		array('id' => PommoMailing::queueGet($relayID, $queueSize)));
+		array('id' => PommoMailCtl::queueGet($relayID, $queueSize)));
 		
 }
 	
@@ -316,8 +316,8 @@ while(!$die) {
 		
 	// update & poll every 7 seconds || if logger is large
 	if (((time() - $timer) > 7)) {
-		PommoMailing::update($sent, $failed, $emailHash);
-		PommoMailing::poll();
+		PommoMailCtl::update($sent, $failed, $emailHash);
+		PommoMailCtl::poll();
 		
 		$timer = time();
 		$sent = array();
@@ -327,12 +327,12 @@ while(!$die) {
 
 // don't respawn if this is a test mailing
 if ($test) {
-	PommoMailing::finish($mailingID,TRUE,TRUE);
+	PommoMailCtl::finish($mailingID,TRUE,TRUE);
 	PommoSubscriber::delete(4294967295);
 	die();
 }
 
-PommoMailing::update($sent, $failed, $emailHash);
-PommoMailing::respawn();
-PommoMailing::kill('Queue empty or Runtime reached. Respawning...');
+PommoMailCtl::update($sent, $failed, $emailHash);
+PommoMailCtl::respawn();
+PommoMailCtl::kill('Queue empty or Runtime reached. Respawning...');
 ?>
