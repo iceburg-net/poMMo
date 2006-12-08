@@ -10,108 +10,271 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
-
-class PommoHelperMailings {
  
- 	// send a confirmation message
- 	// accepts to address (str) [email]
- 	// accepts a confirmation code (str)
- 	// accepts a confirmation type (str) either; 'subscribe', 'unsubscribe', 'update'
-	function sendConfirmation($to, $confirmation_key, $type) {
-	 	global $pommo;
-		$logger = & $pommo->_logger;
-	
-		if (empty($confirmation_key) || empty ($to) || empty($type)) 
-			return false;
-		
-		$dbvalues = PommoAPI::configGet('messages');
-		$messages = unserialize($dbvalues['messages']);
+// include the mailing prototype object 
+$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
+ 
 
-		$subject = $messages[$type]['sub'];
+class PommoMailing {
 	
-		$url = $pommo->_http.$pommo->_baseUrl.'user/confirm.php?code='.$confirmation_key;
-		$body = preg_replace('@\[\[URL\]\]@i',$url,$messages[$type]['msg']);  
-	
-		if (empty($subject) || empty($body)) 
-			return false;
-	
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
-		$mail = new PommoMailer();
-	
-		// allow mail to be sent, even if demo mode is on
-		$mail->toggleDemoMode("off");
-	
-		// send the confirmation mail
-		$mail->prepareMail($subject, $body);
-		
-		$ret = true;
-		if (!$mail->bmSendmail($to)) {
-			$logger->addErr(Pommo::_T('Error Sending Mail'));
-			$ret = false;
-		}
-		// reset demo mode to default
-		$mail->toggleDemoMode();
-		return $ret;
+	// make a mailing template
+	// accepts a mailing template (assoc array)
+	// accepts a flag (bool) to designate return of current mailing type
+	// return a mailing object (array)
+	function & make($in = array(), $current = FALSE) {
+		$o = ($current) ?
+			PommoType::mailingCurrent() :
+			PommoType::mailing();
+		return PommoAPI::getParams($o, $in);
 	}
-
-	// Sends a "test" mailing to an address, returns <string> status.
-	function bmSendTestMailing(&$to, &$input) {
-		require_once (bm_baseDir.'inc/class.bmailer.php');
-		require_once (bm_baseDir.'inc/lib.txt.php');
-			$Mail = new bMailer($input['fromname'], $input['fromemail'], $input['frombounce'],NULL,NULL,$input['charset']);
-			$altbody = NULL;
-			$html = FALSE;
-			if ($input['ishtml'] == 'html')
-				$html = TRUE;
-			if (!empty($input['altbody']) && $input['altInclude'] == 'yes')
-				$altbody = str2str($input['altbody']);
-			if (!$Mail->prepareMail(str2str($input['subject']), str2str($input['body']), $html, $altbody)) 
-				return '(Errors Preparing Test)';
+	
+	// make a mailing template based off a database row (mailing* schema)
+	// accepts a mailing template (assoc array)  
+	// accepts a flag (bool) to designate return of current mailing type
+	// return a mailing object (array)	
+	function & makeDB(&$row) {
+		$in = array(
+		'id' => $row['mailing_id'],
+		'fromname' => $row['fromname'],
+		'fromemail' => $row['fromemail'],
+		'frombounce' => $row['frombounce'],
+		'subject' => $row['subject'],
+		'body' => $row['body'],
+		'altbody' => $row['altbody'],
+		'ishtml' => $row['ishtml'],
+		'group' => $row['mailgroup'],
+		'tally' => $row['subscriberCount'],
+		'start' => $row['started'],
+		'end' => $row['finished'],
+		'sent' => $row['sent'],
+		'charset' => $row['charset'],
+		'status' => $row['status']);
 			
-			if (!$Mail->bmSendmail($to))
-				return _T('Error Sending Mail');
-			return sprintf(_T('Test sent to %s'), $to);
+		if ($row['status'] == 1) {
+			$o = array(
+				'command' => $row['command'],
+				'serial' => $row['serial'],
+				'code' => $row['securityCode'],
+				'notices' => $row['notices'],
+				'touched' => $row['touched'], // TIMESTAMP
+				'current_status' => $row['current_status']);
+			$in = array_merge($o,$in);
+		}
+
+		$o = ($row['status'] == 1) ?
+			PommoType::mailingCurrent() :
+			PommoType::mailing();
+		return PommoAPI::getParams($o,$in);
 	}
 	
-	
-	// spawns a page in the background, used by mail processor.
-	function spawn($page) {
+	// mailing validation
+	// accepts a mailing object (array)
+	// returns true if mailing ($in) is valid, false if not
+	function validate(&$in) {
 		global $pommo;
 		$logger =& $pommo->_logger;
+		
+		$invalid = array();
 
-		/* Convert illegal characters in url */
-		$page = str_replace(' ', '%20', $page);
-
-		$errno = '';
-		$errstr = '';
-		$port = $pommo->_hostport;
-		$host = $pommo->_hostname;
-
-		// strip port information from hostname
-		$host = preg_replace('/:\d+$/i', '', $host);
-
-		// NOTE: fsockopen() SSL Support requires PHP 4.3+ with OpenSSL compiled in
-		$ssl = (strpos($pommo->_http, 'https://')) ? 'ssl://' : '';
-
-		$out = "GET $page HTTP/1.1\r\n";
-		$out .= "Host: " . $host . "\r\n";
-
-		// to allow for basic .htaccess http authentication, 
-		//   uncomment and fill in the following;
-		// $out .= "Authorization: Basic " . base64_encode('username:password')."\r\n";
-
-		$out .= "\r\n";
-
-		$socket = fsockopen($ssl . $host, $port, $errno, $errstr, 10);
-
-		if ($socket) {
-			fwrite($socket, $out);
-		} else {
-			$logger->addErr(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr);
+		if (empty($in['fromemail']) || !PommoHelper::isEmail($in['fromemail']))
+			$invalid[] = 'fromemail';
+		if (empty($in['frombounce']) || !PommoHelper::isEmail($in['frombounce']))
+			$invalid[] = 'frombounce';
+		if (empty($in['subject']))
+			$invalid[] = 'subject';
+		if (empty($in['body']))
+			$invalid[] = 'body';
+		if (!is_numeric($in['tally']) || $in['tally'] < 1)
+			$invalid[] = 'subscriberCount';
+		if (!empty($in['start']) && !is_numeric($in['start']))
+			$invalid[] = 'started';
+		if (!empty($in['end']) && !is_numeric($in['end']))
+			$invalid[] = 'finished';
+		if (!empty($in['sent']) && !is_numeric($in['sent']))
+			$invalid[] = 'sent';
+			
+		switch($in['status']) {
+			case 0:
+			case 1:
+			case 2:
+				break;
+			default:
+				$invalid[] = 'status';
+		}
+		
+		if ($in['status'] == 1) {
+			switch ($in['command']) {
+				case 'none':
+				case 'restart':
+				case 'stop':
+					break;
+				default:
+					$invalid[] = 'command'; 
+			}
+			if (!empty($in['serial']) && !is_numeric($in['serial']))
+			$invalid[] = 'serial';
+			switch ($in['current_status']) {
+				case 'started':
+				case 'stopped':
+					break;
+				default:
+					$invalid[] = 'current_status'; 
+			}
+		}
+			
+		if (!empty($invalid)) {
+			$logger->addErr("Mailing failed validation on; ".implode(',',$invalid),1);
 			return false;
 		}
-
+		
 		return true;
 	}
+	
+	
+	// fetches mailings from the database
+	// accepts a filtering array -->
+	//   active (bool) toggle returning of only active mailings
+	//   id (array||str) -> A single or an array of mailing IDs
+	//   code (str) security code of mailing
+	//   sort (str) [subject, mailgroup, subscriberCount, started, etc.]
+	//   order (str) "ASC" or "DESC"
+	//   limit (int) limits # mailings returned
+	//   offset (int) the SQL offset to start at
+	// returns an array of mailings. Array key(s) correlates to mailing ID.
+	function & get($p = array()) {
+		$defaults = array('active' => false, 'id' => null, 'code' => null, 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null);
+		$p = PommoAPI :: getParams($defaults, $p);
+		
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$p['active'] = ($p['active']) ? 1 : null;
+		
+		if (is_numeric($p['limit']) && !is_numeric($p['offset']))
+			$p['offset'] = 0;
+		
+		$o = array();
+		
+		$query = "
+			SELECT *
+			FROM 
+				" . $dbo->table['mailings']." m
+				LEFT JOIN " . $dbo->table['mailing_current']." c ON (m.mailing_id = c.current_id)
+			WHERE
+				1
+				[AND m.status=%I]
+				[AND m.mailing_id IN(%C)]
+				[AND c.securityCode='%S'] 
+				[ORDER BY %S] [%S] 
+				[LIMIT %I, %I]";
+		$query = $dbo->prepare($query,array($p['active'],$p['id'],$p['code'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
+		
+		while ($row = $dbo->getRows($query)) {
+			$o[$row['field_id']] = PommoMailing::makeDB($row);
+		}
+		
+		return $o;
+	}
+	
+	// adds a mailing to the database
+	// accepts a mailing (array)
+	// returns the database ID of the added mailing,
+	//  OR if the mailing is a current mailing (status == 1), returns
+	//  the security code of the mailing. FALSE if failed
+	function add(&$in) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		// set the start time if not provided
+		if (empty($in['start']))
+			$in['start'] = time();
+			
+		if (empty($in['sent']))
+			$in['sent'] = 0;
+
+		if (!PommoMailing::validate($in))
+			return false;
+		
+		$query = "
+			INSERT INTO " . $dbo->table['mailings'] . "
+			SET
+			[fromname='%S',]
+			[fromemail='%S',]
+			[frombounce='%S',]
+			[subject='%S',]
+			[body='%S',]
+			[altbody='%S',]
+			[ishtml='%S',]
+			[mailgroup='%S',]
+			[subscriberCount=%I,]
+			[finished=FROM_UNIXTIME(%I),]
+			[sent=%I,]
+			[charset='%S',]
+			[status=%I,]
+			started=FROM_UNIXTIME(%i)";
+		$query = $dbo->prepare($query,array(
+			$in['fromname'],
+			$in['fromemail'],
+			$in['frombounce'],
+			$in['subject'],
+			$in['body'],
+			$in['altbody'],
+			$in['ishtml'],
+			$in['group'],
+			$in['tally'],
+			$in['end'],
+			$in['sent'],
+			$in['charset'],
+			$in['status'],
+			$in['start']));
+		if (!$dbo->query($query))
+			return false;
+		
+		// fetch new subscriber's ID
+		$id = $dbo->lastId();
+		
+		// insert current if applicable
+		if (!empty($in['status']) && $in['status'] == 1) {
+			if(empty($in['code']))
+				$in['code'] = PommoHelper::makeCode();
+			
+			$query = "
+			INSERT INTO " . $dbo->table['mailing_current'] . "
+			SET
+			[command='%S',]
+			[serial=%I,]
+			[securityCode='%S',]
+			[notices='%S',]
+			[current_status='%S',]
+			current_id=%i";
+			$query = $dbo->prepare($query,array(
+				$in['command'],
+				$in['serial'],
+				$in['code'],
+				$in['notices'],
+				$in['current_status'],
+				$id
+			));
+			if (!$dbo->query($query))
+				return false;
+			return $in['code'];
+		}
+			
+		return $id;
+	}
+	
+	// checks if a mailing is processing
+	// returns (bool) - true if current mailing
+	function isCurrent() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT count(mailing_id)
+			FROM ".$dbo->table['mailings']."
+			WHERE status=1";
+		return ($dbo->query($query,0) > 0) ? true : false;
+	}
+	
 }
 ?>

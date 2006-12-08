@@ -15,10 +15,11 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+
 
 $pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));
 $logger = & $pommo->_logger;
@@ -66,10 +67,10 @@ if (!$code)
 	jsonKill('Unable to add mailing',$key);
 	
 $queue = array($key);
-if(!PommoMailing::queueMake($queue))
+if(!PommoMailCtl::queueMake($queue))
 	jsonKill('Unable to populate queue',$key);
 			
-if (!PommoHelperMailings::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?testMailing=TRUE&securityCode='.$code))
+if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?testMailing=TRUE&securityCode='.$code))
 	jsonKill('Unable to spawn background mailer',$key);
 
 $json = "{success: true, msg: \"".Pommo::_T('Test Mailing Sent.')."\"}";

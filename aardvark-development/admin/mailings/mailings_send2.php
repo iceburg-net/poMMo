@@ -15,7 +15,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailing.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init(array('keep' => TRUE));

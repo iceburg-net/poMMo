@@ -75,6 +75,8 @@ die();
 	  (API) Rewrite PommoMailer()  [ currently depricated with PR13 functionality ]
 	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
 	  (API) Database debugs & outputs should go to loggger -- see notes under THEME
+	  (API) Better Organice inc/helpers/messages & validate... underutilized!
+	  
 	  
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
 	  (feature) Add specific emails to a group

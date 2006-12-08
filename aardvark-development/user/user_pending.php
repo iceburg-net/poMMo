@@ -40,20 +40,20 @@ if (!$pending)
 // check if user wants to reconfirm or cancel their request
 if (!empty ($_POST)) {
 	if (isset ($_POST['reconfirm'])) {
-		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
+		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 		
 		switch ($pending['type']) {
 			case "add" :
-				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'subscribe');
+				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'subscribe');
 				break;
 			case "change" :
-				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'update');
+				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'update');
 				break;
 			case "del" :
-				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'unsubscribe');
+				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'unsubscribe');
 				break;
 			case "password" :
-				PommoHelperMailings::sendConfirmation($input['Email'], $pending['pending_code'], 'password');
+				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'password');
 				break;
 		}
 		$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['Email']));
