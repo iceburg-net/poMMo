@@ -18,9 +18,12 @@ div.date-picker-holder, div.date-picker-holder * {
 	margin: 0;
 	padding: 0;
 }
+
 div.date-picker-holder {
-	position: relative;
+    display: inline;
+    position: absolute;
 }
+  
 div.date-picker-holder input {
 	float: left;
 }
