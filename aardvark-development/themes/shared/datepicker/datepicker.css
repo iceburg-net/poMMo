@@ -39,6 +39,7 @@ div.popup-calendar {
 	overflow:hidden;
 	width: 163px;
 }
+
 html>body div.popup-calendar {
 	left: 99px; /* value for decent browsers */
 }
