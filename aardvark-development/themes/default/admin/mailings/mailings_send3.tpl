@@ -38,7 +38,11 @@
 
 {if $ishtml == 'on'}
 
-<p><strong>{t}HTML Body:{/t}</strong> <a href="mailing_preview.php" target="_blank">{t}View in a new browser window{/t}</a></p>
+<p><strong>{t}HTML Body:{/t}</strong> 
+<a href="ajax/mailing_preview.php?height=320&width=480" title="{t}Message Preview{/t}" class="thickbox">
+{t}Preview Message{/t}
+</a>
+</p>
 
 {if $altbody}
 <p><strong>{t}Alt Body:{/t}</strong></p>
