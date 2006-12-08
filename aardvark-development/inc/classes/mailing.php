@@ -449,7 +449,7 @@ class PommoMailing {
 	
 	
 	// end a mailing
-	function finish($id = 0, $cancel = false) {
+	function finish($id = 0, $cancel = false, $test = false) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -462,15 +462,22 @@ class PommoMailing {
 		if ($dbo->affected($query) < 1)
 			return false;
 			
-			
-		$query = "
-			UPDATE ". $dbo->table['mailings']."
-			SET 
-			finished=FROM_UNIXTIME(%i),
-			status=%i,
-			sent=(SELECT count(subscriber_id) FROM ". $dbo->table['queue']." WHERE status > 0)
-			WHERE mailing_id=%i";
-		$query = $dbo->prepare($query, array(time(), $status, $id));
+		if ($test) { // remove if this was a test mailing
+			$query = "
+				DELETE FROM ". $dbo->table['mailings']."
+				WHERE mailing_id=%i";
+			$query = $dbo->prepare($query, array($id));
+		}
+		else {
+			$query = "
+				UPDATE ". $dbo->table['mailings']."
+				SET 
+				finished=FROM_UNIXTIME(%i),
+				status=%i,
+				sent=(SELECT count(subscriber_id) FROM ". $dbo->table['queue']." WHERE status > 0)
+				WHERE mailing_id=%i";
+			$query = $dbo->prepare($query, array(time(), $status, $id));
+		}
 		
 		if (!$dbo->query($query))
 			return false;

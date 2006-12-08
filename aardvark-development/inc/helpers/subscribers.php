@@ -330,8 +330,12 @@ class PommoSubscriber {
 	
 	// adds a subscriber to the database
 	// accepts a subscriber (array)
+	// accepts a ID (int typically 0) if set forces the added subscriber ID to a key, ovverriding row
 	// returns the database ID of the added field or FALSE if failed
-	function add(&$in) {
+	
+	// TODO -> potentially use the REPLACE INTO of this function
+	//  as a means for UPDATE?
+	function add(&$in, $id = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -341,16 +345,19 @@ class PommoSubscriber {
 
 		if (!PommoSubscriber::validate($in))
 			return false;
-			
+		
+		$insert = ($id === null) ? 'INSERT' : 'REPLACE';
 		$query = "
-		INSERT INTO " . $dbo->table['subscribers'] . "
-		SET
-		email='%s',
-		time_registered=FROM_UNIXTIME(%i),
-		flag=%i,
-		ip=INET_ATON('%s'),
-		status=%i";
+			$insert INTO " . $dbo->table['subscribers'] . "
+			SET
+			[subscriber_id=%I,]
+			email='%s',
+			time_registered=FROM_UNIXTIME(%i),
+			flag=%i,
+			ip=INET_ATON('%s'),
+			status=%i";
 		$query = $dbo->prepare($query,array(
+			$id,
 			$in['email'],
 			$in['registered'],
 			$in['flag'],

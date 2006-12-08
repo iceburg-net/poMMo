@@ -34,10 +34,15 @@ if (PommoMailing::isCurrent())
 
 $input = $pommo->get('mailingData');
 
+
 // redirect (restart) if body or group id are null...
 if (empty($input['mailgroup']) || empty($input['body'])) {
 	Pommo::redirect('mailings_send.php');
 }
+
+if ($pommo->_config['demo_mode'] == 'on')
+	$logger->addMsg(Pommo::_T('Demonstration Mode is on. No Emails will be sent.'));
+
 
 $group = new PommoGroup($input['mailgroup'], 1);
 
