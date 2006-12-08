@@ -42,6 +42,7 @@ $start = time();
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
 $code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
+$test = (empty($_GET['testMailing'])) ? false : true;
 
 if (!$skipSecurity && $relayID < 1 && $relayID > 4)
 	PommoMailing::kill('Mailing stopped. Bad RelayID.', TRUE);
@@ -146,7 +147,7 @@ PommoMailing::poll();
 
 
 // If we're in multimode, spawn scripts (unless this is a spawn!)
-if ($config['multimode'] && !empty($_GET['spawn'])) {
+if ($config['multimode'] && !empty($_GET['spawn']) && !$test) {
 	for ($i = 1; $i < 5; $i++) {
 		if(!empty($config['smtp_'.$i])) {
 			PommoMailing::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
@@ -204,6 +205,11 @@ $subscribers = PommoSubscriber::get(
 	array('id' => PommoMailing::queueGet($relayID, $queueSize)));
 	
 while(empty($subscribers)) {
+	if(PommoMailing::queueUnsentCount() < 1) {
+		PommoMailing::finish($mailingID);
+		die();	
+	}
+			
 	sleep(10);
 	
 	if((time() - $start) > $maxRunTime) {
@@ -213,10 +219,7 @@ while(empty($subscribers)) {
 	
 	$subscribers = PommoSubscriber::get(
 		array('id' => PommoMailing::queueGet($relayID, $queueSize)));
-	
-	if(empty($subscribers))
-		if(PommoMailing::queueUnsentCount() < 1)
-			PommoMailing::finish($mailingID);
+		
 }
 	
 // seperate emails into an array ([email],[domain]) to feed to throttler
@@ -311,7 +314,6 @@ while(!$die) {
 	if (!$throttler->mailsInQueue())
 		$die = TRUE;
 		
-	
 	// update & poll every 7 seconds || if logger is large
 	if (((time() - $timer) > 7)) {
 		PommoMailing::update($sent, $failed, $emailHash);
@@ -321,6 +323,13 @@ while(!$die) {
 		$sent = array();
 		$failed = array();
 	}
+}
+
+// don't respawn if this is a test mailing
+if ($test) {
+	PommoMailing::finish($mailingID,TRUE,TRUE);
+	PommoSubscriber::delete(4294967295);
+	die();
 }
 
 PommoMailing::update($sent, $failed, $emailHash);

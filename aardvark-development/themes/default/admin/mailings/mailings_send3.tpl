@@ -1,3 +1,9 @@
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
+{/capture}
 {include file="admin/inc.header.tpl"}
 
 <div id="preview">
@@ -54,34 +60,30 @@
 {/if}
 </div>
 
-<form method="post" action="" name="test">
 <fieldset>
-<legend>{t}Test mailing{/t}</legend>
+<legend>{t}Test Mailing{/t}</legend>
 
 <div>
-<label for="testTo">{t}Test address:{/t}</label>
-<input type="text" name="testTo" id="testTo" size="50" value="{$config.admin_email}" maxlength="60" />
+<a href="ajax/mailing_test.php?height=400&width=500" title="{t}Send Test Mailing{/t}" class="thickbox"><button>{t}Send Test{/t}</button></a>
 </div>
+
+<br/>
 
 </fieldset>
 
-<div class="buttons">
-
-<input type="submit" name="testMail" value="{t}Send Test{/t}" />
-
-</div>
-
-</form>
-
+<br/>
 <form method="get" action="">
 
+<fieldset>
+<legend>{t}Send Mailing{/t}</legend>
+
+
 <div class="buttons">
-
 <button type="submit" name="sendaway" value="TRUE"><img src="{$url.theme.shared}images/icons/send.png" alt="broadcast icon" />{t}Send Mailing{/t}</button>
-
 </div>
 
 </form>
+</fieldset>
 
 </div>
 
