@@ -79,7 +79,7 @@ class PommoHelperPersonalize {
 	// accepts personalization array
 	// returns a personalized body
 	function body(&$msg, &$s, &$p) {
-		
+		$body = $msg;
 		foreach($p[0] as $key => $search) {
 		
 			// lookup replace string (or if it is Email, replace with email address)
@@ -90,10 +90,10 @@ class PommoHelperPersonalize {
 			if (empty($replace))
 				$replace = $p[2][$key];
 				
-			$body = str_replace($search, $replace,$body);
+			$body = str_replace($search, $replace, $body);
 		}
-	
-	return $body;
+		return $body;
 	}
+	
 }
 ?>
