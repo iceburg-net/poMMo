@@ -15,43 +15,35 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
 define('_poMMo_support', TRUE);
 
-require ('bootstrap.php');
-require ($pommo->_baseDir . 'install/helper.install.php');
+require ('../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
 
-$pommo = & fireup('install');
-session_start();
+if (bmIsInstalled())
+	$pommo->init();
+else
+	$pommo->init(array('authLevel' => 0));
 
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-// allow access to this page if not installed 
-if (bmIsInstalled() && !$_SESSION['pommo']['authenticated']) {
-	Pommo::kill(sprintf(Pommo::_T('Denied access. You must %s logon %s to access this page...'), '<a href="' .
-	$pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
-	die();
-}
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+
+
+$smarty->display('support/support.lib.tpl');
+Pommo::kill();
+
+
+
 
 echo<<<EOF
 
-<hr>
-<div style="width: 100%; text-align: center;">
-	poMMo support v0.02
-	<hr>
-</div>
 
-<ul>
-	<li><a href="support.php?cmd=clearWork">Clear Work Directory</a></li>
-	<br>
-	<li><a href="support.php?cmd=checkSpawn">Test Mailing Processor</a></li>
-	<br>
-	<li><a href="support.php?cmd=killMail">Terminate Mailing</a></li>
-	<br>
-	<li><a href="support.php?cmd=testTime">Test ability to set Maximum Exec Time</a></li>
-</ul>
-<hr>
 
 <div style="width: 100%; text-align: center;">
 	Status
@@ -64,9 +56,11 @@ if (isset ($_GET['cmd'])) {
 		case 'clearWork' :
 
 			function delDir($dirName) {
-				if (empty ($dirName)) {
+				global $pommo;
+				
+				if (empty ($dirName)) 
 					return true;
-				}
+					
 				if (file_exists($dirName)) {
 					$dir = dir($dirName);
 					while ($file = $dir->read()) {
@@ -79,7 +73,7 @@ if (isset ($_GET['cmd'])) {
 						}
 					}
 					$dir->close();
-					if ($dirName != bm_workDir)
+					if ($dirName != $pommo->_workDir)
 						@ rmdir($dirName) or die('Folder ' . $dirName . ' couldn\'t be deleted!');
 				} else {
 					return false;
@@ -87,13 +81,13 @@ if (isset ($_GET['cmd'])) {
 				return true;
 			}
 
-			echo (delDir(bm_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
+			echo (delDir($pommo->_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
 
 			break;
 			
 		case 'checkSpawn' :
 
-			$port = $AAApommo->_hostport; 
+			$port = $pommo->_hostport; 
 			echo 'Attempting to spawn initial background script (HOST: ' . $AAApommo->_hostname . ' PORT: ' . $port . ')... please wait.<br><br>';
 			ob_flush();
 			flush();
