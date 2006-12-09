@@ -1,152 +1,154 @@
-{include file="admin/inc.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+{* Include in-place editing of subscriber table *}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
+<script type="text/javascript">{literal}
+$().ready(function() {
+	$('#orderForm select').change(function() {
+		$('#orderForm')[0].submit();
+	});
+});
+{/literal}</script>
+{* Styling of table *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
+{/capture}
+{include file="admin/inc.header.tpl" sidebar='off'}
 
 <h2>{t}Mailings History{/t}</h2>
+<div class="inpage_menu">
+<li>
+<a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a>
+</li>
+</div>
 
 {include file="admin/inc.messages.tpl"}
 
-<!-- Ordering options -->
-<form method="post" action="" name="bForm" id="bForm">
+<form method="post" action="" id="orderForm">
 <fieldset class="sorting">
-<legend>Sorting</legend>
-
-<div>
-<label for="limit">{t}Mailings per Page:{/t}</label>
-<select name="limit" id="limit" onChange="document.bForm.submit()">
-<option value="10"{if $state.limit == '10'} selected="selected"{/if}>10</option>
-<option value="20"{if $state.limit == '20'} selected="selected"{/if}>20</option>
-<option value="50"{if $state.limit == '50'} selected="selected"{/if}>50</option>
-<option value="100"{if $state.limit == '100'} selected="selected"{/if}>100</option>
-</select>
-</div>
-
-<div>
-<label for="sortBy">{t}Order by:{/t}</label>
-<select name="sortBy" id="sortBy" onChange="document.bForm.submit()">
-<option value="subject"{if $state.sortBy == 'subject'} selected="selected"{/if}>subject</option>
-<option value="started"{if $state.sortBy == 'started'} selected="selected"{/if}>Start Date</option>
-<option value="finished"{if $state.sortBy == 'finished'} selected="selected"{/if}>Finish Date</option>
-<option value="mailgroup"{if $state.sortBy == 'mailgroup'} selected="selected"{/if}>Mail group</option>
-<option value="sent"{if $state.sortBy == 'sent'} selected="selected"{/if}>Mails Sent</option>
-<option value="ishtml"{if $state.sortBy == 'ishtml'} selected="selected"{/if}>HTML Mail</option>
-</select>
-<select name="sortOrder" onChange="document.bForm.submit()">
-<option value="ASC"{if $state.sortOrder == 'ASC'} selected="selected"{/if}>{t}ascending{/t}</option>
-<option value="DESC"{if $state.sortOrder == 'DESC'} selected="selected"{/if}>{t}descending{/t}</option>
-</select>
-</div>
-
+	<legend>{t}Sorting{/t}</legend>
+	
+	<div class="inpage_menu">
+	
+	<li>
+	<label for="sort">{t}Sort by{/t}</label>
+	<select name="sort">
+	<option value="subject" {if $state.sort == 'subject'}SELECTED{/if}>{t}Subject{/t}</option>
+	<option value="mailgroup" {if $state.sort == 'mailgroup'}SELECTED{/if}>{t}Group{/t}</option>
+	<option value="subscriberCount" {if $state.sort == 'subscriberCount'}SELECTED{/if}>{t}Subscriber Count{/t}</option>
+	<option value="started" {if $state.sort == 'started'}SELECTED{/if}>{t}Time Created{/t}</option>
+	</select>
+	</li>
+	
+	<li>
+	<label for="order">{t}Order by{/t}</label>
+	<select name="order">
+	<option value="asc" {if $state.order == 'asc'}SELECTED{/if}>{t}ascending{/t}</option>
+	<option value="desc" {if $state.order == 'desc'}SELECTED{/if}>{t}descending{/t}</option>
+	</select>
+	</li>
+	
+	<li>
+	<label for="limit">{t}# per page{/t}</label>
+	<select name="limit">
+	<option value="10" {if $state.limit == '10'}SELECTED{/if}>10</option>
+	<option value="50" {if $state.limit == '50'}SELECTED{/if}>50</option>
+	<option value="150" {if $state.limit == '150'}SELECTED{/if}>150</option>
+	<option value="300" {if $state.limit == '300'}SELECTED{/if}>300</option>
+	<option value="500" {if $state.limit == '500'}SELECTED{/if}>500</option>
+	</select>
+	</li>
+	
 </fieldset>
 </form>
 
+
+
+
 <form method="post" action="mailings_mod.php" name="oForm" id="oForm">
 <fieldset>
-<legend>Subscribers</legend>
+<legend>{t}Mailings{/t}</legend>
 
-<p class="count">(<em>{t 1=$rowsinset}%1 mailings{/t}</em>)</p>
+<p class="count">({t 1=$tally}%1 mailings{/t})</p>
 
-<table id="mailingtable" summary="history of sent email">
+{if $tally > 0}
+<table summary="mailing details" id="subs">
 <thead>
 <tr>
-<th>{t}select{/t}</th>
-<th>{t}delete{/t}</th>
-<th>{t}view{/t}</th>
-<th>{t}reload{/t}</th>
+
+<th name="key"></th>
+
 <th>{t}Subject{/t}</th>
 <th>{t}Group (count){/t}</th>
 <th>{t}Sent{/t}</th>
 <th>{t}Started{/t}</th>
 <th>{t}Finished{/t}</th>
-<th>{t}Duration{/t}</th>
-<th>{t}HTML{/t}</th>
+<th>{t}Status{/t}</th>
+
 </tr>
 </thead>
 
 <tbody>
 
-{foreach name=mailloop from=$mailings key=key item=mailitem}
-
-<tr class="{cycle values="alt1,alt2"}">
-<td nowrap><input type="checkbox" name="mailid[]" value="{$mailitem.mailid}" /></td>
-<td nowrap><a href="mailings_mod.php?mailid={$mailitem.mailid}&amp;action=delete">{t}delete{/t}</a></td>
-<td nowrap><a href="mailings_mod.php?mailid={$mailitem.mailid}&amp;action=view">{t}view{/t}</a></td>
-<td nowrap><a href="mailings_mod.php?mailid={$mailitem.mailid}&amp;action=reload"><img src="{$url.theme.shared}images/icons/reload-small.png" alt="reload icon" title="{t}Reload, edit and resend Mail{/t}" /></a></td>
-<td nowrap><i>{$mailitem.subject}</i></td>
-<td nowrap>{$mailitem.mailgroup} <span>({$mailitem.subscriberCount})</span></td>
-<td nowrap>{$mailitem.sent}</td>
-<td nowrap>{$mailitem.started}</td>
-<td nowrap>{$mailitem.finished}</td>
-<td nowrap>{$mailitem.duration} 
-
-{if $mailitem.mps}
-<span>({$mailitem.mps} {t}msgs/sec{/t})</span></td>
-{/if}
-
+{foreach from=$mailings key=id item=o}
+<tr>
 <td>
-{if $mailitem.ishtml == 'on'}
-<a href="mailing_preview.php?action=viewhtml&amp;viewid={$mailitem.mailid}" target="_blank"><img src="{$url.theme.shared}images/icons/viewhtml.png" alt="view html icon" title="{t}View HTML in new browser window{/t}" /></a>
-{/if}
+<p class="key">{$id}</p>
+DELETE 
+<br/>
+<a href="ajax/mailing_preview.php?mail_id={$id}&height=320&width=480" title="{t}Message Preview{/t}" class="thickbox">{t}View{/t}</a>
+<br/>
+<a href="ajax/mailing_reload.php?mail_id={$id}" title="{t}Reload Mailing{/t}">{t}Reload{/t}</a>
 </td>
 
-{*{foreach name=propsloop from=$mailitem key=key item=item}
-<td nowrap>{$item}</td> {$key}:{$item}
-{/foreach}-$mailitem.finished}*}
-
-</tr>				
-
-{foreachelse}
-<tr>
-<td colspan="11">{t}No mailing found{/t}</td>
+<td>{$o.subject}</td>
+<td>{$o.group} ({$o.sent})</td>
+<td>{$o.tally}</td>
+<td>{$o.start}</td>
+<td>{$o.end}</td>
+<td>
+{if $o.status == 0}
+	{t}Complete{/t}
+{elseif $o.status == 1}
+	{t}Processing{/t}
+{else}
+	{t}Cancelled{/t}
+{/if}
+</td>
 </tr>
 {/foreach}
 
 </tbody>
 </table>
 
-</fieldset>
-
-<fieldset class="controls">
-<legend>{t}Controls{/t}</legend>
-
-<ul>
-<li><a href="javascript:SetChecked(1,'mailid[]');">{t}Check All{/t}</a></li>
-<li><a href="javascript:SetChecked(0,'mailid[]');">{t}Clear All{/t}</a></li>
-</ul>
-
-<select name="action">
-<option value="view">{t}View{/t} {t}checked mailings{/t}</option>
-<option value="delete">{t}Delete{/t} {t}checked mailings{/t}</option>
-</select>
-
-</fieldset>
-
-<div class="buttons">
-
-<input type="submit" name="send" value="{t}go{/t}" />
-
-</div>
-
+<div>
 {$pagelist}
-
-</form>
+</div>
 
 {literal}
 <script type="text/javascript">
-// <![CDATA[
-
-/* The following code is to "check all/check none" NOTE: form name must properly be set */
-var form='oForm' //Give the form name here
-function SetChecked(val,chkName) {
-	dml=document.forms[form];
-	len = dml.elements.length;
-	var i=0;
-	for( i=0 ; i<len ; i++) {
-		if (dml.elements[i].name==chkName) {
-			dml.elements[i].checked=val;
-		}
-	}
-}
-// ]]>
+$().ready(function() {	
+	$("#subs").tableSorter({
+		sortClassAsc: 'headerSortUp', 		// class name for ascending sorting action to header
+		sortClassDesc: 'headerSortDown',	// class name for descending sorting action to header
+		headerClass: 'header', 				// class name for headers (th's)
+		disableHeader: 0					// DISABLE Sorting on edit/delete column
+	});
+	
+	$('#subs tbody tr').quicksearch({
+		attached: "#subs",
+		position: "before",
+		lavelClass: "quicksearch",
+		stripeRowClass: ['r1', 'r2', 'r3'],
+		labelText: "{/literal}{t}Quick Search{/t}{literal}",
+		inputText: "{/literal}{t}search table{/t}{literal}",
+		loaderImg: '{/literal}{$url.theme.shared}images/loader.gif{literal}'
+	});	
+});
 </script>
 {/literal}
+{/if}
 
 {include file="admin/inc.footer.tpl"}

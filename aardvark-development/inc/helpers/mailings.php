@@ -13,7 +13,34 @@
  
 // include the mailing prototype object 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
- 
+
+/**
+ * Mailing: A poMMo Mailing
+ * ==SQL Schema==
+ *	mailing_id		(int)		Database ID/Key
+ *	fromname		(str)		Header: FROM name<>
+ *  fromemail		(str)		Header: FROM <email>
+ *  subject			(str)		Header: SUBJECT
+ *  body			(str)		Message Body
+ *  altbody			(str)		Alternative Text Body
+ *  ishtml			(enum)		'on','off' toggle of HTML mailing
+ *  mailgroup		(str)		Name of poMMo group mailed
+ *  subscriberCount	(int)		Number of subscribers in group
+ *  started			(datetime)	Time mailing started
+ *  finished		(datetime)	Time mailing ended
+ *  sent			(int)		Number of mails sent
+ *  charset			(str)		Encoding of Message
+ *  status			(bool)		0: finished, 1: processing, 2: cancelled
+ * 	
+ * ==Additional Columns for Current Mailing==
+ * 
+ *  current_id		(int)		ID of current mailing (from mailing_id)
+ *  command			(enum)		'none' (default), 'restart', 'stop'
+ *  serial			(int)		Serial of this mailing
+ *  securityCode	(char[32])	Security Code of Mailing
+ *	notices			(str)		Mailing Messages
+ *  current_status	(enum)		'started', 'stopped' (default)
+ */ 
 
 class PommoMailing {
 	
@@ -134,6 +161,7 @@ class PommoMailing {
 	// fetches mailings from the database
 	// accepts a filtering array -->
 	//   active (bool) toggle returning of only active mailings
+	//	 noBody (bool) toggle returning of mailing bodies (default false)
 	//   id (array||str) -> A single or an array of mailing IDs
 	//   code (str) security code of mailing
 	//   sort (str) [subject, mailgroup, subscriberCount, started, etc.]
@@ -142,7 +170,7 @@ class PommoMailing {
 	//   offset (int) the SQL offset to start at
 	// returns an array of mailings. Array key(s) correlates to mailing ID.
 	function & get($p = array()) {
-		$defaults = array('active' => false, 'id' => null, 'code' => null, 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null);
+		$defaults = array('active' => false, 'noBody' => false, 'id' => null, 'code' => null, 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
 		global $pommo;
@@ -155,8 +183,12 @@ class PommoMailing {
 		
 		$o = array();
 		
+		$select = "mailing_id, fromname, fromemail, subject, ishtml, mailgroup, subscriberCount, started, finished, sent, charset, status, c.*";
+		if(!$p['noBody'])
+			$select .= ", body, altbody";
+		
 		$query = "
-			SELECT *
+			SELECT $select
 			FROM 
 				" . $dbo->table['mailings']." m
 				LEFT JOIN " . $dbo->table['mailing_current']." c ON (m.mailing_id = c.current_id)
@@ -170,7 +202,7 @@ class PommoMailing {
 		$query = $dbo->prepare($query,array($p['active'],$p['id'],$p['code'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
 		
 		while ($row = $dbo->getRows($query)) {
-			$o[$row['field_id']] = PommoMailing::makeDB($row);
+			$o[$row['mailing_id']] = PommoMailing::makeDB($row);
 		}
 		
 		return $o;
@@ -274,6 +306,18 @@ class PommoMailing {
 			FROM ".$dbo->table['mailings']."
 			WHERE status=1";
 		return ($dbo->query($query,0) > 0) ? true : false;
+	}
+	
+	// gets the number of mailings
+	// returns mailing tally (int)
+	function tally() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT count(mailing_id)
+			FROM " . $dbo->table['mailings'];
+		return ($dbo->query($query,0));
 	}
 	
 }
