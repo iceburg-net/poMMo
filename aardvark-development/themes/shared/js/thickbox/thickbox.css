@@ -110,12 +110,11 @@ html, body {
 	top: 50%;
 	left: 50%;
 	 margin: -50px 0 0 -50px; /* -height/2 0 0 -width/2 */
-	display:none;
 	height:100px;
 	width:100px;
 	z-index:101;
-	// bb: added
-	background: url('loadingAnimation.gif') center center no-repeat;
+	display: none;
+	background: url('loadingAnimation.gif') center center no-repeat;	
 }
 
 #TB_HideSelect{

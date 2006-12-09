@@ -30,7 +30,7 @@
  	
  	function rememberBaseURL() {
  		global $pommo;
- 		$config = PommoHelper::parseConfig($pommo->_workDir . '/maintenance.php', 'w');
+ 		$config = PommoHelper::parseConfig($pommo->_workDir . '/maintenance.php');
  		return $config['baseURL'];
  	}
  }
