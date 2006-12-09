@@ -325,18 +325,6 @@ class PommoMailCtl {
 		PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$p['code'].'&relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
 	}
 	
-	// gets the number of mailings
-	// returns mailing tally (int)
-	function tally() {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-		
-		$query = "
-			SELECT count(mailing_id)
-			FROM " . $dbo->table['mailings'];
-		return ($dbo->query($query,0));
-	}
-	
 	// spawns a page in the background, used by mail processor.
 	function spawn($page) {
 		global $pommo;

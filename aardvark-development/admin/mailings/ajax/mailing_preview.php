@@ -15,13 +15,15 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-$input = $pommo->get('mailingData');
+$input = (isset($_GET['mail_id'])) ? 
+	current(PommoMailing::get(array('id' => $_GET['mail_id']))) :
+	$pommo->get('mailingData');
 
 die($input['body']);
 
