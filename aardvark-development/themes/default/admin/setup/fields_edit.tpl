@@ -18,13 +18,13 @@
 
 <div>
 <label for="field_name"><span class="required">{t}Short Name:{/t}</span> <span class="error">{validate id="field_name" message=$formError.field_name}</span></label>
-<input type="text" class="text" maxlength="60" size="32" name="field_name" id="field_name" value="{$field_name|escape}"/>
+<input type="text" maxlength="60" size="32" name="field_name" id="field_name" value="{$field_name|escape}"/>
 <div class="notes">{t}Identifying name. NOT displayed on Subscription Form or seen by users.{/t}</div>
 </div>
 
 <div>
 <label for="field_prompt"><span class="required">{t}Form Name:{/t}</span> <span class="error">{validate id="field_prompt" message=$formError.field_prompt}</span></label>
-<input type="text" class="text" maxlength="60" size="32" name="field_prompt" id="field_prompt" value="{$field_prompt|escape}"/>
+<input type="text" maxlength="60" size="32" name="field_prompt" id="field_prompt" value="{$field_prompt|escape}"/>
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}Prompt for field on the Subscription Form. e.g. %1Type your city%2{/t}</div>
 </div>
 
@@ -45,7 +45,7 @@
 {if $field.type == 'text' || $field.type == 'number' || $field.type == 'date'}
 <div>
 <label for="field_normally">{t}Default:{/t}</label>
-<input type="text" class="text" maxlength="60" size="32" name="field_normally" id="field_normally" value="{$field_normally|escape}" />
+<input type="text" maxlength="60" size="32" name="field_normally" id="field_normally" value="{$field_normally|escape}" />
 <div class="notes">{t}If provided, this value will appear pre-filled on the subscription form{/t}</div>
 </div>
 
@@ -95,7 +95,7 @@
 
 <div>
 <label for="addOption">Options:</label>
-<input type="text" class="text" name="addOption" id="addOption" title="{t}type option(s){/t}" size="50" />
+<input type="text" name="addOption" id="addOption" title="{t}type option(s){/t}" size="50" />
 </div>
 
 <div class="buttons">

@@ -17,7 +17,7 @@
 
 <div>
 <label class="required" for="email"><strong>{t}Your Email:{/t}</strong></label>
-<input type="text" class="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" />
+<input type="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" />
 </div>
 
 {foreach name=fields from=$fields key=key item=field}
@@ -25,7 +25,7 @@
 <label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 
 {if $field.type == 'text' || $field.type == 'number'}
-<input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
+<input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
 
 {elseif $field.type == 'checkbox'}
 <input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{elseif !$formSubmitted && $field.normally == "on"} checked="checked"{/if} />

@@ -20,7 +20,7 @@
 <div>
 <div class="error">{validate id="subscribe_sub" message=$formError.subscribe_sub}</div>
 <label for="Subscribe_sub"><span class="required">{t}Subject:{/t}</span></label>
-<input type="text" class="text" size="32" maxlength="60" name="Subscribe_sub" value="{$Subscribe_sub|escape}" id="subscribe_sub" />
+<input type="text" size="32" maxlength="60" name="Subscribe_sub" value="{$Subscribe_sub|escape}" id="subscribe_sub" />
 <div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
@@ -51,7 +51,7 @@
 <div>
 <div class="error">{validate id="unsubscribe_sub" message=$formError.unsubscribe_sub}</div>
 <label for="Unsubscribe_sub"><span class="required">{t}Subject:{/t}</span></label>
-<input type="text" class="text" size="32" maxlength="60" name="Unsubscribe_sub" value="{$Unsubscribe_sub|escape}" id="unsubscribe_sub" />
+<input type="text" size="32" maxlength="60" name="Unsubscribe_sub" value="{$Unsubscribe_sub|escape}" id="unsubscribe_sub" />
 <div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
@@ -82,7 +82,7 @@
 <div>
 <div class="error">{validate id="update_sub" message=$formError.update_sub}</div>
 <label for="Update_sub"><span class="required">{t}Subject:{/t}</span></label>
-<input type="text" class="text" size="32" maxlength="60" name="Update_sub" value="{$Update_sub|escape}" id="update_sub" />
+<input type="text" size="32" maxlength="60" name="Update_sub" value="{$Update_sub|escape}" id="update_sub" />
 <div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
@@ -113,7 +113,7 @@
 <div>
 <div class="error">{validate id="password_sub" message=$formError.password_sub}</div>
 <label for="Password_sub"><span class="required">{t}Subject:{/t}</span></label>
-<input type="text" class="text" size="32" maxlength="60" name="Password_sub" value="{$Password_sub|escape}" id="password_sub" />
+<input type="text" size="32" maxlength="60" name="Password_sub" value="{$Password_sub|escape}" id="password_sub" />
 <div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 

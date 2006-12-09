@@ -13,27 +13,27 @@
 		<div>
 
 			<label for="admin_username"><span class="required">{t}Administrator Username:{/t}</span> <span class="error">{validate id="admin_username" message=$formError.admin_username}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="admin_username" value="{$admin_username|escape}" id="admin_username" />
+			<input type="text" size="32" maxlength="60" name="admin_username" value="{$admin_username|escape}" id="admin_username" />
 			<div class="notes">{t}(you will use this to login){/t}</div>
 		</div>
 
 		<div>
 			<label for="admin_password">{t}Administrator Password:{/t} </label>
-			<input type="text" class="text" size="32" maxlength="60" name="admin_password" value="{$admin_password|escape}" id="admin_password" />
+			<input type="text" size="32" maxlength="60" name="admin_password" value="{$admin_password|escape}" id="admin_password" />
 			<div class="notes">{t}(you will use this to login){/t}</div>
 		</div>
 
 		<div>
 
 			<label for="admin_password2">{t}Verify Password:{/t} <span class="error">{validate id="admin_password2" message=$formError.admin_password2}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="admin_password2" value="{$admin_password2|escape}" id="admin_password2" />
+			<input type="text" size="32" maxlength="60" name="admin_password2" value="{$admin_password2|escape}" id="admin_password2" />
 			<div class="notes">{t}(enter password again){/t}</div>
 		</div>
 
 		<div>
 
 			<label for="admin_email"><span class="required">{t}Administrator Email:{/t} <span class="error">{validate id="admin_email" message=$formError.admin_email}</span></span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="admin_email" value="{$admin_email|escape}" id="admin_email" />
+			<input type="text" size="32" maxlength="60" name="admin_email" value="{$admin_email|escape}" id="admin_email" />
 			<div class="notes">{t}(email address of administrator){/t}</div>
 		</div>
 
@@ -45,26 +45,26 @@
 		<div>
 
 			<label for="site_name"><span class="required">{t}Website Name:{/t}</span> <span class="error">{validate id="site_name" message=$formError.site_name}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="site_name" value="{$site_name|escape}" id="site_name" />
+			<input type="text" size="32" maxlength="60" name="site_name" value="{$site_name|escape}" id="site_name" />
 			<div class="notes">{t}(The name of your Website){/t}</div>
 		</div>
 
 		<div>
 
 			<label for="site_url"><span class="required">{t}Website URL:{/t}</span> <span class="error">{validate id="site_url" message=$formError.site_url}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="site_url" value="{$site_url|escape}" id="site_url" />
+			<input type="text" size="32" maxlength="60" name="site_url" value="{$site_url|escape}" id="site_url" />
 			<div class="notes">{t}(Web address of your Website){/t}</div>
 		</div>
 
 		<div>
 			<label for="site_success">{t}Success URL:{/t} <span class="error">{validate id="site_success" message=$formError.site_success}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="site_success" value="{$site_success|escape}" id="site_success" />
+			<input type="text" size="32" maxlength="60" name="site_success" value="{$site_success|escape}" id="site_success" />
 			<div class="notes">{t}(Webpage users will see upon successfull subscription. Leave blank to display default welcome page.){/t}</div>
 		</div>
 
 		<div>
 			<label for="site_confirm">{t}Confirm URL:{/t} <span class="error">{validate id="site_confirm" message=$formError.site_confirm}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="site_confirm" value="{$site_confirm|escape}" id="site_confirm" />
+			<input type="text" size="32" maxlength="60" name="site_confirm" value="{$site_confirm|escape}" id="site_confirm" />
 			<div class="notes">{t}(Webpage users will see upon subscription attempt. Leave blank to display default confirmation page.){/t}</div>
 		</div>
 
@@ -95,25 +95,25 @@
 
 		<div>
 			<label for="list_name"><span class="required">{t}List Name:{/t}</span> <span class="error">{validate id="list_name" message=$formError.list_name}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="list_name" value="{$list_name|escape}" id="list_name" />
+			<input type="text" size="32" maxlength="60" name="list_name" value="{$list_name|escape}" id="list_name" />
 			<div class="notes">{t}(The name of your Mailing List){/t}</div>
 		</div>
 
 		<div>
 			<label for="list_fromname"><span class="required">{t}From Name:{/t}</span> <span class="error">{validate id="list_fromname" message=$formError.list_fromname}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="list_fromname" value="{$list_fromname|escape}" id="list_fromname" />
+			<input type="text" size="32" maxlength="60" name="list_fromname" value="{$list_fromname|escape}" id="list_fromname" />
 			<div class="notes">{t}(Default name mails will be sent from){/t}</div>
 		</div>
 
 		<div>
 			<label for="list_fromemail"><span class="required">{t}From Email:{/t}</span> <span class="error">{validate id="list_fromemail" message=$formError.list_fromemail}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="list_fromemail" value="{$list_fromemail|escape}" id="list_fromemail" />
+			<input type="text" size="32" maxlength="60" name="list_fromemail" value="{$list_fromemail|escape}" id="list_fromemail" />
 			<div class="notes">{t}(Default email mails will be sent from){/t}</div>
 		</div>
 
 		<div>
 			<label for="list_frombounce"><span class="required">{t}Bounce Address:{/t}</span> <span class="error">{validate id="list_frombounce" message=$formError.list_frombounce}</span></label>
-			<input type="text" class="text" size="32" maxlength="60" name="list_frombounce" value="{$list_frombounce|escape}" id="list_frombounce" />
+			<input type="text" size="32" maxlength="60" name="list_frombounce" value="{$list_frombounce|escape}" id="list_frombounce" />
 			<div class="notes">{t}(Returned emails will be sent to this address){/t}</div>
 		</div>
 
