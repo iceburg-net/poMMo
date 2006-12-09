@@ -19,7 +19,7 @@
 
 <div>
 <label for="field_name">New field name:</label>
-<input type="text" class="text" title="{t}type new field name{/t}" maxlength="60" size="30" name="field_name" id="field_name" />
+<input type="text" title="{t}type new field name{/t}" maxlength="60" size="30" name="field_name" id="field_name" />
 </div>
 
 <div>

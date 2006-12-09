@@ -35,42 +35,42 @@
 <fieldset>
 <legend>{t}Configuration Options{/t}</legend>
 
-<div class="field">
+<div>
 <div class="error">{validate id="list_name" message=$formError.list_name}</div>
 <label for="list_name"><span class="required">{t}Name of Mailing List:{/t}</span></label>
 <input type="text" size="32" maxlength="60" name="list_name" value="{$list_name|escape}" id="list_name" />
 <div class="notes">{t}(ie. Brice's Mailing List){/t}</div>
 </div>
 
-<div class="field">
+<div>
 <div class="error">{validate id="site_name" message=$formError.site_name}</div>
 <label for="site_name"><span class="required">{t}Name of Website:{/t}</span></label>
 <input type="text" size="32" maxlength="60" name="site_name" value="{$site_name|escape}" id="site_name" />
 <div class="notes">{t}(ie. The poMMo Website){/t}</div>
 </div>
 
-<div class="field">
+<div>
 <div class="error">{validate id="site_url" message=$formError.site_url}</div>
 <label for="site_url"><span class="required">{t}Website URL:{/t}</span></label>
 <input type="text" size="32" maxlength="60" name="site_url" value="{$site_url|escape}" id="site_url" />
 <div class="notes">{t}(ie. http://www.pommo-rocks.com/){/t}</div>
 </div>
 
-<div class="field">
+<div>
 <div class="error">{validate id="admin_password" message=$formError.admin_password}</div>
 <label for="admin_password"><span class="required">{t}Administrator Password:{/t}</span></label>
 <input type="text" size="32" maxlength="60" name="admin_password" value="{$admin_password|escape}" id="admin_password" />
 <div class="notes">{t}(you will use this to login){/t}</div>
 </div>
 
-<div class="field">
+<div>
 <div class="error">{validate id="admin_password2" message=$formError.admin_password2}</div>
 <label for="admin_password2"><span class="required">{t}Verify Password:{/t}</span></label>
 <input type="text" size="32" maxlength="60" name="admin_password2" value="{$admin_password2|escape}" id="admin_password2" />
  <div class="notes">{t}(enter password again){/t}</div>
 </div>
 
-<div class="field">
+<div>
 <div class="error">{validate id="admin_email" message=$formError.admin_email}</div>
 <label for="admin_email"><span class="required">{t}Administrator Email:{/t}</span></label>
 <input type="text" size="32" maxlength="60" name="admin_email" value="{$admin_email|escape}" id="admin_email" />

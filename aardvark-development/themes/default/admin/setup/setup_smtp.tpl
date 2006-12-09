@@ -41,13 +41,13 @@
 
 <div>
 <label for="host{$id}">{t}SMTP Host:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="host[{$id}]" id="host{$id}" value="{$smtp[$id].host|escape}"  />
+<input type="text" size="32" maxlength="60" name="host[{$id}]" id="host{$id}" value="{$smtp[$id].host|escape}"  />
 <div class="notes">{t}(IP Address or Name of SMTP server){/t}</div>
 </div>
 
 <div>
 <label for="port{$id}">{t}Port Number:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="port[{$id}]" id="port{$id}" value="{$smtp[$id].port|escape}"  />
+<input type="text" size="32" maxlength="60" name="port[{$id}]" id="port{$id}" value="{$smtp[$id].port|escape}"  />
 <div class="notes">{t}(Port # of SMTP server [usually 25]){/t}</div>
 </div>
 
@@ -60,13 +60,13 @@
 
 <div>
 <label for="user{$id}">{t}SMTP Username:{/t} </label>
-<input type="text" class="text" size="32" maxlength="60" name="user[{$id}]" id="user{$id}" value="{$smtp[$id].user|escape}" />
+<input type="text" size="32" maxlength="60" name="user[{$id}]" id="user{$id}" value="{$smtp[$id].user|escape}" />
 <div class="notes">{t}(optional){/t}</div>
 </div>
 
 <div>
 <label for="pass{$id}">{t}SMTP Password:{/t} </label>
-<input type="text" class="text" size="32" maxlength="60" name="pass[{$id}]" id="pass{$id}" value="{$smtp[$id].pass|escape}" />
+<input type="text" size="32" maxlength="60" name="pass[{$id}]" id="pass{$id}" value="{$smtp[$id].pass|escape}" />
 <div class="notes">{t}(optional){/t}</div>
 </div>
 

@@ -14,8 +14,6 @@ Useful for properly including javascripts and CSS in the HTML <head> *}
 is prepared to include a form from the parent PHP script *}
 
 {if $isForm}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/bform.css" />
-
 <script type="text/javascript" src="{$url.theme.shared}js/bform.js"></script>
 {/if}
 </head>

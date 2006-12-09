@@ -11,7 +11,7 @@
 
 <div>
 <label for="subject"><span class="required">{t}Subject:{/t}</span> <span class="error">{validate id="subject" message=$formError.subject}</span></label>
-<input type="text" class="text" size="60" maxlength="60" name="subject" value="{$subject|escape}" id="subject" />
+<input type="text" size="60" maxlength="60" name="subject" value="{$subject|escape}" id="subject" />
 <div class="notes">{t}(maximum of 60 characters){/t}</div>
 </div>
 
@@ -37,19 +37,19 @@
 
 <div>
 <label for="fromname"><span class="required">{t}From Name:{/t}</span> <span class="error">{validate id="fromname" message=$formError.fromname}</span></label>
-<input type="text" class="text" size="60" maxlength="60" name="fromname" value="{$fromname|escape}" id="fromname" />
+<input type="text" size="60" maxlength="60" name="fromname" value="{$fromname|escape}" id="fromname" />
 <div class="notes">{t}(maximum of 60 characters){/t}</div>
 </div>
 
 <div>
 <label for="fromemail"><span class="required">{t}From Email:{/t}</span> <span class="error">{validate id="fromemail" message=$formError.fromemail}</span></label>
-<input type="text" class="text" size="60" maxlength="60" name="fromemail" value="{$fromemail|escape}" id="fromemail" />
+<input type="text" size="60" maxlength="60" name="fromemail" value="{$fromemail|escape}" id="fromemail" />
 <div class="notes">{t}(maximum of 60 characters){/t}</div>
 </div>
 
 <div>
 <label for="frombounce"><span class="required">{t}Return:{/t}</span> <span class="error">{validate id="frombounce" message=$formError.frombounce}</span></label>
-<input type="text" class="text" size="60" maxlength="60" name="frombounce" value="{$frombounce|escape}" id="frombounce" />
+<input type="text" size="60" maxlength="60" name="frombounce" value="{$frombounce|escape}" id="frombounce" />
 <div class="notes">{t}(maximum of 60 characters){/t}</div>
 </div>
 

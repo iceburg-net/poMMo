@@ -10,7 +10,7 @@
 
 <div>
 <label for="email">{t}Your Email:{/t}</label>
-<input type="text" class="text" size="20" maxlength="60" name="Email" id="email" />
+<input type="text" size="20" maxlength="60" name="Email" id="email" />
 </div>
 
 </fieldset>

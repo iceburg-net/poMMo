@@ -15,17 +15,17 @@
 
 <div>
 <label class="required" for="email"><strong>{t}Your Email:{/t}</strong></label>
-<input type="text" class="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" readonly="readonly" />
+<input type="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" readonly="readonly" />
 </div>
 
 <div>
 <label for="email">{t}New Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="newemail" id="newemail" value="{$newemail|escape}" />
+<input type="text" size="32" maxlength="60" name="newemail" id="newemail" value="{$newemail|escape}" />
 </div>
 
 <div>
 <label for="email">{t}Verify New Email:{/t}</label>
-<input type="text" class="text" size="32" maxlength="60" name="newemail2" id="newemail2" value="{$newemail2|escape}" />
+<input type="text" size="32" maxlength="60" name="newemail2" id="newemail2" value="{$newemail2|escape}" />
 </div>
 
 {foreach name=fields from=$fields key=key item=field}
@@ -33,7 +33,7 @@
 <label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 
 {if $field.type == 'text' || $field.type == 'number'}
-<input type="text" class="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
+<input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
 
 {elseif $field.type == 'checkbox'}
 <input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{elseif !$formSubmitted && $field.normally == "on"} checked="checked"{/if} />
