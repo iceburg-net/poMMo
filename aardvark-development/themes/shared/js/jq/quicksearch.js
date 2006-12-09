@@ -205,11 +205,11 @@ jQuery._makeForm = function (set) {
 	this.mform = function () {
 		return '<form action="#" ' + 
 						'id="'+ this.settings.formId + '" ' +
-						'class="quicksearch">' +
+						'class="quicksearch"><div>' +
 						this.mlabel() +
 						this.minput() +
 						this.mloader() +		
-						'</form>';
+						'</div></form>';
 	};
 	this.mlabel = function () {
 		if(!this.isEmpty(this.settings.labelText)) {

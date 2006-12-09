@@ -20,91 +20,79 @@ $().ready(function() {
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
 
-<form method="post" action="" id="orderForm">
-
 <ul class="inpage_menu">
-	<li>
-	<!-- <a href="#TB_inline?height=400&width=500&inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> -->
-	<a href="ajax/subscriber_add.php?height=400&width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a>
-	</li>
-	
-	<li>
-	<a href="ajax/subscriber_del.php?height=400&width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a>
-	</li>
-	
+<li><!-- <a href="#TB_inline?height=400&amp;width=500&amp;inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> --><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
+
+<li><a href="ajax/subscriber_del.php?height=400&amp;width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a></li>	
 </ul>
 
+<form method="post" action="" id="orderForm">
 <fieldset class="sorting">
-	<legend>{t}View{/t}</legend>
-	
-	<div class="inpage_menu">
-	
-	<li>
-	<label for="status">{t}View{/t}</label>
-	<select name="status">
-	<option value="1" {if $state.status == 1}SELECTED{/if}>{t}Active Subscribers{/t}</option>
-	<option value="1">------------------</option>
-	<option value="0" {if $state.status == 0}SELECTED{/if}>{t}Unsubscribed{/t}</option>
-	<option value="2" {if $state.status == 2}SELECTED{/if}>{t}Pending{/t}</option>
-	</select>
-	</li>
-	
-	<li>
-	<label for="group">{t}Belonging to Group{/t}</label>
-	<select name="group">
-	<option value="all" {if $state.group == 'all'}SELECTED{/if}>{t}All Subscribers{/t}</option>
-	<option value="all">---------------</option>
-	{foreach from=$groups key=id item=g}
-	<option value="{$id}" {if $state.group == $id}SELECTED{/if}>{$g.name}</option>
-	{/foreach}
-	</select>
-	</li>
-	
-	<li>
-	<label for="limit">{t}# per page{/t}</label>
-	<select name="limit">
-	<option value="10" {if $state.limit == '10'}SELECTED{/if}>10</option>
-	<option value="50" {if $state.limit == '50'}SELECTED{/if}>50</option>
-	<option value="150" {if $state.limit == '150'}SELECTED{/if}>150</option>
-	<option value="300" {if $state.limit == '300'}SELECTED{/if}>300</option>
-	<option value="500" {if $state.limit == '500'}SELECTED{/if}>500</option>
-	</select>
-	</li>
-	
-	</div>
+<legend>{t}View{/t}</legend>
+
+<div>
+<label for="status">{t}View{/t}</label>
+<select name="status">
+<option value="1"{if $state.status == 1} selected="selected"{/if}>{t}Active Subscribers{/t}</option>
+<option value="1">------------------</option>
+<option value="0"{if $state.status == 0} selected="selected"{/if}>{t}Unsubscribed{/t}</option>
+<option value="2"{if $state.status == 2} selected="selected"{/if}>{t}Pending{/t}</option>
+</select>
+</div>
+
+<div>
+<label for="group">{t}Belonging to Group{/t}</label>
+<select name="group">
+<option value="all"{if $state.group == 'all'} selected="selected"{/if}>{t}All Subscribers{/t}</option>
+<option value="all">---------------</option>
+{foreach from=$groups key=id item=g}
+<option value="{$id}"{if $state.group == $id} selected="selected"{/if}>{$g.name}</option>
+{/foreach}
+</select>
+</div>
+
+<div>
+<label for="limit">{t}# per page{/t}</label>
+<select name="limit">
+<option value="10"{if $state.limit == '10'} selected="selected"{/if}>10</option>
+<option value="50"{if $state.limit == '50'} selected="selected"{/if}>50</option>
+<option value="150"{if $state.limit == '150'} selected="selected"{/if}>150</option>
+<option value="300"{if $state.limit == '300'} selected="selected"{/if}>300</option>
+<option value="500"{if $state.limit == '500'} selected="selected"{/if}>500</option>
+</select>
+</div>
+
 </fieldset>
 
 <fieldset class="sorting">
-	<legend>{t}Sorting{/t}</legend>
-	
-	<div class="inpage_menu">
-	
-	<li>
-	<label for="sort">{t}Sort by{/t}</label>
-	<select name="sort">
-	<option value="email" {if $state.sort == 'email'}SELECTED{/if}>{t}email{/t}</option>
-	<option value="time_registered" {if $state.sort == 'time_registered'}SELECTED{/if}>{t}time registered{/t}</option>
-	<option value="time_touched" {if $state.sort == 'time_touched'}SELECTED{/if}>{t}time last updated{/t}</option>
-	<option value="ip" {if $state.sort == 'ip'}SELECTED{/if}>{t}IP Address{/t}</option>
-	</select>
-	</li>
-	
-	<li>
-	<label for="order">{t}Order by{/t}</label>
-	<select name="order">
-	<option value="asc" {if $state.order == 'asc'}SELECTED{/if}>{t}ascending{/t}</option>
-	<option value="desc" {if $state.order == 'desc'}SELECTED{/if}>{t}descending{/t}</option>
-	</select>
-	</li>
-	
-	<li>
-	<label for="info">{t}Extended Info{/t}</label>
-	<select name="info">
-	<option value="show" {if $state.info == 'show'}SELECTED{/if}>{t}show{/t}</option>
-	<option value="hide" {if $state.info == 'hide'}SELECTED{/if}>{t}hide{/t}</option>
-	</select>
-	</li>
-	
+<legend>{t}Sorting{/t}</legend>
+
+<div>
+<label for="sort">{t}Sort by{/t}</label>
+<select name="sort">
+<option value="email"{if $state.sort == 'email'} selected="selected"{/if}>{t}email{/t}</option>
+<option value="time_registered"{if $state.sort == 'time_registered'} selected="selected"{/if}>{t}time registered{/t}</option>
+<option value="time_touched"{if $state.sort == 'time_touched'} selected="selected"{/if}>{t}time last updated{/t}</option>
+<option value="ip"{if $state.sort == 'ip'} selected="selected"{/if}>{t}IP Address{/t}</option>
+</select>
+</div>
+
+<div>
+<label for="order">{t}Order by{/t}</label>
+<select name="order">
+<option value="asc"{if $state.order == 'asc'} selected="selected"{/if}>{t}ascending{/t}</option>
+<option value="desc"{if $state.order == 'desc'} selected="selected"{/if}>{t}descending{/t}</option>
+</select>
+</div>
+
+<div>
+<label for="info">{t}Extended Info{/t}</label>
+<select name="info">
+<option value="show"{if $state.info == 'show'} selected="selected"{/if}>{t}show{/t}</option>
+<option value="hide"{if $state.info == 'hide'} selected="selected"{/if}>{t}hide{/t}</option>
+</select>
+</div>
+
 </fieldset>
 </form>
 
@@ -114,15 +102,13 @@ $().ready(function() {
 <table summary="subscriber details" id="subs">
 <thead>
 <tr>
-
 <th name="key"></th>
-
 <th name="email" class="pvV pvEmail pvEmpty">EMAIL</th>
 
 {foreach from=$fields key=id item=f}
 <th name="{$id}" class="pvV{if $f.required == 'on'} pvEmpty{/if}{if $f.type == 'number'} pvNumber{/if}{if $f.type == 'date'} pvDate{/if}">{$f.name}</th>
 	{if $f.type == 'multiple'}
-	<select style="display: none;" id="seM{$id}">{foreach name=inner from=$f.array item=option}<option value="{$option|escape}">{$option}</option>{/foreach}</select>
+	<select style="display:none" id="seM{$id}">{foreach name=inner from=$f.array item=option}<option value="{$option|escape}">{$option}</option>{/foreach}</select>
 	{/if}
 {/foreach}
 
@@ -141,7 +127,7 @@ $().ready(function() {
 <tr>
 <td>
 {* edit button -- this switches to {$url.theme.shared}images/icons/yes.png when clicked *}
-<button class="edit"><img src="{$url.theme.shared}images/icons/edit.png"></button>
+<button class="edit"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
 
 <p class="key">{$sid}</p>
 </td>
@@ -150,7 +136,7 @@ $().ready(function() {
 
 {foreach name=inner from=$fields key=fid item=f}
 {if $fields[$fid].type == 'checkbox'}
-<td><input type="checkbox" disabled {if $s.data[$fid] == 'on'}checked{/if}/></td>
+<td><input type="checkbox" disabled="disabled" {if $s.data[$fid] == 'on'}checked="checked"{/if}/></td>
 {elseif $fields[$fid].type == 'multiple'}
 <td class="seMultiple" rel="seM{$fid}">{$s.data[$fid]}</td>{* Add class multiple+field ID so editable column is converted to a select input in pre_edit function *}
 {elseif $fields[$fid].type == 'date'}
@@ -172,9 +158,7 @@ $().ready(function() {
 </tbody>
 </table>
 
-<div>
 {$pagelist}
-</div>
 
 {literal}
 <script type="text/javascript">
@@ -194,7 +178,7 @@ $().ready(function() {
 		FUNC_POST_EDIT: 'postEdit',
 		FUNC_UPDATE: 'updateTable'
 	});
-	
+
 	$('table#subs tbody tr').quicksearch({
 		attached: "#subs",
 		position: "before",
@@ -223,14 +207,13 @@ function preEdit(o) {
 function postEdit(o) {
 	PommoValidate.reset(); // TODO -- validate must be scoped to this ROW. Modify validate.js
 	PommoValidate.init('input.pvV, select.pvV','../td button.edit', true, o.row);
-	
+
 	// remove the preserve class [ added by tableEditor makeEditable() method ]
 	o.row.each(function() {
 		if ($(this).is(".seMultiple"))
 			$(this).find("select").removeClass("tsPreserve");
 	});
 }
-
 
 function updateTable(o) {
 	// check if changed is empty

@@ -31,6 +31,7 @@ body div {
 }
 #preview .edit img {
 	margin: 0 auto;
+	border: none;
 }
 
 .articleimg {
@@ -153,15 +154,18 @@ fieldset {
 }
 
 /* Forms */
-
+label {
+	color: #333;
+}
 .notes {/* inline help */
 	font-size: 90%;
 	color: #666;
 	font-style: italic;
 }
 
-.sorting label {/* oftern appear before tables for filtering */
-
+.sorting div {/* often appear before tables for filtering */
+	display: inline;
+	padding: .5em 1em;
 }
 
 .controls ul {/* oftern appear after tables for checkbox selection */
@@ -181,7 +185,55 @@ fieldset {
 	background: #E8FFBA;
 }
 
+/* Sortable table */
+table,
+th,
+td {
+	padding: 2px;
+	border-collapse: collapse;
+	border: 1px solid #DDD;
+}
+th {
+	background: #EDF7FA;
+	color: #333;
+}
+
+/* Inpage windows */
+#newFilter {
+	position: relative;
+}
+#filterWindow {
+	z-index: 100;
+	position: absolute;
+	display: none;
+    top: -200px;
+	left: -50px;
+	padding: 1em;
+	border: 5px solid #6CAF00;
+	background: #FDFEFB;
+}
+#filterWindow input[type="text"] {
+	width: 150px;
+}
+.fwTransfer {
+	border: 2px solid #6CAF00;
+	border-left: 2px dashed #6CAF00;
+	border-right: 2px dashed #6CAF00;
+}
+
+input.pvInvalid,
+select.pvInvalid {
+	border: 1px solid red;
+}
+
 /* Status Messages */
+#alertmsg {
+	margin: .5em 0;
+}
+#alertmsg img {
+	float: left;
+	margin-right: 25px;
+}
 .alert,
 .warn,
 .error {
@@ -189,39 +241,22 @@ fieldset {
 	padding: 5px;
 	color: #000;
 }
-#alertmsg {
-	border: 1px solid #A5D768;
-}
-
-#alertmsg img.fatalMsg {
-	float: left;
-	margin-right: 25px;
-}
 .alert {
 	background: #DDF0BD;
-}
-.alert strong,
-.alert label {
 	color: green;
 }
-#warn {
+#alertmsg.warn {
 	border: 1px solid #FF8000;
 }
 .warn {
 	background: #FFF6E5;
-}
-.warn strong,
-.warn label {
 	color: #FF8000;
 }
-#error {
+#alertmsg.error {
 	border: 1px solid #F3D5D5;
 }
 .error {
 	background: #FFF1F1;
-}
-.error strong,
-.error label {
 	color: red;
 }
 .error input,
@@ -283,6 +318,12 @@ h3 {
 }
 h3 a {
 	color: #6AC65D;
+}
+pre {
+	padding: 4px;
+	border: 1px dashed #CCC;
+	font-size: 110%;
+	color: #333;
 }
 
 #header {
@@ -396,6 +437,10 @@ h3 a {
 #content {display: block;}
 /* End hide from IE-mac */
 
+#content li {
+	padding-top: .5em;
+}
+
 #footer {
 	clear: both;
 	padding: 10px 0;
@@ -430,7 +475,7 @@ legend {
 input[type="text"],
 input[type="password"] {
 	margin: 0;
-	width: 95px;
+	width: 250px;
 	border: 1px solid #CCC;
 	background: #FFF;
 	color: #000;
@@ -452,4 +497,5 @@ input[type="password"]:hover {
 
 .required {
 	font-weight: bold;
+	color: #333;
 }
