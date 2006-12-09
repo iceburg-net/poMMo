@@ -1,49 +1,57 @@
-<hr>
-<input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}">
-<input type="hidden" id="fwMatchID" name="field_id" value="{$field.id}">
+<input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}" />
+<input type="hidden" id="fwMatchID" name="field_id" value="{$field.id}" />
 
-<div>
+<p>
 {t}Add new filter:{/t} 
+
 {if $field.type == 'date'}
 	{t}value must be a date (mm/dd/yyyy){/t}
+
 {elseif $field.type == 'number'}
 	{t}value must be a number{/t}
+
 {elseif $field.type == 'text'}
 	{t}value must not be blank{/t}
-{/if}
-</div>
 
-<table cellpadding="5" border="0">
+{/if}
+</p>
+
+<table summary="filter setup">
+<tbody>
 <tr>
 <td valign="top">
 {t}Match subscribers where{/t} <strong>{$field.name}</strong>
+
 <select name="logic" id="fwLogic">
 {foreach from=$logic key=val item=desc}
 <option value="{$val}">{$desc}</option>
 {/foreach}
 </select>
+
 </td>
 
 {if $field.type == 'multiple'}
 
 <td valign="top" id="fwValue">
-
 <select name="v" class="pvEmpty">
 {foreach from=$field.array item=option}
-<option {if $option == $firstVal}SELECTED{/if}>{$option}</option>
+<option{if $option == $firstVal} selected="selected"{/if}>{$option}</option>
 {/foreach}
 </select>
-<input type="button" value="+" id="fwAddValue">
+
+<input type="button" value="+" id="fwAddValue" />
 
 {* If we're editing, add another input populated w/ value *}
 {foreach name=outter from=$values item=val}
 <div>
 <select name="v" class="pvEmpty">
 {foreach name=inner from=$field.array item=option}
-<option {if $option == $val}SELECTED{/if}>{$option}</option>
+<option{if $option == $val} selected="selected"{/if}>{$option}</option>
 {/foreach}
 </select>
-&nbsp;<input type="button" value="-" class="fwDelVal">
+
+<input type="button" value="-" class="fwDelVal" />
+
 </div>
 {/foreach}
 
@@ -52,15 +60,16 @@
 {elseif $field.type != 'checkbox'}
 
 <td valign="top" id="fwValue">
-
-<input type="text" name="v" value="{$firstVal}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}">
-<input type="button" value="+" id="fwAddValue">
+<input type="text" name="v" value="{$firstVal}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
+<input type="button" value="+" id="fwAddValue" />
 
 {* If we're editing, add another input populated w/ value *}
 {foreach name=outter from=$values item=val}
 <div>
-<input type="text" name="v" value="{$val}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}">
-&nbsp;<input type="button" value="-" class="fwDelVal">
+<input type="text" name="v" value="{$val}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
+
+<input type="button" value="-" class="fwDelVal" />
+
 </div>
 {/foreach}
 
@@ -69,12 +78,14 @@
 {/if}
 
 </tr>
+</tbody>
 </table>
 
 <div class="buttons">
-	<input type="button" value="{if $firstVal}{t}Update{/t}{else}{t}Add{/t}{/if}" id="fwSubmit">
+
+<input type="button" value="{if $firstVal}{t}Update{/t}{else}{t}Add{/t}{/if}" id="fwSubmit" />
+
 </div>
-<hr>
 
 {literal}
 <script type="text/javascript">
@@ -84,14 +95,14 @@ $('#fwAddValue').click(function() {
 	e = $('*:first-child', $(this).parent()).get(0);
 	$('div:last-child', $(this).parent()).
 		append($(e).clone().val('')).
-		append('&nbsp;<input type="button" value="-">');
-	
+		append(' <input type="button" value="-" />');
+
 	$('div:last-child input[@type=button]', $(this).parent()).oneclick(function() {
 		$(this).parent().remove();
 		PommoValidate.reset();
 		PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
 	});
-	
+
 	PommoValidate.reset();
 	PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
 });

@@ -1,6 +1,5 @@
-<hr>
-<input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}">
-<input type="hidden" id="fwMatchID" name="match_id" value="{$match_id}">
+<input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}" />
+<input type="hidden" id="fwMatchID" name="match_id" value="{$match_id}" />
 
 <div>{t}Add new filter:{/t}</div>
 
@@ -9,22 +8,21 @@
 <option value="not_in">{t}Exclude{/t}</option>
 </select>
 
-{t 1=$match_name}subscribers belonging to group %1{/t}
+<p class="count">{t 1=$match_name}subscribers belonging to group %1{/t}</p>
 
 <div class="buttons">
-	<input type="button" value="{t}Add{/t}" id="fwSubmit">
-</div>
-<hr>
 
+<input type="button" value="{t}Add{/t}" id="fwSubmit" />
+
+</div>
 
 {literal}
 <script type="text/javascript">
-	
 $('#fwSubmit').oneclick(function() {
 	var _logic = $('#fwLogic').val();
 	var _group = $('#fwGroupID').val();
 	var _match = $('#fwMatchID').val();
-	
+
 	$.post("ajax/filter_update.php",
 		{ logic: _logic, group: _group, match: _match },
 		function(out) {
@@ -39,6 +37,5 @@ $('#fwSubmit').oneclick(function() {
 		}
 	);
 });
-
 </script>
 {/literal}
