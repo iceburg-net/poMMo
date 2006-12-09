@@ -43,40 +43,6 @@ $().ready(function(){
 
 
 </script>
-
-<style>
-#newFilter
-{
-	position: relative;
-}
-#filterWindow
-{
-	position: absolute;
-    top: -200px;
-	left: -50px;
-	
-	background-color: #B5EF59;
-	border: 10px solid #6CAF00;
-	padding: 10px;
-	
-	z-index: 100;
-	text-align: left;
-	display: none;
-}
-
-.fwTransfer
-{
-	border-top: 2px solid #6CAF00;
-	border-bottom: 2px solid #6CAF00;
-	border-left: 5px dashed #6CAF00;
-	border-right: 5px dashed #6CAF00;
-}
-
-input.pvInvalid, select.pvInvalid
-{
-	border: 1px solid red;
-}
-</style>
 {/literal}
 {/capture}
 {include file="admin/inc.header.tpl"}

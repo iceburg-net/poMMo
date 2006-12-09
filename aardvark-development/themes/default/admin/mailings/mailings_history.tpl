@@ -18,54 +18,48 @@ $().ready(function() {
 {include file="admin/inc.header.tpl" sidebar='off'}
 
 <h2>{t}Mailings History{/t}</h2>
-<div class="inpage_menu">
-<li>
-<a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a>
-</li>
-</div>
+
+<ul class="inpage_menu">
+<li><a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a></li>
+</ul>
 
 {include file="admin/inc.messages.tpl"}
 
 <form method="post" action="" id="orderForm">
 <fieldset class="sorting">
-	<legend>{t}Sorting{/t}</legend>
-	
-	<div class="inpage_menu">
-	
-	<li>
-	<label for="sort">{t}Sort by{/t}</label>
-	<select name="sort">
-	<option value="subject" {if $state.sort == 'subject'}SELECTED{/if}>{t}Subject{/t}</option>
-	<option value="mailgroup" {if $state.sort == 'mailgroup'}SELECTED{/if}>{t}Group{/t}</option>
-	<option value="subscriberCount" {if $state.sort == 'subscriberCount'}SELECTED{/if}>{t}Subscriber Count{/t}</option>
-	<option value="started" {if $state.sort == 'started'}SELECTED{/if}>{t}Time Created{/t}</option>
-	</select>
-	</li>
-	
-	<li>
-	<label for="order">{t}Order by{/t}</label>
-	<select name="order">
-	<option value="asc" {if $state.order == 'asc'}SELECTED{/if}>{t}ascending{/t}</option>
-	<option value="desc" {if $state.order == 'desc'}SELECTED{/if}>{t}descending{/t}</option>
-	</select>
-	</li>
-	
-	<li>
-	<label for="limit">{t}# per page{/t}</label>
-	<select name="limit">
-	<option value="10" {if $state.limit == '10'}SELECTED{/if}>10</option>
-	<option value="50" {if $state.limit == '50'}SELECTED{/if}>50</option>
-	<option value="150" {if $state.limit == '150'}SELECTED{/if}>150</option>
-	<option value="300" {if $state.limit == '300'}SELECTED{/if}>300</option>
-	<option value="500" {if $state.limit == '500'}SELECTED{/if}>500</option>
-	</select>
-	</li>
-	
+<legend>{t}Sorting{/t}</legend>
+
+<div>
+<label for="sort">{t}Sort by{/t}</label>
+<select name="sort">
+<option value="subject"{if $state.sort == 'subject'} selected="selected"{/if}>{t}Subject{/t}</option>
+<option value="mailgroup"{if $state.sort == 'mailgroup'} selected="selected"{/if}>{t}Group{/t}</option>
+<option value="subscriberCount"{if $state.sort == 'subscriberCount'} selected="selected"{/if}>{t}Subscriber Count{/t}</option>
+<option value="started"{if $state.sort == 'started'} selected="selected"{/if}>{t}Time Created{/t}</option>
+</select>
+</div>
+
+<div>
+<label for="order">{t}Order by{/t}</label>
+<select name="order">
+<option value="asc"{if $state.order == 'asc'} selected="selected"{/if}>{t}ascending{/t}</option>
+<option value="desc"{if $state.order == 'desc'} selected="selected"{/if}>{t}descending{/t}</option>
+</select>
+</div>
+
+<div>
+<label for="limit">{t}# per page{/t}</label>
+<select name="limit">
+<option value="10"{if $state.limit == '10'} selected="selected"{/if}>10</option>
+<option value="50"{if $state.limit == '50'} selected="selected"{/if}>50</option>
+<option value="150"{if $state.limit == '150'} selected="selected"{/if}>150</option>
+<option value="300"{if $state.limit == '300'} selected="selected"{/if}>300</option>
+<option value="500"{if $state.limit == '500'} selected="selected"{/if}>500</option>
+</select>
+</div>
+
 </fieldset>
 </form>
-
-
-
 
 <form method="post" action="mailings_mod.php" name="oForm" id="oForm">
 <fieldset>
@@ -77,16 +71,13 @@ $().ready(function() {
 <table summary="mailing details" id="subs">
 <thead>
 <tr>
-
 <th name="key"></th>
-
 <th>{t}Subject{/t}</th>
 <th>{t}Group (count){/t}</th>
 <th>{t}Sent{/t}</th>
 <th>{t}Started{/t}</th>
 <th>{t}Finished{/t}</th>
 <th>{t}Status{/t}</th>
-
 </tr>
 </thead>
 
@@ -96,10 +87,7 @@ $().ready(function() {
 <tr>
 <td>
 <p class="key">{$id}</p>
-DELETE 
-<br/>
-<a href="ajax/mailing_preview.php?mail_id={$id}&height=320&width=480" title="{t}Message Preview{/t}" class="thickbox">{t}View{/t}</a>
-<br/>
+DELETE  <a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}View{/t}</a>
 <a href="ajax/mailing_reload.php?mail_id={$id}" title="{t}Reload Mailing{/t}">{t}Reload{/t}</a>
 </td>
 
@@ -122,10 +110,6 @@ DELETE
 
 </tbody>
 </table>
-
-<div>
-{$pagelist}
-</div>
 
 {literal}
 <script type="text/javascript">
@@ -150,5 +134,10 @@ $().ready(function() {
 </script>
 {/literal}
 {/if}
+
+</fieldset>
+</form>
+
+{$pagelist}
 
 {include file="admin/inc.footer.tpl"}

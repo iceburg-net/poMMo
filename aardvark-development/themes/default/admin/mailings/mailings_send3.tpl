@@ -37,11 +37,7 @@
 
 {if $ishtml == 'on'}
 
-<p><strong>{t}HTML Body:{/t}</strong> 
-<a href="ajax/mailing_preview.php?height=320&width=480" title="{t}Message Preview{/t}" class="thickbox">
-{t}Preview Message{/t}
-</a>
-</p>
+<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php?height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}Preview Message{/t}</a></p>
 
 {if $altbody}
 <p><strong>{t}Alt Body:{/t}</strong></p>
@@ -66,15 +62,12 @@
 <fieldset>
 <legend>{t}Test Mailing{/t}</legend>
 
-<div>
-<a href="ajax/mailing_test.php?height=400&width=500" title="{t}Send Test Mailing{/t}" class="thickbox"><button>{t}Send Test{/t}</button></a>
+<div class="buttons">
+<a href="ajax/mailing_test.php?height=400&amp;width=500" title="{t}Send Test Mailing{/t}" class="thickbox"><button>{t}Send Test{/t}</button></a>
 </div>
-
-<br/>
 
 </fieldset>
 
-<br/>
 <form method="get" action="">
 
 <fieldset>
@@ -85,8 +78,8 @@
 <button type="submit" name="sendaway" value="TRUE"><img src="{$url.theme.shared}images/icons/send.png" alt="broadcast icon" />{t}Send Mailing{/t}</button>
 </div>
 
-</form>
 </fieldset>
+</form>
 
 </div>
 

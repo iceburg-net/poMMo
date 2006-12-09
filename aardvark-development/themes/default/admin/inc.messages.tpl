@@ -13,7 +13,7 @@
 {if $errors}
 <div id="alertmsg" class="error">
 
-{if $fatalMsg}<img src="{$url.theme.shared}images/icons/alert.png" alt="Fatal Error" class="fatalMsg" />{/if}
+{if $fatalMsg}<img src="{$url.theme.shared}images/icons/alert.png" alt="fatal error icon" />{/if}
 
 <ul>
 {foreach from=$errors item=msg}
