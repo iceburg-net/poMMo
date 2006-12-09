@@ -1,8 +1,7 @@
 <div id="addOut" class="error"></div>
 <div class="warn"></div>
-<hr>
-<br/>
-{t}Welcome to the test mailer! Verify a mailing looks correct and that the mailer works by sending a message to yourself.{/t}
+
+<p>{t}Welcome to the test mailer! Verify a mailing looks correct and that the mailer works by sending a message to yourself.{/t}</p>
 
 {if $msg}<div class="warn">{$msg}</div>{/if}
 
@@ -19,10 +18,7 @@
 
 </fieldset>
 
-<p>
-{t escape='no' 1='<strong>' 2='</strong>'}If your mailing includes personalizations, you can %1 optionally %2 supply test values{/t}
-</p>
-
+<p>{t escape='no' 1='<strong>' 2='</strong>'}If your mailing includes personalizations, you can %1 optionally %2 supply test values{/t}</p>
 
 <fieldset>
 <legend>{t}Personalizations{/t}</legend>
@@ -62,29 +58,29 @@
 {literal}
 <script type="text/javascript">
 $().ready(function(){
-	
+
 	$('#testForm').submit(function() {
 		var input = $(this).formToArray();
-		
+
 		url = "ajax/mailing_test2.php";
-		
+
 		$.post(url, input, function(json) {
 			eval("var args = " + json);
-		
+
 			if (typeof(args.success) == 'undefined') {
 				alert('ajax error!');
 				return;	
 			}
-			
+
 			$('#addOut').html(args.msg);
-			
+
 			if(args.success)
 				$('#testForm input[@type="submit"]').hide();
 		});
-	
+
 		return false;
 	});
-	
+
 });
 </script>
 {/literal}
