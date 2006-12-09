@@ -24,21 +24,18 @@ die();
 	
 
 [THEME]
-	USE TABLES IN SUBSCRIPTION FORM? -- DATEPICKER BREAKS FORMATTING
 	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
-		
+	Use TableSorter/Table layout for field, group, and group filter display
   
 [BRICE -- "Feel free to inherit any of these ;)" ]
 
 	NOTES:
-		CHECK subscriber update (self + admin) of UNCHECKING/CHECKING a check field
 		MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
 		SECURITY ISSUE W/ SESSIONS -- e.g. If you login to demo & then acess pommo elsewhere on SAME DOMAIN -- you bypass login.
 	
 	SHORT TERM:
 	
-	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  (API) Better mailing send debugging ->
 	    Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
 	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
@@ -48,8 +45,7 @@ die();
 	  (feature) Add OR to group filtering
 	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
 	  (feature) Rewritten Pager -- current one is very ugly when > 25 pages are available. Use "google" like paging.
-	  (feature) Ability to download a sent + unsent list during the processing of a mailing
-	  
+
 	  ADD Support Page (next to admin page in main menu bar)
 		+ Enhanced support library
 		+ PHPInfo()  (or specifically mysql, php, gettext, safemode, webserver, etc. versions)
@@ -63,10 +59,6 @@ die();
 		+ Backup Database
 		+ Ensure max run time is 30 seconds if safe mode is enabled
 
-	  "Test Mailing" enhancements
-		+ send via httpSpawn
-		+ popup dialog to fill in personalization values
-	
 	  	
 	MEDIUM TERM:
 	
@@ -74,17 +66,16 @@ die();
  		 + Requires unobtrusive modal window (thickbox destroys event bindings). Keep eye on Gavin's plugin
 	  (API) Rewrite PommoMailer()  [ currently depricated with PR13 functionality ]
 	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
-	  (API) Database debugs & outputs should go to loggger -- see notes under THEME
-	  (API) Better Organice inc/helpers/messages & validate... underutilized!
+	  (API) Better Organize inc/helpers/messages & validate... underutilized!
+	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  
 	  
+	  (feature) Implement drag & drop between AND and OR filters (via table row handles)
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
 	  (feature) Add specific emails to a group
 	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.
 	  (feature) Display flagged subscribers...
 	  (feature) Support SSL+TLS SMTP Connections
-	  
-	  (security) Add a index.php to every directory (or use a .htaccess?)
 	  
 	LONG TERM:
 	
@@ -102,43 +93,12 @@ die();
 
 [CORINNA]
 
-		(feature)	add + refactor http://www.phpinsider.com/php/code/SafeSQL/
-			 	-> all but the Strings with escaped ''.
-			 	
-			 	$whereStr = ' WHERE group_id=\''.$where.'\'';
-			 	[..]
-			 	$safesql =& new SafeSQL_MySQL;
-				$sql = $safesql->query("SELECT group_id, group_name FROM %s %s ORDER BY group_name",
-					array($dbo->table['groups'], $whereStr) );
-					
-				Brice, what do you want for standard? SafeSQL wants "QUERY STRING in double QUOTES and the parameters in 'this quotes'"
-				Also should i use always %s oder %i for the ids? Because you used 'id', but i think numbers can be without ''
-				Can i convert all to this format? $stringvar = "abc'de'fgh"
-				See his README in inc/safesql
-				
-				// bb: Corinna, PR14 wraps about every query through safeSQL. Look at functions in inc/helpers/*
-				 as examples to the new standard. Let me know if you have any ?s ;)
-				
-				
-		DB Scheme for Mailings current/history(ideas?) -- 
-				* Eventually I think they should be merged into one table as we discussed. 
-				At this time, lets focus elsewhere as there are bigger fish to fry ;). Mark this as long/medium term? 
-
-				-> OK!
-				-> You requested this in the poMMo forum if the execution times will be longer..
-				With little data it is no problem and when one has a lot of data he can always 
-				make a index on them (Indices).
-				
-				// bb : Corinna, I've merged subscribers and mailings tables for PR14
-
 	SHORT TERM
 		
 		(API) 		get rid of appendURL problem!
 					+ convert to $pommo->_state + save there
-	
-		(feature)	alter database design -> merge tables mailings &mailings_history and refactor
-					EDIT: after finishing mailing ... database entry in mailing_current would not 
-					switch to mailing_history
+					
+			====>	BB: Corinna, See the new state handling in subscribers_manage & mailings_history
 	
 		(arch)		module integration architecture
 					how hook in the modules?
@@ -152,7 +112,6 @@ die();
 					Filter incoming Mails, if there is a mailer-daemon replied to 1 of 
 					our mails report it to the administrator
 		
-		(feature)	Numeric types/sets for Demographics
 		
 	MIDDLE TERM
 	
