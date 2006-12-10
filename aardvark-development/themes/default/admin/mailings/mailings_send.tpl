@@ -12,7 +12,7 @@
 <div>
 <label for="subject"><span class="required">{t}Subject:{/t}</span> <span class="error">{validate id="subject" message=$formError.subject}</span></label>
 <input type="text" size="60" maxlength="60" name="subject" value="{$subject|escape}" id="subject" />
-<div class="notes">{t}(maximum of 60 characters){/t}</div>
+<span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
 <div>
@@ -21,7 +21,7 @@
 <option value="on"{if $ishtml == 'on'} selected="selected"{/if}>{t}HTML Mailing{/t}</option>
 <option value="off"{if $ishtml == 'off'} selected="selected"{/if}>{t}Plain Text Mailing{/t}</option>
 </select>
-<div class="notes">{t}(Select the format of this mailing){/t}</div>
+<span class="notes">{t}(Select the format of this mailing){/t}</span>
 </div>
 
 <div>
@@ -32,25 +32,25 @@
 <option value="{$key}"{if $mailgroup == $key} selected="selected"{/if}>{$group.name}</option>
 {/foreach}
 </select>
-<div class="notes">{t}(Select who should recieve the mailing){/t}</div>
+<span class="notes">{t}(Select who should recieve the mailing){/t}</span>
 </div>
 
 <div>
 <label for="fromname"><span class="required">{t}From Name:{/t}</span> <span class="error">{validate id="fromname" message=$formError.fromname}</span></label>
 <input type="text" size="60" maxlength="60" name="fromname" value="{$fromname|escape}" id="fromname" />
-<div class="notes">{t}(maximum of 60 characters){/t}</div>
+<span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
 <div>
 <label for="fromemail"><span class="required">{t}From Email:{/t}</span> <span class="error">{validate id="fromemail" message=$formError.fromemail}</span></label>
 <input type="text" size="60" maxlength="60" name="fromemail" value="{$fromemail|escape}" id="fromemail" />
-<div class="notes">{t}(maximum of 60 characters){/t}</div>
+<span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
 <div>
 <label for="frombounce"><span class="required">{t}Return:{/t}</span> <span class="error">{validate id="frombounce" message=$formError.frombounce}</span></label>
 <input type="text" size="60" maxlength="60" name="frombounce" value="{$frombounce|escape}" id="frombounce" />
-<div class="notes">{t}(maximum of 60 characters){/t}</div>
+<span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
 <div>
@@ -66,9 +66,8 @@
 <option value="GB2312"{if $charset == 'GB2312'} selected="selected"{/if}>{t}Simplified Chinese (GB2312){/t}</option>
 <option value="EUC-JP"{if $charset == 'EUC-JP'} selected="selected"{/if}>{t}Japanese (EUC-JP){/t}</option>
 </select>
-<div class="notes">{t}(Select Character Set of Mailings){/t}</div>
+<span class="notes">{t}(Select Character Set of Mailings){/t}</span>
 </div>
-
 
 </fieldset>
 
