@@ -77,9 +77,10 @@ class PommoTemplate extends Smarty {
 			if (!is_file($this->_themeDir . 'default/' . $resource_name))
 				// requested template file does not exist in "default" theme, die.
 				Pommo :: kill(sprintf(Pommo::_T('Template file (%s) not found in default or current theme'), $resource_name));
-			else
+			else {
 				$resource_name = $this->_themeDir . 'default/' . $resource_name;
-
+				$this->template_dir = $this->_themeDir . 'default';
+			}
 		if ($pommo->_logger->isMsg())
 			$this->assign('messages', $pommo->_logger->getMsg());
 		if ($pommo->_logger->isErr())
