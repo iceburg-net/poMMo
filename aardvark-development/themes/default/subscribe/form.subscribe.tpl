@@ -1,17 +1,17 @@
 <div id="subscribeForm">
 
 <form method="post" action="{$url.base}user/process.php">
-<input type="hidden" name="formSubmitted" value="1">
 <fieldset>
 <legend>Join newsletter</legend>
 
+<input type="hidden" name="formSubmitted" value="1" />
 {if $referer}
 <input type="hidden" name="bmReferer" value="{$referer}" />
 {/if}
 
 <div class="notes">
 
-<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}%1 Fields %2 are required{/t}</p>
+<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}%1Fields%2 are required{/t}</p>
 
 </div>
 
@@ -22,7 +22,7 @@
 
 {foreach name=fields from=$fields key=key item=field}
 <div>
-<label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
+<label for="field{$key}">{if $field.required == 'on'}<strong class="required">{/if}{$field.prompt}{if $field.required == 'on'}</strong>{/if}:</label>
 
 {if $field.type == 'text' || $field.type == 'number'}
 <input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
@@ -39,8 +39,7 @@
 </select>
 
 {elseif $field.type == 'date'}
-<input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|escape}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
-
+<input type="text" class="datepicker" size="12" name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|escape}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
 
 {else}
 <p class="error">{t}Unsupported field type{/t}</p>
