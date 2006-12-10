@@ -9,7 +9,7 @@
 <legend>{t}Remove Subscribers{/t}</legend>
 
 <div>
-<label class="required" for="emails">{t}Email Addresses:{/t}</label>
+<label for="emails"><strong class="required">{t}Email Addresses:{/t}</strong></label>
 <textarea name="emails" cols="40" rows="8">{t}Enter Emails...{/t}</textarea>
 </div>
 

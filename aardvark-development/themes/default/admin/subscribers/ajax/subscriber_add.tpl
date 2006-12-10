@@ -8,13 +8,13 @@
 <legend>{t}Add Subscriber{/t}</legend>
 
 <div>
-<label class="required" for="email">{t}Email:{/t}</label>
+<label for="email"><strong class="required">{t}Email:{/t}</strong></label>
 <input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email" />
 </div>
 
 {foreach name=fields from=$fields key=key item=field}
 <div>
-<label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
+<label for="field{$key}">{if $field.required == 'on'}<strong class="required">{/if}{$field.prompt}:{if $field.required == 'on'}</strong>{/if}</label>
 
 {if $field.type == 'checkbox'}
 <input type="checkbox" name="d[{$key}]"{if $field.normally == "on"} checked="checked"{/if}{if $field.required == 'on'} class="pvEmpty"{/if} />

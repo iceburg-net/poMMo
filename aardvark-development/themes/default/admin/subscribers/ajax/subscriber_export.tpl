@@ -4,12 +4,11 @@
 <p>{t}Welcome to subscriber export! You can export subscribers in the current view as a .TXT file of email addresses or as a .CSV file containing all field data. Further, you can choose to export the "current page" (only subscribers listed in the table below) or "all pages" (all matching subscribers).{/t}</p>
 
 <form method="post" action="ajax/subscriber_export2.php" id="pForm">
-
 <fieldset>
 <legend>{t}Export Subscribers{/t}</legend>
 
 <div>
-<label class="required" for="emails">{t}Export Type:{/t}</label>
+<label for="emails"><strong class="required">{t}Export Type:{/t}</strong></label>
 <select name="type">
 <option value="txt">{t}.TXT - Only Email Addresses{/t}</option>
 <option value="csv">{t}.CSV - All subscriber Data{/t}</option>
@@ -17,7 +16,7 @@
 </div>
 
 <div>
-<label class="required" for="emails">{t}Export Who?{/t}</label>
+<label for="emails"><strong class="required">{t}Export from:{/t}</strong></label>
 <select name="who">
 <option value="all">{t}All Pages{/t}</option>
 <option value="cur">{t}Current Page{/t}</option>
@@ -27,10 +26,12 @@
 </fieldset>
 
 <div class="buttons">
+
+<input type="hidden" name="ids" id="ids" value="" />
 <input type="submit" value="{t}Export Subscribers{/t}" />
+
 </div>
 
-<input type="hidden" name="ids" value="" id="ids">
 </form>
 
 {literal}
@@ -51,13 +52,13 @@ $().ready(function(){
 	});
 
 	$('#pForm').submit(function() {
-		
+
 		if ($("select[@name='who']", this).val() == 'cur') {
 			var ids = new Array();
 			$('#subs tbody/tr:visible').find('td:eq(0)').each(function() {
 				ids.push($("p.key", this).html());
 			});
-			
+
 			$('#ids',this).val(ids.join());
 		}
 		else {

@@ -10,10 +10,10 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
- 
- /**********************************
+
+/**********************************
 	INITIALIZATION METHODS
- *********************************/
+*********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
@@ -30,10 +30,10 @@ function jsonKill($msg) {
 }
 
 if (!PommoHelper::isEmail($_POST['Email']))
-	jsonKill(Pommo::_T('Error adding subscriber.').'<br>'.Pommo::_T('Invalid Email.'));
+	jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Invalid email.'));
 
 if(count(PommoHelper::emailExists($_POST['Email'])) > 0)
-		jsonKill(Pommo::_T('Error adding subscriber.').'<br>'.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
+		jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 
 $subscriber = array(
 	'email' => $_POST['Email'],
@@ -45,8 +45,8 @@ $subscriber = array(
 $flag = false;
 if (!PommoValidate::subscriberData($subscriber['data'],array('active' => FALSE, 'ignore' => TRUE))) {
 	if(!isset($_GET['force']))
-		jsonKill(Pommo::_T('Error adding subscriber.').'<br>'.Pommo::_T('Invalid or missing information.').'<br>'.implode("<br>", $logger->getAll()));
-		
+		jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Invalid or missing information.').'<br />'.implode("<br />", $logger->getAll()));
+
 	$flag = true;
 	$subscriber['flag'] = 9; // 9 for "update"
 }
@@ -54,7 +54,6 @@ if (!PommoValidate::subscriberData($subscriber['data'],array('active' => FALSE, 
 $key = PommoSubscriber::add($subscriber);
 if (!$key)
 	jsonKill(Pommo::_T('Error adding subscriber.'));
-	
 
 // some homebrew json.. ;(
 $msg = ($flag) ? 
