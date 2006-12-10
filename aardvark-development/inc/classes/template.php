@@ -22,7 +22,7 @@ class PommoTemplate extends Smarty {
 		global $pommo;
 
 		// set theme -- TODO; extend this to the theme selector
-		$this->_pommoTheme = 'default';
+		$this->_pommoTheme = 'rmw';
 
 		// set smarty directories
 		$this->_themeDir = $pommo->_baseDir . 'themes/';

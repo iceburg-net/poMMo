@@ -10,7 +10,7 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
- 
+
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
@@ -30,9 +30,8 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 if (PommoMailing::isCurrent())
-	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %s Status %s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
+	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
-	
 // check if altBody should be imported from HTML
 if (isset($_POST['altGen'])) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
@@ -52,30 +51,28 @@ if ($mailingData['ishtml'] == 'html') {
 	$smarty->assign('isForm',FALSE);
 }
 
-
 if (empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
-	
+
 	$formError = array ();
 	$formError['fromname'] = $formError['body'] = Pommo::_T('Cannot be empty.');
 	$smarty->assign('formError', $formError);
-	
+
 	// load mailing data from session
 	@$_POST['body'] = $mailingData['body'];
 	@$_POST['altbody'] = $mailingData['altbody'];
 	@$_POST['altInclude'] = $mailingData['altInclude'];
-	
-	
+
 } elseif(isset($_POST['preview'])) {
 	// ___ USER HAS SENT FORM ___
-	
+
 		// __ FORM IS VALID
 		unset($_POST['preview']);
 		$mailingData['body'] = $_POST['body'];
 		$mailingData['altbody'] = $_POST['altbody'];
 		$mailingData['altInclude'] = $_POST['altInclude'];
 		$pommo->set(array('mailingData' => $mailingData));
-		
+
 		Pommo::redirect('mailings_send3.php');
 }
 

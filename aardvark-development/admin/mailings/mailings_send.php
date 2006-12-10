@@ -30,7 +30,7 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 if (PommoMailing::isCurrent())
-	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %s Status %s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
+	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
 // SmartyValidate Custom Validation Function
 function check_charset($value, $empty, & $params, & $formvars) {
