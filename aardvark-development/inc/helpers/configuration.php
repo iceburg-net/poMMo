@@ -46,7 +46,7 @@
 
 		if ($section == 'all' || $section == 'update') {
 		$messages['update'] = array();
-		$messages['update']['msg'] =  sprintf(Pommo::_T('You have requested to change your password for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['update']['msg'] =  sprintf(Pommo::_T('You have requested to update your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['update']['sub'] = Pommo::_T('Update Records request'); 
 		$messages['update']['suc'] = Pommo::_T('Your records have been updated. Enjoy!');
 		}

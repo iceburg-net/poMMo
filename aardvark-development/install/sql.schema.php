@@ -138,7 +138,7 @@ CREATE TABLE :::subscriber_data::: (
 CREATE TABLE :::subscriber_pending::: (
   `pending_id` int(10) unsigned NOT NULL auto_increment,
   `subscriber_id` int(10) unsigned NOT NULL default '0',
-  `pending_code` char(32) collate latin1_general_ci NOT NULL,
+  `pending_code` char(32) NOT NULL,
   `pending_type` enum('add','del','change','password') default NULL,
   `pending_array` text NULL default NULL,
   PRIMARY KEY  (`pending_id`),
