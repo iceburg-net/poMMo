@@ -6,11 +6,11 @@
 <script type="text/javascript">
 function fwAjaxCall(id, name, gid, l) {
 	$('#newFilter select').each(function() { $(this).hide(); });
-	
+
 	var p = (typeof(l) == 'undefined') ?
 		{ID: id, add: name, group: gid} :
 		{ID: id, add: name, group: gid, logic: l};
-		
+
 	$('#filterWindow div.fwContent').load(
 		'ajax/group_edit.php',
 		p,
@@ -31,7 +31,7 @@ $().ready(function(){
 		$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({to: name,className:'fwTransfer', duration: 300})});
 		return false;
 	});
-					
+
 	$('#newFilter select').change(function() {
 		var name = $(this).name(); // "field" or "group"
 		var id = $(this).val(); // group or field ID
@@ -40,8 +40,6 @@ $().ready(function(){
 			fwAjaxCall(id, name, gid);
 	});
 });
-
-
 </script>
 {/literal}
 {/capture}
@@ -65,18 +63,17 @@ $().ready(function(){
 <label for="group_name">{t}Group name:{/t}</label> <input type="text" title="{t}type new group name{/t}" maxlength="60" size="30" name="group_name" id="group_name"  value="{$group.name|escape}" />
 </div>
 
+</fieldset>
 
 <div class="buttons">
 <input type="submit" name="rename" value="{t}Rename{/t}" />
 </div>
 
-</fieldset>
 </form>
 
 <form method="post" action="" id="filterForm" name="filterForm">
 <fieldset>
 <legend>{t}Add Filter{/t}</legend>
-
 
 <div id="newFilter">
 
@@ -172,6 +169,7 @@ $().ready(function(){
 
 </tbody>
 </table>
+
 </fieldset>
 
 </form>

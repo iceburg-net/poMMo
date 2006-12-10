@@ -25,9 +25,7 @@
 <p><strong>{t}Bounces:{/t}</strong> <tt>&lt;{$frombounce}&gt;</tt></p>
 {/if}
 
-{if $advanced}
 <p><strong>{t}Character Set:{/t}</strong> <tt>{$charset}</tt></p>
-{/if}
 
 </div>
 
