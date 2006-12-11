@@ -10,6 +10,19 @@
 
 <p><a href="{$url.base}admin/setup/admin_setup.php"><img src="{$url.theme.shared}images/icons/settings.png" alt="hammer and screw icon" class="navimage" /> {t}Setup{/t}</a> - {t}This area allows you to configure {$app_name} and its default behavior. Set mailing list parameters, choose the information you'd like to collect from subscribers, and generate subscription forms from here.{/t}</p>
 
+
+	{*corinna Display this only if plugins are activated in $pommo->_useplugins *}
+	{if $showplugin}
+		<p>
+			<a href="{$url.base}plugins/adminplugins/adminplugins.php">
+			<img src="" class="navimage" width="64" height="64" />
+			{t}Setup Plugins{/t}</a> - 
+			{t}Set up all the Plugins: Authentication methods, User Administration, and more...{/t}
+		</p><br>
+	{/if}
+	{*corinna End additional plugin functionality *}
+
+
 </div>
 <!-- end mainbar -->
 

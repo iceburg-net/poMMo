@@ -36,6 +36,12 @@ class Pommo {
 	var $_data; // Used to hold temporary data (such as an uploaded file's contents).. accessed via set (sets), get (returns), clear(deletes)
 	var $_state; // Used to hold the state of pages -- e.g. variables that should be stored like 'limit, order, etc'
 
+
+	//corinna TODO -> think of some mechanism, or put it to the config file
+	var $_useplugins = TRUE;	// main plugin switcher!
+	//corinna
+	
+
 	// default constructor
 	function Pommo($baseDir) {
 		$this->_baseDir = $baseDir;
@@ -70,7 +76,8 @@ class Pommo {
 				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
 				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
 			} else {
-				$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				//backupurl://$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				$baseUrl = preg_replace('@/(inc|setup|user|install|plugins(/lib|/lib/interfaces|/adminplugins|/adminplugins(/useradmin|/useradmin(/listmanager|/respmanager|/usermanager)|/pluginconfig))|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
 				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
 			}
 		}
