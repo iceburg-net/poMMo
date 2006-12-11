@@ -1,0 +1,213 @@
+<?php
+/** [BEGIN HEADER] **
+ * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
+ * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
+ * AUTHOR: Brice Burgess <bhb@iceburg.net>
+ * Created: Corinna Thoeni <corinn at gmx dot net> - 07.09.2006
+ * SOURCE: http://pommo.sourceforge.net/
+ *
+ *  :: RESTRICTIONS ::
+ *  1. This header must accompany all portions of code contained within.
+ *  2. You must notify the above author of modifications to contents within.
+ * 
+ ** [END HEADER]**/
+
+require_once ($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
+
+// Cool DB Query Wrapper from Monte Ohrt
+require_once ($pommo->_baseDir.'/inc/lib/safesql/SafeSQL.class.php');
+
+
+class ListDBHandler  implements iDbHandler {
+
+	private $dbo;
+	private $safesql;
+
+
+	public function __construct($dbo) {
+		$this->dbo = $dbo;
+		$this->safesql =& new SafeSQL_MySQL;
+	}
+
+	/** Returns if the Plugin itself is active */
+	public function & dbPluginIsActive($pluginame) {
+		$sql = $this->safesql->query("SELECT plugin_active FROM %s " .
+				"WHERE plugin_uniquename='%s' ", 
+			array(pommomod_plugin, $pluginame) );
+		return $this->dbo->query($sql, 0);	//row 0
+	}
+	
+	
+	
+	/* Custom DB fetch functions */
+	/*public function dbFetchUser() {
+
+		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, p.perm_name " .	//user_pass,
+				"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
+			array( 'pommomod_user', 'pommomod_perm' ) );
+		$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$user[$i] = array(
+				'user_id' 		=> $row['user_id'],
+				'user_name'		=> $row['user_name'],
+				//'user_pass'		=> $row['user_pass'],
+				'user_group'	=> $row['group_name'],
+				);
+			$i++;
+		}
+		return $user;
+	}*/
+
+
+	/*public function dbFetchUserLists() {
+		$sql = $this->safesql->query("SELECT u.user_name, p.perm_name, l.list_name " .	// count(l.list_id) AS numlist
+				"FROM %s AS u LEFT JOIN %s AS lu ON u.user_id=lu.user_id " .
+				"LEFT JOIN %s AS l ON lu.list_id=l.list_id " .
+				"LEFT JOIN %s AS p ON u.user_perm=p.perm_id " .
+				"ORDER BY u.user_id ",	//GROUP BY u.user_id 
+			array( 'pommomod_user', 'pommomod_list_user', 'pommomod_list', 'pommomod_perm' ) );	
+			
+		$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$user[$i] = array(
+				//'user_id' 		=> $row['user_id'],
+				'user_name'		=> $row['user_name'],
+				'user_group'	=> $row['group_name'],
+				'numlist'		=> $row['numlist'],
+				'list_name'		=> $row['list_name'],
+				//'list_user_data'	=> $row['list_user_data'],
+			);
+			$i++;
+		}
+		
+		echo "<div style='background-color:red;'>"; echo $this->dbo->affected(); echo "</div>";
+		return $user;
+	}*/
+	public function dbFetchUserLists() {
+		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, p.perm_name, count(lu.list_id) AS numlist " .	
+				"FROM %s AS u LEFT JOIN %s AS lu ON u.user_id=lu.user_id " .
+				//"LEFT JOIN %s AS l ON lu.list_id=l.list_id " .
+				"LEFT JOIN %s AS p ON u.perm_id=p.perm_id " .
+				"GROUP BY u.user_id ORDER BY u.user_id ",
+			array( 'pommomod_user', 'pommomod_list_rp', 'pommomod_perm' ) );	// als 3. 'pommomod_list'
+		$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$user[$i] = array(
+				'uid'		=> $row['user_id'],
+				'name'		=> $row['user_name'],
+				'perm'		=> $row['perm_name'],
+				'numlist'	=> $row['numlist'],
+			);
+			$i++;
+		}
+		
+		for ($i=0; $i < count($user); $i++) {
+			if ($user[$i]['numlist'] > 0 ) {
+				$user[$i]['lists'] = $this->dbGetListsForUser($user[$i]['uid']); //$row['list_id']
+			}
+		}
+		
+		return $user;
+	}
+	
+	public function dbGetListsForUser($userid) {
+		$sql1 = $this->safesql->query("SELECT lu.user_id, l.list_id, l.list_name, l.list_desc " .
+				"FROM %s AS l, %s AS lu WHERE l.list_id=lu.list_id AND lu.user_id=%i",	//
+			array('pommomod_list', 'pommomod_list_rp', $userid) );
+		$i=0;
+		while ($row1 = $this->dbo->getRows($sql1)) {
+			$lists[$i] = array(
+				'user_id'		=> $row1['user_id'],
+				'list_id'		=> $row1['list_id'],
+				'list_name'		=> $row1['list_name'],
+				'list_desc'		=> $row1['list_desc'],
+			);
+			$i++;
+		}
+		return $lists;
+	}
+	
+	
+	public function dbAddList($name, $desc, $userid) {
+			$sql = $this->safesql->query("INSERT INTO %s (list_name, list_desc, list_created, list_sentmailings, list_active, list_senderinfo) " .
+					"VALUES ('%s', '%s', NOW(), '0', TRUE, 'Ab. S. Ender'); ",
+				array('pommomod_list', $name, $desc ) );
+			$sql2 = $this->safesql->query("INSERT INTO %s (list_id, user_id) VALUES (LAST_INSERT_ID(), '%s')", 
+				array('pommomod_list_rp', $userid) );
+				
+			if (!$this->dbo->query($sql) OR !$this->dbo->query($sql2)) {
+				return  $this->_dbo->getError();
+			} else {
+				return TRUE;
+				/*$affected = $this->dbo->affected();
+				return ($affected == 2) ? 1 : FALSE;*/
+			}
+	}
+	
+	public function dbDeleteList($listid, $userid) {
+		$sql = $this->safesql->query("DELETE FROM %s WHERE list_id=%i",
+			array('pommomod_list', $listid ) );
+		$sql2 = $this->safesql->query("DELETE FROM %s WHERE list_id=%i AND user_id=%i",
+			array('pommomod_list_rp', $listid, $userid) );
+		if (!$this->dbo->query($sql) OR !$this->dbo->query($sql2)) {
+			return  $this->_dbo->getError();
+		} else {
+			return TRUE;
+			/*$affected = $this->dbo->affected();
+			return ($affected == 0) ? FALSE : $affected;*/
+		}
+	}
+	public function dbEditList($listid, $name, $desc) {
+		$sql = $this->safesql->query("UPDATE %s SET list_name='%s', list_desc='%s'  
+				WHERE list_id=%i",
+			array('pommomod_list', $name, $desc, $listid ) );
+		if (!$this->dbo->query($sql)) {
+			return  $this->_dbo->getError();
+		} else {
+			$affected = $this->dbo->affected();
+			return ($affected == 0) ? FALSE : $affected;
+		}
+	}
+	
+	public function dbGetListInfo($listid, $userid) {
+		/*$sql = $this->safesql->query("SELECT l.list_id, l.list_name, lu.user_id " .
+				"FROM %s AS lu, %s AS l WHERE l.list_id=%i AND lu.user_id=%i", 
+			array('pommomod_list_user', 'pommomod_list', $listid) );*/
+		$sql = $this->safesql->query("SELECT list_id, list_name, list_desc " .	//user_name
+				"FROM %s WHERE list_id=%i LIMIT 1", 
+			array('pommomod_list', $listid) );
+		//$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$listinfo = array(	//[$i]
+				'list_id'		=> $row['list_id'],
+				'list_name'		=> $row['list_name'],
+				'list_desc'		=> $row['list_desc'],
+				'user_id'		=> $userid,
+				//'user_name'		=> $row['user_name']
+			);
+			//$i++;
+		}
+		return $listinfo;
+	}
+	
+function & dbGetMailGroups($where = NULL) {
+
+	$whereStr = '';
+	if (is_numeric($where))
+		$whereStr = " WHERE group_id=".$where." ";
+		//$whereStr = ' WHERE group_id=\''.$where.'\'';
+
+	$groups = array ();
+	$sql = $this->safesql->query("SELECT group_id, group_name FROM %s %s ORDER BY group_name",
+		array($this->dbo->table['groups'], $whereStr) );
+		
+	while ($row = $this->dbo->getRows($sql, TRUE)) {
+		$groups[$row[0]] = $row[1];
+	}
+	return $groups;
+}
+
+} //ListDBHandler
+
+?>
+
