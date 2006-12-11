@@ -21,16 +21,18 @@ class PommoAuth {
 
 	// default constructor. Get current logged in user from session. Check for permissions.
 	function PommoAuth($args = array ()) {
+		global $pommo;
+		
 		$defaults = array (
 			'username' => null,
 			'requiredLevel' => 0
 		);
 		$p = PommoAPI :: getParams($defaults, $args);
 		
-		if (empty($_SESSION['pommo']['auth']['username']))
-			$_SESSION['pommo']['auth']['username'] = $p['username'];
+		if (empty($pommo->_session['username']))
+			$pommo->_session['username'] = $p['username'];
 		
-		$this->_username = & $_SESSION['pommo']['auth']['username'];
+		$this->_username = & $pommo->_session['username'];
 		$this->_permissionLevel = $this->getPermissionLevel($this->_username);
 
 		if ($p['requiredLevel'] > $this->_permissionLevel) {
@@ -63,7 +65,6 @@ class PommoAuth {
 	function logout() {
 		$this->_username = null;
 		$this->_permissionLevel = 0;
-		$_SESSION['pommo']['auth'] = array();
 		session_destroy();
 		return;
 	}

@@ -31,7 +31,7 @@ class PommoAPI {
 
 	// Returns base configuration data from SESSION. If optional argument is supplied, configuration will be loaded from
 	// the database & stored in SESSION.
-	function configGetBase($fromDB = FALSE) {
+	function configGetBase($reset = FALSE) {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
@@ -39,8 +39,8 @@ class PommoAPI {
 		if($pommo->_verbosity > 2)
 			$dbo->debug(FALSE);
 
-		if ($fromDB || empty ($_SESSION['pommo']['config'])) {
-			$_SESSION['pommo']['config'] = array ();
+		if ($reset || empty ($pommo->_session['config'])) {
+			$pommo->_session['config'] = array ();
 			$query = "
 				SELECT config_name, config_value
 				FROM ".$dbo->table['config'] ."
@@ -48,10 +48,10 @@ class PommoAPI {
 			$query = $dbo->prepare($query);
 			
 			while ($row = $dbo->getRows($query))
-				$_SESSION['pommo']['config'][$row['config_name']] = $row['config_value'];
+				$pommo->_session['config'][$row['config_name']] = $row['config_value'];
 		}
 		
-		if (!$fromDB) { // check file revision against database revision
+		if (!$reset) { // check file revision against database revision
 		$query = "
 			SELECT config_value
 			FROM ".$dbo->table['config'] ."
@@ -68,7 +68,7 @@ class PommoAPI {
 			$dbo->debug(TRUE);
 		
 		$dbo->dieOnQUery(TRUE);
-		return $_SESSION['pommo']['config'];
+		return $pommo->_session['config'];
 	}
 
 	// Gets specified config value(s) from the DB. 
@@ -138,10 +138,12 @@ class PommoAPI {
 	// accepts array of ovverriding variables
 	// returns the current page state (array)
 	function & stateInit($name = 'default', $defaults = array (), $source = array()) {
-		if (empty($_SESSION['pommo']['state'][$name]))
-			$_SESSION['pommo']['state'][$name] = $defaults;
+		global $pommo;
 		
-		$state =& $_SESSION['pommo']['state'][$name];
+		if (empty($pommo->_session['state'][$name]))
+			$pommo->_session['state'][$name] = $defaults;
+		
+		$state =& $pommo->_session['state'][$name];
 		
 		if(empty($defaults))
 			Pommo::kill('Defaults not passed to state Init');
@@ -158,19 +160,21 @@ class PommoAPI {
 	}
 	
 	// clears page state(s)
-	// accepts a page state or array of states to clear
+	// accepts a state name or array of state names to clear
 	//   if not supplied, ALL page states are cleared
 	// returns (bool)
 	function stateReset($state = array()) {
+		global $pommo;
+		
 		if (!is_array($state))
 			$state = array($state);
 		
 		if (empty($state))
-			$_SESSION['pommo']['state'] = array();
+			$pommo->_session['state'] = array();
 		else
 			foreach($state as $s)
-				unset($_SESSION['pommo']['state'][$s]);
-		
+				unset($pommo->_session['state'][$s]);
+				
 		return true;
 	}
 }
