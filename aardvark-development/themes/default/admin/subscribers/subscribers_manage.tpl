@@ -23,9 +23,11 @@ $().ready(function() {
 <ul class="inpage_menu">
 <li><!-- <a href="#TB_inline?height=400&amp;width=500&amp;inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> --><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
 
-<li><a href="ajax/subscriber_del.php?height=400&amp;width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a></li>	
+<li><a href="ajax/subscriber_del.php?height=400&amp;width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a></li>
 
-<li><a href="ajax/subscriber_export.php?height=400&amp;width=500" title="{t}Export Subscribers{/t}" class="thickbox">{t}Export Subscribers{/t}</a></li>	
+<li><a href="ajax/subscriber_export.php?height=400&amp;width=500" title="{t}Export Subscribers{/t}" class="thickbox">{t}Export Subscribers{/t}</a></li>
+
+<li><a href="admin_subscribers.php" title="{t}Return to Subscribers Page{/t}">{t}Return to Subscribers Page{/t}</a></li>
 </ul>
 
 <form method="post" action="" id="orderForm">
@@ -232,7 +234,7 @@ function updateTable(o) {
 		eval("var args = " + json);
 		if (typeof(args.success) == 'undefined')
 			alert('ajax error!');
-			
+
 		if (!args.success) {
 			alert(args.msg);
 			// restore row
