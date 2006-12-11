@@ -1,0 +1,62 @@
+#subs {
+	border: 1px solid #000;
+	border-spacing: 0;
+	text-align: left;
+	margin-top: 5px;
+}
+
+#subs tr td {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#subs thead tr th {
+	background: #000;
+	padding: 0 0 0 3px;
+	height: 30px;
+	color: #e0e0e0;
+	white-space: nowrap;
+}
+
+
+#subs thead tr th.header {
+	background-image: url(bg.png);
+	background-repeat: no-repeat;
+	border-bottom: none;
+	padding: 0 8px 0 35px;
+	border-left: #aaa solid 1px;
+	cursor: pointer;
+}
+
+#subs thead tr th.headerSortUp {
+	background-image: url(bg_asc.png);
+}
+
+#subs thead tr th.headerSortDown {
+	background-image: url(bg_desc.png);
+}	
+
+#subs tr td input[type="text"] {
+	width: 12em;
+}
+
+.key { 
+	display: none;
+}
+
+input.pvInvalid, select.pvInvalid
+{
+	border: 1px solid red;
+}
+
+// the following are for row striping (provided by quick search plugin)
+.r1 { background: #e0e0e0;}
+.r2 { background: #f8ffe5; }
+.r3 { background: #edf5f8; }
+
+.quickSearch {
+	margin-top: 4px;
+	font-weight: bold;
+}
+
+.newRow { background: #FFF6E5; }
