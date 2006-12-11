@@ -33,9 +33,8 @@ class Pommo {
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
 
 	var $_config; // configuration array to hold values loaded from the DB
-	var $_data; // Used to hold temporary data (such as an uploaded file's contents).. accessed via set (sets), get (returns), clear(deletes)
-	var $_state; // Used to hold the state of pages -- e.g. variables that should be stored like 'limit, order, etc'
-
+	var $_session;  // pointer to this install's/instance values in $_SESSION
+	
 
 	//corinna TODO -> think of some mechanism, or put it to the config file
 	var $_useplugins = TRUE;	// main plugin switcher!
@@ -102,16 +101,17 @@ class Pommo {
 			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
-
+		
 		// make sure workDir is writable
 		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
+				
 			$wd = $this->_workDir; $this->_workDir = null;
 			if (!is_dir($wd))
-				Pommo::kill(sprintf(Pommo::_T('Work Directory (%s) not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'), $this->_workDir));
+				Pommo::kill(sprintf(Pommo::_T('Work Directory (%s) not found! Make sure it exists and the webserver can write to it. You can change its location from the config.php file.'), $wd));
 			if (!is_writable($wd))
-				Pommo::kill(sprintf(Pommo::_T('Cannot write to Work Directory (%s). Make sure it has the proper permissions.'), $this->_workDir));
+				Pommo::kill(sprintf(Pommo::_T('Cannot write to Work Directory (%s). Make sure it has the proper permissions.'), $wd));
 			if (ini_get('safe_mode') == "1")
-				Pommo::kill(sprintf(Pommo::_T('Working Directory (%s) cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'), $this->_workDir));
+				Pommo::kill(sprintf(Pommo::_T('Working Directory (%s) cannot be created under PHP SAFE MODE. See Documentation, or disable SAFE MODE.'), $wd));
 			if (!is_dir($wd . '/pommo'))
 				if (!mkdir($wd . '/pommo'))
 					Pommo::kill(Pommo::_T('Could not create directory') . ' ' . $wd . '/pommo');
@@ -119,7 +119,6 @@ class Pommo {
 				Pommo::kill(Pommo::_T('Could not create directory') . ' ' . $wd . '/pommo/smarty');
 			$this->_workdir = $wd;
 		}
-			
 
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
@@ -144,7 +143,7 @@ class Pommo {
      */
 
 	function init($args = array ()) {
-
+		
 		$defaults = array (
 			'authLevel' => 1,
 			'keep' => FALSE,
@@ -171,6 +170,7 @@ class Pommo {
 		// read configuration data
 		$this->_config = PommoAPI :: configGetBase();
 		
+		
 		// Bypass SESSION creation, reading of config, authentication checks and return
 		//  if 'noSession' passed
 		if ($p['noSession'])
@@ -180,26 +180,34 @@ class Pommo {
 		if (!empty($p['sessionID']))
 			session_id($p['sessionID']);
 		session_start();
-
-		// create placeholder for $_SESSION['pommo'] if this is a new session
-		if (empty ($_SESSION['pommo'])) {
-			$_SESSION['pommo'] = array (
-				'auth' => array (),
+		
+		// generate unique session name
+		$key =& $this->_config['key'];
+		
+		if(empty($key))
+			$key = '123456';
+		
+		// create SESSION placeholder for if this is a new session
+		if (empty ($_SESSION['pommo'.$key])) {
+			$_SESSION['pommo'.$key] = array (
 				'data' => array (),
-				'state' => array ()
+				'state' => array (),
+				'username' => null
 			);
 		}
-
+		
+		$this->_session =& $_SESSION['pommo'.$key];
+		
 		// check authentication levels
 		$this->_auth = new PommoAuth(array (
 			'requiredLevel' => $p['authLevel']
 		));
 
-		// clear _data unless 'keep' is true. Create SESSION reference.
-		if (!$p['keep']) {
-			$_SESSION['pommo']['data'] = array ();
-		}
-		$this->_data = & $_SESSION['pommo']['data'];
+		// clear SESSION 'data' unless keep is passed.
+		// TODO --> phase this out in favor of page state system? 
+		// -- add "persistent" flag & complicate state initilization...
+		if (!$p['keep'])
+			$this->_session['data'] = array ();
 	}
 	
 	// reload base configuration from database
@@ -234,7 +242,8 @@ class Pommo {
 
 	/**
 	 *  _data Handler functions ==>
-	 *    $pommo->_data is a reference to $_SESSION['pommo']['data'], an array in the Session
+	 *    (got rid of _data reference...)
+	 *    XXXX $pommo->_data is a reference to $_SESSION['pommo']['data'], an array in the Session
 	 *    which holds any data we'd like to persist through pages. This array is cleared by default 
 	 *    unless explicity saved by passing the 'keep' argument to the $pommo->init() function.
 	 */
@@ -244,14 +253,18 @@ class Pommo {
 			$value = array (
 				$value => TRUE
 			);
-		return (empty ($this->_data)) ? $this->_data = $value : $this->_data = array_merge($this->_data, $value);
+		return (empty ($this->_session['data'])) ? 
+			$this->_session['data'] = $value : 
+			$this->_session['data'] = array_merge($this->_session['data'], $value);
 	}
 
 	function & get($name = FALSE) {
 		if ($name) {
-			return (isset($this->_data[$name])) ? $this->_data[$name] : array();
+			return (isset($this->_session['data'][$name])) ? 
+				$this->_session['data'][$name] : 
+				array();
 		}
-		return $this->_data;
+		return $this->_session['data'];
 	}
 	
 
