@@ -90,6 +90,10 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				// install configuration
 				$_POST['admin_password'] = md5($_POST['admin_password']);
 				PommoAPI::configUpdate($_POST);
+				
+				// generate key to uniquely identify this installation
+				$key = PommoHelper::makeCode(6);
+				PommoAPI::configUpdate(array('key' => $key),TRUE);
 
 				// load configuration [depricated?], set message defaults.
 				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/configuration.php');

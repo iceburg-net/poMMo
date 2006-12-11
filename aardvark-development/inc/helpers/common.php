@@ -72,8 +72,10 @@ class PommoHelper {
 	
 	// generates a unique code to be used as a confirmation key.
 	// returns code (str)
-	function makeCode() {
-		return md5(rand(0, 5000).time());
+	function makeCode($length = false) {
+		if (!$length)
+			return md5(rand(0, 5000).time());
+		return substr(md5(rand(0, 5000).time()),0,$length-1).rand(0,9);
 	}
 	
 	function makePassword() {

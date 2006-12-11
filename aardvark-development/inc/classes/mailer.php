@@ -254,9 +254,10 @@ class PommoMailer extends PHPMailer {
 				
 				// check for personalization personaliztion and override message body
 				if ($this->_personalize) {
-					$this->Body = PommoHelperPersonalize::body($this->_body, $subscriber, $_SESSION['pommo']['personalization_body']);
+					global $pommo;
+					$this->Body = PommoHelperPersonalize::body($this->_body, $subscriber, $pommo->_session['personalization_body']);
 					if (!empty($this->_altbody))
-						$this->AltBody = PommoHelperPersonalize::body($this->_altbody,$subscriber,$_SESSION['pommo']['personalization_altbody']);
+						$this->AltBody = PommoHelperPersonalize::body($this->_altbody,$subscriber,$pommo->_session['personalization_altbody']);
 				}
 
 				// send the mail. If unsucessful, add error message.
@@ -285,9 +286,10 @@ class PommoMailer extends PHPMailer {
 					
 					// check for personalization personaliztion and override message body
 					if ($this->_personalize) {
-						$this->Body = personalizeBody($this->_body,$to[$key],$_SESSION['pommo']['personalization']);
-						if (!empty($this->AltBody))
-							$this->AltBody = personalizeBody($this->_altbody,$to[$key],$_SESSION['pommo']['personalization']);
+						global $pommo;
+						$this->Body = PommoHelperPersonalize::body($this->_body, $subscriber, $pommo->_session['personalization_body']);
+						if (!empty($this->_altbody))
+							$this->AltBody = PommoHelperPersonalize::body($this->_altbody,$subscriber,$pommo->_session['personalization_altbody']);
 					}
 					
 					// send the mail. If unsucessful, add error message.

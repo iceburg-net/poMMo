@@ -27,7 +27,8 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-Pommo::kill('Importing and Exporting is temporarily disabled until PR15');
+
+//Pommo::kill('Importing and Exporting is temporarily disabled until PR15');
 
 // Maximum File Size (in MB) 
 $max_file_size = 2;
@@ -36,17 +37,18 @@ $smarty->assign('maxSize',$max_file_size * 1024 * 1024);
 // Filename (in $_FILES array)
 $fname = "csvfile";
 
-
-// if file is uploaded, validate & re-direct.
-if (!empty($_FILES[$fname]['tmp_name'])) {
+if(isset($_POST['submit'])) {
+	// POST exists -- set pointer to content
+	$c = false;
 	
-	$csvArray =& csvPrepareFile($_FILES[$fname]['tmp_name']);
+	if (!empty($_FILES[$fname]['tmp_name']))
+		$c =& $_FILES[$fname]['tmp_name'];
+	elseif (!empty($_POST['input']))
+		$c =& $_POST['input'];
 	
-	if (is_array($csvArray)) {
-		$sessionArray['csvArray'] =& $csvArray;
-		$pommo->set($sessionArray);
-		Pommo::redirect('subscribers_import2.php');
-	}
+	if($c) 
+		$csvArray = PommoHelperImport::makeCSV($c);
+	
 }
 
 $smarty->display('admin/subscribers/subscribers_import.tpl');

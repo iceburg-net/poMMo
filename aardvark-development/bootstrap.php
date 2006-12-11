@@ -31,7 +31,7 @@ if (!defined('SID')) {
     @ini_set('session.use_trans_sid', 0);
 }
 
-// turn off magic quotes -- NOTE; this may break embedded scripts?
+// soft turn off magic quotes -- NOTE; this may break embedded scripts?
 // clean user input of slashes added by magic quotes. TODO; optimize this.
 if (get_magic_quotes_gpc()) {
 	if (!empty ($_POST))

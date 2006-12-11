@@ -14,10 +14,13 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
+ 
 require ('bootstrap.php');
 $pommo->init(array('authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
+
+var_dump($GLOBALS['pommo']);
 
 
 /**********************************
@@ -29,13 +32,12 @@ $smarty = new PommoTemplate();
 
 // log the user out if requested
 if (isset($_GET['logout'])) {
-	if (class_exists('PommoAuth'))
-		$pommo->_auth->logout();
+	$pommo->_auth->logout();
 	header('Location: ' . $pommo->_http . $pommo->_baseUrl . 'index.php');
 }
 
 // check if user is already logged in
-if (class_exists('PommoAuth') && $pommo->_auth->isAuthenticated()) {
+if ($pommo->_auth->isAuthenticated()) {
 	// If user is authenticated (has logged in), redirect to admin.php
 	Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'admin/admin.php');
 }
