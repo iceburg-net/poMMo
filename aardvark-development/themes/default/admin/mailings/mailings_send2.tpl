@@ -149,6 +149,7 @@
 <div class="buttons">
 
 <input type="submit" id="bForm-submit" name="preview" value="{t}Continue{/t}" />
+<a href="mailings_send.php">{t}Cancel{/t}</a>
 
 </div>
 

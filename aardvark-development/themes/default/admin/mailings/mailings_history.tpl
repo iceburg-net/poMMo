@@ -17,11 +17,11 @@ $().ready(function() {
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
 
-<h2>{t}Mailings History{/t}</h2>
-
 <ul class="inpage_menu">
 <li><a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a></li>
 </ul>
+
+<h2>{t}Mailings History{/t}</h2>
 
 {include file="admin/inc.messages.tpl"}
 
@@ -120,7 +120,7 @@ $().ready(function() {
 		headerClass: 'header', 				// class name for headers (th's)
 		disableHeader: 0					// DISABLE Sorting on edit/delete column
 	});
-	
+
 	$('#subs tbody tr').quicksearch({
 		attached: "#subs",
 		position: "before",
