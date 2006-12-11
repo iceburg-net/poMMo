@@ -61,7 +61,7 @@ $().ready(function(){
 
 	$('#testForm').submit(function() {
 		var input = $(this).formToArray();
-
+		
 		url = "ajax/mailing_test2.php";
 
 		$.post(url, input, function(json) {

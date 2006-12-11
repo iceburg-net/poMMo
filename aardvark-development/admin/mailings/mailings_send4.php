@@ -160,22 +160,22 @@ if ($config['multimode'] && !empty($_GET['spawn']) && !$test) {
 // check if message body contains personalizations
 // personalizations are cached in session
 
-if(!isset($_SESSION['pommo']['personalization'])) {
+if(!isset($pommo->_session['personalization'])) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php');
 	
-	$_SESSION['pommo']['personalization'] = FALSE;
+	$pommo->_session['personalization'] = FALSE;
 	$matches = array();
 	preg_match('/\[\[[^\]]+]]/', $mailing['body'], $matches);
 	if (!empty($matches))
-		$_SESSION['pommo']['personalization'] = TRUE;
+		$pommo->_session['personalization'] = TRUE;
 	preg_match('/\[\[[^\]]+]]/', $mailing['altbody'], $matches);
 	if (!empty($matches))
-		$_SESSION['pommo']['personalization'] = TRUE;
+		$pommo->_session['personalization'] = TRUE;
 
 	// cache personalizations in session
-	if ($_SESSION['pommo']['personalization']) {
-		$_SESSION['pommo']['personalization_body'] = PommoHelperPersonalize::get($mailing['body']);
-		$_SESSION['pommo']['personalization_altbody'] = PommoHelperPersonalize::get($mailing['altbody']);
+	if ($pommo->_session['personalization']) {
+		$pommo->_session['personalization_body'] = PommoHelperPersonalize::get($mailing['body']);
+		$pommo->_session['personalization_altbody'] = PommoHelperPersonalize::get($mailing['altbody']);
 	}
 }
 
@@ -184,7 +184,7 @@ if(!isset($_SESSION['pommo']['personalization'])) {
  *********************************/
 $html = ($mailing['ishtml'] == 'on') ? TRUE : FALSE;
 
-$mailer = new PommoMailer($mailing['fromname'],$mailing['fromemail'],$mailing['frombounce'], $config['list_exchanger'],NULL,$mailing['charset'], $_SESSION['pommo']['personalization']);
+$mailer = new PommoMailer($mailing['fromname'],$mailing['fromemail'],$mailing['frombounce'], $config['list_exchanger'],NULL,$mailing['charset'], $pommo->_session['personalization']);
 
 if (!$mailer->prepareMail($mailing['subject'], $mailing['body'], $html, $mailing['altbody']))
 	PommoMailCtl::kill('prepareMail() returned errors.');
@@ -240,8 +240,8 @@ foreach($subscribers as $s) {
 	
 $tid = ($config['throttle_SMTP'] == 'shared') ? 1 : $relayID;
 
-if(empty($_SESSION['pommo']['throttler'][$tid]))
-	$_SESSION['pommo']['throttler'] = array (
+if(empty($pommo->_session['throttler'][$tid]))
+	$pommo->_session['throttler'] = array (
 		$tid => array(
 			'MPS' => $config['throttle_MPS'],
 			'BPS' => $config['throttle_MPS'],
@@ -257,11 +257,11 @@ if(empty($_SESSION['pommo']['throttler'][$tid]))
 		);
 		
 $throttler =& new PommoThrottler(
-	$_SESSION['pommo']['throttler'][$tid], 
+	$pommo->_session['throttler'][$tid], 
 	$emails, 
-	$_SESSION['pommo']['throttler'][$tid]['domainHistory'], 
-	$_SESSION['pommo']['throttler'][$tid]['sent'],
-	$_SESSION['pommo']['throttler'][$tid]['sentBytes']
+	$pommo->_session['throttler'][$tid]['domainHistory'], 
+	$pommo->_session['throttler'][$tid]['sent'],
+	$pommo->_session['throttler'][$tid]['sentBytes']
 	);
 	
 
@@ -288,7 +288,7 @@ while(!$die) {
 		
 		// set $personal as subscriber if personalization is enabled 
 		$personal = FALSE;
-		if ($_SESSION['pommo']['personalization'])
+		if ($pommo->_session['personalization'])
 			$personal =& $subscribers[$emailHash[$mail[0]]];
 		
 		if (!$mailer->bmSendmail($mail[0], $personal)) // sending failed, write to log  
