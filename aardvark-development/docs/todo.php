@@ -32,12 +32,8 @@ die();
 
 	NOTES:
 		MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
-		SECURITY ISSUE W/ SESSIONS -- e.g. If you login to demo & then acess pommo elsewhere on SAME DOMAIN -- you bypass login.
-	
-	SHORT TERM:
-	
-	  (API) Better mailing send debugging ->
-	    Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
+
+	SHORT TERM: 
 	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
 	  
 	  (feature) add message templating

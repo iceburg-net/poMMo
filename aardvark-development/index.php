@@ -20,9 +20,6 @@ $pommo->init(array('authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-var_dump($GLOBALS['pommo']);
-
-
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
