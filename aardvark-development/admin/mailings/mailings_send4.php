@@ -328,7 +328,7 @@ while(!$die) {
 // don't respawn if this is a test mailing
 if ($test) {
 	PommoMailCtl::finish($mailingID,TRUE,TRUE);
-	PommoSubscriber::delete(4294967295);
+	PommoSubscriber::delete($subscribers[0]['id']);
 	die();
 }
 
