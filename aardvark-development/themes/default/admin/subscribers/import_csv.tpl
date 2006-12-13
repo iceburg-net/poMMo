@@ -18,15 +18,15 @@
 <legend>{t}Assign Fields{/t}</legend>
 
 {* Encasing in a <p> causes the table not to display in FF 2.0 !!?!?! *}
-<br/>
+<p>
 {t}Below is a preview of your CSV data. You can assign subscriber fields to columns. At the very least, you must assign an email address.{/t}
-<br/><br/>
+</p>
 
+<form action="" method="post" id="assign">
 <table summary="{t}Assign Fields{/t}" id="subs">
 
 <thead>
 <tr>
-<form action="" method="post" id="assign">
 
 {section name=columns start=0 loop=$colNum }
 <th>
@@ -41,7 +41,6 @@
 </th>
 {/section}
 
-</form>
 </tr>
 </thead>
 
@@ -54,8 +53,8 @@
 
 {/foreach}
 
-
 </table>
+</form>
 
 
 <div class="buttons" id="buttons">
