@@ -1,6 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 {* Styling of table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
 {/capture}
@@ -30,7 +31,7 @@
 
 {section name=columns start=0 loop=$colNum }
 <th>
-&nbsp;<select name="col{$smarty.section.columns.index}">
+&nbsp;<select name="f[{$smarty.section.columns.index}]">
 <option value="">{t}Ignore Column{/t}</option>
 <option value="email">{t}Email{/t}</option>
 <option value="">-----------</option>
@@ -95,6 +96,14 @@ $().ready(function(){
 			alert('{/literal}{t}You must assign an email column!{/t}{literal}');
 			return false;
 		}
+		
+		$('#buttons').hide();
+		
+		var input = $('#assign').formToArray();
+		
+		$('#ajax').show().load('import_csv2.php',input, function() {
+			$('#ajax').removeClass('warn').addClass('error');
+		});
 		
 		return false;
 	

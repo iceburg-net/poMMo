@@ -40,8 +40,6 @@ foreach($preview as $row) {
 		$cols = $c;
 }
 
-var_dump($preview);
-
 $smarty->assign('preview',$preview);
 $smarty->assign('colNum',$cols);
 $smarty->assign('fields',PommoField::get());

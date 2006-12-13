@@ -139,14 +139,14 @@ class PommoAPI {
 	// returns the current page state (array)
 	function & stateInit($name = 'default', $defaults = array (), $source = array()) {
 		global $pommo;
-		
+				
 		if (empty($pommo->_session['state'][$name]))
 			$pommo->_session['state'][$name] = $defaults;
 		
 		$state =& $pommo->_session['state'][$name];
 		
 		if(empty($defaults))
-			Pommo::kill('Defaults not passed to state Init');
+			return $state;
 
 		foreach(array_keys($state) as $key)
 			if (array_key_exists($key,$source))
