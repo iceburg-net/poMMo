@@ -390,6 +390,7 @@ class PommoSubscriber {
 		}
 		
 		// insert data
+		$values = array();
 		foreach ($in['data'] as $field_id => $value)
 			$values[] = $dbo->prepare("(%i,%i,'%s')",array($field_id,$id,$value));
 			

@@ -6,7 +6,7 @@
 
 <p>
 <img src="{$url.theme.shared}images/icons/alert.png" class="articleimg" alt="thunderbolt icon" />
-{t}Mailings are processed in the background so feel free to turn off your computer and browse other sites. Throttle settings can also be adjusted -- although you must pause and revive the mailing before changes take effect.{/t}
+{t escape=no 1="<a href='`$url.base`admin/setup/setup_throttle.php'>" 2="</a>"}Mailings are processed in the background so feel free to turn off your computer and browse other sites. %1Throttle settings%2 can also be adjusted -- although you must pause and revive the mailing before changes take effect.{/t}
 </p>
 
 <div>
