@@ -50,7 +50,7 @@ if(isset($_POST['submit'])) {
 		// wrap $c as a file stream -- requires PHP 4.3.2
 		//  for early versions investigate using tmpfile() -- efficient?
 		stream_wrapper_register("pommoCSV", "PommoCSVStream")
-			or die('Failed to register pommoCSV');
+			or Pommo::kill('Failed to register pommoCSV');
 		$fp = fopen("pommoCSV://str", "r+"); 
 	}
 	
@@ -84,7 +84,8 @@ if(isset($_POST['submit'])) {
 			}
 			
 			// save file for access after assignments
-			move_uploaded_file($pommo->_workDir.'import.csv', $_FILES[$fname]['tmp_name']);
+			move_uploaded_file($_FILES[$fname]['tmp_name'], $pommo->_workDir.'/import.csv')
+				or Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
 			$pommo->set(array('preview' => $a));
 			Pommo::redirect('import_csv.php');
 		}
