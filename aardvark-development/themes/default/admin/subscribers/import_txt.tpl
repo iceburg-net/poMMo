@@ -27,7 +27,7 @@
 </fieldset>
 
 {* Vs. all the style="display: none;" can we have a "hide" class?  -- e.g. <div class="hide"></div> || <p class="hide"></p> etc? *}
-<div id="ajax" class="warn" style="display: none;">
+<div id="ajax" class="warn hidden">
 <img src="{$url.theme.shared}images/loader.gif" alt="Importing..." />... {t}Processing{/t}
 </div>
 
