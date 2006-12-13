@@ -23,8 +23,29 @@ $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
+$smarty->assign('returnStr',Pommo::_T('Import'));
 
-$preview =& $pommo->get('preview');
+$preview = $pommo->get('preview');
+
+// find the most columns in a row
+$cols = 0;
+foreach($preview as $row) {
+	$c = count($row);
+	if($c > $cols)
+		$cols = $c;
+}
 
 var_dump($preview);
+
+$smarty->assign('preview',$preview);
+$smarty->assign('colNum',$cols);
+$smarty->assign('fields',PommoField::get());
+
+$smarty->display('admin/subscribers/import_csv.tpl');
+Pommo::kill();
 ?>
