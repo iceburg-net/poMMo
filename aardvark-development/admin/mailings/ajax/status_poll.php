@@ -40,7 +40,9 @@ $statusText = array(
 	4 => Pommo::_T('Finished')
 );
 
-$mailing = current(PommoMailing::get(array('active' => TRUE)));
+$mailing = (isset($_GET['id'])) ?
+	 current(PommoMailing::get(array('id' => $_GET['id']))) :
+	 current(PommoMailing::get(array('active' => TRUE)));
 
 // status >> 1: Processing  2: Stopped  3: Frozen  4: Finished
 if ($mailing['status'] != 1)

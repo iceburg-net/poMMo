@@ -136,7 +136,7 @@ pommo = {
 	},
 	poll: function() {
 		this.polling = true;
-		$.post("ajax/status_poll.php?attempt="+pommo.attempt, {}, function(out) {
+		$.post("ajax/status_poll.php?id={/literal}{$mailing.id}{literal}&attempt="+pommo.attempt, {}, function(out) {
 			pommo.disabled = false; // enable commands after AJAX success
 			eval("var json = " + out);
 				if (typeof(json.status) == 'undefined')
