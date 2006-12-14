@@ -183,7 +183,7 @@ $().ready(function() {
 		FUNC_UPDATE: 'updateTable'
 	});
 
-	$('table#subs tbody tr').quicksearch({
+	$('#subs tbody tr').quicksearch({
 		attached: "#subs",
 		position: "before",
 		labelClass: "quicksearch",
