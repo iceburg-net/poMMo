@@ -57,7 +57,7 @@ if (empty($timestamp))
 	$timestamp = $mailing['touched']; // get retuns a blank array -- not false
 
 if ($json['status'] != 4) {
-	if ($mailing['command'] != 'none' || $mailing['touched'] == $timestamp)
+	if ($mailing['command'] != 'none' || ($mailing['touched'] == $timestamp && $mailing['current_status'] != 'stopped'))
 		$json['incAttempt'] = TRUE;
 	if ($mailing['command'] != 'none')
 		$json['command'] = TRUE;
