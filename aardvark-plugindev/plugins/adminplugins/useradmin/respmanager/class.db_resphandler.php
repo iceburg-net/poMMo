@@ -43,6 +43,46 @@ class RespDBHandler implements iDbHandler {
 		return $this->dbo->query($sql, 0);	//row 0
 	}
 	
+	
+	
+	public function dbFetchRespLists() {
+		$sql = $this->safesql->query("SELECT rp.user_id, u.user_name, l.list_id, l.list_name, l.list_desc, l.list_created, l.list_sentmailings, l.list_active, l.list_senderinfo " .
+				"FROM %s AS l LEFT JOIN %s AS lrp ON l.list_id = lrp.list_id " .
+				"LEFT JOIN %s AS rp ON lrp.user_id = rp.user_id  " .
+				"LEFT JOIN %s AS u ON rp.user_id = u.user_id " .
+				"ORDER BY u.user_name ",
+				array('pommomod_list', 'pommomod_list_rp', 'pommomod_responsibleperson', 'pommomod_user'));
+			
+		$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$list[$i] = array(
+				'uid'		=> $row['user_id'],
+				'uname'		=> $row['user_name'],
+				'lid'		=> $row['list_id'],
+				'name'		=> $row['list_name'],
+				'desc'		=> $row['list_desc'],
+				'created'		=> $row['list_created'],
+				'sentmailings'	=> $row['list_sentmailings'],
+				'active'		=> $row['list_active'],
+				'senderinfo'	=> $row['list_senderinfo'],
+			);
+			$i++;
+		}
+		print_r($list);
+		return $list;
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/* Custom DB fetch functions */
 	public function dbFetchRespMatrix() {
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, r.rp_realname, r.rp_bounceemail, r.rp_sonst " .	//user_pass,

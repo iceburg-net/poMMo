@@ -97,9 +97,9 @@ die();
 		
 		(API) 		get rid of appendURL problem!
 					+ convert to $pommo->_state + save there
-					
-			====>	BB: Corinna, See the new state handling in subscribers_manage & mailings_history
-	
+
+					==> i tried to use POST method instead of GET					
+
 		(arch)		module integration architecture
 					how hook in the modules?
 		

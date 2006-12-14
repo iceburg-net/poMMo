@@ -61,7 +61,9 @@ class UserPlugin { //implements plugin
 		
 		// TODO test this
 		if (!$this->isActive()) {
-			print_r("<b style='color:red;'>NOT ACTIVE!!!</b>");
+			//print_r("<b style='color:red;'>NOT ACTIVE!!! Try to enable useradmin plugin in ´the General Plugin setup</b>");
+			Pommo::kill("PLUGIN NOT ACTIVE. Try to enable the 'useradmin' plugin in the General Plugin Setup." .
+					" <a href='../../pluginconfig/config_main.php'>&raquo; go there</a> &nbsp;&nbsp;");
 			//zurückleiten zu seite vorher??? permissions einfügen und $logger
 			return;
 		}

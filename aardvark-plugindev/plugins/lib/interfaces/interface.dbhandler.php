@@ -14,17 +14,12 @@
 
 interface iDbHandler {
    
-   	//REDO
-	//public function getPermission();
-	//MAybe some error handling?
-
-
+	// dbo and safeSQL init
 	public function __construct($dbo);
 
 	//Determines if the plugin itself is marked active in the database
 	public function & dbPluginIsActive($pluginame);
-
-
+	
 } //iDbHandler
 
 ?>

@@ -27,6 +27,72 @@
 	</ul>
 	{/if}
 </li>
+{*corinna TODO: remove!!! DIRTY!!!! *}
+{*{if $showplugin}*}
+<li><a href="{$url.base}plugins/adminplugins/adminplugins.php">{t}Plugins{/t}</a>
+	{if $section == "plugins/adminplugins"}
+		<ul>
+			<li><a href="useradmin/useradmin.php">{t}Administration Tasks{/t}</a></li>
+			<li><a href="pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
+		</ul>
+	{/if}
+	{if $section == "plugins/adminplugins/pluginconfig"}
+		<ul>
+			<li><a href="../useradmin/useradmin.php">{t}Administration Tasks{/t}</a></li>
+			<li><a href="config_main.php">{t}General Plugin Setup{/t}</a></li>
+		</ul>
+	{/if}
+	{if $section == "plugins/adminplugins/useradmin"}
+	<ul>
+		<li><a href="useradmin.php">{t}Administration Tasks{/t}</a>
+			<ul>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="usermanager/user_main.php">{t}User Administration{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>
+			</ul>		
+		</li>
+		<li><a href="../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
+	</ul>
+	{/if}
+	{if $section == "plugins/adminplugins/useradmin/listmanager"}
+	<ul>
+		<li><a href="../useradmin.php">{t}Administration Tasks{/t}</a>
+			<ul>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="list_main.php">{t}Mailing Lists{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="../usermanager/user_main.php">{t}User Administration{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="../respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>
+			</ul>		
+		</li>
+		<li><a href="../../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
+	</ul>
+	{/if}	
+	{if $section == "plugins/adminplugins/useradmin/usermanager"}
+	<ul>
+		<li><a href="../useradmin.php">{t}Administration Tasks{/t}</a>
+			<ul>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="../listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="user_main.php">{t}User Administration{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="../respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>
+			</ul>		
+		</li>
+		<li><a href="../../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
+	</ul>
+	{/if}	
+	{if $section == "plugins/adminplugins/useradmin/respmanager"}
+	<ul>
+		<li><a href="../useradmin.php">{t}Administration Tasks{/t}</a>
+			<ul>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="../listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="../usermanager/user_main.php">{t}User Administration{/t}</a></li>
+				<li style="margin-left: 12px; background-color: #FFF;"><a href="resp_main.php">{t}Responsible Persons{/t}</a></li>
+			</ul>		
+		</li>
+		<li><a href="../../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
+	</ul>
+	{/if}	
+</li>
+{*{/if}*}
+{*corinna*}
 </ul>
 
 <div class="extra">

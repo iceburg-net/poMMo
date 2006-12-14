@@ -12,33 +12,29 @@
  * 
  ** [END HEADER]**/
 
-require_once ($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.db_confighandler.php'); 
-//require_once ($pommo->_baseDir . '/inc/class.pager.php');
 
+//Pommo::requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.db_confighandler.php'); 
+//Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+//require_once ($pommo->_baseDir . '/inc/class.pager.php');
 
 /**
  * This Plugin has no general options to setup
  * You cannot deactivate/disable this plugin...
  * This should only be visible to the trusted :) administrator/s
  */
-class PluginConfig {
+class PluginConfig { //implements iPlugin
 	
-
-	// UNIQUE Name of the Plugin i decided to do this so some can select his plugins configuration from the database through this name.
+	// UNIQUE Name of the Plugin
 	private $pluginname = "pluginconfig";
-	
-	private $dbo;
-	private $logger;
 	private $pommo;
-	
-	private $plugindbhandler;
+	private $logger;
+	private $configdbhandler;
 	
 
 	public function __construct($pommo) {
-		$this->dbo = $pommo->_dbo;
-		$this->logger = $pommo->_logger;
 		$this->pommo = $pommo;
-		$this->configdbhandler = new ConfigDBHandler($this->dbo);
+		$this->logger = $pommo->_logger;
+		$this->configdbhandler = new ConfigDBHandler($pommo->_dbo);
 	}
 	
 	public function __destruct() {
@@ -50,9 +46,7 @@ class PluginConfig {
 		// return $this->userdbhandler->dbPluginIsActive($this->pluginname);
 		// This plugin should always be activated! You can only activate/deactivate it through 
 		// the DB, but its a bad idea
-		
 		// maybe check if $useplugins in config.php is activated/deactivated
-		
 		return TRUE; 
 	}
 	public function getPermission($user) {
@@ -67,7 +61,6 @@ class PluginConfig {
 		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();
 		
-
 		if ($data['changeid']) {
 			$this->editSetup($data['old'],$data['new']);
 			//$this->switchPlugin($data['changeid'], $data['active']); remove -> switch is controlled solely by the icon button
@@ -82,8 +75,12 @@ class PluginConfig {
 		if ($data['switchcid']) {
 			$this->switchCategory($data['switchcid'], $data['active']);
 		}
+		if ($data['allpluginsoff']) {
+			$this->configdbhandler->dbSetPlugins('OFF');
+			$this->logger->addMsg("All Plugins disabled.");
+		}
 		
-		// PLugin Matrix
+		// Plugin Matrix
 		$plugins = $this->configdbhandler->dbGetPluginMatrix();
 		$smarty->assign('plugins' , $plugins);
 		$smarty->assign('nrplugins', count($plugins));
@@ -91,26 +88,7 @@ class PluginConfig {
 		//Matrix of incative categories
 		$smarty->assign('inactive', $this->configdbhandler->dbGetCategories('inactive'));
 
-
-		//$smarty->assign('active', $this->configdbhandler->dbGetCategories('active'));
-		//$smarty->assign('categories', $this->configdbhandler->dbGetCategories());
-		
-		//$categories = $this->configdbhandler->dbGetCategories();
-		//$smarty->assign('categories', $categories);
-		//echo "<div style='color:red;'>"; print_r($categories); echo "</div><br>";
-		
-		// ALles Categoiries zurückliefern mit GROUP BY plugin_category und dann
-		// im template <h1>{category}</h1>
-		//	und alle plugins vom typ "category"auflisten
-		// nein -> im if???
-		// alte categorie, neue categorien??
-		/*$smarty->assign('categories2', $plugins['category']);
-		echo "<div style='color:red;'>"; print_r($plugins[0]['category']); echo "</div><br>";
-		*/
-		
-		
-		$smarty->assign($_POST);
-
+		$smarty->assign($_POST);	//no edit data
 		$smarty->display('plugins/adminplugins/pluginconfig/config_main.tpl');
 		
 		Pommo::kill();
@@ -137,7 +115,7 @@ class PluginConfig {
 			}
 		}
 		if ($changed == NULL) {
-			$this->logger->addMsg('Data altered somehow?');
+			$this->logger->addMsg('Data altered.');
 		} else {
 			$this->logger->addMsg('Config altered:<br> ' . implode("<br>", $changed));
 		}
@@ -158,11 +136,8 @@ class PluginConfig {
 		$this->logger->addMsg($str);
 	}
 	
-	
 
-		
 } //PluginSetup
-
 
 
 ?>
