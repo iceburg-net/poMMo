@@ -148,8 +148,26 @@
 					<td class="cell" style="text-align: center;">{$user.logintries}</td>
 					<td class="cell" style="text-align: center;">{$user.lastedit}</td>
 					<td class="cell" style="text-align: center;">{$user.active}</td>
-					<td class="cell" style="text-align: center;"><a href="user_main.php?action=edit&userid={$user.id}">edit</a></td>		
-					<td class="cell" style=" text-align: center;"><a href="user_main.php?action=delete&userid={$user.id}">delete</a></td>
+					<td>
+							<form action="" method="POST" style="padding:0px;margin:0px;">
+									<input type="hidden" name="action" value="edit">
+									<input type="hidden" name="userid" value="{$user.id}">
+									<button onclick="window.location.href='user_main.php'">
+										<img alt="edit" src="/pommo/aardvark-development/themes/shared/images/icons/edit.png"/>
+									</button>
+							</form>
+					</td>
+					<td>
+							<form action="" method="POST" style="padding:0px;margin:0px;">
+									<input type="hidden" name="action" value="delete">
+									<input type="hidden" name="userid" value="{$user.id}">
+									<button onclick="window.location.href='user_main.php'">
+										<img alt="delete" src="/pommo/aardvark-development/themes/shared/images/icons/delete.png"/>
+									</button>
+							</form>
+					</td>
+					{*<td class="cell" style="text-align: center;"><a href="user_main.php?action=edit&userid={$user.id}">edit</a></td>		
+					<td class="cell" style=" text-align: center;"><a href="user_main.php?action=delete&userid={$user.id}">delete</a></td>*}
 				</tr>
 			{/foreach}
 		
@@ -157,10 +175,14 @@
 		
 		{* --- ADD USER BUTTON -> ICON??? --- *}
 		<div style="text-align: right; clear: both; width: 1px;"></div>
-			<div style="float:left;"><br><a href="user_main.php?action=add">Add User</a></div>
+			<form action="" method="POST" style="" name="adduser">
+				<input type="hidden" name="action" value="add">
+				<a href="#" onClick="document.adduser.submit()">&raquo Add User</a><br>
+			</form>
 		<div style="text-align: right; clear: both; width: 1px;"></div>
 
 		<br><br>
+
 
 
 	{* ----------------- [group] MATRIX --------------------- *}
@@ -186,8 +208,26 @@
 						<td  valign="top">{$item.name}</td>
 						<td  valign="top">{$item.perm}</td>
 						<td  valign="top">{$item.desc}</td>
-						<td  valign="top"><a href="user_main.php?action=editgroup&groupid={$item.id}">edit</a></td>
-						<td  valign="top"><a href="user_main.php?action=delgroup&groupid={$item.id}">delete</a></td>
+						<td valign="top">
+								<form action="" method="POST" style="padding:0px;margin:0px;">
+										<input type="hidden" name="action" value="editgroup">
+										<input type="hidden" name="groupid" value="{$item.id}">
+										<button onclick="window.location.href='user_main.php'">
+											<img alt="edit" src="/pommo/aardvark-development/themes/shared/images/icons/edit.png"/>
+										</button>
+								</form>
+						</td>
+						<td valign="top">
+								<form action="" method="POST" style="padding:0px;margin:0px;">
+										<input type="hidden" name="action" value="deletegroup">
+										<input type="hidden" name="groupid" value="{$item.id}">
+										<button onclick="window.location.href='user_main.php'">
+											<img alt="delete" src="/pommo/aardvark-development/themes/shared/images/icons/delete.png"/>
+										</button>
+								</form>
+						</td>
+						{*<td  valign="top"><a href="user_main.php?action=editgroup&groupid={$item.id}">edit</a></td>
+						<td  valign="top"><a href="user_main.php?action=delgroup&groupid={$item.id}">delete</a></td>*}
 					</tr>
 				{/foreach}
 				
@@ -251,8 +291,12 @@
 		{* --- TODO ADD PERMISSION GROUP BUTTON -> ICON??? --- *}
 		<div style="clear:both;"></div>
 		<div style="text-align: left; ">
-			<br><a href="user_main.php?action=addgroup" style="text-align: left; ">{t}Add new permission group{/t}</a><br><br><br>
+			<form action="" method="POST" style="" name="addgroup">
+				<input type="hidden" name="action" value="addgroup">
+				<a href="#" onClick="document.addgroup.submit()">&raquo {t}Add new permission group{/t}</a><br>
+			</form>
 		</div>
-			
+		<br><br><br>
+	
 			
 {include file="admin/inc.footer.tpl"}

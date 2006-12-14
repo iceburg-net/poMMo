@@ -12,23 +12,33 @@
  * 
  ** [END HEADER]**/
 
-require('../../../bootstrap.php');
+require ('../../../bootstrap.php');
 
-require_once ($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.pluginconfig.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
 
+$pommo->requireOnce($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
+$pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.db_confighandler.php');
+$pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.pluginconfig.php');
+/*Pommo::requireOnce($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
+Pommo::requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.db_confighandler.php');
+Pommo::requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.pluginconfig.php');*/
 
 $pommo->init();
-$logger = & $pommo->_logger;
-$dbo = & $pommo->_dbo;
-
-
 $data = NULL;
 
-	// get/post dat
-	
+
+/**
+	//print_r($data['setupid']);
+		//$blah = PommoValidate::subscriberData($data['setupid']);
+		//if ($blah) echo "<br>ok<br>"; else echo "<br>ned ok!<br>";
+		//print_r($data['setupid']);
+ */
+
+	/* collection of POST data*/
+
 	if ($_REQUEST['viewsetup']) {
 		$data['setupid'] = $_REQUEST['setupid'];
-	}
+	} 	
 	
 	if ($_REQUEST['changesetup']) {
 		//Data to be changed
@@ -38,21 +48,35 @@ $data = NULL;
 		$data['new'] = $_REQUEST['plugindata'];
 	}
 	
-	if (($_REQUEST['action'] == "switch") AND ($_REQUEST['switchid'])) {
+	if ($_REQUEST['switchplugin'] AND $_REQUEST['switchid']) {
 		$data['switchid'] = $_REQUEST['switchid'];
 		$data['active'] = $_REQUEST['active'];
 	}
 	
-	if ($_REQUEST['switchcid']) { //($_REQUEST['action'] == "switchPlugin") AND 
+	if ($_REQUEST['switchcid'] AND $_REQUEST['switchcid']) { 
 		$data['switchcid'] = $_REQUEST['switchcid'];
 		$data['active'] = $_REQUEST['active'];
 	}
+	
+	if ($_REQUEST['setallpluginsoff']) {
+		$data['allpluginsoff'] = TRUE;
+	}
+
 
 
 $pluginconfig = new PluginConfig($pommo);
-$pluginconfig->execute($data);
 
-Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/pluginconfig/config_main.php');
+// Some Validation with a inherited class
+//$blah = PommoValidate::subscriberData($_REQUEST); //$blah = FALSE;
+$blah = "TRUE";
+if ($blah) {
+	//$data = $pluginconfig->extractData($_REQUEST); //validated data
+	// data validator in the extract Data function??
+	$pluginconfig->execute($data); //$data
+} else { 
+	Pommo::kill("config_main: Validation Error.");
+}
+	
+// Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/pluginconfig/config_main.php');
 
 ?>
-

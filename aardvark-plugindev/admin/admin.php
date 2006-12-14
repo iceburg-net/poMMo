@@ -22,7 +22,7 @@ $dbo = & $pommo->_dbo;
 
 
 //corinna
-echo $pommo->_dbo->_auth->_username;	//why auth in DBO?
+//echo $pommo->_dbo->_auth->_username;	//why auth in DBO?
 $user = & $pommo->_auth->_username;
 $perm = $loggeduser['perm'];	//TODO
 //corinna

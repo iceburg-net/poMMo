@@ -12,26 +12,19 @@
  * 
  ** [END HEADER]**/
 
-
-require_once($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
-
-// Cool DB Query Wrapper from Monte Ohrt
-require_once($pommo->_baseDir.'inc/lib/safesql/SafeSQL.class.php');
-
-
 class ConfigDBHandler implements iDbHandler {
 
 	private $dbo;
 	private $safesql;
 
-
 	public function __construct($dbo) {
 		$this->dbo = $dbo;
-		$this->safesql =& new SafeSQL_MySQL;
+		$this->safesql = $dbo->_safeSQL;
 	}
 
 	/** Returns if the Plugin itself is active */
 	public function & dbPluginIsActive($pluginname) {
+		// The plugin administration plugin should always be active
 		return TRUE;
 	}
 	
@@ -142,6 +135,22 @@ class ConfigDBHandler implements iDbHandler {
 				array('pommomod_plugin', $setto, $pluginid ) );
 		//}
 		return $this->dbo->query($sql);
+	}
+	
+	
+	public function dbSetPlugins($state) {	// = NULL
+
+		if (($state == "ON") OR ($state == "OFF")) {
+			
+			if ($state == "ON") $to = "TRUE"; else $to = "FALSE";
+			$sql = NULL;
+			$sql = $this->safesql->query("UPDATE %s SET plugin_active=%s",
+				array('pommomod_plugin', $to ) );
+			return $this->dbo->query($sql);
+		
+		} else {
+			return FALSE;
+		}
 	}
 
 

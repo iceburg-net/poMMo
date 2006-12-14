@@ -12,11 +12,6 @@
  * 
  ** [END HEADER]**/
 
-require_once ($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
-
-// Cool DB Query Wrapper from Monte Ohrt
-require_once ($pommo->_baseDir.'/inc/lib/safesql/SafeSQL.class.php');
-
 
 class ListDBHandler  implements iDbHandler {
 
@@ -26,37 +21,45 @@ class ListDBHandler  implements iDbHandler {
 
 	public function __construct($dbo) {
 		$this->dbo = $dbo;
-		$this->safesql =& new SafeSQL_MySQL;
+		$this->safesql = $dbo->_safeSQL;
 	}
 
 	/** Returns if the Plugin itself is active */
 	public function & dbPluginIsActive($pluginame) {
-		$sql = $this->safesql->query("SELECT plugin_active FROM %s " .
-				"WHERE plugin_uniquename='%s' ", 
+		$sql = $this->safesql->query("SELECT plugin_active FROM %s WHERE plugin_uniquename='%s' ", 
 			array(pommomod_plugin, $pluginame) );
 		return $this->dbo->query($sql, 0);	//row 0
 	}
 	
 	
-	
-	/* Custom DB fetch functions */
-	/*public function dbFetchUser() {
-
-		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, p.perm_name " .	//user_pass,
-				"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
-			array( 'pommomod_user', 'pommomod_perm' ) );
+	public function dbFetchLists() {
+		$sql = $this->safesql->query("SELECT rp.user_id, u.user_name, l.list_id, l.list_name, l.list_desc, l.list_created, l.list_sentmailings, l.list_active, l.list_senderinfo " .
+				"FROM %s AS l LEFT JOIN %s AS lrp ON l.list_id = lrp.list_id " .
+				"LEFT JOIN %s AS rp ON lrp.user_id = rp.user_id  " .
+				"LEFT JOIN %s AS u ON rp.user_id = u.user_id " .
+				"ORDER BY u.user_name ",
+				array('pommomod_list', 'pommomod_list_rp', 'pommomod_responsibleperson', 'pommomod_user'));
+			
 		$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
-			$user[$i] = array(
-				'user_id' 		=> $row['user_id'],
-				'user_name'		=> $row['user_name'],
-				//'user_pass'		=> $row['user_pass'],
-				'user_group'	=> $row['group_name'],
-				);
+			$list[$i] = array(
+				'uid'		=> $row['user_id'],
+				'uname'		=> $row['user_name'],
+				'lid'		=> $row['list_id'],
+				'name'		=> $row['list_name'],
+				'desc'		=> $row['list_desc'],
+				'created'		=> $row['list_created'],
+				'sentmailings'	=> $row['list_sentmailings'],
+				'active'		=> $row['list_active'],
+				'senderinfo'	=> $row['list_senderinfo'],
+			);
 			$i++;
 		}
-		return $user;
-	}*/
+		print_r($list);
+		return $list;
+	}
+
+
 
 
 	/*public function dbFetchUserLists() {

@@ -12,11 +12,6 @@
  * 
  ** [END HEADER]**/
 
-require_once ($pommo->_baseDir.'/plugins/adminplugins/useradmin/listmanager/class.db_listhandler.php'); 
-//require_once ($pommo->_baseDir.'/plugins/adminplugins/adminuser/usermanager/class.listplugin.php');
-//require_once ($pommo->_baseDir.'/inc/class.pager.php');
-
-
 
 class ListPlugin {
 	
@@ -25,26 +20,24 @@ class ListPlugin {
 	// from the database through this name.
 	private $pluginname = "listmanager";	
 	
-	private $dbo;
 	private $logger;
 	private $pommo;
 	
-	private $userdbhandler;
+	private $listdbhandler;
 	
 
 	public function __construct($pommo) {
-		$this->dbo = $pommo->_dbo;
-		$this->logger = $pommo->_logger;
 		$this->pommo = $pommo;
+		$this->logger = $pommo->_logger;
 		
-		$this->listdbhandler = new ListDBHandler($this->dbo);
+		$this->listdbhandler = new ListDBHandler($pommo->_dbo);
 	}
 	public function __destruct() {
 	}
 
 	public function isActive() {
 		// Parameter 'PLUGINNAME' is the uniquename of the plugin
-		return $this->userdbhandler->dbPluginIsActive($this->pluginname);
+		return $this->listdbhandler->dbPluginIsActive($this->pluginname);
 	}
 	
 	public function getPermission($user) {
@@ -58,7 +51,7 @@ class ListPlugin {
 		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();
 		
-		echo "<div style='color:blue;'>"; print_r($data); echo "</div>";
+		/*echo "<div style='color:blue;'>"; print_r($data); echo "</div>";
 		
 		if ($data['showAdd']) {
 			$smarty->assign('showAdd' , 'TRUE');
@@ -79,13 +72,13 @@ class ListPlugin {
 		if ($data['action']) {
 			$smarty->assign('action', $data['action']);
 			$smarty->assign('showformid', $data['userid']);	//needed for forms
-		}
+		}*/
 		
 		
-		//$user = $this->listdbhandler->dbFetchUser();
-		$user = $this->listdbhandler->dbFetchUserLists();
-		$smarty->assign('userlist' , $user);
-		$smarty->assign('nrusers', count($user) );
+		$list = $this->listdbhandler->dbFetchLists();
+		$smarty->assign('list' , $list);
+		
+		$smarty->assign('nrlists', count($list) );
 		
 		$smarty->assign($_POST);
 

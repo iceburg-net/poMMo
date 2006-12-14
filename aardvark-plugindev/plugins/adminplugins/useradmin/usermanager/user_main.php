@@ -52,7 +52,7 @@ if ($_REQUEST['userid']) {
 		// If the add button is pressed
 		if (!empty($_REQUEST['AddUser'])) {
 			$ret = $userplugin->addUser($_REQUEST['username'], $_REQUEST['userpass'], $_REQUEST['userpasscheck'], $_REQUEST['usergroup']);
-			if ($ret) Pommo::redirect($pommo->_baseUrl.'/plugins/adminplugins/useradmin/usermanager/user_main.php');
+			if ($ret) Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/useradmin/usermanager/user_main.php');
 				//$data['showAddForm'] = FALSE;	
 				
 		}
@@ -61,7 +61,7 @@ if ($_REQUEST['userid']) {
 		$data['showDelForm'] = TRUE;
 		if (!empty($_REQUEST['DeleteUser'])) {
 			$ret = $userplugin->deleteUser($_REQUEST['userid']);
-			if ($ret) Pommo::redirect($pommo->_baseUrl.'/plugins/adminplugins/useradmin/usermanager/user_main.php');
+			if ($ret) Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/useradmin/usermanager/user_main.php');
 				//$data['showDelForm'] = FALSE;	
 		}	
 	
@@ -69,7 +69,7 @@ if ($_REQUEST['userid']) {
 		$data['showEditForm'] = TRUE;
 		if (!empty($_REQUEST['EditUser'])) {
 			$ret = $userplugin->editUser($_REQUEST['userid'], $_REQUEST['username'], $_REQUEST['userpass'], $_REQUEST['usergroup']);
-			if ($ret) Pommo::redirect($pommo->_baseUrl.'/plugins/adminplugins/useradmin/usermanager/user_main.php');
+			if ($ret) Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/useradmin/usermanager/user_main.php');
 				//$data['showEditForm'] = FALSE;	
 		}
 
@@ -93,7 +93,7 @@ if ($_REQUEST['userid']) {
 		$data['showGroupEditForm'] = TRUE;
 		if (!empty($_REQUEST['EditGroup'])) {
 			$ret = $userplugin->editPermGroup($_REQUEST['groupid'], $_REQUEST['groupname'], $_REQUEST['groupperm'], $_REQUEST['groupdesc']);
-			if ($ret) Pommo::redirect($pommo->_baseUrl.'/plugins/adminplugins/useradmin/usermanager/user_main.php');
+			if ($ret) Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/useradmin/usermanager/user_main.php');
 				//$data['showGroupEditForm'] = FALSE;	
 		}
 	}

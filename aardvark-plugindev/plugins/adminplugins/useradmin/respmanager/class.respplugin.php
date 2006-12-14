@@ -89,6 +89,15 @@ class RespPlugin {
 		
 		$resp = $this->respdbhandler->dbFetchRespMatrix();
 		$smarty->assign('resp', $resp);
+		
+		
+		$list = $this->respdbhandler->dbFetchRespLists();
+		$smarty->assign('list', $list);
+		$smarty->assign('nrlists', count($list));
+		
+		echo "<div style='color: red;'>";
+		print_r($list); echo "</div>";
+		
 		$smarty->assign('nrresp', count($resp));
 		
 

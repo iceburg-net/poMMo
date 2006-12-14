@@ -12,17 +12,18 @@
  * 
  ** [END HEADER]**/
 
-require('../../../../bootstrap.php');
-require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/listmanager/class.listplugin.php');
+require ('../../../../bootstrap.php');
+
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+
+$pommo->requireOnce($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
+$pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/useradmin/listmanager/class.db_listhandler.php');
+$pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/useradmin/listmanager/class.listplugin.php');
 
 $pommo->init();
-$logger = & $pommo->_logger;
-$dbo = & $pommo->_dbo;
-
-
 $data = NULL;
-$listplugin = new ListPlugin($pommo);
 
+$listplugin = new ListPlugin($pommo);
 
 
 //GETPOST data
@@ -60,6 +61,7 @@ if ($_REQUEST['action']) {
 
 $listplugin->execute($data);
 
+// Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/pluginconfig/config_main.php');
 
 ?>
 
