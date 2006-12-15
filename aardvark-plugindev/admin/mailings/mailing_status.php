@@ -30,7 +30,6 @@ $smarty = new PommoTemplate();
 
 $mailing = current(PommoMailing::get(array('active' => TRUE)));
 
-
 $smarty->assign('mailing', $mailing);
 $smarty->display('admin/mailings/mailing_status.tpl');
 Pommo::kill();

@@ -122,14 +122,19 @@ class Pommo {
 
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
-
+			
 		// initialize database link
 		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 
-		// if debugging is set in config.php, enable debugging on the database.
-		if ($this->_debug == 'on') {
-			$this->_dbo->debug(TRUE);
+		// turn off debugging if in user area
+		if($this->_section == 'user') {
+			$this->_debug = 'off';
+			$this->_dbo->debug(FALSE);
 		}
+		
+		// if debugging is set in config.php, enable debugging on the database.
+		if ($this->_debug == 'on') 
+			$this->_dbo->debug(TRUE);
 
 	}
 
@@ -321,7 +326,7 @@ class Pommo {
 		}
 		
 		// output debugging info if enabled (in config.php)
-		if ($pommo->_debug == 'on' && $pommo->_section != 'user') { // don't debug if section == user.'
+		if ($pommo->_debug == 'on') { // don't debug if section == user.'
 			if (is_object($pommo)) {
 				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
 				$debug = new PommoHelperDebug();

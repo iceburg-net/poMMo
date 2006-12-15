@@ -39,7 +39,7 @@ $subscriber = array(
 	'email' => $_POST['Email'],
 	'registered' => time(),
 	'ip' => $_SERVER['REMOTE_ADDR'],
-	'status' => 1,
+	'status' => 0,
 	'data' => $_POST['d']);
 	
 
@@ -48,7 +48,7 @@ if(!PommoHelper::isEmail($_POST['Email']))
 
 
 PommoValidate::subscriberData($subscriber['data'],array('active' => FALSE, 'ignore' => TRUE));
-$key = PommoSubscriber::add($subscriber, 4294967295);
+$key = PommoSubscriber::add($subscriber);
 if (!$key)
 	jsonKill('Unable to add test subscriber',$key);
 

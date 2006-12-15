@@ -12,6 +12,7 @@
  ** [END HEADER]**/
 require('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 
 $pommo->init();
@@ -20,8 +21,9 @@ $dbo = & $pommo->_dbo;
 
 $pommo->toggleEscaping(TRUE);
 
-$state =& PommoAPI::stateInit('subscribers_manage',array('group' => 'all', 'status' => 1));
-
+$state =& PommoAPI::stateInit('subscribers_manage');
+$fields = array_keys(PommoField::get());
+	
 
 $ids = FALSE;
 if(!empty($_POST['ids']))
@@ -44,7 +46,15 @@ if($_POST['type'] == 'csv') {
 		return;
 	}
 	foreach($subscribers as $sub) {
-		$d = $sub['data'];
+		$d = array();
+		
+		// normalize field order in export
+		foreach($fields as $id)
+			if(array_key_exists($id,$sub['data']))
+				$d[$id] = $sub['data'][$id];
+			else
+				$d[$id] = null;
+		
 		$s = array($sub['email']); // can add IP time_registered, etc. to this....
 		
 		array_walk($d, 'csvWrap');

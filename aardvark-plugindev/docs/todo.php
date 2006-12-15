@@ -27,17 +27,15 @@ die();
 	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 	Use TableSorter/Table layout for field, group, and group filter display
-  
+	Fix table styling/striping -- don't rely on #subs! make a generic architecture + modular CSS include!
+	  Seen in subscriber_manage, import_csv, and mailings_history SO FAR
+	  
 [BRICE -- "Feel free to inherit any of these ;)" ]
 
 	NOTES:
 		MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
-		SECURITY ISSUE W/ SESSIONS -- e.g. If you login to demo & then acess pommo elsewhere on SAME DOMAIN -- you bypass login.
-	
-	SHORT TERM:
-	
-	  (API) Better mailing send debugging ->
-	    Change queue table to include "status" field --> ie. ENUM ('unsent','sent','failed') + error catching... (including PHP fatal errors) 
+
+	SHORT TERM: 
 	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
 	  
 	  (feature) add message templating

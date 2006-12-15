@@ -124,7 +124,7 @@ $().ready(function() {
 	$('#subs tbody tr').quicksearch({
 		attached: "#subs",
 		position: "before",
-		lavelClass: "quicksearch",
+		labelClass: "quicksearch",
 		stripeRowClass: ['r1', 'r2', 'r3'],
 		labelText: "{/literal}{t}Quick Search{/t}{literal}",
 		inputText: "{/literal}{t}search table{/t}{literal}",

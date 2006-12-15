@@ -183,7 +183,7 @@ class PommoMailing {
 		
 		$o = array();
 		
-		$select = "mailing_id, fromname, fromemail, subject, ishtml, mailgroup, subscriberCount, started, finished, sent, charset, status, c.*";
+		$select = "mailing_id, fromname, fromemail, frombounce, subject, ishtml, mailgroup, subscriberCount, started, finished, sent, charset, status, c.*";
 		if(!$p['noBody'])
 			$select .= ", body, altbody";
 		

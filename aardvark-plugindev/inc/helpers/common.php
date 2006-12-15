@@ -84,7 +84,7 @@ class PommoHelper {
 	
 	// checks to see if an email address exists in the system
 	// accepts a single email (str) or array of emails
-	// returns an array found emails. (will be empty if none found).
+	// returns an array of found emails. (will be empty if none found).
 	function & emailExists(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;

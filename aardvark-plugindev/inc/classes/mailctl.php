@@ -29,7 +29,8 @@ class PommoMailCtl {
 			$query = "
 				INSERT IGNORE INTO ".$dbo->table['queue']."
 				(subscriber_id)
-				SELECT subscriber_id FROM ".$dbo->table['subscribers'];
+				SELECT subscriber_id FROM ".$dbo->table['subscribers']."
+				WHERE status=1";
 			if (!$dbo->query($query))
 				return false;
 				

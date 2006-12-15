@@ -86,6 +86,7 @@ CREATE TABLE :::mailing_current::: (
   `securityCode` char(32) default NULL,
   `notices` longtext default NULL,
   `current_status` enum('started','stopped') NOT NULL default 'stopped',
+  `touched` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`current_id`)
 );
 

@@ -333,14 +333,13 @@ jQuery.tableEditor = {
 			
 			return newRow;
 		},
-		
 		// -- THIS FUNCTION IS OPTIONAL! Not necessary for in place editing.
 		// Removes a row from the table
 		// Returns success (bool)
 		deleteRow: function(input) {
 			var defaults =  {		
 				TABLE: false, // jQ object containing table, else FALSE (use first tableEditor table)
-				KEY: false, // a key or ARRAY of keys to delete
+				KEY: false // a key or ARRAY of keys to delete
 			};
 			jQuery.extend(defaults, input);
 			
