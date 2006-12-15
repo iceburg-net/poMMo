@@ -14,7 +14,6 @@ die();
 ?>
 
 [BEFORE Aardvark Final]
-	+ Rewritten Import/Export
 	+ Message Templating
 	+ Rewritten Default Theme (CSS, JS, TEMPLATES)
 	
@@ -29,6 +28,7 @@ die();
 	Use TableSorter/Table layout for field, group, and group filter display
 	Fix table styling/striping -- don't rely on #subs! make a generic architecture + modular CSS include!
 	  Seen in subscriber_manage, import_csv, and mailings_history SO FAR
+	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
 	  
 [BRICE -- "Feel free to inherit any of these ;)" ]
 
@@ -42,6 +42,21 @@ die();
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
 	  (feature) Add OR to group filtering
 	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
+	  	
+	  	----
+			SELECT count(subscriber_id)
+			from subscribers 
+			where 
+			status ='1' 
+			AND (
+			subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
+			AND subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
+			OR subscriber_id in
+				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
+			);
+	  	----
 	  (feature) Rewritten Pager -- current one is very ugly when > 25 pages are available. Use "google" like paging.
 
 	  ADD Support Page (next to admin page in main menu bar)

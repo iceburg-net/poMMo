@@ -23,7 +23,7 @@
 <li><a href="{$url.base}embed.miniform.php">{t}URL{/t}</a></li>
 </ul>
 
-<p>PHP: <tt>include('{$url.base}embed.miniform.php');</tt></p>
+<p>PHP: <tt>include('{$config.app.path}embed.miniform.php');</tt></p>
 
 <div id="miniPreview" class="lightbox">
 
@@ -58,7 +58,7 @@ include('{$url.base}embed.mini.php');
 <li><a href="{$url.base}embed.form.php">{t}URL{/t}</a></li>
 </ul>
 
-<p>PHP: <tt>include('{$url.base}embed.form.php');</tt></p>
+<p>PHP: <tt>include('{$config.app.path}embed.form.php');</tt></p>
 
 <div id="fullPreview" class="lightbox">
 
