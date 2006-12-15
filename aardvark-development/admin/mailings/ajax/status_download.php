@@ -42,7 +42,7 @@ $emails = $dbo->getAll($query,'assoc','email');
 
 $o = '';
 foreach($emails as $e)
-	$o .= "$e\n";
+	$o .= "$e\r\n";
 	
 $size_in_bytes = strlen($o);
 header("Content-disposition:  attachment; filename=".$nameMap[$i].".txt; size=$size_in_bytes");
