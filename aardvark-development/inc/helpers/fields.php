@@ -245,18 +245,15 @@ class PommoField {
 	// accepts a field (array)
 	// accepts a value (str)
 	// returns success (bool)
-	function optionAdd(&$field, &$value) {
+	function optionAdd(&$field, $value) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		$logger =& $pommo->_logger;
 		
-		if (is_numeric(array_search($value,$field['array']))) {
-			$logger->addMsg(sprintf(Pommo::_T('Option %s already exists'),$value));
-			return false;
-		}
-			
+		$value = array_unique(preg_split("/[\s,]+/", $value));
+		
 		// add value to the array
-		array_push($field['array'],$value);
+		$field['array'] = array_unique(array_merge($field['array'],$value));
 		$o = serialize($field['array']);
 		
 		$query = "

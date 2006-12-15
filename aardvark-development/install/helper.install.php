@@ -11,6 +11,9 @@
  * 
  ** [END HEADER]**/
 
+// TODO --> REWRITE -- Entire file is DEPRICATED OLD SKOOL
+
+
 // TODO : Make array of queries.. send array to dbo->query(); update query function to allow arrays...
 // TODO : Play with output buffering...
 // TODO : load array of done serials @ beginning of loop.. not per each update!!!
@@ -19,35 +22,38 @@
 
 // NOTE TO SELF -- all updates in a upgrade must be serialized, and their serial incremented!
 
-function parse_mysql_dump($ignoreerrors = false) {
+function parse_mysql_dump($ignoreerrors = false, $file = false) {
 	global $pommo;
 	$dbo =& $pommo->_dbo;
 	$logger =& $pommo->_logger;
 
-			$file_content = @file($pommo->_baseDir."install/sql.schema.php");
-			if (empty ($file_content))
-				Pommo::kill('Error installing. Could not read '.$pommo->_baseDir.'install/sql.schema.php');
-			$query = '';
-			foreach ($file_content as $sql_line) {
-				$tsl = trim($sql_line);
-				if (($sql_line != "") && (substr($tsl, 0, 2) != "--") && (substr($tsl, 0, 1) != "#")) {
-					$query .= $sql_line;
-					if (preg_match("/;\s*$/", $sql_line)) {
-						$matches = array();
-						preg_match('/:::(.+):::/',$query,$matches);
-						if ($matches[1])
-							$query = preg_replace('/:::(.+):::/',$dbo->table[$matches[1]], $query);
-							$query = trim($query);
-						if (!$dbo->query($query) && !$ignoreerrors) {
-							$logger->addErr(Pommo::_T('Database Error: ').$dbo->getError());
-							return false;
-						}
-						$query = '';
-					}
+	if (!$file)
+		$file = $pommo->_baseDir."install/sql.schema.php";
+		
+	$file_content = @file($file);
+	if (empty ($file_content))
+		Pommo::kill('Error installing. Could not read '.$file);
+	$query = '';
+	foreach ($file_content as $sql_line) {
+		$tsl = trim($sql_line);
+		if (($sql_line != "") && (substr($tsl, 0, 2) != "--") && (substr($tsl, 0, 1) != "#")) {
+			$query .= $sql_line;
+			if (preg_match("/;\s*$/", $sql_line)) {
+				$matches = array();
+				preg_match('/:::(.+):::/',$query,$matches);
+				if ($matches[1])
+					$query = preg_replace('/:::(.+):::/',$dbo->table[$matches[1]], $query);
+					$query = trim($query);
+				if (!$dbo->query($query) && !$ignoreerrors) {
+					$logger->addErr(Pommo::_T('Database Error: ').$dbo->getError());
+					return false;
 				}
+				$query = '';
 			}
-			return true;
 		}
+	}
+	return true;
+}
 		
 
 // <bool> Returns true if the program is installed, false if not. TODO: eventaully allow for table prefixing..

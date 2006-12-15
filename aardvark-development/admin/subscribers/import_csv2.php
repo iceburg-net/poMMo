@@ -51,7 +51,8 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 		// validate/fix data
 		if(!PommoValidate::subscriberData($subscriber['data'], array(
 			'log' => false,
-			'ignore' => true)))
+			'ignore' => true,
+			'active' => false)))
 			$subscriber['flag'] = 9;
 		
 		// add subscriber

@@ -52,12 +52,16 @@
 				continue;
 			$in[$id] = trim($in[$id]);
 			
-			if ($field['required'] == 'on' && empty($in[$id])) {
-				if ($p['log'])
-					$logger->addErr(sprintf(Pommo::_T('%s is a required field.'),$field['prompt']));
+			if (empty($in[$id])) {
 				if ($p['ignore'])
 					unset($in[$id]);
-				$valid = false;
+					
+				if ($field['required'] == 'on') {
+					if ($p['log'])
+						$logger->addErr(sprintf(Pommo::_T('%s is a required field.'),$field['prompt']));
+					$valid = false;
+				}
+				continue;
 			}
 			
 			switch ($field['type']) {
@@ -95,8 +99,13 @@
 					break;
 				case "date": // TODO -- ENHANCE/VERIFY THIS!
 					// convert date to unix timestamp (# of secs since j1 1970)
+					
+					if(is_numeric($in[$id]))
+						$in[$id] = date('m/d/Y',$in[$id]);
+						
 					$in[$id] = strtotime($in[$id]);
-					if($in[$id] == 0 || !$in[$id]) {
+					
+					if(!$in[$id] || $in[$id] < 0) {
 						if ($p['log'])
 							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a date (mm/dd/yyyy).'),$field['prompt']));
 						if ($p['ignore'])

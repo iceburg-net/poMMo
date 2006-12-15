@@ -12,6 +12,20 @@
 <li><a href="tests/mailing.test.php?height=320&amp;width=480" title="Test Mailing Processor" class="thickbox">Test Mailing Processor</a></li>
 <li><a href="tests/mailing.kill.php?height=320&amp;width=480" title="Terminate Current Mailing" class="thickbox">Terminate Current Mailing</a></li>
 <li><a href="tests/mailing.runtime.php?height=320&amp;width=480" title="Test Max Runtime" class="thickbox">Test Max Runtime (takes 40 seconds)</a></li>
+<li><a class="warn" href="util/db.clear.php" title="Reset Database">Reset Database (clears all subscribers, groups, fields)</a></li>
+<li><a class="warn" href="util/db.subscriberClear.php" title="Reset Subscribers">Reset Subscribers (clears all susbcribers)</a></li>
+<li><a class="warn" href="util/db.sample.php" title="Load Sample Data">Load Sample Data (resets database, loads sample data)</a></li>
 </ul>
+
+{literal}
+<script type="text/javascript">
+$().ready(function() { 
+	$('a.warn').click(function() { 
+		var str = this.innerHTML;
+		return confirm("{/literal}{t}Confirm your action.{/t}{literal}\n"+str+"?");
+	});
+});
+</script>
+{/literal}
 
 {include file="admin/inc.footer.tpl"}
