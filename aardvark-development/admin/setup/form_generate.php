@@ -65,32 +65,32 @@ foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 
 	if ($field['required'] == 'on')
-		echo "<!--	BEGIN INPUT FOR REQUIRED FIELD \"".$field['name']."\" -->\n<div>\n<label for=\"field".$field_id."\"><strong>".$field['prompt'].":</strong></label>\n";
+		echo "<!--	BEGIN INPUT FOR REQUIRED FIELD \"".$field['name']."\" -->\r\n<div>\r\n<label for=\"field".$field_id."\"><strong>".$field['prompt'].":</strong></label>\r\n";
 	else
-		echo "<!--	BEGIN INPUT FOR FIELD \"".$field['name']."\" -->\n<div>\n<label for=\"field".$field_id."\">".$field['prompt'].":</label>\n";
+		echo "<!--	BEGIN INPUT FOR FIELD \"".$field['name']."\" -->\r\n<div>\r\n<label for=\"field".$field_id."\">".$field['prompt'].":</label>\r\n";
 
 	switch ($field['type']) {
 		case "checkbox": // checkbox	
 			if (empty($field['normally']))
-				echo "\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" />";
+				echo "\r\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" />";
 			else
-				echo "\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" checked=\"checked\" />";
+				echo "\r\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" checked=\"checked\" />";
 			break;
 
 		case "multiple": // select
 
-			echo "\n<select name=\"d[".$field_id."]\" id=\"field".$field_id."\">\n";
+			echo "\r\n<select name=\"d[".$field_id."]\" id=\"field".$field_id."\">\r\n";
 
-			echo "<option>Please choose...</option>\n";
+			echo "<option>Please choose...</option>\r\n";
 
 			foreach ($field['array'] as $option) {
 
 				if (!empty($field['normally']) && $option == $field['normally'])
-					echo "<option value=\"".htmlspecialchars($option)."\" selected=\"selected\"> ".$option."</option>\n";
+					echo "<option value=\"".htmlspecialchars($option)."\" selected=\"selected\"> ".$option."</option>\r\n";
 				else
-					echo "<option value=\"".htmlspecialchars($option)."\"> ".$option."</option>\n";
+					echo "<option value=\"".htmlspecialchars($option)."\"> ".$option."</option>\r\n";
 			}			
-			echo "</select>\n";
+			echo "</select>\r\n";
 
 			break;
 
@@ -99,16 +99,16 @@ foreach (array_keys($fields) as $field_id) {
 		case "date": // select
 
 			if (empty($field['normally']))
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" maxlength=\"60\" />\n";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" maxlength=\"60\" />\r\n";
 			else
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".htmlspecialchars($field['normally'])."\" />\n";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".htmlspecialchars($field['normally'])."\" />\r\n";
 			break;
 
 		default:
 			break;
 	}
 
-	echo "</div>\n\n";
+	echo "</div>\r\n\r\n";
 }
 ?>
 </fieldset>

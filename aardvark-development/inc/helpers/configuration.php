@@ -25,28 +25,28 @@
 
 		if ($section == 'all' || $section == 'subscribe') {
 		$messages['subscribe'] = array();
-		$messages['subscribe']['msg'] = sprintf(Pommo::_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $pommo->_config['list_name'])."\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['subscribe']['msg'] = sprintf(Pommo::_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $pommo->_config['list_name'])."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['subscribe']['sub'] = Pommo::_T('Subscription request'); 
 		$messages['subscribe']['suc'] = Pommo::_T('Welcome to our mailing list. Enjoy your stay.');
 		}
 
 		if ($section == 'all' || $section == 'unsubscribe') {
 		$messages['unsubscribe'] = array();
-		$messages['unsubscribe']['msg'] = sprintf(Pommo::_T('You have requested to unsubscribe from %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['unsubscribe']['msg'] = sprintf(Pommo::_T('You have requested to unsubscribe from %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['unsubscribe']['sub'] = Pommo::_T('Unsubscription request'); 
 		$messages['unsubscribe']['suc'] = Pommo::_T('You have successfully unsubscribed. Enjoy your travels.');
 		}
 
 		if ($section == 'all' || $section == 'password') {
 		$messages['password'] = array();
-		$messages['password']['msg'] =  sprintf(Pommo::_T('You have requested to change your password for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['password']['msg'] =  sprintf(Pommo::_T('You have requested to change your password for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['password']['sub'] = Pommo::_T('Change Password request'); 
 		$messages['password']['suc'] = Pommo::_T('Your password has been reset. Enjoy!');
 		}
 
 		if ($section == 'all' || $section == 'update') {
 		$messages['update'] = array();
-		$messages['update']['msg'] =  sprintf(Pommo::_T('You have requested to update your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['update']['msg'] =  sprintf(Pommo::_T('You have requested to update your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['update']['sub'] = Pommo::_T('Update Records request'); 
 		$messages['update']['suc'] = Pommo::_T('Your records have been updated. Enjoy!');
 		}

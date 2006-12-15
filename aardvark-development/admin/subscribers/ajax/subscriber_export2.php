@@ -61,7 +61,7 @@ if($_POST['type'] == 'csv') {
 		array_walk($s, 'csvWrap');
 		
 		$a = array_merge($s,$d);
-		$o .= implode(',',$a)."\n";
+		$o .= implode(',',$a)."\r\n";
 	}
 	
 	$size_in_bytes = strlen($o);
@@ -82,7 +82,7 @@ $emails = PommoSubscriber::getEmail(array('id' => $ids));
 
 $o = '';
 foreach($emails as $e)
-	$o .= "$e\n";
+	$o .= "$e\r\n";
 	
 $size_in_bytes = strlen($o);
 header("Content-disposition:  attachment; filename=poMMo_".Pommo::_T('Subscribers').".txt; size=$size_in_bytes");
