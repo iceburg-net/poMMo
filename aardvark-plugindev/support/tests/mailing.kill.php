@@ -31,6 +31,10 @@ $query = "DELETE FROM ".$dbo->table['mailing_current'];
 if(!$dbo->query($query))
 	die('ERROR deleting current mailings.');
 	
+$query = "DELETE FROM ".$dbo->table['queue'];
+if(!$dbo->query($query))
+	die('ERROR clearing queue.');
+	
 $query = "
 UPDATE ".$dbo->table['mailings']." 
 SET status=2 

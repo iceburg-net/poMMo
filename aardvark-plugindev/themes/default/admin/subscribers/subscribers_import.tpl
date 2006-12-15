@@ -10,7 +10,9 @@
 {t escape=no 1='<tt>' 2='</tt>'}Welcome to Subscriber Import! You can import subscribers from a list of email addresses or from a full fledged CSV file containing subscriber field values as well as their email. CSV files should have one subscriber(email) per line with field information seperated by commas(%1,%2).{/t}
 </p>
 
-<p>{t escape=no 1='<a href="http://www.openoffice.org/">' 2='</a>'}Popular programs such as Microsoft Excel and %1 Open Office %2 support saving files in Comma-Seperated-Value format.{/t}</p>
+<p>{t escape=no 1='<a href="http://www.openoffice.org/">' 2='</a>'}Popular programs such as Microsoft Excel and %1 Open Office %2 support saving files in CSV (Comma-Seperated-Value) format.{/t}</p>
+
+<p class="warn">{t}Duplicate subscribers or invalid email addresses will be ignored.{/t}</p>
 
 <form method="post" enctype="multipart/form-data" action="">
 <input type="hidden" name="MAX_FILE_SIZE" value="{$maxSize}" />{* <-- DO NOT CHANGE THE LOCATION OF THIS *}

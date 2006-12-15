@@ -40,7 +40,9 @@ $statusText = array(
 	4 => Pommo::_T('Finished')
 );
 
-$mailing = current(PommoMailing::get(array('active' => TRUE)));
+$mailing = (isset($_GET['id'])) ?
+	 current(PommoMailing::get(array('id' => $_GET['id']))) :
+	 current(PommoMailing::get(array('active' => TRUE)));
 
 // status >> 1: Processing  2: Stopped  3: Frozen  4: Finished
 if ($mailing['status'] != 1)
@@ -57,7 +59,7 @@ if (empty($timestamp))
 	$timestamp = $mailing['touched']; // get retuns a blank array -- not false
 
 if ($json['status'] != 4) {
-	if ($mailing['command'] != 'none' || $mailing['touched'] == $timestamp)
+	if ($mailing['command'] != 'none' || ($mailing['touched'] == $timestamp && $mailing['current_status'] != 'stopped'))
 		$json['incAttempt'] = TRUE;
 	if ($mailing['command'] != 'none')
 		$json['command'] = TRUE;

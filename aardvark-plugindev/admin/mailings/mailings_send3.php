@@ -63,7 +63,6 @@ if (!empty ($_GET['sendaway'])) {
 		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code))
 			Pommo::kill('Unable to spawn background mailer');
 
-		sleep(1);
 		Pommo::redirect('mailing_status.php');
 
 		//die ($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode);

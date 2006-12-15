@@ -9,10 +9,10 @@
 {include file="admin/inc.messages.tpl"}
 
 <fieldset>
-<legend>New group</legend>
+<legend>{t}New group{/t}</legend>
 
 <div>
-<label for="group_name">Group name</label>
+<label for="group_name">{t}Group name{/t}</label>
 <input type="text" title="{t}type new group name{/t}" name="group_name" id="group_name" maxlength="60" size="30" />
 </div>
 

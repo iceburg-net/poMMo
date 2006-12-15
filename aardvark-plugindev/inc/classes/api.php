@@ -146,7 +146,7 @@ class PommoAPI {
 		$state =& $pommo->_session['state'][$name];
 		
 		if(empty($defaults))
-			Pommo::kill('Defaults not passed to state Init');
+			return $state;
 
 		foreach(array_keys($state) as $key)
 			if (array_key_exists($key,$source))

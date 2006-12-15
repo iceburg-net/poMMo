@@ -50,7 +50,7 @@ $state =& PommoAPI::stateInit('subscribers_manage',array(
 	'group' => 'all',
 	'info' => 'hide'),
 	$_REQUEST);
-	
+
 if($state['sort'] != 'email')
 	$state['info'] = 'show';
 

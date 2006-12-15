@@ -81,7 +81,7 @@ $config = PommoAPI::configGet(array (
 
 if ($config['list_confirm'] == 'on') { // email confirmation required. 
 	// add user as "pending"
-	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/mailings.php');
+	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 	
 	$subscriber['pending_code'] = PommoHelper::makeCode();
 	$subscriber['pending_type'] = 'add';
