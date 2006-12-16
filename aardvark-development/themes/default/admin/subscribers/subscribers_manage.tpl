@@ -1,12 +1,12 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Include in-place editing of subscriber table *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
 <script type="text/javascript">{literal}
 $().ready(function() {
 	$('#orderForm select').change(function() {
@@ -15,7 +15,7 @@ $().ready(function() {
 });
 {/literal}</script>
 {* Styling of subscriber table *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
@@ -133,7 +133,7 @@ $().ready(function() {
 {* edit button -- this switches to {$url.theme.shared}images/icons/yes.png when clicked *}
 <button class="edit"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
 
-<p class="key">{$sid}</p>
+<p class="hidden">{$sid}</p>
 </td>
 
 <td>{$s.email}</td>
@@ -168,9 +168,9 @@ $().ready(function() {
 <script type="text/javascript">
 $().ready(function() {	
 	$("#subs").tableSorter({
-		sortClassAsc: 'headerSortUp', 		// class name for ascending sorting action to header
-		sortClassDesc: 'headerSortDown',	// class name for descending sorting action to header
-		headerClass: 'header', 				// class name for headers (th's)
+		sortClassAsc: 'sortUp', 		// class name for ascending sorting action to header
+		sortClassDesc: 'sortDown',	// class name for descending sorting action to header
+		headerClass: 'sort', 				// class name for headers (th's)
 		disableHeader: 0					// DISABLE Sorting on edit/delete column
 	}).tableEditor({
 		SAVE_HTML: '<img src="{/literal}{$url.theme.shared}images/icons/yes.png{literal}">',

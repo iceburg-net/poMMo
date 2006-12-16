@@ -13,9 +13,6 @@ Useful for properly including javascripts and CSS in the HTML <head> *}
 {* Include HTML FORM styling and javascript from shared theme directory when template
 is prepared to include a form from the parent PHP script *}
 
-{if $isForm}
-<script type="text/javascript" src="{$url.theme.shared}js/bform.js"></script>
-{/if}
 </head>
 <body>
 

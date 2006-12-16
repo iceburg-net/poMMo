@@ -1,18 +1,22 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Include in-place editing of subscriber table *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
-<script type="text/javascript">{literal}
+<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
+
+{literal}
+<script type="text/javascript">
 $().ready(function() {
 	$('#orderForm select').change(function() {
 		$('#orderForm')[0].submit();
 	});
 });
-{/literal}</script>
+</script>
+{/literal}
+
 {* Styling of table *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
@@ -68,7 +72,7 @@ $().ready(function() {
 <p class="count">({t 1=$tally}%1 mailings{/t})</p>
 
 {if $tally > 0}
-<table summary="mailing details" id="subs">
+<table summary="mailing details">
 <thead>
 <tr>
 <th name="key"></th>
@@ -86,16 +90,16 @@ $().ready(function() {
 {foreach from=$mailings key=id item=o}
 <tr>
 <td>
-<p class="key">{$id}</p>
+<p class="hidden">{$id}</p>
 DELETE  <a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}View{/t}</a>
 <a href="ajax/mailing_reload.php?mail_id={$id}" title="{t}Reload Mailing{/t}">{t}Reload{/t}</a>
 </td>
 
 <td>{$o.subject}</td>
-<td>{$o.group} ({$o.sent})</td>
-<td>{$o.tally}</td>
+<td>{$o.group} ({$o.tally})</td>
+<td>{$o.sent}</td>
 <td>{$o.start}</td>
-<td>{$o.end}</td>
+<td>{$o.end} <div>({$o.mph} {t}Mails/Hour{/t})</div></td>
 <td>
 {if $o.status == 0}
 	{t}Complete{/t}
@@ -114,15 +118,15 @@ DELETE  <a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width
 {literal}
 <script type="text/javascript">
 $().ready(function() {	
-	$("#subs").tableSorter({
-		sortClassAsc: 'headerSortUp', 		// class name for ascending sorting action to header
-		sortClassDesc: 'headerSortDown',	// class name for descending sorting action to header
-		headerClass: 'header', 				// class name for headers (th's)
+	$("table").tableSorter({
+		sortClassAsc: 'sortUp', 		// class name for ascending sorting action to header
+		sortClassDesc: 'sortDown',	// class name for descending sorting action to header
+		headerClass: 'sort', 				// class name for headers (th's)
 		disableHeader: 0					// DISABLE Sorting on edit/delete column
 	});
 
-	$('#subs tbody tr').quicksearch({
-		attached: "#subs",
+	$('table tbody tr').quicksearch({
+		attached: "table",
 		position: "before",
 		labelClass: "quicksearch",
 		stripeRowClass: ['r1', 'r2', 'r3'],
