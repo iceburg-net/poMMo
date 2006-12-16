@@ -59,6 +59,19 @@ $mailings = PommoMailing::get(array(
 	'order' => $state['order'],
 	'limit' => $state['limit'],
 	'offset' => $start));
+	
+// calculates Mails / Hour
+foreach(array_keys($mailings) as $key) {
+	$m =& $mailings[$key];
+	if(!empty($m['end']) && !empty($m['sent'])) {
+		$start = strtotime($m['start']);
+		$end = strtotime($m['end']);
+		//$m['mph'] = (($end - $start) / $m['sent']) * 60 * 60;
+		$m['mph'] = round(($m['sent'] / ($end - $start)) * 3600);
+	}
+	else
+		$m['mph'] = 0;
+}
 
 
 $smarty->assign('pagelist',$pagelist);

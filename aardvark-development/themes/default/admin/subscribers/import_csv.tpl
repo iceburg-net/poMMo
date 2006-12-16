@@ -1,9 +1,9 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
 {* Styling of table *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 {/capture}
 {include file="admin/inc.header.tpl" sidebar='off'}
 
@@ -18,13 +18,12 @@
 <fieldset>
 <legend>{t}Assign Fields{/t}</legend>
 
-{* Encasing in a <p> causes the table not to display in FF 2.0 !!?!?! *}
-<p>
+<div>
 {t}Below is a preview of your CSV data. You can assign subscriber fields to columns. At the very least, you must assign an email address.{/t}
-</p>
+</div>
 
 <form action="" method="post" id="assign">
-<table summary="{t}Assign Fields{/t}" id="subs">
+<table summary="{t}Assign Fields{/t}">
 
 <thead>
 <tr>
@@ -44,6 +43,7 @@
 
 </tr>
 </thead>
+<tbody>
 
 {foreach from=$preview item=row}
 <tr>
@@ -51,9 +51,9 @@
 <td>{if $row[$smarty.section.rows.index]}{$row[$smarty.section.rows.index]}{/if}</td>
 {/section}
 </tr>
-
 {/foreach}
 
+</tbody>
 </table>
 </form>
 
@@ -74,23 +74,18 @@
 <script type="text/javascript">
 $().ready(function(){
 	
-	$('#subs tbody tr').quicksearch({
-		attached: "#subs",
-		position: "before",
-		labelClass: "quicksearch",
-		stripeRowClass: ['r1', 'r2', 'r3'],
-		labelText: "{/literal}{t}Quick Search{/t}{literal}",
-		inputText: "{/literal}{t}search table{/t}{literal}",
-		loaderImg: '{/literal}{$url.theme.shared}images/loader.gif{literal}'
-	});	
+	// stripe table body rows
+	$('table tbody tr').rowStripe();
 	
 	$('#import').click(function() {
 		
+		var input = $('#assign').formToArray();
 		var c = false;
-		$('select').each(function() {
-			if(this.value == 'email')
+		
+		for (i in input) {
+			if(input[i].value == 'email')
 				c = true;
-		});
+		}
 		
 		if(!c) {
 			alert('{/literal}{t}You must assign an email column!{/t}{literal}');
@@ -98,8 +93,6 @@ $().ready(function(){
 		}
 		
 		$('#buttons').hide();
-		
-		var input = $('#assign').formToArray();
 		
 		$('#ajax').show().load('import_csv2.php',input, function() {
 			$('#ajax').removeClass('warn').addClass('error');

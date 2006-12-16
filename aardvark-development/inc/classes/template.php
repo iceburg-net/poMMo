@@ -95,9 +95,6 @@ class PommoTemplate extends Smarty {
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
 
-		// assign isForm to TRUE, used by header.tpl to include form CSS/Javascript in HTML HEAD
-		$this->assign('isForm', TRUE);
-
 	}
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 

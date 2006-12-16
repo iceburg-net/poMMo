@@ -1,3 +1,42 @@
+/* Adds Quicksearch Capability and Row Striping to tables */
+
+// use on tbody tr .. e.g. $('#table tbody tr').rowStripe();
+jQuery.fn.rowStripe = function (options) {
+    this.settings = jQuery.extend({
+        stripeRowClass: ['r1', 'r2', 'r3']
+    }, options || {});
+    
+    var stripes = new jQuery._stripe(this.settings.stripeRowClass);	
+
+	$(this).each(function () {			
+		stripes.go(this);
+	});
+	
+	stripes.reset();
+};
+
+jQuery._stripe = function (set) {
+	this.i = 0;
+	this.set = set;
+	this.go = function (el) {
+		this.removeClasses(el);
+		if(el.getAttribute('style') != "display: none;") {				
+			$(el).addClass(this.set[this.i%this.set.length]);
+			this.i += 1;
+		}
+	}; 
+	this.removeClasses = function (el) {
+		for(var j = 0; j < this.set.length; j++) {
+			if(this.i%this.set.length != j) {
+				$(el).removeClass(this.set[j]);
+			}
+		}
+	};
+	this.reset = function () {
+		this.i = 0;
+	}
+}
+
 jQuery.fn.quicksearch = function (options) {
 	
 	this.timeout = null;
@@ -248,24 +287,6 @@ jQuery._stripHtml = function (input) {
 	return output;
 }
 
-jQuery._stripe = function (set) {
-	this.i = 0;
-	this.set = set;
-	this.go = function (el) {
-		this.removeClasses(el);
-		if(el.getAttribute('style') != "display: none;") {				
-			$(el).addClass(this.set[this.i%this.set.length]);
-			this.i += 1;
-		}
-	}; 
-	this.removeClasses = function (el) {
-		for(var j = 0; j < this.set.length; j++) {
-			if(this.i%this.set.length != j) {
-				$(el).removeClass(this.set[j]);
-			}
-		}
-	};
-	this.reset = function () {
-		this.i = 0;
-	}
-}
+
+
+

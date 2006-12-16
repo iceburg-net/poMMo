@@ -500,3 +500,8 @@ input[type="password"]:hover {
 	font-weight: bold;
 	color: #333;
 }
+
+input.pvInvalid, select.pvInvalid
+{
+	border: 1px solid red;
+}

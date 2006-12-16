@@ -26,10 +26,9 @@ die();
 	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 	Use TableSorter/Table layout for field, group, and group filter display
-	Fix table styling/striping -- don't rely on #subs! make a generic architecture + modular CSS include!
-	  Seen in subscriber_manage, import_csv, and mailings_history SO FAR
 	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
-	  
+	ReStripe rows on delete/tableSort
+	
 [BRICE -- "Feel free to inherit any of these ;)" ]
 
 	NOTES:

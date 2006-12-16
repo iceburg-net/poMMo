@@ -46,11 +46,6 @@ if (!$mailingData) {
 }
 @$smarty->assign('ishtml', $mailingData['ishtml']);
 
-// remove normal forms CSS/JAVA if XInha form is to be printed
-if ($mailingData['ishtml'] == 'html') {
-	$smarty->assign('isForm',FALSE);
-}
-
 if (empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
