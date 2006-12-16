@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <div id="mainbar">
 
@@ -14,4 +14,4 @@
 </div>
 <!-- end mainbar -->
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

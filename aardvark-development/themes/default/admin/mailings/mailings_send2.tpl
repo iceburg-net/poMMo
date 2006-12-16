@@ -38,7 +38,7 @@
 {/if}
 
 {/capture}
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
 <div style="position: relative; width: 100%; z-index: 1;">
 <a class="pommoOpen" href="#">{t}Add Personalization{/t}</a>
@@ -220,4 +220,4 @@ $(function() {
 </script>
 {/literal}
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

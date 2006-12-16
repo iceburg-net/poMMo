@@ -4,7 +4,7 @@
 <script src="{$url.theme.shared}js/lightbox.js" type="text/javascript"></script>
 {/capture}
 
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Embedded Subscription Forms{/t}</h2>
 
@@ -84,4 +84,4 @@ include('{$url.base}embed.form.php');
 
 </div>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

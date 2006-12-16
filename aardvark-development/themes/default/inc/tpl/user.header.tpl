@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>{$title}</title>
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/user.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/user.css" />
 
 {* If $head has been captured, print its contents here. Capture $head via templates
 using {capture name=head}..content..{/capture} before including this header file. 

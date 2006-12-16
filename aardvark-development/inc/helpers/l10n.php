@@ -38,9 +38,6 @@ class PommoHelperL10n {
 		if (function_exists('bind_textdomain_codeset')) {
 			bind_textdomain_codeset($domain, 'UTF-8');
 		}
-		
-		// register the global (to be looked up by the static Pommo::_T() method)
-		$GLOBALS['pommol10n'] = TRUE;
 	}
 
 	// taken from Gallery2

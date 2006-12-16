@@ -43,7 +43,7 @@ $().ready(function(){
 </script>
 {/literal}
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <ul class="inpage_menu">
 <li><a href="{$url.base}admin/subscribers/subscribers_groups.php">{t 1=$returnStr}Return to %1{/t}</a></li>
@@ -53,7 +53,7 @@ $().ready(function(){
 
 <p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="articleimg" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Filters can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <form method="post" action="" id="nameForm" name="nameForm">
 <fieldset>
@@ -176,4 +176,4 @@ $().ready(function(){
 
 <p>{t escape=no 1="<em>`$filterCount`</em>" 2="<strong>`$tally`</strong>"}%1 filters match a total of %2 active subscribers{/t}</p>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

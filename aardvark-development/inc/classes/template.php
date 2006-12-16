@@ -27,7 +27,7 @@ class PommoTemplate extends Smarty {
 		// set smarty directories
 		$this->_themeDir = $pommo->_baseDir . 'themes/';
 		$this->template_dir = $this->_themeDir . $this->_pommoTheme;
-		$this->config_dir = $this->_template_dir . '/configs';
+		$this->config_dir = $this->template_dir . '/inc/config';
 		$this->cache_dir = $pommo->_workDir . '/pommo/smarty';
 		$this->compile_dir = $pommo->_workDir . '/pommo/smarty';
 		$this->plugins_dir = array (
@@ -89,12 +89,21 @@ class PommoTemplate extends Smarty {
 		return parent :: display($resource_name, $cache_id = null, $compile_id = null, $display = false);
 	}
 
+	function addPager() {
+		global $pommo;
+
+		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/paginate';
+		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartypaginate.php');
+	
+		$this->assign('pagerPrev',Pommo::_T('prev'));
+		$this->assign('pagerNext',Pommo::_T('next'));
+	}
+	
 	function prepareForForm() {
 		global $pommo;
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
-
 	}
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 

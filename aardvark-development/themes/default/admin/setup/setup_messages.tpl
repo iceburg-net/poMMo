@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <ul class="inpage_menu">
 <li><a href="{$url.base}admin/setup/setup_configure.php">{t 1=$returnStr}Return to %1{/t}</a></li>
@@ -10,7 +10,7 @@
 
 <p><strong>{t}Note:{/t}</strong> {t escape='no' 1='<tt>' 2='</tt>'}Using %1[[url]]%2 in the message body will reference the confirmation link.{/t}</p>
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <form action="" method="post">
 
@@ -140,4 +140,4 @@
 
 </form>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

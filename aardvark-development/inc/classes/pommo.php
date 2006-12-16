@@ -90,10 +90,13 @@ class Pommo {
 		$this->_logger->_verbosity = $this->_verbosity;
 		
 		// include translation (l10n) methods if language is not English
+		$this->_l10n = FALSE;
 		if ($this->_language != 'en') {
+			$this->_l10n = TRUE;
 			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
+		
 		
 		// make sure workDir is writable
 		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
@@ -115,7 +118,7 @@ class Pommo {
 
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
-			
+
 		// initialize database link
 		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 
@@ -226,15 +229,15 @@ class Pommo {
 	 function _T($msg) {
 		global $pommo;
 		if($pommo->_escaping)
-			return ($GLOBALS['pommol10n']) ? htmlspecialchars(PommoHelperL10n::translate($msg)) : htmlspecialchars($msg);
-		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translate($msg) : $msg;
+			return ($pommo->_l10n) ? htmlspecialchars(PommoHelperL10n::translate($msg)) : htmlspecialchars($msg);
+		return ($pommo->_l10n) ? PommoHelperL10n::translate($msg) : $msg;
 	}
 
 	function _TP($msg, $plural, $count) { // for plurals
 		global $pommo;
 		if($pommo->_escaping)
-			return ($GLOBALS['pommol10n']) ? htmlspecialchars(PommoHelperL10n::translatePlural($msg, $plural, $count)) : htmlspecialchars($msg);
-		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translatePlural($msg, $plural, $count) : $msg;
+			return ($pommo->_l10n) ? htmlspecialchars(PommoHelperL10n::translatePlural($msg, $plural, $count)) : htmlspecialchars($msg);
+		return ($pommo->_l10n) ? PommoHelperL10n::translatePlural($msg, $plural, $count) : $msg;
 	}
 
 
