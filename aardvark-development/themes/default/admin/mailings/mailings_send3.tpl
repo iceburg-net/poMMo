@@ -4,13 +4,13 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <div id="preview">
 
 <h2>{t}Preview Mailing{/t}</h2>
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <div class="msgheaders">
 
@@ -82,4 +82,4 @@
 
 </div>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

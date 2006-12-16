@@ -5,7 +5,7 @@
 {* Styling of table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 {/capture}
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
 <ul class="inpage_menu">
 <li><a href="subscribers_import.php">{t 1=$returnStr}Return to %1{/t}</a></li>
@@ -104,4 +104,4 @@ $().ready(function(){
 });
 </script>
 {/literal}
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

@@ -289,7 +289,7 @@ table span {
 body {
 	margin: 0 auto;
 	padding: 0;
-	background: #FFF url(bg_body.gif) repeat-x;
+	background: #FFF url(../images/bg_body.gif) repeat-x;
 	font: 80% Tahoma, Arial, Helvetica, sans-serif;
 	color: #7E7E7E;
 }
@@ -331,7 +331,7 @@ pre {
 	margin: 0;
 	padding: 5px;
 	border-top: 2px solid #333;
-	background: #FFF url(bg_header.gif) bottom repeat-x;
+	background: #FFF url(../images/bg_header.gif) bottom repeat-x;
 	color: #808080;
 }
 #header h1 {
@@ -352,7 +352,7 @@ pre {
 #menu {
 	height: 25px;
 	margin: 0;
-	background: #F6F6F6 url(bg_menu.gif) repeat-x;
+	background: #F6F6F6 url(../images/bg_menu.gif) repeat-x;
 	text-align: right;
 }
 #menu ul {
@@ -372,7 +372,7 @@ pre {
 	text-decoration: none;
 }
 #menu a:hover {
-	background: #33ADDB url(bg_sidebar.gif) repeat-x;
+	background: #33ADDB url(../images/bg_sidebar.gif) repeat-x;
 	color: #FFF;
 }
 
@@ -399,7 +399,7 @@ pre {
 	display: block;
 	margin-top: 1px;
 	padding: 8px 4px;
-	background: #239DCB url(bg_sidebar.gif) repeat-x;
+	background: #239DCB url(../images/bg_sidebar.gif) repeat-x;
 	color: #FFF;
 	text-decoration: none;
 	font-weight: bold;

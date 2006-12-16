@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <div id="mainbar">
 <h2>{t}Subscription Forms{/t}</h2>
@@ -12,4 +12,4 @@
 </div>
 <!-- end mainbar -->
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

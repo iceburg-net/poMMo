@@ -1,7 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <div id="mainbar">
 
@@ -51,4 +51,4 @@ $().ready(function(){
 });
 </script>
 {/literal}
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Groups Page{/t}</h2>
 
@@ -6,7 +6,7 @@
 
 <form method="post" action="">
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <fieldset>
 <legend>{t}New group{/t}</legend>
@@ -56,4 +56,4 @@
 </fieldset>
 </form>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

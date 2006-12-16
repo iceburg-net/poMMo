@@ -18,7 +18,6 @@ require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.pager.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -57,12 +56,17 @@ if($state['sort'] != 'email')
 // get the group
 $group = new PommoGroup($state['group'], $state['status']);
 
-// Instantiate Pager class (Using modified template from author)
-$p = new Pager();
-$start = $p->findStart($state['limit']);
-$pages = $p->findPages($group->_tally, $state['limit']);
-// $pagelist : echo to print page navigation.
-$pagelist = $p->pageList($_GET['page'], $pages);
+// fireup Monte's pager
+$smarty->addPager();
+
+SmartyPaginate::connect();
+SmartyPaginate::setLimit($state['limit']);
+if(isset($_REQUEST['resetPager']))
+	SmartyPaginate::reset();
+$start = SmartyPaginate::getCurrentIndex();
+SmartyPaginate::setTotal($group->_tally);
+SmartyPaginate::assign($smarty);
+
 
 // get the subscribers details
 $subscribers = $group->members(array(
@@ -72,7 +76,6 @@ $subscribers = $group->members(array(
 	'offset' => $start));
 	
 
-$smarty->assign('pagelist',$pagelist);
 $smarty->assign('state',$state);
 $smarty->assign('subscribers',$subscribers);
 $smarty->assign('tally',$group->_tally);

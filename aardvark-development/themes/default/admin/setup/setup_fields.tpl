@@ -4,7 +4,7 @@
 <script src="{$url.theme.shared}js/scriptaculous/dragdrop.js" type="text/javascript"></script>
 <script src="{$url.theme.shared}js/scriptaculous/controls.js" type="text/javascript"></script>
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Fields Page{/t}</h2>
 
@@ -12,7 +12,7 @@
 
 <form method="post" action="">
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
  
 <fieldset>
 <legend>{t}Fields{/t}</legend>
@@ -102,4 +102,4 @@ Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){n
 </script>
 {/literal}
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

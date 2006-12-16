@@ -18,7 +18,7 @@ $().ready(function() {
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
 <ul class="inpage_menu">
 <li><!-- <a href="#TB_inline?height=400&amp;width=500&amp;inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> --><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
@@ -31,6 +31,9 @@ $().ready(function() {
 </ul>
 
 <form method="post" action="" id="orderForm">
+
+<input type="hidden" name="resetPager" value="true">
+
 <fieldset class="sorting">
 <legend>{t}View{/t}</legend>
 
@@ -162,7 +165,8 @@ $().ready(function() {
 </tbody>
 </table>
 
-{$pagelist}
+{* Include Pagination *}
+{include file="inc/tpl/pager.tpl"}
 
 {literal}
 <script type="text/javascript">
@@ -246,4 +250,4 @@ function updateTable(o) {
 {/literal}
 {/if}
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

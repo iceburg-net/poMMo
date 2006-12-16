@@ -1,4 +1,4 @@
-{include file="user/inc.header.tpl"}
+{include file="inc/tpl/user.header.tpl"}
 
 <h2>{t}Subscription Review{/t}</h2>
 
@@ -10,10 +10,10 @@
 
 {/if}
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 {if $dupe}
 <p>{t escape=no 1="<a href=\"login.php\">" 2='</a>'}%1Update your records%2{/t}</p>
 {/if}
 
-{include file="user/inc.footer.tpl"}
+{include file="inc/tpl/user.footer.tpl"}
