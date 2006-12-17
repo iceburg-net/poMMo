@@ -45,6 +45,9 @@ body {
 /* BASE PAGE STYLING */
 /*********************/
 
+a { color: #339CC7; }
+a:hover { color: #575757; }
+
 #content li {
 	padding-top: .5em;
 }
@@ -62,211 +65,20 @@ img.navimage {
 
 img.navimage.right {
     float: right;
-    margin: 20px 20px 20px 5px;
+    margin: 0 0 0 10px;
 }
 
 a:hover img.navimage {
 	border: 1px solid #000;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#mainbar {
-	float: left;
-	background: #FFF;
-}
-#mainbar p {
-	float: left;
-	clear: left;
-	width: 100%;
-}
-
-#body {/* email body textarea */
-	width: 368px;
-}
-
-#content .htmlarea a {
-	border-bottom: none !important;
-}
-.inpage_menu {
-	padding-top: .5em;
-	text-align: right;
-}
-
-.inpage_menu li {
-	display: inline;
-	padding: .5em 1em;
-}
-
-.msgheaders,
-.msgpreview {
-	padding: 5px;
-}
-.msgheaders {
-	background: #E6ECDA;
-}
-.msgpreview {
-	background: #F6F8F1;
-}
-
-.count {/* shows the number of records */
-	float: right;
-	font-size: 80%;
-	color: #666;
-}
-
-/* Forms */
-label {
-	color: #333;
-}
-.notes {/* inline help */
-	display: block;
-	font-size: 90%;
-	color: #666;
-	font-style: italic;
-}
-
-.sorting div {/* often appear before tables for filtering */
-	display: inline;
-	padding: .5em 1em;
-}
-
-.controls ul {/* oftern appear after tables for checkbox selection */
-	display: inline;
-	margin: 0;
-	padding: 0;
-}
-.controls ul li {
-	list-style: none;
-	display: inline;
-	padding: 0 .3em;
-}
-
-.page_list {/* links numbers to paginate long lists of results */
-	margin: .5em 0;
-	padding: 2px;
-	background: #E8FFBA;
-}
-
-
-/* Inpage windows */
-#newFilter {
-	position: relative;
-}
-#filterWindow {
-	z-index: 100;
-	position: absolute;
-	display: none;
-    top: -200px;
-	left: -50px;
-	padding: 1em;
-	border: 5px solid #6CAF00;
-	background: #FDFEFB;
-}
-#filterWindow input[type="text"] {
-	width: 150px;
-}
-.fwTransfer {
-	border: 2px solid #6CAF00;
-	border-left: 2px dashed #6CAF00;
-	border-right: 2px dashed #6CAF00;
-}
-
-input.pvInvalid,
-select.pvInvalid {
-	border: 1px solid red;
-}
-
-/* Status Messages */
-#alertmsg {
-	margin: .5em 0;
-}
-#alertmsg img {
-	float: left;
-	margin-right: 25px;
-}
-.alert,
-.warn,
-.error {
-	clear: right;
-	padding: 5px;
-	color: #000;
-}
-.alert {
-	background: #DDF0BD;
-	color: green;
-}
-#alertmsg.warn {
-	border: 1px solid #FF8000;
-}
-.warn {
-	background: #FFF6E5;
-	color: #FF8000;
-}
-#alertmsg.error {
-	border: 1px solid #F3D5D5;
-}
-.error {
-	background: #FFF1F1;
-	color: red;
-}
-.error input,
-.error textarea {
-	background: #FFF;
-}
-
-/* Table */
-table span {
-	font-size: 80%;
-}
-.alt1,
-.alt2 {
-	text-align: center;
-}
-.alt1 {
-	background: #DDD;
-}
-.alt2 {
-	background: #FFF;
-}
-
-
-a {
-	color: #339CC7;
-}
-a:hover {
-	color: #575757;
-}
 h2 {
 	margin: 0;
 	padding: 0;
 	font: bold 1.8em Arial, sans-serif;
 	letter-spacing: -1px;
 }
-h2 a,
-h3 a {
-	text-decoration: none;
-}
+h2 a, h3 a { text-decoration: none;}
 h3 {
 	margin: 0;
 	padding: 3px 0 6px;
@@ -275,14 +87,35 @@ h3 {
 	color: #808080;
 	text-transform: uppercase;
 }
-h3 a {
-	color: #6AC65D;
-}
+h3 a { color: #6AC65D; }
+
 pre {
 	padding: 4px;
 	border: 1px dashed #CCC;
 	font-size: 110%;
 	color: #333;
+}
+
+
+/**************************/
+/* Menu & Sidebar Styling */
+/**************************/
+
+#boxMenu { float: left; }
+
+#boxMenu div { 
+    clear: both;
+    padding: 15px 0;
+}
+
+ul.inpage_menu {
+	margin: 5px 0;
+	text-align: right;
+}
+
+ul.inpage_menu li {
+	display: inline;
+	padding: .5em 1em;
 }
 
 #header {
@@ -379,6 +212,14 @@ pre {
 }
 
 
+/*********************/
+/* HTML Form Styling */
+/*********************/
+
+label {
+	color: #333;
+}
+
 form div {
 	margin: .5em 0;
 }
@@ -393,7 +234,7 @@ legend {
 	color: #89AA34;
 }
 
-.buttons {
+div.buttons {
 	margin: 1em;
 }
 
@@ -410,20 +251,66 @@ input[type="password"]:hover {
 	border: 1px solid #808080;
 }
 
-.count {
-	color: #CCC;
-	text-align: right;
-	margin: 4px 0 3px;
-}
-
-
-
 .required {
 	font-weight: bold;
 	color: #333;
 }
 
+/* inline help || field footer */
+.notes {
+	display: block;
+	font-size: 90%;
+	color: #666;
+	font-style: italic;
+}
 
+/* tied to validation JS */
+input.pvInvalid,
+select.pvInvalid {
+	border: 1px solid red;
+}
+
+
+/*******************/
+/* Message Styling */
+/*******************/
+
+#alertmsg {
+	margin: .5em 0;
+}
+#alertmsg img {
+	float: left;
+	margin-right: 25px;
+}
+.alert,
+.warn,
+.error {
+	clear: right;
+	padding: 5px;
+	color: #000;
+}
+.alert {
+	background: #DDF0BD;
+	color: green;
+}
+#alertmsg.warn {
+	border: 1px solid #FF8000;
+}
+.warn {
+	background: #FFF6E5;
+	color: #FF8000;
+}
+#alertmsg.error {
+	border: 1px solid #F3D5D5;
+}
+.error {
+	background: #FFF1F1;
+	color: red;
+}
+.error input,
+.error textarea {
+	background: #FFF;
+}
 
 
 /****************/
@@ -431,32 +318,11 @@ input[type="password"]:hover {
 /****************/
 
 .hidden { display: none; }
+.clear { clear: both; }
 
 /* make the button look like a link */
 #resetPassword {
 	background: none;
 	border: none;
 	color: #0E9749;
-}
-
-
-
-/************************/
-/* Mailing Body Preview */
-/************************/
-
-#preview img {
-	display: block;
-}
-#preview div a {
-	border: none;
-}
-#preview .edit {
-	float: right;
-	width: 70px;
-	text-align: center;
-}
-#preview .edit img {
-	margin: 0 auto;
-	border: none;
 }

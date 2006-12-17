@@ -50,7 +50,7 @@ elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST
 		
 		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
-		PommoHelperMaintenance::memorizeBaseURL();
+		PommoHelperMaintenance::perform();
 
 		$pommo->_auth->login($_POST['username']);
 		

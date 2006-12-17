@@ -1,3 +1,5 @@
+<br class="clear" />
+
 </div>
 <!-- end content -->
 

@@ -6,7 +6,7 @@
 
 <h2>{t}Message Settings{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/settings.png" class="navimg right" alt="settings icon" /> {t}You can configure the messages sent when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/settings.png" class="navimage right" alt="settings icon" /> {t}You can configure the messages sent when users try to subscribe, unsubscribe, or update their records. You can also configure the messages displayed when the user successfully completes this task.{/t}</p>
 
 <p><strong>{t}Note:{/t}</strong> {t escape='no' 1='<tt>' 2='</tt>'}Using %1[[url]]%2 in the message body will reference the confirmation link.{/t}</p>
 

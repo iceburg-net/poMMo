@@ -1,11 +1,11 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/mailing.status.css"/>
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css"/>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/capture}
 {include file="inc/tpl/admin.header.tpl"}
 
 <p>
-<img src="{$url.theme.shared}images/icons/alert.png" class="navimg right" alt="thunderbolt icon" />
+<img src="{$url.theme.shared}images/icons/alert.png" class="navimage right" alt="thunderbolt icon" />
 {t escape=no 1="<a href='`$url.base`admin/setup/setup_throttle.php'>" 2="</a>"}Mailings are processed in the background so feel free to turn off your computer and browse other sites. %1Throttle settings%2 can also be adjusted -- although you must pause and revive the mailing before changes take effect.{/t}
 </p>
 
@@ -29,36 +29,36 @@
 </div>
 
 {* Hidden until mailing is finished *}
-<div id="finished" class="hide error">
+<div id="finished" class="hidden error">
 {t}Mailing Finished{/t} -- <a href="admin_mailings.php">{t}Return to{/t} {t}Mailings Page{/t}</a>
 </div>
 
 {* Displayed when a command is clicked *}
-<div id="wait" class="hide error">
+<div id="wait" class="hidden error">
 {t}Command Recieved. Please wait...{/t}
 </div>
 
 <hr />
 
-<div class="pbBarText" id="pbBarText">
+<div id="barHead">
 	{t escape="no" 1='<span id="sent">0</span>'}%1 mails sent{/t}
 	<img class="anim go" src="{$url.theme.shared}images/loader.gif" alt="Processing" />
-	<img class="anim hide stop" src="{$url.theme.shared}images/icons/stopped-small.png" alt="Stopped" />
+	<img class="anim hidden stop" src="{$url.theme.shared}images/icons/stopped-small.png" alt="Stopped" />
 </div>
 
-<div class="pbTrack">
-	<div class="pbBarContainer">
-		<div class="pbBar" id="pbBar"></div>
+<div id="barBox">
+	<div id="barTrack">
+		<div id="bar"></div>
 	</div>
 </div>
 
-<div class="pbText" id="pbText"></div>
+<div id="barFoot"></div>
 
 
 <fieldset>
 	<legend>{t}Last 50 notices{/t}</legend>
 	
-<div class="inpage_menu">
+<ul class="inpage_menu">
 	<li>
 	<a href="ajax/status_download.php?type=sent">{t}View{/t} {t}Sent Emails{/t}</a>
 	</li>
@@ -70,16 +70,14 @@
 	<li>
 	<a href="ajax/status_download.php?type=error">{t}View{/t} {t}Failed Emails{/t}</a>
 	</li>
-</div>
+</ul>
 
-<br/>
-	
 <div id="notices"></div>
 
 </fieldset>
 
 {* the folowing populate #commands via Javascript, and are here for reference/translation *}
-<div class="hide" id="started">
+<div class="hidden" id="started">
 	<div class="first">
 		<a class="cmd" href="#stop">
 		<img src="{$url.theme.shared}images/icons/pause-small.png" alt="Pause"/>
@@ -94,7 +92,7 @@
 	</div>
 </div>
 
-<div class="hide" id="stopped">
+<div class="hidden" id="stopped">
 	<div class="first">
 		<a class="cmd" href="#restart">
 		<img src="{$url.theme.shared}images/icons/restart-small.png" alt="Pause"/>
@@ -109,7 +107,7 @@
 	</div>
 </div>
 
-<div class="hide" id="frozen">
+<div class="hidden" id="frozen">
 	<div class="first">
 		<a class="cmd" href="#restart">
 		<img src="{$url.theme.shared}images/icons/restart-small.png" alt="Pause"/>
@@ -149,9 +147,9 @@ pommo = {
 			
 			// status >> 1: Processing  2: Stopped  3: Frozen  4: Finished
 			if(json.status == 1)
-				$('#pbBarText').find('img.go').css('display', 'inline').end().find('img.stop').css('display', 'none');
+				$('#barHead').find('img.go').css('display', 'inline').end().find('img.stop').css('display', 'none');
 			else 
-				$('#pbBarText').find('img.go').css('display', 'none').end().find('img.stop').css('display', 'inline');
+				$('#barHead').find('img.go').css('display', 'none').end().find('img.stop').css('display', 'inline');
 			
 			if(!json.command || $('#commands div.init').size() > 0)  {
 				switch(json.status) {
@@ -167,8 +165,8 @@ pommo = {
 			$('#commands a.cmd').click(function() { return pommo.click(this); });
 			
 			$('#sent').html(json.sent);
-			$('#pbText').html(json.percent+'%');
-			$('#pbBar').width(json.percent+'%');
+			$('#barFoot').html(json.percent+'%');
+			$('#bar').width(json.percent+'%');
 			
 			if (typeof(json.notices) == 'object')
 				for (i in json.notices)
