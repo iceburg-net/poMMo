@@ -1,14 +1,14 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}js/scriptaculous/effects.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}js/scriptaculous/dragdrop.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}js/scriptaculous/controls.js" type="text/javascript"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
+{* Styling of CSS table *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
 {/capture}
 {include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Fields Page{/t}</h2>
 
-{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="articleimg" /> {$intro}</p>{/if}
+{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimg right" /> {$intro}</p>{/if}
 
 <form method="post" action="">
 
@@ -42,63 +42,110 @@
 </fieldset>
 </form>
 
-<div class="reorder">
-
-<h3>Field order</h3>
+<fieldset>
+<legend>{t}Field Ordering{/t}</legend>
 
 <ul>
-<li>{t escape=no}Names in <strong>bold</strong> are active.{/t}</li>
 <li>{t}Change the ordering of fields on the subscription form by dragging and dropping the order icon{/t}</li>
+<li>{t escape=no}Names in <strong>bold</strong> are active.{/t}</li>
 </ul>
 
-<div>
+
+
+</tbody>
+</table>
+
+
+<div id="grid">
+
+<div class="header">
 <span>{t}Delete{/t}</span>
 <span>{t}Edit{/t}</span>
-<span>{t}Order{/t}</span>
-<span class="fieldname">{t}Field Name{/t}</span>
+<span>{t}Order{/t}</span>	
+<span>{t}Field Name{/t}</span>
 </div>
 
-<div>
-<span>------</span>
-<span>------</span>
-<span>------</span>
-<span class="fieldname"><strong>Email</strong></span>
-</div>
-
-<div id="fieldOrder">
-
+		
 {foreach name=fields from=$fields key=key item=field}
-<div id="_{$key}">
-<span><a href="{$smarty.server.PHP_SELF}?field_id={$key}&amp;delete=TRUE&amp;field_name={$field.name}"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></a></span>
 
-<span><a href="fields_edit.php?field_id={$key}"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></a></span>
+<div class="{cycle values="r1,r2,r3"} sortable" id="id{$key}">
 
-<span class="handle"><img src="{$url.theme.shared}images/icons/order.png" alt="order icon" /></span>
-
-<span class="fieldname">
-{if $field.active == 'on'}<strong>{$field.name}</strong>{else}{$field.name}{/if}
- ({$field.type})
+<span>
+<a href="{$smarty.server.PHP_SELF}?field_id={$key}&amp;delete=TRUE&amp;field_name={$field.name}"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></a>
 </span>
-</div>	
 
-{foreachelse}
-<div><strong>{t}No fields have been assigned.{/t}</strong></div>
+<span>
+<a href="fields_edit.php?field_id={$key}"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></a>
+</span>
+
+<span>
+<img src="{$url.theme.shared}images/icons/order.png" alt="order icon" class="handle" id="a{$key}" />
+</span>
+
+<span>
+{if $field.active == 'on'}<strong>{$field.name}</strong>{else}{$field.name}{/if} - <em>{$field.type}</em>
+</span>
+
+</div>
+
 {/foreach}
 
 </div>
 
-</div>
-<!-- end reorder -->
-
-<div id="ajaxOutput" class="alert"></div>
+<div id="ajaxOut" class="alert"></div>
 
 {literal}
 <script type="text/javascript">
-// <![CDATA[
 
-Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_fieldOrder.php', {onComplete:function(request){new Effect.Highlight('fieldOrder',{});}, parameters:Sortable.serialize('fieldOrder'), evalScripts:true, asynchronous:true})}});
+var pommoSort = {
+	init: function() {
+		var s = $.SortSerialize('grid');
+		this.hash = s.hash;
+	},
+	update: function(hash) {
+		if(this.hash == hash)
+			return false; // don't do a thing if unchanged...
+		this.hash = hash;
+		
+		
+		$.post("ajax/fields_order.php", this.hash, function(json) {
+			eval("var args = " + json);
 
-// ]]>
+			if (typeof(args.success) == 'undefined') {
+				alert('ajax error!');
+				return;	
+			}
+
+			$('#ajaxOut').html(args.msg).fadeIn('fast');
+
+			if (args.success === true)
+				$('#ajaxOut').fadeOut(6000);
+			
+		});
+		
+		
+		return false;
+	}
+};
+
+$().ready(function(){
+	
+	$('#grid').Sortable({
+		accept : 'sortable',
+		handle: 'img.handle',
+		opacity: 0.8,
+		revert: true,
+		tolerance: 'intersect',
+		onStop: function() { 
+			var s = $.SortSerialize('grid');
+			pommoSort.update(s.hash); 
+		}
+	});
+	pommoSort.init();
+});
+
+
+//Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_fieldOrder.php', {onComplete:function(request){new Effect.Highlight('fieldOrder',{});}, parameters:Sortable.serialize('fieldOrder'), evalScripts:true, asynchronous:true})}});
 </script>
 {/literal}
 

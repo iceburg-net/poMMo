@@ -13,14 +13,21 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-require ('../../bootstrap.php');
+require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-foreach($_POST['fieldOrder'] as $val => $id) { // syntax for multi-row updates in in 1 query.
-	$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($id,$val)).' ';
+function jsonKill($msg, $success = "false") {
+	$json = "{success: $success, msg: \"".$msg."\"}";
+	die($json);
+}
+
+
+foreach($_POST['grid'] as $order => $id) { // syntax for multi-row updates in in 1 query.
+	$id = substr($id,2);
+	$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($id,$order)).' ';
 }
 
 $query = "
@@ -28,5 +35,7 @@ $query = "
 	SET field_ordering = 
 		CASE field_id ".$when." ELSE field_ordering END";
 if (!$dbo->query($dbo->prepare($query)))
-	echo('Error updating order');
+	jsonKill('Error Updating Order');
+	
+jsonKill(Pommo::_T('Order Updated.'), "true");
 			

@@ -15,7 +15,6 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.pager.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init();
@@ -44,12 +43,10 @@ $state =& PommoAPI::stateInit('mailings_history',array(
 	
 $tally = PommoMailing::tally();
 
-// Instantiate Pager class (Using modified template from author)
-$p = new Pager();
-$start = $p->findStart($state['limit']);
-$pages = $p->findPages($tally, $state['limit']);
-// $pagelist : echo to print page navigation.
-$pagelist = $p->pageList($_GET['page'], $pages);
+// fireup Monte's pager
+$smarty->addPager($state['limit'], $tally);
+$start = SmartyPaginate::getCurrentIndex();
+SmartyPaginate::assign($smarty);
 
 
 // Fetch Mailings

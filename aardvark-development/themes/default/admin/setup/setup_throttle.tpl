@@ -24,7 +24,7 @@
 <li><a href="{$url.base}admin/setup/setup_configure.php">{t 1=$returnStr}Return to %1{/t}</a></li>
 </ul>
 
-<p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="articleimg" /> {t}You can throttle mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be controlled. Additionally, you can limit the mails and kilobytes sent to a single domain during a specified time frame.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="navimg right" /> {t}You can throttle mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be controlled. Additionally, you can limit the mails and kilobytes sent to a single domain during a specified time frame.{/t}</p>
 
 {include file="inc/tpl/messages.tpl"}
 

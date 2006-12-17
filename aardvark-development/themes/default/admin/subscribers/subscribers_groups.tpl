@@ -2,7 +2,7 @@
 
 <h2>{t}Groups Page{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" class="articleimg" alt="groups icon" />{t}Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/groups.png" class="navimage right" alt="groups icon" />{t}Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list.{/t}</p>
 
 <form method="post" action="">
 

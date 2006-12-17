@@ -6,7 +6,7 @@
 <h2>{t}Import Subscribers{/t}</h2>
 
 <p>
-<img src="{$url.theme.shared}images/icons/cells.png" class="articleimg" alt="table cells icon"/> 
+<img src="{$url.theme.shared}images/icons/cells.png" class="navimg right" alt="table cells icon"/> 
 {t escape=no 1='<tt>' 2='</tt>'}Welcome to Subscriber Import! You can import subscribers from a list of email addresses or from a full fledged CSV file containing subscriber field values as well as their email. CSV files should have one subscriber(email) per line with field information seperated by commas(%1,%2).{/t}
 </p>
 
