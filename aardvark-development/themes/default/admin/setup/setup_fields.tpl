@@ -8,7 +8,7 @@
 
 <h2>{t}Fields Page{/t}</h2>
 
-{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimg right" /> {$intro}</p>{/if}
+{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimage right" /> {$intro}</p>{/if}
 
 <form method="post" action="">
 

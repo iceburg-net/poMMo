@@ -13,6 +13,15 @@
  
  class PommoHelperMaintenance {
  	
+ 	function perform() {
+ 		global $pommo;
+ 		PommoHelperMaintenance::memorizeBaseURL();
+ 		if(is_file($pommo->_workDir.'/import.csv'))
+ 			if (!unlink($pommo->_workDir.'/import.csv'))
+ 				Pommo::kill('Unable to remove import.csv');
+ 		return true;
+ 		
+ 	}
  	// write baseURL to maintenance.php in config file syntax (to be read back by embedded apps)
  	function memorizeBaseURL() {
  		global $pommo;

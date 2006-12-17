@@ -31,12 +31,14 @@ $().ready(function() {
 
 <form method="post" action="" id="orderForm">
 
-<input type="hidden" name="resetPager" value="true">
+<input type="hidden" name="resetPager" value="true" />
 
-<fieldset class="sorting">
+<fieldset>
 <legend>{t}Sorting{/t}</legend>
 
-<div>
+<ul class="inpage_menu">
+
+<li>
 <label for="sort">{t}Sort by{/t}</label>
 <select name="sort">
 <option value="subject"{if $state.sort == 'subject'} selected="selected"{/if}>{t}Subject{/t}</option>
@@ -44,17 +46,17 @@ $().ready(function() {
 <option value="subscriberCount"{if $state.sort == 'subscriberCount'} selected="selected"{/if}>{t}Subscriber Count{/t}</option>
 <option value="started"{if $state.sort == 'started'} selected="selected"{/if}>{t}Time Created{/t}</option>
 </select>
-</div>
+</li>
 
-<div>
+<li>
 <label for="order">{t}Order by{/t}</label>
 <select name="order">
 <option value="asc"{if $state.order == 'asc'} selected="selected"{/if}>{t}ascending{/t}</option>
 <option value="desc"{if $state.order == 'desc'} selected="selected"{/if}>{t}descending{/t}</option>
 </select>
-</div>
+</li>
 
-<div>
+<li>
 <label for="limit">{t}# per page{/t}</label>
 <select name="limit">
 <option value="10"{if $state.limit == '10'} selected="selected"{/if}>10</option>
@@ -63,7 +65,9 @@ $().ready(function() {
 <option value="300"{if $state.limit == '300'} selected="selected"{/if}>300</option>
 <option value="500"{if $state.limit == '500'} selected="selected"{/if}>500</option>
 </select>
-</div>
+</li>
+
+</ul>
 
 </fieldset>
 </form>

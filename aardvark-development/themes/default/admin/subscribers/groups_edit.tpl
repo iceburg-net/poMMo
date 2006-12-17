@@ -42,6 +42,7 @@ $().ready(function(){
 });
 </script>
 {/literal}
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/modal.css" />
 {/capture}
 {include file="inc/tpl/admin.header.tpl"}
 
@@ -51,7 +52,7 @@ $().ready(function(){
 
 <h2>{t}Edit Group{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimg right" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Filters can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimage right" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Filters can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
 
 {include file="inc/tpl/messages.tpl"}
 

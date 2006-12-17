@@ -61,13 +61,17 @@ table tr.r3 { background: #edf5f8; }
 /* MISC STYLING */
 /****************/
 
-
 /* Assigned when tableEditor makes new row */
 table tr.newRow { background: #FFF6E5; }
-
 
 /* Assigned to quickSearch form label */
 .quickSearch {
 	font-weight: bold;
 }
 
+/* shows the number of records */
+p.count {
+	float: right;
+	font-size: 80%;
+	color: #666;
+}

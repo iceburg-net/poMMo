@@ -3,8 +3,6 @@
 {/capture}
 {include file="inc/tpl/admin.header.tpl"}
 
-<div id="mainbar">
-
 <h2>{t}Import Subscribers{/t}</h2>
 
 <fieldset>
@@ -31,8 +29,6 @@
 <img src="{$url.theme.shared}images/loader.gif" alt="Importing..." />... {t}Processing{/t}
 </div>
 
-</div>
-<!-- end mainbar -->
 
 {literal}
 <script type="text/javascript">

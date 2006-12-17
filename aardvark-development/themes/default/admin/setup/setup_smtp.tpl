@@ -6,7 +6,7 @@
 
 <h2>{t}Configure{/t} - {t}SMTP Relays{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/settings.png" class="navimg right" alt="settings icon" />{t}Sent mail can relay mail through up to 4 SMTP servers simutaneously. Throttle settings can either be shared or individually controlled per SMTP relay (for maximum thoroughput).{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/settings.png" class="navimage right" alt="settings icon" />{t}Sent mail can relay mail through up to 4 SMTP servers simutaneously. Throttle settings can either be shared or individually controlled per SMTP relay (for maximum thoroughput).{/t}</p>
 
 {include file="inc/tpl/messages.tpl"}
 
