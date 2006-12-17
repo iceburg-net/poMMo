@@ -32,8 +32,7 @@ class PommoTemplate extends Smarty {
 		$this->compile_dir = $pommo->_workDir . '/pommo/smarty';
 		$this->plugins_dir = array (
 				'plugins', // the default under SMARTY_DIR
-	$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext'
-		);
+				$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext');
 
 		// set base/core variables available to all template
 		$this->assign('url', array (
@@ -64,6 +63,10 @@ class PommoTemplate extends Smarty {
 
 		// assign section (used for sidebar template)
 		$this->assign('section', $pommo->_section);
+		
+		// destroy pagination data if not in use
+		if(isset($_SESSION['SmartyPaginate']) && $_SESSION['SmartyPaginate']['default']['url'] != $_SERVER['PHP_SELF'])
+			unset($_SESSION['SmartyPaginate']);
 	}
 
 	// display function falls back to "default" theme if theme file not found
@@ -89,14 +92,25 @@ class PommoTemplate extends Smarty {
 		return parent :: display($resource_name, $cache_id = null, $compile_id = null, $display = false);
 	}
 
-	function addPager() {
+	function addPager($limit, $tally) {
 		global $pommo;
+		
+		if(!is_numeric($limit) || !is_numeric($tally))
+			Pommo::kill('addPager() was passed illegal vars');
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/paginate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartypaginate.php');
 	
 		$this->assign('pagerPrev',Pommo::_T('prev'));
 		$this->assign('pagerNext',Pommo::_T('next'));
+		
+		SmartyPaginate::connect();
+		
+		if(isset($_REQUEST['resetPager']))
+			SmartyPaginate::reset();
+			
+		SmartyPaginate::setLimit($limit);
+		SmartyPaginate::setTotal($tally);
 	}
 	
 	function prepareForForm() {

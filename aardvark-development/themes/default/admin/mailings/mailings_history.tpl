@@ -30,6 +30,9 @@ $().ready(function() {
 {include file="inc/tpl/messages.tpl"}
 
 <form method="post" action="" id="orderForm">
+
+<input type="hidden" name="resetPager" value="true">
+
 <fieldset class="sorting">
 <legend>{t}Sorting{/t}</legend>
 
@@ -142,6 +145,7 @@ $().ready(function() {
 </fieldset>
 </form>
 
-{$pagelist}
+{* Include Pagination *}
+{include file="inc/tpl/pager.tpl"}
 
 {include file="inc/tpl/admin.footer.tpl"}

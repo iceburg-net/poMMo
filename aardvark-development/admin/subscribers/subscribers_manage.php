@@ -57,14 +57,8 @@ if($state['sort'] != 'email')
 $group = new PommoGroup($state['group'], $state['status']);
 
 // fireup Monte's pager
-$smarty->addPager();
-
-SmartyPaginate::connect();
-SmartyPaginate::setLimit($state['limit']);
-if(isset($_REQUEST['resetPager']))
-	SmartyPaginate::reset();
+$smarty->addPager($state['limit'], $group->_tally);
 $start = SmartyPaginate::getCurrentIndex();
-SmartyPaginate::setTotal($group->_tally);
 SmartyPaginate::assign($smarty);
 
 

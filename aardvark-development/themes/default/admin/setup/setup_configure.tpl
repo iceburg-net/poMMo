@@ -2,7 +2,7 @@
 
 <h2>{t}Configure{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="articleimg" /> {t}You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="navimg right" /> {t}You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.{/t}</p>
 
 {include file="inc/tpl/messages.tpl"}
 

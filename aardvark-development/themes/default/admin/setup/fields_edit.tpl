@@ -6,7 +6,7 @@
 <li><a href="{$url.base}admin/setup/setup_fields.php">{t}Return to Fields Page{/t}</a></li>
 </ul>
 
-{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="articleimg" /> {$intro}</p>{/if}
+{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimg right" /> {$intro}</p>{/if}
 
 {include file="inc/tpl/messages.tpl"}
  

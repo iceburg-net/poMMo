@@ -41,6 +41,7 @@ die();
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
 	  (feature) Add OR to group filtering
 	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
+	  	+ Use http://interface.eyecon.ro/demos/sort_example.html  to move between && or ||
 	  	
 	  	----
 			SELECT count(subscriber_id)
