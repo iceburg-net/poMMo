@@ -117,6 +117,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$oldDemo = $pommo->_config['demo_mode'];
 
 		PommoAPI::configUpdate($_POST);
+		
+		unset($_POST['admin_password'],$_POST['admin_password2']);
 
 		$pommo->reloadConfig();
 
