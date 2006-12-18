@@ -142,7 +142,7 @@ $().ready(function() {
 {* edit button -- this switches to {$url.theme.shared}images/icons/yes.png when clicked *}
 <button class="edit"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
 
-<p class="hidden">{$sid}</p>
+<p class="key hidden">{$sid}</p>
 </td>
 
 <td>{$s.email}</td>

@@ -22,7 +22,7 @@ $dbo = & $pommo->_dbo;
 $pommo->toggleEscaping(TRUE);
 
 $state =& PommoAPI::stateInit('subscribers_manage');
-$fields = array_keys(PommoField::get());
+$fields = PommoField::get();
 	
 
 $ids = FALSE;
@@ -38,8 +38,16 @@ if($_POST['type'] == 'csv') {
 	}
 	else 
 		$subscribers = PommoSubscriber::get(array('id' => $ids));
-		
-	$o = '';
+	
+	// supply headers
+	$o = '"'.Pommo::_T('Email').'"';
+	if(!empty($_POST['registered']))
+		$o .= ',"'.Pommo::_T('Date Registered').'"';
+	if(!empty($_POST['ip']))
+		$o .= ',"'.Pommo::_T('IP Address').'"';
+	foreach($fields as $f)
+		$o.=",\"{$f['name']}\"";
+	$o .= "\r\n";
 	
 	function csvWrap(&$in) {
 		$in = '"'.addslashes($in).'"';
@@ -49,13 +57,17 @@ if($_POST['type'] == 'csv') {
 		$d = array();
 		
 		// normalize field order in export
-		foreach($fields as $id)
+		foreach(array_keys($fields) as $id)
 			if(array_key_exists($id,$sub['data']))
 				$d[$id] = $sub['data'][$id];
 			else
 				$d[$id] = null;
 		
-		$s = array($sub['email']); // can add IP time_registered, etc. to this....
+		$s = array($sub['email']);
+		if(!empty($_POST['registered']))
+			$s[] = $sub['registered'];
+		if(!empty($_POST['ip']))
+			$s[] = $sub['ip'];
 		
 		array_walk($d, 'csvWrap');
 		array_walk($s, 'csvWrap');
