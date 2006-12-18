@@ -91,7 +91,7 @@
 
 <input type="hidden" name="field_id" value="{$field.id}" />
 
-<div class="alert">{t}NOTE: You can add multiple options by separating each with a comma. To include special characters such as quote marks and commas, prefix them with a backslash (\\).{/t}</div>
+<div class="alert">{t}NOTE: You can add multiple options at once by separating each with a comma.{/t}</div>
 
 <div>
 <label for="addOption">Options:</label>

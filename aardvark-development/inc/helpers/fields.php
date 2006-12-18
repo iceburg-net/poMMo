@@ -250,7 +250,8 @@ class PommoField {
 		$dbo =& $pommo->_dbo;
 		$logger =& $pommo->_logger;
 		
-		$value = array_unique(preg_split("/[\s,]+/", $value));
+		$value = explode(',',$value);
+		array_walk($value,'trim');
 		
 		// add value to the array
 		$field['array'] = array_unique(array_merge($field['array'],$value));

@@ -21,7 +21,7 @@ $().ready(function() {
 {include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
 <ul class="inpage_menu">
-<li><!-- <a href="#TB_inline?height=400&amp;width=500&amp;inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> --><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
+<li><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
 
 <li><a href="ajax/subscriber_del.php?height=400&amp;width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a></li>
 
