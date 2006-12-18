@@ -40,6 +40,10 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 			$subscriber['data'][$fid] = $col;
 		elseif($fid == 'email' && PommoHelper::isEmail($col))
 			$subscriber['email'] = $col;
+		elseif($fid == 'registered')
+			$subscriber['registered'] = strtotime($col);
+		elseif($fid == 'ip')
+			$subscriber['ip'] = $col;
 	}
 	if($subscriber['email']) {
 		// check for dupe

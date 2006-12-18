@@ -30,7 +30,10 @@
 <th>
 &nbsp;<select name="f[{$smarty.section.columns.index}]">
 <option value="">{t}Ignore Column{/t}</option>
+<option value="">-----------</option>
 <option value="email">{t}Email{/t}</option>
+<option value="registered">{t}Date Registered{/t}</option>
+<option value="ip">{t}IP Address{/t}</option>
 <option value="">-----------</option>
 {foreach from=$fields item=f key=id}
 <option value="{$id}">{$f.name}</option>
