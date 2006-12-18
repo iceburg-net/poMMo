@@ -1,10 +1,8 @@
-{capture name=head}
-{* used to inject content into the HTML <head> *}
-<script src="{$url.theme.shared}js/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="{$url.theme.shared}js/lightbox.js" type="text/javascript"></script>
-{/capture}
-
-{include file="inc/tpl/admin.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
+{/capture}{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Embedded Subscription Forms{/t}</h2>
 
@@ -19,17 +17,14 @@
 <p>{t}This prints a form which prompts for a user's email address. If the inputted email exists as a registered subscriber, it redirects to the subscriber update page. If not, it redirects to the the default subscription form.{/t}</p>
 
 <ul>
-<li><a href="#miniPreview" rel="miniPreview" class="lbOn">{t}Preview{/t}</a></li>
+<li><a href="#TB_inline?height=400&amp;width=500&amp;inlineId=miniPreview" class="thickbox">{t}Preview{/t}</a></li>
 <li><a href="{$url.base}embed.miniform.php">{t}URL{/t}</a></li>
 </ul>
 
 <p>PHP: <tt>include('{$config.app.path}embed.miniform.php');</tt></p>
 
-<div id="miniPreview" class="lightbox">
+<div id="miniPreview" class="hidden">
 
-<ul class="inpage_menu">
-<li><a href="#" class="lbAction" rel="deactivate">Close</a></li>
-</ul>
 
 <h4>{t}Mini Subscription Form{/t} {t}Preview{/t}</h4>
 
@@ -54,17 +49,13 @@ include('{$url.base}embed.mini.php');
 <p>{t}This prints the entire subscription form.{/t}</p>
 
 <ul>
-<li><a href="#fullPreview" rel="fullPreview" class="lbOn">{t}Preview{/t}</a></li>
+<li><a href="#TB_inline?height=400&amp;width=500&amp;inlineId=fullPreview" class="thickbox">{t}Preview{/t}</a></li>
 <li><a href="{$url.base}embed.form.php">{t}URL{/t}</a></li>
 </ul>
 
 <p>PHP: <tt>include('{$config.app.path}embed.form.php');</tt></p>
 
-<div id="fullPreview" class="lightbox">
-
-<ul class="inpage_menu">
-<li><a href="#" class="lbAction" rel="deactivate">Close</a></li>
-</ul>
+<div id="fullPreview" class="hidden">
 
 <h4>{t}Subscription Form{/t} {t}Preview{/t}</h4>
 
