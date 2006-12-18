@@ -18,12 +18,12 @@
 <legend>{t}Fields{/t}</legend>
 
 <div>
-<label for="field_name">New field name:</label>
+<label for="field_name">{t}New field name:{/t}</label>
 <input type="text" title="{t}type new field name{/t}" maxlength="60" size="30" name="field_name" id="field_name" />
 </div>
 
 <div>
-<label for="field_type">Value type:</label>
+<label for="field_type">{t}Value type:{/t}</label>
 <select name="field_type" id="field_type">
 <option value="text">{t}Text{/t}</option>
 <option value="number">{t}Number{/t}</option>
@@ -49,11 +49,6 @@
 <li>{t}Change the ordering of fields on the subscription form by dragging and dropping the order icon{/t}</li>
 <li>{t escape=no}Names in <strong>bold</strong> are active.{/t}</li>
 </ul>
-
-
-
-</tbody>
-</table>
 
 
 <div id="grid">

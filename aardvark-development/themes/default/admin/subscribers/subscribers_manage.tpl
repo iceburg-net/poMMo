@@ -126,9 +126,9 @@ $().ready(function() {
 {/foreach}
 
 {if $state.info == 'show'}
-<th name="registered" class="noEdit">Registered</th>
-<th name="touched" class="noEdit">Updated</th>
-<th name="ip" class="noEdit">IP Address</th>
+<th name="registered" class="noEdit">{t}Registered{/t}</th>
+<th name="touched" class="noEdit">{t}Updated{/t}</th>
+<th name="ip" class="noEdit">{t}IP Address{/t}</th>
 {/if}
 
 </tr>
