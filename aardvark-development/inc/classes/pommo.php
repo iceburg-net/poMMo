@@ -58,22 +58,6 @@ class Pommo {
 		// TODO -> write a web-based frontend to config.php creation
 		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
 		
-		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
-		// TODO -> provide validation of baseURL ?
-		if (isset ($config['baseURL'])) {
-			$this->_baseUrl = $config['baseURL'];
-		} else {
-			// If we're called from an outside (embedded) script, read baseURL from "last known good".
-			// Else, set it based off of REQUEST
-			if (defined('_poMMo_embed')) {
-				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
-				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
-			} else {
-				$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
-				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
-			}
-		}
-		
 		// check to see if config.php was "properly" loaded
 		if (count($config) < 5)
 			Pommo::kill('Could not read config.php');
@@ -95,6 +79,22 @@ class Pommo {
 			$this->_l10n = TRUE;
 			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
+		}
+		
+		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
+		// TODO -> provide validation of baseURL ?
+		if (isset ($config['baseURL'])) {
+			$this->_baseUrl = $config['baseURL'];
+		} else {
+			// If we're called from an outside (embedded) script, read baseURL from "last known good".
+			// Else, set it based off of REQUEST
+			if (defined('_poMMo_embed')) {
+				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
+				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
+			} else {
+				$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
+			}
 		}
 		
 		
