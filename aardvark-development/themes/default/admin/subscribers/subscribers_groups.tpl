@@ -1,4 +1,7 @@
-{include file="inc/tpl/admin.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+{* Styling of CSS table *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
+{/capture}{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Groups Page{/t}</h2>
 
@@ -23,37 +26,39 @@
 </div>
 
 </fieldset>
+</form>
+
 
 <fieldset>
 <legend>{t}Groups{/t}</legend>
 
-<table summary="list of groups and controls">
-<thead>
-<tr>
-<th>{t}Group Name{/t}</th>
-<th>{t}Edit{/t}</th>
-<th>{t}Delete{/t}</th>
-</tr>
-</thead>
+<div id="grid">
 
-<tbody>
+<div class="header">
+<span>{t}Delete{/t}</span>
+<span>{t}Edit{/t}</span>
+<span>{t}Group Name{/t}</span>	
+</div>
+
 {foreach from=$groups key=id item=group}
-<tr>
-<td>{$group.name}</td>
-<td><button onclick="window.location.href='groups_edit.php?group_id={$id}'; return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button></td>
-<td><button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$id}&amp;delete=TRUE'; return false;"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></button></td>
-</tr>
+<div class="{cycle values="r1,r2,r3"} sortable" id="id{$id}">
+<span>
+<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$id}&amp;delete=TRUE'; return false;"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></button>
+</span>
 
-{foreachelse}
-<tr>
-<td colspan="3"><strong>{t}No groups have been assigned.{/t}</strong></td>
-</tr>
+<span>
+<button onclick="window.location.href='groups_edit.php?group_id={$id}'; return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
+</span>
+
+<span>
+{$group.name}
+</span>
+</div>
 {/foreach}
 
-</tbody>
-</table>
+</div>
+
+
 
 </fieldset>
-</form>
-
 {include file="inc/tpl/admin.footer.tpl"}

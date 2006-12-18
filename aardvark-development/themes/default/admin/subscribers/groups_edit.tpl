@@ -2,47 +2,8 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-{literal}
-<script type="text/javascript">
-function fwAjaxCall(id, name, gid, l) {
-	$('#newFilter select').each(function() { $(this).hide(); });
-
-	var p = (typeof(l) == 'undefined') ?
-		{ID: id, add: name, group: gid} :
-		{ID: id, add: name, group: gid, logic: l};
-
-	$('#filterWindow div.fwContent').load(
-		'ajax/group_edit.php',
-		p,
-		function() {
-			$('#filterWindow a.fwClose').attr("alt",name);
-			$('#'+name).TransferTo({to:'filterWindow',className:'fwTransfer', duration: 300, complete:function(to){$(to).fadeIn(200)}});
-			PommoValidate.reset();
-			PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
-		}
-	);
-	return false; // don't follow href
-}
-$().ready(function(){ 
-
-	$('#filterWindow a.fwClose').click(function() {
-		var name = $(this).attr('alt');
-		$('#newFilter select').each(function() { $(this).show().val(''); });
-		$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({to: name,className:'fwTransfer', duration: 300})});
-		return false;
-	});
-
-	$('#newFilter select').change(function() {
-		var name = $(this).name(); // "field" or "group"
-		var id = $(this).val(); // group or field ID
-		var gid = $(this).attr("alt"); // this group's ID
-		if(id != '') 
-			fwAjaxCall(id, name, gid);
-	});
-});
-</script>
-{/literal}
 <link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/modal.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 {/capture}
 {include file="inc/tpl/admin.header.tpl"}
 
@@ -52,7 +13,7 @@ $().ready(function(){
 
 <h2>{t}Edit Group{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimage right" />{t}Groups allow you to mail subsets of your subscribers. They are made up of "filters" that match values to subscriber fields. Filters can also match (include) or not match (exclude) members from other groups. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country".{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimage right" />{t}Groups allow you to mail subsets of your subscribers. They are made of "filters" which match subscribers based on their field values. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country". You can also include or exclude members of other groups.{/t}</p>
 
 {include file="inc/tpl/messages.tpl"}
 
@@ -113,40 +74,44 @@ $().ready(function(){
 <table summary="list of filters and controls">
 <thead>
 <tr>
+<th>{t}Delete{/t}</th>
+<th>{t}Edit{/t}</th>
 <th>{t}Field{/t}</th>
 <th>{t}Logic{/t}</th>
 <th>{t}Value(s){/t}</th>
-<th>{t}Edit{/t}</th>
-<th>{t}Delete{/t}</th>
 </tr>
 </thead>
 <tbody>
 {foreach name=outter from=$filters key=field_id item=logicArray}
 	{foreach name=inner from=$logicArray key=logic item=valArray}
-	<tr>
 	{if $field_id == 0}{* group match *}
-	<td colspan="5">{$english[$logic]}</td>
+	<tr class="{cycle values="r1,r2,r3" advance=false}">
+	<td colspan="3"></td><td colspan="2">{$english[$logic]}</td>
 	</tr>
 	{foreach name=v from=$valArray item=value}
-		<tr>
-		<td colspan="2">
-		<td>{$groups[$value].name}</td>
-		<td></td>
+		<tr class="{cycle values="r1,r2,r3"}">
+		
 		<td>
 		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;groupDelete={$value}&amp;logic={$logic|escape}'; return false;">
 		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
 		</button>
 		</td>
+		
+		<td></td>
+		
+		<td colspan="2">
+		<td>{$groups[$value].name}</td>
+		
 		</tr>
 	{/foreach}
 	{else}
-	<td>{$fields[$field_id].name}</td>
-	<td>{$english[$logic]}</td>
+	<tr class="{cycle values="r1,r2,r3"}">
 	<td>
-		<ul>
-		{foreach from=$valArray item=value}<li>{$value}</li>{/foreach}
-		</ul>
+		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;fieldDelete={$field_id}&amp;logic={$logic|escape}'; return false;">
+		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
+		</button>
 	</td>
+	
 	<td>
 		{if $logic != 'true' && $logic != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
 		<button onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic}'); return false;">
@@ -154,11 +119,17 @@ $().ready(function(){
 		</button>
 		{/if}
 	</td>
+	
+	<td>{$fields[$field_id].name}</td>
+	
+	<td>{$english[$logic]}</td>
+	
 	<td>
-		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;fieldDelete={$field_id}&amp;logic={$logic|escape}'; return false;">
-		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
-		</button>
+		<ul>
+		{foreach from=$valArray item=value}<li>{$value}</li>{/foreach}
+		</ul>
 	</td>
+	
 	</tr>
 	{/if}
 	{/foreach}
@@ -176,5 +147,46 @@ $().ready(function(){
 </form>
 
 <p>{t escape=no 1="<em>`$filterCount`</em>" 2="<strong>`$tally`</strong>"}%1 filters match a total of %2 active subscribers{/t}</p>
+
+{literal}
+<script type="text/javascript">
+function fwAjaxCall(id, name, gid, l) {
+	$('#newFilter select').each(function() { $(this).hide(); });
+
+	var p = (typeof(l) == 'undefined') ?
+		{ID: id, add: name, group: gid} :
+		{ID: id, add: name, group: gid, logic: l};
+
+	$('#filterWindow div.fwContent').load(
+		'ajax/group_edit.php',
+		p,
+		function() {
+			$('#filterWindow a.fwClose').attr("alt",name);
+			$('#'+name).TransferTo({to:'filterWindow',className:'fwTransfer', duration: 300, complete:function(to){$(to).fadeIn(200)}});
+			PommoValidate.reset();
+			PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
+		}
+	);
+	return false; // don't follow href
+}
+$().ready(function(){ 
+
+	$('#filterWindow a.fwClose').click(function() {
+		var name = $(this).attr('alt');
+		$('#newFilter select').each(function() { $(this).show().val(''); });
+		$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({to: name,className:'fwTransfer', duration: 300})});
+		return false;
+	});
+
+	$('#newFilter select').change(function() {
+		var name = $(this).name(); // "field" or "group"
+		var id = $(this).val(); // group or field ID
+		var gid = $(this).attr("alt"); // this group's ID
+		if(id != '') 
+			fwAjaxCall(id, name, gid);
+	});
+});
+</script>
+{/literal}
 
 {include file="inc/tpl/admin.footer.tpl"}
