@@ -147,18 +147,18 @@
 
 {if $list_exchanger == 'smtp'}
 <div>
-<a href="setup_smtp.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" />Setup your SMTP Servers relays</a>
+<a href="setup_smtp.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
 <span class="notes">{t}(configure SMTP relays){/t}</span>
 </div>
 {/if}
 
 <div>
-<a href="setup_messages.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> Customize mailed messages</a>
+<a href="setup_messages.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Customize mailed messages{/t}</a>
 <span class="notes">{t}(define the email messages sent during subscription, updates, etc.){/t}</span>
 </div>
 
 <div>
-<a href="setup_throttle.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> Set mail throttle values</a>
+<a href="setup_throttle.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Set mailing throttle values{/t}</a>
 <span class="notes">{t}(controls mails per second, bytes per second, and domain limits){/t}</span>
 </div>
 

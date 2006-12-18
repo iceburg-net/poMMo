@@ -73,7 +73,7 @@
 
 <div class="buttons">
 
-<input type="submit" id="submit" name="submit" value="Continue" />
+<input type="submit" id="submit" name="submit" value="{t}Continue{/t}" />
 
 </div>
 

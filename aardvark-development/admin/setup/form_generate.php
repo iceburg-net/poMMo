@@ -37,7 +37,7 @@ $form_name = "signup";
 ?>
 <body>
 
-<pre>VIEW THE SOURCE TO COPY, PASTE, EDIT, AND SAVE THE FORM TO AN APPROPRIATE LOCATION ON YOUR WEBSITE</pre>
+<pre><?php echo Pommo::_T('VIEW THE SOURCE TO COPY, PASTE, EDIT, AND SAVE THE FORM TO AN APPROPRIATE LOCATION ON YOUR WEBSITE'); ?></pre>
 
 <hr />
 
@@ -51,11 +51,11 @@ $form_name = "signup";
 <fieldset>
 <legend>Subscribe</legend>
 
-<p><em>Fields in <strong>bold</strong> are required.</em></p>
+<p><?php echo sprintf(Pommo::_T('%sFields%s are required'),'<strong>','</strong>'); ?></p>
 
 <!--	Email field must be named "Email" -->
 <div>
-<label for="email"><strong>Your Email:</strong></label>
+<label for="email"><strong><?php echo Pommo::_T('Your Email:'); ?></strong></label>
 <input type="text" name="Email" id="email" maxlength="60" />
 </div>
 
@@ -119,7 +119,7 @@ foreach (array_keys($fields) as $field_id) {
 	  If you'd like to change the button text change the "value=" text. -->
 	  
 <input type="hidden" name="pommo_signup" value="true" />
-<input type="submit" value="Signup" />
+<input type="submit" value="<?php echo Pommo::_T('Subscribe'); ?>" />
 
 </div>
 

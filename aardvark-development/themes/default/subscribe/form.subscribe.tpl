@@ -2,7 +2,7 @@
 
 <form method="post" action="{$url.base}user/process.php">
 <fieldset>
-<legend>Join newsletter</legend>
+<legend>{t}Join newsletter{/t}</legend>
 
 <input type="hidden" name="formSubmitted" value="1" />
 {if $referer}
