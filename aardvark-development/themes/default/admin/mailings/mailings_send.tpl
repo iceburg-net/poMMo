@@ -1,4 +1,6 @@
-{include file="inc/tpl/admin.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
+{/capture}{include file="inc/tpl/admin.header.tpl"}
 
 {include file="inc/tpl/messages.tpl"}
 
