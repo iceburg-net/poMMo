@@ -2,6 +2,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
 {include file="inc/tpl/admin.header.tpl"}
@@ -36,7 +37,7 @@
 
 {if $ishtml == 'on'}
 
-<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php?height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}Preview Message{/t}</a></p>
+<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php" title="{t}Message Preview{/t}" target="_blank">{t}Preview Message{/t}</a></p>
 
 {if $altbody}
 <p><strong>{t}Alt Body:{/t}</strong></p>
