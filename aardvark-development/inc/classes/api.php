@@ -59,9 +59,11 @@ class PommoAPI {
 		$query = $dbo->prepare($query);
 		
 		$revision = $dbo->query($query, 0);
-		if (!$revision)
-			$this->kill(sprintf(Pommo :: _T('Error loading configuration. Have you %s installed %s ?'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
-		elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
+		
+		if(!defined('_poMMo_support'))
+			if (!$revision)
+				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Have you %s installed %s ?'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
+			elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
 		}
 		
 		if ($pommo->_debug == 'on')

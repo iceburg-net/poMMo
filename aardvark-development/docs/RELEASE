@@ -1,4 +1,69 @@
-=== Release Notes for Aardvark SVN ===
- <Released April ??, 2010>
+=== Release Notes for Aardvark PR14 ===
+ <Released December 20, 2006>
  
- Coming to a theatre near you!
+[Additions]
+
+  * New subscriber management
+    -- Quickly add a subscriber
+    -- Filter the current view through quicksearch
+    -- Revolutionary AJAX interface
+    -- Ultra fast removal of subscribers in current view/pasted emails
+    -- Ability to view unsubscribed members
+  
+  * New default theme (thanks largely to Rowan Walker)
+    -- Switch to valid semantic XHTML
+    -- Incorporated logo by Zena Swanepoel
+    -- Migration to jQuery as base javascript library
+    -- Restructured and modularized theme components
+    
+  * Added support for numeric and date subscriber fields
+    -- Kelvin Luck's javascript datepicker pops up on default subscriber form
+  
+  * Sent, Unsent, and Failed emails can now be polled during a mailing
+  * Subscriber IP Address and modification date now logged
+  * Greek ISO-8859-7 supported as mailing charset
+    
+
+[Improvements]
+  
+  * Enhanced subsriber import/export
+    -- Export list of emails or customizable CSV of subscribers
+    -- Import from list of emails or CSV
+    -- Improved reliablity and interface
+    -- Importing is more flexible 
+    
+  * Improved mailing processor
+    -- Increased throttle accuracy
+    -- Improved I/O efficiency during personali(s/z)ations
+   
+  * Enhanced the support library
+    -- Link to support.php is now accessible
+    -- Modularized tests
+    -- Added clearning of database, subscribers
+    -- Added loading of sample data
+    
+  * Rewritten Framework  (90% of codebase changed)
+    -- Improved code clarity and performance
+    -- Introduced Object Oriented Design
+    -- Simplified and normalized database schema
+    -- Bumped MySQL Server requirement to 4.1
+    -- Now using Monte Ohrt's SmartyPaginate and SafeSQL
+    -- Developer Friendly API
+    
+  * Config file(s) and Export(s) now use Windows Line Breaks
+  
+  * Mournfully fixed script to work with PHP register_globals enabled
+  
+  * Test mailings now include accurate personali(s/z)ation
+   
+
+[Bug Fixes]
+
+  * Protection against "end of mailing" frozen mailing caused by list duplicates
+  * Mailings History page once again functional
+  
+
+[Security]
+  
+  * Included files are now passed through a customized parser
+  
