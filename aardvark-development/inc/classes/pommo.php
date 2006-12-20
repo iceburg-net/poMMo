@@ -99,7 +99,7 @@ class Pommo {
 		
 		
 		// make sure workDir is writable
-		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
+		if (!is_dir($this->_workDir . '/pommo/smarty')) {
 				
 			$wd = $this->_workDir; $this->_workDir = null;
 			if (!is_dir($wd))
