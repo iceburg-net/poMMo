@@ -13,6 +13,8 @@
 die();
 ?>
 
+THROTTLER -> must return false every 10 seconds [no loops]...
+
 [BEFORE Aardvark Final]
 	+ Message Templating
 	+ Rewritten Default Theme (CSS, JS, TEMPLATES)

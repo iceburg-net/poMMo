@@ -244,7 +244,7 @@ if(empty($pommo->_session['throttler'][$tid]))
 	$pommo->_session['throttler'] = array (
 		$tid => array(
 			'MPS' => $config['throttle_MPS'],
-			'BPS' => $config['throttle_MPS'],
+			'BPS' => $config['throttle_BPS'],
 			'DP' => $config['throttle_DP'],
 			'DMPP' => $config['throttle_DMPP'],
 			'DBPP' => $config['throttle_DBPP'],
