@@ -10,6 +10,10 @@ You can find updated installation instructions at the <a href="http://www.pommo.
 Server:
 <ul>
 <li>PHP version 4.3 or greater</li>
+    <ul>
+    <li>Apache Timeout directive or IIS CGI timeout should be 100+ seconds (both default to 300)</li>
+    <li>For i18n (other languages) PHP should have gettext support</li>
+    </ul>
 <li>MySQL Server 4.1 or higher (or 3.23 for Legacy poMMo)</li>
 </ul>
 

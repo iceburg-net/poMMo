@@ -10,6 +10,29 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
+ 
+/**********************************
+	STARTUP ROUTINES
+ *********************************/
+ 
+
+// # of mails to fetch from the queue at a time (Default: 100)
+$queueSize = 100;
+
+// set maximum runtime of this script in seconds (Default: 80). 
+$maxRunTime = 80;
+if (ini_get('safe_mode'))
+	$maxRunTime = ini_get('max_execution_time') - 10;
+else
+	set_time_limit(0);
+
+// start the timer
+$start = time();
+
+// skips serial and security code checking. For debbuing this script.
+$skipSecurity = FALSE;
+
+
 // TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
 //		else move $config to $_SESSION...
 require ('../../bootstrap.php');
@@ -19,34 +42,11 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/throttler.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
-/**********************************
-	STARTUP ROUTINES
- *********************************/
- 
-// skips serial and security code checking. For debbuing this script.
-$skipSecurity = TRUE;
-
-// # of mails to fetch from the queue at a time (Default: 100)
-$queueSize = 100;
-
-// set maximum runtime of this script in seconds (Default: 80). If unable to set (SAFE MODE,etc.), max runtime will default to 3 seconds less than current max.
-$maxRunTime = 80;
-if (ini_get('safe_mode'))
-	$maxRunTime = ini_get('max_execution_time') - 10;
-else
-	set_time_limit($maxRunTime +90);
-
-// start the timer
-$start = time();
 
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
 $code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
 $test = (empty($_GET['testMailing'])) ? false : true;
-
-if (!$skipSecurity && $relayID < 1 && $relayID > 4)
-	PommoMailCtl::kill('Mailing stopped. Bad RelayID.', TRUE);
-	
 
 /**********************************
 	INITIALIZATION METHODS
@@ -62,6 +62,15 @@ $logger = & $pommo->_logger;
 // don't die on query so we can capture logs'
 // NOTE: Be extra careful to check the success of queries/methods!
 $dbo->dieOnQuery(FALSE); 
+
+
+if (!$skipSecurity && $relayID < 1 && $relayID > 4)
+	PommoMailCtl::kill('Mailing stopped. Bad RelayID.', TRUE);
+	
+if($maxRunTime < 20) {
+	$logger->addMsg();
+	PommoMailCtl::kill('PHP Max Runtime is too low! Set higher.', TRUE);
+}
 
 $input = $pommo->get('mailingData');
 

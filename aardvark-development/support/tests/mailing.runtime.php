@@ -14,6 +14,14 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
+ 
+// set maximum runtime of this script in seconds (Default: 80). 
+$maxRunTime = 90;
+if (ini_get('safe_mode'))
+	$maxRunTime = ini_get('max_execution_time') - 10;
+else
+	set_time_limit(0);
+
 define('_poMMo_support', TRUE);
 
 require ('../../bootstrap.php');
@@ -24,18 +32,17 @@ if (bmIsInstalled())
 else
 	$pommo->init(array('authLevel' => 0));
 
-$maxRunTime = 2;
+
 echo 'Initial Run Time: '.ini_get('max_execution_time').' seconds <br>';
-if (ini_get('safe_mode')) {
-	$maxRunTime = ini_get('max_execution_time') - 3;
-	echo 'Safe mode is enabled<br>';
-}
-set_time_limit($maxRunTime);
-
-echo '<br/> SLEEPING FOR RUNTIME -- FAILED IF NO OUTPUT BELOW THIS LINE';
+echo '<br/> SLEEPING FOR 90 SECONDS -- FAILED IF "SUCCESS" NEVER OUTPUTTED';
 echo '<hr>';
-sleep(10);
+ob_flush(); flush();
+$i = 0;
+while ($i < 90) {
+	$i += 10;
+	sleep(10);
+	echo "$i <br />"; 
+	ob_flush(); flush();
+}
 
-echo '<br/> SUCCESS <br/>';
-echo 'End Run Time: '.ini_get('max_execution_time').' seconds <br>';
-	
+die('<hr>SUCCESS');
