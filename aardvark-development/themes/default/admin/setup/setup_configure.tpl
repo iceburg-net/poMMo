@@ -116,7 +116,7 @@
 
 </fieldset>
 
-<fieldset>
+<fieldset class="advanced">
 <legend>{t}Advanced{/t}</legend>
 
 <div>

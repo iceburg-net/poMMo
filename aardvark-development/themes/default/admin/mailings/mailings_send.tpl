@@ -55,7 +55,7 @@
 <span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
-<div>
+<div class="advanced">
 <label for="charset"><span class="required">{t}Character Set:{/t}</span> <span class="error">{validate id="charset" message=$formError.charset}</span></label>
 <select name="charset" id="charset">
 <option value="UTF-8"{if $charset == 'UTF-8'} selected="selected"{/if}>{t}UTF-8 (recommended){/t}</option>

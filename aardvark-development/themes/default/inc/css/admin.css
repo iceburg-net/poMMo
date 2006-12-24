@@ -270,6 +270,39 @@ select.pvInvalid {
 	border: 1px solid red;
 }
 
+/**************************/
+/* Dynamic Mail Variables */
+/**************************/
+
+#mailmerge {
+	display: none;
+	width: 90%;
+	padding: 7px;
+}
+#mailmerge,
+#mergeopen.selected {
+	background: #F3FFDC;
+	padding: 3px;
+	border: 1px solid #000;
+}
+#mergeopen {
+	margin: 0;
+	padding: 4px;
+}
+#mergeopen.selected {
+	display: block;
+	width: 20em;
+	border-bottom: none;
+}
+#mergeopen.selected:hover {
+	border-bottom: none;
+}
+#mailmerge #mergeclose {
+	float: right;
+}
+#mailmerge #mergehelp p {
+	display: none;
+}
 
 /*******************/
 /* Message Styling */
@@ -319,6 +352,10 @@ select.pvInvalid {
 
 .hidden { display: none; }
 .clear { clear: both; }
+
+.pager {
+	text-align:center;
+}
 
 /* make the button look like a link */
 #resetPassword {
