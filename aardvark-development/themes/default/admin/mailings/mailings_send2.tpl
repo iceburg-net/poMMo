@@ -42,16 +42,21 @@
 {/capture}
 {include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
-<div style="position: relative; width: 100%; z-index: 1;">
-<a href="#" class="pommoOpen">{t}Add Personalization{/t}</a>
+<a href="#" id="mergeopen">{t}Add Personalization{/t}</a>
 
-<div id="selectField" style="z-index: 2; display: none; position: absolute; top: -5px; left: -5px; width: 90%; background-color: #e6eaff; padding: 7px; border: 1px solid;">
+<div id="mailmerge">
 
-<div class="pommoHelp">
-<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" style="float: right; margin-left: 10px;" /><strong>{t}Add Personalization{/t}:</strong> <span class="pommoHelp" style="display: none;">{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. The "[[..]]" will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with "Dear [[firstName|Friend]] [[lastName]], ..." providing you collect firstName and lastName fields.{/t}</span>
+<a href="#" id="mergeclose">{t}Close{/t}</a>
 
-<hr style="clear: both;" />
+<div id="mergehelp">
+
+<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" />
+
+<p>{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. The "[[..]]" will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with "Dear [[firstName|Friend]] [[lastName]], ..." providing you collect firstName and lastName fields.{/t}</p>
+
 </div>
+
+<div id="selectField">
 
 <div>
 <label for="field">{t}Insert field{/t}:</label>
@@ -74,8 +79,6 @@
 <input type="submit" id="insert" value="{t}Insert{/t}" />
 
 </div>			
-
-<p><a href="#" class="pommoClose" style="float:right;"><img src="{$url.theme.shared}images/icons/left.png" alt="back icon" class="navimage" /> {t}Close{/t}</a></p>
 
 </div>
 
@@ -132,6 +135,7 @@
 <div class="buttons">
 
 <input type="submit" id="bForm-submit" name="preview" value="{t}Continue{/t}" />
+<a href="mailings_send.php">{t}Cancel{/t}</a>
 
 </div>
 
@@ -169,23 +173,18 @@ $(function() {
 		return false;
 	});
 
-	$("#personalize").click(function() {
-		$("#selectField").slideDown('slow', function() {
-			$(this).find("a.pommoClose").click(function() {
-					$("#selectField").slideUp('slow', function() { $(this).unclick(); });
-					return false;
-				});
-			});
-		return false;
-		});
 	***********/
 
-	$("a.pommoOpen").click(function() { $(this).siblings("div").slideDown(); return false; });
+	function displayMailMerge() {
+		$("#mergeopen").toggleClass('selected');
+		$("#mailmerge").toggle(); return false;
+	}
 
-	$("a.pommoClose").click(function() { $(this).parent().parent().slideUp(); return false; });
+	$("#mergeopen").click(function() { displayMailMerge(); });
+	$("#mergeclose").click(function() { displayMailMerge();	});
 
-	$("div.pommoHelp img").click(function() {
-		$(this).parent().find("span.pommoHelp").toggle(); return false;
+	$("#mergehelp img").click(function() {
+		$("#mergehelp p").toggle(); return false;
 	});
 
 	$("#insert").click(function() {
@@ -206,10 +205,9 @@ $(function() {
 			xinha_editors.body.insertHTML(str);
 		}
 
-		// hide dialog
+		// hide dialogue
+		displayMailMerge();
 		$("#field").add("#default").val("");
-
-		$('#selectField').hide();
 
 		return false;
 	});

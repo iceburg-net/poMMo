@@ -17,10 +17,7 @@
 
 <ul>
 {foreach from=$errors item=msg}
-<li>
-
-{$msg}
-</li>
+<li>{$msg}</li>
 {/foreach}
 </ul>
 

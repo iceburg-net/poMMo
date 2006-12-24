@@ -21,7 +21,7 @@
 <li><a href="{$url.base}admin/setup/admin_setup.php">{t}Setup{/t}</a>
 	{if $section == "setup"}
 	<ul>
-	<li><a href="setup_configure.php">{t}Configure{/t}</a></li>
+	<li class="advanced"><a href="setup_configure.php">{t}Configure{/t}</a></li>
 	<li><a href="setup_fields.php">{t}Fields{/t}</a></li>
 	<li><a href="setup_form.php">{t}Setup Form{/t}</a></li>
 	</ul>

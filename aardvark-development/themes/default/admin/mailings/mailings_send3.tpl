@@ -15,7 +15,7 @@
 
 <div class="msgheaders">
 
-<p class="edit"><a href="mailings_send.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" />{t}edit{/t}</a></p>
+<p class="edit"><a href="mailings_send.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" /> {t}edit{/t}</a></p>
 
 <p><strong>{t}Subject:{/t}</strong> <tt>{$subject}</tt></p>
 
@@ -27,17 +27,17 @@
 <p><strong>{t}Bounces:{/t}</strong> <tt>&lt;{$frombounce}&gt;</tt></p>
 {/if}
 
-<p><strong>{t}Character Set:{/t}</strong> <tt>{$charset}</tt></p>
+<p class="advanced"><strong>{t}Character Set:{/t}</strong> <tt>{$charset}</tt></p>
 
 </div>
 
 <div class="msgpreview">
 
-<p class="edit"><a href="mailings_send2.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" />{t}edit{/t}</a></p>
+<p class="edit"><a href="mailings_send2.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" /> {t}edit{/t}</a></p>
 
 {if $ishtml == 'on'}
 
-<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php" title="{t}Message Preview{/t}" target="_blank">{t}Preview Message{/t}</a></p>
+<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php" title="{t}Message Preview{/t}" onclick="return !window.open(this.href)">{t}Preview Message{/t}</a></p>
 
 {if $altbody}
 <p><strong>{t}Alt Body:{/t}</strong></p>
@@ -45,7 +45,6 @@
 <pre>
 {$altbody}
 </pre>
-
 {/if}
 
 {else}
@@ -73,9 +72,10 @@
 <fieldset>
 <legend>{t}Send Mailing{/t}</legend>
 
-
 <div class="buttons">
+
 <button type="submit" name="sendaway" value="TRUE"><img src="{$url.theme.shared}images/icons/send.png" alt="broadcast icon" />{t}Send Mailing{/t}</button>
+
 </div>
 
 </fieldset>
