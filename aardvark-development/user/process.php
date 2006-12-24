@@ -63,7 +63,8 @@ if (count(PommoHelper::emailExists($subscriber['email'])) > 0) {
 }
 
 // check if errors exist with data, if so print results and die.
-if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'])) {
+if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'], array(
+	'active' => FALSE))) {
 	$smarty->assign('back', TRUE);
 	$smarty->display('user/process.tpl');
 	Pommo::kill();

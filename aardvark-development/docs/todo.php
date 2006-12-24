@@ -14,6 +14,7 @@ die();
 ?>
 
 THROTTLER -> must return false every 10 seconds [no loops]...
+MAILING Notifications -- new database table
 
 I checked in IE and FF and cannot get a mailings to delete out of history. I do not recall if this worked in RC1-RC3. I checked the demo site and it is the same way. It says "DELETE", but you cannot click on it!
 
