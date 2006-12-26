@@ -23,15 +23,8 @@ else
 	set_time_limit(0);
 
 define('_poMMo_support', TRUE);
-
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
-
-if (bmIsInstalled())
-	$pommo->init();
-else
-	$pommo->init(array('authLevel' => 0));
-
+$pommo->init();
 
 echo 'Initial Run Time: '.ini_get('max_execution_time').' seconds <br>';
 echo '<br/> SLEEPING FOR 90 SECONDS -- FAILED IF "SUCCESS" NEVER OUTPUTTED';

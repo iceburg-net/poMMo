@@ -15,15 +15,10 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
-
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+$pommo->init();
 
-if (bmIsInstalled())
-	$pommo->init();
-else
-	$pommo->init(array('authLevel' => 0));
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
 $initial = time();
 

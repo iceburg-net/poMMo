@@ -17,15 +17,10 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
-
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php'); // MUST HAVE THIS HERE!
+$pommo->init();
 
-if (bmIsInstalled())
-	$pommo->init();
-else
-	$pommo->init(array('authLevel' => 0));
-	
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/install.php'); 
 $dbo =& $pommo->_dbo;
 
 // reset DB
@@ -44,7 +39,7 @@ foreach($dbo->table as $id => $table) {
 }
 
 $file = $pommo->_baseDir."install/sql.sample.php";
-if(!parse_mysql_dump(false,$file))
+if(!PommoInstall::parseSQL(false,$file))
 	die('Could not load sample data. Database Reset.');
 
 die('Database Reset. Sample Data Loaded.');

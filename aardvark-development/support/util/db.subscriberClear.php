@@ -17,15 +17,9 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
-
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
+$pommo->init();
 
-if (bmIsInstalled())
-	$pommo->init();
-else
-	$pommo->init(array('authLevel' => 0));
-	
 $dbo =& $pommo->_dbo;
 
 $a = array(
