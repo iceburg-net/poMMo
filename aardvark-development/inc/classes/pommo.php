@@ -16,7 +16,7 @@
 */
 
 class Pommo {
-	var $_revision = '26'; // poMMo's revision #
+	var $_revision = 27; // poMMo's revision #
 
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object
@@ -198,6 +198,12 @@ class Pommo {
 		}
 		
 		$this->_session =& $_SESSION['pommo'.$key];
+		
+		// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
+		if (defined('_poMMo_support')) {
+			Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
+			$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
+		}
 		
 		// check authentication levels
 		$this->_auth = new PommoAuth(array (

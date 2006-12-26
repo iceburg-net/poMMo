@@ -1,6 +1,6 @@
 <?php
 /** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
+ * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
  * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
  * SOURCE: http://pommo.sourceforge.net/
@@ -11,7 +11,90 @@
  * 
  ** [END HEADER]**/
 
-// TODO --> REWRITE -- Entire file is DEPRICATED OLD SKOOL
+class PommoInstall {
+ 	
+ 	// parses a SQL file (usually generated via mysqldump)
+ 	// text like ':::table:::' will be replaced with $dbo->table['table']; (to add prefix)
+ 	
+ 	function parseSQL($ignoreerrors = false, $file = false) {
+ 		global $pommo;
+		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
+	
+		if (!$file)
+			$file = $pommo->_baseDir."install/sql.schema.php";
+			
+		$file_content = @file($file);
+		if (empty ($file_content))
+			Pommo::kill('Error installing. Could not read '.$file);
+		$query = '';
+		foreach ($file_content as $sql_line) {
+			$tsl = trim($sql_line);
+			if (($sql_line != "") && (substr($tsl, 0, 2) != "--") && (substr($tsl, 0, 1) != "#")) {
+				$query .= $sql_line;
+				if (preg_match("/;\s*$/", $sql_line)) {
+					$matches = array();
+					preg_match('/:::(.+):::/',$query,$matches);
+					if ($matches[1])
+						$query = preg_replace('/:::(.+):::/',$dbo->table[$matches[1]], $query);
+						$query = trim($query);
+					if (!$dbo->query($query) && !$ignoreerrors) {
+						$logger->addErr(Pommo::_T('Database Error: ').$dbo->getError());
+						return false;
+					}
+					$query = '';
+				}
+			}
+		}
+		return true;
+ 	}
+ 	
+ 	// verifies if poMMo has been installed.
+ 	// returns bool (true if installed)
+ 	function verify() {
+ 		global $pommo;
+		$dbo =& $pommo->_dbo;
+ 		
+ 		if (is_object($dbo)) {
+			$sql = 'SHOW TABLES LIKE \'' . $dbo->table['groups'] . '\'';
+			if ($dbo->records($sql))
+				return true;
+		}
+	
+		return false;
+ 	}
+ 	
+ 	// performs an update increment
+ 	// checks if the update has already been performed
+ 	// returns update status
+ 	function incUpdate($serial, $sql) {
+ 		global $pommo;
+ 		$dbo =& $pommo->_dbo;
+ 		
+ 		if (!is_numeric($serial))
+ 			Pommo::kill('Invalid serial passed; '.$serial);
+ 			
+		$query = "
+			SELECT update_serial FROM {$dbo->table['updates']} 
+			WHERE update_serial=%i";
+		$query = $dbo->prepare($query,array($serial));
+		if ($dbo->records($query))
+			return true;
+			
+		$query = $dbo->prepare($sql);
+		if (!$dbo->query($query))
+			return false;
+		
+		$query = "
+			INSERT INTO {$dbo->table['updates']} 
+			(update_serial) VALUES(%i)";
+		$query = $dbo->prepare($query,array($serial));
+		if (!$dbo->query($query))
+			Pommo::kill('Unable to serialize');
+		
+		return true;
+ 	}
+}
 
 
 // TODO : Make array of queries.. send array to dbo->query(); update query function to allow arrays...
@@ -22,55 +105,10 @@
 
 // NOTE TO SELF -- all updates in a upgrade must be serialized, and their serial incremented!
 
-function parse_mysql_dump($ignoreerrors = false, $file = false) {
-	global $pommo;
-	$dbo =& $pommo->_dbo;
-	$logger =& $pommo->_logger;
-
-	if (!$file)
-		$file = $pommo->_baseDir."install/sql.schema.php";
-		
-	$file_content = @file($file);
-	if (empty ($file_content))
-		Pommo::kill('Error installing. Could not read '.$file);
-	$query = '';
-	foreach ($file_content as $sql_line) {
-		$tsl = trim($sql_line);
-		if (($sql_line != "") && (substr($tsl, 0, 2) != "--") && (substr($tsl, 0, 1) != "#")) {
-			$query .= $sql_line;
-			if (preg_match("/;\s*$/", $sql_line)) {
-				$matches = array();
-				preg_match('/:::(.+):::/',$query,$matches);
-				if ($matches[1])
-					$query = preg_replace('/:::(.+):::/',$dbo->table[$matches[1]], $query);
-					$query = trim($query);
-				if (!$dbo->query($query) && !$ignoreerrors) {
-					$logger->addErr(Pommo::_T('Database Error: ').$dbo->getError());
-					return false;
-				}
-				$query = '';
-			}
-		}
-	}
-	return true;
-}
-		
-
-// <bool> Returns true if the program is installed, false if not. TODO: eventaully allow for table prefixing..
-function bmIsInstalled() {
-	global $pommo;
-	$dbo =& $pommo->_dbo;
-	
-	if (is_object($dbo)) {
-		$sql = 'SHOW TABLES LIKE \'' . $dbo->table['groups'] . '\'';
-		if ($dbo->records($sql))
-			return true;
-	}
-	
-	return false;
-}
 
 // Returns the poMMo revision the user is upgrading from
+
+//  USE CONFIG API
 function getOldVersion(& $dbo) {
 	$oldRevision = NULL;
 
@@ -90,6 +128,8 @@ function getOldVersion(& $dbo) {
 }
 
 // updates the version + revision in the DB
+
+/// USE CONFIG API
 function bmBumpVersion(& $dbo, $revision, $versionStr) {
 	global $logger;
 
