@@ -37,7 +37,7 @@
 
 {if $ishtml == 'on'}
 
-<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php" title="{t}Message Preview{/t}" onclick="return !window.open(this.href)">{t}Preview Message{/t}</a></p>
+<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php" title="{t}Preview Message{/t}" onclick="return !window.open(this.href)">{t}Preview Message{/t}</a></p>
 
 {if $altbody}
 <p><strong>{t}Alt Body:{/t}</strong></p>
