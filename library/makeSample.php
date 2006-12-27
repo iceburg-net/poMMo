@@ -14,9 +14,6 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-
-set_time_limit(300);
-
 require ('bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
@@ -25,7 +22,7 @@ $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 // quick'n'dirty creation of sample data
-$count = 50000; // # of subscribers to insert
+$count = 5000; // # of subscribers to insert
 $fieldCount = 6; // @ # of required fields
 $clearTable = false; // clear the subscriber, pending, and data tables first?
 
@@ -51,15 +48,15 @@ for ($i = 0; $i < $count; $i++) {
 		'registered' => makeTime(),
 		'flag' => makeFlag(),
 		'ip' => makeIP(),
-		'status' => 'active'
+		'status' => 1
 	);
 	
 	if ($i < $pendingCount) {
-		$subscriber['status'] = 'pending';
+		$subscriber['status'] = 2;
 		$subscriber['pending_code'] = md5(md5(rand()).rand());
 		
 		if (rand(1,100) < 10)
-			$subscriber['pending_email'] = makeEmail();
+			$subscriber['pending_array'] = array('email' => makeEmail());
 			
 		$subscriber['pending_type'] = 'change';
 		
@@ -67,15 +64,14 @@ for ($i = 0; $i < $count; $i++) {
 	}
 	else {
 		if ($i < ($pendingCount + $unsubscribeCount))
-			$subscriber['status'] = 'inactive';
+			$subscriber['status'] = 0;
 		$subscriber = PommoSubscriber::make($subscriber);
 	}
 	
 	$subscriber['data'] = makeData($fieldCount);
 	
-	//var_dump($subscriber);
 	if(!PommoSubscriber::add($subscriber)) {
-		$pommo->addErr('error adding subscriber');
+		$logger->addErr('error adding subscriber');
 	}
 }
 
@@ -115,7 +111,7 @@ function makeIP() {
 
 // flag the subscriber 8 % of the time
 function makeFlag() {
-	return (mt_rand(1,100) < 9) ? 'update' : null;
+	return (mt_rand(1,100) < 9) ? 9 : null;
 }
 
 // from http://www.php.net comment
