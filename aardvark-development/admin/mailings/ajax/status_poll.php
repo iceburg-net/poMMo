@@ -30,7 +30,8 @@ $json = array(
 	'statusText' => null,
 	'sent' => null,
 	'incAttempt' => FALSE,
-	'command' => FALSE
+	'command' => FALSE,
+	'notices' => FALSE
 );
 
 $statusText = array(
@@ -72,17 +73,13 @@ $pommo->set(array('timestamp' => $mailing['touched']));
 
 $json['statusText'] = $statusText[$json['status']];
 
-// trim last 50 notices
-if(!empty($mailing['notices'])) {
-	$json['notices'] = explode('||',$mailing['notices'], 50);
-	$newNotices = str_replace(implode('||',$json['notices']),'',$mailing['notices']);
-	$query = "
-		UPDATE ".$dbo->table['mailing_current']."
-		SET notices='%s'
-		WHERE current_id=%i";
-	$query = $dbo->prepare($query, array($newNotices, $mailing['id']));
-	$dbo->query($query);
-}
+// get last 50 unique notices
+$notices = PommoMailing::getNotices($mailing['id']);
+$oldNotices = $pommo->get('notices');
+$pommo->set(array('notices' => $notices));
+$json['notices'] = array_diff($notices,$oldNotices);
+
+//var_dump($notices,$oldNotices);
 
 $query = "
 	SELECT count(subscriber_id) 

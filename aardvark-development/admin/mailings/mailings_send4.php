@@ -30,7 +30,7 @@ else
 $start = time();
 
 // skips serial and security code checking. For debbuing this script.
-$skipSecurity = FALSE;
+$skipSecurity = TRUE;
 
 
 // TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
@@ -55,9 +55,6 @@ $test = (empty($_GET['testMailing'])) ? false : true;
 $pommo->init(array('sessionID' => $serial, 'keep' => TRUE, 'authLevel' => 0, 'noDebug' => TRUE));
 $dbo = & $pommo->_dbo;
 $logger = & $pommo->_logger;
-
-//DEBUGGING LINE
-//$query="UPDATE ".$dbo->table['mailing_current']." SET notices='yyy'"; $dbo->query($query); die();
 
 // don't die on query so we can capture logs'
 // NOTE: Be extra careful to check the success of queries/methods!
@@ -129,9 +126,6 @@ $config =& $input['config'];
 /**********************************
  * MAILING INITIALIZATION
  *********************************/
-
-//DEBUGGING LINE
-//$query="UPDATE ".$dbo->table['mailing_current']." SET notices='VVVerbosity - ".$logger->_verbosity."'"; $dbo->query($query); 
 
 $mailing = current(PommoMailing::get(array('code' => $code, 'active' => TRUE)));
 if (empty($mailing))

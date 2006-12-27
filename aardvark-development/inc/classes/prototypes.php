@@ -163,13 +163,14 @@ class PommoType {
 			'end' => null,
 			'sent' => null,
 			'charset' => null,
-			'status' => null
+			'status' => null,
+			'notices' => array()
 		);
 	}
 	
 	function & mailingCurrent() {
 		$o = PommoType::mailing();
-		$o['touched'] = $o['current_id'] = $o['command'] = $o['serial'] = $o['code'] = $o['notices'] = $o['current_status'] = null;
+		$o['touched'] = $o['current_id'] = $o['command'] = $o['serial'] = $o['code'] = $o['current_status'] = null;
 		return $o;
 	}
 	
