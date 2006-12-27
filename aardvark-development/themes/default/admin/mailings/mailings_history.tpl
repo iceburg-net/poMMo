@@ -114,8 +114,8 @@ DELETE  <a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width
 	{t}Processing{/t}
 {else}
 	{t}Cancelled{/t}
-<div>(<a href="ajax/history_notices.php?mail_id={$id}&amp;height=320&amp;width=480" title="{t}View Last Notices{/t}" class="thickbox">{t}View Last Notices{/t}</a>)
 {/if}
+<div>(<a href="ajax/history_notices.php?mail_id={$id}&amp;height=320&amp;width=480" title="{t}View Last Notices{/t}" class="thickbox">{t}View Last Notices{/t}</a>)
 </td>
 </tr>
 {/foreach}

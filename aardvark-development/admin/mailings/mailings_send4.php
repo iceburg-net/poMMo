@@ -15,7 +15,6 @@
 	STARTUP ROUTINES
  *********************************/
  
-
 // # of mails to fetch from the queue at a time (Default: 100)
 $queueSize = 100;
 
@@ -30,7 +29,7 @@ else
 $start = time();
 
 // skips serial and security code checking. For debbuing this script.
-$skipSecurity = TRUE;
+$skipSecurity = FALSE;
 
 
 // TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
