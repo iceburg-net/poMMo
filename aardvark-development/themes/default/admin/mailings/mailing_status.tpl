@@ -167,7 +167,7 @@ pommo = {
 			$('#sent').html(json.sent);
 			$('#barFoot').html(json.percent+'%');
 			$('#bar').width(json.percent+'%');
-			
+
 			if (typeof(json.notices) == 'object')
 				for (i in json.notices)
 					if(json.notices[i] != '')

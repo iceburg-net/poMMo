@@ -361,8 +361,5 @@ class Pommo {
 			$files[$file] = TRUE;
 		}
 	}
-	
-	
-	
 }
 ?>

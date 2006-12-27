@@ -43,6 +43,7 @@ class PommoDB {
 			'fields' => $tablePrefix . 'fields',
 			'group_criteria' => $tablePrefix . 'group_criteria',
 			'groups' => $tablePrefix . 'groups',
+			'mailing_notices' => $tablePrefix . 'mailing_notices',
 			'mailing_current' => $tablePrefix . 'mailing_current',
 			'mailings' => $tablePrefix . 'mailings',
 			'subscriber_data' => $tablePrefix . 'subscriber_data',
@@ -163,7 +164,7 @@ class PommoDB {
 				$logger->addMsg('Query failed with error --> ' . mysql_error()); 
 
 			if ($this->_dieOnQuery)
-				Pommo::kill('MySQL Query Failed.');
+				Pommo::kill('MySQL Query Failed.'.$query);
 			else
 				return false;
 		}

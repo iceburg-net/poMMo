@@ -108,6 +108,10 @@ class PommoMailCtl {
 				PommoMailCtl::kill(Pommo::_T('Serials do not match. Another background script is probably processing the mailing.'),TRUE);
 			if ($row['current_status'] == 'stopped')
 				PommoMailCtl::kill(Pommo::_T('Mailing halted. You must restart the mailing.'), TRUE);			
+			
+			// upate the timestamp
+			$query = "UPDATE ". $dbo->table['mailing_current']." SET touched=NULL";
+			$dbo->query($query);
 			break;
 		}
 		
@@ -155,21 +159,13 @@ class PommoMailCtl {
 				PommoMailCtl::kill('Unable to update queue failed');
 		}
 			
-		
-		// update DB notices
-		$notices = $dbo->prepare('[%Q]', array($logger->getAll()));
-		if (!empty($notices)) {
-			$query = "
-				UPDATE ".$dbo->table['mailing_current']."
-				SET notices=CONCAT_WS('||',notices,".$notices.") 
-				WHERE current_id=".$mailingID;
-			$dbo->query($query);
-		}
-		
+		// add notices
+		PommoMailCtl::addNotices($mailingID);
 	}
 	
 	
 	// end a mailing
+	// shortens notices to the last 50
 	function finish($id = 0, $cancel = false, $test = false) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -184,12 +180,18 @@ class PommoMailCtl {
 			return false;
 			
 		if ($test) { // remove if this was a test mailing
+			// remove notices
+			PommoMailCtl::delNotices($id,0);
+			
 			$query = "
 				DELETE FROM ". $dbo->table['mailings']."
 				WHERE mailing_id=%i";
 			$query = $dbo->prepare($query, array($id));
 		}
 		else {
+			// shorten notices to last 50
+			PommoMailCtl::delNotices($id);
+			
 			$query = "
 				UPDATE ". $dbo->table['mailings']."
 				SET 
@@ -220,17 +222,9 @@ class PommoMailCtl {
 		// release queue items allocated to this relayID
 		PommoMailCtl::queueRelease($relayID);
 		
-		// update DB notices
-		$notices = $dbo->prepare('[%Q]', array($logger->getAll()));
-		if (!empty($notices)) {
-			$query = "
-				UPDATE ".$dbo->table['mailing_current']."
-				SET notices=CONCAT_WS('||',notices,".$notices.") 
-				WHERE current_id=".$mailingID;
-			$dbo->query($query);
-		}
+		// add notices
+		PommoMailCtl::addNotices($mailingID);
 			
-		
 		if ($killSession)
 			session_destroy();
 			
@@ -364,6 +358,64 @@ class PommoMailCtl {
 		}
 
 		return true;
+	}
+	
+	function addNotices($id) {	
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
+		
+		$notices = array();
+		foreach($logger->getAll() as $n)
+			$notices[] = $dbo->prepare("(%i,'%s')",array($id, $n));
+		
+		// update DB notices
+		if (!empty($notices)) {
+			$query = "
+				INSERT INTO ".$dbo->table['mailing_notices']."
+				(mailing_id,notice) VALUES ".implode(',',$notices);
+			$dbo->query($query);
+		}
+		
+		// trim notices
+		PommoMailCtl::delNotices($id);
+	}
+	
+	// removes notices from a mailing
+	// accepts mailing ID
+	// accepts # of notices to keep -- if 0, none are kept
+	function delNotices($id, $keep = 50) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$keep = intval($keep);
+		if ($keep == 0) {
+			$query = "
+				DELETE FROM ".$dbo->table['mailing_notices']." 
+				WHERE mailing_id=%i";
+			$query = $dbo->prepare($query,array($id));
+			$dbo->query($query);
+			return;
+		}
+		
+		// shorten notices to keep # (50)
+		$query = "
+			SELECT count(mailing_id) 
+				FROM ".$dbo->table['mailing_notices']." 
+			WHERE mailing_id=%i";
+		$query = $dbo->prepare($query,array($id));
+		$count = $dbo->query($query,0);
+		
+		if ($count > $keep) {
+			$query = "
+				DELETE FROM ".$dbo->table['mailing_notices']." 
+				WHERE mailing_id=%i
+				ORDER BY touched ASC
+				LIMIT %i";
+			$query = $dbo->prepare($query,array($id, ($count - $keep)));
+			$dbo->query($query);
+		}
+		return;
 	}
 	
 }

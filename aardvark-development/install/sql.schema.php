@@ -35,9 +35,9 @@ INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('version', 'Aardvark SVN', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR14.1', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '26', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '27', 'Internal Revision', 'on', 'off');
 
 
 -- DEMOGRAPHICS
@@ -90,6 +90,14 @@ CREATE TABLE :::mailing_current::: (
   PRIMARY KEY  (`current_id`)
 );
 
+-- MAILING_NOTICES
+
+CREATE TABLE :::mailing_notices::: (
+  `mailing_id` int(10) unsigned NOT NULL,
+  `notice` varchar(255) NOT NULL,
+  `touched` timestamp NOT NULL,
+  KEY `mailing_id` (`mailing_id`)
+);
 
 -- MAILINGS
 
@@ -172,8 +180,6 @@ CREATE TABLE :::subscribers::: (
 -- UPDATES
 
 CREATE TABLE :::updates::: (
-  `update_id` int(10) unsigned NOT NULL auto_increment,
-  `update_serial` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`update_id`),
-  KEY `update_serial` (`update_serial`)
+  `serial` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`serial`)
 );
