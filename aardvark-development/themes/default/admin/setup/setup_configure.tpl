@@ -65,6 +65,13 @@
 <span class="notes">{t}(Webpage users will see upon subscription attempt. Leave blank to display default confirmation page.){/t}</span>
 </div>
 
+<div>
+<label for="list_confirm">{t}Make History Public:{/t} </label>
+<input type="radio" name="public_history" value="on"{if $public_history == 'on'} checked="checked"{/if} /> on
+<input type="radio" name="public_history" value="off"{if $public_history != 'on'} checked="checked"{/if} /> off
+<span class="notes">{t}(Makes the history of mailings available to the public.){/t}</span>
+</div>
+
 </fieldset>
 
 <div class="buttons">
