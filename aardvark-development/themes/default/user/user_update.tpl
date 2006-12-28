@@ -12,21 +12,20 @@
  	
 {include file="subscribe/form.update.tpl"}
 
-<form method="post" action="">
-<fieldset>
-<legend>{t}Unsubscribe{/t}</legend>
+<h3>{t}Unsubscribe{/t}</h3>
 
-<input type="hidden" name="Email" value="{$Email}" />
+<form method="post" action="">
 
 <div class="buttons">
 
-<button type="submit" name="unsubscribe">
+<input type="hidden" name="Email" value="{$Email}" />
+
+<button type="submit" name="unsubscribe" value="true">
 <img src="{$url.theme.shared}images/icons/nok.png" alt="not ok icon" /> {t}Click to unsubscribe{/t} {$Email}
 </button>
 
 </div>
 
-</fieldset>
 </form>
 
 {include file="inc/tpl/user.footer.tpl"}

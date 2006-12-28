@@ -10,7 +10,7 @@
  *  2. You must notify the above author of modifications to contents within.
  * 
  ** [END HEADER]**/
- 
+
  /**********************************
 	INITIALIZATION METHODS
  *********************************/
@@ -36,39 +36,39 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 		'data' => array());
 	foreach ($row as $key => $col) {
 		$fid =& $_POST['f'][$key];
-		if(is_numeric($fid))
+		if (is_numeric($fid))
 			$subscriber['data'][$fid] = $col;
-		elseif($fid == 'email' && PommoHelper::isEmail($col))
+		elseif ($fid == 'email' && PommoHelper::isEmail($col))
 			$subscriber['email'] = $col;
-		elseif($fid == 'registered')
+		elseif ($fid == 'registered')
 			$subscriber['registered'] = strtotime($col);
-		elseif($fid == 'ip')
+		elseif ($fid == 'ip')
 			$subscriber['ip'] = $col;
 	}
-	if($subscriber['email']) {
+	if ($subscriber['email']) {
 		// check for dupe
 		if (PommoSubscriber::getIDByEmail($subscriber['email'])) {
 			$dupes++;
 			continue;
 		}
-		
+
 		// validate/fix data
 		if(!PommoValidate::subscriberData($subscriber['data'], array(
 			'log' => false,
 			'ignore' => true,
 			'active' => false)))
 			$subscriber['flag'] = 9;
-		
+
 		// add subscriber
-		if(PommoSubscriber::add($subscriber)) {
+		if (PommoSubscriber::add($subscriber)) {
 			$tally++;
-			if($subscriber['flag'] == 9)
+			if ($subscriber['flag'] == 9)
 				$flagged++;
 		}
 	}
-	
+
 }
 unlink($pommo->_workDir.'/import.csv');
-echo ('<div class="warn"><p>'.sprintf(Pommo::_T('%s subscribers imported! Of these, %s were flagged to upadte their records.'),$tally, $flagged).'<p>'.sprintf(Pommo::_T('%s duplicates encountered.'),$dupes).'</p></div>');
+echo ('<div class="warn"><p>'.sprintf(Pommo::_T('%s subscribers imported! Of these, %s were flagged to update their records.'),$tally, $flagged).'<p>'.sprintf(Pommo::_T('%s duplicates encountered.'),$dupes).'</p></div>');
 die(Pommo::_T('Complete!').' <a href="subscribers_import.php">'.Pommo::_T('Return to').' '.Pommo::_T('Import').'</a>');
 ?>

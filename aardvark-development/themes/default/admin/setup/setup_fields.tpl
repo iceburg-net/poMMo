@@ -13,7 +13,7 @@
 <form method="post" action="">
 
 {include file="inc/tpl/messages.tpl"}
- 
+
 <fieldset>
 <legend>{t}Fields{/t}</legend>
 
@@ -42,25 +42,22 @@
 </fieldset>
 </form>
 
-<fieldset>
-<legend>{t}Field Ordering{/t}</legend>
+<h3>{t}Field Ordering{/t}</h3>
 
 <ul>
 <li>{t}Change the ordering of fields on the subscription form by dragging and dropping the order icon{/t}</li>
 <li>{t escape=no}Names in <strong>bold</strong> are active.{/t}</li>
 </ul>
 
-
 <div id="grid">
 
 <div class="header">
 <span>{t}Delete{/t}</span>
 <span>{t}Edit{/t}</span>
-<span>{t}Order{/t}</span>	
+<span>{t}Order{/t}</span>
 <span>{t}Field Name{/t}</span>
 </div>
 
-		
 {foreach name=fields from=$fields key=key item=field}
 
 <div class="{cycle values="r1,r2,r3"} sortable" id="id{$key}">
@@ -87,58 +84,53 @@
 
 </div>
 
-<div id="ajaxOut" class="alert"></div>
-
 {literal}
 <script type="text/javascript">
-
 var pommoSort = {
 	init: function() {
 		var s = $.SortSerialize('grid');
 		this.hash = s.hash;
 	},
 	update: function(hash) {
-		if(this.hash == hash)
+		if (this.hash == hash)
 			return false; // don't do a thing if unchanged...
 		this.hash = hash;
-		
-		
+
 		$.post("ajax/fields_order.php", this.hash, function(json) {
 			eval("var args = " + json);
 
 			if (typeof(args.success) == 'undefined') {
 				alert('ajax error!');
-				return;	
+				return;
 			}
 
 			$('#ajaxOut').html(args.msg).fadeIn('fast');
 
 			if (args.success === true)
 				$('#ajaxOut').fadeOut(6000);
-			
+
 		});
-		
-		
+
 		return false;
 	}
 };
 
 $().ready(function(){
-	
+
 	$('#grid').Sortable({
 		accept : 'sortable',
 		handle: 'img.handle',
 		opacity: 0.8,
 		revert: true,
 		tolerance: 'intersect',
-		onStop: function() { 
+		onStop: function() {
 			var s = $.SortSerialize('grid');
-			pommoSort.update(s.hash); 
+			pommoSort.update(s.hash);
 		}
 	});
 	pommoSort.init();
-});
 
+});
 
 //Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_fieldOrder.php', {onComplete:function(request){new Effect.Highlight('fieldOrder',{});}, parameters:Sortable.serialize('fieldOrder'), evalScripts:true, asynchronous:true})}});
 </script>

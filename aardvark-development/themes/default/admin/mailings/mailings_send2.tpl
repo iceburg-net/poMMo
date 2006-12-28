@@ -52,7 +52,7 @@
 
 <img src="{$url.theme.shared}images/icons/help.png" alt="help icon" />
 
-<p>{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. The "[[..]]" will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with "Dear [[firstName|Friend]] [[lastName]], ..." providing you collect firstName and lastName fields.{/t}</p>
+<p>{t escape=no 1='<tt>' 2='</tt>' 3='&hellip;'}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, %3" instead of "Dear Subscriber, %3". The syntax for personalization is; %1[[field_name]]%2 or %1[[field_name|default_value]]%2. If 'default_value' is supplied and a subscriber has no value for 'field_name', %1[[field_name|default_value]]%2 will be replaced by %1default_value%2. The %1[[%3]]%2 will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with %1Dear [[firstName|Friend]] [[lastName]],%3%2 providing you collect 'firstName' and 'lastName' fields.{/t}</p>
 
 </div>
 
