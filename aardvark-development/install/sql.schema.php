@@ -38,7 +38,7 @@ INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('version', 'Aardvark PR14.1', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');
 INSERT INTO :::config::: VALUES ('revision', '27', 'Internal Revision', 'on', 'off');
-
+INSERT INTO :::config::: VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on');
 
 -- DEMOGRAPHICS
 

@@ -92,7 +92,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		'list_frombounce',
 		'list_exchanger',
 		'list_confirm',
-		'list_charset'
+		'list_charset',
+		'public_history'
 	));
 
 	$dbVals['demo_mode'] = (!empty ($pommo->_config['demo_mode']) && ($pommo->_config['demo_mode'] == "on")) ? 'on' : 'off';
