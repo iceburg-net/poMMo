@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-12-18 01:03+1000\n"
+"PO-Revision-Date: 2006-12-28 22:41+1000\n"
 "Last-Translator: R Walker <mountainash@rmwpublishing.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -286,7 +286,7 @@ msgstr ""
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:150
 msgid "Generate a plain HTML subscription form that you can customize to fit your site."
-msgstr ""
+msgstr "Generate a plain HTML subscription form that you can customise to fit your site."
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:156
@@ -2183,7 +2183,7 @@ msgstr ""
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1563
 msgid "Initializing..."
-msgstr ""
+msgstr "Initialising..."
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1566
