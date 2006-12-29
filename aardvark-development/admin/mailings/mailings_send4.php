@@ -208,6 +208,7 @@ $subscribers = PommoSubscriber::get(
 	
 while(empty($subscribers)) {
 	if(PommoMailCtl::queueUnsentCount() < 1) {
+		$mailer->SmtpClose();
 		PommoMailCtl::finish($mailingID);
 		die();	
 	}
@@ -215,6 +216,7 @@ while(empty($subscribers)) {
 	sleep(10);
 	
 	if((time() - $start) > $maxRunTime) {
+		$mailer->SmtpClose();
 		PommoMailCtl::respawn();
 		PommoMailCtl::kill('Max runtime reached. Respawning...');
 	}
@@ -333,9 +335,11 @@ if ($test) {
 	reset($subscribers);
 	$s = current($subscribers);
 	PommoSubscriber::delete($s['id']);
+	$mailer->SmtpClose();
 	die();
 }
 
+$mailer->SmtpClose();
 PommoMailCtl::update($sent, $failed, $emailHash);
 PommoMailCtl::respawn();
 PommoMailCtl::kill('Queue empty or Runtime reached. Respawning...');
