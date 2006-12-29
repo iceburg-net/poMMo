@@ -58,6 +58,7 @@ class PommoMailCtl {
 		global $relayID;
 		global $serial;
 		global $mailingID;
+		global $mailer;
 		
 		$dbo =& $pommo->_dbo;
 		$logger =& $pommo->_logger;
@@ -74,6 +75,13 @@ class PommoMailCtl {
 			
 		switch ($row['command']) {
 		case 'restart':
+			
+			// terminate if this is not a "fresh"/"new" process
+			if (is_object($mailer)) {
+				$mailer->SmtpClose();
+				PommoMailCtl::kill('Mailing with serial '.$serial.' terminated'); 
+			}
+			
 			$query = "
 				UPDATE ". $dbo->table['mailing_current']."
 				SET
@@ -93,6 +101,8 @@ class PommoMailCtl {
 			break;
 	
 		case 'stop':
+			if (is_object($mailer))
+				$mailer->SmtpClose();
 			$query = "
 				UPDATE ". $dbo->table['mailing_current']."
 				SET
