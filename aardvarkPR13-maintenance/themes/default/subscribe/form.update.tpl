@@ -17,8 +17,10 @@
 <div>
 <label class="required" for="email2">{t}Verify Email:{/t}</label>
 <input type="text" class="text" size="32" maxlength="60" name="email2" id="email2" value="{$email2}" />
+</div>
 
 {foreach name=demos from=$fields key=key item=demo}
+<div>
 <label{if $demo.required} class="required"{/if} for="field{$key}">{$demo.prompt}</label>
 
 {if $demo.type == 'text'}
@@ -40,6 +42,7 @@
 {t}Unsupported Field Type{/t}
 
 {/if}
+</div>
 
 {/foreach}
 
