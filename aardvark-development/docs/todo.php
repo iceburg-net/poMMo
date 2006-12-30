@@ -53,6 +53,8 @@ Add http://www.pommo.org/community/viewtopic.php?pid=1609#p1609  JP Charset
 	SHORT TERM: 
 	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
 	  
+	  (API) Maintenance : clean out old/not utilized activations from subscriber_update
+	  
 	  (feature) add message templating
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
 	  (feature) Add OR to group filtering

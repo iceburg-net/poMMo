@@ -57,6 +57,16 @@ function PommoRevUpgrade($rev) {
 				return false;
 		case 27 : // Aardvark PR14.1
 			// (gets executed ) echo 'xxx';
+			
+			CREATE TABLE :::subscriber_update::: (
+  `email` varchar(60) NOT NULL,
+  `code` char(32) NOT NULL ,
+  `activated` datetime NULL default NULL ,
+  `touched` timestamp(14) NOT NULL,
+PRIMARY KEY ( `email` )
+);
+
+
 			break;
 		default: 
 			return false;

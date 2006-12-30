@@ -346,5 +346,20 @@ class PommoPending {
 		
 	}
 	
+	// validates a activation code for an email address
+	// accepts a activation code (str) || false
+	// accepts a email address (str)
+	// returns (bool) if code OR if was accepted (true if so)
+	//  NOTE: has the magic functionality of setting the state timeline
+	function actCodeTry($code = FALSE, $email) {
+		
+		// lookup code ++ subscriber ++ act state
+		
+		
+		// if exists, make sure request is timely -- expire @ 12 hours
+		
+		
+	}
+	
 }
 ?>

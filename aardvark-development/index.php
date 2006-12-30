@@ -79,7 +79,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		// see if there is already a pending request for the administrator [subscriber id == 0]
 		if (PommoPending::isPending(0)) {
 			$input = urlencode(serialize(array('adminID' => TRUE, 'Email' => $pommo->_config['admin_email'])));
-			Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'user/user_pending.php?input='.$input);
+			Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'user/pending.php?input='.$input);
 		}
 
 		// create a password change request, send confirmation mail
