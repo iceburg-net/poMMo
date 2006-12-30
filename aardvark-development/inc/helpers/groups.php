@@ -33,7 +33,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	var $_name; // name of group
  	var $_group; // the group object
  	var $_tally; // the group tally
- 	var $_status; // subscriber status (0(inactive),1(active),2(pending),'any'/NULL)
+ 	var $_status; // subscriber status (0(inactive),1(active),2(pending))
  	var $_memberIDs; // array of member IDs (if group is numeric)
  	var $_id; // ID of bgroup
  	
@@ -175,7 +175,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	
 	// gets the members of a group
 	// accepts a group object (array)
-	// accepts filter by status (str) either 1 (active) (default), 0 (inactive), 2 (pending) or 'all'/NULL (any/all)
+	// accepts filter by status (str) either 1 (active) (default), 0 (inactive), 2 (pending) 
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns an array of subscriber IDs
 	function & getMemberIDs($group, $status = 1) {
@@ -190,18 +190,16 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		foreach($group['criteria'] as $c)
 			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
 
-		if (!empty($status)) {
-			if (!isset($f['subscribers']))
-				$f['subscribers'] = array();
-			$f['subscribers']['status'] = array("equal: ".$status);
-		}
+		if(!is_numeric($status))
+			Pommo::kill('Invalid status passed to getMemberIDs()', TRUE);
+		$f['subscribers'] = array('status' => array("equal: $status"));
 		
 		return PommoSubscriber::getIDByAttr($f);
 	}
 	
 	// Returns the # of members in a group
 	// accepts a group object (array)
-	// accepts filter by status (str) either 1 (active) (default), 0 (inactive), 2 (pending) or 'all'/NULL (any/all)
+	// accepts filter by status (int) either 1 (active) (default), 0 (inactive), 2 (pending)
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns a tally (int)
 	function & tally($group, $status = 1) {
@@ -216,12 +214,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		
 		foreach($group['criteria'] as $c)
 			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
-
-		if (!empty($status)) {
-			if (!isset($f['subscribers']))
-				$f['subscribers'] = array();
-			$f['subscribers']['status'] = array("equal: ".$status);
-		}
+			
+		if(!is_numeric($status))
+			Pommo::kill('Invalid status passed to tally()', TRUE);
+		$f['subscribers'] = array('status' => array("equal: $status"));
 		
 		$sql = array('where' => array(), 'join' => array());
 		if (!empty($f['subscribers']))

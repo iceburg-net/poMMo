@@ -34,7 +34,7 @@ $smarty->prepareForSubscribeForm();
 
 $_POST['Email'] = $smarty->get_template_vars('Email');
 
-$subscriber = current(PommoSubscriber::get(array('email' => $_POST['Email'])));
+$subscriber = current(PommoSubscriber::get(array('email' => $_POST['Email'], 'status' => 1)));
 
 if (empty($subscriber))
 	Pommo::redirect('login.php');

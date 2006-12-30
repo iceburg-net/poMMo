@@ -83,9 +83,10 @@ class PommoHelper {
 	}
 	
 	// checks to see if an email address exists in the system
+	//  only includes active && pending subscribers
 	// accepts a single email (str) or array of emails
-	// returns an array of found emails. (will be empty if none found).
-	function & emailExists(&$in) {
+	// returns an array of duplicate found emails. FALSE if no dupes were found. 
+	function & isDupe(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -95,11 +96,12 @@ class PommoHelper {
 		$query = "
 			SELECT email
 			FROM " . $dbo->table['subscribers'] ."
-			WHERE email IN (%q)";
+			WHERE email IN (%q)
+			AND status IN(1,2)";
 		$query = $dbo->prepare($query,array($in));
 		$o = $dbo->getAll($query, 'assoc', 'email');
 
-		return $o;
+		return (empty($o)) ? false : $o;
 	}
 	
 	// array_intersect_key requires PHP 5.1 +, here's a compat function --> (limited to 2 arrs)

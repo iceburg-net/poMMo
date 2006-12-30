@@ -137,9 +137,10 @@ class PommoTemplate extends Smarty {
 		}
 			
 		// process.php appends serialized values to _GET['input']
-		if (isset ($_GET['input'])) {
+		if (isset ($_GET['input'])) 
 			$this->assign(unserialize($_GET['input']));
-		}
+		elseif (isset($_GET['Email'])) 
+			$this->assign(array('Email' => $_GET['Email']));
 		
 		$this->assign($_POST);
 	}

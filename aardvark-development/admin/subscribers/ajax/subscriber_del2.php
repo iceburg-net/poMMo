@@ -41,7 +41,7 @@ if (isset($_POST['emails'])) {
 
 $c = 0;
 if (count($emails) > 0)  {
-	$ids = PommoSubscriber::getIDsByEmails($emails);
+	$ids = PommoSubscriber::getIDByEmail($emails);
 	$c = PommoSubscriber::delete($ids);
 }
 
