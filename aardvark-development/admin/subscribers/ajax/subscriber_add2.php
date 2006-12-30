@@ -32,8 +32,8 @@ function jsonKill($msg) {
 if (!PommoHelper::isEmail($_POST['Email']))
 	jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Invalid email.'));
 
-if(count(PommoHelper::emailExists($_POST['Email'])) > 0)
-		jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
+if(isDupe($_POST['Email']))
+	jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 
 $subscriber = array(
 	'email' => $_POST['Email'],

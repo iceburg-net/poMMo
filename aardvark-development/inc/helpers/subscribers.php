@@ -244,9 +244,9 @@ class PommoSubscriber {
 		return $o;
 	}
 	
-	// fetches a subscriber ID from an email
+	// fetches subscriber IDs from passed emails
 	// accepts a email address (str) or array of email addresses
-	// returns a subscriber ID (int) or false
+	// returns an array of subscriber IDs
 	function & getIDByEmail($email) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -254,24 +254,8 @@ class PommoSubscriber {
 		$query = "
 			SELECT subscriber_id
 			FROM " . $dbo->table['subscribers'] . "
-			WHERE email='%s'
-			LIMIT 1";
-		$query = $dbo->prepare($query,array($email));
-		return $dbo->query($query,0);
-	}
-	
-	// fetches subscriber IDs from passed emails
-	// accepts a array of email addresses
-	// returns an array of subscriber IDs
-	function & getIDsByEmails(&$emails) {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-		
-		$query = "
-			SELECT subscriber_id
-			FROM " . $dbo->table['subscribers'] . "
 			WHERE email IN (%q)";
-		$query = $dbo->prepare($query,array($emails));
+		$query = $dbo->prepare($query,array($email));
 		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	

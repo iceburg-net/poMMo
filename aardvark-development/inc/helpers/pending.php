@@ -94,6 +94,7 @@ class PommoPending {
 	}
 	
 	// get a pending entry from a email address
+	//  only includes active && pending subscribers
 	// accepts a pending code (str)
 	// returns pending object (array) or false if not found.
 	function & getByEmail($email = null){
@@ -111,6 +112,7 @@ class PommoPending {
 			WHERE 
 				s.subscriber_id = p.subscriber_id
 				AND s.email = '%s'
+				AND s.status IN(1,2) 
 			LIMIT 1";
 		$query = $dbo->prepare($query,array($email));
 		while ($row = $dbo->getRows($query)) 
@@ -120,6 +122,7 @@ class PommoPending {
 	}
 	
 	// get a pending entry from a subscriber ID
+	//  only includes active && pending subscribers
 	// accepts a subscriber ID (int)
 	// returns pending object (array) or false if not found.
 	function & getBySubID($id = null){
@@ -159,6 +162,7 @@ class PommoPending {
 	}
 	
 	// checks to see if a email has a pending request
+	//  only includes active && pending subscribers
 	// accepts a email (str)
 	// returns true if pending exists, false if not (bool)
 	function & isEmailPending($email = null){
@@ -174,6 +178,7 @@ class PommoPending {
 			WHERE 
 				s.subscriber_id = p.subscriber_id
 				AND s.email = '%s'
+				AND s.status IN(1,2) 
 			LIMIT 1";
 		$query = $dbo->prepare($query,array($email));
 		return ($dbo->query($query,0) > 0) ? true : false;

@@ -16,6 +16,19 @@ die();
 THROTTLER -> must return false every 10 seconds [no loops]...
 I checked in IE and FF and cannot get a mailings to delete out of history. I do not recall if this worked in RC1-RC3. I checked the demo site and it is the same way. It says "DELETE", but you cannot click on it!
 
+Frozen Mailings after 1 sent ? http://www.pommo.org/community/viewtopic.php?id=267
+
+----
+"Hello. I have upload a file with about 35.000 emails.
+
+All ok. But, after, when i need to select field i have this error:
+
+Fatal error: Maximum execution time of 30 seconds exceeded
+
+/inc/lib/safesql/SafeSQL.class.php on line 106"
+----
+
+Add http://www.pommo.org/community/viewtopic.php?pid=1609#p1609  JP Charset
 
 [BEFORE Aardvark Final]
 	+ Message Templating
@@ -78,6 +91,8 @@ I checked in IE and FF and cannot get a mailings to delete out of history. I do 
 	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
 	  (API) Better Organize inc/helpers/messages & validate... underutilized!
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
+	  
+	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
 	  
 	  
 	  (feature) Implement drag & drop between AND and OR filters (via table row handles)

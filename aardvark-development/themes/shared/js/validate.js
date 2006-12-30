@@ -81,7 +81,6 @@ var PommoValidate = {
 			case 'email' :
 				var r1 = /@.*@|\.\.|\,|\;/;
 				var r2 = /^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
-				
 				return (!r1.test(value) || !r2.test(value)) ? true : false;
 				break;
 		}

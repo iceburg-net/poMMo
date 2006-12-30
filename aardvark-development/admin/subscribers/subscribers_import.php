@@ -66,7 +66,7 @@ if(isset($_POST['submit'])) {
 			
 			// remove dupes
 			$a = array_unique($a);
-			$emails = array_diff($a, PommoHelper::emailExists($a));
+			$emails = array_diff($a, PommoHelper::isDupe($a));
 			
 			$pommo->set(array(
 				'emails' => $emails,
