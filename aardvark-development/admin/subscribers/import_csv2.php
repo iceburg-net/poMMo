@@ -48,7 +48,7 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 	if ($subscriber['email']) {
 		// check for dupe
 		// TODO -- DO THIS IN BATCH ??
-		if (PommoSubscriber::getDupes($subscriber['email'])) {
+		if (PommoHelper::isDupe($subscriber['email'])) {
 			$dupes++;
 			continue;
 		}
