@@ -1,28 +1,27 @@
-=== Release Notes for Aardvark PR14.1 ===
- <Released December 27, 2006>
+=== Release Notes for Aardvark PR14.2 ===
+ <Released December 31, 2006>
  
 [Additions]
 
-  * Added viewing of a mailings recent notices from the history page
-  * Re-Added upgrade script
-  * Added EN-UK translation
+  * Added ability to toggle a public mailings history page -- visible to public via;
+    http://www.yoursite.com/pommo/user/mailings.php (if enabled)
+  * Added favicon.ico (only used if installed on server root)
+  * Added "update activation" -- subscribers must verify their email before accessing records
 
 [Improvements]
   
-  * Attempt to use browser history to go back when  errors detected in subscriber form
-  * Updated Romanian Translation
-  * Theme CSS improvements
-  * Improved subscriber data validation
-  * Mailing notice logging greatly improved
+  * Javascript regex email check is now consistent with PommoHelper::isEmail()
+  * Typo and Spacing Fixes
+  * EN-UK Translation Update
+  * Increased subscriber's privacy through update activation
 
 [Bug Fixes]
 
-  * Fixed bug in mailing processor which confused throttle setting of BPS with MPS
-  * Max runtime test now works
-  * "Administrative"/hidden/inactive fields can be added via subscribe form
-  * Removed MySQL 5+ dependency from install DB schema
+  * Mailing processor now explicitly closes the SMTP session
+  * Unsubscribed members no longer show up in dupe checking and lookup functions
+  * Members can now unsubscribe themselves again
 
 [Security]
   
-  * Mailing Processor: SkipSecurity toggle is now disabled by default
+ * Safeguarded against script collisions when a mailing receives a restart command
   
