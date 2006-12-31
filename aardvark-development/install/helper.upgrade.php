@@ -67,6 +67,10 @@ function PommoRevUpgrade($rev) {
 			)"
 			,"Adding Update Activation Table")) return false;
 			
+			if (!PommoInstall::incUpdate(6,
+			"INSERT INTO {$dbo->table['config']} VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on')"
+			,"Adding configuration of Public Mailings")) return false;
+			
 			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 			PommoHelperMessages::resetDefault();
 			
