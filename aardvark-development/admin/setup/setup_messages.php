@@ -11,11 +11,13 @@
  * 
  ** [END HEADER]**/
  
+ // TODO -- This page is an optimized sludge... re-write! Too much code repetition, memory use.
+ 
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
 require('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/configuration.php');
+Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -36,10 +38,9 @@ $messages = array();
 // Check if user requested to restore defaults
 if (isset($_POST['restore'])) {
 	switch (key($_POST['restore'])) {
-		case 'subscribe' : $messages = PommoHelperConfig::messageResetDefault('subscribe'); break;
-		case 'unsubscribe' : $messages = PommoHelperConfig::messageResetDefault('unsubscribe'); break;
-		case 'password' : $messages = PommoHelperConfig::messageResetDefault('password'); break;
-		case 'update' : $messages = PommoHelperConfig::messageResetDefault('update'); break;
+		case 'subscribe' : $messages = PommoHelperMessages::messageResetDefault('subscribe'); break;
+		case 'activate' : $messages = PommoHelperMessages::resetDefault('activate'); break;
+		case 'unsubscribe' : $messages = PommoHelperMessages::resetDefault('unsubscribe'); break;
 	}
 	// reset _POST.
 	$_POST = array(); 
@@ -53,28 +54,17 @@ if (!SmartyValidate::is_registered_form() || empty($_POST)) {
 	SmartyValidate :: register_validator('subscribe_sub', 'Subscribe_sub', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('subscribe_msg', 'Subscribe_msg:!\[\[URL\]\]!i', 'isRegExp', false, false, 'trim');
 	SmartyValidate :: register_validator('subscribe_suc', 'Subscribe_suc', 'notEmpty', false, false, 'trim');
-	SmartyValidate :: register_validator('unsubscribe_sub', 'Unsubscribe_sub', 'notEmpty', false, false, 'trim');
-	SmartyValidate :: register_validator('unsubscribe_msg', 'Unsubscribe_msg:!\[\[URL\]\]!i', 'isRegExp', false, false, 'trim');
+	
+	SmartyValidate :: register_validator('activate_sub', 'Activate_sub', 'notEmpty', false, false, 'trim');
+	SmartyValidate :: register_validator('activate_msg', 'Activate_msg:!\[\[URL\]\]!i', 'isRegExp', false, false, 'trim');
+	
 	SmartyValidate :: register_validator('unsubscribe_suc', 'Unsubscribe_suc', 'notEmpty', false, false, 'trim');
-	SmartyValidate :: register_validator('update_sub', 'Update_sub', 'notEmpty', false, false, 'trim');
-	SmartyValidate :: register_validator('update_msg', 'Update_msg:!\[\[URL\]\]!i', 'isRegExp', false, false, 'trim');
-	SmartyValidate :: register_validator('update_suc', 'Update_suc', 'notEmpty', false, false, 'trim');
-	SmartyValidate :: register_validator('password_sub', 'Password_sub', 'notEmpty', false, false, 'trim');
-	SmartyValidate :: register_validator('password_msg', 'Password_msg:!\[\[URL\]\]!i', 'isRegExp', false, false, 'trim');
-	SmartyValidate :: register_validator('password_suc', 'Password_suc', 'notEmpty', false, false, 'trim');
+	
 	
 	$formError = array();
-	$formError['subscribe_sub'] = $formError['subscribe_suc'] =
-	$formError['unsubscribe_sub'] = $formError['unsubscribe_suc'] =
-	$formError['update_sub'] = $formError['update_suc'] =
-	$formError['password_sub'] = $formError['password_suc'] =
-	 Pommo::_T('Cannot be empty.');
-	 
-	$formError['subscribe_msg'] =
-	$formError['unsubscribe_msg'] =
-	$formError['update_msg'] =
-	$formError['password_msg'] =
-	 Pommo::_T('You must include "[[URL]]" for the confirm link');
+	$formError['empty'] = Pommo::_T('Cannot be empty.');
+	$formError['url'] =	 Pommo::_T('You must include "[[URL]]" for the confirm link');
+	
 	$smarty->assign('formError',$formError);
 	
 	// populate _POST with info from database (fills in form values...)
@@ -82,7 +72,7 @@ if (!SmartyValidate::is_registered_form() || empty($_POST)) {
 		$dbvalues = PommoAPI::configGet(array('messages'));
 		
 		if (empty($dbvalues['messages'])) 
-			$messages = PommoHelperConfig::messageResetDefault('all'); 
+			$messages = PommoHelperMessages::resetDefault('all'); 
 		else
 			$messages = unserialize($dbvalues['messages']);
 	}
@@ -92,20 +82,14 @@ if (!SmartyValidate::is_registered_form() || empty($_POST)) {
 		$_POST['Subscribe_sub'] = $messages['subscribe']['sub'];
 		$_POST['Subscribe_suc'] = $messages['subscribe']['suc'];
 	}
+	
+	if (isset($messages['activate'])) {
+		$_POST['Activate_msg'] = $messages['activate']['msg'];
+		$_POST['Activate_sub'] = $messages['activate']['sub'];
+	}
+	
 	if (isset($messages['unsubscribe'])) {
-		$_POST['Unsubscribe_msg'] = $messages['unsubscribe']['msg'];
-		$_POST['Unsubscribe_sub'] = $messages['unsubscribe']['sub'];
 		$_POST['Unsubscribe_suc'] = $messages['unsubscribe']['suc'];
-	}
-	if (isset($messages['password'])) {
-		$_POST['Password_msg'] = $messages['password']['msg'];
-		$_POST['Password_sub'] = $messages['password']['sub'];
-		$_POST['Password_suc'] = $messages['password']['suc'];
-	}
-	if (isset($messages['update'])) {
-		$_POST['Update_msg'] = $messages['update']['msg'];
-		$_POST['Update_sub'] = $messages['update']['sub'];
-		$_POST['Update_suc'] = $messages['update']['suc'];
 	}
 	
 }
@@ -122,20 +106,12 @@ else {
 		$messages['subscribe']['sub'] = $_POST['Subscribe_sub'];
 		$messages['subscribe']['suc'] = $_POST['Subscribe_suc']; 
 		
+		$messages['activate'] = array();
+		$messages['activate']['msg'] = $_POST['Activate_msg']; 
+		$messages['activate']['sub'] = $_POST['Activate_sub']; 
+		
 		$messages['unsubscribe'] = array();
-		$messages['unsubscribe']['msg'] = $_POST['Unsubscribe_msg']; 
-		$messages['unsubscribe']['sub'] = $_POST['Unsubscribe_sub']; 
 		$messages['unsubscribe']['suc'] = $_POST['Unsubscribe_suc']; 
-		
-		$messages['password'] = array();
-		$messages['password']['msg'] = $_POST['Password_msg']; 
-		$messages['password']['sub'] = $_POST['Password_sub']; 
-		$messages['password']['suc'] = $_POST['Password_suc']; 
-		
-		$messages['update'] = array();
-		$messages['update']['msg'] = $_POST['Update_msg']; 
-		$messages['update']['sub'] = $_POST['Update_sub']; 
-		$messages['update']['suc'] = $_POST['Update_suc']; 
 		
 		$input = array('messages' => serialize($messages));
 		PommoAPI::configUpdate( $input, TRUE);

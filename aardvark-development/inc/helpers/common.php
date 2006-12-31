@@ -91,7 +91,7 @@ class PommoHelper {
 		$dbo =& $pommo->_dbo;
 		
 		if(empty($in))
-			return true;
+			return false;
 
 		$query = "
 			SELECT email

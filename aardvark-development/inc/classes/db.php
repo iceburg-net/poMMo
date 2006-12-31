@@ -48,6 +48,7 @@ class PommoDB {
 			'mailings' => $tablePrefix . 'mailings',
 			'subscriber_data' => $tablePrefix . 'subscriber_data',
 			'subscriber_pending' => $tablePrefix . 'subscriber_pending',
+			'subscriber_update' => $tablePrefix . 'subscriber_update',
 			'subscribers' => $tablePrefix . 'subscribers',
 			'queue' => $tablePrefix . 'queue',
 			'updates' => $tablePrefix . 'updates');		

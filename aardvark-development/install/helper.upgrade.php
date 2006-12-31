@@ -56,17 +56,26 @@ function PommoRevUpgrade($rev) {
 			if (!PommoAPI::configUpdate(array('revision' => 27), true))
 				return false;
 		case 27 : // Aardvark PR14.1
-			// (gets executed ) echo 'xxx';
 			
-			CREATE TABLE :::subscriber_update::: (
-  `email` varchar(60) NOT NULL,
-  `code` char(32) NOT NULL ,
-  `activated` datetime NULL default NULL ,
-  `touched` timestamp(14) NOT NULL,
-PRIMARY KEY ( `email` )
-);
-
-
+			if (!PommoInstall::incUpdate(5,
+			"CREATE TABLE {$dbo->table['subscriber_update']} (
+				`email` varchar(60) NOT NULL,
+  				`code` char(32) NOT NULL ,
+  				`activated` datetime NULL default NULL ,
+  				`touched` timestamp(14) NOT NULL,
+				PRIMARY KEY ( `email` )
+			)"
+			,"Adding Update Activation Table")) return false;
+			
+			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+			PommoHelperMessages::resetDefault();
+			
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 28), true))
+				return false;
+		
+		case 28 : // Aardvark PR14.2
+			// gets executed
 			break;
 		default: 
 			return false;

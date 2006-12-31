@@ -14,7 +14,7 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-require ('../bootstrap.php');\
+require ('../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
 
@@ -28,36 +28,32 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-$subscriber = current(PommoSubscriber::get(array('email' => $_REQUEST['Email'], 'status' => 1)));
-
 // make sure email be valid
-if (empty($subscriber))
+$email = $_REQUEST['Email'];
+if (!PommoHelper::isDupe($email))
 	Pommo::redirect('login.php');
-	
 
 // verify activation code (if sent) || that user is not already activated
-$code = (isset($_GET['codeTry'])) ? $_GET['codeTry'] : false;
-if (PommoPending::actCodeTry($subscriber['email']) {
-	$input = urlencode(serialize(array('Email' => $subscriber['email'])));
+$code = (isset($_GET['codeTry'])) ? $_GET['code'] : false;
+if (PommoPending::actCodeTry($code, $email)) {
+	$input = urlencode(serialize(array('Email' => $email)));
 	Pommo::redirect('update.php?input='.$input);
 }
-if ($code)
+if ($code !== false)
 	$logger->addErr(Pommo::_T('Invalid Activation Code!'));
 
 
-// check to see if activation code exists  --- returns false if no act code for this email.. or the code if it exists
-$code = PommoPending::actCodeSent($subscriber['email']);
-if (!$code)
-	$code = PommoHelper::makeCode();
-
 // check for request to send activation code
 if (!empty($_GET['send'])) {
+	$code = PommoPending::actCodeGet($email);
 	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-	PommoHelperMessages::sendConfirmation($subscriber['email'], $code, 'activate');
-	$logger->addMsg(Pommo::_T('Activation request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+	if (!PommoHelperMessages::sendConfirmation($email, $code, 'activate'))
+		$logger->addErr(Pommo::_T('Error sending mail')); 
+	else
+		$logger->addMsg(Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 }
 
-$smarty->assign('Email', $subscriber['email']);
+$smarty->assign('Email', $email);
 $smarty->display('user/update_activate.tpl');
 Pommo::kill();
 ?>

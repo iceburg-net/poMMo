@@ -94,8 +94,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				PommoAPI::configUpdate(array('key' => $key),TRUE);
 
 				// load configuration [depricated?], set message defaults.
-				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/configuration.php');
-				PommoHelperConfig::messageResetDefault('all');
+				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
+				PommoHelperMessages::resetDefault('all');
 
 				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');
