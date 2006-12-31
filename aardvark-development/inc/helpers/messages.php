@@ -80,8 +80,8 @@ class PommoHelperMessages {
 		
 		if ($section == 'all' || $section == 'activate') {
 		$messages['activate'] = array();
-		$messages['activate']['msg'] =  sprintf(Pommo::_T('You have requested to activate your records for %s.'),$pommo->_config['list_name'])."\r\n\r\n".sprintf(Pommo::_T('Your activation code is %s'),"[[CODE]]\r\n\r\n").Pommo::_T('You can access your records by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
-		$messages['activate']['sub'] = Pommo::_T('Please verify your email'); 
+		$messages['activate']['msg'] =  sprintf(Pommo::_T('You have requested to activate your records for %s.'),$pommo->_config['list_name']).' '.sprintf(Pommo::_T('Your activation code is %s'),"[[CODE]]\r\n\r\n").Pommo::_T('You can access your records by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['activate']['sub'] = Pommo::_T('Verify your address'); 
 		}
 		
 		
