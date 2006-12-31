@@ -94,18 +94,18 @@ if (!empty ($_POST['update'])) {
 	}
 }
 elseif (!empty ($_POST['unsubscribe'])) {
-	$subscriber = array(
+	$newsub = array(
 		'id' => $subscriber['id'],
-		'status' => 0
+		'status' => 0,
+		'data' => array()
 	);
-	if (!PommoSubscriber::update($subscriber, FALSE))
+	if (!PommoSubscriber::update($newsub, FALSE))
 		$logger->addErr('Error updating subscriber.');
 	else {
 		$dbvalues = PommoAPI::configGet(array('messages'));
 		$messages = unserialize($dbvalues['messages']);
 		$logger->addMsg($messages['unsubscribe']['suc']);
 		$smarty->assign('unsubscribe', TRUE);
-		
 		PommoPending::actCodeDie($subscriber['email']);
 	}
 }
