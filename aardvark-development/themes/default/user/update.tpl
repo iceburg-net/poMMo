@@ -1,7 +1,10 @@
-{if $datePicker}{capture name=head}
-{* used to inject content into the HTML <head> *}
+{capture name=head}{* used to inject content into the HTML <head> *}
+{if $datePicker}
 {include file="`$config.app.path`themes/shared/datepicker/datepicker.tpl"}
-{/capture}{/if}
+{else}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+{/if}
+{/capture}
 {include file="inc/tpl/user.header.tpl"}
 
 <h3>{t}Subscriber Update{/t}</h3>
@@ -19,12 +22,23 @@
 
 <div class="buttons">
 
-<button type="submit" name="unsubscribe" value="true">
+<button type="submit" name="unsubscribe" value="true" class="warn">
 <img src="{$url.theme.shared}images/icons/nok.png" alt="not ok icon" /> {t}Click to unsubscribe{/t} {$Email}
 </button>
 
 </div>
 
 </form>
+
+{literal}
+<script type="text/javascript">
+$().ready(function() {
+	$('.warn').click(function() {
+		var str = this.innerHTML;
+		return confirm("{/literal}{t}Really unsubscribe?{/t}{literal}");
+	});
+});
+</script>
+{/literal}
 
 {include file="inc/tpl/user.footer.tpl"}
