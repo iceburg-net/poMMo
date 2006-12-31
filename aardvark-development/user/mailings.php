@@ -21,7 +21,7 @@ $config = PommoAPI::configGet('public_history');
 if($config['public_history'] == 'on') {
 	$pommo->init(array('authLevel' => 0));
 } else {
-	$pommo->init();	
+	Pommo::redirect('login.php');
 }
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
@@ -76,12 +76,11 @@ foreach(array_keys($mailings) as $key) {
 		$m['mph'] = 0;
 }
 
-
 $smarty->assign('pagelist',$pagelist);
 $smarty->assign('state',$state);
 $smarty->assign('mailings', $mailings);
 $smarty->assign('tally',$tally); // was "rowinset"
 
-$smarty->display('user/mailings_history.tpl');
+$smarty->display('user/mailings.tpl');
 Pommo::kill();
 ?>

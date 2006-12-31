@@ -66,11 +66,12 @@
 </div>
 
 <div>
-<label for="list_confirm">{t}Make History Public:{/t} </label>
+<label for="list_confirm">{t}Public Mailings{/t} </label>
 <input type="radio" name="public_history" value="on"{if $public_history == 'on'} checked="checked"{/if} /> on
 <input type="radio" name="public_history" value="off"{if $public_history != 'on'} checked="checked"{/if} /> off
-<span class="notes">{t}(Makes the history of mailings available to the public.){/t}</span>
+<span class="notes">{t escape=no 1="<a href='`$url.base`user/mailings.php'>" 2='</a>'}(When on, the public can view past mailings at this %1URL%2){/t}</span>
 </div>
+
 
 </fieldset>
 
