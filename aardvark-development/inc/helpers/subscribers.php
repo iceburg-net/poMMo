@@ -456,18 +456,18 @@ class PommoSubscriber {
 		if (!$dbo->query($query) || ($dbo->affected() != 1))
 				return false;
 		
-		
 		// if this is "full", delete all. otherwise delete FIDs.
-		$select = ($full) ? null : array_keys($in['data']);
-		
-		$query = "
-			DELETE
-			FROM " . $dbo->table['subscriber_data'] . "
-			WHERE subscriber_id=%i
-			[AND field_id IN (%C)]";
-		$query = $dbo->prepare($query,array($in['id'], $select));
-		if (!$dbo->query($query))
-				return false;
+		if (!empty($in['data']) || $full) {
+			$select = ($full) ? null : array_keys($in['data']);
+			$query = "
+				DELETE
+				FROM " . $dbo->table['subscriber_data'] . "
+				WHERE subscriber_id=%i
+				[AND field_id IN (%C)]";
+			$query = $dbo->prepare($query,array($in['id'], $select));
+			if (!$dbo->query($query))
+					return false;
+		}
 		
 		$values = array();
 		foreach ($in['data'] as $field_id => $value)

@@ -244,7 +244,6 @@ class PommoPending {
 		return $pending['code'];
 	}
 	
-	
 	// removes a pending entry
 	// accepts a pending object (array)
 	// return success (bool)
@@ -295,19 +294,6 @@ class PommoPending {
 					return false;
 				}
 				break;
-				
-			case 'del': // unsubscribe
-				$query = "
-					UPDATE ".$dbo->table['subscribers']."
-					SET status=0
-					WHERE subscriber_id=%i";
-				$query = $dbo->prepare($query,array($in['subscriber_id']));
-				if (!$dbo->query($query)) {
-					$logger->addErr('PommoPending::delete() -> Error updating subscriber.');
-					return false;
-				}
-				break;
-				
 			case 'change': // update
 				$pommo->requireOnce($pommo->_baseDir. 'inc/helpers/subscribers.php');
 				$subscriber =& $in['array'];
@@ -346,19 +332,81 @@ class PommoPending {
 		
 	}
 	
-	// validates a activation code for an email address
+	// checks activation state of an email address
 	// accepts a activation code (str) || false
 	// accepts a email address (str)
-	// returns (bool) if code OR if was accepted (true if so)
+	// returns (bool) true if code was accepted || if user email is active
 	//  NOTE: has the magic functionality of setting the state timeline
 	function actCodeTry($code = FALSE, $email) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
 		
-		// lookup code ++ subscriber ++ act state
+		$query = "
+			SELECT email, code, activated FROM {$dbo->table['subscriber_update']}
+			WHERE email='%s'";
+		$query = $dbo->prepare($query,array($email));
+		$row = mysql_fetch_assoc($dbo->query($query));
+		if (empty($row))
+			return false;
 		
+		// email is already activated
+		if(!empty($row['activated'])) {
+			// make sure it is not expired
+			if ((time() - strtotime($row['activated'])) > (60*60*12)) {
+				die($row['activated']);
+				if (basename($_SERVER['PHP_SELF']) == 'update.php')
+					Pommo::redirect('update_activate.php?Email='.$email);
+				
+				PommoPending::actCodeDie($email);
+				$logger->addMsg(Pommo::_T('Activation Expired. You must re-verify your email.'));
+				return false;
+			}
+			return true;
+		}
 		
-		// if exists, make sure request is timely -- expire @ 12 hours
+		if($code && $code == $row['code']) {
+			$query = "
+				UPDATE {$dbo->table['subscriber_update']} 
+				SET activated=FROM_UNIXTIME(%i) 
+				WHERE email='%s'";
+			$query = $dbo->prepare($query,array(time(),$email));
+			$dbo->query($query);
+			return true;
+		}
+		return false;
+	}
+	
+	// creates (if !exists) && returns an activation code for an email
+	function actCodeGet($email) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
 		
+		$query = "SELECT code FROM {$dbo->table['subscriber_update']} WHERE email='%s'";
+		$query = $dbo->prepare($query,array($email));
+		$code = $dbo->query($query,0);
 		
+		if(!$code) {
+			$code = PommoHelper::makeCode();
+			$query = "
+				INSERT INTO {$dbo->table['subscriber_update']} 
+				(code,email, activated) VALUES ('%s','%s', NULL)";
+			$query = $dbo->prepare($query,array($code,$email));
+			if (!$dbo->query($query))
+				Pommo::kill('Error adding activation code to DB');
+		}
+		
+		return $code;
+	}
+	
+	// kills a activation code for email address
+	function actCodeDie($email) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "DELETE FROM {$dbo->table['subscriber_update']} WHERE email='%s'";
+		$query = $dbo->prepare($query,array($email));
+		return $dbo->query($query);
 	}
 	
 }

@@ -44,19 +44,19 @@ if (!empty ($_POST)) {
 		
 		switch ($pending['type']) {
 			case "add" :
-				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'subscribe');
+				$status = PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], 'subscribe');
 				break;
 			case "change" :
-				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'update');
-				break;
-			case "del" :
-				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'unsubscribe');
+				$status = PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], 'update');
 				break;
 			case "password" :
-				PommoHelperMessages::sendConfirmation($input['Email'], $pending['pending_code'], 'password');
+				$status = PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], 'password');
 				break;
 		}
-		$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['Email']));
+		if (!$status) 
+			$logger->addErr(Pommo::_T('Error sending mail'));
+		else
+			$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['Email']));
 	} elseif (isset($_POST['cancel'])) {
 		PommoPending::cancel($pending);
 		$logger->addMsg(Pommo::_T('Your pending request has been cancelled.'));		
@@ -65,7 +65,6 @@ if (!empty ($_POST)) {
 } else {
 	switch ($pending['type']) {
 		case "add" :
-		case "del" :
 		case "change" :
 		case "password" :
 			$logger->addMsg(Pommo::_T('You have pending changes. Please respond to your confirmation email'));
@@ -74,6 +73,6 @@ if (!empty ($_POST)) {
 			$logger->addErr(sprintf(Pommo::_T('Please Try Again! %s login %s'), '<a href="' . $pommo->_baseUrl . 'user/login.php">', '</a>'));
 	}
 }
-$smarty->display('user/user_pending.tpl');
+$smarty->display('user/pending.tpl');
 Pommo::kill();
 ?>
