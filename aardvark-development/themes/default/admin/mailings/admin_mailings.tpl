@@ -11,7 +11,6 @@
 
 <div>
 <a href="{$url.base}admin/mailings/mailings_history.php"><img src="{$url.theme.shared}images/icons/history.png" alt="calendar icon" class="navimage" />{t}History{/t}</a> - {t}View mailings that have already been sent.{/t}
-iew mailings that have already been sent. 
 </div>
 
 </div>
