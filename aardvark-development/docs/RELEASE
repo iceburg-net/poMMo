@@ -24,4 +24,3 @@
 [Security]
   
  * Safeguarded against script collisions when a mailing receives a restart command
-  

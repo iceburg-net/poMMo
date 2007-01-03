@@ -18,6 +18,10 @@ I checked in IE and FF and cannot get a mailings to delete out of history. I do 
 
 Frozen Mailings after 1 sent ? http://www.pommo.org/community/viewtopic.php?id=267
 
+Test mailing exchanger from setup > configure page
+
+Try to remove PHP notices
+
 ----
 "Hello. I have upload a file with about 35.000 emails.
 
