@@ -227,18 +227,20 @@ class PommoMailCtl {
 		$dbo =& $pommo->_dbo;
 	
 		if(!empty($reason))
-			$logger->addMsg('Script Ending: ' . $reason, 2);
+			$logger->addMsg('Script Ending: ' . $reason, 2);	
 			
+		echo 'REASON! '.$reason;
+	
 		// release queue items allocated to this relayID
 		PommoMailCtl::queueRelease($relayID);
 		
 		// add notices
 		PommoMailCtl::addNotices($mailingID);
-			
+		
 		if ($killSession)
 			session_destroy();
 			
-		Pommo::kill();
+		Pommo::kill($reason);
 	}
 	
 	// allocates part of the queue to a relay

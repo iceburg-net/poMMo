@@ -73,15 +73,15 @@ class PommoLog {
 		return $msgs;
 	}
 	
-	function & getMsg($limit = FALSE, $clear = TRUE) {
+	function getMsg($limit = FALSE, $clear = TRUE) {
 		return $this->Get($limit,$clear,$this->_messages);
 	}
 	
-	function & getErr($limit = FALSE, $clear = TRUE) {
+	function getErr($limit = FALSE, $clear = TRUE) {
 		return $this->Get($limit,$clear,$this->_errors);
 	}
 	
-	function & getAll($limit = FALSE, $clear = TRUE) {
+	function getAll($limit = FALSE, $clear = TRUE) {
 		return array_merge($this->Get($limit,$clear,$this->_errors),$this->Get($limit,$clear,$this->_messages));
 	}
 	

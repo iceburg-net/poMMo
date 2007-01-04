@@ -14,7 +14,6 @@ die();
 ?>
 
 THROTTLER -> must return false every 10 seconds [no loops]...
-I checked in IE and FF and cannot get a mailings to delete out of history. I do not recall if this worked in RC1-RC3. I checked the demo site and it is the same way. It says "DELETE", but you cannot click on it!
 
 Frozen Mailings after 1 sent ? http://www.pommo.org/community/viewtopic.php?id=267
 
@@ -23,8 +22,6 @@ Test mailing exchanger from setup > configure page
 Try to remove PHP notices
 
 Toggle gettext emulation (phpgettext)
-
-Block PHP notices/errors @ AJAX pages -- only if verbosity > 1
 
 ----
 "Hello. I have upload a file with about 35.000 emails.
@@ -64,7 +61,10 @@ Add http://www.pommo.org/community/viewtopic.php?pid=1609#p1609  JP Charset
 	  (API) Maintenance : clean out old/not utilized activations from subscriber_update
 	  
 	  (feature) add message templating
+	  
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
+	  (enhancement) Setup > Config tabbed layout
+	  
 	  (feature) Add OR to group filtering
 	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
 	  	+ Use http://interface.eyecon.ro/demos/sort_example.html  to move between && or ||

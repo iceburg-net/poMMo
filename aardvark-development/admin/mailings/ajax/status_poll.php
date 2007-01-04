@@ -61,11 +61,6 @@ else
 // get the old timestamp
 $timestamp = $pommo->get('timestamp');
 
-// for debugging -- can be removed @ later versions
-$json['timeStamp'] = $timestamp;
-$json['touched'] = @$mailing['touched'];
-// end debug
-
 if (empty($timestamp))
 	$timestamp = @$mailing['touched']; // get retuns a blank array -- not false
 
@@ -74,7 +69,7 @@ if ($json['status'] != 4) {
 		$json['incAttempt'] = TRUE;
 	if ($mailing['command'] != 'none')
 		$json['command'] = TRUE;
-	if ($_GET['attempt'] > 3)
+	if ($_GET['attempt'] > 4)
 		$json['status'] = 3;
 }
 

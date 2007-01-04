@@ -88,10 +88,9 @@ if (empty($input['config'])) {
 		'throttle_DBPP'
 	));
 	$config =& $input['config'];
+	$config['multimode'] = false;
 
 	if ($config['list_exchanger'] == 'smtp') {
-		
-		$config['multimode'] = false;
 		
 		if (!empty ($config['smtp_1'])) {
 			$config['smtp_1'] = unserialize($config['smtp_1']);
@@ -232,7 +231,7 @@ $emailHash = array(); // used to quickly lookup subscriberID based off email
 foreach($subscribers as $s) {
 	array_push($emails, array(
 		$s['email'],
-		substr($email,strpos($email,'@')+1)
+		substr($s['email'],strpos($s['email'],'@')+1)
 		)
 	);
 	$emailHash[$s['email']] = $s['id'];
@@ -247,21 +246,22 @@ $tid = ($config['throttle_SMTP'] == 'shared') ? 1 : $relayID;
 if(empty($pommo->_session['throttler'][$tid]))
 	$pommo->_session['throttler'] = array (
 		$tid => array(
-			'MPS' => $config['throttle_MPS'],
-			'BPS' => $config['throttle_BPS'],
-			'DP' => $config['throttle_DP'],
-			'DMPP' => $config['throttle_DMPP'],
-			'DBPP' => $config['throttle_DBPP'],
+			'base' => array(
+				'MPS' => $config['throttle_MPS'],
+				'BPS' => $config['throttle_BPS'],
+				'DP' => $config['throttle_DP'],
+				'DMPP' => $config['throttle_DMPP'],
+				'DBPP' => $config['throttle_DBPP'],
+				'genesis' => time()
+			),
 			'domainHistory' => array(),
-			'genesis' => time(),
-			'runtime' => $maxRunTime,
-			'sent' => 0.0,
-			'sentBytes' => 0.0
+			'sent' => floatval(0),
+			'sentBytes' => floatval(0)
 			)
 		);
 		
 $throttler =& new PommoThrottler(
-	$pommo->_session['throttler'][$tid], 
+	$pommo->_session['throttler'][$tid]['base'], 
 	$emails, 
 	$pommo->_session['throttler'][$tid]['domainHistory'], 
 	$pommo->_session['throttler'][$tid]['sent'],
@@ -311,15 +311,13 @@ while(!$die) {
 			$logger->addMsg('Added ' . $bytes . ' bytes to throttler.', 1);
 		}
 	}
-	elseif ($throttler->getCommand() == 2) // kill command received
-		$die = TRUE;
 	
-	// check if there's any mails in the
-	if (!$throttler->mailsInQueue())
+	// check if there's any mails in the || we've exceeded max runtime
+	if (!$throttler->mailsInQueue() || (time() - $start) > $maxRunTime)
 		$die = TRUE;
 		
-	// update & poll every 7 seconds || if logger is large
-	if (((time() - $timer) > 7)) {
+	// update & poll every 10 seconds || if logger is large
+	if (!$die && ((time() - $timer) > 9) || count($logger->_messages) > 40) {
 		PommoMailCtl::update($sent, $failed, $emailHash);
 		PommoMailCtl::poll();
 		
