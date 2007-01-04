@@ -57,7 +57,7 @@ class PommoSubscriber {
 	// accepts a flag (bool) to designate return of a pending subscriber type
 	// return a subscriber object (array)
 	function & makeDB(&$row, $pending = FALSE) {
-		$in = array(
+		$in = @array(
 		'id' => $row['subscriber_id'],
 		'email' => $row['email'],
 		'touched' => $row['time_touched'],
@@ -340,7 +340,7 @@ class PommoSubscriber {
 			flag=%i,
 			ip=INET_ATON('%s'),
 			status=%i";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$id,
 			$in['email'],
 			$in['registered'],
@@ -363,7 +363,7 @@ class PommoSubscriber {
 			subscriber_id=%i,
 			pending_code='%s',
 			pending_type='%s'";
-			$query = $dbo->prepare($query,array(
+			$query = $dbo->prepare($query,@array(
 				$in['pending_array'],
 				$id,
 				$in['pending_code'],
@@ -445,7 +445,7 @@ class PommoSubscriber {
 			[flag=%I,]
 			time_touched=CURRENT_TIMESTAMP
 			WHERE subscriber_id=%i";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$in['email'],
 			$in['registered'],
 			$in['ip'],

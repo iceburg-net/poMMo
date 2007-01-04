@@ -22,6 +22,10 @@ Test mailing exchanger from setup > configure page
 
 Try to remove PHP notices
 
+Toggle gettext emulation (phpgettext)
+
+Block PHP notices/errors @ AJAX pages -- only if verbosity > 1
+
 ----
 "Hello. I have upload a file with about 35.000 emails.
 

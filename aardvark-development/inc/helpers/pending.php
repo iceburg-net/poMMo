@@ -29,7 +29,7 @@ class PommoPending {
 	// accepts a pending template (assoc array)  
 	// return a pending object (array)
 	function & makeDB(&$row) {
-		$in = array(
+		$in = @array(
 		'id' => $row['pending_id'],
 		'subscriber_id' => $row['subscriber_id'],
 		'code' => $row['pending_code'],

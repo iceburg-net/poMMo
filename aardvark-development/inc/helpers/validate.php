@@ -54,7 +54,7 @@
 			
 			if (!isset($in[$id]) && $p['skipReq'])
 				continue;
-			$in[$id] = trim($in[$id]);
+			$in[$id] = @trim($in[$id]);
 			
 			if (empty($in[$id])) {
 				unset($in[$id]); // don't include blank values

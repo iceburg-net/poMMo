@@ -64,6 +64,7 @@ div.msgpreview {
 #barHead {
 	text-align: right;
 	font-weight: bold;
+	clear: right;
 }
 #barFoot {
 	width: 514px;

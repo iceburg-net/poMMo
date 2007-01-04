@@ -120,6 +120,7 @@ class PommoAPI {
 		$query = $dbo->prepare($query, array (array_keys($input), $force));
 
 		// update rows/options
+		$when = '';
 		while ($row = $dbo->getRows($query)) { // multi-row update in a single query syntax
 			$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($row['config_name'],$input[$row['config_name']])).' ';
 			$where[] = $row['config_name']; // limits multi-row update query to specific rows (vs updating entire table)

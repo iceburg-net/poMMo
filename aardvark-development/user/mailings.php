@@ -76,7 +76,6 @@ foreach(array_keys($mailings) as $key) {
 		$m['mph'] = 0;
 }
 
-$smarty->assign('pagelist',$pagelist);
 $smarty->assign('state',$state);
 $smarty->assign('mailings', $mailings);
 $smarty->assign('tally',$tally); // was "rowinset"

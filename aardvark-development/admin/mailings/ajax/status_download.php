@@ -13,7 +13,7 @@
 require('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
-$pommo->init();
+$pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 

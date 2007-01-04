@@ -29,7 +29,7 @@ class PommoType {
 	 *	field_required	('on','off')	If field is required for subscription
 	 *	field_type		(enum)			checkbox, multiple, text, date, number
 	 */
-	function & field() {
+	function field() {
 		return array(
 			'id' => null,
 			'active' => null,
@@ -57,7 +57,7 @@ class PommoType {
 	 *  logic			(enum)		'is','not','greater','less','true','false','is_in','not_in'
 	 *	value			(str)		Match Value
 	 */
-	function & group() {
+	function group() {
 		return array(
 			'id' => null,
 			'name' => null,
@@ -90,7 +90,7 @@ class PommoType {
 	 *	value			(str)			Subscriber's field value
 	 */
 	
-	function & subscriber() {
+	function subscriber() {
 		return array(
 			'id' => null,
 			'email' => null,
@@ -108,7 +108,7 @@ class PommoType {
 		return $o;
 	}
 	
-	function & pending() {
+	function pending() {
 		return array(
 			'id' => null,
 			'subscriber_id' => null,
@@ -147,7 +147,7 @@ class PommoType {
 	 *  current_status	(enum)		'started', 'stopped' (default)
 	 */
 	 
-	function & mailing() {
+	function mailing() {
 		return array(
 			'id' => null,
 			'fromname' => null,
