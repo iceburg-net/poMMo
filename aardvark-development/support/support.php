@@ -28,6 +28,9 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
 
+$smarty->assign('version',$pommo->_config['version']);
+$smarty->assign('revision',$pommo->_config['revision']);
+
 $smarty->display('support/support.tpl');
 Pommo::kill();
 ?>

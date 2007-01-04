@@ -1,8 +1,10 @@
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}{debug}
 
 <h2>{t}Support Page{/t}</h2>
 
 <p><a href="support.lib.php">poMMo Support Library</a></p>
+
+<p>poMMo version: {$version} +{$revision}</p>
 
 <p><i>Coming to a theatre near you</i></p>
 
