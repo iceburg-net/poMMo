@@ -118,9 +118,9 @@ class Pommo {
 
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
-
+		
 		// initialize database link
-		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
+		$this->_dbo = @new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 
 		// turn off debugging if in user area
 		if($this->_section == 'user') {
@@ -161,6 +161,9 @@ class Pommo {
 		if ($p['noDebug']) {
 			$this->_dbo->debug(FALSE);
 			$this->_debug = 'off';
+			
+			// don't display PHP error messages [useful JSON ajax request]
+			ini_set('display_errors', '0');
 		}
 
 		// Bypass Reading of Config, SESSION creation, and authentication checks and return
@@ -265,12 +268,11 @@ class Pommo {
 			$this->_session['data'] = array_merge($this->_session['data'], $value);
 	}
 
-	function & get($name = FALSE) {
-		if ($name) {
+	function get($name = FALSE) {
+		if ($name)
 			return (isset($this->_session['data'][$name])) ? 
-				$this->_session['data'][$name] : 
+				$this->_session['data'][$name] :
 				array();
-		}
 		return $this->_session['data'];
 	}
 	

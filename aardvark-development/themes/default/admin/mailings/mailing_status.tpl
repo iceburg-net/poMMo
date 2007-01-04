@@ -45,6 +45,7 @@
 
 </div>
 
+
 <div id="barHead">
 {t escape="no" 1='<span id="sent">0</span>'}%1 mails sent{/t}
 
@@ -98,19 +99,19 @@
 
 </div>
 
-<div class="hidden" id="stopped">
-
-<div class="first">
-
-<a class="cmd" href="#restart"><img src="{$url.theme.shared}images/icons/restart-small.png" alt="pause icon" /> {t}Resume Mailing{/t}</a>
-
-</div>
-
-<div class="second">
-
-<a class="cmd" href="#cancel">{t}Cancel Mailing{/t}	<img src="{$url.theme.shared}images/icons/stopped-small.png" alt="restart icon" /></a>
-
-</div>
+	<div class="hidden" id="stopped">
+	
+	<div class="first">
+	
+	<a class="cmd" href="#restart"><img src="{$url.theme.shared}images/icons/restart-small.png" alt="pause icon" /> {t}Resume Mailing{/t}</a>
+	
+	</div>
+	
+	<div class="second">
+	
+	<a class="cmd" href="#cancel">{t}Cancel Mailing{/t}	<img src="{$url.theme.shared}images/icons/stopped-small.png" alt="restart icon" /></a>
+	
+	</div>
 
 </div>
 

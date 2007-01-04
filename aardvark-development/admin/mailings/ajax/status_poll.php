@@ -24,6 +24,7 @@ $dbo = & $pommo->_dbo;
 
 $pommo->toggleEscaping(); // _T and logger responses will be wrapped in htmlspecialchars
 
+
 $json = array(
 	'percent' => null,
 	'status' => null,
@@ -31,7 +32,8 @@ $json = array(
 	'sent' => null,
 	'incAttempt' => FALSE,
 	'command' => FALSE,
-	'notices' => FALSE
+	'notices' => FALSE,
+	'timeStamp' => null
 );
 
 $statusText = array(
@@ -55,9 +57,17 @@ else
 
 
 // check for frozen mailing
+
+// get the old timestamp
 $timestamp = $pommo->get('timestamp');
+
+// for debugging -- can be removed @ later versions
+$json['timeStamp'] = $timestamp;
+$json['touched'] = @$mailing['touched'];
+// end debug
+
 if (empty($timestamp))
-	$timestamp = $mailing['touched']; // get retuns a blank array -- not false
+	$timestamp = @$mailing['touched']; // get retuns a blank array -- not false
 
 if ($json['status'] != 4) {
 	if ($mailing['command'] != 'none' || ($mailing['touched'] == $timestamp && $mailing['current_status'] != 'stopped'))
@@ -68,8 +78,7 @@ if ($json['status'] != 4) {
 		$json['status'] = 3;
 }
 
-$pommo->set(array('timestamp' => $mailing['touched']));
-
+@$pommo->set(array('timestamp' => $mailing['touched']));
 
 $json['statusText'] = $statusText[$json['status']];
 
@@ -78,8 +87,6 @@ $notices = PommoMailing::getNotices($mailing['id']);
 $oldNotices = $pommo->get('notices');
 $pommo->set(array('notices' => $notices));
 $json['notices'] = array_diff($notices,$oldNotices);
-
-//var_dump($notices,$oldNotices);
 
 $query = "
 	SELECT count(subscriber_id) 

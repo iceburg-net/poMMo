@@ -59,7 +59,7 @@ class PommoMailing {
 	// accepts a flag (bool) to designate return of current mailing type
 	// return a mailing object (array)	
 	function & makeDB(&$row) {
-		$in = array(
+		$in = @array(
 		'id' => $row['mailing_id'],
 		'fromname' => $row['fromname'],
 		'fromemail' => $row['fromemail'],
@@ -77,7 +77,7 @@ class PommoMailing {
 		'status' => $row['status']);
 			
 		if ($row['status'] == 1) {
-			$o = array(
+			$o = @array(
 				'command' => $row['command'],
 				'serial' => $row['serial'],
 				'code' => $row['securityCode'],
@@ -242,7 +242,7 @@ class PommoMailing {
 			[charset='%S',]
 			[status=%I,]
 			started=FROM_UNIXTIME(%i)";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$in['fromname'],
 			$in['fromemail'],
 			$in['frombounce'],
@@ -276,7 +276,7 @@ class PommoMailing {
 			[securityCode='%S',]
 			[current_status='%S',]
 			current_id=%i";
-			$query = $dbo->prepare($query,array(
+			$query = $dbo->prepare($query,@array(
 				$in['command'],
 				$in['serial'],
 				$in['code'],

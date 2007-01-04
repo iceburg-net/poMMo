@@ -15,7 +15,7 @@ Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 
-$pommo->init();
+$pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 

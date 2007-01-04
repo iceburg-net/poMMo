@@ -15,7 +15,7 @@
 *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-$pommo->init();
+$pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -25,6 +25,7 @@ function jsonKill($msg, $success = "false") {
 }
 
 
+$when = '';
 foreach($_POST['grid'] as $order => $id) { // syntax for multi-row updates in in 1 query.
 	$id = substr($id,2);
 	$when .= $dbo->prepare("WHEN '%s' THEN '%s'",array($id,$order)).' ';

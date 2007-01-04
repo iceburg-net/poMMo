@@ -81,7 +81,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// accepts a group template (assoc array)  
 	// return a group object (array)
 	function & makeDB(&$row) {
-		$in = array(
+		$in = @array(
 		'id' => $row['group_id'],
 		'name' => $row['group_name']);
 		$o = PommoType::group();
@@ -250,7 +250,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		INSERT INTO " . $dbo->table['groups'] . "
 		SET
 		group_name='%s'";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$in['name']
 		));
 		

@@ -38,7 +38,7 @@ if (isset($_POST['email'])) {
 		jsonKill(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 }
 
-$s = array(
+$s = @array(
 	'id' => $_GET['key'],
 	'email' => $_POST['email']
 	);

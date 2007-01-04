@@ -100,8 +100,9 @@ class PommoHelper {
 			AND status IN(1,2)";
 		$query = $dbo->prepare($query,array($in));
 		$o = $dbo->getAll($query, 'assoc', 'email');
-
-		return (empty($o)) ? false : $o;
+		if (empty($o))
+			$o = false;
+		return $o;
 	}
 	
 	// array_intersect_key requires PHP 5.1 +, here's a compat function --> (limited to 2 arrs)

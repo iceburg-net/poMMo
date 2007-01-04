@@ -63,7 +63,7 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 		// add subscriber
 		if (PommoSubscriber::add($subscriber)) {
 			$tally++;
-			if ($subscriber['flag'] == 9)
+			if (isset($subscriber['flag']))
 				$flagged++;
 		}
 	}
