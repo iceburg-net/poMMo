@@ -63,8 +63,7 @@ foreach(array_keys($mailings) as $key) {
 	if(!empty($m['end']) && !empty($m['sent'])) {
 		$start = strtotime($m['start']);
 		$end = strtotime($m['end']);
-		//$m['mph'] = (($end - $start) / $m['sent']) * 60 * 60;
-		$m['mph'] = round(($m['sent'] / ($end - $start)) * 3600);
+		$m['mph'] = round(($m['sent'] / (($end - $start)+1)) * 3600);
 	}
 	else
 		$m['mph'] = 0;
