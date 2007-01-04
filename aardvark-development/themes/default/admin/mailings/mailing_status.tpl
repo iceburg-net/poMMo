@@ -5,7 +5,7 @@
 {include file="inc/tpl/admin.header.tpl"}
 
 <p><img src="{$url.theme.shared}images/icons/alert.png" class="navimage right" alt="thunderbolt icon" />
-{t escape=no 1='<span class="advanced"><a href="`$url.base`admin/setup/setup_throttle.php">' 2='</a>'}Mailings are processed in the background so feel free to turn off your computer and browse other sites. %1Throttle settings%2 can also be adjusted -- although you must pause and revive the mailing before changes take effect.{/t}</span></p>
+{t escape=no 1="<span class='advanced'><a href='`$url.base`admin/setup/setup_throttle.php'>" 2='</a>'}Mailings take place in the background so feel free to close this page, visit other sites, or even turn off your computer. You can always return to this status page by visiting the Mailings section.  %1Throttle settings%2 can also be adjusted -- although you must pause and revive the mailing before changes take effect.{/t}</span></p>
 
 <div>
 
@@ -187,8 +187,14 @@ pommo = {
 			pommo.attempt = (json.incAttempt) ? pommo.attempt + 1 : 1;
 
 			// repoll
-			if (json.status < 3)
-				setTimeout('pommo.poll()',5500);
+			if (json.status < 3) {
+				if(pommo.attempt == 1)
+					setTimeout('pommo.poll()',5500);
+				else if(pommo.attempt == 2)
+					setTimeout('pommo.poll()',7500);
+				else
+					setTimeout('pommo.poll()',8500);
+			}
 			else
 				pommo.polling = false;
 		});

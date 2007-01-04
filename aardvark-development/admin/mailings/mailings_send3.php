@@ -64,8 +64,6 @@ if (!empty ($_GET['sendaway'])) {
 			Pommo::kill('Unable to spawn background mailer');
 
 		Pommo::redirect('mailing_status.php');
-
-		//die ($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$securityCode);
 	}
 	else {
 		$logger->addMsg(Pommo::_T('Cannot send a mailing to 0 subscribers!'));
