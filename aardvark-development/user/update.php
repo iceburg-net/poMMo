@@ -72,17 +72,22 @@ if (!empty ($_POST['update'])) {
 		
 		// only send confirmation mail if subscriber changed email address, else UPDATE
 		if (!empty($_POST['newemail']) && PommoHelper::isEmail($_POST['newemail'])) {
-			$newsub['email'] = $_POST['newemail'];
 			
-			$code = PommoPending::add($newsub, 'change');
-			if (empty($code)) {
-				$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') . 
-				sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
-			} else {
-				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-				PommoHelperMessages::sendConfirmation($newsub['email'], $code, 'update');
-				$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
-				PommoPending::actCodeDie($subscriber['email']);
+			if(PommoHelper::isDupe($_POST['newemail']))
+				$logger->addMsg(Pommo::_T('Email address already exists. Duplicates are not allowed.'));
+			else {
+				$newsub['email'] = $_POST['newemail'];
+				
+				$code = PommoPending::add($newsub, 'change');
+				if (empty($code)) {
+					$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') . 
+					sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
+				} else {
+					Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+					PommoHelperMessages::sendConfirmation($newsub['email'], $code, 'update');
+					$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+					PommoPending::actCodeDie($subscriber['email']);
+				}
 			}
 		}
 		else {
