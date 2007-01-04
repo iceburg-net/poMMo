@@ -43,11 +43,11 @@ class PommoTemplate extends Smarty {
 			'base' => $pommo->_baseUrl,
 			'http' => $pommo->_http
 		));
-		$this->assign('config', array (
+		$this->assign('config', @array (
 			'app' => array (
 				'path' => $pommo->_baseDir,
 				'weblink' => '<a href="http://pommo.sourceforge.net/">' . Pommo::_T('poMMo Website') . '</a>',
-				'version' => $pommo->_config['version']),
+				),
 			'site_name' => $pommo->_config['site_name'],
 			'site_url' => $pommo->_config['site_url'], 
 			'list_name' => $pommo->_config['list_name'],
