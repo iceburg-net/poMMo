@@ -41,6 +41,7 @@ if(isset($_POST['submit'])) {
 
 	// POST exists -- set pointer to content
 	$fp = false;
+	$box = false;
 	
 	if (!empty($_FILES[$fname]['tmp_name']))
 		$fp =& fopen($_FILES[$fname]['tmp_name'], "r");
@@ -52,6 +53,8 @@ if(isset($_POST['submit'])) {
 		stream_wrapper_register("pommoCSV", "PommoCSVStream")
 			or Pommo::kill('Failed to register pommoCSV');
 		$fp = fopen("pommoCSV://str", "r+"); 
+		
+		$box = true;
 	}
 	
 	if(is_resource($fp)) {
@@ -65,12 +68,14 @@ if(isset($_POST['submit'])) {
 			}
 			
 			// remove dupes
-			$a = array_unique($a);
-			$emails = array_diff($a, PommoHelper::isDupe($a));
+			$dupes =& PommoHelper::isDupe($a);
+			if (!$dupes)
+				$dupes = array();
+			$emails = array_diff($a, $dupes);
 			
 			$pommo->set(array(
 				'emails' => $emails,
-				'dupes' => (count($a) - count($emails))));
+				'dupes' => (count($dupes))));
 			Pommo::redirect('import_txt.php');
 		}
 		elseif($_POST['type'] == 'csv') { // csv of subscriber data, store first 10 for preview
@@ -84,8 +89,21 @@ if(isset($_POST['submit'])) {
 			}
 			
 			// save file for access after assignments
-			move_uploaded_file($_FILES[$fname]['tmp_name'], $pommo->_workDir.'/import.csv')
-				or Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+			if ($box) {
+				// when PHP5 is widespread, switch to file_put_contents()  && use the $fp stream
+				if (!$handle = fopen($pommo->_workDir.'/import.csv', 'w'))
+					Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+				
+				if (fwrite($handle, $_POST['box']) === FALSE)
+      				Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+				
+				 fclose($handle);
+			}
+			else {
+				move_uploaded_file($_FILES[$fname]['tmp_name'], $pommo->_workDir.'/import.csv')
+					or Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+			}
+			
 			$pommo->set(array('preview' => $a));
 			Pommo::redirect('import_csv.php');
 		}

@@ -13,13 +13,9 @@
 die();
 ?>
 
-THROTTLER -> must return false every 10 seconds [no loops]...
-
-Frozen Mailings after 1 sent ? http://www.pommo.org/community/viewtopic.php?id=267
+Mailing notices -- no dupes are displayed
 
 Test mailing exchanger from setup > configure page
-
-Try to remove PHP notices
 
 Toggle gettext emulation (phpgettext)
 
