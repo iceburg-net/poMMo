@@ -52,8 +52,8 @@ class PommoHelper {
 			$line = trim($rawLine);
 			if (substr($line,0,1) == '[') { // line should be traded as a key:value pair
 				$matches = array();
-				preg_match('/^\[(\w+)\]\s*=\s*\"?(.[^\"]*)\"?.*$/i',$line,$matches);
-				
+				preg_match('/^\[(\w+)\]\s*=\s*\"?([^\"]*)\"?.*$/i',$line,$matches);
+
 				// check if a key:value was extracted
 				if (!empty($matches[2]))
 					// merge key:value onto return array
