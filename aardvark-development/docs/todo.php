@@ -31,6 +31,9 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 
 Add http://www.pommo.org/community/viewtopic.php?pid=1609#p1609  JP Charset
 
+[LEGACY POMMO]
+  Port config parser + config.php/sample
+
 [BEFORE Aardvark Final]
 	+ Message Templating
 	+ Remove language from default distribution, seperate download.
