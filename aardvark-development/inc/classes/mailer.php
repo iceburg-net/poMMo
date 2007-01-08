@@ -191,8 +191,12 @@ class PommoMailer extends PHPMailer {
 
 			$this->FromName = $this->_fromname;
 			$this->From = $this->_fromemail;
-			$this->Sender = $this->_frombounce;
 			$this->Subject = $this->_subject;
+			
+			// don't set Sender (bounce address) if SAFE MODE is on
+			if (!ini_get('safe_mode'))
+				$this->Sender = $this->_frombounce;
+			
 
 			// make sure exchanger is valid, DEFAULT to PHP Mail
 			if ($this->_exchanger != "mail" && $this->_exchanger != "sendmail" && $this->_exchanger != "smtp")
