@@ -15,7 +15,7 @@
 
 <p>{t}Captcha Text:{/t} <input type="text" name="captcha" /></p>
 
-<input type="submit" name="resetPassword" value="{t}Reset Password{/t}" />
+<input type="submit" name="resetPassword green" value="{t}Reset Password{/t}" />
 </form>
 
 {else}
