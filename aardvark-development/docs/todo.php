@@ -19,7 +19,7 @@ INDICATED REQUIRED .. AND ACTIVE FIELDS
 
 Mailing notices -- no dupes are displayed
 
-Test mailing exchanger from setup > configure page
+Test mailing exchanger from setup @ configure page
 
 Toggle gettext emulation (phpgettext)
 

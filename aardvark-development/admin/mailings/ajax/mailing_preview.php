@@ -28,7 +28,7 @@ $dbo = & $pommo->_dbo;
 
 $input = (isset($_GET['mail_id'])) ? 
 	current(PommoMailing::get(array('id' => $_GET['mail_id']))) :
-	$pommo->get('mailingData');
+	$input = $pommo->_session['state']['mailings_send2'];
 
 die($input['body']);
 

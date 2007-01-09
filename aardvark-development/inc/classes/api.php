@@ -156,7 +156,7 @@ class PommoAPI {
 				$state[$key] = $source[$key];
 		
 		// normalize the page state
-		if (count($state) > count($defaults)) 
+		if ($normalize && count($state) > count($defaults)) 
 			$state = PommoHelper::arrayIntersect($state, $defaults);
 			
 		return $state;

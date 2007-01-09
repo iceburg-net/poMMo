@@ -182,8 +182,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
-		if (empty($group['criteria']))
-			return array();
+		if (empty($group['criteria'])) {
+			$o = array();
+			return $o;
+		}
 		
 		$f = array();
 		
