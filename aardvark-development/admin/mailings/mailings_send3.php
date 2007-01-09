@@ -32,7 +32,8 @@ $smarty = new PommoTemplate();
 if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
-$input = $pommo->get('mailingData');
+$input = array_merge($pommo->_session['state']['mailings_send'], $pommo->_session['state']['mailings_send2']);
+$input['charset'] = $input['list_charset'];
 
 // redirect (restart) if body or group id are null...
 if (empty($input['mailgroup']) || empty($input['body'])) {
@@ -63,6 +64,9 @@ if (!empty ($_GET['sendaway'])) {
 		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code))
 			Pommo::kill('Unable to spawn background mailer');
 
+		// clear mailing composistion data from session
+		PommoAPI::stateReset(array('mailings_send','mailings_send2'));
+		
 		Pommo::redirect('mailing_status.php');
 	}
 	else {

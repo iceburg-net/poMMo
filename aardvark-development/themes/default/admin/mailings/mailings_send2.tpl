@@ -42,6 +42,8 @@
 {/capture}
 {include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
+{include file="inc/tpl/messages.tpl"}
+
 <a href="#" id="mergeopen">{t}Add Personalization{/t}</a>
 
 <div id="mailmerge">
@@ -110,10 +112,10 @@
 
 <fieldset>
 <legend>{t}HTML Message{/t}</legend>
-
 <div>
 <textarea id="body" name="body" rows="10" cols="120" style="width: 100%;">{$body}</textarea>
 </div>
+<div><span class="error">{validate id="body" message=$formError.body}</span></div>
 
 </fieldset>
 
@@ -148,6 +150,7 @@
 <label for="body"><span class="required">{t}Message:{/t}</span></label>
 <textarea rows="10" cols="120" id="body" name="body">{$body}</textarea>
 </div>
+<div><span class="error">{validate id="body" message=$formError.body}</span></div>
 
 </fieldset>
 

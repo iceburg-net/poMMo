@@ -33,7 +33,8 @@ function jsonKill($msg,$key = 0) {
 	die($json);
 }
 
-$input = $pommo->get('mailingData');
+$input = array_merge($pommo->_session['state']['mailings_send'], $pommo->_session['state']['mailings_send2']);
+$input['charset'] = $input['list_charset'];
 
 $subscriber = array(
 	'email' => $_POST['Email'],

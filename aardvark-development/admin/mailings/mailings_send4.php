@@ -31,16 +31,12 @@ $start = time();
 // skips serial and security code checking. For debbuing this script.
 $skipSecurity = FALSE;
 
-
-// TODO -> Move throttler & personalizations to mailing data $input ($pommo->get('mailingData');)
-//		else move $config to $_SESSION...
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/throttler.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-
 
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
