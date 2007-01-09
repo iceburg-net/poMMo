@@ -46,7 +46,6 @@
 
 <ul>
 <li>{t}Change the ordering of fields on the subscription form by dragging and dropping the order icon{/t}</li>
-<li>{t escape=no}Names in <strong>bold</strong> are active.{/t}</li>
 </ul>
 
 <div id="grid">
@@ -74,8 +73,15 @@
 <img src="{$url.theme.shared}images/icons/order.png" alt="order icon" class="handle" id="a{$key}" />
 </span>
 
-<span>
-{if $field.active == 'on'}<strong>{$field.name}</strong>{else}{$field.name}{/if} - <em>{$field.type}</em>
+<span{if $field.active == 'on'} class="green"{/if}>
+{if $field.required == 'on'}
+<strong>
+{$field.name}
+</strong>
+{else}
+{$field.name}
+{/if}
+- <em>{$field.type}</em>
 </span>
 
 </div>
@@ -83,6 +89,10 @@
 {/foreach}
 
 </div>
+
+<p>{t escape=no}Fields in <strong>bold</strong> are required.{/t}</p>
+<p>{t escape=no 1='<span class="green">' 2='</span>'}Fields in %1green%2 are active.{/t}</p>
+
 
 {literal}
 <script type="text/javascript">

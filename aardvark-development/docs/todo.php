@@ -13,10 +13,6 @@
 die();
 ?>
 
-Mailing composition;  Save to page state
-
-INDICATED REQUIRED .. AND ACTIVE FIELDS
-
 Mailing notices -- no dupes are displayed
 
 Test mailing exchanger from setup @ configure page

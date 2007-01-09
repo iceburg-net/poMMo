@@ -328,5 +328,8 @@ div.pager {
 #resetPassword {
 	background: none;
 	border: none;
-	color: #0E9749;
+}
+
+.green {
+    color: #0E9749;
 }
