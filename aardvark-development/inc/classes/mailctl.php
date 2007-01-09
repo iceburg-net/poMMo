@@ -359,7 +359,7 @@ class PommoMailCtl {
 		// $out .= "Authorization: Basic " . base64_encode('username:password')."\r\n";
 
 		$out .= "\r\n";
-
+		
 		$socket = fsockopen($ssl . $host, $port, $errno, $errstr, 10);
 
 		if ($socket) {

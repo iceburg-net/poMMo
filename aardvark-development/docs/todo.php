@@ -13,6 +13,10 @@
 die();
 ?>
 
+Mailing composition;  Save to page state
+
+INDICATED REQUIRED .. AND ACTIVE FIELDS
+
 Mailing notices -- no dupes are displayed
 
 Test mailing exchanger from setup > configure page
@@ -28,8 +32,6 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 
 /inc/lib/safesql/SafeSQL.class.php on line 106"
 ----
-
-Add http://www.pommo.org/community/viewtopic.php?pid=1609#p1609  JP Charset
 
 [LEGACY POMMO]
   Port config parser + config.php/sample

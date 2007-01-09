@@ -139,13 +139,15 @@ class PommoPending {
 		while ($row = $dbo->getRows($query)) 
 			$o[$row['pending_id']] = PommoPending::MakeDB($row);
 		
-		return (empty($o)) ? false : current($o);
+		$o = (empty($o)) ? false : current($o);
+		
+		return $o;
 	}
 	
 	// checks to see if a subscriber ID has a pending request
 	// accepts a subscriber ID (int)
 	// returns true if pending exists, false if not (bool)
-	function & isPending($id = null){
+	function isPending($id = null){
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
