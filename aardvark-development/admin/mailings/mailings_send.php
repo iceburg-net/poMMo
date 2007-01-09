@@ -43,7 +43,8 @@ function check_charset($value, $empty, & $params, & $formvars) {
 		'cp1251',
 		'KOI8-R',
 		'GB2312',
-		'EUC-JP'
+		'EUC-JP',
+		'ISO-2022-JP'
 	);
 	return in_array($value, $validCharsets);
 }
@@ -71,11 +72,11 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('ishtml', 'ishtml:/(on|off)/i', 'isRegExp', false, false, 'trim');
 	SmartyValidate :: register_validator('mailgroup', 'mailgroup:/(all|\d+)/i', 'isRegExp', false, false, 'trim');
 
-	SmartyValidate :: register_validator('charset', 'charset', 'isCharSet', false, false, 'trim');
+	SmartyValidate :: register_validator('list_charset', 'list_charset', 'isCharSet', false, false, 'trim');
 
 	$formError = array ();
 	$formError['fromname'] = $formError['subject'] = Pommo::_T('Cannot be empty.');
-	$formError['charset'] = Pommo::_T('Invalid Character Set');
+	$formError['list_charset'] = Pommo::_T('Invalid Character Set');
 	$formError['fromemail'] = $formError['frombounce'] = Pommo::_T('Invalid email address');
 	$formError['ishtml'] = $formError['mailgroup'] = Pommo::_T('Invalid Input');
 
@@ -88,7 +89,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$_POST['frombounce'] = $mailingData['frombounce'];
 		$_POST['subject'] = $mailingData['subject'];
 		$_POST['ishtml'] = $mailingData['ishtml'];
-		$_POST['charset'] = $mailingData['charset'];
+		$_POST['list_charset'] = $mailingData['charset'];
 		$_POST['mailgroup'] = $mailingData['mailgroup'];
 	} else { // mailingData Empty. Load default values from DB
 		$dbvalues = PommoAPI::configGet(array (
@@ -104,7 +105,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		if (!isset ($_POST['frombounce']))
 			$_POST['frombounce'] = $dbvalues['list_frombounce'];
 		if (!isset ($_POST['charset']))
-			$_POST['charset'] = $dbvalues['list_charset'];
+			$_POST['list_charset'] = $dbvalues['list_charset'];
 	}
 } else {
 	// ___ USER HAS SENT FORM ___
@@ -121,7 +122,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$mailingData['frombounce'] = $_POST['frombounce'];
 		$mailingData['subject'] = $_POST['subject'];
 		$mailingData['ishtml'] = $_POST['ishtml'];
-		$mailingData['charset'] = $_POST['charset'];
+		$mailingData['charset'] = $_POST['list_charset'];
 		$mailingData['mailgroup'] = $_POST['mailgroup'];
 		$pommo->set(array('mailingData' => $mailingData));
 

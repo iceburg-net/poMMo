@@ -37,7 +37,8 @@ function check_charset($value, $empty, & $params, & $formvars) {
 		'cp1251',
 		'KOI8-R',
 		'GB2312',
-		'EUC-JP'
+		'EUC-JP',
+		'ISO-2022-JP'
 	);
 
 	return in_array($value, $validCharsets);

@@ -1,4 +1,4 @@
-{include file="inc/tpl/admin.header.tpl"}{debug}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Support Page{/t}</h2>
 
