@@ -40,7 +40,7 @@ $state =& PommoAPI::stateInit('mailings_send2',array(
 	'altInclude' => 'no',
 	'editorType' => 'wysiwyg'
 	),
-	$_REQUEST);
+	$_POST);
 
 @$smarty->assign('ishtml', $pommo->_session['state']['mailings_send']['ishtml']);
 

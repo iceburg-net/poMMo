@@ -50,7 +50,7 @@ $state =& PommoAPI::stateInit('mailings_send',array(
 	'ishtml' => 'on',
 	'mailgroup' => 'all'
 	),
-	$_REQUEST);
+	$_POST);
 
 // SmartyValidate Custom Validation Function
 function check_charset($value, $empty, & $params, & $formvars) {

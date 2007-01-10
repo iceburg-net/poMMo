@@ -27,7 +27,7 @@
  		global $pommo;
  		
  		if (!$handle = fopen($pommo->_workDir . '/maintenance.php', 'w'))
-			Pommo::kill('Unable to perform maintenance');
+			Pommo::kill('Unable to prepare maintenance.php for writing');
 			
 		$fileContent = "<?php die(); ?>\n[baseURL] = \"$pommo->_baseUrl\"\n";
 		
