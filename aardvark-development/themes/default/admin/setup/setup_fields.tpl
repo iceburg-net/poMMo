@@ -51,6 +51,7 @@
 <div id="grid">
 
 <div class="header">
+<span>{t}ID{/t}</span>
 <span>{t}Delete{/t}</span>
 <span>{t}Edit{/t}</span>
 <span>{t}Order{/t}</span>
@@ -60,6 +61,11 @@
 {foreach name=fields from=$fields key=key item=field}
 
 <div class="{cycle values="r1,r2,r3"} sortable" id="id{$key}">
+
+<span>
+{$field.id}
+</span>
+
 
 <span>
 <a href="{$smarty.server.PHP_SELF}?field_id={$key}&amp;delete=TRUE&amp;field_name={$field.name}"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></a>
