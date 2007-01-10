@@ -11,14 +11,13 @@
 
 <div>
 <label class="required" for="email">{t}Email:{/t}</label>
-<input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email"/>
-&nbsp;&nbsp;
+<input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email" />
 <input type="submit" value="{t}Send Mailing{/t}"/>
 </div>
 
 </fieldset>
 
-<p>{t escape='no' 1='<strong>' 2='</strong>'}If your mailing includes personalizations, you can %1 optionally %2 supply test values{/t}</p>
+<p>{t escape='no' 1='<strong>' 2='</strong>'}If your mailing includes personalizations, you can %1optionally%2 supply test values{/t}</p>
 
 <fieldset>
 <legend>{t}Personalizations{/t}</legend>
@@ -28,7 +27,7 @@
 <label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 
 {if $field.type == 'checkbox'}
-<input type="checkbox" name="d[{$key}]" {if $field.normally == "on"} checked="checked"{/if} {if $field.required == 'on'}class="pvEmpty"{/if}/>
+<input type="checkbox" name="d[{$key}]"{if $field.normally == "on"} checked="checked"{/if}{if $field.required == 'on'} class="pvEmpty"{/if} />
 
 {elseif $field.type == 'multiple'}
 <select name="d[{$key}]">
@@ -38,13 +37,13 @@
 </select>
 
 {elseif $field.type == 'date'}
-<input type="text" class="pvDate {if $field.required == 'on'}pvEmpty{/if}" size=12 name="d[{$key}]" value={if $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
+<input type="text" class="pvDate{if $field.required == 'on'} pvEmpty{/if}" size="12" name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{else}{t}mm/dd/yyyy{/t}{/if}" />
 
 {elseif $field.type == 'number'}
-<input type="text" class="pvNumber {if $field.required == 'on'}pvEmpty{/if}" size=12 name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />
+<input type="text" class="pvNumber{if $field.required == 'on'} pvEmpty{/if}" size="12" name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />
 
 {else}
-<input type="text" size="32" {if $field.required == 'on'}class="pvEmpty"{/if} name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />
+<input type="text"{if $field.required == 'on'} class="pvEmpty"{/if} size="32" name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />
 {/if}
 
 </div>
@@ -61,7 +60,7 @@ $().ready(function(){
 
 	$('#testForm').submit(function() {
 		var input = $(this).formToArray();
-		
+
 		url = "ajax/mailing_test2.php";
 
 		$.post(url, input, function(json) {

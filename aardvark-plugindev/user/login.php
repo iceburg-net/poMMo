@@ -52,22 +52,22 @@ if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 	SmartyValidate :: connect($smarty);
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID __
-		if (count(PommoHelper::emailExists($_POST['Email'])) > 0) {
+		if (PommoHelper::isDupe($_POST['Email'])) {
 			if (PommoPending::isEmailPending($_POST['Email'])) {
 				$input = urlencode(serialize(array('Email' => $_POST['Email'])));
 				SmartyValidate :: disconnect();
-				Pommo::redirect('user_pending.php?input='.$input);
+				Pommo::redirect('pending.php?input='.$input);
 			}
 			else {
 				// __ EMAIL IN SUBSCRIBERS TABLE, REDIRECT
-				$input = urlencode(serialize(array('Email' => $_POST['Email'])));
 				SmartyValidate :: disconnect();
-				Pommo::redirect('user_update.php?input='.$input);
+				Pommo::redirect('update_activate.php?Email='.$_POST['Email']);
 			}
 		}
 		else {
-		// __ REPORT STATUS
-		$logger->addMsg(Pommo::_T('Email address not found! Please try again.'));
+			// __ REPORT STATUS
+			$logger->addMsg(Pommo::_T('Email address not found! Please try again.'));
+			$logger->addMsg(sprintf(Pommo::_T('To subscribe, %sclick here%s'),'<a href="'.$pommo->_baseUrl.'user/subscribe.php?Email='.$_POST['Email'].'">','</a>'));
 		}
 	}
 	$smarty->assign($_POST);

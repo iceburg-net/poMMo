@@ -13,7 +13,7 @@
 require('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
-$pommo->init();
+$pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -42,7 +42,7 @@ $emails = $dbo->getAll($query,'assoc','email');
 
 $o = '';
 foreach($emails as $e)
-	$o .= "$e\n";
+	$o .= "$e\r\n";
 	
 $size_in_bytes = strlen($o);
 header("Content-disposition:  attachment; filename=".$nameMap[$i].".txt; size=$size_in_bytes");

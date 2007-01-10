@@ -23,6 +23,16 @@
 </select>
 </div>
 
+<div id="extended" class="hidden">
+<label for="registered">{t}Include{/t} {t}Date Registered{/t}</label>
+<input type="checkbox" name="registered" value="true" />
+
+&nbsp;&nbsp;
+
+<label for="ip">{t}Include{/t} {t}IP Address{/t}</label>
+<input type="checkbox" name="ip" value="true" />
+</div>
+
 </fieldset>
 
 <div class="buttons">
@@ -38,17 +48,11 @@
 <script type="text/javascript">
 $().ready(function(){
 
-	$('#autoFill').click(function() {
-		box.val("");
-		var emails = new Array();
-
-		$('#subs tbody/tr:visible').find('td:eq(1)').each(function() {
-			emails.push($(this).html());
-		});
-
-		box.val(emails.join("\n"));
-
-		return false;
+	$('#pForm select[@name=type]').change(function() {
+		if (this.value == 'txt')
+			$('#extended').hide();
+		else
+			$('#extended').show();
 	});
 
 	$('#pForm').submit(function() {
@@ -58,7 +62,7 @@ $().ready(function(){
 			$('#subs tbody/tr:visible').find('td:eq(0)').each(function() {
 				ids.push($("p.key", this).html());
 			});
-
+			
 			$('#ids',this).val(ids.join());
 		}
 		else {

@@ -43,10 +43,12 @@ class PommoDB {
 			'fields' => $tablePrefix . 'fields',
 			'group_criteria' => $tablePrefix . 'group_criteria',
 			'groups' => $tablePrefix . 'groups',
+			'mailing_notices' => $tablePrefix . 'mailing_notices',
 			'mailing_current' => $tablePrefix . 'mailing_current',
 			'mailings' => $tablePrefix . 'mailings',
 			'subscriber_data' => $tablePrefix . 'subscriber_data',
 			'subscriber_pending' => $tablePrefix . 'subscriber_pending',
+			'subscriber_update' => $tablePrefix . 'subscriber_update',
 			'subscribers' => $tablePrefix . 'subscribers',
 			'queue' => $tablePrefix . 'queue',
 			'updates' => $tablePrefix . 'updates');		
@@ -88,7 +90,7 @@ class PommoDB {
 
 	// alias to SafeSQL->Query(); See inc/lib/safesql/README for usage
 	//  if second parameter is not passed, pass a blank one (avoids safeSQL throwing a warning)
-	function & prepare() {
+	function prepare() {
 		$a = func_get_args();
 		if (count($a) < 2)
 			$a[] = array();
@@ -158,27 +160,15 @@ class PommoDB {
 
 		// check if query was unsuccessful
 		if (!$this->_result) {
-
 			if ($this->_debug)
 				$logger->addMsg('Query failed with error --> ' . mysql_error()); 
 
 			if ($this->_dieOnQuery)
-				Pommo::kill('MySQL Query Failed.');
-			else
-				return false;
+				Pommo::kill('MySQL Query Failed.'.$query);
 		}
 
 		if (is_numeric($row))
-			return ($this->records()) ? mysql_result($this->_result, $row, $col) : false;
-
-		/*
-		// check if specific field requested, return value.
-		if (is_numeric($row)) {
-			if (is_numeric($col)) {
-				return ($this->records()) ? mysql_result($this->_result, $row, $col) : false;
-			}
-			return mysql_result($this->_result, $row);
-		}*/
+			$this->_result = mysql_result($this->_result, $row, $col); // func returns false on failure
 
 		// return the result
 		return $this->_result;
@@ -191,7 +181,7 @@ class PommoDB {
 	// function affected - returns the amount of affects rows from a INSERT,UPDATE, or DELETE Query.
 	// Note, if nothing was changed in an update.. 0 will be returned!
 	//    if $sql is passed, a query will be issued. Otherwise examine the saved result.
-	function & affected($sql = NULL) {
+	function affected($sql = NULL) {
 		if ($sql)
 			$this->query($sql);
 		$x = mysql_affected_rows($this->_link);
@@ -200,7 +190,7 @@ class PommoDB {
 
 	// function records - returns the number of rows resultings in a SELECT query -- 0 (false) if none...
 	//    if $sql is passed, a query will be issued. Otherwise examine the saved result.
-	function & records($sql = NULL) {
+	function records($sql = NULL) {
 		if ($sql)
 			$this->query($sql);
 
@@ -208,7 +198,7 @@ class PommoDB {
 	}
 
 	// returns the ID of the pkey from an INSERT Statement
-	function & lastId() {
+	function lastId() {
 		return mysql_insert_id($this->_link);
 	}
 
@@ -249,16 +239,13 @@ class PommoDB {
 					return false;
 		}
 		
-
 		// Fetch row from result set at end of result stack
 		 ($enumerated) ? $row = mysql_fetch_row(end($set)) : $row = mysql_fetch_assoc(end($set));
 
-		if ($row)
-			return $row;
-
-		// fetching row failed, result set is empty.
-		array_pop($set);
-		return false;
+		if (!$row)
+			array_pop($set); // fetching row failed, result set is empty.
+		
+		return $row;
 	}
 
 	// retuns an entire result set as an associative array. pass type 'row' to make it enumerated
@@ -271,7 +258,7 @@ class PommoDB {
 			$this->query($sql);
 
 		if ($field != NULL)
-			eval ('while(@$r = mysql_fetch_' . $type . '($this->_result)) array_push($a, $r[' . $field . ']);');
+			eval ('while(@$r = mysql_fetch_' . $type . '($this->_result)) array_push($a, $r[\'' . $field . '\']);');
 		else
 			eval ('while(@$r = mysql_fetch_' . $type . '($this->_result)) array_push($a, $r);');
 		return $a;

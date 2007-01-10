@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Edit Field{/t}</h2>
 
@@ -6,9 +6,9 @@
 <li><a href="{$url.base}admin/setup/setup_fields.php">{t}Return to Fields Page{/t}</a></li>
 </ul>
 
-{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="articleimg" /> {$intro}</p>{/if}
+{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimage right" /> {$intro}</p>{/if}
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
  
 <form method="post" action="">
 <input type="hidden" name="field_id" value="{$field.id}" />
@@ -91,7 +91,7 @@
 
 <input type="hidden" name="field_id" value="{$field.id}" />
 
-<div class="alert">{t}NOTE: You can add multiple options by separating each with a comma. To include special characters such as quote marks and commas, prefix them with a backslash (\\).{/t}</div>
+<div class="alert">{t}NOTE: You can add multiple options at once by separating each with a comma.{/t}</div>
 
 <div>
 <label for="addOption">Options:</label>
@@ -125,4 +125,4 @@
 </form>
 {/if}
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

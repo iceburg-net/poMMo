@@ -33,36 +33,19 @@ class PommoThrottler {
 	var $_startTime;
 
 	/**
-	 * Maximum amount of seconds a processing script may run for 
-	 * (before being restarted for maintainences)
-	 * Statically set to 110 seconds
-	 * 
-	 * @var int
-	 */
-	var $_maxRunTime = 110;
-
-	/**
 	 * The mode that this throttler is engaged in,
 	 * 1: Hesitate	| Sets mode to evaluate, Pauses, Releases a mail from queue.
 	 * 2: Run 		| Increments cycle count, Sets mode to hesitate if at end of cycle, Releases a mail from queue
-	 * 3: Evaluate	| Evaluates mails per second, Adjusts periods and run cycle, Sleeps or changes mode or command
+	 * 3: Evaluate	| Evaluates mails per second, Adjusts periods and run cycle, Sleeps or changes mode
 	 * @var int
 	 */
 	var $_mode = 3;
 
 	/**
-	 * The command to be followed if a call to pullQueue returns false
-	 * 1: continue	| Continue loop
-	 * 2: break		| Break loop
-	 * @var int
-	 */
-	var $_command = 1;
-
-	/**
 	 * Number of mails to release during a run cycle before hesitation 
 	 * @var int
 	 */
-	var $_cycleSize = 0;
+	var $_cycleSize = 1;
 
 	/**
 	 * Mails sent by a run cycle
@@ -75,7 +58,7 @@ class PommoThrottler {
 	 * Set when mode is evaluate
 	 * @var int
 	 */
-	var $_hesitatePeriod = 0;
+	var $_hesitatePeriod = 1;
 
 	/**
 	 * Target mails per period (second) to achieve -- averaged
@@ -175,14 +158,14 @@ class PommoThrottler {
 	function PommoThrottler($p = array(), & $queue, & $history, &$sent, &$sentBytes) { 
 		global $pommo;
 		
-		$this->logger = new PommoLog();
-		$this->_targetMPS = $p['MPS'];
-		$this->_targetBPS = $p['BPS'];
-		$this->_domPeriod = $p['DP'];
-		$this->_domMPP = $p['DMPP'];
-		$this->_domBPP = $p['DBPP'];
+		$this->logger =& $pommo->_logger;
+		
+		$this->_targetMPS = floatval($p['MPS']);
+		$this->_targetBPS = floatval($p['BPS']);
+		$this->_domPeriod = floatval($p['DP']);
+		$this->_domMPP = floatval($p['DMPP']);
+		$this->_domBPP = floatval($p['DBPP']);
 		$this->_genesis = $p['genesis'];
-		$this->_maxRunTime = $p['runtime'];
 		
 		$this->_domain =& $history;
 		$this->_queue =& $queue;
@@ -196,19 +179,22 @@ class PommoThrottler {
 		
 		$this->_mode = $this->smartInit();
 		
+		// alter adjustment to better handle very slow MPS settings
+		if ($this->_targetMPS < 0.35)
+			$this->_adjust = 0.002;
+		elseif($this->_targetMPS < 0.55)
+			$this->_adjust = 0.009;
+		elseif($this->_targetMPS < 0.8)
+			$this->_adjust = 0.11;
+		else
+			$this->_adjust = 0.15;
+		
 		$this->logger->addMsg('bThrottler initialized. [Genesis] ' . $this->_genesis . ' [Queue Size] ' . count($this->_queue) . ' [Target MPS] ' . $this->_targetMPS . ' [Target BPS] ' . $this->_targetBPS . ' [Domain Period] ' . $this->_domPeriod . ' [Domain MPP] ' . $this->_domMPP . ' [Domain BPP] ' . $this->_domBPP, 1);		
 	}
 
 	// PARENT METHODS (executed by mailing script)
 	// -----------------------------------------------------------
 
-	// getCommand() - returns (and clears) the current command. Called from parent if pullQueue() returns false.
-	function getCommand() {
-		$command = $this->_command;
-		$this->logger->addMsg('getCommand() called, returning: ' . $command, 1);
-		$this->_command = 1;
-		return $command;
-	}
 
 	// updateBytes() - Updates the bytes sent. Called by parent when byte throttling is enabled.
 	function updateBytes($bytes = 0, $domain = FALSE) {
@@ -257,10 +243,10 @@ class PommoThrottler {
 
 			case 1 : // **hesitate**
 
-				$this->logger->addMsg('pullQueue() called, in hesitate mode (sleeping for ' . $this->_hesitatePeriod . ' seconds)', 1);
-
+				$this->logger->addMsg('pullQueue() called - in hesitate mode',1);
+				
 				$this->_mode = 3; // set mode to evaluate
-				sleep($this->_hesitatePeriod); // sleep for the designated time
+				$this->pause();
 
 				// release an email from the queue
 				$retVal = $this->release();
@@ -284,13 +270,6 @@ class PommoThrottler {
 
 				$this->logger->addMsg('pullQueue() called, in evaluate mode', 1);
 
-				// check if we've reached max runtime
-				if ((time() - $this->_startTime) > $this->_maxRunTime) {
-					$this->logger->addMsg('Max runtime reached ('.$this->_maxRunTime.' seconds). Sending Kill signal to restart background processor.', 2);
-					$this->_command = 2;
-					break;
-				}
-
 				if ($this->_targetBPS > 0) { // byte throttling is enabled
 					// BEHAVIOR: Jump to maximum bytes per second, then throttle back when/if reached
 
@@ -312,14 +291,23 @@ class PommoThrottler {
 					// BEHAVIOR: Attempt to match the targeted mails per second through small speedups and slowdowns
 
 					// calculate actual mails per second
-					$this->_actualMPS = $this->_sentMails / (time() - $this->_genesis);
-
+					$this->_actualMPS = ($this->_sentMails > 0) ? 
+						$this->_sentMails / (time() - $this->_genesis) :
+						0;
 					$this->logger->addMsg('MPS Throttle -> calculated to ' . $this->_actualMPS . 'MPS', 2);
+					
 					$suggest = 3; // suggest returning to evaluate mode by default
-
-					if ($this->_actualMPS > ($this->_targetMPS + 0.015))
+					
+					if ($this->_actualMPS === 0) {
+						// keep in eval if unleashing a mail will be way above threshold
+						if ((1 / ((time() - $this->_genesis)+0.5)) < $this->_targetMPS + 0.15)
+							$suggest = 1;
+						else
+							$this->pause();
+					}
+					elseif ($this->_actualMPS > ($this->_targetMPS + $this->_adjust))
 						$suggest = $this->slowdown();
-					elseif ($this->_actualMPS < ($this->_targetMPS - 0.015)) $suggest = $this->speedup();
+					elseif ($this->_actualMPS < ($this->_targetMPS - $this->_adjust)) $suggest = $this->speedup();
 					else { // on target! recall initialize?
 						$this->logger->addMsg('MPS Throttle -> at "sweet" spot', 2);
 						$suggest = $this->smartInit();
@@ -465,20 +453,26 @@ class PommoThrottler {
 			$this->_cycleSize = 1;
 
 		if ($this->_hesitatePeriod == 7) { // don't exceed 7 second hesitate periods
-			sleep(1);
+			$this->pause();
 			return 3; // evaluate mode
 		}
 		else
 			$this->_hesitatePeriod++;
 		return 1; // hesitate mode		
 	}
+	
+	function pause() {
+		$this->logger->addMsg('Throttle pausing for '.$this->_hesitatePeriod.' seconds',1);
+		sleep($this->_hesitatePeriod);
+	}
 
 	// sets the mode, hP, and cS according to target mails per second
 	function smartInit() {
+		
 		if ($this->_targetMPS < 0.15) {
 			$this->_hesitatePeriod = 7;
-			$this->_cycleSize = 1;
-			return 1;
+			$this->pause();
+			return 3;
 		}
 		if ($this->_targetMPS < 0.179) {
 			$this->_hesitatePeriod = 6;
@@ -487,22 +481,18 @@ class PommoThrottler {
 		}
 		if ($this->_targetMPS < 0.225) {
 			$this->_hesitatePeriod = 5;
-			$this->_cycleSize = 1;
 			return 1;
 		}
 		if ($this->_targetMPS < 0.3) {
 			$this->_hesitatePeriod = 4;
-			$this->_cycleSize = 1;
 			return 1;
 		}
 		if ($this->_targetMPS < 0.45) {
 			$this->_hesitatePeriod = 3;
-			$this->_cycleSize = 1;
 			return 1;
 		}
 		if ($this->_targetMPS < 0.745) {
 			$this->_hesitatePeriod = 2;
-			$this->_cycleSize = 1;
 			return 1;
 		}
 		if ($this->_targetMPS < 1.45) {
@@ -511,8 +501,6 @@ class PommoThrottler {
 			return 2;
 		}
 		if ($this->_targetMPS < 2.5) {
-			$this->_hesitatePeriod = 1;
-			$this->_cycleSize = 1;
 			return 2;
 		}
 		if ($this->_targetMPS < 3.5) {
@@ -521,11 +509,9 @@ class PommoThrottler {
 			return 2;
 		}
 		if ($this->_targetMPS < 4.5) {
-			$this->_hesitatePeriod = 1;
 			$this->_cycleSize = 2;
 			return 2;
 		} else { // 5 per second..
-			$this->_hesitatePeriod = 1;
 			$this->_cycleSize = 3;
 			return 2;
 		}

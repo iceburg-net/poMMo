@@ -1,9 +1,11 @@
 {capture name=head}
 {* used to inject content into the HTML <head> *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
+
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript">
- _editor_url  = "{$url.theme.shared}js/xinha/"; 
- _editor_lang = "en";
+	_editor_url  = "{$url.theme.shared}js/xinha/";
+	_editor_lang = "en";
 </script>
 
 {if $ishtml == 'on'}
@@ -25,9 +27,9 @@
 				document.bForm.submit();
 				return true;
 			{rdelim}
-			 $(function() {ldelim}
-			 	xinha_init();
-			 {rdelim});
+			$(function() {ldelim}
+				xinha_init();
+			{rdelim});
 		</script>
 
 	{/if}
@@ -38,18 +40,25 @@
 {/if}
 
 {/capture}
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
-<div style="position: relative; width: 100%; z-index: 1;">
-<a class="pommoOpen" href="#">{t}Add Personalization{/t}</a>
+{include file="inc/tpl/messages.tpl"}
 
-<div id="selectField" style="z-index: 2; display: none; position: absolute; top: -5px; left: -5px; width: 90%; background-color: #e6eaff; padding: 7px; border: 1px solid;">
+<a href="#" id="mergeopen">{t}Add Personalization{/t}</a>
 
-<div class="pommoHelp">
-<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" style="float: right; margin-left: 10px;" /><strong>{t}Add Personalization{/t}:</strong> <span class="pommoHelp" style="display: none;">{t}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, ..." instead of "Dear Subsriber, ...". The syntax for personalization is; [[field_name]] or [[field_name|default_value]]. If 'default_value' is supplied and a subscriber has no value for 'field_name', [[field_name|default_value]] will be replaced by default_value. The "[[..]]" will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with "Dear [[firstName|Friend]] [[lastName]], ..." providing you collect firstName and lastName fields.{/t}</span>
+<div id="mailmerge">
 
-<hr style="clear: both;" />
+<a href="#" id="mergeclose">{t}Close{/t}</a>
+
+<div id="mergehelp">
+
+<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" />
+
+<p>{t escape=no 1='<tt>' 2='</tt>' 3='&hellip;'}Mailings can be personalized by adding subscriber field values to the body. For instance, you can have mailings begin with "Dear Susan, %3" instead of "Dear Subscriber, %3". The syntax for personalization is; %1[[field_name]]%2 or %1[[field_name|default_value]]%2. If 'default_value' is supplied and a subscriber has no value for 'field_name', %1[[field_name|default_value]]%2 will be replaced by %1default_value%2. The %1[[%3]]%2 will be erased and replaced with nothing if a default value is not supplied and the subscriber field value does not exist. Thus you can start a mailing with %1Dear [[firstName|Friend]] [[lastName]],%3%2 providing you collect 'firstName' and 'lastName' fields.{/t}</p>
+
 </div>
+
+<div id="selectField">
 
 <div>
 <label for="field">{t}Insert field{/t}:</label>
@@ -63,18 +72,15 @@
 </div>
 
 <div>
-<label for="insert">{t}Default value{/t}:</label>
+<label for="default">{t}Default value{/t}:</label>
 <input type="text" id="default" />
 </div>
 
 <div class="buttons">
 
-<input id="insert" type="submit" value="{t}Insert{/t}" />
+<input type="submit" id="insert" value="{t}Insert{/t}" />
 
 </div>			
-
-<p><a href="#" class="pommoClose" style="float:right;">
-<img src="{$url.theme.shared}images/icons/left.png" alt="back icon" class="navimage" />{t}Close{/t}</a></p>
 
 </div>
 
@@ -106,10 +112,10 @@
 
 <fieldset>
 <legend>{t}HTML Message{/t}</legend>
-
 <div>
 <textarea id="body" name="body" rows="10" cols="120" style="width: 100%;">{$body}</textarea>
 </div>
+<div><span class="error">{validate id="body" message=$formError.body}</span></div>
 
 </fieldset>
 
@@ -118,7 +124,7 @@
 <legend>{t}Text Message{/t}</legend>
 
 <button type="submit" name="altGen" id="altGen" onclick="xinhaSubmit()">
-<img src="{$url.theme.shared}images/icons/down.png" alt="down icon" />{t}Copy text from HTML Message{/t}
+<img src="{$url.theme.shared}images/icons/down.png" alt="down icon" /> {t}Copy text from HTML Message{/t}
 </button>
 
 <div>
@@ -131,6 +137,7 @@
 <div class="buttons">
 
 <input type="submit" id="bForm-submit" name="preview" value="{t}Continue{/t}" />
+<a href="mailings_send.php">{t}Cancel{/t}</a>
 
 </div>
 
@@ -143,9 +150,10 @@
 <label for="body"><span class="required">{t}Message:{/t}</span></label>
 <textarea rows="10" cols="120" id="body" name="body">{$body}</textarea>
 </div>
+<div><span class="error">{validate id="body" message=$formError.body}</span></div>
 
 </fieldset>
-  
+
 <div class="buttons">
 
 <input type="submit" id="bForm-submit" name="preview" value="{t}Continue{/t}" />
@@ -154,14 +162,12 @@
 </div>
 
 {/if}
- 
+
 </form>
 
 {literal}
 <script type="text/javascript">
-
 $(function() {
-
 
 	/********
 
@@ -170,35 +176,29 @@ $(function() {
 		return false;
 	});
 
-	
-	$("#personalize").click(function() {
-		$("#selectField").slideDown('slow', function() {
-			$(this).find("a.pommoClose").click(function() {
-					$("#selectField").slideUp('slow', function() { $(this).unclick(); });
-					return false;
-				});
-			});
-		return false;
-		});
 	***********/
 
-	$("a.pommoOpen").click(function() { $(this).siblings("div").slideDown(); return false; });
-		
-	$("a.pommoClose").click(function() { $(this).parent().parent().slideUp(); return false; });
+	function displayMailMerge() {
+		$("#mergeopen").toggleClass('selected');
+		$("#mailmerge").toggle(); return false;
+	}
 
-	$("div.pommoHelp img").click(function() {
-		$(this).parent().find("span.pommoHelp").toggle(); return false;
-		});
-		
-	$("#insert").click(function() {		
-		if ($("#field").val() == '') { 
-			alert ('{/literal}{t}You must choose a field{/t}{literal}'); 
-			return false; 
-			}
-		
+	$("#mergeopen").click(function() { displayMailMerge(); });
+	$("#mergeclose").click(function() { displayMailMerge();	});
+
+	$("#mergehelp img").click(function() {
+		$("#mergehelp p").toggle(); return false;
+	});
+
+	$("#insert").click(function() {
+		if ($("#field").val() == '') {
+			alert ('{/literal}{t}You must choose a field{/t}{literal}');
+			return false;
+		}
+
 		// sting to append
-		var str = '[['+($("#field").val())+(($("#default").val() == '')? '' : '|'+$("#default").val())+']]';
-		
+		var str = '[['+($("#field").val())+(($("#default").val() == '') ? '' : '|'+$("#default").val())+']]';
+
 		if (!xinha_enabled) {
 			// append to plain text editor (regular textarea)
 			$("#body").get(0).value += (str);
@@ -207,17 +207,14 @@ $(function() {
 			// append to xinha editor
 			xinha_editors.body.insertHTML(str);
 		}
-		
-		
-		// hide dialog
+
+		// hide dialogue
+		displayMailMerge();
 		$("#field").add("#default").val("");
-		
-		$('#selectField').hide();
-		
+
 		return false;
 	});
 });
 </script>
 {/literal}
-
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

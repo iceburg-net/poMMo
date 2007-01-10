@@ -38,7 +38,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  *  command			(enum)		'none' (default), 'restart', 'stop'
  *  serial			(int)		Serial of this mailing
  *  securityCode	(char[32])	Security Code of Mailing
- *	notices			(str)		Mailing Messages
  *  current_status	(enum)		'started', 'stopped' (default)
  */ 
 
@@ -60,7 +59,7 @@ class PommoMailing {
 	// accepts a flag (bool) to designate return of current mailing type
 	// return a mailing object (array)	
 	function & makeDB(&$row) {
-		$in = array(
+		$in = @array(
 		'id' => $row['mailing_id'],
 		'fromname' => $row['fromname'],
 		'fromemail' => $row['fromemail'],
@@ -78,11 +77,10 @@ class PommoMailing {
 		'status' => $row['status']);
 			
 		if ($row['status'] == 1) {
-			$o = array(
+			$o = @array(
 				'command' => $row['command'],
 				'serial' => $row['serial'],
 				'code' => $row['securityCode'],
-				'notices' => $row['notices'],
 				'touched' => $row['touched'], // TIMESTAMP
 				'current_status' => $row['current_status']);
 			$in = array_merge($o,$in);
@@ -244,7 +242,7 @@ class PommoMailing {
 			[charset='%S',]
 			[status=%I,]
 			started=FROM_UNIXTIME(%i)";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$in['fromname'],
 			$in['fromemail'],
 			$in['frombounce'],
@@ -276,14 +274,12 @@ class PommoMailing {
 			[command='%S',]
 			[serial=%I,]
 			[securityCode='%S',]
-			[notices='%S',]
 			[current_status='%S',]
 			current_id=%i";
-			$query = $dbo->prepare($query,array(
+			$query = $dbo->prepare($query,@array(
 				$in['command'],
 				$in['serial'],
 				$in['code'],
-				$in['notices'],
 				$in['current_status'],
 				$id
 			));
@@ -318,6 +314,25 @@ class PommoMailing {
 			SELECT count(mailing_id)
 			FROM " . $dbo->table['mailings'];
 		return ($dbo->query($query,0));
+	}
+	
+	// gets *latest* notices from a mailing
+	// accepts mailing ID
+	// accepts a limit (def. 50) -- or 0
+	// returns an array of notices
+	function getNotices($id,$limit = 50) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$limit = intval($limit);
+		if($limit == 0)
+			$limit = false;
+		
+		$query = "
+			SELECT notice FROM ".$dbo->table['mailing_notices']."
+			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
+		$query = $dbo->prepare($query,array($id,$limit));
+		return $dbo->getAll($query,'assoc','notice');
 	}
 	
 }

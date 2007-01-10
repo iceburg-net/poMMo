@@ -1,8 +1,8 @@
-{include file="admin/inc.header.tpl"}
-<div id="mainbar">
+{include file="inc/tpl/admin.header.tpl"}
 
+<h2>{t}Plugin Configuration{/t}</h2>
 
-	<h1>{t}Plugin Configuration{/t}</h1>
+<!--<div id="boxMenu">-->
 
 	<div>
 		<a class="pommoClose" href="../adminplugins.php" style="float: left; line-height:18px; " >
@@ -10,11 +10,14 @@
 		{t}Return to Plugin Menu{/t}
 		</a>
 	</div>
-	<div style="text-align: right; clear: both;width: 1px;"></div>
+	<!--<div style="text-align: right; clear: both;width: 1px;"></div>-->
 	<br>
 
-	{include file="admin/inc.messages.tpl"}
+<!--</div>--> <!--boxmenu-->
+
+	{include file="inc/tpl/messages.tpl"}
 	
+	<div id="plugincontent">
 
 		<!--CONTENT-->
 
@@ -195,5 +198,7 @@
 			{/if}
 		<br><br>
 
-</div>
-{include file="admin/inc.footer.tpl"}
+	</div> <!-- plugincontent -->
+
+<!--</div>--> <!--boxmenu closed at the top-->
+{include file="inc/tpl/admin.footer.tpl"}

@@ -13,11 +13,27 @@
 die();
 ?>
 
+Mailing notices -- no dupes are displayed
+
+Test mailing exchanger from setup @ configure page
+
+Toggle gettext emulation (phpgettext)
+
+----
+"Hello. I have upload a file with about 35.000 emails.
+
+All ok. But, after, when i need to select field i have this error:
+
+Fatal error: Maximum execution time of 30 seconds exceeded
+
+/inc/lib/safesql/SafeSQL.class.php on line 106"
+----
+
+[LEGACY POMMO]
+  Port config parser + config.php/sample
+
 [BEFORE Aardvark Final]
-	+ Rewritten Import/Export
 	+ Message Templating
-	+ Rewritten Default Theme (CSS, JS, TEMPLATES)
-	
 	+ Remove language from default distribution, seperate download.
 	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
 	+ Rewrite validate.js for scoping by table row
@@ -27,9 +43,10 @@ die();
 	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 	Use TableSorter/Table layout for field, group, and group filter display
-	Fix table styling/striping -- don't rely on #subs! make a generic architecture + modular CSS include!
-	  Seen in subscriber_manage, import_csv, and mailings_history SO FAR
-	  
+	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
+	ReStripe rows on delete/tableSort
+	ELEMENTS with TITLE="??" : Title needs to be translated -- use SAME text as INNERHTML/LINK text
+	
 [BRICE -- "Feel free to inherit any of these ;)" ]
 
 	NOTES:
@@ -38,12 +55,32 @@ die();
 	SHORT TERM: 
 	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
 	  
+	  (API) Maintenance : clean out old/not utilized activations from subscriber_update
+	  
 	  (feature) add message templating
+	  
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
+	  (enhancement) Setup > Config tabbed layout
+	  
 	  (feature) Add OR to group filtering
 	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
-	  (feature) Rewritten Pager -- current one is very ugly when > 25 pages are available. Use "google" like paging.
-
+	  	+ Use http://interface.eyecon.ro/demos/sort_example.html  to move between && or ||
+	  	
+	  	----
+			SELECT count(subscriber_id)
+			from subscribers 
+			where 
+			status ='1' 
+			AND (
+			subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
+			AND subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
+			OR subscriber_id in
+				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
+			);
+	  	----
+	  	
 	  ADD Support Page (next to admin page in main menu bar)
 		+ Enhanced support library
 		+ PHPInfo()  (or specifically mysql, php, gettext, safemode, webserver, etc. versions)
@@ -52,11 +89,6 @@ die();
 		+ Link to WIKI documentation
 			+ Make a user-contributed open WIKI documentation system
 			+ When support page is clicked, show specific support topics for that page
-		+ Clear All Subscribers
-		+ Reset Database
-		+ Backup Database
-		+ Ensure max run time is 30 seconds if safe mode is enabled
-
 	  	
 	MEDIUM TERM:
 	
@@ -66,6 +98,8 @@ die();
 	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
 	  (API) Better Organize inc/helpers/messages & validate... underutilized!
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
+	  
+	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
 	  
 	  
 	  (feature) Implement drag & drop between AND and OR filters (via table row handles)
@@ -123,19 +157,4 @@ die();
 
   -----------------------------------------------
  	[DONE]
-
-
- 
-  	(API) - Fix pager class. See Corinna's comments @ admin/mailings/mailings_history.php + 
-	// This seems to not handle the case, that when we are on the last page of multiple pages,
-	// and then choose to increase the diplay number then the start value is too great
-	// eg. limit=5, 3 pages, go to page 3 -> then choose limit=10 
-	// -> no mailings found because of start = 20 
-	// its doing right, but less user friendly it it says no mailing, but its only that there are no mailings in this range
-	// $pagelist : echo to print page navigation. -- 
-	// TODO: adding appendURL to every link gets VERY LONG!!! come up w/ new plan!
-	-> i started from the beginning in the case of $start geater then number of mails -> simple :/
-	
-	bb: I'll be replacing the pager class with a more Google like one -- current one displays WAY too many pages
-	with large amounts of subscribers (50,000+)
 

@@ -32,6 +32,18 @@ $smarty->prepareForForm();
 if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
+
+// Initialize page state with default values overriden by those held in $_REQUEST
+$state =& PommoAPI::stateInit('mailings_send2',array(
+	'body' => '',
+	'altbody' => '',
+	'altInclude' => 'no',
+	'editorType' => 'wysiwyg'
+	),
+	$_REQUEST);
+
+@$smarty->assign('ishtml', $pommo->_session['state']['mailings_send']['ishtml']);
+
 // check if altBody should be imported from HTML
 if (isset($_POST['altGen'])) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
@@ -39,45 +51,32 @@ if (isset($_POST['altGen'])) {
 	$_POST['altbody'] = $h2t->get_text();
 }
 
-// Get MailingData from SESSION.
-$mailingData = $pommo->get('mailingData');
-if (!$mailingData) {
-	$mailingData = array ();
-}
-@$smarty->assign('ishtml', $mailingData['ishtml']);
-
-// remove normal forms CSS/JAVA if XInha form is to be printed
-if ($mailingData['ishtml'] == 'html') {
-	$smarty->assign('isForm',FALSE);
-}
-
-if (empty ($_POST)) {
+if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
+	SmartyValidate :: connect($smarty, true);
+	SmartyValidate :: register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+	
 	$formError = array ();
-	$formError['fromname'] = $formError['body'] = Pommo::_T('Cannot be empty.');
+	$formError['body'] = Pommo::_T('Cannot be empty.');
 	$smarty->assign('formError', $formError);
 
-	// load mailing data from session
-	@$_POST['body'] = $mailingData['body'];
-	@$_POST['altbody'] = $mailingData['altbody'];
-	@$_POST['altInclude'] = $mailingData['altInclude'];
-
-} elseif(isset($_POST['preview'])) {
+} else {
 	// ___ USER HAS SENT FORM ___
-
+	SmartyValidate :: connect($smarty);
+	
+	if (SmartyValidate :: is_valid($_POST) && isset($_POST['preview'])) {
 		// __ FORM IS VALID
-		unset($_POST['preview']);
-		$mailingData['body'] = $_POST['body'];
-		$mailingData['altbody'] = $_POST['altbody'];
-		$mailingData['altInclude'] = $_POST['altInclude'];
-		$pommo->set(array('mailingData' => $mailingData));
-
+		SmartyValidate :: disconnect();
 		Pommo::redirect('mailings_send3.php');
+	}
+	// __ FORM NOT VALID
+	if (isset($_POST['preview']))
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));	
 }
 
 $smarty->assign('fields',PommoField::get());
-$smarty->assign($_POST);
+$smarty->assign($state);
 $smarty->display('admin/mailings/mailings_send2.tpl');
 Pommo::kill();
 ?>

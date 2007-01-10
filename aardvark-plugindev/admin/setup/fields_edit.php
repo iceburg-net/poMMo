@@ -29,11 +29,11 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
-
 $field = PommoField::get(array('id' => $_REQUEST['field_id']));
 if (count($field) < 1)
 	Pommo::redirect('setup_fields.php');
 $field =& current($field); // reference the first field returned by PommoField::getById
+
 
 // check if user submitted options to add
 if (!empty ($_POST['dVal-add'])) {
@@ -44,8 +44,10 @@ if (!empty ($_POST['dVal-add'])) {
 }
 
 // check if user requestedfield_id='.$field['id'] to remove an option
-if (!empty ($_REQUEST['dVal-del']) && !empty ($_REQUEST['delOption'])) {
-	
+if (!empty ($_REQUEST['dVal-del'])) {
+	if(empty ($_REQUEST['delOption']))
+		Pommo::redirect($_SERVER['PHP_SELF'].'?field_id='.$field['id']);
+		
 	$affected = PommoField::subscribersAffected($field['id'],$_REQUEST['delOption']);
 	if(count($affected) > 0 && empty($_GET['dVal-force'])) {
 		$smarty->assign('confirm',array(

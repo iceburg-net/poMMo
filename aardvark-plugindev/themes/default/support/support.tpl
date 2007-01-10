@@ -1,8 +1,10 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Support Page{/t}</h2>
 
 <p><a href="support.lib.php">poMMo Support Library</a></p>
+
+<p>poMMo version: {$version} +{$revision}</p>
 
 <p><i>Coming to a theatre near you</i></p>
 
@@ -22,4 +24,4 @@
 + Ensure max run time is 30 seconds if safe mode is enabled
 </pre>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

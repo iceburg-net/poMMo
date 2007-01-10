@@ -32,20 +32,27 @@ $gid = 'all';
 foreach($groups as $group) 
 	if ($group['name'] == $mailing['group'])
 		$gid = $group['id'];
-		
 
-$pommo->set(array(
-	'mailingData' => array (
-		'fromname' => $mailing['fromname'],
-		'fromemail' => $mailing['fromemail'],
-		'frombounce' => $mailing['frombounce'],
-		'subject' => $mailing['subject'],
-		'ishtml' => $mailing['ishtml'],
-		'charset' => $mailing['charset'],
-		'mailgroup' => $gid,
-		'altbody' => $mailing['altbody'],
-		'body' => $mailing['body']
-		)
+PommoAPI::stateReset(array('mailings_send','mailings_send2'));
+
+$state =& PommoAPI::stateInit('mailings_send',array(
+	'fromname' => $mailing['fromname'],
+	'fromemail' => $mailing['fromemail'],
+	'frombounce' => $mailing['frombounce'],
+	'list_charset' => $mailing['charset'],
+	'subject' => $mailing['subject'],
+	'ishtml' => $mailing['ishtml'],
+	'mailgroup' => $gid
 	));
+
+$altInclude = (empty($mailing['altbody'])) ? 'no' : 'yes';
+
+$state =& PommoAPI::stateInit('mailings_send2',array(
+	'body' => $mailing['body'],
+	'altbody' => $mailing['altbody'],
+	'altInclude' => $altInclude,
+	'editorType' => 'wysiwyg'
+	));
+
 Pommo::redirect($pommo->_baseUrl.'admin/mailings/mailings_send.php');
 ?>

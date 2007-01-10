@@ -33,12 +33,13 @@ Set the table prefix
  	
 ::: Language Information :::
 Set this to your desired locale. Current languages available are;
- bg - Bulgarian					es - Spanish
+ bg - Bulgarian				es - Spanish
  br - Brazilian Portugese	fr - French
- da - Danish						it - Italian
- de - German					nl - Dutch
- en - English						ro - Romanian
-
+ da - Danish				it - Italian
+ de - German				nl - Dutch
+ en - English				ro - Romanian
+ en-uk - British			ru - Russian
+ 
 	[lang] = en
 	
 
@@ -62,9 +63,9 @@ Set the verbosity level of logging (1: Debugging 2: Informational 3: Important[d
   
 Set the Base URL.
   This is the path to poMMo relative to the WEB. Below are examples with value;
-  (poMMo location)                                                 (baseURL value)
-  http://newsletter.mysite.com/                                /
-  http://www.mysite.com/me/pommo                        /me/pommo/
+  (poMMo location)							(baseURL value)
+  http://newsletter.mysite.com/				/
+  http://www.mysite.com/me/pommo			/me/pommo/
   
   NOTE: Include trailing slash
 

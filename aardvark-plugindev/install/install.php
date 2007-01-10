@@ -15,7 +15,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/install.php');
 $pommo->init(array('authLevel' => 0, 'install' => TRUE));
 
 session_start(); // required by smartyValidate. TODO -> move to prepareForForm() ??
@@ -31,14 +31,12 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 // Check to make sure poMMo is not already installed.
-if (bmIsInstalled()) {
+if (PommoInstall::verify()) {
 	$logger->addErr(Pommo::_T('poMMo is already installed.'));
 	$smarty->assign('installed', TRUE);
 	$smarty->display('install.tpl');
 	Pommo::kill();
 }
-
-
 
 if (isset ($_REQUEST['disableDebug']))
 	unset ($_REQUEST['debugInstall']);
@@ -80,7 +78,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			if (isset ($_REQUEST['debugInstall']))
 				$dbo->debug(TRUE);
 
-			$install = parse_mysql_dump();
+			$install = PommoInstall::parseSQL();
 
 			if ($install) {
 				// installation of DB went OK, set configuration values to user supplied ones
@@ -96,8 +94,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				PommoAPI::configUpdate(array('key' => $key),TRUE);
 
 				// load configuration [depricated?], set message defaults.
-				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/configuration.php');
-				PommoHelperConfig::messageResetDefault('all');
+				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
+				PommoHelperMessages::resetDefault('all');
 
 				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');

@@ -1,10 +1,10 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>{t}Configure{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="articleimg" /> {t}You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="navimage right" /> {t}You can change the login information, set website and mailing list parameters, end enable demonstration mode. If you enable demonstration mode, no emails will be sent from the system.{/t}</p>
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <form method="post" action="">
 <fieldset>
@@ -65,6 +65,14 @@
 <span class="notes">{t}(Webpage users will see upon subscription attempt. Leave blank to display default confirmation page.){/t}</span>
 </div>
 
+<div>
+<label for="list_confirm">{t}Public Mailings{/t} </label>
+<input type="radio" name="public_history" value="on"{if $public_history == 'on'} checked="checked"{/if} /> on
+<input type="radio" name="public_history" value="off"{if $public_history != 'on'} checked="checked"{/if} /> off
+<span class="notes">{t escape=no 1="<a href='`$url.base`user/mailings.php'>" 2='</a>'}(When on, the public can view past mailings at this %1URL%2){/t}</span>
+</div>
+
+
 </fieldset>
 
 <div class="buttons">
@@ -116,21 +124,22 @@
 
 </fieldset>
 
-<fieldset>
+<fieldset class="advanced">
 <legend>{t}Advanced{/t}</legend>
 
 <div>
 <label for="list_charset"><span class="required">{t}Character Set:{/t}</span> <span class="error">{validate id="list_charset" message=$formError.list_charset}</span></label>
 <select name="list_charset" id="list_charset">
 <option value="UTF-8"{if $list_charset == 'UTF-8'} selected="selected"{/if}>{t}UTF-8 (recommended){/t}</option>
-<option value="ISO-8859-1"{if $list_charset == 'ISO-8859-1'} selected="selected"{/if}>{t}western (ISO-8859-1){/t}</option>
+<option value="ISO-8859-1"{if $list_charset == 'ISO-8859-1'} selected="selected"{/if}>{t}Western (ISO-8859-1){/t}</option>
+<option value="ISO-8859-15"{if $list_charset == 'ISO-8859-15'} selected="selected"{/if}>{t}Western (ISO-8859-15){/t}</option>
 <option value="ISO-8859-2"{if $list_charset == 'ISO-8859-2'} selected="selected"{/if}>{t}Central/Eastern European (ISO-8859-2){/t}</option>
 <option value="ISO-8859-7"{if $list_charset == 'ISO-8859-7'} selected="selected"{/if}>{t}Greek (ISO-8859-7){/t}</option>
-<option value="ISO-8859-15"{if $list_charset == 'ISO-8859-15'} selected="selected"{/if}>{t}western (ISO-8859-15){/t}</option>
+<option value="ISO-2022-JP"{if $list_charset == 'ISO-2022-JP'} selected="selected"{/if}>{t}Japanese (ISO-2022-JP){/t}</option>
+<option value="EUC-JP"{if $list_charset == 'EUC-JP'} selected="selected"{/if}>{t}Japanese (EUC-JP){/t}</option>
 <option value="cp1251"{if $list_charset == 'cp1251'} selected="selected"{/if}>{t}cyrillic (Windows-1251){/t}</option>
 <option value="KOI8-R"{if $list_charset == 'KOI8-R'} selected="selected"{/if}>{t}cyrillic (KOI8-R){/t}</option>
 <option value="GB2312"{if $list_charset == 'GB2312'} selected="selected"{/if}>{t}Simplified Chinese (GB2312){/t}</option>
-<option value="EUC-JP"{if $list_charset == 'EUC-JP'} selected="selected"{/if}>{t}Japanese (EUC-JP){/t}</option>
 </select>
 <span class="notes">{t}(Select Default Character Set of Mailings){/t}</span>
 </div>
@@ -147,18 +156,18 @@
 
 {if $list_exchanger == 'smtp'}
 <div>
-<a href="setup_smtp.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" />Setup your SMTP Servers relays</a>
+<a href="setup_smtp.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
 <span class="notes">{t}(configure SMTP relays){/t}</span>
 </div>
 {/if}
 
 <div>
-<a href="setup_messages.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> Customize mailed messages</a>
+<a href="setup_messages.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Customize mailed messages{/t}</a>
 <span class="notes">{t}(define the email messages sent during subscription, updates, etc.){/t}</span>
 </div>
 
 <div>
-<a href="setup_throttle.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> Set mail throttle values</a>
+<a href="setup_throttle.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Set mailing throttle values{/t}</a>
 <span class="notes">{t}(controls mails per second, bytes per second, and domain limits){/t}</span>
 </div>
 
@@ -172,4 +181,4 @@
 
 </form>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

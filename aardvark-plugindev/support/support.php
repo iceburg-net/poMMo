@@ -15,14 +15,8 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
-
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'install/helper.install.php');
-
-if (bmIsInstalled())
-	$pommo->init();
-else
-	$pommo->init(array('authLevel' => 0));
+$pommo->init();
 
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
@@ -33,6 +27,9 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
+
+$smarty->assign('version',$pommo->_config['version']);
+$smarty->assign('revision',$pommo->_config['revision']);
 
 $smarty->display('support/support.tpl');
 Pommo::kill();
