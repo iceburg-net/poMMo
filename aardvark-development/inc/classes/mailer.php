@@ -193,14 +193,17 @@ class PommoMailer extends PHPMailer {
 			$this->From = $this->_fromemail;
 			$this->Subject = $this->_subject;
 			
-			// don't set Sender (bounce address) if SAFE MODE is on
-			if (!ini_get('safe_mode'))
-				$this->Sender = $this->_frombounce;
+			// set Sender (bounce address)
+			$this->Sender = $this->_frombounce;
 			
+			// if safe mode is on && using sendmail, force php mail() as excahnger [sendmail will not send w/ safe mode on]
+			if (ini_get('safe_mode') && $this->_exchanger == 'sendmail')
+				$this->_exchanger = 'mail';
 
 			// make sure exchanger is valid, DEFAULT to PHP Mail
 			if ($this->_exchanger != "mail" && $this->_exchanger != "sendmail" && $this->_exchanger != "smtp")
-				$this->_exchanger = "mail";
+				$this->_exchanger = "mail";				
+			
 			$this->Mailer = $this->_exchanger;
 
 			if ($this->Mailer == 'smtp') { // loads the default relay (#1) -- use setRelay() to change.
@@ -274,33 +277,6 @@ class PommoMailer extends PHPMailer {
 				// MULTI MODE! -- antiquated.
 				// incorporate BCC+Enveloping in here if type is SMTP
 				// TODO Play w/ the size limiting of arrays sent here
-
-				/*
-								foreach (array_keys($to) as $key) {
-									
-									if ($key == "0") 
-							 			$this->AddAddress($to[$key]);
-									else
-							  			$this->AddBcc($to[$key]);
-								} */
-
-				foreach (array_keys($to) as $key) {
-					$this->ClearAddresses();
-					$this->AddAddress($to[$key]);
-					
-					// check for personalization personaliztion and override message body
-					if ($this->_personalize) {
-						global $pommo;
-						$this->Body = PommoHelperPersonalize::body($this->_body, $subscriber, $pommo->_session['personalization_body']);
-						if (!empty($this->_altbody))
-							$this->AltBody = PommoHelperPersonalize::body($this->_altbody,$subscriber,$pommo->_session['personalization_altbody']);
-					}
-					
-					// send the mail. If unsucessful, add error message.
-					if (!$this->Send())
-						$errors[] = 'Sending to: ' . $to[$key] . ', Error: ' . $this->ErrorInfo;
-				}
-
 			}
 		} else {
 			$this->logger->addMsg(sprintf(Pommo::_T("Mail to: %s not sent. Demonstration mode is active."),(is_array($to)) ? implode(',', $to) : $to));
