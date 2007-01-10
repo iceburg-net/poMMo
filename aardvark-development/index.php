@@ -26,7 +26,6 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-
 // log the user out if requested
 if (isset($_GET['logout'])) {
 	$pommo->_auth->logout();
@@ -38,8 +37,6 @@ if ($pommo->_auth->isAuthenticated()) {
 	// If user is authenticated (has logged in), redirect to admin.php
 	Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'admin/admin.php');
 }
-
-
 // Check if user submitted correct username & password. If so, Authenticate.
 elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST['password'])) {	
 	$auth = PommoAPI::configGet(array (
@@ -48,9 +45,13 @@ elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST
 	));
 	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
 		
-		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
-		PommoHelperMaintenance::perform();
+		
+		// don't perform maintenance if accessing support area
+		if(!isset($_GET['referer']) || !basename($_GET['referer']) == 'support.php') {
+			// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+			PommoHelperMaintenance::perform();
+		}
 
 		$pommo->_auth->login($_POST['username']);
 		
