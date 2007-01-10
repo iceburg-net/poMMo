@@ -47,8 +47,8 @@ $state =& PommoAPI::stateInit('mailings_send2',array(
 // check if altBody should be imported from HTML
 if (isset($_POST['altGen'])) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
-	$h2t = & new html2text($_POST['body']);
-	$_POST['altbody'] = $h2t->get_text();
+	$h2t = & new html2text($state['body']);
+	$state['altbody'] = $h2t->get_text();
 }
 
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
