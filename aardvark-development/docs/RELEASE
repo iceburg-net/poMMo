@@ -1,5 +1,17 @@
+=== Release Notes for Aardvark PR14.3.1 ===
+ .: Released Janurary 10, 2007
+ 
+[Bug Fixes]
+
+  * Fixed character escaping issue in mailing composition
+  * Fixed copying html message to alternative text body
+  * Field ID is not displayed @ field ordering table
+  * Maintenance no longer performed when logging into support area
+  * Sendmail exchanger now works under SAFE MODE [ defaults to PHP Mail() ]
+  
+  
 === Release Notes for Aardvark PR14.3 ===
- <Released Janurary 1, 2007>
+ .: Released Janurary 10, 2007
  
 [Additions]
 
