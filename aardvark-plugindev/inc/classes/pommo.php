@@ -16,7 +16,7 @@
 */
 
 class Pommo {
-	var $_revision = '26'; // poMMo's revision #
+	var $_revision = 29; // poMMo's revision #
 
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object
@@ -34,12 +34,10 @@ class Pommo {
 
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_session;  // pointer to this install's/instance values in $_SESSION
-	
 
 	//corinna TODO -> think of some mechanism, or put it to the config file
 	var $_useplugins = TRUE;	// main plugin switcher!
 	//corinna
-	
 
 	// default constructor
 	function Pommo($baseDir) {
@@ -64,23 +62,6 @@ class Pommo {
 		// TODO -> write a web-based frontend to config.php creation
 		$config = PommoHelper::parseConfig($this->_baseDir . 'config.php');
 		
-		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
-		// TODO -> provide validation of baseURL ?
-		if (isset ($config['baseURL'])) {
-			$this->_baseUrl = $config['baseURL'];
-		} else {
-			// If we're called from an outside (embedded) script, read baseURL from "last known good".
-			// Else, set it based off of REQUEST
-			if (defined('_poMMo_embed')) {
-				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
-				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
-			} else {
-				//backupurl://$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
-				$baseUrl = preg_replace('@/(inc|setup|user|install|plugins(/lib|/lib/interfaces|/adminplugins|/adminplugins(/useradmin|/useradmin(/listmanager|/respmanager|/usermanager)|/pluginconfig))|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
-				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
-			}
-		}
-		
 		// check to see if config.php was "properly" loaded
 		if (count($config) < 5)
 			Pommo::kill('Could not read config.php');
@@ -97,13 +78,33 @@ class Pommo {
 		$this->_logger->_verbosity = $this->_verbosity;
 		
 		// include translation (l10n) methods if language is not English
+		$this->_l10n = FALSE;
 		if ($this->_language != 'en') {
+			$this->_l10n = TRUE;
 			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
 		
+		// set base URL (e.g. http://mysite.com/news/pommo => 'news/pommo/')
+		// TODO -> provide validation of baseURL ?
+		if (isset ($config['baseURL'])) {
+			$this->_baseUrl = $config['baseURL'];
+		} else {
+			// If we're called from an outside (embedded) script, read baseURL from "last known good".
+			// Else, set it based off of REQUEST
+			if (defined('_poMMo_embed')) {
+				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
+				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
+			} else {
+				//$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				$baseUrl = preg_replace('@/(inc|setup|user|install|plugins(/lib|/lib/interfaces|/adminplugins|/adminplugins(/useradmin|/useradmin(/listmanager|/respmanager|/usermanager)|/pluginconfig))|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
+			}
+		}
+		
+		
 		// make sure workDir is writable
-		if (!is_dir($this->_workDir . '/pommo/smarty') && !defined('_poMMo_support')) {
+		if (!is_dir($this->_workDir . '/pommo/smarty')) {
 				
 			$wd = $this->_workDir; $this->_workDir = null;
 			if (!is_dir($wd))
@@ -122,9 +123,9 @@ class Pommo {
 
 		// set the current "section" -- should be "user" for /user/* files, "mailings" for /admin/mailings/* files, etc. etc.
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
-			
+		
 		// initialize database link
-		$this->_dbo = new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
+		$this->_dbo = @new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 
 		// turn off debugging if in user area
 		if($this->_section == 'user') {
@@ -165,6 +166,10 @@ class Pommo {
 		if ($p['noDebug']) {
 			$this->_dbo->debug(FALSE);
 			$this->_debug = 'off';
+			
+			// don't display PHP error messages [useful JSON ajax request]
+			if ($this->_verbosity > 1)
+				ini_set('display_errors', '0');
 		}
 
 		// Bypass Reading of Config, SESSION creation, and authentication checks and return
@@ -203,6 +208,12 @@ class Pommo {
 		
 		$this->_session =& $_SESSION['pommo'.$key];
 		
+		// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
+		if (defined('_poMMo_support')) {
+			Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
+			$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
+		}
+		
 		// check authentication levels
 		$this->_auth = new PommoAuth(array (
 			'requiredLevel' => $p['authLevel']
@@ -233,15 +244,15 @@ class Pommo {
 	 function _T($msg) {
 		global $pommo;
 		if($pommo->_escaping)
-			return ($GLOBALS['pommol10n']) ? htmlspecialchars(PommoHelperL10n::translate($msg)) : htmlspecialchars($msg);
-		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translate($msg) : $msg;
+			return ($pommo->_l10n) ? htmlspecialchars(PommoHelperL10n::translate($msg)) : htmlspecialchars($msg);
+		return ($pommo->_l10n) ? PommoHelperL10n::translate($msg) : $msg;
 	}
 
 	function _TP($msg, $plural, $count) { // for plurals
 		global $pommo;
 		if($pommo->_escaping)
-			return ($GLOBALS['pommol10n']) ? htmlspecialchars(PommoHelperL10n::translatePlural($msg, $plural, $count)) : htmlspecialchars($msg);
-		return ($GLOBALS['pommol10n']) ? PommoHelperL10n::translatePlural($msg, $plural, $count) : $msg;
+			return ($pommo->_l10n) ? htmlspecialchars(PommoHelperL10n::translatePlural($msg, $plural, $count)) : htmlspecialchars($msg);
+		return ($pommo->_l10n) ? PommoHelperL10n::translatePlural($msg, $plural, $count) : $msg;
 	}
 
 
@@ -263,12 +274,11 @@ class Pommo {
 			$this->_session['data'] = array_merge($this->_session['data'], $value);
 	}
 
-	function & get($name = FALSE) {
-		if ($name) {
+	function get($name = FALSE) {
+		if ($name)
 			return (isset($this->_session['data'][$name])) ? 
-				$this->_session['data'][$name] : 
+				$this->_session['data'][$name] :
 				array();
-		}
 		return $this->_session['data'];
 	}
 	
@@ -359,8 +369,5 @@ class Pommo {
 			$files[$file] = TRUE;
 		}
 	}
-	
-	
-	
 }
 ?>

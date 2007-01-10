@@ -1,11 +1,10 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
-<div id="mainbar">
+<h2>{t}Responsible Persons Management{/t}</h2>
 
-<h1>{t}Responsible Persons Management{/t}</h1>
+<div id="boxMenu">
 
-	{include file="admin/inc.messages.tpl"}
-		
+	{include file="inc/tpl/messages.tpl"}
 		
 		<div>
 			<a class="pommoClose" href="../useradmin.php" style="float: left; line-height:18px;">
@@ -13,9 +12,13 @@
 			{t}Return to User Management Menu{/t}
 			</a>
 		</div>
-		<div style="text-align: right; clear: both;width: 1px;"></div>
+		<!--<div style="text-align: right; clear: both;width: 1px;"></div>-->
 		<br>
-	
+		
+</div>
+
+<div id="plugincontent">
+
 		{if ($nrlists <= 0) } 
 			<i>No Mailing List found.</i>
 		{else}
@@ -180,6 +183,7 @@
 		<div align="left">
 			<a href="resp_main.php?action=showAdd">&raquo; Add new responsible person</a>
 		</div>
-		
+
+</div> <!-- plugincontent-->
 
 {include file="admin/inc.footer.tpl"}

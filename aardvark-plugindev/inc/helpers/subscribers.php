@@ -57,7 +57,7 @@ class PommoSubscriber {
 	// accepts a flag (bool) to designate return of a pending subscriber type
 	// return a subscriber object (array)
 	function & makeDB(&$row, $pending = FALSE) {
-		$in = array(
+		$in = @array(
 		'id' => $row['subscriber_id'],
 		'email' => $row['email'],
 		'touched' => $row['time_touched'],
@@ -244,9 +244,9 @@ class PommoSubscriber {
 		return $o;
 	}
 	
-	// fetches a subscriber ID from an email
+	// fetches subscriber IDs from passed emails
 	// accepts a email address (str) or array of email addresses
-	// returns a subscriber ID (int) or false
+	// returns an array of subscriber IDs
 	function & getIDByEmail($email) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -254,24 +254,8 @@ class PommoSubscriber {
 		$query = "
 			SELECT subscriber_id
 			FROM " . $dbo->table['subscribers'] . "
-			WHERE email='%s'
-			LIMIT 1";
-		$query = $dbo->prepare($query,array($email));
-		return $dbo->query($query,0);
-	}
-	
-	// fetches subscriber IDs from passed emails
-	// accepts a array of email addresses
-	// returns an array of subscriber IDs
-	function & getIDsByEmails(&$emails) {
-		global $pommo;
-		$dbo =& $pommo->_dbo;
-		
-		$query = "
-			SELECT subscriber_id
-			FROM " . $dbo->table['subscribers'] . "
 			WHERE email IN (%q)";
-		$query = $dbo->prepare($query,array($emails));
+		$query = $dbo->prepare($query,array($email));
 		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	
@@ -356,7 +340,7 @@ class PommoSubscriber {
 			flag=%i,
 			ip=INET_ATON('%s'),
 			status=%i";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$id,
 			$in['email'],
 			$in['registered'],
@@ -379,7 +363,7 @@ class PommoSubscriber {
 			subscriber_id=%i,
 			pending_code='%s',
 			pending_type='%s'";
-			$query = $dbo->prepare($query,array(
+			$query = $dbo->prepare($query,@array(
 				$in['pending_array'],
 				$id,
 				$in['pending_code'],
@@ -461,7 +445,7 @@ class PommoSubscriber {
 			[flag=%I,]
 			time_touched=CURRENT_TIMESTAMP
 			WHERE subscriber_id=%i";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$in['email'],
 			$in['registered'],
 			$in['ip'],
@@ -472,18 +456,18 @@ class PommoSubscriber {
 		if (!$dbo->query($query) || ($dbo->affected() != 1))
 				return false;
 		
-		
 		// if this is "full", delete all. otherwise delete FIDs.
-		$select = ($full) ? null : array_keys($in['data']);
-		
-		$query = "
-			DELETE
-			FROM " . $dbo->table['subscriber_data'] . "
-			WHERE subscriber_id=%i
-			[AND field_id IN (%C)]";
-		$query = $dbo->prepare($query,array($in['id'], $select));
-		if (!$dbo->query($query))
-				return false;
+		if (!empty($in['data']) || $full) {
+			$select = ($full) ? null : array_keys($in['data']);
+			$query = "
+				DELETE
+				FROM " . $dbo->table['subscriber_data'] . "
+				WHERE subscriber_id=%i
+				[AND field_id IN (%C)]";
+			$query = $dbo->prepare($query,array($in['id'], $select));
+			if (!$dbo->query($query))
+					return false;
+		}
 		
 		$values = array();
 		foreach ($in['data'] as $field_id => $value)

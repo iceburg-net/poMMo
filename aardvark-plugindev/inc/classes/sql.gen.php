@@ -47,9 +47,9 @@ class PommoSQL {
 						case "not":
 							$joins[] = $dbo->prepare("[".$join."$p$i.value NOT IN (%Q))]",array($vals)); break;
 						case "less":
-							$joins[] = $dbo->prepare("[".$join."$p$i.value < %I)]",array($vals)); break;
+							$joins[] = $dbo->prepare("[".$join."$p$i.value < %I)]",array($vals[0])); break;
 						case "greater":
-							$joins[] = $dbo->prepare("[".$join."$p$i.value > %I)]",array($vals)); break;
+							$joins[] = $dbo->prepare("[".$join."$p$i.value > %I)]",array($vals[0])); break;
 						case "true":
 							$joins[] = $join."$p$i.value = 'on')"; break;
 						case "false":

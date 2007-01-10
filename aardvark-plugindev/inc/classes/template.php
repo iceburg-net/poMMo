@@ -27,13 +27,12 @@ class PommoTemplate extends Smarty {
 		// set smarty directories
 		$this->_themeDir = $pommo->_baseDir . 'themes/';
 		$this->template_dir = $this->_themeDir . $this->_pommoTheme;
-		$this->config_dir = $this->_template_dir . '/configs';
+		$this->config_dir = $this->template_dir . '/inc/config';
 		$this->cache_dir = $pommo->_workDir . '/pommo/smarty';
 		$this->compile_dir = $pommo->_workDir . '/pommo/smarty';
 		$this->plugins_dir = array (
 				'plugins', // the default under SMARTY_DIR
-	$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext'
-		);
+				$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext');
 
 		// set base/core variables available to all template
 		$this->assign('url', array (
@@ -44,11 +43,11 @@ class PommoTemplate extends Smarty {
 			'base' => $pommo->_baseUrl,
 			'http' => $pommo->_http
 		));
-		$this->assign('config', array (
+		$this->assign('config', @array (
 			'app' => array (
 				'path' => $pommo->_baseDir,
 				'weblink' => '<a href="http://pommo.sourceforge.net/">' . Pommo::_T('poMMo Website') . '</a>',
-				'version' => $pommo->_config['version']),
+				),
 			'site_name' => $pommo->_config['site_name'],
 			'site_url' => $pommo->_config['site_url'], 
 			'list_name' => $pommo->_config['list_name'],
@@ -64,6 +63,10 @@ class PommoTemplate extends Smarty {
 
 		// assign section (used for sidebar template)
 		$this->assign('section', $pommo->_section);
+		
+		// destroy pagination data if not in use
+		if(isset($_SESSION['SmartyPaginate']) && $_SESSION['SmartyPaginate']['default']['url'] != $_SERVER['PHP_SELF'])
+			unset($_SESSION['SmartyPaginate']);
 	}
 
 	// display function falls back to "default" theme if theme file not found
@@ -89,15 +92,32 @@ class PommoTemplate extends Smarty {
 		return parent :: display($resource_name, $cache_id = null, $compile_id = null, $display = false);
 	}
 
+	function addPager($limit, $tally) {
+		global $pommo;
+		
+		if(!is_numeric($limit) || !is_numeric($tally))
+			Pommo::kill('addPager() was passed illegal vars');
+
+		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/paginate';
+		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartypaginate.php');
+	
+		$this->assign('pagerPrev',Pommo::_T('prev'));
+		$this->assign('pagerNext',Pommo::_T('next'));
+		
+		SmartyPaginate::connect();
+		
+		if(isset($_REQUEST['resetPager']))
+			SmartyPaginate::reset();
+			
+		SmartyPaginate::setLimit($limit);
+		SmartyPaginate::setTotal($tally);
+	}
+	
 	function prepareForForm() {
 		global $pommo;
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
-
-		// assign isForm to TRUE, used by header.tpl to include form CSS/Javascript in HTML HEAD
-		$this->assign('isForm', TRUE);
-
 	}
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
@@ -117,9 +137,10 @@ class PommoTemplate extends Smarty {
 		}
 			
 		// process.php appends serialized values to _GET['input']
-		if (isset ($_GET['input'])) {
+		if (isset ($_GET['input'])) 
 			$this->assign(unserialize($_GET['input']));
-		}
+		elseif (isset($_GET['Email'])) 
+			$this->assign(array('Email' => $_GET['Email']));
 		
 		$this->assign($_POST);
 	}

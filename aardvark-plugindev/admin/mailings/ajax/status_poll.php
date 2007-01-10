@@ -24,13 +24,16 @@ $dbo = & $pommo->_dbo;
 
 $pommo->toggleEscaping(); // _T and logger responses will be wrapped in htmlspecialchars
 
+
 $json = array(
 	'percent' => null,
 	'status' => null,
 	'statusText' => null,
 	'sent' => null,
 	'incAttempt' => FALSE,
-	'command' => FALSE
+	'command' => FALSE,
+	'notices' => FALSE,
+	'timeStamp' => null
 );
 
 $statusText = array(
@@ -54,35 +57,31 @@ else
 
 
 // check for frozen mailing
+
+// get the old timestamp
 $timestamp = $pommo->get('timestamp');
+
 if (empty($timestamp))
-	$timestamp = $mailing['touched']; // get retuns a blank array -- not false
+	$timestamp = @$mailing['touched']; // get retuns a blank array -- not false
 
 if ($json['status'] != 4) {
 	if ($mailing['command'] != 'none' || ($mailing['touched'] == $timestamp && $mailing['current_status'] != 'stopped'))
 		$json['incAttempt'] = TRUE;
 	if ($mailing['command'] != 'none')
 		$json['command'] = TRUE;
-	if ($_GET['attempt'] > 3)
+	if ($_GET['attempt'] > 4)
 		$json['status'] = 3;
 }
 
-$pommo->set(array('timestamp' => $mailing['touched']));
-
+@$pommo->set(array('timestamp' => $mailing['touched']));
 
 $json['statusText'] = $statusText[$json['status']];
 
-// trim last 50 notices
-if(!empty($mailing['notices'])) {
-	$json['notices'] = explode('||',$mailing['notices'], 50);
-	$newNotices = str_replace(implode('||',$json['notices']),'',$mailing['notices']);
-	$query = "
-		UPDATE ".$dbo->table['mailing_current']."
-		SET notices='%s'
-		WHERE current_id=%i";
-	$query = $dbo->prepare($query, array($newNotices, $mailing['id']));
-	$dbo->query($query);
-}
+// get last 50 unique notices
+$notices = PommoMailing::getNotices($mailing['id']);
+$oldNotices = $pommo->get('notices');
+$pommo->set(array('notices' => $notices));
+$json['notices'] = array_diff($notices,$oldNotices);
 
 $query = "
 	SELECT count(subscriber_id) 

@@ -1,4 +1,4 @@
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
 <h2>{t}Installation{/t}</h2>
 
@@ -11,7 +11,7 @@
 
 <p>{t}Welcome to the online installation process. We have connected to the database and set your language successfully. Fill in the values below, and you'll be on your way!{/t}</p>
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 {if !$installed}
 <form method="post" action="">
@@ -84,4 +84,4 @@
 
 <p><a href="{$url.base}index.php"><img src="{$url.theme.shared}images/icons/back.png" alt="back icon" class="navimage" />{t}Continue to login page{/t}</a></p>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

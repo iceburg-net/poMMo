@@ -8,7 +8,7 @@
 <option value="not_in">{t}Exclude{/t}</option>
 </select>
 
-<p class="count">{t 1=$match_name}subscribers belonging to group %1{/t}</p>
+{t 1=$match_name}subscribers belonging to group %1{/t}
 
 <div class="buttons">
 

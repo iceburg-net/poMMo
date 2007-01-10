@@ -1,6 +1,6 @@
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 {if $captcha}
 
@@ -15,7 +15,7 @@
 
 <p>{t}Captcha Text:{/t} <input type="text" name="captcha" /></p>
 
-<input type="submit" name="resetPassword" value="{t}Reset Password{/t}" />
+<input type="submit" name="resetPassword green" value="{t}Reset Password{/t}" />
 </form>
 
 {else}
@@ -51,4 +51,4 @@
 </form>
 {/if}
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

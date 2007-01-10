@@ -35,10 +35,10 @@ INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('version', 'Aardvark SVN', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR14.3', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '26', 'Internal Revision', 'on', 'off');
-
+INSERT INTO :::config::: VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on');
+INSERT INTO :::config::: VALUES ('revision', '28', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
@@ -86,10 +86,18 @@ CREATE TABLE :::mailing_current::: (
   `securityCode` char(32) default NULL,
   `notices` longtext default NULL,
   `current_status` enum('started','stopped') NOT NULL default 'stopped',
-  `touched` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `touched` timestamp NOT NULL,
   PRIMARY KEY  (`current_id`)
 );
 
+-- MAILING_NOTICES
+
+CREATE TABLE :::mailing_notices::: (
+  `mailing_id` int(10) unsigned NOT NULL,
+  `notice` varchar(255) NOT NULL,
+  `touched` timestamp NOT NULL,
+  KEY `mailing_id` (`mailing_id`)
+);
 
 -- MAILINGS
 
@@ -149,6 +157,16 @@ CREATE TABLE :::subscriber_pending::: (
   KEY `subscriber_id` (`subscriber_id`)
 );
 
+-- SUBSCRIBER_UPDATE
+
+CREATE TABLE :::subscriber_update::: (
+  `email` varchar(60) NOT NULL,
+  `code` char(32) NOT NULL ,
+  `activated` datetime NULL default NULL ,
+  `touched` timestamp(14) NOT NULL,
+PRIMARY KEY ( `email` )
+);
+
 
 --  SUBSCRIBERS
 
@@ -172,8 +190,6 @@ CREATE TABLE :::subscribers::: (
 -- UPDATES
 
 CREATE TABLE :::updates::: (
-  `update_id` int(10) unsigned NOT NULL auto_increment,
-  `update_serial` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`update_id`),
-  KEY `update_serial` (`update_serial`)
+  `serial` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`serial`)
 );

@@ -2,19 +2,20 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <div id="preview">
 
 <h2>{t}Preview Mailing{/t}</h2>
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <div class="msgheaders">
 
-<p class="edit"><a href="mailings_send.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" />{t}edit{/t}</a></p>
+<p class="edit"><a href="mailings_send.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" /> {t}edit{/t}</a></p>
 
 <p><strong>{t}Subject:{/t}</strong> <tt>{$subject}</tt></p>
 
@@ -26,17 +27,17 @@
 <p><strong>{t}Bounces:{/t}</strong> <tt>&lt;{$frombounce}&gt;</tt></p>
 {/if}
 
-<p><strong>{t}Character Set:{/t}</strong> <tt>{$charset}</tt></p>
+<p class="advanced"><strong>{t}Character Set:{/t}</strong> <tt>{$list_charset}</tt></p>
 
 </div>
 
 <div class="msgpreview">
 
-<p class="edit"><a href="mailings_send2.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" />{t}edit{/t}</a></p>
+<p class="edit"><a href="mailings_send2.php"><img src="{$url.theme.shared}images/icons/left.png" alt="back arrow icon" /> {t}edit{/t}</a></p>
 
 {if $ishtml == 'on'}
 
-<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php?height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}Preview Message{/t}</a></p>
+<p><strong>{t}HTML Body:{/t}</strong> <a href="ajax/mailing_preview.php" title="{t}Preview Message{/t}" onclick="return !window.open(this.href)">{t}Preview Message{/t}</a></p>
 
 {if $altbody}
 <p><strong>{t}Alt Body:{/t}</strong></p>
@@ -44,7 +45,6 @@
 <pre>
 {$altbody}
 </pre>
-
 {/if}
 
 {else}
@@ -72,9 +72,10 @@
 <fieldset>
 <legend>{t}Send Mailing{/t}</legend>
 
-
 <div class="buttons">
+
 <button type="submit" name="sendaway" value="TRUE"><img src="{$url.theme.shared}images/icons/send.png" alt="broadcast icon" />{t}Send Mailing{/t}</button>
+
 </div>
 
 </fieldset>
@@ -82,4 +83,4 @@
 
 </div>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

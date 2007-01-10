@@ -37,7 +37,7 @@ $form_name = "signup";
 ?>
 <body>
 
-<pre>VIEW THE SOURCE TO COPY, PASTE, EDIT, AND SAVE THE FORM TO AN APPROPRIATE LOCATION ON YOUR WEBSITE</pre>
+<pre><?php echo Pommo::_T('VIEW THE SOURCE TO COPY, PASTE, EDIT, AND SAVE THE FORM TO AN APPROPRIATE LOCATION ON YOUR WEBSITE'); ?></pre>
 
 <hr />
 
@@ -51,11 +51,11 @@ $form_name = "signup";
 <fieldset>
 <legend>Subscribe</legend>
 
-<p><em>Fields in <strong>bold</strong> are required.</em></p>
+<p><?php echo sprintf(Pommo::_T('%sFields%s are required'),'<strong>','</strong>'); ?></p>
 
 <!--	Email field must be named "Email" -->
 <div>
-<label for="email"><strong>Your Email:</strong></label>
+<label for="email"><strong><?php echo Pommo::_T('Your Email:'); ?></strong></label>
 <input type="text" name="Email" id="email" maxlength="60" />
 </div>
 
@@ -65,32 +65,32 @@ foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 
 	if ($field['required'] == 'on')
-		echo "<!--	BEGIN INPUT FOR REQUIRED FIELD \"".$field['name']."\" -->\n<div>\n<label for=\"field".$field_id."\"><strong>".$field['prompt'].":</strong></label>\n";
+		echo "<!--	BEGIN INPUT FOR REQUIRED FIELD \"".$field['name']."\" -->\r\n<div>\r\n<label for=\"field".$field_id."\"><strong>".$field['prompt'].":</strong></label>\r\n";
 	else
-		echo "<!--	BEGIN INPUT FOR FIELD \"".$field['name']."\" -->\n<div>\n<label for=\"field".$field_id."\">".$field['prompt'].":</label>\n";
+		echo "<!--	BEGIN INPUT FOR FIELD \"".$field['name']."\" -->\r\n<div>\r\n<label for=\"field".$field_id."\">".$field['prompt'].":</label>\r\n";
 
 	switch ($field['type']) {
 		case "checkbox": // checkbox	
 			if (empty($field['normally']))
-				echo "\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" />";
+				echo "\r\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" />";
 			else
-				echo "\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" checked=\"checked\" />";
+				echo "\r\n<input type=\"checkbox\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" checked=\"checked\" />";
 			break;
 
 		case "multiple": // select
 
-			echo "\n<select name=\"d[".$field_id."]\" id=\"field".$field_id."\">\n";
+			echo "\r\n<select name=\"d[".$field_id."]\" id=\"field".$field_id."\">\r\n";
 
-			echo "<option>Please choose...</option>\n";
+			echo "<option>Please choose...</option>\r\n";
 
 			foreach ($field['array'] as $option) {
 
 				if (!empty($field['normally']) && $option == $field['normally'])
-					echo "<option value=\"".htmlspecialchars($option)."\" selected=\"selected\"> ".$option."</option>\n";
+					echo "<option value=\"".htmlspecialchars($option)."\" selected=\"selected\"> ".$option."</option>\r\n";
 				else
-					echo "<option value=\"".htmlspecialchars($option)."\"> ".$option."</option>\n";
+					echo "<option value=\"".htmlspecialchars($option)."\"> ".$option."</option>\r\n";
 			}			
-			echo "</select>\n";
+			echo "</select>\r\n";
 
 			break;
 
@@ -99,16 +99,16 @@ foreach (array_keys($fields) as $field_id) {
 		case "date": // select
 
 			if (empty($field['normally']))
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" maxlength=\"60\" />\n";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" id=\"field".$field_id."\" maxlength=\"60\" />\r\n";
 			else
-				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".htmlspecialchars($field['normally'])."\" />\n";
+				echo "<input type=\"text\" name=\"d[".$field_id."]\" maxlength=\"60\" value=\"".htmlspecialchars($field['normally'])."\" />\r\n";
 			break;
 
 		default:
 			break;
 	}
 
-	echo "</div>\n\n";
+	echo "</div>\r\n\r\n";
 }
 ?>
 </fieldset>
@@ -119,7 +119,7 @@ foreach (array_keys($fields) as $field_id) {
 	  If you'd like to change the button text change the "value=" text. -->
 	  
 <input type="hidden" name="pommo_signup" value="true" />
-<input type="submit" value="Signup" />
+<input type="submit" value="<?php echo Pommo::_T('Subscribe'); ?>" />
 
 </div>
 

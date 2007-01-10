@@ -1,4 +1,26 @@
-=== Release Notes for Aardvark SVN ===
- <Released April ??, 2010>
+=== Release Notes for Aardvark PR14.2 ===
+ <Released December 31, 2006>
  
- Coming to a theatre near you!
+[Additions]
+
+  * Added ability to toggle a public mailings history page -- visible to public via;
+    http://www.yoursite.com/pommo/user/mailings.php (if enabled)
+  * Added favicon.ico (only used if installed on server root)
+  * Added "update activation" -- subscribers must verify their email before accessing records
+
+[Improvements]
+  
+  * Javascript regex email check is now consistent with PommoHelper::isEmail()
+  * Typo and Spacing Fixes
+  * EN-UK Translation Update
+  * Increased subscriber's privacy through update activation
+
+[Bug Fixes]
+
+  * Mailing processor now explicitly closes the SMTP session
+  * Unsubscribed members no longer show up in dupe checking and lookup functions
+  * Members can now unsubscribe themselves again
+
+[Security]
+  
+ * Safeguarded against script collisions when a mailing receives a restart command

@@ -9,7 +9,6 @@
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
  * SOURCE: http://www.iceburg.net/brice/
  */
-
 require('../bootstrap.php');
 Pommo::redirect('/support/support.php');
 ?>

@@ -1,6 +1,8 @@
-{include file="admin/inc.header.tpl"}
+{capture name=head}{* used to inject content into the HTML <head> *}
+<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
+{/capture}{include file="inc/tpl/admin.header.tpl"}
 
-{include file="admin/inc.messages.tpl"}
+{include file="inc/tpl/messages.tpl"}
 
 <form method="post" action="">
 
@@ -53,18 +55,19 @@
 <span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
-<div>
-<label for="charset"><span class="required">{t}Character Set:{/t}</span> <span class="error">{validate id="charset" message=$formError.charset}</span></label>
-<select name="charset" id="charset">
-<option value="UTF-8"{if $charset == 'UTF-8'} selected="selected"{/if}>{t}UTF-8 (recommended){/t}</option>
-<option value="ISO-8859-1"{if $charset == 'ISO-8859-1'} selected="selected"{/if}>{t}western (ISO-8859-1){/t}</option>
-<option value="ISO-8859-2"{if $charset == 'ISO-8859-2'} selected="selected"{/if}>{t}Central/Eastern European (ISO-8859-2){/t}</option>
-<option value="ISO-8859-7"{if $charset == 'ISO-8859-7'} selected="selected"{/if}>{t}Greek (ISO-8859-7){/t}</option>
-<option value="ISO-8859-15"{if $charset == 'ISO-8859-15'} selected="selected"{/if}>{t}western (ISO-8859-15){/t}</option>
-<option value="cp1251"{if $charset == 'cp1251'} selected="selected"{/if}>{t}cyrillic (Windows-1251){/t}</option>
-<option value="KOI8-R"{if $charset == 'KOI8-R'} selected="selected"{/if}>{t}cyrillic (KOI8-R){/t}</option>
-<option value="GB2312"{if $charset == 'GB2312'} selected="selected"{/if}>{t}Simplified Chinese (GB2312){/t}</option>
-<option value="EUC-JP"{if $charset == 'EUC-JP'} selected="selected"{/if}>{t}Japanese (EUC-JP){/t}</option>
+<div class="advanced">
+<label for="list_charset"><span class="required">{t}Character Set:{/t}</span> <span class="error">{validate id="list_charset" message=$formError.list_charset}</span></label>
+<select name="list_charset" id="list_charset">
+<option value="UTF-8"{if $list_charset == 'UTF-8'} selected="selected"{/if}>{t}UTF-8 (recommended){/t}</option>
+<option value="ISO-8859-1"{if $list_charset == 'ISO-8859-1'} selected="selected"{/if}>{t}Western (ISO-8859-1){/t}</option>
+<option value="ISO-8859-15"{if $list_charset == 'ISO-8859-15'} selected="selected"{/if}>{t}Western (ISO-8859-15){/t}</option>
+<option value="ISO-8859-2"{if $list_charset == 'ISO-8859-2'} selected="selected"{/if}>{t}Central/Eastern European (ISO-8859-2){/t}</option>
+<option value="ISO-8859-7"{if $list_charset == 'ISO-8859-7'} selected="selected"{/if}>{t}Greek (ISO-8859-7){/t}</option>
+<option value="ISO-2022-JP"{if $list_charset == 'ISO-2022-JP'} selected="selected"{/if}>{t}Japanese (ISO-2022-JP){/t}</option>
+<option value="EUC-JP"{if $list_charset == 'EUC-JP'} selected="selected"{/if}>{t}Japanese (EUC-JP){/t}</option>
+<option value="cp1251"{if $list_charset == 'cp1251'} selected="selected"{/if}>{t}cyrillic (Windows-1251){/t}</option>
+<option value="KOI8-R"{if $list_charset == 'KOI8-R'} selected="selected"{/if}>{t}cyrillic (KOI8-R){/t}</option>
+<option value="GB2312"{if $list_charset == 'GB2312'} selected="selected"{/if}>{t}Simplified Chinese (GB2312){/t}</option>
 </select>
 <span class="notes">{t}(Select Character Set of Mailings){/t}</span>
 </div>
@@ -73,10 +76,10 @@
 
 <div class="buttons">
 
-<input type="submit" id="submit" name="submit" value="Continue" />
+<input type="submit" id="submit" name="submit" value="{t}Continue{/t}" />
 
 </div>
 
 </form>
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

@@ -57,13 +57,14 @@ if (!PommoHelper::isEmail($subscriber['email']))
 	$logger->addErr(Pommo::_T('Invalid Email Address'));
 		
 // ** check if email already exists in DB ("duplicates are bad..")
-if (count(PommoHelper::emailExists($subscriber['email'])) > 0) {
+if (PommoHelper::isDupe($subscriber['email'])) {
 	$logger->addErr(Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 	$smarty->assign('dupe', TRUE);
 }
 
 // check if errors exist with data, if so print results and die.
-if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'])) {
+if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'], array(
+	'active' => FALSE))) {
 	$smarty->assign('back', TRUE);
 	$smarty->display('user/process.tpl');
 	Pommo::kill();
@@ -87,7 +88,8 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	$subscriber['pending_type'] = 'add';
 	$subscriber['status'] = 2;
 	
-	if (!PommoSubscriber::add($subscriber)) {
+	$id = PommoSubscriber::add($subscriber);
+	if (!$id) {
 		$logger->addErr('Error adding subscriber! Please contact the administrator.');
 		$smarty->assign('back', TRUE);
 	}
@@ -103,7 +105,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 			$smarty->assign('back', TRUE);
 			
 			// delete the subscriber
-			PommoSubscriber::delete(PommoSubscriber::getIDByEmail($subscriber['email']));
+			PommoSubscriber::delete($id);
 		}
 	}
 }

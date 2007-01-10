@@ -13,7 +13,7 @@
  ** [END HEADER]**/
 
 require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/usermanager/class.db_userhandler.php'); 
-require_once ($pommo->_baseDir.'inc/lib/class.pager.php');
+//require_once ($pommo->_baseDir.'inc/lib/class.pager.php');
 
 
 class UserPlugin { //implements plugin

@@ -1,9 +1,5 @@
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
-<div id="mainbar">
+{include file="inc/tpl/messages.tpl"}
 
-{include file="admin/inc.messages.tpl"}
-
-</div>
-
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

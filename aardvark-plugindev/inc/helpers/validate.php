@@ -17,13 +17,14 @@
 	// accepts a parameter array
 	//   prune: (bool) true => if true, prune the data array (passed by reference)
 	//     to only recognized/checked fields
-	//   ignore: (bool) false => if true, invalid fields will be pruned from $in array.
+	//   ignore: (bool) false => if true, invalid fields will be pruned from $in array -- no error thrown
+	//	 ignoreInactive: (bool) true => if true, invalid inactive fields will be pruned from $in array -- no error thrown
 	//   active: (bool) true => if true, only check data against active fields. Typically true 
 	//     if subscribing via form, false if admin importing. 
 	//	 skipReq: (bool) false => if true, skip the required check AND empty fields.
 	//   log: (bool) true => if true, log invalid fields as error. Typicall true
 	//     if subscribing via form, false if admin importing.
-	// returns (bool) validation
+	// returns (bool) validation status
 	//   NOTE: has the MAGIC FUNCTIONALITY of converting date field input 
 	//     to a UNIX TIMESTAMP. This is necessary for quick SQL comparisson of dates, etc.
 	//   NOTE: has the MAGIC FUNCTINALITY of changing "true"/"false" to checkbox "on"/off equivelent
@@ -36,6 +37,7 @@
 			'active' => true,
 			'log' => true,
 			'ignore' => false,
+			'ignoreInactive' => true,
 			'skipReq' => false);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
@@ -48,16 +50,20 @@
 		$valid = true;
 		foreach ($fields as $id => $field) {
 			
+			$inactive = ($field['active'] == 'on') ? false : true;
+			
 			if (!isset($in[$id]) && $p['skipReq'])
 				continue;
-			$in[$id] = trim($in[$id]);
+			$in[$id] = @trim($in[$id]);
 			
-			if ($field['required'] == 'on' && empty($in[$id])) {
-				if ($p['log'])
-					$logger->addErr(sprintf(Pommo::_T('%s is a required field.'),$field['prompt']));
-				if ($p['ignore'])
-					unset($in[$id]);
-				$valid = false;
+			if (empty($in[$id])) {
+				unset($in[$id]); // don't include blank values
+				if ($field['required'] == 'on') {
+					if ($p['log'])
+						$logger->addErr(sprintf(Pommo::_T('%s is a required field.'),$field['prompt']));
+					$valid = false;
+				}
+				continue;
 			}
 			
 			switch ($field['type']) {
@@ -67,10 +73,12 @@
 					if (strtolower($in[$id]) == 'false')
 						$in[$id] = '';
 					if ($in[$id] != 'on' && $in['id'] != '') {
+						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
+							unset($in[$id]);
+							break;
+						}
 						if ($p['log'])
 							$logger->addErr(sprintf(Pommo::_T('Illegal input for field %s.'),$field['prompt']));
-						if ($p['ignore'])
-							unset($in[$id]);
 						$valid = false;
 					}
 					break;
@@ -78,38 +86,51 @@
 					if (is_array($in[$id])) {
 						foreach ($in[$id] as $key => $val)
 							if (!in_array($val, $field['array'])) {
+								if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
+									unset($in[$id]);
+									break;
+								}
 								if ($p['log'])
 									$logger->addErr(sprintf(Pommo::_T('Illegal input for field %s.'),$field['prompt']));
-								if ($p['ignore'])
-									unset($in[$id][$key]);
 								$valid = false;
 							}
 					}
 					elseif (!in_array($in[$id], $field['array'])) {
+						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
+							unset($in[$id]);
+							break;
+						}
 						if ($p['log'])
 							$logger->addErr(sprintf(Pommo::_T('Illegal input for field %s.'),$field['prompt']));
-						if ($p['ignore'])
-							unset($in[$id]);
 						$valid = false;
 					}
 					break;
 				case "date": // TODO -- ENHANCE/VERIFY THIS!
 					// convert date to unix timestamp (# of secs since j1 1970)
+					
+					if(is_numeric($in[$id]))
+						$in[$id] = date('m/d/Y',$in[$id]);
+						
 					$in[$id] = strtotime($in[$id]);
-					if($in[$id] == 0 || !$in[$id]) {
+					
+					if(!$in[$id] || $in[$id] < 0) {
+						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
+							unset($in[$id]);
+							break;
+						}
 						if ($p['log'])
 							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a date (mm/dd/yyyy).'),$field['prompt']));
-						if ($p['ignore'])
-							unset($in[$id]);
 						$valid = false;
 					}
 					break;
 				case "number":
 					if (!is_numeric($in[$id])) {
+						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
+							unset($in[$id]);
+							break;
+						}
 						if ($p['log'])
 							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a number.'),$field['prompt']));
-						if ($p['ignore'])
-							unset($in[$id]);
 						$valid = false;
 					}
 				break;
@@ -123,3 +144,5 @@
 	}
  }
 ?>
+
+

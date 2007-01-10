@@ -42,7 +42,7 @@ class PommoField {
 	// accepts a field template (assoc array) 
 	// return a field (array)
 	function & makeDB(&$row) {
-		$in = array(
+		$in = @array(
 		'id' => $row['field_id'],
 		'active' => $row['field_active'],
 		'ordering' => $row['field_ordering'],
@@ -134,10 +134,9 @@ class PommoField {
 			ORDER BY field_ordering";
 		$query = $dbo->prepare($query,array($p['active'],$p['id']));
 		
-		while ($row = $dbo->getRows($query)) {
+		while ($row = $dbo->getRows($query))
 			$o[$row['field_id']] = PommoField::makeDB($row);
-		}
-		
+
 		return $o;
 	}
 	
@@ -172,7 +171,7 @@ class PommoField {
 		field_array='%s',
 		field_required='%s',
 		field_type='%s'";
-		$query = $dbo->prepare($query,array(
+		$query = $dbo->prepare($query,@array(
 			$in['active'],
 			$in['ordering'],
 			$in['name'],
@@ -227,7 +226,7 @@ class PommoField {
 			[field_type='%S',]
 			field_id=field_id
 			WHERE field_id=%i";
-			$query = $dbo->prepare($query,array(
+			$query = $dbo->prepare($query,@array(
 				$in['active'],
 				$in['ordering'],
 				$in['name'],
@@ -245,18 +244,16 @@ class PommoField {
 	// accepts a field (array)
 	// accepts a value (str)
 	// returns success (bool)
-	function optionAdd(&$field, &$value) {
+	function optionAdd(&$field, $value) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		$logger =& $pommo->_logger;
 		
-		if (is_numeric(array_search($value,$field['array']))) {
-			$logger->addMsg(sprintf(Pommo::_T('Option %s already exists'),$value));
-			return false;
-		}
-			
+		$value = explode(',',$value);
+		array_walk($value,'trim');
+		
 		// add value to the array
-		array_push($field['array'],$value);
+		$field['array'] = array_unique(array_merge($field['array'],$value));
 		$o = serialize($field['array']);
 		
 		$query = "

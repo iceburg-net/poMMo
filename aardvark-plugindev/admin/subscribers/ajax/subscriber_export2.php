@@ -15,14 +15,14 @@ Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 
-$pommo->init();
+$pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 $pommo->toggleEscaping(TRUE);
 
 $state =& PommoAPI::stateInit('subscribers_manage');
-$fields = array_keys(PommoField::get());
+$fields = PommoField::get();
 	
 
 $ids = FALSE;
@@ -38,8 +38,16 @@ if($_POST['type'] == 'csv') {
 	}
 	else 
 		$subscribers = PommoSubscriber::get(array('id' => $ids));
-		
-	$o = '';
+	
+	// supply headers
+	$o = '"'.Pommo::_T('Email').'"';
+	if(!empty($_POST['registered']))
+		$o .= ',"'.Pommo::_T('Date Registered').'"';
+	if(!empty($_POST['ip']))
+		$o .= ',"'.Pommo::_T('IP Address').'"';
+	foreach($fields as $f)
+		$o.=",\"{$f['name']}\"";
+	$o .= "\r\n";
 	
 	function csvWrap(&$in) {
 		$in = '"'.addslashes($in).'"';
@@ -49,19 +57,23 @@ if($_POST['type'] == 'csv') {
 		$d = array();
 		
 		// normalize field order in export
-		foreach($fields as $id)
+		foreach(array_keys($fields) as $id)
 			if(array_key_exists($id,$sub['data']))
 				$d[$id] = $sub['data'][$id];
 			else
 				$d[$id] = null;
 		
-		$s = array($sub['email']); // can add IP time_registered, etc. to this....
+		$s = array($sub['email']);
+		if(!empty($_POST['registered']))
+			$s[] = $sub['registered'];
+		if(!empty($_POST['ip']))
+			$s[] = $sub['ip'];
 		
 		array_walk($d, 'csvWrap');
 		array_walk($s, 'csvWrap');
 		
 		$a = array_merge($s,$d);
-		$o .= implode(',',$a)."\n";
+		$o .= implode(',',$a)."\r\n";
 	}
 	
 	$size_in_bytes = strlen($o);
@@ -82,7 +94,7 @@ $emails = PommoSubscriber::getEmail(array('id' => $ids));
 
 $o = '';
 foreach($emails as $e)
-	$o .= "$e\n";
+	$o .= "$e\r\n";
 	
 $size_in_bytes = strlen($o);
 header("Content-disposition:  attachment; filename=poMMo_".Pommo::_T('Subscribers').".txt; size=$size_in_bytes");

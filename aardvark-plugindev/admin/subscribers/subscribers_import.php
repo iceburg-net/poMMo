@@ -38,17 +38,79 @@ $smarty->assign('maxSize',$max_file_size * 1024 * 1024);
 $fname = "csvfile";
 
 if(isset($_POST['submit'])) {
+
 	// POST exists -- set pointer to content
-	$c = false;
+	$fp = false;
+	$box = false;
 	
 	if (!empty($_FILES[$fname]['tmp_name']))
-		$c =& $_FILES[$fname]['tmp_name'];
-	elseif (!empty($_POST['input']))
-		$c =& $_POST['input'];
+		$fp =& fopen($_FILES[$fname]['tmp_name'], "r");
+	elseif (!empty($_POST['box'])) {
+		$str =& $_POST['box']; 
+		
+		// wrap $c as a file stream -- requires PHP 4.3.2
+		//  for early versions investigate using tmpfile() -- efficient?
+		stream_wrapper_register("pommoCSV", "PommoCSVStream")
+			or Pommo::kill('Failed to register pommoCSV');
+		$fp = fopen("pommoCSV://str", "r+"); 
+		
+		$box = true;
+	}
 	
-	if($c) 
-		$csvArray = PommoHelperImport::makeCSV($c);
-	
+	if(is_resource($fp)) {
+		
+		if($_POST['type'] == 'txt') { // list of emails 
+			$a = array(); 
+			while (($data = fgetcsv($fp,2048,',','"')) !== FALSE) {
+				foreach($data as $email)
+					if(PommoHelper::isEmail($email))
+						array_push($a,$email);
+			}
+			
+			// remove dupes
+			$dupes =& PommoHelper::isDupe($a);
+			if (!$dupes)
+				$dupes = array();
+			$emails = array_diff($a, $dupes);
+			
+			$pommo->set(array(
+				'emails' => $emails,
+				'dupes' => (count($dupes))));
+			Pommo::redirect('import_txt.php');
+		}
+		elseif($_POST['type'] == 'csv') { // csv of subscriber data, store first 10 for preview
+			$a = array(); $i = 1;
+			while (($data = fgetcsv($fp,2048,',','"')) !== FALSE) {
+				array_push($a,$data);
+					
+				if($i > 9) // only get first 10 lines -- move file
+					break;
+				$i++;
+			}
+			
+			// save file for access after assignments
+			if ($box) {
+				// when PHP5 is widespread, switch to file_put_contents()  && use the $fp stream
+				if (!$handle = fopen($pommo->_workDir.'/import.csv', 'w'))
+					Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+				
+				if (fwrite($handle, $_POST['box']) === FALSE)
+      				Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+				
+				 fclose($handle);
+			}
+			else {
+				move_uploaded_file($_FILES[$fname]['tmp_name'], $pommo->_workDir.'/import.csv')
+					or Pommo::kill('Could not write to temp CSV file ('.$pommo->_workDir.'/import.csv)');
+			}
+			
+			$pommo->set(array('preview' => $a));
+			Pommo::redirect('import_csv.php');
+		}
+		else {
+			$logger->addErr('Unknown Import Type');
+		}
+	}
 }
 
 $smarty->display('admin/subscribers/subscribers_import.tpl');

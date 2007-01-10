@@ -34,11 +34,11 @@ if (!is_numeric($_GET['key']) || $_GET['key'] < 1)
 if (isset($_POST['email'])) {
 	if (!PommoHelper::isEmail($_POST['email']))
 		jsonKill(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Invalid Email.'));
-	if(count(PommoHelper::emailExists($_POST['email'])) > 0)
+	if(PommoHelper::isDupe($_POST['email']))
 		jsonKill(Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 }
 
-$s = array(
+$s = @array(
 	'id' => $_GET['key'],
 	'email' => $_POST['email']
 	);

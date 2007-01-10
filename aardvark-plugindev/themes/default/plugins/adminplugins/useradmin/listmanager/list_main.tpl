@@ -1,10 +1,10 @@
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
-<div id="mainbar">
+<h2>{t}Mailing List Management Management{/t}</h2>
 
-<h1>{t}Mailing List Management Management{/t}</h1>
+<div id="boxMenu">
 
-	{include file="admin/inc.messages.tpl"}
+	{include file="inc/tpl/messages.tpl"}
 
 		<div>
 			<a class="pommoClose" href="../useradmin.php" style="float: left; line-height:18px;">
@@ -12,8 +12,12 @@
 			{t}Return to User Management Menu{/t}
 			</a>
 		</div>
-		<div style="text-align: right; clear: both;width: 1px;"></div>
+		<!--<div style="text-align: right; clear: both;width: 1px;"></div>-->
 		<br>
+		
+</div>
+
+<div id="plugincontent">
 
 		<i>({t 1=$nrlists}%1 lists{/t})</i>
 
@@ -90,6 +94,6 @@
 
 		{/if}	{* more than 0 list data records *}
 
-	</div>
+	</div> <!-- plugincontent -->
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

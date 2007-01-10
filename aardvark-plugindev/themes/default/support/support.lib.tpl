@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="admin/inc.header.tpl"}
+{include file="inc/tpl/admin.header.tpl"}
 
 <h2>poMMo support v0.02</h2>
 
@@ -11,7 +11,21 @@
 <li><a href="tests/file.clearWork.php?height=320&amp;width=480" title="Clear Work Directory" class="thickbox">Clear Work Directory</a></li>
 <li><a href="tests/mailing.test.php?height=320&amp;width=480" title="Test Mailing Processor" class="thickbox">Test Mailing Processor</a></li>
 <li><a href="tests/mailing.kill.php?height=320&amp;width=480" title="Terminate Current Mailing" class="thickbox">Terminate Current Mailing</a></li>
-<li><a href="tests/mailing.runtime.php?height=320&amp;width=480" title="Test Max Runtime" class="thickbox">Test Max Runtime (takes 40 seconds)</a></li>
+<li><a href="tests/mailing.runtime.php" title="Test Max Runtime" onclick="return !window.open(this.href)">Test Max Runtime (takes 90 seconds)</a></li>
+<li><a class="warn" href="util/db.clear.php" title="Reset Database">Reset Database (clears all subscribers, groups, fields)</a></li>
+<li><a class="warn" href="util/db.subscriberClear.php" title="Reset Subscribers">Reset Subscribers (clears all susbcribers)</a></li>
+<li><a class="warn" href="util/db.sample.php" title="Load Sample Data">Load Sample Data (resets database, loads sample data)</a></li>
 </ul>
 
-{include file="admin/inc.footer.tpl"}
+{literal}
+<script type="text/javascript">
+$().ready(function() {
+	$('a.warn').click(function() {
+		var str = this.innerHTML;
+		return confirm("{/literal}{t}Confirm your action.{/t}{literal}\n"+str+"?");
+	});
+});
+</script>
+{/literal}
+
+{include file="inc/tpl/admin.footer.tpl"}

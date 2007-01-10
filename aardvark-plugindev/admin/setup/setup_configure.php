@@ -37,7 +37,8 @@ function check_charset($value, $empty, & $params, & $formvars) {
 		'cp1251',
 		'KOI8-R',
 		'GB2312',
-		'EUC-JP'
+		'EUC-JP',
+		'ISO-2022-JP'
 	);
 
 	return in_array($value, $validCharsets);
@@ -92,7 +93,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		'list_frombounce',
 		'list_exchanger',
 		'list_confirm',
-		'list_charset'
+		'list_charset',
+		'public_history'
 	));
 
 	$dbVals['demo_mode'] = (!empty ($pommo->_config['demo_mode']) && ($pommo->_config['demo_mode'] == "on")) ? 'on' : 'off';
@@ -117,6 +119,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		$oldDemo = $pommo->_config['demo_mode'];
 
 		PommoAPI::configUpdate($_POST);
+		
+		unset($_POST['admin_password'],$_POST['admin_password2']);
 
 		$pommo->reloadConfig();
 

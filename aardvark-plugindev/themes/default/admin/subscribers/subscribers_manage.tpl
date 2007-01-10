@@ -1,12 +1,12 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Include in-place editing of subscriber table *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/quicksearch.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
 <script type="text/javascript">{literal}
 $().ready(function() {
 	$('#orderForm select').change(function() {
@@ -15,13 +15,13 @@ $().ready(function() {
 });
 {/literal}</script>
 {* Styling of subscriber table *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/tableEditor/style.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="admin/inc.header.tpl" sidebar='off'}
+{include file="inc/tpl/admin.header.tpl" sidebar='off'}
 
 <ul class="inpage_menu">
-<li><!-- <a href="#TB_inline?height=400&amp;width=500&amp;inlineId=addSubs" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a> --><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
+<li><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
 
 <li><a href="ajax/subscriber_del.php?height=400&amp;width=500" title="{t}Remove Subscribers{/t}" class="thickbox">{t}Remove Subscribers{/t}</a></li>
 
@@ -31,10 +31,15 @@ $().ready(function() {
 </ul>
 
 <form method="post" action="" id="orderForm">
-<fieldset class="sorting">
+
+<input type="hidden" name="resetPager" value="true" />
+
+<fieldset>
 <legend>{t}View{/t}</legend>
 
-<div>
+<ul class="inpage_menu">
+
+<li>
 <label for="status">{t}View{/t}</label>
 <select name="status">
 <option value="1"{if $state.status == 1} selected="selected"{/if}>{t}Active Subscribers{/t}</option>
@@ -42,9 +47,9 @@ $().ready(function() {
 <option value="0"{if $state.status == 0} selected="selected"{/if}>{t}Unsubscribed{/t}</option>
 <option value="2"{if $state.status == 2} selected="selected"{/if}>{t}Pending{/t}</option>
 </select>
-</div>
+</li>
 
-<div>
+<li>
 <label for="group">{t}Belonging to Group{/t}</label>
 <select name="group">
 <option value="all"{if $state.group == 'all'} selected="selected"{/if}>{t}All Subscribers{/t}</option>
@@ -53,9 +58,9 @@ $().ready(function() {
 <option value="{$id}"{if $state.group == $id} selected="selected"{/if}>{$g.name}</option>
 {/foreach}
 </select>
-</div>
+</li>
 
-<div>
+<li>
 <label for="limit">{t}# per page{/t}</label>
 <select name="limit">
 <option value="10"{if $state.limit == '10'} selected="selected"{/if}>10</option>
@@ -64,14 +69,16 @@ $().ready(function() {
 <option value="300"{if $state.limit == '300'} selected="selected"{/if}>300</option>
 <option value="500"{if $state.limit == '500'} selected="selected"{/if}>500</option>
 </select>
-</div>
+</li>
 
 </fieldset>
 
-<fieldset class="sorting">
+<fieldset>
 <legend>{t}Sorting{/t}</legend>
 
-<div>
+<ul class="inpage_menu">
+
+<li>
 <label for="sort">{t}Sort by{/t}</label>
 <select name="sort">
 <option value="email"{if $state.sort == 'email'} selected="selected"{/if}>{t}email{/t}</option>
@@ -79,23 +86,25 @@ $().ready(function() {
 <option value="time_touched"{if $state.sort == 'time_touched'} selected="selected"{/if}>{t}time last updated{/t}</option>
 <option value="ip"{if $state.sort == 'ip'} selected="selected"{/if}>{t}IP Address{/t}</option>
 </select>
-</div>
+</li>
 
-<div>
+<li>
 <label for="order">{t}Order by{/t}</label>
 <select name="order">
 <option value="asc"{if $state.order == 'asc'} selected="selected"{/if}>{t}ascending{/t}</option>
 <option value="desc"{if $state.order == 'desc'} selected="selected"{/if}>{t}descending{/t}</option>
 </select>
-</div>
+</li>
 
-<div>
+<li>
 <label for="info">{t}Extended Info{/t}</label>
 <select name="info">
 <option value="show"{if $state.info == 'show'} selected="selected"{/if}>{t}show{/t}</option>
 <option value="hide"{if $state.info == 'hide'} selected="selected"{/if}>{t}hide{/t}</option>
 </select>
-</div>
+</li>
+
+</ul>
 
 </fieldset>
 </form>
@@ -117,9 +126,9 @@ $().ready(function() {
 {/foreach}
 
 {if $state.info == 'show'}
-<th name="registered" class="noEdit">Registered</th>
-<th name="touched" class="noEdit">Updated</th>
-<th name="ip" class="noEdit">IP Address</th>
+<th name="registered" class="noEdit">{t}Registered{/t}</th>
+<th name="touched" class="noEdit">{t}Updated{/t}</th>
+<th name="ip" class="noEdit">{t}IP Address{/t}</th>
 {/if}
 
 </tr>
@@ -133,7 +142,7 @@ $().ready(function() {
 {* edit button -- this switches to {$url.theme.shared}images/icons/yes.png when clicked *}
 <button class="edit"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
 
-<p class="key">{$sid}</p>
+<p class="key hidden">{$sid}</p>
 </td>
 
 <td>{$s.email}</td>
@@ -162,15 +171,16 @@ $().ready(function() {
 </tbody>
 </table>
 
-{$pagelist}
+{* Include Pagination *}
+{include file="inc/tpl/pager.tpl"}
 
 {literal}
 <script type="text/javascript">
 $().ready(function() {	
 	$("#subs").tableSorter({
-		sortClassAsc: 'headerSortUp', 		// class name for ascending sorting action to header
-		sortClassDesc: 'headerSortDown',	// class name for descending sorting action to header
-		headerClass: 'header', 				// class name for headers (th's)
+		sortClassAsc: 'sortUp', 		// class name for ascending sorting action to header
+		sortClassDesc: 'sortDown',	// class name for descending sorting action to header
+		headerClass: 'sort', 				// class name for headers (th's)
 		disableHeader: 0					// DISABLE Sorting on edit/delete column
 	}).tableEditor({
 		SAVE_HTML: '<img src="{/literal}{$url.theme.shared}images/icons/yes.png{literal}">',
@@ -246,4 +256,4 @@ function updateTable(o) {
 {/literal}
 {/if}
 
-{include file="admin/inc.footer.tpl"}
+{include file="inc/tpl/admin.footer.tpl"}

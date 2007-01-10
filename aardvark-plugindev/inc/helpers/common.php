@@ -52,8 +52,8 @@ class PommoHelper {
 			$line = trim($rawLine);
 			if (substr($line,0,1) == '[') { // line should be traded as a key:value pair
 				$matches = array();
-				preg_match('/^\[(\w+)\]\s*=\s*\"?(.[^\"]+)\"?.*$/i',$line,$matches);
-				
+				preg_match('/^\[(\w+)\]\s*=\s*\"?([^\"]*)\"?.*$/i',$line,$matches);
+
 				// check if a key:value was extracted
 				if (!empty($matches[2]))
 					// merge key:value onto return array
@@ -83,22 +83,25 @@ class PommoHelper {
 	}
 	
 	// checks to see if an email address exists in the system
+	//  only includes active && pending subscribers
 	// accepts a single email (str) or array of emails
-	// returns an array of found emails. (will be empty if none found).
-	function & emailExists(&$in) {
+	// returns an array of duplicate found emails. FALSE if no dupes were found. 
+	function & isDupe(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		if(empty($in))
-			return true;
+			return false;
 
 		$query = "
 			SELECT email
 			FROM " . $dbo->table['subscribers'] ."
-			WHERE email IN (%q)";
+			WHERE email IN (%q)
+			AND status IN(1,2)";
 		$query = $dbo->prepare($query,array($in));
 		$o = $dbo->getAll($query, 'assoc', 'email');
-
+		if (empty($o))
+			$o = false;
 		return $o;
 	}
 	
