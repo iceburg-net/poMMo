@@ -159,7 +159,7 @@ pommo = {
 			else 
 				$('#barHead').find('img.go').css('display', 'none').end().find('img.stop').css('display', 'inline');
 
-			if(!json.command || $('#commands div.init').size() > 0) {
+			if(!json.command || json.status == 3 || $('#commands div.init').size() > 0) {
 				switch(json.status) {
 					case 1: $('#commands').html($('#started').html()); break;
 					case 2: $('#commands').html($('#stopped').html()); break;

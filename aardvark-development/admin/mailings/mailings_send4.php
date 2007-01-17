@@ -16,7 +16,7 @@
  *********************************/
  
 // # of mails to fetch from the queue at a time (Default: 100)
-$queueSize = 100;
+$queueSize = 10;
 
 // set maximum runtime of this script in seconds (Default: 80). 
 $maxRunTime = 80;
@@ -41,7 +41,10 @@ Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
 $code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
+$spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);
 $test = (empty($_GET['testMailing'])) ? false : true;
+$mailingID = PommoMailCtl::getCurID(); // placeholder for when we'll add support for simultaneous mailings & require this var -- gets overwritten @ mailing initialization. 
+
 
 /**********************************
 	INITIALIZATION METHODS
@@ -64,11 +67,14 @@ if($maxRunTime < 20) {
 	PommoMailCtl::kill('PHP Max Runtime is too low! Set higher.', TRUE);
 }
 
-$input = $pommo->get('mailingData');
-
-if (empty($input['config'])) {
+if ($spawn > 0)
+	$logger->addMsg("Background mailer re-spawned (#$spawn).", 2);
+else
 	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 3);
+
+$input = $pommo->get('mailingData');
 	
+if (empty($input['config'])) {
 	// get list exchanger & smtp values. If more than 1 smtp relay exist, enter "multimode"
 	$input['config'] = PommoAPI::configGet(array (
 		'list_exchanger',
@@ -111,9 +117,6 @@ if (empty($input['config'])) {
 
 	$pommo->set(array('mailingData' => array('config' => $config)));
 } 
-else {
-	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 2);
-}
 
 $config =& $input['config'];
 
@@ -143,11 +146,12 @@ if (!$skipSecurity && $code != $mailing['code'])
 PommoMailCtl::poll();
 
 
-// If we're in multimode, spawn scripts (unless this is a spawn!)
-if ($config['multimode'] && !empty($_GET['spawn']) && !$test) {
+// If we're in multimode, spawn scripts (unless this is a respawn!)
+if ($config['multimode'] && $spawn == 0 && !$test) {
 	for ($i = 1; $i < 5; $i++) {
 		if(!empty($config['smtp_'.$i])) {
-			PommoMailCtl::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
+			$spawn++;
+			PommoMailCtl::respawn(array('code' => $code, 'relayID' => $i, 'serial' => $serial, 'spawn' => $spawn));
 			sleep(3); // prevent a shared throttler race
 		}
 	}
@@ -212,7 +216,7 @@ while(empty($subscribers)) {
 	
 	if((time() - $start) > $maxRunTime) {
 		$mailer->SmtpClose();
-		PommoMailCtl::respawn();
+		PommoMailCtl::respawn(array('code' => $code, 'relayID' => $relayID, 'serial' => $serial, 'spawn' => $spawn));
 		PommoMailCtl::kill('Max runtime reached. Respawning...');
 	}
 	
@@ -335,6 +339,6 @@ if ($test) {
 
 $mailer->SmtpClose();
 PommoMailCtl::update($sent, $failed, $emailHash);
-PommoMailCtl::respawn();
+PommoMailCtl::respawn(array('code' => $code, 'relayID' => $relayID, 'serial' => $serial, 'spawn' => $spawn));
 PommoMailCtl::kill('Queue empty or Runtime reached. Respawning...');
 ?>

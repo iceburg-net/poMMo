@@ -81,7 +81,7 @@ $json['statusText'] = $statusText[$json['status']];
 $notices = PommoMailing::getNotices($mailing['id']);
 $oldNotices = $pommo->get('notices');
 $pommo->set(array('notices' => $notices));
-$json['notices'] = array_diff($notices,$oldNotices);
+$json['notices'] = array_reverse(array_diff($notices,$oldNotices));
 
 $query = "
 	SELECT count(subscriber_id) 

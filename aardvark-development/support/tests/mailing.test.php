@@ -20,19 +20,30 @@ $pommo->init();
 
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
-$initial = time();
+$code = PommoHelper::makeCode();
 
-if(!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?initial='.$initial)) 
-	Pommo::kill('Initial Spawn Failed');
+if(!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?securityCode='.$code)) 
+	Pommo::kill('Initial Spawn Failed! You must correct this before poMMo can send mails.');
 
 sleep(6);
 
-if (!is_file($pommo->_workDir . '/mailing.test.php'))
-	die('Spawning Failed');
+if (!is_file($pommo->_workDir . '/mailing.test.php')) {
+	// make sure we can write to the file
+	if (!$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w')) 
+		die('Unable to write to test file!');
+	fclose($handle);
+	unlink($pommo->_workDir.'/mailing.test.php');
 	
-$o = PommoHelper::parseConfig($pommo->_workDir . '/mailing.test.php', 'w');
+	die('Initial Spawn Failed! You must correct this before poMMo can send mails.');
+}
+	
+$o = PommoHelper::parseConfig($pommo->_workDir . '/mailing.test.php');
+unlink($pommo->_workDir.'/mailing.test.php') or die('could not remove mailing.test.php');
 
-echo 'INITIAL SPAWN: '. ((is_numeric($o['initial']) && $initial == $o['initial']) ? 'SUCCESS' : 'FAILED');
-echo '<br/>';
-echo 'SECOND SPAWN: '. ((is_numeric($o['respawn'])) ? 'SUCCESS' : 'FAILED');
-echo '<br/>';
+if (!isset($o['code']) || $o['code'] != $code)
+	die ('Spawning Failed. Codes did not match.');
+	
+if (!isset($o['spawn']) || $o['spawn'] == 0)
+	die ('Inital spawn success. Respawn failed!');
+
+die('Initial spawn success. Respawn success. Spawning Works!');
