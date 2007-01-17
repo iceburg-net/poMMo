@@ -1,23 +1,57 @@
 <?php
 /** [BEGIN HEADER] **
  * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
+ * LICENSE: http://www.gnu.org/licenses/gpl.html GNU/GPL 
  * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
+ * SOURCE: http://www.pommo.org/
  *
  *  :: RESTRICTIONS ::
  *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+ *  2. Notify the above author of modifications to contents within.
+ * 
+ *  WHY? Because this is a community project -- purposely released under the GPL.
+ *    We'd love to have the possiblity to include your derivative works! 
+ *    We'd love to coordinate around your development efforts!
+ *    We'd love to assist you with your changes!
+ *    DON'T BE A STRANGER!
  * 
  ** [END HEADER]**/
 die();
 ?>
+
+When installing, I left the db_prefix in the config file blank, since the poMMo stuff was going into its own separate database.  Got an error installing, since it tried to create a table called just "fields", which is a SQL keyword.  So I'd suggest adding backticks to the SQL statement that creates that (and other) tables.
+
+SSL Fix -- http://www.pommo.org/community/viewtopic.php?id=303
 
 Mailing notices -- no dupes are displayed
 
 Test mailing exchanger from setup @ configure page
 
 Toggle gettext emulation (phpgettext)
+
+Redirect to filter page upon group creation
+
+Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
+
+
+----
+
+comporder1: I was thinking.... once you get mailing templates implemented... You could set up a user upload mail template site... 
+bricecubed: hmm
+bricecubed: good idea
+bricecubed: contributed templates
+comporder1: right!
+bricecubed: I'll keep that in mind when I design the architecture
+bricecubed: PR15 has been a long time coming... still testing PR14 :)
+bricecubed: I think w/ 14.3.1 things are stabalizing
+comporder1: download zip file.... drop in "mailings template" dir and select with drop down menu
+bricecubed: what really needs to be fixed is all that fancy edit-in-place javascript I wrote for subscribers-manage
+bricecubed: I could also have in-program browsing  && downloading/"pulling" of the desired templates
+bricecubed: probably will do it that way
+comporder1: that is even better!
+
+
+----
 
 ----
 "Hello. I have upload a file with about 35.000 emails.
