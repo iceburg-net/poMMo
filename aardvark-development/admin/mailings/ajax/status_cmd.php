@@ -43,8 +43,9 @@ switch ($_GET['cmd']) {
 		if (!$dbo->query($query))
 			$json['success'] = FALSE;
 		
-		if($_GET['cmd'] == 'restart')
-			PommoMailCtl::respawn(array('code' => $mailing['code'], 'relayID' => null, 'serial' => null, 'spawn' => null));
+		if($_GET['cmd'] == 'restart') 
+			PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$mailing['code']);
+		
 		break;
 }
 $encoder = new json;

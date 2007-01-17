@@ -20,25 +20,25 @@ $pommo->init(array('install' => TRUE));
 
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
-$initial = (isset($_GET['initial'])) ? $_GET['initial'] : time();
-$respawn = (isset($_GET['respawn'])) ? $_GET['respawn'] : false;
+$code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
+$spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);
 
-
-$fileContent = "<?php die(); ?>\n[initial] = $initial \n";
-if($respawn)
-	$fileContent .= "[respawn] = $respawn";
-
+$fileContent = "<?php die(); ?>\n[code] = $code\n[spawn] = $spawn\n";
 
 if (!$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w')) 
-Pommo::kill('Unable to write to test file');
+	die('Unable to write to test file');
 
 if (fwrite($handle, $fileContent) === FALSE) 
-	Pommo::kill('Unable to write to test file');
+	die('Unable to write to test file');
+	
 fclose($handle);
+
+if($spawn > 0)
+	die();
 
 sleep(1);
 
-if(!$respawn)
-	PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?initial='.$initial.'&respawn='.time());
+$page = $pommo->_baseUrl.'support/tests/mailing.test2.php';
+PommoMailCtl::respawn(array('code' => $code, 'spawn' => $spawn), $page);
 	
-Pommo::kill();
+die();

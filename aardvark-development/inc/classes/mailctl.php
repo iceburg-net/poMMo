@@ -252,6 +252,7 @@ class PommoMailCtl {
 		if(!is_numeric($relay) || $relay == 0)
 			return array();
 		
+		// release from the queue (only if serials match)
 		if(!PommoMailCtl::queueRelease($relay))
 			PommoMailCtl::kill('Unable to release queue.');
 		
@@ -279,7 +280,17 @@ class PommoMailCtl {
 	// returns success (bool)
 	function queueRelease($relay) {
 		global $pommo;
+		global $mailingID;
+		global $skipSecurity;
+		global $serial;
 		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
+		
+		// make sure the serial matches before releasing -- this prevents double sending
+		//  it is helpful when a user resumes/restarts/dethaws a mailing while a background
+		//  script is currently processing (which will have a queue checked out)
+		
+		// code removed...
 		
 		$query = "
 			UPDATE ".$dbo->table['queue']."
@@ -319,17 +330,16 @@ class PommoMailCtl {
 	}
 	
 	
-	function respawn($p = array()) {
+	function respawn($p = array(), $page = false) {
 		global $pommo;
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 		
-		global $relayID;
-		global $serial;
-		global $code;
-		$defaults = array('relayID' => $relayID, 'serial' => $serial, 'spawn' => 'TRUE', 'code' => $code);
+		$defaults = array('code' => null, 'relayID' => null, 'serial' => null, 'spawn' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
-		PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$p['code'].'&relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
+		if (!$page)
+			$page = $pommo->_baseUrl.'admin/mailings/mailings_send4.php';
+			
+		return PommoMailCtl::spawn($page.'?securityCode='.$p['code'].'&relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
 	}
 	
 	// spawns a page in the background, used by mail processor.
@@ -428,6 +438,16 @@ class PommoMailCtl {
 			$dbo->query($query);
 		}
 		return;
+	}
+	
+	// temporary function to get the current mailing ID.. will be removed when
+	//  simultaneous mailings support is enabled
+	function getCurID() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "SELECT current_id FROM {$dbo->table['mailing_current']} LIMIT 1";
+		return $dbo->query($query,0);
 	}
 	
 }
