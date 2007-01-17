@@ -362,7 +362,6 @@ class PommoPending {
 		if(!empty($row['activated'])) {
 			// make sure it is not expired
 			if ((time() - strtotime($row['activated'])) > (60*60*12)) {
-				die($row['activated']);
 				if (basename($_SERVER['PHP_SELF']) == 'update.php')
 					Pommo::redirect('update_activate.php?Email='.$email);
 				
