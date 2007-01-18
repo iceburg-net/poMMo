@@ -75,9 +75,6 @@ for ($i = 0; $i < $count; $i++) {
 	}
 }
 
-var_dump($pommo->_logger);
-
-
 function makeData($count) {
 	
 	$words = array('Lemur','From','Wikipedia','the','free','encyclopedia','Jump','to','navigation','search','Lemurs','1','Cheirogaleoidea','Scientific','classification','Kingdom','Animalia','Phylum','Chordata','Class','Mammalia','Order','Primates','Suborder','Strepsirrhini','Infraorder','Lemuriformes','Gray','1821','Superfamilies','and','Families','o','Cheirogaleidae','Lemuroidea','Lemuridae','Lepilemuridae','Indriidae','are','members','of','a','class','primates','known','as','prosimians','make','up','infraorder','This',

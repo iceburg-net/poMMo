@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>[poMMo DevLib] - Database Schema</title>
+<LINK rel="stylesheet" type="text/css" href="inc/style/site.css">
+<script type="text/javascript" src="inc/js/jquery.js"></script>
+
+</head>
+<body>
+
+<i>Written for poMMo PR14 and above. Versions prior support MySQL 3.23 and use an entirely different API.</i>
+
+<h2>Introduction</h2>
+<hr />
+
+<p>
+Following is the schema of poMMo's database as well my explanatory notes and thoughts. I am not a SQL expert, and
+would greatly benefit from your advice if you are one.
+</p>
+
+<p>
+I have not yet listed the queries that poMMo typically makes -- e.g., those executed during subscriber addition, deletion,
+or group filtering. To examine the queries you can, of course, use MySQL's logging mechanism -- or more
+conveniently; enable debugging in your config.php. With debugging enabled, all queries made  will be printed to your browser. 
+</p>
+
+<p>
+You can also examine queries within the PHP source code. Of interest is the internal API, found in; inc/classes/*.php 
+and inc/helpers/*.php. All queries are clearly marked using the $query variable to hold the query string and blockquote notation.
+Most queries are prepared with the safeSQL class whose documentation is in inc/lib/safesql/README.
+</p>
+
+<br />
+
+<h2>Database Requirements</h2>
+<hr />
+
+<p>MySQL 4.1 or higher -- Subqueries are used in the group filtering function as well as mailing queue creation and completion</p>
+
+<br />
+
+<h2>Database Schema</h2>
+<hr />
+
+<p>
+The database schema is available in install/sql.schema.php. This plain text file is syntatically similar 
+to the output produced by mysqldump.  The file is parsed during  installation (install/install.php) to produce 
+poMMo's database on the MySQL server.
+</p>
+
+<p>
+For a better understanding, I have provided a UML model with notes. This model does NOT include keys and indexes. See
+<a href="database.keys.html">database.keys.html</a> for a listing of indexes and keys used.
+</p>
+
+<ul>
+<li>Database Model with notes
+    <ul>
+    <li>
+    <a href="inc/img/db.model.dia">dia</a> - (<a href="http://www.gnome.org/projects/dia/">gnome diagram</a>, 130k)
+    </li>
+    <li>
+    <a href="inc/img/db.model.gif">gif</a> - (141k, 256 color)
+    </li>
+    <li>
+    <a href="inc/img/db.model.png">png</a> - (248k, full color)
+    </ul>
+</li>
+<li>
+Database indexes and keys, <a href="database.keys.html">here</a>
+</li>
+</ul>
+
+
+    
+
+
+</body>
+</html>
