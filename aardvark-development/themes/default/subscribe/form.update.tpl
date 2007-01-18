@@ -33,21 +33,21 @@
 <label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 
 {if $field.type == 'text' || $field.type == 'number'}
-<input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{elseif $field.normally} value="{$field.normally|escape}"{/if} />
+<input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{/if} />
 
 {elseif $field.type == 'checkbox'}
-<input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{elseif !$formSubmitted && $field.normally == "on"} checked="checked"{/if} />
+<input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{/if} />
 
 {elseif $field.type == 'multiple'}
 <select name="d[{$key}]" id="field{$key}">
 <option value="">{t}Choose Selection{/t}</option>
 {foreach from=$field.array item=option}
-<option{if $d.$key == $option} selected="selected"{elseif !isset($d.$key) && $field.normally == $option} selected="selected"{/if}>{$option}</option>
+<option{if $d.$key == $option} selected="selected">{$option}</option>
 {/foreach}
 </select>
 
 {elseif $field.type == 'date'}
-<input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|date_format:"%m/%d/%Y"}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
+<input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|date_format:"%m/%d/%Y"}"{/if} />
 
 {else}
 <p class="error">{t}Unsupported field type{/t}</p>
