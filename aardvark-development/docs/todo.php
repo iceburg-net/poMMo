@@ -33,6 +33,10 @@ Redirect to filter page upon group creation
 
 Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
 
+Importer:
+  + Optimize
+  + Convert uploaded files to UTF-8
+
 
 ----
 
@@ -62,6 +66,10 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 
 /inc/lib/safesql/SafeSQL.class.php on line 106"
 ----
+
+PR16 -- hopefully have all strings in program, notify translators, ask for review of contributors section.
+
+it shou
 
 [LEGACY POMMO]
   Port config parser + config.php/sample

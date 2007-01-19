@@ -34,6 +34,8 @@ class Pommo {
 	var $_workDir; // poMMo's working (writable) directory (e.g. /home/www/site1/pommo/cache/)
 	var $_hostname; // WebServer hostname (e.g. www.site1.com) - null = autodetect
 	var $_hostport; // WebServer port (e.g. 80) - null = autodetect
+	var $_ssl; // bool - true if accessed via HTTPS
+	var $_http; // the "http(s)://hostname(:port)" full connection string
 	var $_language; // language to translate to (via Pommo::_T())
 	var $_debug; // debug status, either 'on' or 'off'
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
@@ -69,13 +71,18 @@ class Pommo {
 			Pommo::kill('Could not read config.php');
 
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
-		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
-		$this->_hostname = (empty($config['hostname'])) ? $_SERVER['HTTP_HOST'] : $config['hostname'];
 		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
-		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
 		
+		// the regex strips port info from hostname
+		$this->_hostname = (empty($config['hostname'])) ? preg_replace('/:\d+$/i', '', $_SERVER['HTTP_HOST']) : $config['hostname'];
+		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
+		$this->_ssl = (!isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) != 'on') ? false : true;
+		$this->_http = (($this->_ssl) ? 'https://' : 'http://') . $this->_hostname;
+		if ($this->_hostport != 80 && $this->_hostport != 443)
+			$this->_http .= ':'.$this->_hostport;
+				
 		// set logger verbosity
 		$this->_logger->_verbosity = $this->_verbosity;
 		
