@@ -5,7 +5,9 @@
 
 <h2>{t}Groups Page{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" class="navimage right" alt="groups icon" />{t}Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/groups.png" class="navimage right" alt="groups icon" />
+{t escape=no 1="<a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a>"}Subscriber Groups allow you to mail subsets of your subscribers instead of the entire list. Groups are defined by customizable matching rules, and members are dynamically assigned based off %1subscriber field%2 values.{/t}
+</p>
 
 <form method="post" action="">
 

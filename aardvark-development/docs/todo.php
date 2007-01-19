@@ -21,15 +21,11 @@ die();
 
 When installing, I left the db_prefix in the config file blank, since the poMMo stuff was going into its own separate database.  Got an error installing, since it tried to create a table called just "fields", which is a SQL keyword.  So I'd suggest adding backticks to the SQL statement that creates that (and other) tables.
 
-SSL Fix -- http://www.pommo.org/community/viewtopic.php?id=303
-
 Mailing notices -- no dupes are displayed
 
 Test mailing exchanger from setup @ configure page
 
 Toggle gettext emulation (phpgettext)
-
-Redirect to filter page upon group creation
 
 Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
 
@@ -37,6 +33,9 @@ Importer:
   + Optimize
   + Convert uploaded files to UTF-8
 
+
+---
+Notice: Only variable references should be returned by reference in /maxtor/work/eclipse/poMMo/inc/classes/sql.gen.php on line 92
 
 ----
 

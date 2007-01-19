@@ -41,8 +41,10 @@ if (!empty ($_POST['group_name'])) {
 		$logger->addMsg(sprintf(Pommo::_T('Group name (%s) already exists'),$_POST['group_name']));
 	else {
 		$group = PommoGroup::make(array('name' => $_POST['group_name']));
-		if (PommoGroup::add($group))
-			$logger->addMsg(sprintf(Pommo::_T('Group %s Added'),$_POST['group_name']));
+		$id = PommoGroup::add($group);
+		($id) ?
+			Pommo::redirect("groups_edit.php?group_id=$id") :
+			$logger->addMsg(Pommo::_T('Error with addition.'));
 	}
 }
 
