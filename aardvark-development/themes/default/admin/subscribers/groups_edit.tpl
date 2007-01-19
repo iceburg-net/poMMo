@@ -13,7 +13,12 @@
 
 <h2>{t}Edit Group{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimage right" />{t}Groups allow you to mail subsets of your subscribers. They are made of "filters" which match subscribers based on their field values. For example, if you collect "age" and "country" as subscriber fields, you can match those who are 21+ and living in Japan by creating two filtering critiera; one which matches "age" to GREATER THAN 20, and another which matches "Japan" IS "country". You can also include or exclude members of other groups.{/t}</p>
+<p>
+<img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimage right" />
+{t escape=no 1="<a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a>"}To add subscribers to a group you must create matching rules. Subscribers are automatically added to a group if their %1subscriber field%2 values "match" a Group's rules. For example, if you collect "AGE" and "COUNTRY" as %1subscriber fields%2, you can match those who are 21+ and living in Japan by creating two rules; one which matches "AGE" to greater than 20, and another which matches "Japan" to "COUNTRY". You can also include or exclude members of other groups.{/t}
+</p>
+
+
 
 {include file="inc/tpl/messages.tpl"}
 
@@ -35,7 +40,7 @@
 
 <form method="post" action="" id="filterForm" name="filterForm">
 <fieldset>
-<legend>{t}Add Filter{/t}</legend>
+<legend>{t}Add Rule{/t}</legend>
 
 <div id="newFilter">
 
@@ -69,9 +74,9 @@
 </fieldset>
 
 <fieldset>
-<legend>{t}Group Filters{/t}</legend>
+<legend>{t}Group Rules{/t}</legend>
 
-<table summary="list of filters and controls">
+<table summary="list of rules">
 <thead>
 <tr>
 <th>{t}Delete{/t}</th>
@@ -146,7 +151,7 @@
 
 </form>
 
-<p>{t escape=no 1="<em>`$filterCount`</em>" 2="<strong>`$tally`</strong>"}%1 filters match a total of %2 active subscribers{/t}</p>
+<p>{t escape=no 1="<em>`$filterCount`</em>" 2="<strong>`$tally`</strong>"}%1 rules match a total of %2 active subscribers{/t}</p>
 
 {literal}
 <script type="text/javascript">

@@ -210,13 +210,13 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// accepts filter by status (int) either 1 (active) (default), 0 (inactive), 2 (pending)
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns a tally (int)
-	function & tally($group, $status = 1) {
+	function tally($group, $status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		$pommo->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/sql.gen.php');
 		
 		if (empty($group['criteria']))
-			return array();
+			return 0;
 		
 		$f = array();
 		
