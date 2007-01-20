@@ -19,10 +19,6 @@
 die();
 ?>
 
-When installing, I left the db_prefix in the config file blank, since the poMMo stuff was going into its own separate database.  Got an error installing, since it tried to create a table called just "fields", which is a SQL keyword.  So I'd suggest adding backticks to the SQL statement that creates that (and other) tables.
-
-Mailing notices -- no dupes are displayed
-
 Test mailing exchanger from setup @ configure page
 
 Toggle gettext emulation (phpgettext)
