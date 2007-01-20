@@ -325,8 +325,9 @@ class PommoMailing {
 	// gets *latest* notices from a mailing
 	// accepts mailing ID
 	// accepts a limit (def. 50) -- or 0
-	// returns an array of notices
-	function getNotices($id,$limit = 50) {
+	// returns an array of notices, if timestamp set to true, array will contain an array of keys that are timestamps, and value is an array of notices
+	//   e.g. array('<timestamp>' => array('notice1','notice2'))
+	function & getNotices($id,$limit = 50, $timestamp = FALSE) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -334,11 +335,26 @@ class PommoMailing {
 		if($limit == 0)
 			$limit = false;
 		
+		if (!$timestamp) {
 		$query = "
 			SELECT notice FROM ".$dbo->table['mailing_notices']."
 			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
 		$query = $dbo->prepare($query,array($id,$limit));
 		return $dbo->getAll($query,'assoc','notice');
+		}
+		
+		$o = array();
+		$query = "
+			SELECT touched,notice FROM ".$dbo->table['mailing_notices']."
+			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
+		$query = $dbo->prepare($query,array($id,$limit));
+		while ($row = $dbo->getRows($query)) {
+			if (!isset($o[$row['touched']]))
+				$o[$row['touched']] = array();
+			array_push($o[$row['touched']], $row['notice']);
+		}
+		return $o;
+		
 	}
 	
 }
