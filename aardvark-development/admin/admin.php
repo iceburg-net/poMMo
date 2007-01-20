@@ -20,6 +20,12 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
+$lang = false;
+if (isset($_POST['lang'])) {
+	define('_poMMo_lang', $_POST['lang']);
+	$lang = true;
+}
+	
 require('../bootstrap.php');
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -35,7 +41,11 @@ $smarty->assign('header',array(
 	'main' => 'poMMo '.$pommo->_config['version'],
 	'sub' => sprintf(Pommo::_T('Powerful mailing list software for %s'),$pommo->_config['list_name']) 
 	));
-	
+
+if($lang)
+	$logger->addErr(Pommo::_T('You have changed the language for this session. To make this the default language, you must update your config.php file.'));
+
+$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
 $smarty->display('admin/admin.tpl');
 Pommo::kill();
 	
