@@ -172,10 +172,12 @@ class PommoDB {
 			if ($this->_dieOnQuery)
 				Pommo::kill('MySQL Query Failed.'.$query);
 		}
-
-		if (is_numeric($row))
-			$this->_result = mysql_result($this->_result, $row, $col); // func returns false on failure
-
+		
+		if (is_numeric($row)) {
+			$this->_result = ($this->records() === 0) ? false :
+				mysql_result($this->_result, $row, $col);
+		}
+		
 		// return the result
 		return $this->_result;
 	}
