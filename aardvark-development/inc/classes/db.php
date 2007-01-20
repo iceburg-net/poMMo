@@ -45,19 +45,19 @@ class PommoDB {
 		
 		$this->_database = $database;
 		$this->table = array (
-			'config' => $tablePrefix . 'config',
-			'fields' => $tablePrefix . 'fields',
-			'group_criteria' => $tablePrefix . 'group_criteria',
-			'groups' => $tablePrefix . 'groups',
-			'mailing_notices' => $tablePrefix . 'mailing_notices',
-			'mailing_current' => $tablePrefix . 'mailing_current',
-			'mailings' => $tablePrefix . 'mailings',
-			'subscriber_data' => $tablePrefix . 'subscriber_data',
-			'subscriber_pending' => $tablePrefix . 'subscriber_pending',
-			'subscriber_update' => $tablePrefix . 'subscriber_update',
-			'subscribers' => $tablePrefix . 'subscribers',
-			'queue' => $tablePrefix . 'queue',
-			'updates' => $tablePrefix . 'updates');		
+			'config' => '`'.$tablePrefix . 'config`',
+			'fields' => '`'.$tablePrefix . 'fields`',
+			'group_criteria' => '`'.$tablePrefix . 'group_criteria`',
+			'groups' => '`'.$tablePrefix . 'groups`',
+			'mailing_notices' => '`'.$tablePrefix . 'mailing_notices`',
+			'mailing_current' => '`'.$tablePrefix . 'mailing_current`',
+			'mailings' => '`'.$tablePrefix . 'mailings`',
+			'subscriber_data' => '`'.$tablePrefix . 'subscriber_data`',
+			'subscriber_pending' => '`'.$tablePrefix . 'subscriber_pending`',
+			'subscriber_update' => '`'.$tablePrefix . 'subscriber_update`',
+			'subscribers' => '`'.$tablePrefix . 'subscribers`',
+			'queue' => '`'.$tablePrefix . 'queue`',
+			'updates' => '`'.$tablePrefix . 'updates`');		
 
 		$this->_dieOnQuery = TRUE;
 		$this->_debug = FALSE;
