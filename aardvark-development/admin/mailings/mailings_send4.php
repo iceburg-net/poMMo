@@ -49,7 +49,6 @@ $relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
 $code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
 $spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);
 $test = (empty($_GET['testMailing'])) ? false : true;
-$mailingID = PommoMailCtl::getCurID(); // placeholder for when we'll add support for simultaneous mailings & require this var -- gets overwritten @ mailing initialization. 
 
 
 /**********************************
@@ -64,6 +63,7 @@ $logger = & $pommo->_logger;
 // NOTE: Be extra careful to check the success of queries/methods!
 $dbo->dieOnQuery(FALSE); 
 
+$mailingID = PommoMailCtl::getCurID(); // placeholder for when we'll add support for simultaneous mailings & require this var -- gets overwritten @ mailing initialization. 
 
 if (!$skipSecurity && $relayID < 1 && $relayID > 4)
 	PommoMailCtl::kill('Mailing stopped. Bad RelayID.', TRUE);

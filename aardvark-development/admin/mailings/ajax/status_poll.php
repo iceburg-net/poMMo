@@ -84,10 +84,22 @@ if ($json['status'] != 4) {
 $json['statusText'] = $statusText[$json['status']];
 
 // get last 50 unique notices
-$notices = PommoMailing::getNotices($mailing['id']);
 $oldNotices = $pommo->get('notices');
-$pommo->set(array('notices' => $notices));
-$json['notices'] = array_reverse(array_diff($notices,$oldNotices));
+$newNotices = PommoMailing::getNotices($mailing['id'], 50, true);
+$notices = array();
+foreach($newNotices as $time => $arr) {
+	if (!isset($oldNotices[$time])) {
+		$notices = array_merge($notices, $arr);
+		continue;	
+	}
+	foreach($arr as $notice) {
+		if (array_search($notice,$arr) === false) 
+			$notices[] = $notice;
+	}
+}
+
+$pommo->set(array('notices' => $newNotices));
+$json['notices'] = array_reverse($notices);
 
 $query = "
 	SELECT count(subscriber_id) 
