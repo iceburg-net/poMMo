@@ -37,6 +37,7 @@ class Pommo {
 	var $_ssl; // bool - true if accessed via HTTPS
 	var $_http; // the "http(s)://hostname(:port)" full connection string
 	var $_language; // language to translate to (via Pommo::_T())
+	var $_slanguage; // the "session" language (if set)
 	var $_debug; // debug status, either 'on' or 'off'
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
 
@@ -73,7 +74,7 @@ class Pommo {
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
 		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
-		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
+		$this->_logger->_verbosity = $this->_verbosity;
 		
 		// the regex strips port info from hostname
 		$this->_hostname = (empty($config['hostname'])) ? preg_replace('/:\d+$/i', '', $_SERVER['HTTP_HOST']) : $config['hostname'];
@@ -82,9 +83,9 @@ class Pommo {
 		$this->_http = (($this->_ssl) ? 'https://' : 'http://') . $this->_hostname;
 		if ($this->_hostport != 80 && $this->_hostport != 443)
 			$this->_http .= ':'.$this->_hostport;
-				
-		// set logger verbosity
-		$this->_logger->_verbosity = $this->_verbosity;
+			
+		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
+		$this->_slanguage = (defined('_poMMo_lang')) ? _poMMo_lang : false;
 		
 		// include translation (l10n) methods if language is not English
 		$this->_l10n = FALSE;
@@ -197,7 +198,7 @@ class Pommo {
 		// start the session
 		if (!empty($p['sessionID']))
 			session_id($p['sessionID']);
-		session_start();
+		$this->startSession();
 		
 		// generate unique session name
 		$key =& $this->_config['key'];
@@ -215,6 +216,21 @@ class Pommo {
 		}
 		
 		$this->_session =& $_SESSION['pommo'.$key];
+		
+		// check for "session" language -- user defined language on the fly.
+		if ($this->_slanguage) 
+			$this->_session['slanguage'] = $this->_slanguage;
+			
+		if(isset($this->_session['slanguage'])) {
+			if($this->_session['slanguage'] == 'en')
+				$this->_l10n = FALSE;
+			else {
+				$this->_l10n = TRUE;
+				Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
+				PommoHelperL10n::init($this->_session['slanguage'], $this->_baseDir);
+			}
+			$this->_slanguage = $this->_session['slanguage'];
+		}
 		
 		// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
 		if (defined('_poMMo_support')) {
@@ -376,6 +392,13 @@ class Pommo {
 			require ($file);
 			$files[$file] = TRUE;
 		}
+	}
+	
+	function startSession($name = null) {
+		static $start=false;
+		if (!$start)
+			session_start();
+		$start = true;
 	}
 }
 ?>

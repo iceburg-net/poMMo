@@ -21,19 +21,16 @@ die();
 
 Test mailing exchanger from setup @ configure page
 
-Toggle gettext emulation (phpgettext)
-
 Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
 
 Importer:
   + Optimize
   + Convert uploaded files to UTF-8
-
+  
 
 ---
 Notice: Only variable references should be returned by reference in /maxtor/work/eclipse/poMMo/inc/classes/sql.gen.php on line 92
-
-----
+---
 
 comporder1: I was thinking.... once you get mailing templates implemented... You could set up a user upload mail template site... 
 bricecubed: hmm

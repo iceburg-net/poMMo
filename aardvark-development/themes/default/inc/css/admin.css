@@ -319,6 +319,7 @@ select.pvInvalid {
 
 .hidden { display: none; }
 .clear { clear: both; }
+.right { float: right; }
 
 div.pager {
 	text-align:center;
