@@ -19,50 +19,6 @@
 die();
 ?>
 
-Test mailing exchanger from setup @ configure page
-
-Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
-
-Importer:
-  + Optimize
-  + Convert uploaded files to UTF-8
-  
-
----
-Notice: Only variable references should be returned by reference in /maxtor/work/eclipse/poMMo/inc/classes/sql.gen.php on line 92
----
-
-comporder1: I was thinking.... once you get mailing templates implemented... You could set up a user upload mail template site... 
-bricecubed: hmm
-bricecubed: good idea
-bricecubed: contributed templates
-comporder1: right!
-bricecubed: I'll keep that in mind when I design the architecture
-bricecubed: PR15 has been a long time coming... still testing PR14 :)
-bricecubed: I think w/ 14.3.1 things are stabalizing
-comporder1: download zip file.... drop in "mailings template" dir and select with drop down menu
-bricecubed: what really needs to be fixed is all that fancy edit-in-place javascript I wrote for subscribers-manage
-bricecubed: I could also have in-program browsing  && downloading/"pulling" of the desired templates
-bricecubed: probably will do it that way
-comporder1: that is even better!
-
-
-----
-
-----
-"Hello. I have upload a file with about 35.000 emails.
-
-All ok. But, after, when i need to select field i have this error:
-
-Fatal error: Maximum execution time of 30 seconds exceeded
-
-/inc/lib/safesql/SafeSQL.class.php on line 106"
-----
-
-PR16 -- hopefully have all strings in program, notify translators, ask for review of contributors section.
-
-it shou
-
 [LEGACY POMMO]
   Port config parser + config.php/sample
 
@@ -94,7 +50,9 @@ it shou
 	  (feature) add message templating
 	  
 	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
+	 
 	  (enhancement) Setup > Config tabbed layout
+	  	Test mailing exchanger from setup @ configure page
 	  
 	  (feature) Add OR to group filtering
 	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
@@ -115,6 +73,8 @@ it shou
 			);
 	  	----
 	  	
+	  	
+	  	
 	  ADD Support Page (next to admin page in main menu bar)
 		+ Enhanced support library
 		+ PHPInfo()  (or specifically mysql, php, gettext, safemode, webserver, etc. versions)
@@ -123,8 +83,16 @@ it shou
 		+ Link to WIKI documentation
 			+ Make a user-contributed open WIKI documentation system
 			+ When support page is clicked, show specific support topics for that page
+			
+		Importer:
+  			+ Optimize
+  			+ Convert uploaded files to UTF-8
+  			+ Protection against timeouts, status?
+  		
+  		Rewrite sql.gen.php, matching algorithms.
+  			Avoid; Notice: Only variable references should be returned by reference in /maxtor/work/eclipse/poMMo/inc/classes/sql.gen.php on line 92
 	  	
-	MEDIUM TERM:
+	MEDIUM TERM: (PR16)
 	
 	  (API) SWITCH "phase1" dialogs of subscriber add/delete/search/export to INLINE DISPLAY vs. AJAX POLL 
  		 + Requires unobtrusive modal window (thickbox destroys event bindings). Keep eye on Gavin's plugin
@@ -132,30 +100,35 @@ it shou
 	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
 	  (API) Better Organize inc/helpers/messages & validate... underutilized!
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
-	  
 	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
-	  
 	  
 	  (feature) Implement drag & drop between AND and OR filters (via table row handles)
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
 	  (feature) Add specific emails to a group
+	  	++ Allow rules to include base subscriber data such as IP && date_registered.
+	  	
 	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.
 	  (feature) Display flagged subscribers...
 	  (feature) Support SSL+TLS SMTP Connections
 	  
+	  PR16 -- hopefully have all strings in program, notify translators, ask for review of contributors section.
+	  
+	  
 	LONG TERM:
+	
+	  (fix) Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
+	  
+	  (feature) Bounced mail reading
+	  (feature) Add search capability to subscriber management
+	  (feature) Add theme selector
+	  
+	  (module) Visual Verrification / CAPTCHA @ subscribe form
+	  (design) client side validation of subscribe form (use validation.js), potential AJAX processing
 	
 	  (API) include some kind of bandwith throttling / DOS detection / firewalling to drop pages from offending IPs / halt system for 3 mins if too many page requests ??
 	  (API) Plugin architecture -- allow handler & manipulation injections/replacements to API functions
 	  	+ Can be used to chain the subscription process (process.php) through custom functions, add an extended authentication layer, etc.
 	  	
-	  (design) client side validation of subscribe form (use validation.js), potential AJAX processing
-	  (module) Visual Verrification / CAPTCHA @ subscribe form
-	  (feature) Bounced mail reading
-	  (feature) Add search capability to subscriber management
-	  
-	  (security) Implement Passwords on user information (login.php). Include customizable question/answer pair.
-
 
 [CORINNA]
 
@@ -165,7 +138,8 @@ it shou
 					+ convert to $pommo->_state + save there
 					
 			====>	BB: Corinna, See the new state handling in subscribers_manage & mailings_history
-	
+			====>   BB: I've also added mailing composition to page states -- so user can bounce around program & not loose mailing data
+			
 		(arch)		module integration architecture
 					how hook in the modules?
 		
