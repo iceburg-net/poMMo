@@ -97,10 +97,10 @@ foreach($newNotices as $time => $arr) {
 			$notices[] = $notice;
 	}
 }
-
 $pommo->set(array('notices' => $newNotices));
 $json['notices'] = array_reverse($notices);
 
+// calculate sent
 $query = "
 	SELECT count(subscriber_id) 
 	FROM ".$dbo->table['queue']."
