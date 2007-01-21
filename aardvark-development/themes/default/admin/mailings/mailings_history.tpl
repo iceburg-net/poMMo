@@ -72,17 +72,19 @@ $().ready(function() {
 </fieldset>
 </form>
 
-<form method="post" action="mailings_mod.php" name="oForm" id="oForm">
+<form method="get" action="" id="form">
 <fieldset>
 <legend>{t}Mailings{/t}</legend>
 
 <p class="count">({t 1=$tally}%1 mailings{/t})</p>
 
+
 {if $tally > 0}
 <table summary="mailing details">
 <thead>
 <tr>
-<th name="key"></th>
+<th name="check"></th>
+<th name="cmd"></th>
 <th>{t}Subject{/t}</th>
 <th>{t}Group (count){/t}</th>
 <th>{t}Sent{/t}</th>
@@ -97,8 +99,11 @@ $().ready(function() {
 {foreach from=$mailings key=id item=o}
 <tr>
 <td>
-<p class="hidden">{$id}</p>
-DELETE  <a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}View{/t}</a>
+<input type="checkbox" name="mail_id[]" value="{$id}">
+</td>
+<td>
+<a href="{$smarty.server.PHP_SELF}?delete=true&mail_id={$id}">{t}Delete{/t}</a>
+<a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width=480" title="{t}Message Preview{/t}" class="thickbox">{t}View{/t}</a>
 <a href="ajax/mailing_reload.php?mail_id={$id}" title="{t}Reload Mailing{/t}">{t}Reload{/t}</a>
 </td>
 
@@ -123,6 +128,14 @@ DELETE  <a href="ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width
 </tbody>
 </table>
 
+<div class="buttons">
+<button class="check all">{t}Check All{/t}</button>
+<button class="check">{t}Reset{/t}</button>
+<button name="delete" value="true">{t}Delete Checked{/t} {t}Mailings{/t}</button>
+</div>
+
+</form>
+
 {literal}
 <script type="text/javascript">
 $().ready(function() {	
@@ -130,7 +143,7 @@ $().ready(function() {
 		sortClassAsc: 'sortUp', 		// class name for ascending sorting action to header
 		sortClassDesc: 'sortDown',	// class name for descending sorting action to header
 		headerClass: 'sort', 				// class name for headers (th's)
-		disableHeader: 0					// DISABLE Sorting on edit/delete column
+		disableHeader: [0,1]					// DISABLE Sorting on edit/delete column
 	});
 
 	$('table tbody tr').quicksearch({
@@ -141,7 +154,33 @@ $().ready(function() {
 		labelText: "{/literal}{t}Quick Search{/t}{literal}",
 		inputText: "{/literal}{t}search table{/t}{literal}",
 		loaderImg: '{/literal}{$url.theme.shared}images/loader.gif{literal}'
-	});	
+	});
+	
+	$('#form div.buttons button.check').click(function(){
+		var bool = $(this).is('.all');
+		$('#form input[@type=checkbox]').each(function() {
+			this.checked = bool;
+		});
+		return false;
+	});
+	
+	$('#form button[@name=delete]').click(function() {
+		var proceed = false;
+		$('#form input[@type=checkbox]').each(function() {
+			if (this.checked == true) {
+				proceed = true;
+				return false;
+			}
+		});
+		
+		if (!proceed)
+			return false; // nothing was checked
+			
+		$('#form')[0].submit();
+		return true;
+	});
+	
+	
 });
 </script>
 {/literal}

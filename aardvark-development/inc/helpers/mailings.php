@@ -297,6 +297,38 @@ class PommoMailing {
 		return $id;
 	}
 	
+	// removes a mailing from the database
+	// accepts a single ID (int) or array of IDs 
+	// returns the # of deleted subscribers (int). 0 (false) if none.
+	function delete(&$id) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			DELETE
+			FROM " . $dbo->table['mailings'] . "
+			WHERE mailing_id IN(%c)";
+		$query = $dbo->prepare($query,array($id));
+		
+		$deleted = $dbo->affected($query);
+		
+		$query = "
+			DELETE
+			FROM " . $dbo->table['mailing_current'] . "
+			WHERE current_id IN(%c)";
+		$query = $dbo->prepare($query,array($id));
+		$dbo->query($query);
+		
+		$query = "
+			DELETE
+			FROM " . $dbo->table['mailing_notices'] . "
+			WHERE mailing_id IN(%c)";
+		$query = $dbo->prepare($query,array($id));
+		$dbo->query($query);
+		
+		return $deleted;
+	}
+	
 	// checks if a mailing is processing
 	// returns (bool) - true if current mailing
 	function isCurrent() {

@@ -238,6 +238,10 @@ div.buttons {
 	margin: 1em;
 }
 
+div.buttons button, div.buttons input[type="submit"] {
+    margin-right: 1em;
+}
+
 input[type="text"],
 input[type="password"] {
 	margin: 0;
