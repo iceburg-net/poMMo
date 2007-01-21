@@ -5,8 +5,8 @@
 <div id="language" class="right">
 <form method="POST" action="" id="language">
 <select name="lang" onChange="this.form.submit();">
-<option value="en">English</option>
-<option value="en-uk" {if $lang == 'en-uk'}SELECTED{/if}>English (uk)</option>
+<option value="en">English (en)</option>
+<option value="en-uk" {if $lang == 'en-uk'}SELECTED{/if}>British English (en-uk)</option>
 <option value="bg" {if $lang == 'bg'}SELECTED{/if}>български (bg)</option>
 <option value="br" {if $lang == 'br'}SELECTED{/if}>português (br)</option>
 <option value="da" {if $lang == 'da'}SELECTED{/if}>dansk (da)</option>

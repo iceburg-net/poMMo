@@ -46,6 +46,14 @@ $state =& PommoAPI::stateInit('mailings_history',array(
 	'sort' => 'started',
 	'order' => 'asc'),
 	$_REQUEST);
+
+$deleted = 0;
+if(isset($_GET['delete'])) 
+	if (isset($_GET['mail_id']))
+		$deleted = PommoMailing::delete($_GET['mail_id']);
+if($deleted > 0)
+	$logger->addMsg(sprintf(Pommo::_T('%s mailings deleted'), $deleted));
+	
 	
 $tally = PommoMailing::tally();
 
