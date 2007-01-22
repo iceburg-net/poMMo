@@ -60,13 +60,11 @@ class PommoInstall {
  	function verify() {
  		global $pommo;
 		$dbo =& $pommo->_dbo;
- 		
  		if (is_object($dbo)) {
-			$sql = 'SHOW TABLES LIKE \'' . $dbo->table['groups'] . '\'';
-			if ($dbo->records($sql))
+			$sql = 'DESCRIBE ' . $dbo->table['groups'];
+			if ($dbo->records($sql) > 0)
 				return true;
 		}
-	
 		return false;
  	}
  	
