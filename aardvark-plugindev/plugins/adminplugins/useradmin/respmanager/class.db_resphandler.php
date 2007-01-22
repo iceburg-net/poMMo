@@ -27,7 +27,7 @@ class RespDBHandler implements iDbHandler {
 
 	public function __construct($dbo) {
 		$this->dbo = $dbo;
-		$this->safesql =& new SafeSQL_MySQL;
+		$this->safesql = $dbo->_safeSQL;
 	}
 
 
@@ -39,11 +39,58 @@ class RespDBHandler implements iDbHandler {
 	public function & dbPluginIsActive($pluginame) {
 		$sql = $this->safesql->query("SELECT plugin_active FROM %s " .
 				"WHERE plugin_uniquename='%s' ", 
-			array(pommomod_plugin, $pluginame) );
+			array('pommomod_plugin', $pluginame) );
 		return $this->dbo->query($sql, 0);	//row 0
 	}
-	
-	
+
+
+	/* Custom DB fetch functions */
+	public function dbFetchRespMatrix() {
+		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, r.rp_realname, r.rp_bounceemail, r.rp_sonst " .	//user_pass,
+				//"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
+				"FROM %s AS u RIGHT JOIN %s as r ON u.user_id=r.user_id ORDER BY u.user_name ", 
+			array( 'pommomod_user',  'pommomod_responsibleperson' ) );
+		$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$user[$i] = array(
+				'uid' 		=> $row['user_id'],
+				'name'		=> $row['user_name'],
+				'realname'	=> $row['rp_realname'],
+				//'surname'	=> $row['user_realsurname'],
+				'bounceemail'	=> $row['rp_bounceemail'],
+				'sonst'	=> $row['rp_sonst'],
+				);
+			$i++;
+		}
+		return $user;
+	}
+
+	public function dbFetchRespGroups() {
+		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, r.rp_realname, r.rp_bounceemail, r.rp_sonst, " .
+				"g.group_id, g.group_name " .	//user_pass,
+				//"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
+				"FROM %s AS u RIGHT JOIN %s as r ON u.user_id=r.user_id " .
+				"RIGHT JOIN %s AS rg ON r.user_id=rg.user_id " .
+				"RIGHT JOIN %s AS g ON rg.group_id=g.group_id " .
+				"ORDER BY u.user_name ", 
+			array( 'pommomod_user',  'pommomod_responsibleperson', 'pommomod_rp_group', 'pommo_groups' ) );
+		$i=0;
+		while ($row = $this->dbo->getRows($sql)) {
+			$user[$i] = array(
+				'uid' 		=> $row['user_id'],
+				'name'		=> $row['user_name'],
+				'realname'	=> $row['rp_realname'],
+				//'surname'	=> $row['user_realsurname'],
+				'bounceemail'	=> $row['rp_bounceemail'],
+				'sonst'	=> $row['rp_sonst'],
+				'gid'	=> $row['group_id'],
+				'gname'	=> $row['group_name'],
+				);
+			$i++;
+		}
+		return $user;
+	}
+
 	
 	public function dbFetchRespLists() {
 		$sql = $this->safesql->query("SELECT rp.user_id, u.user_name, l.list_id, l.list_name, l.list_desc, l.list_created, l.list_sentmailings, l.list_active, l.list_senderinfo " .
@@ -68,7 +115,7 @@ class RespDBHandler implements iDbHandler {
 			);
 			$i++;
 		}
-		print_r($list);
+		//print_r($list);
 		return $list;
 	}	
 	
@@ -83,26 +130,7 @@ class RespDBHandler implements iDbHandler {
 	
 	
 	
-	/* Custom DB fetch functions */
-	public function dbFetchRespMatrix() {
-		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, r.rp_realname, r.rp_bounceemail, r.rp_sonst " .	//user_pass,
-				//"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
-				"FROM %s AS u RIGHT JOIN %s as r ON u.user_id=r.user_id ", 
-			array( 'pommomod_user',  'pommomod_responsibleperson' ) );
-		$i=0;
-		while ($row = $this->dbo->getRows($sql)) {
-			$user[$i] = array(
-				'uid' 		=> $row['user_id'],
-				'name'		=> $row['user_name'],
-				'realname'	=> $row['rp_realname'],
-				//'surname'	=> $row['user_realsurname'],
-				'bounceemail'	=> $row['rp_bounceemail'],
-				//'realname'	=> $row['user_realname'],
-				);
-			$i++;
-		}
-		return $user;
-	}
+
 	
 	public function dbFetchUser() {
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name " .	//user_pass,

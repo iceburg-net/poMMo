@@ -78,5 +78,6 @@ class PommoAuth {
 	function isAuthenticated() {
 		return (empty($this->_username)) ? false : true;
 	}
+	
 }
 ?>

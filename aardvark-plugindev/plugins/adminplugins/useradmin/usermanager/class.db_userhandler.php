@@ -51,6 +51,7 @@ class UserDBHandler implements iDbHandler {
 	 *  Get User Matrix with Permission Group Information
 	 */
 	public function dbFetchUserMatrix() {
+		
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, u.user_pass, p.perm_name, u.user_created, u.user_lastlogin, u.user_logintries, u.user_lastedit, u.user_active " .
 				"FROM %s AS u LEFT JOIN %s AS p ON u.perm_id=p.perm_id ORDER BY u.user_id",
 			array( 'pommomod_user', 'pommomod_perm' ) );
@@ -172,17 +173,21 @@ class UserDBHandler implements iDbHandler {
 	 * Table row is unique, check not needed? only logger binding!
 	 */
 	public function dbAddUser($user, $pass, $perm) {
+
+		echo "<h1>USERADD!!!!!!! CHECK</h1>";
+
+		$dbo = clone $this->dbo;
 		if ($this->dbCheckUserName($user) == 0) {
 			
 			// We insert in DB only when the username does not exist
 			$sql = $this->safesql->query("INSERT INTO %s (user_name, user_pass, perm_id, user_created, user_lastlogin, user_logintries, user_lastedit, user_active ) " .
 					"VALUES ('%s', '%s', '%s',  NOW(), '0000-00-00', 0, NOW(), TRUE)",
-				array('pommomod_user', $user, $pass, $perm ) );
+				array('pommomod_user', $user, md5($pass), $perm ) );
 			// If query fails return the Error
-			if (!$this->dbo->query($sql)) {
-				return  $this->_dbo->getError();
+			if (!$dbo->query($sql)) {
+				return  $dbo->getError();
 			} else {
-				$affected = $this->dbo->affected();
+				$affected = $dbo->affected();
 				return ($affected == 1) ? 1 : FALSE;
 			}
 		} else {
@@ -195,7 +200,7 @@ class UserDBHandler implements iDbHandler {
 			array('pommomod_user', $userid ) );
 		// If query fails return the error.
 		if (!$this->dbo->query($sql)) {
-			return  $this->_dbo->getError();
+			return  $this->dbo->getError();
 		} else {
 			$affected = $this->dbo->affected();
 			return ($affected == 0) ? FALSE : $affected;
@@ -209,11 +214,11 @@ class UserDBHandler implements iDbHandler {
 		// changed and some unchanged.
 		$sql = $this->safesql->query("UPDATE %s SET user_name='%s', user_pass='%s', perm_id='%s', user_lastedit=NOW(), user_active=%s 
 				WHERE user_id=%i",
-			array('pommomod_user', $user, $pass, $perm, $active, $id) );
+			array('pommomod_user', $user, md5($pass), $perm, $active, $id) );
 		//$count = $this->dbo->query($sql);
 		//TODO	//return "User {$id}->{$column}:{$newval} changed.<br>";
 		if (!$this->dbo->query($sql)) {
-			return  $this->_dbo->getError();
+			return  $this->dbo->getError();
 		} else {
 			$affected = $this->dbo->affected();
 			return ($affected == 0) ? FALSE : $affected;
@@ -230,10 +235,12 @@ class UserDBHandler implements iDbHandler {
 	}*/	
 	
 	private function dbCheckUserName($user) {
+		
+		$dbo = clone $this->dbo;
 		$sql = $this->safesql->query("SELECT user_name FROM %s WHERE user_name='%s'",
 			array('pommomod_user', $user ) );
-		$this->dbo->query($sql);
-		$count = $this->dbo->affected();
+		$dbo->query($sql);
+		$count = $dbo->affected();
 		return $count;
 	}
 	
@@ -257,7 +264,7 @@ class UserDBHandler implements iDbHandler {
 				array('pommomod_perm', $name, $perm, $desc ) );
 			// If query fails return the Error
 			if (!$this->dbo->query($sql)) {
-				return  $this->_dbo->getError();
+				return  $this->dbo->getError();
 			} else {
 				$affected = $this->dbo->affected();
 				return ($affected == 1) ? 1 : FALSE;
@@ -275,7 +282,7 @@ class UserDBHandler implements iDbHandler {
 		//TODO
 		//return "User {$id}->{$column}:{$newval} changed.<br>";
 		if (!$this->dbo->query($sql)) {
-			return  $this->_dbo->getError();
+			return  $this->dbo->getError();
 		} else {
 			$affected = $this->dbo->affected();
 			return ($affected == 0) ? FALSE : $affected;
@@ -289,7 +296,7 @@ class UserDBHandler implements iDbHandler {
 			array('pommomod_user', $permid ) );
 		// If query fails return the error.
 		if (!$this->dbo->query($sql) OR !$this->dbo->query($sql2)) {
-			return  $this->_dbo->getError();
+			return  $this->dbo->getError();
 		} else {
 			$affected = $this->dbo->affected();
 			return ($affected == 0) ? FALSE : $affected;

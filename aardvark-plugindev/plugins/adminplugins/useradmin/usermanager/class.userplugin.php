@@ -163,15 +163,18 @@ class UserPlugin { //implements plugin
 	
 	public function addUser($user, $pass, $passcheck, $group) {
 
+		$this->logger->addMsg("<h1>USER NAME!!!!!!! IM PLUGIN</h1>");
+
 		//TODO mache string aus permission -> soll array sein / SMARTY VALIDATOR
-		if (empty($user) OR empty($pass) OR empty($passcheck) OR empty($group)) {
+		if (empty($user) OR empty($pass) OR empty($passcheck)) {//OR empty($group)) {
 			// No parameter should be empty
 			$str = "({$user}, {$group})";
 			$this->logger->addMsg('Add User: Parameter is empty. ' . $str);	
+
 		} else {
 			
 			//write to the database after password check (if its the same)
-			if ($pass && $passcheck) {
+			if (md5($pass) == md5($passcheck)) { //was &&
 				$ret = $this->userdbhandler->dbAddUser($user, $pass, $group);
 				if (!is_numeric($ret)) {
 					$this->logger->addMsg("Add User: User could not be added: ".$ret);

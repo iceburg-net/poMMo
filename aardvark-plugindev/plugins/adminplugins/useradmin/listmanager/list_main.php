@@ -32,14 +32,13 @@ if ($_REQUEST['action']) {
 	
 	 if ($data['action'] == "delete") {
 		$data['showDelete'] = TRUE;
-		$data['userid'] = $_REQUEST['userid'];
+		//$data['userid'] = $_REQUEST['userid'];
 		$data['listid'] = $_REQUEST['listid'];
 		if (!empty($_REQUEST['deleteList'])) {
 			$ret = $listplugin->deleteList($data['listid'], $_REQUEST['userid']);
 			if ($ret) $data['showDelete'] = FALSE;	
 		}
 	} elseif ($data['action'] == "edit") {
-		$data['userid'] = $_REQUEST['userid'];
 		$data['listid'] = $_REQUEST['listid'];
 		$data['showEdit'] = TRUE;
 		if (!empty($_REQUEST['editList'])) {
@@ -47,19 +46,20 @@ if ($_REQUEST['action']) {
 			if ($ret) $data['showEdit'] = FALSE;	
 		}
 	} elseif ($data['action'] == "add") {
-		$data['userid'] = $_REQUEST['userid'];
 		$data['showAdd'] = TRUE;
 		if (!empty($_REQUEST['addList'])) {
-			$ret = $listplugin->addList($_REQUEST['listname'], $_REQUEST['listdesc'], $data['userid']);
+			$ret = $listplugin->addList($_REQUEST['listname'], $_REQUEST['listdesc'], 
+				$_REQUEST['senderemail'], $_REQUEST['userarray'], $_REQUEST['grouparray']);
 			if ($ret) $data['showAdd'] = FALSE;	
 		}
 	}
 	
-	echo "<div style='color:red'>"; print_r($_REQUEST); echo "</div>";
+	//echo "<div style='color:red'>"; print_r($_REQUEST); echo "</div>";
 }
 
 
 $listplugin->execute($data);
+
 
 // Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/pluginconfig/config_main.php');
 

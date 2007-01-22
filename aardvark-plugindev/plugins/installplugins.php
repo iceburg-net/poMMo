@@ -107,14 +107,27 @@ if ($pommo->_useplugins) {
 						array($pluginprefix, $bmdb['prefix'], $dbstr, $charset) );
 
 
-
+		// SHOULD BE NAMED PERMGROUP
+		// little bit messy
 		$sqltab[] = $safesql->query("CREATE TABLE `%sperm` ( " .
 							"`perm_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
 							"`perm_name` VARCHAR( 75 ) NOT NULL UNIQUE, " .
 							"`perm_perm` VARCHAR( 200 ) NOT NULL , " .
 							"`perm_desc` VARCHAR( 250 ) NOT NULL  " .
+							//"`perm_id` VARCHAR( 250 ) NOT NULL  " .
 							") %s %s; ",
 						array($pluginprefix, $dbstr, $charset) );
+
+		/*$sqltab[] = $safesql->query("CREATE TABLE `%spermission` ( " .
+							"`perm_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
+							"`perm_send` BOOL NOT NULL  DEFAULT '0', " .
+							"`perm_compose` BOOL NOT NULL  DEFAULT '0', " .
+							"`perm_history` BOOL NOT NULL  DEFAULT '0', " .
+							//TODO corinna and so on, decide this with brice
+							"`` BOOL NOT NULL  DEFAULT '0' " .
+							") %s %s; ",
+						array($pluginprefix, $dbstr, $charset) );*/
+
 
 		$sqltab[] = $safesql->query("CREATE TABLE `%suser` ( " .
 							"`user_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
@@ -125,6 +138,7 @@ if ($pommo->_useplugins) {
 							"`user_lastlogin` DATETIME NOT NULL , " .
 							"`user_logintries` SMALLINT UNSIGNED NOT NULL, " .					//AUTO_INCREMENT
 							"`user_lastedit` DATETIME NOT NULL , " .
+							//TODO add"`user_permissionlvl` TINYINT NOT NULL DEFAULT '0'', " . `user_permissionlvl` TINYINT NOT NULL DEFAULT '0'
 							"`user_active` BOOL NOT NULL  DEFAULT '0' " .
 							") %s %s; ",
 						array($pluginprefix, $pluginprefix, $dbstr, $charset) );
@@ -134,6 +148,7 @@ if ($pommo->_useplugins) {
 							"`rp_realname` VARCHAR( 150 ) NOT NULL UNIQUE, " .
 							"`rp_bounceemail` VARCHAR( 100 ) NOT NULL , " .
 							"`rp_sonst` VARCHAR( 250 ) NOT NULL  " .
+							//"`bounce_id` SMALLINT UNSIGNED NULL REFERENCES %sbounce(bounce_id) " . 
 							") %s %s; ",
 						array($pluginprefix, $pluginprefix, $dbstr, $charset) );
 
@@ -306,7 +321,40 @@ if ($pommo->_useplugins) {
 
 
 
+		/************** OTHER READY MADE TEST DATA ************************/
+$sql[] = $safesql->query("INSERT INTO %slist (list_id, list_name, list_senderinfo, list_desc, list_created, 
+		list_sentmailings, list_active) VALUES 
+		(1, 'Elektrotechniker Mailingsliste', 'info@eletriker.com', 'Die Eletronischen Elektriker', '2006-12-13 17:46:40', 3, 1),
+		(2, 'Informatiker Mailingsliste', 'info@profipc.it', 'Die Computerprofis', '2006-12-12 17:47:25', 0, 0),
+		(3, 'Mathematiker Mailingliste', 'maths@mats.com', 'Die wahnsinnigen kommen', '2006-12-13 18:05:37', 3, 1),
+		(4, 'Mathematiker Mailingliste', 'maths@mats.com', 'Die wahnsinnigen kommen', '2006-12-13 18:05:37', 3, 1),
+		(5, 'neich', 'Ab. S. Ender', 'blah', '2007-01-12 18:26:00', 0, 1),
+		(6, 'neich', 'Ab. S. Ender', 'blah', '2007-01-12 18:41:33', 0, 1); ", array($pluginprefix) );
 
+$sql[] = $safesql->query("INSERT INTO %slist_rp (list_id, user_id) VALUES (1, 1), (2, 1), (3, 2); ", array($pluginprefix) );
+
+$sql[] = $safesql->query("INSERT INTO %sperm (perm_id, perm_name, perm_perm, perm_desc) 
+		VALUES (1, 'Admin', 'send, compose, maillists, history, bounce, useradmin, subscribers, groups', 'Admingroup can do all'),
+				(2, 'Senders', 'send, compose', 'This group can only send'); ", array($pluginprefix) );
+
+$sql[] = $safesql->query("INSERT INTO %sresponsibleperson (user_id, rp_realname, rp_bounceemail, rp_sonst) 
+		VALUES (1, 'Corinna Thoeni', 'corinn@gmx.net', 'blah'),
+			(2, 'Franz Schiaber', 'blah@hahaha.com', 'Only RP name! Testing purposes'),
+			(4, 'Schiaba Franz', 'info@hintotux.at', 'EIn RP ohne user! geht nicht!'); ", array($pluginprefix) );
+
+$sql[] = $safesql->query("INSERT INTO %srp_group (user_id, group_id) VALUES (1, 4), (1, 3), (1, 2), (4, 1), (2, 2); ", array($pluginprefix) );
+
+$sql[] = $safesql->query("INSERT INTO %suser (user_id, user_name, user_pass, perm_id, user_created, user_lastlogin, user_logintries, 
+			user_lastedit, user_active) VALUES 
+(1, 'corinna', 'cedb35a74c19383eb196cb02636dd045', 1, '2006-12-11 18:10:51', '2007-01-19 18:08:51', 0, '2006-12-14 13:11:07', 1),
+(2, 'franz', 'e7f169c9a5847fc2e7825747a2d52dfe', 2, '2006-12-11 18:11:26', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:24', 1),
+(3, 'franziska', '5eedb9ea471e2661e6483f0a3ba19804', 1, '2006-12-11 18:11:41', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:14', 1),
+(4, 'sonscheice', '498d3c6bfa033f6dc1be4fcc3c370aa7', 1, '2007-01-18 17:10:00', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:00', 1);", 
+		array($pluginprefix));
+
+
+
+		/******************************************************************/
 
 			// Execute queries 
 			for ($i = 0; $i < sizeof($sql); $i++) {

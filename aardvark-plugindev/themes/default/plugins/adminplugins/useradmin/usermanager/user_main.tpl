@@ -7,7 +7,7 @@
 	{include file="inc/tpl/messages.tpl"}
 		
 		<div>
-			<a class="pommoClose" href="../useradmin.php" style="float: left; line-height:18px;">
+			<a class="pommoClose" href="../useradmin.php" style="float: right; line-height:18px;">
 			<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
 			{t}Return to User Management Menu{/t}
 			</a>
@@ -25,6 +25,7 @@
 		<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
 			<h4>{$actionStr}</h4>
 			<form action="" method="POST">
+				<input type="hidden" name="action" value="add">
 				<table style="font-size: 12px;" cellpadding="3" cellspacing="0">
 					<tr>
 						<td>Username:</td>
@@ -62,6 +63,7 @@
 		<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
 			<h4>{$actionStr}</h4>
 			<form action="" method="POST">
+				<input type="hidden" name="action" value="edit">
 				<input type="hidden" name="userid" value="{$userinfo.id}">
 				<table style="font-size: 12px;" cellpadding="3" cellspacing="0">
 					<tr>
@@ -94,6 +96,7 @@
 		<div class="actioncontainer"  style="margin: left; border: 1px solid silver; background-color:#eeeeee; padding:8px;">
 			<h4>{$actionStr}</h4>
 			<form action="" method="POST">
+				<input type="hidden" name="action" value="delete">
 				Do you really want to delete this user:<br>
 				<input type="hidden" name="userid" value="{$userinfo.id}">
 				Userid: {$userinfo.id}<br>
