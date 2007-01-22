@@ -1,39 +1,27 @@
-=== Release Notes for Aardvark PR14.3.1 ===
- .: Released Janurary 10, 2007
- 
-[Bug Fixes]
-
-  * Fixed character escaping issue in mailing composition
-  * Fixed copying html message to alternative text body
-  * Field ID is not displayed @ field ordering table
-  * Maintenance no longer performed when logging into support area
-  * Sendmail exchanger now works under SAFE MODE [ defaults to PHP Mail() ]
-  
-  
-=== Release Notes for Aardvark PR14.3 ===
- .: Released Janurary 10, 2007
+=== Release Notes for Aardvark PR14.4 ===
+ .: Released Janurary 22, 2007
  
 [Additions]
 
-  * Support: version display
-  * Added ISO-2022-JP Charset Support
+  * Ability to select language "per session" from admin page
+  * Added Gettext Emulation Layer
+      + Will "fallback" to if gettext or locale is not available to system
 
 [Improvements]
-  
-  * Improved throttle accuracy for slow mailings (90-270 Mails/Hour)
-  * Styling improvements
-  * Suppressed PHP notices
-  * Prevented output of PHP errors in AJAX responses
-  * Language files (.po) updated
-  * PHP Safe Mode improvements
-  * Mailing Composition now uses page state -- will remember body, subject, etc.
-  * Field state is better indicated @ field ordering table
 
+  * Enhanced mailing respawn method
+  * Pre-init mailing notices are now logged (improved debugging of mailer)
+  * Added error protection to database layer
+  * Table names in all database queries are now escaped with backticks (`)
+  * Clarified subscriber groups (text, redirect to "rules")
+  * Subscriber Update form will not auto-populate default/"normally" values
+  * Improved accuracy of mailing processor test (support library)
+ 
 [Bug Fixes]
 
-  * l10n: Extended characters are properly displayed
-  * Improved config file parsing -- embedded form @ root installs now works
-  * Fixed adding subscribers from subscribers_manage.php
-  * User cannot change their email address to an existing one
-  * Fixed import duplicate bug
-  * Fixed division by zero bug @ mailings history
+  * Fixed notice ordering
+  * Fixed Russian Translation
+  * Duplicate mailing notices are properly handled
+  * Respawning now supports SSL, custom ports, and custom SSL ports out-of-box.
+  * Expired subscriber activation codes no longer result in blank page with timestamp.
+  * Mailing commands are now force-displayed when a frozen mailing is detected
