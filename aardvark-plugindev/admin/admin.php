@@ -20,13 +20,15 @@ $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 
-
 //corinna
-//echo $pommo->_dbo->_auth->_username;	//why auth in DBO?
-$user = & $pommo->_auth->_username;
-$perm = $loggeduser['perm'];	//TODO
+echo "<div style='color:green;'>$ pommo: ";
+print_r($pommo);
+echo "<br><br> $ session: ";
+print_r($_SESSION);
+echo "<br><br> $ request: ";
+print_r($_REQUEST);
+echo "</div>";
 //corinna
-
 
 
 /**********************************
@@ -35,23 +37,24 @@ $perm = $loggeduser['perm'];	//TODO
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-//corinna
+//corinna TODO CORINNA
 // Distinguish between admin and normal users
 // if plugins are activated the admin gets a additional plugin config menu point
-if ($pommo->_useplugins) {
+/*if ($pommo->_useplugins) {
 	
 	// Rightmanagement: if (accesslevel == 5)
+	$accessLevel = $pommo->_auth->_permissionLevel;
 	
-	if (($user != 'admin') AND $pommo->_useplugins) {
-		echo "show multiuser interface.";
+	if (($user != 'admin') AND $accessLevel != 5) {
+		echo "<h1>show multiuser interface.</h1>";
 	}
 	
-	if (($user == 'admin') AND $pommo->_useplugins) {
+	if (($user == 'admin') AND $accessLevel == 5) {
 		// Show additional functionality from the plugins: Plugin SETUP button
 		$smarty->assign('showplugin', TRUE);
 	}
 	
-}
+}*/
 //corinna
 
 

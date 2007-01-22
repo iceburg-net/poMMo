@@ -53,7 +53,7 @@ class Pommo {
 		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
 		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
 		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
+		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php'); //TODO CORINNA new auth objects if plugins are activated
 		
 		// initialize logger
 		$this->_logger = new PommoLog(); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
@@ -125,7 +125,16 @@ class Pommo {
 		$this->_section = preg_replace('@^admin/?@i', '', str_replace($this->_baseUrl, '', dirname($_SERVER['PHP_SELF'])));
 		
 		// initialize database link
-		$this->_dbo = @new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
+		//WAS: $this->_dbo = @new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
+		//TODO CORINNA
+		if ($this->_useplugins) { //AND Multiuser activated
+			$setPluginTables = TRUE;
+		} else {
+			$setPluginTables = FALSE;
+		}
+		$this->_dbo = @new PommoDB($setPluginTables , $config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
+		//TODO CORINNA
+
 
 		// turn off debugging if in user area
 		if($this->_section == 'user') {
@@ -136,7 +145,7 @@ class Pommo {
 		// if debugging is set in config.php, enable debugging on the database.
 		if ($this->_debug == 'on') 
 			$this->_dbo->debug(TRUE);
-
+			
 	}
 
 	/** 
@@ -202,7 +211,9 @@ class Pommo {
 			$_SESSION['pommo'.$key] = array (
 				'data' => array (),
 				'state' => array (),
-				'username' => null
+				//WAS:'username' => null				//corinna: TODO put away?
+				'username' => null, //$this->_username,    //init empty session username
+				'sonstiges' => 'blah'
 			);
 		}
 		
@@ -214,17 +225,52 @@ class Pommo {
 			$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
 		}
 		
+		
+		//TODO CORINNA! This will change
+		// will be a MultAuth obj
 		// check authentication levels
-		$this->_auth = new PommoAuth(array (
-			'requiredLevel' => $p['authLevel']
-		));
+		
+		if ($this->_useplugins) { //TODO AND ($multiuser ist aktiv!!!!)
+			
+					
+				
+				Pommo::requireOnce($this->_baseDir.'plugins/lib/auth/class.multauth.php');
+				
+				// generate a EMPTY MultAuth object
+				// _auth holds naw a object that is capable of generating a Userobject of
+				// type SimpleUser or AdminUser, (that can authenticate by itself with 
+				// the various authentication methods)
+				// in index.php before authenticate() you have to generate this obj firts
+				// tramits constructUser
+				
+				// _auth is EMPTY when $pommo is generated!
+				// at this time the login procedure is not yet executed!
+				if (!$this->_auth) {
+					$this->_auth = new MultAuth();  //array ( 'requiredLevel' => $p['authLevel']));
+				} else {
+					echo "auth exists";
+				
+				}
+		} else {
+		
+				//brice
+				$this->_auth = new PommoAuth(array (
+					'requiredLevel' => $p['authLevel']
+				));
+				//brice
+
+		}
+	
+		//CORINNA
 
 		// clear SESSION 'data' unless keep is passed.
 		// TODO --> phase this out in favor of page state system? 
 		// -- add "persistent" flag & complicate state initilization...
 		if (!$p['keep'])
 			$this->_session['data'] = array ();
-	}
+			
+	} //init
+	
 	
 	// reload base configuration from database
 	function reloadConfig() {

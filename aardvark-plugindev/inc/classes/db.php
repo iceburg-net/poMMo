@@ -30,7 +30,10 @@ class PommoDB {
 	var $_safeSQL; // holds Monte's SafeSQL Class , referenced via prepare()
 	var $_results; // array holding unique results (for use with executing queries within loops & not overwriting the loops conditional resultset)
 
-	function PommoDB($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
+
+	//TODO CORINNA
+	//WAS: function PommoDB($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
+	function PommoDB($setPluginTables, $username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
 
 		// turn off magic quotes runtime
 		if (get_magic_quotes_runtime())
@@ -52,6 +55,40 @@ class PommoDB {
 			'subscribers' => $tablePrefix . 'subscribers',
 			'queue' => $tablePrefix . 'queue',
 			'updates' => $tablePrefix . 'updates');		
+
+		//TODO CORINNA
+		if ($setPluginTables) { //AND multiuser is activated! -> checked in pommo this time. QUICK & DIRTY
+			$pluginTablePrefix = "pommomod_";
+			$this->table = array (			//TODO: corinna add this to the array! Not entire array again!
+
+				'config' => $tablePrefix . 'config',
+				'fields' => $tablePrefix . 'fields',
+				'group_criteria' => $tablePrefix . 'group_criteria',
+				'groups' => $tablePrefix . 'groups',
+				'mailing_notices' => $tablePrefix . 'mailing_notices',
+				'mailing_current' => $tablePrefix . 'mailing_current',
+				'mailings' => $tablePrefix . 'mailings',
+				'subscriber_data' => $tablePrefix . 'subscriber_data',
+				'subscriber_pending' => $tablePrefix . 'subscriber_pending',
+				'subscriber_update' => $tablePrefix . 'subscriber_update',
+				'subscribers' => $tablePrefix . 'subscribers',
+				'queue' => $tablePrefix . 'queue',
+				'updates' => $tablePrefix . 'updates',
+			
+				'bounce' => $pluginTablePrefix . 'bounce',
+				'list' => $pluginTablePrefix . 'list',
+				'list_rp' => $pluginTablePrefix . 'list_rp',
+				'mailingqueue' => $pluginTablePrefix . 'mailingqueue',
+				'perm' => $pluginTablePrefix . 'perm',
+				'plugin' => $pluginTablePrefix . 'plugin',
+				'plugincategory' => $pluginTablePrefix . 'plugincategory',
+				'plugindata' => $pluginTablePrefix . 'plugindata',
+				'responsibleperson' => $pluginTablePrefix . 'responsibleperson',
+				'rp_group' => $pluginTablePrefix . 'rp_group',
+				'user' => $pluginTablePrefix . 'user'
+			);
+		}
+		//TODO CORINNA
 
 		$this->_dieOnQuery = TRUE;
 		$this->_debug = FALSE;

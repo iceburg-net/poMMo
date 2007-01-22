@@ -51,7 +51,7 @@ class ListPlugin {
 		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();
 		
-		/*echo "<div style='color:blue;'>"; print_r($data); echo "</div>";
+		echo "<div style='color:blue;'>"; print_r($data); echo "</div>";
 		
 		if ($data['showAdd']) {
 			$smarty->assign('showAdd' , 'TRUE');
@@ -65,10 +65,12 @@ class ListPlugin {
 			$smarty->assign('showEdit', 'TRUE');
 		} elseif ($data['showDelete']) {
 			$listdata = $this->listdbhandler->dbGetListInfo($data['listid'], $data['userid']);
+			echo "<br><br>LISTDATA:<br>im"; print_r($listdata);
 			$smarty->assign('listdata', $listdata);
 			$smarty->assign('showDelete', 'TRUE');
 		}
 		
+		/*
 		if ($data['action']) {
 			$smarty->assign('action', $data['action']);
 			$smarty->assign('showformid', $data['userid']);	//needed for forms
@@ -77,7 +79,6 @@ class ListPlugin {
 		
 		$list = $this->listdbhandler->dbFetchLists();
 		$smarty->assign('list' , $list);
-		
 		$smarty->assign('nrlists', count($list) );
 		
 		$smarty->assign($_POST);
@@ -89,8 +90,8 @@ class ListPlugin {
 	
 	
 	//TODO some checks
-	public function addList($name, $desc, $userid) {
-		return $this->listdbhandler->dbAddList($name, $desc, $userid);
+	public function addList($name, $desc, $email, $user, $group) {
+		return $this->listdbhandler->dbAddList($name, $desc, $email, $user, $group);
 	}
 	public function editList($listid, $name, $desc) {
 		return $this->listdbhandler->dbEditList($listid, $name, $desc);

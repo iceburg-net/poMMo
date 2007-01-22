@@ -13,7 +13,7 @@
  ** [END HEADER]**/
 
 
-class ListDBHandler  implements iDbHandler {
+class ListDBHandler implements iDbHandler {
 
 	private $dbo;
 	private $safesql;
@@ -55,7 +55,7 @@ class ListDBHandler  implements iDbHandler {
 			);
 			$i++;
 		}
-		print_r($list);
+		//print_r($list);
 		return $list;
 	}
 
@@ -130,20 +130,20 @@ class ListDBHandler  implements iDbHandler {
 		return $lists;
 	}
 	
-	
-	public function dbAddList($name, $desc, $userid) {
+
+	public function dbAddList($name, $desc, $email, $user, $group) {
+			// SELECT USER ID
 			$sql = $this->safesql->query("INSERT INTO %s (list_name, list_desc, list_created, list_sentmailings, list_active, list_senderinfo) " .
 					"VALUES ('%s', '%s', NOW(), '0', TRUE, 'Ab. S. Ender'); ",
-				array('pommomod_list', $name, $desc ) );
+				array('pommomod_list', $name, $desc ) ); //$email
 			$sql2 = $this->safesql->query("INSERT INTO %s (list_id, user_id) VALUES (LAST_INSERT_ID(), '%s')", 
-				array('pommomod_list_rp', $userid) );
+				array('pommomod_list_rp', $user) );
 				
 			if (!$this->dbo->query($sql) OR !$this->dbo->query($sql2)) {
 				return  $this->_dbo->getError();
 			} else {
 				return TRUE;
-				/*$affected = $this->dbo->affected();
-				return ($affected == 2) ? 1 : FALSE;*/
+				/*$affected = $this->dbo->affected();	return ($affected == 2) ? 1 : FALSE;*/
 			}
 	}
 	
@@ -176,16 +176,19 @@ class ListDBHandler  implements iDbHandler {
 		/*$sql = $this->safesql->query("SELECT l.list_id, l.list_name, lu.user_id " .
 				"FROM %s AS lu, %s AS l WHERE l.list_id=%i AND lu.user_id=%i", 
 			array('pommomod_list_user', 'pommomod_list', $listid) );*/
-		$sql = $this->safesql->query("SELECT list_id, list_name, list_desc " .	//user_name
-				"FROM %s WHERE list_id=%i LIMIT 1", 
+		$sql = $this->safesql->query("SELECT list_id, list_name, list_desc, list_created, list_sentmailings, list_active, list_senderinfo " .	//user_name
+				"FROM %s WHERE list_id=%i LIMIT 1", //USER
 			array('pommomod_list', $listid) );
 		//$i=0;
 		while ($row = $this->dbo->getRows($sql)) {
 			$listinfo = array(	//[$i]
-				'list_id'		=> $row['list_id'],
-				'list_name'		=> $row['list_name'],
-				'list_desc'		=> $row['list_desc'],
-				'user_id'		=> $userid,
+				'lid'		=> $row['list_id'],
+				'lname'		=> $row['list_name'],
+				'ldesc'		=> $row['list_desc'],
+				'lcreated'	=> $row['list_sentmailings'],
+				'lactive'	=> $row['list_active'],
+				'lsenderinfo' => $row['list_senderinfo'],
+				'uname'		=> $userid,
 				//'user_name'		=> $row['user_name']
 			);
 			//$i++;

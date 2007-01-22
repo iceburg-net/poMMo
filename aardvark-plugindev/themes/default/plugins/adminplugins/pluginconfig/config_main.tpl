@@ -5,7 +5,7 @@
 <!--<div id="boxMenu">-->
 
 	<div>
-		<a class="pommoClose" href="../adminplugins.php" style="float: left; line-height:18px; " >
+		<a class="pommoClose" href="../adminplugins.php" style="float: right; line-height:18px; " >
 		<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
 		{t}Return to Plugin Menu{/t}
 		</a>
@@ -29,7 +29,7 @@
 			
 		{else}
 		
-			<h2>{t}Active Plugins{/t}</h2>
+			<h3>{t}Active Plugins{/t}</h3>
 			<div style="text-align:left;"><i>({t}Activated parameters:{/t} {$nrplugins})</i></div>
 			
 			<table border="0" border="0" cellspacing="1" cellpadding="4" width="100%">
@@ -167,7 +167,7 @@
 		
 			<!-- CATEGORY TABLE -->
 			
-			<h2>{t}Inactive Categories{/t}</h2>
+			<h3>{t}Inactive Categories{/t}</h3>
 			
 			{if $inactive == NULL }
 				<i>{t}No inactive Category{/t}{*All categories activated*}</i>

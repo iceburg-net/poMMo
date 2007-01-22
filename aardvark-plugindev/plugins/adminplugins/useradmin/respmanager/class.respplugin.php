@@ -86,21 +86,18 @@ class RespPlugin {
 			$smarty->assign('showformid', $data['userid']);	//needed for forms
 		}*/
 		
-		
-		$resp = $this->respdbhandler->dbFetchRespMatrix();
+		$resp = $this->respdbhandler->dbFetchRespGroups();
+		//$resp = $this->respdbhandler->dbFetchRespMatrix();
 		$smarty->assign('resp', $resp);
+		$smarty->assign('nrresp', count($resp));
 		
-		
+		/*
 		$list = $this->respdbhandler->dbFetchRespLists();
 		$smarty->assign('list', $list);
 		$smarty->assign('nrlists', count($list));
-		
-		echo "<div style='color: red;'>";
-		print_r($list); echo "</div>";
-		
-		$smarty->assign('nrresp', count($resp));
-		
-
+		*/
+		/*echo "<div style='color: red;'>";
+		print_r($list); echo "</div>";*/
 		
 		
 		$smarty->assign($_POST);

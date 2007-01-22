@@ -20,6 +20,7 @@ $pommo->init(array('authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
+
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
@@ -42,23 +43,57 @@ if ($pommo->_auth->isAuthenticated()) {
 
 // Check if user submitted correct username & password. If so, Authenticate.
 elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST['password'])) {	
-	$auth = PommoAPI::configGet(array (
-		'admin_username',
-		'admin_password'
-	));
-	if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
-		
-		// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
-		PommoHelperMaintenance::perform();
 
-		$pommo->_auth->login($_POST['username']);
+	$multauth = TRUE; //TODO get this from database
+	if ($pommo->_useplugins AND $multauth) {
 		
-		Pommo::redirect($pommo->_http . $_POST['referer']);
-	}
-	else {
-		$logger->addMsg(Pommo::_T('Failed login attempt. Try again.'));
-	}
+		// PLUGIN LOGIN PROCEDURE
+		
+		//We have a MultAuth Object in $pommo->_auth!!! Here we construct a User object depending from what type the login-user is
+		$pommo->_auth->constructUser($_POST['username'], md5($_POST['password']));
+			
+			// then do the authentication
+			if ($pommo->_auth->authenticate()) {
+	
+				/*** Authentication OK, witch Authentication method is encapsulated in the AuthObject ***/
+		
+					// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+					Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+					PommoHelperMaintenance::perform();
+			
+					// add login data & user data to Session
+					// this can only be done if the user is verified
+					// i would not do it before the authentication process
+					$pommo->_auth->login();
+						
+					Pommo::redirect($pommo->_http . $_POST['referer']);
+					
+	
+		} else {
+			//User could not be constructed
+		}
+		
+	} else {
+//brice
+			$auth = PommoAPI::configGet(array (
+				'admin_username',
+				'admin_password'
+			));
+			if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+				
+				// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
+				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+				PommoHelperMaintenance::perform();
+		
+				$pommo->_auth->login($_POST['username']);
+				
+				Pommo::redirect($pommo->_http . $_POST['referer']);
+			}
+			else {
+				$logger->addMsg(Pommo::_T('Failed login attempt. Try again.'));
+			}
+//brice
+	} //useplugins AND multauth
 }
 elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 	// Check if a reset password request has been received

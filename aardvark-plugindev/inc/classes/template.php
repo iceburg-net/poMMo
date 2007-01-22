@@ -67,6 +67,41 @@ class PommoTemplate extends Smarty {
 		// destroy pagination data if not in use
 		if(isset($_SESSION['SmartyPaginate']) && $_SESSION['SmartyPaginate']['default']['url'] != $_SERVER['PHP_SELF'])
 			unset($_SESSION['SmartyPaginate']);
+			
+			
+			
+		//TODO CORINNA
+// zusammrenfügen		
+if ($pommo->_useplugins)  { //AND () multiuser active AND authenticated
+	
+	//if ($pommo->_auth->isAuthenticated()) {
+		
+		//echo "<h2>Authenticated: {$pommo->_auth->getUsertype()}</h2>";
+		$this->assign('showplugin', TRUE);
+		$this->assign('showbounce', TRUE);
+		
+	//}
+			//if (($pommo->_auth->_username != 'admin') OR $pommo->_auth->_permissionLevel != 5) {
+			//echo "<h2>{$pommo->_auth->getUsertype()}</h2>";
+		/*	if ($pommo->_auth->getUsertype() == 'simpleuser') {
+				echo "<h1>show multiuser interface.</h1>";
+			}*/
+			//if (($pommo->_auth->_username == 'admin') AND $pommo->_auth->_permissionLevel == 5) {
+//			if ($pommo->_auth->getUsertype() == 'adminuser') {
+				// Show additional functionality from the plugins: Plugin SETUP button
+				//$this->assign('showplugin', TRUE);
+	//		}
+	//}
+	 /*else {
+		//hier nix mehr
+		$pommo->_logger->addMsg("template.php: WEGDENKEN: not authenticaterd<br>");
+	}*/
+} /*else {
+	$pommo->_logger->addMsg("template.php: Activate Plugins or user/password error<br>");
+}*/
+		//TODO CORINNA end
+			
+			
 	}
 
 	// display function falls back to "default" theme if theme file not found

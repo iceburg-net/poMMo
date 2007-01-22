@@ -15,10 +15,14 @@
 require ('../../../../bootstrap.php');
 require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/usermanager/class.userplugin.php');
 
-
 $pommo->init();	
+//Pommo::requireOnce($pommo->_baseDir.'plugins/adminplugins/useradmin/usermanager/class.userplugin.php');
+
+
 
 $data = NULL;
+
+print_r($_REQUEST);
 
 //TODO weg
 /*
@@ -51,6 +55,8 @@ if ($_REQUEST['userid']) {
 		
 		// If the add button is pressed
 		if (!empty($_REQUEST['AddUser'])) {
+			echo "<h2>ADDE blah</h2>";
+			//addUser($user, $pass, $passcheck, $group) 
 			$ret = $userplugin->addUser($_REQUEST['username'], $_REQUEST['userpass'], $_REQUEST['userpasscheck'], $_REQUEST['usergroup']);
 			if ($ret) Pommo::redirect($pommo->_baseUrl.'plugins/adminplugins/useradmin/usermanager/user_main.php');
 				//$data['showAddForm'] = FALSE;	
