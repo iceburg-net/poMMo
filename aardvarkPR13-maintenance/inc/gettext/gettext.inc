@@ -31,9 +31,9 @@ LC_MESSAGES	5
 LC_ALL			6
 */
 
-require(bm_baseDir.'/inc/gettext/gettext.php');
-
 // Variables
+
+define('_poMMo_gettext',TRUE);
 
 global $text_domains, $default_domain, $LC_CATEGORIES, $EMULATEGETTEXT, $CURRENTLOCALE;
 $text_domains = array();
