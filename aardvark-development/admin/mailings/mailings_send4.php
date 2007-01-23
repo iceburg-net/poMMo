@@ -23,7 +23,7 @@
  *********************************/
  
 // # of mails to fetch from the queue at a time (Default: 100)
-$queueSize = 10;
+$queueSize = 100;
 
 // set maximum runtime of this script in seconds (Default: 80). 
 $maxRunTime = 80;
