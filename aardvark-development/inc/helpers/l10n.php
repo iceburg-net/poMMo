@@ -23,6 +23,9 @@ class PommoHelperL10n {
 
 		if (!is_file($baseDir . 'language/' . $language . '/LC_MESSAGES/pommo.mo'))
 			Pommo::kill('Unknown Language (' .$language . ')');
+			
+		// if LC_MESSAGES is not available.. make it (helpful for win32)
+		if (!defined('LC_MESSAGES')) define('LC_MESSAGES', 6);
 
 		// load gettext emulation layer if PHP is not compiled w/ gettext support
 		if (!function_exists('gettext')) {
