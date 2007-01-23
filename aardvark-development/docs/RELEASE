@@ -1,3 +1,17 @@
+=== Release Notes for Aardvark PR14.4.1 ===
+ .: Released Janurary 23, 2007
+
+[Improvements]
+  * Licensing Updates
+  * Extended Win32 support for translations
+  
+[Bug Fixes]
+
+  * Resolved fatal error on user update page
+  * Subscribe Success message is now displayed when Email Confirmation is disabled
+  * Fixed default queue size (was incorrectly set to 10 -- unecessary respawns)
+  
+ 
 === Release Notes for Aardvark PR14.4 ===
  .: Released Janurary 22, 2007
  

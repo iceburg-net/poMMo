@@ -111,7 +111,11 @@ function PommoRevUpgrade($rev) {
 			if (!PommoAPI::configUpdate(array('revision' => 31,'version' => 'Aardvark PR14.4'), true))
 				return false;
 			break;
-		case 31: // Aardvark PR14
+		case 31: // Aardvark PR14.4
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 32,'version' => 'Aardvark PR14.4.1'), true))
+				return false;
+		case 32: // Aardvark PR14.4.1
 			// gets executed by Upgrade from ^^
 		default: 
 			return false;
