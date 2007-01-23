@@ -42,7 +42,7 @@
 <select name="d[{$key}]" id="field{$key}">
 <option value="">{t}Choose Selection{/t}</option>
 {foreach from=$field.array item=option}
-<option{if $d.$key == $option} selected="selected">{$option}</option>
+<option{if $d.$key == $option} selected="selected"{/if}>{$option}</option>
 {/foreach}
 </select>
 
