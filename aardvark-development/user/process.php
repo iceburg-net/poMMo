@@ -42,7 +42,6 @@ $referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$
 // append stored input
 $smarty->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
 
-
 /**********************************
 	VALIDATE INPUT
  *********************************/
@@ -124,8 +123,9 @@ else { // no email confirmation required
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);
 		
-		$messages = unserialize(PommoAPI::configGet('messages'));
-		$logger->addMsg($messages['subscribe_suc']);
+		$dbvalues = PommoAPI::configGet('messages');
+		$messages = unserialize($dbvalues['messages']);
+		$logger->addMsg($messages['subscribe']['suc']);
 	}
 	
 }

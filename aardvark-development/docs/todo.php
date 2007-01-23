@@ -19,6 +19,10 @@
 die();
 ?>
 
+__IMMEDIATE__
++ Embeded Fix
++ Licensing Change
+
 [LEGACY POMMO]
   Port config parser + config.php/sample
 
