@@ -23,7 +23,7 @@
 */
 
 class Pommo {
-	var $_revision = 31; // poMMo's revision #
+	var $_revision = 32; // poMMo's revision #
 
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object
