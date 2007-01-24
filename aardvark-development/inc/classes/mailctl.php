@@ -377,6 +377,9 @@ class PommoMailCtl {
 
 		$out .= "\r\n";
 		
+		if ($pommo->_verbosity < 3)
+			echo 'Attempting to spawn '.(($ssl) ? 'https://' : 'http://').$pommo->_hostname.':'.$pommo->_hostport.$page.'<br />';
+		
 		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 10);
 
 		if ($socket) {
