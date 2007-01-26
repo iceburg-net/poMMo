@@ -56,9 +56,9 @@ class PommoType {
 	 *	group_id		(int)		Database ID/Key
 	 *	group_name		(str)		Descriptive name for field (used for short identification)
 	 *	
-	 * ==Additional Columns from group_criteria==
+	 * ==Additional Columns from group_rules==
 	 * 
-	 *  criteria_id		(int)		Database ID/Key
+	 *  rule_id			(int)		Database ID/Key
 	 *  group_id		(int)		Correlating Group ID
 	 *  field_id		(int)		Correlating Field ID
 	 *  logic			(enum)		'is','not','greater','less','true','false','is_in','not_in'
@@ -68,7 +68,7 @@ class PommoType {
 		return array(
 			'id' => null,
 			'name' => null,
-			'criteria' => array()
+			'rules' => array()
 		);
 	}
 	

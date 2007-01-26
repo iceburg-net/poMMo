@@ -355,11 +355,12 @@ class PommoSubscriber {
 			$in['ip'],
 			$in['status']
 		));
-		if (!$dbo->query($query))
-			return false;
 		
 		// fetch new subscriber's ID
-		$id = $dbo->lastId();
+		$id = $dbo->lastId($query);
+		
+		if (!$id)
+			return false;
 		
 		// insert pending (if exists)
 		if ($in['status'] == 2) {

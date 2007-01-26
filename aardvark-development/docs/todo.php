@@ -20,9 +20,15 @@
 die();
 ?>
 
-__IMMEDIATE__
-+ Embeded Fix
-+ Licensing Change
+PR15
+----
+
++ tabbed config
++ test mail processor from config
++ message templates
++ admin notifications
++ OR rules
+
 
 [LEGACY POMMO]
   Port config parser + config.php/sample
@@ -76,6 +82,32 @@ __IMMEDIATE__
 			OR subscriber_id in
 				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
 			);
+			
+			for multi group
+			
+			SELECT count(subscriber_id)
+			from subscribers 
+			where 
+			status ='1' 
+			AND (
+			subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
+			AND subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
+			OR subscriber_id in
+				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
+			)
+			OR (
+				(
+				subscriber_id in
+					(select ... [GROUP INCLUSION SUBQUERIES])
+				)
+			)
+			AND (
+			subscriber_id not in [GROUP EXCLUSION SUBQUERIES]
+				(select...)
+			);
+			
 	  	----
 	  	
 	  	

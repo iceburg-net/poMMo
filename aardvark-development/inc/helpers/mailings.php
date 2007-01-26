@@ -264,11 +264,12 @@ class PommoMailing {
 			$in['charset'],
 			$in['status'],
 			$in['start']));
-		if (!$dbo->query($query))
-			return false;
 		
 		// fetch new subscriber's ID
-		$id = $dbo->lastId();
+		$id = $dbo->lastId($query);
+		
+		if (!$id)
+			return false;
 		
 		// insert current if applicable
 		if (!empty($in['status']) && $in['status'] == 1) {

@@ -27,9 +27,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  *	group_id		(int)		Database ID/Key
  *	group_name		(str)		Descriptive name for field (used for short identification)
  *	
- * ==Additional Columns from group_criteria==
+ * ==Additional Columns from group_rules==
  * 
- *  criteria_id		(int)		Database ID/Key
+ *  rule_id		(int)		Database ID/Key
  *  group_id		(int)		Correlating Group ID
  *  field_id		(int)		Correlating Field ID
  *  logic			(enum)		'is','not','greater','less','true','false','is_in','not_in'
@@ -84,7 +84,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		return PommoAPI::getParams($o, $in);
 	}
 	
-	// make a group template based off a database row (group/group_criteria schema)
+	// make a group template based off a database row (group/group_rules schema)
 	// accepts a group template (assoc array)  
 	// return a group object (array)
 	function & makeDB(&$row) {
@@ -106,8 +106,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 
 		if (empty($in['name']))
 			$invalid[] = 'name';
-		if (!is_array($in['criteria']))
-			$invalid[] = 'criteria';
+		if (!is_array($in['rules']))
+			$invalid[] = 'rules';
 			
 		if (!empty($invalid)) {
 			$logger->addErr("Group failed validation on; ".implode(',',$invalid),1);
@@ -130,9 +130,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$o = array();
 		
 		$query = "
-			SELECT g.group_id, g.group_name, c.criteria_id, c.field_id, c.logic, c.value
+			SELECT g.group_id, g.group_name, c.rule_id, c.field_id, c.logic, c.value
 			FROM " . $dbo->table['groups']." g
-			LEFT JOIN " . $dbo->table['group_criteria']." c 
+			LEFT JOIN " . $dbo->table['group_rules']." c 
 				ON (g.group_id = c.group_id)
 			WHERE
 				1
@@ -143,13 +143,13 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			if (empty($o[$row['group_id']]))
 				$o[$row['group_id']] = PommoGroup::makeDB($row);
 			
-			if(!empty($row['criteria_id'])) {
+			if(!empty($row['rule_id'])) {
 				$c = array (
 					'field_id' => $row['field_id'],
 					'logic' => $row['logic'],
 					'value' => $row['value'],
 				);
-				$o[$row['group_id']]['criteria'][$row['criteria_id']] = $c;
+				$o[$row['group_id']]['rules'][$row['rule_id']] = $c;
 			}
 		}
 		
@@ -158,16 +158,16 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	
 	// fetches group name(s) from the database
 	// accepts a filtering array -->
-	//   id (array) -> an array of field IDs
+	//   id (int || array) -> an array of field IDs
 	// returns an array of group names. Array key(s) correlates to group ID.
-	function & getName($id = array()) {
+	function & getNames($id = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$o = array();
 		
 		$query = "
-			SELECT *
+			SELECT group_id, group_name
 			FROM " . $dbo->table['groups']."
 			WHERE
 				1
@@ -189,15 +189,15 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
-		if (empty($group['criteria'])) {
+		if (empty($group['rules'])) {
 			$o = array();
 			return $o;
 		}
 		
 		$f = array();
 		
-		foreach($group['criteria'] as $c)
-			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
+		foreach($group['rules'] as $r)
+			$f['subscriber_data'][$r['field_id']][] = "{$r['logic']}: {$r['value']}";
 
 		if(!is_numeric($status))
 			Pommo::kill('Invalid status passed to getMemberIDs()', TRUE);
@@ -216,13 +216,13 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$dbo =& $pommo->_dbo;
 		$pommo->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/sql.gen.php');
 		
-		if (empty($group['criteria']))
+		if (empty($group['rules']))
 			return 0;
 		
 		$f = array();
 		
-		foreach($group['criteria'] as $c)
-			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
+		foreach($group['rules'] as $r)
+			$f['subscriber_data'][$r['field_id']][] = "{$r['logic']}: {$r['value']}";
 			
 		if(!is_numeric($status))
 			Pommo::kill('Invalid status passed to tally()', TRUE);
@@ -262,11 +262,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$query = $dbo->prepare($query,@array(
 			$in['name']
 		));
-		
-		if (!$dbo->query($query))
-			return false;
-		
-		return $dbo->lastId();
+
+		return $dbo->lastId($query);
 	}
 	
 	// removes a group from the database
@@ -284,9 +281,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		
 		$affected = $dbo->affected($query);
 	
-		// remove filters referencing this group
+		// remove rules referencing this group
 		$query = "
-			DELETE FROM ".$dbo->table['group_criteria']."
+			DELETE FROM ".$dbo->table['group_rules']."
 			WHERE 
 				group_id IN (%c)
 				OR (value IN (%c) AND (logic='is_in' OR logic='not_in'))";
@@ -295,16 +292,16 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		return $affected;
 	}
 	
-	// Returns the # of filters affected by a group deletion
+	// Returns the # of rules affected by a group deletion
 	// accepts a single ID (int) or array of IDs.
-	// Returns a count (int) of affected filters. 0 if none.
-	function filtersAffected($id = array()) {
+	// Returns a count (int) of affected rules. 0 if none.
+	function rulesAffected($id = array()) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
-			SELECT DISTINCT count(criteria_id)
-			FROM ".$dbo->table['group_criteria']."
+			SELECT DISTINCT count(rule_id)
+			FROM ".$dbo->table['group_rules']."
 			WHERE 
 				group_id IN (%c)
 				OR (value IN (%c) AND (logic='is_in' OR logic='not_in'))";
@@ -324,7 +321,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			FROM ".$dbo->table['groups']."
 			WHERE group_name='%s'";
 		$query=$dbo->prepare($query,array($name));
-		return (intval($dbo->query($query,0)) > 0) ? true : false;
+		return (bool) $dbo->query($query,0);
 	}
 	
 	// renames a group

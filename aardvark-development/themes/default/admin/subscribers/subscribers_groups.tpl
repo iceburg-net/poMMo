@@ -42,7 +42,7 @@
 <span>{t}Group Name{/t}</span>	
 </div>
 
-{foreach from=$groups key=id item=group}
+{foreach from=$groups key=id item=name}
 <div class="{cycle values="r1,r2,r3"} sortable" id="id{$id}">
 <span>
 <button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$id}&amp;delete=TRUE'; return false;"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></button>
@@ -53,7 +53,7 @@
 </span>
 
 <span>
-{$group.name}
+{$name}
 </span>
 </div>
 {/foreach}

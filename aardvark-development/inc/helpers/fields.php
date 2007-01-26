@@ -189,10 +189,7 @@ class PommoField {
 			$in['type']
 		));
 		
-		if (!$dbo->query($query))
-			return false;
-		
-		return $dbo->lastId();
+		return $dbo->lastId($query);
 	}
 	
 	// removes a field from the database
