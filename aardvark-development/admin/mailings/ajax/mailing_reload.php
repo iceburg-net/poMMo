@@ -34,7 +34,7 @@ if (empty($mailing))
 	Pommo::kill('Unable to load mailing');
 	
 // change group name to ID
-$groups = PommoGroup::get();
+$groups = PommoGroup::getNames();
 $gid = 'all';
 foreach($groups as $group) 
 	if ($group['name'] == $mailing['group'])

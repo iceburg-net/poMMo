@@ -24,7 +24,7 @@
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/filters.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 
 $pommo->init(array('noDebug' => TRUE));
 $dbo = & $pommo->_dbo;
@@ -32,11 +32,11 @@ $dbo = & $pommo->_dbo;
 switch($_POST['logic']) {
 	case 'is_in':
 	case 'not_in':
-		PommoFilter::addGroupFilter($_POST['group'], $_POST['match'], $_POST['logic']);
+		PommoRules::addGroupRule($_POST['group'], $_POST['match'], $_POST['logic']);
 		break;
 	case 'true':
 	case 'false':
-		PommoFilter::addBoolFilter($_POST['group'], $_POST['match'], $_POST['logic']);
+		PommoRules::addBoolRule($_POST['group'], $_POST['match'], $_POST['logic']);
 		break;
 	case 'is':
 	case 'not':
@@ -54,7 +54,7 @@ switch($_POST['logic']) {
 		}
 		$values = array_unique($values);
 		
-		PommoFilter::addFieldFilter($_POST['group'], $_POST['match'], $_POST['logic'], $values);
+		PommoRules::addFieldRule($_POST['group'], $_POST['match'], $_POST['logic'], $values);
 		break;
 }
 ?>

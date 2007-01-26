@@ -48,7 +48,8 @@ class PommoDB {
 		$this->table = array (
 			'config' => '`'.$tablePrefix . 'config`',
 			'fields' => '`'.$tablePrefix . 'fields`',
-			'group_criteria' => '`'.$tablePrefix . 'group_criteria`',
+			'group_criteria' => '`'.$tablePrefix . 'group_criteria`', // PHASE OUT
+			'group_rules' => '`'.$tablePrefix . 'group_rules`',
 			'groups' => '`'.$tablePrefix . 'groups`',
 			'mailing_notices' => '`'.$tablePrefix . 'mailing_notices`',
 			'mailing_current' => '`'.$tablePrefix . 'mailing_current`',
@@ -193,7 +194,7 @@ class PommoDB {
 	function affected($sql = NULL) {
 		if ($sql)
 			$this->query($sql);
-		$x = mysql_affected_rows($this->_link);
+			
 		return ($this->_result) ? mysql_affected_rows($this->_link) : 0;
 	}
 
@@ -202,13 +203,16 @@ class PommoDB {
 	function records($sql = NULL) {
 		if ($sql)
 			$this->query($sql);
-
+			
 		return ($this->_result) ? mysql_num_rows($this->_result) : 0;
 	}
 
-	// returns the ID of the pkey from an INSERT Statement
-	function lastId() {
-		return mysql_insert_id($this->_link);
+	// returns the ID of the pkey from an INSERT Statement FALSE if bad result
+	function lastId($sql = NULL) {
+		if ($sql)
+			$this->query($sql);
+			
+		return ($this->_result) ? mysql_insert_id($this->_link) : false;
 	}
 
 	// closes the mySql link & frees the resources

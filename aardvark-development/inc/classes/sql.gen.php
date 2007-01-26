@@ -19,6 +19,7 @@
  */
 
 // common SQL clauses
+// REWRITE ALL...
 
 class PommoSQL {
 	// returns where clauses as array

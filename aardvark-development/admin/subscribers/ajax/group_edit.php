@@ -40,7 +40,7 @@ $group = current(PommoGroup::get(array('id' => $_POST['group'])));
 
 
 if ($_POST['add'] == 'group') {
-	$match = PommoGroup::getName($_POST['ID']);
+	$match = PommoGroup::getNames($_POST['ID']);
 	$key = key($match);
 	
 	$smarty->assign('group_id',$group['id']);
@@ -52,15 +52,15 @@ if ($_POST['add'] == 'group') {
 }
 elseif ($_POST['add'] == 'field') {
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/filters.php');
+	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 	
 	// check to see if we're editing
 	
 	$values = array();
 	if (isset($_POST['logic'])) { // logic is passed only when edit button is clicked..
-		foreach($group['criteria'] as $filter) {
-			if($filter['logic'] == $_POST['logic'] && $filter['field_id'] == $_POST['ID'])
-				$values[] = $filter['value'];
+		foreach($group['rules'] as $rule) {
+			if($rule['logic'] == $_POST['logic'] && $rule['field_id'] == $_POST['ID'])
+				$values[] = $rule['value'];
 		}
 	}
 	$firstVal = (empty($values)) ? false : array_shift($values);
@@ -70,14 +70,14 @@ elseif ($_POST['add'] == 'field') {
 	$field = current(PommoField::get(array('id' =>$_POST['ID'])));
 	
 	if (isset($_POST['logic'])) {
-		$logic = array($_POST['logic'] => PommoFilter::getEnglish($_POST['logic']));
+		$logic = array($_POST['logic'] => PommoRules::getEnglish($_POST['logic']));
 	}
 	else {
 		$logic = array();
 		$f = array($field);
-		foreach(PommoFilter::getLegalFilters($group, $f) as $logics)				
+		foreach(PommoRules::getLegal($group, $f) as $logics)				
 			foreach ($logics as $l)
-				$logic[$l] = PommoFilter::getEnglish($l);
+				$logic[$l] = PommoRules::getEnglish($l);
 	}
 	
 	$smarty->assign('group_id',$group['id']);

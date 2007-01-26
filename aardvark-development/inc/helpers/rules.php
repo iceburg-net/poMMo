@@ -18,7 +18,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class PommoFilter {
+class PommoRules {
 	
 	// returns the legal(logical) group selections for new filters 
 	// accepts a group object
@@ -32,19 +32,20 @@ class PommoFilter {
 				$o[$id] = $g['name'];
 		}
 		
-		foreach($group['criteria'] as $c) {
-			if ($c['logic'] == 'is_in' || $c['logic'] == 'not_in')
-				unset($o[$c['value']]);
+		// remember; for is_in/not_in .. field ID should be NULL, value is ID of group to include/exclude
+		foreach($group['rules'] as $r) {
+			if ($r['logic'] == 'is_in' || $r['logic'] == 'not_in')
+				unset($o[$r['value']]);
 		}
 		
 		return $o;
 	}
 	
-	// returns the legal(logical) selections for new filters based off pre-existing criteria
+	// returns the legal(logical) selections for new filters based off current rules
 	// accepts a group object (can be empty -- thus returning all legal field filters)
 	// accepts a array of fields
 	// returns an array of logics. Array key correlates to field_id.
-	function & getLegalFilters(&$group, &$fields) {
+	function & getLegal(&$group, &$fields) {
 		$c = array();
 		
 		$legalities = array(
@@ -58,22 +59,22 @@ class PommoFilter {
 		foreach ($fields as $field)
 			$c[$field['id']] = $legalities[$field['type']];
 		
-		if(empty($group['criteria']))
+		if(empty($group['rules']))
 			return $c;
 		
 		// subtract illogical selections from $c
-		foreach ($group['criteria'] as $criteria) {	
+		foreach ($group['rules'] as $rule) {	
 			
-			if (!isset($c[$criteria['field_id']]))
+			if (!isset($c[$rule['field_id']]))
 				continue;
 			
 			// create reference to this field's legalities 
-			$l =& $c[$criteria['field_id']];
+			$l =& $c[$rule['field_id']];
 			
-			switch($criteria['logic']) {
+			switch($rule['logic']) {
 				case 'true' :
 				case 'false' :
-					// if criteria is true or false, field cannot be ANYTHING else
+					// if rule is true or false, field cannot be ANYTHING else
 					unset($l[array_search('true', $l)]);
 					unset($l[array_search('false', $l)]);
 					break;
@@ -113,12 +114,12 @@ class PommoFilter {
 		return (empty($str)) ? $english : $english[$str]; 
 	}
 	
-	function addBoolFilter(&$group, &$match, &$logic) {
+	function addBoolRule(&$group, &$match, &$logic) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
-			INSERT INTO " . $dbo->table['group_criteria']."
+			INSERT INTO " . $dbo->table['group_rules']."
 			SET
 				group_id=%i,
 				field_id=%i,
@@ -127,12 +128,12 @@ class PommoFilter {
 		return $dbo->affected($query);
 	}
 	
-	function addGroupFilter(&$group, &$match, &$logic) {
+	function addGroupRule(&$group, &$match, &$logic) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
-			INSERT INTO " . $dbo->table['group_criteria']."
+			INSERT INTO " . $dbo->table['group_rules']."
 			SET
 				group_id=%i,
 				value=%i,
@@ -141,30 +142,32 @@ class PommoFilter {
 		return $dbo->affected($query);
 	}
 	
-	function addFieldFilter(&$group, &$match, &$logic, &$values) {
+	function addFieldRule(&$group, &$match, &$logic, &$values) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		// remove previous filters
-		PommoFilter::deleteField($group, $match, $logic);
+		PommoRules::deleteRule($group, $match, $logic);
 		
 		foreach($values as $value)
 			$v[] = $dbo->prepare("(%i,%i,'%s','%s')",array($group, $match, $logic, $value));
 			
 		$query = "
-			INSERT INTO " . $dbo->table['group_criteria']."
+			INSERT INTO " . $dbo->table['group_rules']."
 			(group_id, field_id, logic, value)
 			VALUES ".implode(',', $v);
 		echo $query;
 		return $dbo->affected($query);
 	}
 	
-	function deleteField($group, $field, $logic) {
+	
+	// merge the delete... to just 1 function..
+	function deleteRule($group, $field, $logic) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
-			DELETE FROM " . $dbo->table['group_criteria']."
+			DELETE FROM " . $dbo->table['group_rules']."
 			WHERE group_id=%i
 				AND field_id=%i
 				AND logic='%s'";
@@ -172,12 +175,13 @@ class PommoFilter {
 		return ($dbo->affected($query));
 	}
 	
+	// move to groups.php?
 	function deleteGroup($group, $field, $logic) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
-			DELETE FROM " . $dbo->table['group_criteria']."
+			DELETE FROM " . $dbo->table['group_rules']."
 			WHERE group_id=%i
 				AND field_id=0
 				AND value=%i

@@ -116,6 +116,18 @@ function PommoRevUpgrade($rev) {
 			if (!PommoAPI::configUpdate(array('revision' => 32,'version' => 'Aardvark PR14.4.1'), true))
 				return false;
 		case 32: // Aardvark PR14.4.1
+		
+			if (!PommoInstall::incUpdate(7,
+			"RENAME TABLE {$dbo->table['group_criteria']} TO {$dbo->table['group_rules']}"
+			,"Renaming Group Rules Table")) return false;
+			
+			if (!PommoInstall::incUpdate(8,
+			"ALTER TABLE {$dbo->table['group_rules']} CHANGE `criteria_id` `rule_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT"
+			,"Renaming key column")) return false;
+			
+			if (!PommoAPI::configUpdate(array('revision' => 33,'version' => 'Aardvark SVN'), true))
+				return false;
+		case 33: // Aardvark PR14.4.1
 			// gets executed by Upgrade from ^^
 		default: 
 			return false;

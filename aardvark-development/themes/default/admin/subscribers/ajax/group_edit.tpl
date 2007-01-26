@@ -1,7 +1,7 @@
 <input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}" />
 <input type="hidden" id="fwMatchID" name="match_id" value="{$match_id}" />
 
-<div>{t}Add new filter:{/t}</div>
+<div>{t}Add new rule:{/t}</div>
 
 <select name="logic" id="fwLogic">
 <option value="is_in">{t}Include{/t}</option>
@@ -23,7 +23,7 @@ $('#fwSubmit').oneclick(function() {
 	var _group = $('#fwGroupID').val();
 	var _match = $('#fwMatchID').val();
 
-	$.post("ajax/filter_update.php",
+	$.post("ajax/rule_update.php",
 		{ logic: _logic, group: _group, match: _match },
 		function(out) {
 			var name = $('#filterWindow a.fwClose').attr('alt');

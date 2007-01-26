@@ -55,7 +55,7 @@ if (!empty ($_GET['delete'])) {
 	if (empty($group))
 		Pommo::redirect($_SERVER['PHP_SELF']);
 
-	$affected = PommoGroup::filtersAffected($group['id']);
+	$affected = PommoGroup::rulesAffected($group['id']);
 
 	// See if this change will affect any subscribers, if so, confirm the change.
 	if ($affected > 1 && empty ($_GET['dVal-force'])) {
@@ -76,7 +76,7 @@ if (!empty ($_GET['delete'])) {
 }
 
 // Get array of mailing groups. Key is ID, value is name
-$groups = PommoGroup::get();
+$groups = PommoGroup::getNames();
 
 $smarty->assign('groups',$groups);
 $smarty->display('admin/subscribers/subscribers_groups.tpl');

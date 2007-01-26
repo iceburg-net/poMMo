@@ -18,13 +18,17 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+
+// REWRITE...
+
+
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/filters.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -55,29 +59,29 @@ if (isset($_GET['renamed']))
 	$logger->addMsg(Pommo::_T('Group Renamed'));
 
 if(isset($_GET['fieldDelete'])) {
-	PommoFilter::deleteField($group['id'], $_GET['fieldDelete'], $_GET['logic']);
+	PommoRules::deleteRule($group['id'], $_GET['fieldDelete'], $_GET['logic']);
 	Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
 }
 
 if(isset($_GET['groupDelete'])) {
-	PommoFilter::deleteGroup($group['id'], $_GET['groupDelete'], $_GET['logic']);
+	PommoRules::deleteGroup($group['id'], $_GET['groupDelete'], $_GET['logic']);
 	Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
 }
 	
-$new = & PommoFilter::getLegalFilters($group, $fields);
-$gnew = & PommoFilter::getLegalGroups($group, $groups);
+$new = & PommoRules::getLegal($group, $fields);
+$gnew = & PommoRules::getLegalGroups($group, $groups);
 
-// organize existing criteria into fieldID[logic] = array('values','...');
+// organize existing rules into fieldID[logic] = array('values','...');
 
-$english = PommoFilter::getEnglish();
+$english = PommoRules::getEnglish();
 
-$filters = array();
-foreach($group['criteria'] as $crit) {
-	if (!isset($filters[$crit['field_id']]))
-		$filters[$crit['field_id']] = array();
-	if (!isset($filters[$crit['field_id']][$crit['logic']]))
-		$filters[$crit['field_id']][$crit['logic']] = array();
-	array_push($filters[$crit['field_id']][$crit['logic']], $crit['value']);
+$rules = array();
+foreach($group['rules'] as $rule) {
+	if (!isset($rules[$rule['field_id']]))
+		$rules[$rule['field_id']] = array();
+	if (!isset($rules[$rule['field_id']][$rule['logic']]))
+		$rules[$rule['field_id']][$rule['logic']] = array();
+	array_push($rules[$rule['field_id']][$rule['logic']], $rule['value']);
 }
 
 $smarty->assign('group',$group);
@@ -85,10 +89,10 @@ $smarty->assign('groups',$groups);
 $smarty->assign('fields',$fields);
 $smarty->assign('new', $new);
 $smarty->assign('gnew', $gnew);
-$smarty->assign('filters', $filters);
+$smarty->assign('rules', $rules);
 $smarty->assign('english', $english);
 $smarty->assign('tally', PommoGroup::tally($group));
-$smarty->assign('filterCount', count($group['criteria']));
+$smarty->assign('ruleCount', count($group['rules']));
 
 $smarty->display('admin/subscribers/groups_edit.tpl');
 Pommo::kill();

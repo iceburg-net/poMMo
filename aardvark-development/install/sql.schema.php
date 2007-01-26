@@ -58,13 +58,13 @@ CREATE TABLE :::fields::: (
 
 -- GROUP_CRITERIA  
 
-CREATE TABLE :::group_criteria::: (
-  `criteria_id` int(10) unsigned NOT NULL auto_increment,
+CREATE TABLE :::group_rules::: (
+  `rule_id` int(10) unsigned NOT NULL auto_increment,
   `group_id` int(10) unsigned NOT NULL default '0',
   `field_id` tinyint(3) unsigned NOT NULL default '0',
   `logic` enum('is','not','greater','less','true','false','is_in','not_in') NOT NULL,
   `value` text,
-  PRIMARY KEY  (`criteria_id`),
+  PRIMARY KEY  (`rule_id`),
   KEY `group_id` (`group_id`)
 );
 
