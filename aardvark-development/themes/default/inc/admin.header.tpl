@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>{$title}</title>
 
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/admin.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.admin.css" />
 
 {* If $head has been captured, print its contents here. Capture $head via templates
 	using {capture name=head}..content..{/capture} before including this header file. 
@@ -16,7 +16,7 @@
 
 <div id="header">
 
-<h1><a href="{$config.site_url}"><img src="{$url.theme.this}inc/images/pommo.gif" alt="pommo logo" /> <strong>{$config.site_name}</strong></a></h1>
+<h1><a href="{$config.site_url}"><img src="{$url.theme.shared}images/pommo.gif" alt="pommo logo" /> <strong>{$config.site_name}</strong></a></h1>
 
 </div>
 
@@ -27,7 +27,7 @@
 </ul>
 
 {if ($sidebar != 'off')}
-{include file="inc/tpl/admin.sidebar.tpl"}
+{include file="inc/admin.sidebar.tpl"}
 
 <div id="content">
 

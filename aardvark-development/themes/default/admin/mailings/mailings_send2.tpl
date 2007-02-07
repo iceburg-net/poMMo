@@ -1,6 +1,6 @@
 {capture name=head}
 {* used to inject content into the HTML <head> *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
 
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript">
@@ -40,9 +40,9 @@
 {/if}
 
 {/capture}
-{include file="inc/tpl/admin.header.tpl" sidebar='off'}
+{include file="inc/admin.header.tpl" sidebar='off'}
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <a href="#" id="mergeopen">{t}Add Personalization{/t}</a>
 
@@ -217,4 +217,4 @@ $(function() {
 });
 </script>
 {/literal}
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

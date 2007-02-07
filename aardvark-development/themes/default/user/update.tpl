@@ -5,11 +5,11 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/if}
 {/capture}
-{include file="inc/tpl/user.header.tpl"}
+{include file="inc/user.header.tpl"}
 
 <h3>{t}Subscriber Update{/t}</h3>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
  	
 {include file="subscribe/form.update.tpl"}
 
@@ -41,4 +41,4 @@ $().ready(function() {
 </script>
 {/literal}
 
-{include file="inc/tpl/user.footer.tpl"}
+{include file="inc/user.footer.tpl"}

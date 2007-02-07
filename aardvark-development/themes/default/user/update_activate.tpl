@@ -1,8 +1,8 @@
-{include file="inc/tpl/user.header.tpl"}
+{include file="inc/user.header.tpl"}
 
 <h2>{t}Update Activation{/t}</h2>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 {t}Hello!{/t} {t}Before you can update your records on unsubscribe, we must first verify your email address.{/t}
 
@@ -31,4 +31,4 @@
 </form>
 
 
-{include file="inc/tpl/user.footer.tpl"}
+{include file="inc/user.footer.tpl"}

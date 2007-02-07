@@ -4,7 +4,7 @@
 {* Styling of CSS table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Fields Page{/t}</h2>
 
@@ -12,7 +12,7 @@
 
 <form method="post" action="">
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <fieldset>
 <legend>{t}Fields{/t}</legend>
@@ -152,4 +152,4 @@ $().ready(function(){
 </script>
 {/literal}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}
