@@ -1,5 +1,5 @@
 {if !$embeddedConfirm}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 {if $confirm.title}
 <h2>{$confirm.title}</h2>
@@ -24,5 +24,5 @@
 <p><a href="{$confirm.yesurl}"><img src="{$url.theme.shared}images/icons/ok.png" alt="accept icon" class="navimage" /> {t}Yes{/t} {t}I confirm{/t}</a></p>
 
 {if !$embeddedConfirm}
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}
 {/if}

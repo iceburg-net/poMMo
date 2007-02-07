@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>{$title}</title>
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/user.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.user.css" />
 
 {* If $head has been captured, print its contents here. Capture $head via templates
 using {capture name=head}..content..{/capture} before including this header file. 

@@ -20,9 +20,26 @@
 die();
 ?>
 
+http://www.pommo.org/community/viewtopic.php?id=292
+---
+comporder1: quick question..
+comporder1: you said that when you change the theme in template.php if pommo cant find what it is  looking for, it will default to default. right?
+comporder1: I tried this.... I created a "custom" folder in the themes folder. Then changed the theme in template.php to "custom". I then lost all formatting.
+comporder1: am I missing something?
+bricecubed: no.. that should be the behavior
+bricecubed: let me see
+bricecubed: ahh 
+bricecubed: I see
+bricecubed: <link type="text/css" rel="stylesheet" href="/themes/custom/inc/css/admin.css" />-
+---
+
+
+http://www.pommo.org/community/viewtopic.php?id=288
+
 PR15
 ----
 
++ Groups displayed alphabetically
 + tabbed config
 + test mail processor from config
 + message templates

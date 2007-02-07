@@ -35,7 +35,7 @@ $a = array(
 );
 
 foreach($a as $id => $table) {
-	if($id == 'config' || $id == 'updates')
+	if($id == 'config' || $id == 'updates' || $id == 'group_criteria')
 		continue;
 		
 	$query = "DELETE FROM ".$table;

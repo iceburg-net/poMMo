@@ -1,5 +1,5 @@
-{include file="inc/tpl/admin.header.tpl" sidebar='off'}
+{include file="inc/admin.header.tpl" sidebar='off'}
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

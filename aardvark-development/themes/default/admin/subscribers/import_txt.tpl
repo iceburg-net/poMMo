@@ -1,7 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Import Subscribers{/t}</h2>
 
@@ -47,4 +47,4 @@ $().ready(function(){
 });
 </script>
 {/literal}
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

@@ -2,10 +2,10 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/modal.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <ul class="inpage_menu">
 <li><a href="{$url.base}admin/subscribers/subscribers_groups.php">{t 1=$returnStr}Return to %1{/t}</a></li>
@@ -20,7 +20,7 @@
 
 
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <form method="post" action="" id="nameForm" name="nameForm">
 <fieldset>
@@ -194,4 +194,4 @@ $().ready(function(){
 </script>
 {/literal}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

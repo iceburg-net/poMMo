@@ -16,7 +16,7 @@
 <script src="{$url.theme.shared}js/scriptaculous/slider.js" type="text/javascript"></script>
 {/capture}
 
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Configure{/t} {t}Throttling{/t}</h2>
 
@@ -26,7 +26,7 @@
 
 <p><img src="{$url.theme.shared}images/icons/settings.png" alt="settings icon" class="navimage right" /> {t}You can throttle mails so you don't overload your server or slam a common domain (such as hotmail/yahoo.com). Mail volume and bandwith can be controlled. Additionally, you can limit the mails and kilobytes sent to a single domain during a specified time frame.{/t}</p>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <form method="post" action="">
 
@@ -182,4 +182,4 @@ s_dbpp.setValue({$throttle_DBPP});
 s_dmpp.setValue({$throttle_DMPP});
 </script>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

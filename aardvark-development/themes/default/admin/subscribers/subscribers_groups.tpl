@@ -1,7 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Styling of CSS table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
-{/capture}{include file="inc/tpl/admin.header.tpl"}
+{/capture}{include file="inc/admin.header.tpl"}
 
 <h2>{t}Groups Page{/t}</h2>
 
@@ -11,7 +11,7 @@
 
 <form method="post" action="">
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <fieldset>
 <legend>{t}New group{/t}</legend>
@@ -63,4 +63,4 @@
 
 
 </fieldset>
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

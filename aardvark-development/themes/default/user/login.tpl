@@ -1,10 +1,10 @@
-{include file="inc/tpl/user.header.tpl"}
+{include file="inc/user.header.tpl"}
 
 <h2>{t}Subscriber Login{/t}</h2>
 
 <p>{t}In order to check your subscription status, update your information, or unsubscribe, you must enter your email address in the field below.{/t}</p>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <form method="post" action="">
 <fieldset>
@@ -25,4 +25,4 @@
 
 </form>
 
-{include file="inc/tpl/user.footer.tpl"}
+{include file="inc/user.footer.tpl"}

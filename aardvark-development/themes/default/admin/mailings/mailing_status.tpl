@@ -1,8 +1,8 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <p><img src="{$url.theme.shared}images/icons/alert.png" class="navimage right" alt="thunderbolt icon" />
 {t escape=no 1="<span class='advanced'><a href='`$url.base`admin/setup/setup_throttle.php'>" 2='</a>'}Mailings take place in the background so feel free to close this page, visit other sites, or even turn off your computer. You can always return to this status page by visiting the Mailings section.  %1Throttle settings%2 can also be adjusted -- although you must pause and revive the mailing before changes take effect.{/t}</span></p>
@@ -226,4 +226,4 @@ $().ready(function(){ pommo.init(); });
 </script>
 {/literal}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}
