@@ -22,15 +22,30 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
+
+$maxRunTime = 80;
+if (ini_get('safe_mode'))
+	$maxRunTime = ini_get('max_execution_time') - 10;
+else
+	set_time_limit(0);
 	
 require ('../../bootstrap.php');
-$pommo->init();
+$pommo->init(array('install' => TRUE));
 
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+$code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
 
-$code = PommoHelper::makeCode();
-
-if(!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.runtime3.php?securityCode='.$code)) 
-	Pommo::kill('Spawn Failed! You must correct this before poMMo can send mailings.');
+for($i=0; $i <= 90; $i+=5) {
 	
-Pommo::redirect($pommo->_baseUrl.'support/tests/mailing.runtime2.php?code='.$code);
+	$fileContent = "<?php die(); ?>\n[code] = $code\n[time] = $i\n";
+	
+	if (!$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w')) 
+		die('Unable to write to test file');
+
+	if (fwrite($handle, $fileContent) === FALSE) 
+		die('Unable to write to test file');
+	
+	fclose($handle);
+	sleep(5);
+}
+	
+die();
