@@ -25,14 +25,16 @@ define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init();
 
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
-$code = PommoHelper::makeCode();
+$code = $_GET['code'];
 
-if(!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?securityCode='.$code)) 
-	Pommo::kill('Initial Spawn Failed! You must correct this before poMMo can send mailings.');
+echo 'Initial Run Time: '.ini_get('max_execution_time').' seconds <br>';
+echo '<br/> This test takes at least 90 seconds. Upon completetion "SUCCESS" will be printed. If you do not see "SUCCESS", the max runtime should be set to the highest "reported working" value.';
+echo '<hr>';
+echo '<b>Reported working value(s)</b><br />';
+ob_flush(); flush();
 
-sleep(6);
+sleep(3);
 
 if (!is_file($pommo->_workDir . '/mailing.test.php')) {
 	// make sure we can write to the file
@@ -41,16 +43,29 @@ if (!is_file($pommo->_workDir . '/mailing.test.php')) {
 	fclose($handle);
 	unlink($pommo->_workDir.'/mailing.test.php');
 	
-	die('Initial Spawn Failed (test file not written)! You must correct this before poMMo can send mailings.');
+	die('Initial Spawn Failed (test file could not be written)! Did you try to "refresh" this test? close and try again.');
 }
-	
-$o = PommoHelper::parseConfig($pommo->_workDir . '/mailing.test.php');
-unlink($pommo->_workDir.'/mailing.test.php') or die('could not remove mailing.test.php');
 
-if (!isset($o['code']) || $o['code'] != $code)
-	die ('Spawning Failed. Codes did not match.');
-	
-if (!isset($o['spawn']) || $o['spawn'] == 0)
-	die ('Inital spawn success. Respawn failed!');
+$die = false;
+$time = 0;
+while(!$die) {
+	sleep(10);
+	$o = PommoHelper::parseConfig($pommo->_workDir . '/mailing.test.php');
+	if (!isset($o['code']) || $o['code'] != $code) {
+		unlink($pommo->_workDir.'/mailing.test.php');
+		die ('Spawning Failed. Codes did not match.');	
+	}
+	if(!isset($o['time']) || $time >= $o['time'] || $o['time'] == 90)
+		$die = true;
+	$time = $o['time'];
+		
+	echo "$time seconds <br />";
+	ob_flush(); flush();
+}
+unlink($pommo->_workDir.'/mailing.test.php');
 
-die('Initial spawn success. Respawn success. Spawning Works!');
+
+if($time == 90)
+	die('SUCCESS');
+
+die('FAILED -- A 3rd party tool or webserver "script timeout setting" is terminating PHP. You must adjust your max runtime value.');

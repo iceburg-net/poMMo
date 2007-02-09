@@ -32,6 +32,7 @@ class PommoDB {
 	var $_dieOnQuery;
 	var $_debug;
 	var $_database; // name of database
+	var $_prefix; // table prefix
 	var $table; // array of tables. array_key = nickname, value = table name in DB
 
 	var $_safeSQL; // holds Monte's SafeSQL Class , referenced via prepare()
@@ -43,7 +44,8 @@ class PommoDB {
 		if (get_magic_quotes_runtime())
 			if (!set_magic_quotes_runtime(0))
 				Pommo::kill('Could not turn off PHP\'s magic_quotes_runtime');
-		
+				
+		$this->_prefix = $tablePrefix;
 		$this->_database = $database;
 		$this->table = array (
 			'config' => '`'.$tablePrefix . 'config`',
@@ -248,8 +250,10 @@ class PommoDB {
 			if (!empty ($sql))
 				if ($this->query($sql))
 					array_push($set, $this->_result);
-				else
-					return false;
+				else {
+					$set = false;
+					return $set;
+				}
 		}
 		
 		// Fetch row from result set at end of result stack

@@ -62,8 +62,9 @@ class PommoInstall {
  		global $pommo;
 		$dbo =& $pommo->_dbo;
  		if (is_object($dbo)) {
-			$sql = 'DESCRIBE ' . $dbo->table['groups'];
-			if ($dbo->records($sql) > 0)
+			$query = "SHOW TABLES LIKE '%s'";
+			$query = $dbo->prepare($query,array($dbo->_prefix.'%'));
+			if ($dbo->records($query) > 10)
 				return true;
 		}
 		return false;
