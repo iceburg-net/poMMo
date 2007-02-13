@@ -20,6 +20,12 @@
 die();
 ?>
 
+
+++ add "is empty" filtering rule
+
+
++++ Set sockettimeout in spawn function
+
 http://www.pommo.org/community/viewtopic.php?id=292
 ---
 comporder1: quick question..
@@ -87,6 +93,9 @@ PR15
 	  	+ Use http://interface.eyecon.ro/demos/sort_example.html  to move between && or ||
 	  	
 	  	----
+			
+			for "single" group
+			
 			SELECT count(subscriber_id)
 			from subscribers 
 			where 
@@ -100,7 +109,7 @@ PR15
 				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
 			);
 			
-			for multi group
+			for "multi" group
 			
 			SELECT count(subscriber_id)
 			from subscribers 
@@ -114,17 +123,27 @@ PR15
 			OR subscriber_id in
 				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
 			)
-			OR (
-				(
-				subscriber_id in
-					(select ... [GROUP INCLUSION SUBQUERIES])
+			AND subscriber_ID NOT IN(  // exclude group
+				SELECT subscriber_id from subscribers where status ='1' AND (
+					subscriber_id in
+						(select ... zzz)
+					AND subsriber_id in
+						(select ... zzz)
+					OR subscriber_id in
+						(select ... zzz)
 				)
 			)
-			AND (
-			subscriber_id not in [GROUP EXCLUSION SUBQUERIES]
-				(select...)
-			);
-			
+			OR subscriber_ID IN(  // include group
+				SELECT subscriber_id from subscribers where status ='1' AND (
+					subscriber_id in
+						(select ... zzz)
+					AND subsriber_id in
+						(select ... zzz)
+					OR subscriber_id in
+						(select ... zzz)
+				)
+			)
+						
 	  	----
 	  	
 	  	
