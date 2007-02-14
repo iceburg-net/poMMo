@@ -62,6 +62,7 @@ CREATE TABLE :::group_rules::: (
   `rule_id` int(10) unsigned NOT NULL auto_increment,
   `group_id` int(10) unsigned NOT NULL default '0',
   `field_id` tinyint(3) unsigned NOT NULL default '0',
+  `type` tinyint(1) NOT NULL default '0' COMMENT '0: OFF, (and), 1: ON (or)',  
   `logic` enum('is','not','greater','less','true','false','is_in','not_in') NOT NULL,
   `value` text,
   PRIMARY KEY  (`rule_id`),

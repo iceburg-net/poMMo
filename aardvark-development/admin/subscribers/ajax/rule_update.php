@@ -54,7 +54,10 @@ switch($_POST['logic']) {
 		}
 		$values = array_unique($values);
 		
-		PommoRules::addFieldRule($_POST['group'], $_POST['match'], $_POST['logic'], $values);
+		$type = (isset($_POST['type'])) ?
+			$_POST['type'] : 'add';
+		
+		PommoRules::addFieldRule($_POST['group'], $_POST['match'], $_POST['logic'], $values, $type);
 		break;
 }
 ?>

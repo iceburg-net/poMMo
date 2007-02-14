@@ -21,24 +21,7 @@ die();
 ?>
 
 
-++ add "is empty" filtering rule
-
-
-+++ Set sockettimeout in spawn function
-
 http://www.pommo.org/community/viewtopic.php?id=292
----
-comporder1: quick question..
-comporder1: you said that when you change the theme in template.php if pommo cant find what it is  looking for, it will default to default. right?
-comporder1: I tried this.... I created a "custom" folder in the themes folder. Then changed the theme in template.php to "custom". I then lost all formatting.
-comporder1: am I missing something?
-bricecubed: no.. that should be the behavior
-bricecubed: let me see
-bricecubed: ahh 
-bricecubed: I see
-bricecubed: <link type="text/css" rel="stylesheet" href="/themes/custom/inc/css/admin.css" />-
----
-
 
 http://www.pommo.org/community/viewtopic.php?id=288
 
@@ -50,7 +33,7 @@ PR15
 + test mail processor from config
 + message templates
 + admin notifications
-+ OR rules
++++ Set sockettimeout in spawn function
 
 
 [LEGACY POMMO]
@@ -64,7 +47,7 @@ PR15
 	
 
 [THEME]
-	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
+	ENHACE DEFAULT SUBSCRIPTION FORM -- PLAIN TEXT IS ALWAYS AVAILABLE...
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 	Use TableSorter/Table layout for field, group, and group filter display
 	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
@@ -87,66 +70,6 @@ PR15
 	 
 	  (enhancement) Setup > Config tabbed layout
 	  	Test mailing exchanger from setup @ configure page
-	  
-	  (feature) Add OR to group filtering
-	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
-	  	+ Use http://interface.eyecon.ro/demos/sort_example.html  to move between && or ||
-	  	
-	  	----
-			
-			for "single" group
-			
-			SELECT count(subscriber_id)
-			from subscribers 
-			where 
-			status ='1' 
-			AND (
-			subscriber_id in 
-				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
-			AND subscriber_id in 
-				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
-			OR subscriber_id in
-				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
-			);
-			
-			for "multi" group
-			
-			SELECT count(subscriber_id)
-			from subscribers 
-			where 
-			status ='1' 
-			AND (
-			subscriber_id in 
-				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
-			AND subscriber_id in 
-				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
-			OR subscriber_id in
-				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
-			)
-			AND subscriber_ID NOT IN(  // exclude group
-				SELECT subscriber_id from subscribers where status ='1' AND (
-					subscriber_id in
-						(select ... zzz)
-					AND subsriber_id in
-						(select ... zzz)
-					OR subscriber_id in
-						(select ... zzz)
-				)
-			)
-			OR subscriber_ID IN(  // include group
-				SELECT subscriber_id from subscribers where status ='1' AND (
-					subscriber_id in
-						(select ... zzz)
-					AND subsriber_id in
-						(select ... zzz)
-					OR subscriber_id in
-						(select ... zzz)
-				)
-			)
-						
-	  	----
-	  	
-	  	
 	  	
 	  ADD Support Page (next to admin page in main menu bar)
 		+ Enhanced support library
@@ -157,14 +80,11 @@ PR15
 			+ Make a user-contributed open WIKI documentation system
 			+ When support page is clicked, show specific support topics for that page
 			
-		Importer:
-  			+ Optimize
-  			+ Convert uploaded files to UTF-8
-  			+ Protection against timeouts, status?
-  		
-  		Rewrite sql.gen.php, matching algorithms.
-  			Avoid; Notice: Only variable references should be returned by reference in /maxtor/work/eclipse/poMMo/inc/classes/sql.gen.php on line 92
-	  	
+	  Importer:
+		+ Optimize
+		+ Convert uploaded files to UTF-8
+		+ Protection against timeouts, status?
+	
 	MEDIUM TERM: (PR16)
 	
 	  (API) SWITCH "phase1" dialogs of subscriber add/delete/search/export to INLINE DISPLAY vs. AJAX POLL 
@@ -175,7 +95,6 @@ PR15
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
 	  
-	  (feature) Implement drag & drop between AND and OR filters (via table row handles)
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
 	  (feature) Add specific emails to a group
 	  	++ Allow rules to include base subscriber data such as IP && date_registered.
@@ -186,6 +105,19 @@ PR15
 	  
 	  PR16 -- hopefully have all strings in program, notify translators, ask for review of contributors section.
 	  
+	  
+	  (feature) Add "isEmpty" group rule
+	  
+	  Make groups_edit.php (rule creation page) more responsive.
+	 	++ vs. page reloads, add ajax rule CRUD & with an oncomplete which refreshes
+	 		group filter count + tally.	
+	 	++ Integrate taconite plugin to do the updates for groups_edit.php, 
+	 	  ecentually spread to mailings_status.php
+	 	++ ajax rewritted (see above)
+	 	
+	 (API) Increase subscriber management performance. 
+	 	++ Merge sorting && limiting && ordering into sql.gen.php 
+	 	  
 	  
 	LONG TERM:
 	

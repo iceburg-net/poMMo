@@ -297,6 +297,7 @@ select.pvInvalid {
 	background: #DDF0BD;
 	color: green;
 }
+
 #alertmsg.warn {
 	border: 1px solid #FF8000;
 }
