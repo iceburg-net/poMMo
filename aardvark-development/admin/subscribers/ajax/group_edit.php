@@ -83,6 +83,7 @@ elseif ($_POST['add'] == 'field') {
 	$smarty->assign('group_id',$group['id']);
 	$smarty->assign('field',$field);
 	$smarty->assign('logic',$logic);
+	$smarty->assign('type',$_POST['type']);
 	
 	$smarty->display('admin/subscribers/ajax/group_field.tpl');
 	Pommo::kill();

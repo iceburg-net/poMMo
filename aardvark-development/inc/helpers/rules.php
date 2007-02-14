@@ -142,52 +142,55 @@ class PommoRules {
 		return $dbo->affected($query);
 	}
 	
-	function addFieldRule(&$group, &$match, &$logic, &$values) {
+	function addFieldRule(&$group, &$match, &$logic, &$values, $type = 0) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
+		
+		$type = ($type == 'or')? 1 : 0;
+		
 		
 		// remove previous filters
 		PommoRules::deleteRule($group, $match, $logic);
 		
 		foreach($values as $value)
-			$v[] = $dbo->prepare("(%i,%i,'%s','%s')",array($group, $match, $logic, $value));
+			$v[] = $dbo->prepare("(%i,%i,'%s','%s',%i)",array($group, $match, $logic, $value,$type));
 			
 		$query = "
 			INSERT INTO " . $dbo->table['group_rules']."
-			(group_id, field_id, logic, value)
+			(group_id, field_id, logic, value, type)
 			VALUES ".implode(',', $v);
 		echo $query;
 		return $dbo->affected($query);
 	}
 	
 	
-	// merge the delete... to just 1 function..
-	function deleteRule($group, $field, $logic) {
+	function deleteRule($gid, $fid, $logic) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
+		$where = ($logic == 'is_in' || $logic == 'not_in') ? 
+			"AND field_id=0 AND rule_id=%i" :
+			"AND field_id=%i";
+			
 		$query = "
 			DELETE FROM " . $dbo->table['group_rules']."
-			WHERE group_id=%i
-				AND field_id=%i
-				AND logic='%s'";
-		$query = $dbo->prepare($query,array($group, $field, $logic));
-		return ($dbo->affected($query));
+			WHERE group_id=%i AND logic='%s' ".$where;
+		$query = $dbo->prepare($query,array($gid, $logic, $fid));
+		return ($dbo->affected($query));	
 	}
 	
-	// move to groups.php?
-	function deleteGroup($group, $field, $logic) {
+	function changeType($gid, $fid, $logic, $type) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
+		$type = ($type == 'or') ? 1 : 0;
+			
 		$query = "
-			DELETE FROM " . $dbo->table['group_rules']."
-			WHERE group_id=%i
-				AND field_id=0
-				AND value=%i
-				AND logic='%s'";
-		$query = $dbo->prepare($query,array($group, $field, $logic));
-		return ($dbo->affected($query));
+			UPDATE " . $dbo->table['group_rules']."
+			SET type=$type
+			WHERE group_id=%i AND logic='%s' AND field_id=%i";
+		$query = $dbo->prepare($query,array($gid, $logic, $fid));	
+		return ($dbo->affected($query));	
 	}
 }
 ?>

@@ -129,6 +129,11 @@ function PommoRevUpgrade($rev) {
 				return false;
 		case 33: // Aardvark PR14.4.1
 			// gets executed by Upgrade from ^^
+			
+			if (!PommoInstall::incUpdate(9,
+			"ALTER TABLE {$dbo->table['group_rules']} ADD `type` TINYINT( 1 ) NOT NULL DEFAULT '0'"
+			,"Adding OR support to Group Rules")) return false;
+			
 		default: 
 			return false;
 	} 

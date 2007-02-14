@@ -123,13 +123,6 @@ class PommoSQL {
 	//		'value' => $row['value'],
 	//	);
 	
-	// LOGIC is either; "is, is not, less, greater, true, false, NOT IN, IN"
-	
-	// A "logic array" resembles:
-	//  $logic[logic] = array(
-	//		field_id1 => value
-	//		field_id2 => value
-	//	);
 	
 	// seperates and, or, and group inclusion/exclusion rules
 	// accepts a group rules array
@@ -142,26 +135,34 @@ class PommoSQL {
 			'exclude' => array()
 		);
 		
-		foreach($rules as $r) {
+		foreach($rules as $id => $r) {
 			
 			if($r['or'])
-				array_push($o['or'],$r);
+				$o['or'][$id] = $r;
 			else 
 			switch ($r['logic']) {
 				case 'is_in':
-					array_push($o['include'],$r['value']);
+					$o['include'][$id] = $r['value'];
 					break;
 				case 'not_in':
-					array_push($o['exclude'],$r['value']);
+					$o['exclude'][$id] = $r['value'];
 					break;
 				default:
-					array_push($o['and'],$r);
+					$o['and'][$id] = $r;
 					break;
 			}		
 		}
 		return $o;
 	}
 	
+	
+	// LOGIC is either; "is, is not, less, greater, true, false, NOT IN, IN"
+	
+	// A "logic array" resembles:
+	//  $logic[field_id] = array(
+	//		[logic] => array(values)
+	//		is_in => array(1,2)
+	//	);
 	
 	// accepts a group rules array
 	// returns a logic array
@@ -214,10 +215,7 @@ class PommoSQL {
 	
 	// generate the group SQL subselects
 	// accepts a group object
-	function groupSQL(&$group, $tally = false) {
-
-		var_dump($group);
-		
+	function groupSQL(&$group, $tally = false, $status = 1) {
 		// used to prevent against group include/exclude recursion
 		static $groups;
 		if (!isset ($groups[$group['id']])) 
@@ -225,7 +223,6 @@ class PommoSQL {
 		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		
 		
 		/*
 		SELECT count(subscriber_id)
@@ -262,13 +259,11 @@ class PommoSQL {
 			)
 			*/
 			
-			
 		$rules = PommoSQL::sortRules($group['rules']);
 		$ands = PommoSQL::getSubQueries(PommoSQL::sortLogic($rules['and']));
 		$ors = (empty($rules['or'])) ? 
 			array() : 
 			PommoSQL::getSubQueries(PommoSQL::sortLogic($rules['or']));
-		
 		
 		$sql = ($tally) ?
 			'SELECT count(subscriber_id) ' :
@@ -276,14 +271,14 @@ class PommoSQL {
 	
 		$sql .= "
 			FROM {$dbo->table['subscribers']}
-			WHERE status='1'";
+			WHERE status=".intval($status);
 			
 		if(!empty($ands)) {
 			$sql .= " AND (\n";
 		
 			foreach($ands as $k => $s) {
 				if($k != 0)
-					$sql .= "\n AND";
+					$sql .= "\n AND ";
 				$sql .= $s;
 			}
 			foreach($ors as $s)

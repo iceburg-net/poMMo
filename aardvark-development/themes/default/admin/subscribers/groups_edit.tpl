@@ -2,6 +2,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 {/capture}
@@ -15,10 +16,8 @@
 
 <p>
 <img src="{$url.theme.shared}images/icons/groups.png" alt="groups icon" class="navimage right" />
-{t escape=no 1="<a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a>"}To add subscribers to a group you must create matching rules. Subscribers are automatically added to a group if their %1subscriber field%2 values "match" a Group's rules. For example, if you collect "AGE" and "COUNTRY" as %1subscriber fields%2, you can match those who are 21+ and living in Japan by creating two rules; one which matches "AGE" to greater than 20, and another which matches "Japan" to "COUNTRY". You can also include or exclude members of other groups.{/t}
+{t escape=no 1="<a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a>"}To add subscribers to a group you must create matching rules. Subscribers are automatically added to a group if their %1subscriber field%2 values "match" a Group's rules. For example, if you collect "AGE" and "COUNTRY" as %1subscriber fields%2, you can match those who are 21+ and living in Japan by creating two rules; one which matches "AGE" to greater than 20, and another which matches "Japan" to "COUNTRY". Including or excluding members of other groups is possible.{/t}
 </p>
-
-
 
 {include file="inc/messages.tpl"}
 
@@ -28,14 +27,10 @@
 
 <div>
 <label for="group_name">{t}Group name:{/t}</label> <input type="text" title="{t}type new group name{/t}" maxlength="60" size="30" name="group_name" id="group_name"  value="{$group.name|escape}" />
-</div>
-
-</fieldset>
-
-<div class="buttons">
 <input type="submit" name="rename" value="{t}Rename{/t}" />
 </div>
 
+</fieldset>
 </form>
 
 <form method="post" action="" id="filterForm" name="filterForm">
@@ -73,94 +68,173 @@
 </div>
 </fieldset>
 
+{* **** DISPLAY GROUP RULES **** *}
+
 <fieldset>
 <legend>{t}Group Rules{/t}</legend>
 
-<table summary="list of rules">
+<table>
 <thead>
 <tr>
 <th>{t}Delete{/t}</th>
 <th>{t}Edit{/t}</th>
 <th>{t}Field{/t}</th>
 <th>{t}Logic{/t}</th>
-<th>{t}Value(s){/t}</th>
+<th>{t}Value{/t}</th>
+<th>{t}Type{/t}</th>
 </tr>
 </thead>
 <tbody>
-{foreach name=outter from=$filters key=field_id item=logicArray}
-	{foreach name=inner from=$logicArray key=logic item=valArray}
-	{if $field_id == 0}{* group match *}
-	<tr class="{cycle values="r1,r2,r3" advance=false}">
-	<td colspan="3"></td><td colspan="2">{$english[$logic]}</td>
-	</tr>
-	{foreach name=v from=$valArray item=value}
-		<tr class="{cycle values="r1,r2,r3"}">
-		
-		<td>
-		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;groupDelete={$value}&amp;logic={$logic|escape}'; return false;">
-		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
-		</button>
-		</td>
-		
-		<td></td>
-		
-		<td colspan="2">
-		<td>{$groups[$value].name}</td>
-		
-		</tr>
-	{/foreach}
-	{else}
-	<tr class="{cycle values="r1,r2,r3"}">
-	<td>
-		<button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$group.id}&amp;fieldDelete={$field_id}&amp;logic={$logic|escape}'; return false;">
-		<img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" />
-		</button>
-	</td>
-	
-	<td>
-		{if $logic != 'true' && $logic != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
-		<button onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic}'); return false;">
-		<img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" />
-		</button>
-		{/if}
-	</td>
-	
-	<td>{$fields[$field_id].name}</td>
-	
-	<td>{$english[$logic]}</td>
-	
-	<td>
-		<ul>
-		{foreach from=$valArray item=value}<li>{$value}</li>{/foreach}
-		</ul>
-	</td>
-	
-	</tr>
-	{/if}
-	{/foreach}
-{foreachelse}
-<tr>
-<td colspan="3"><strong>{t}No groups have been assigned.{/t}</strong></td>
+<tr class="alert">{* **** "AND" GROUP RULES **** *}
+<td colspan="6" style="padding: 5px;">
+	<center>
+	{t}"AND" RULES{/t} <br />
+	{t escape=no 1='<strong>' 2='</strong>'}MATCH %1ALL%2 OF THE FOLLOWING{/t}
+	</center>
+</td>
+</tr>
+
+{foreach from=$rules.and key=field_id item=rule}
+{foreach from=$rule key=logic_id item=values}
+<tr class="{cycle values="r1,r2,r3"}">
+
+<td><a href="{$getURL}&delete={$field_id|escape}&logic={$logic_id|escape}"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+
+<td>
+{if $logic_id != 'true' && $logic_id != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
+<a href="#" onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic_id}','and'); return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" /></a>
+{/if}
+</td>
+
+<td>{$fields[$field_id].name}</td>
+
+<td>{$logicNames[$logic_id]}</td>
+
+<td>
+<ul>
+{foreach from=$values item=v name=vals}
+{if $v}{if !$smarty.foreach.vals.first}<br />({t}or{/t}) {/if} {$v}{/if}
+{/foreach}
+</ul>
+</td>
+
+<td>
+<select name="type" onChange="_redirect('&toggle={$field_id|escape}&logic={$logic_id|escape}&type=or');">
+<option selected>{t}AND{/t}</option>
+<option>{t}OR{/t}</option>
+</select>
+</td>
+
 </tr>
 {/foreach}
+{foreachelse}
+<tr class="r1"><td colspan="5">{t}No rules have been added{/t}</td></tr>
+{/foreach}
 
-</tbody>
+{cycle reset=true print=false advance=false}
+<tr class="alert">{* **** "OR" GROUP RULES **** *}
+<td colspan="6" style="padding: 5px; position: relative;">
+	<center>
+	{t}"OR" RULES{/t} <br />
+	{t escape=no 1='<strong>' 2='</strong>'}OR, MATCH %1ANY%2 OF THE FOLLOWING{/t}
+	</center>
+</td>
+</tr>
+
+{foreach from=$rules.or key=field_id item=rule}
+{foreach from=$rule key=logic_id item=values}
+<tr class="{cycle values="r1,r2,r3"}">
+
+<td><a href="{$getURL}&delete={$field_id|escape}&logic={$logic_id|escape}"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+
+<td>
+{if $logic_id != 'true' && $logic_id != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
+<a href="#" onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic_id}','or'); return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" /></a>
+{/if}
+</td>
+
+<td>{$fields[$field_id].name}</td>
+
+<td>{$logicNames[$logic_id]}</td>
+
+<td>
+<ul>
+{foreach from=$values item=v name=vals}
+{if $v}{if !$smarty.foreach.vals.first}<br />({t}or{/t}) {/if} {$v}{/if}
+{/foreach}
+</ul>
+</td>
+
+<td>
+<select name="type" onChange="_redirect('&toggle={$field_id|escape}&logic={$logic_id|escape}&type=and');">
+<option>{t}AND{/t}</option>
+<option selected=true>{t}OR{/t}</option>
+</select>
+</td>
+
+</tr>
+{/foreach}
+{foreachelse}
+<tr class="r1"><td colspan="5">{t}No rules have been added{/t}</td></tr>
+{/foreach}
+
+{cycle reset=true print=false advance=false}
+<tr class="alert">{* **** GROUP IN/EX CLUSIONS **** *}
+<td colspan="6" style="padding: 5px;">
+	<center>
+	{t 1=$t_include}AND, ADD OR SUBTRACT MEMBERS OF OTHER GROUPS{/t} <br />
+	</center>
+</td>
+</tr>
+
+{foreach from=$rules.include key=field_id item=rule}
+{foreach from=$rule key=logic_id item=values}
+<tr class="{cycle values="r1,r2,r3"}">
+
+<td colspan="2"><a href="{$getURL}&delete={$field_id|escape}&logic=is_in"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+
+<td colspan="4">{t escape=no 1=<strong> 2=</strong> 3=$values}%1Add%2 members matching %3{/t}</td>
+
+</tr>
+{/foreach}
+{foreachelse}
+{/foreach}
+
+{foreach from=$rules.exclude key=field_id item=rule}
+{foreach from=$rule key=logic_id item=values}
+<tr class="{cycle values="r1,r2,r3"}">
+
+{debug}
+
+<td colspan="2"><a href="{$getURL}&delete={$field_id|escape}&logic=not_in"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+
+<td colspan="4">{t escape=no 1=<strong> 2=</strong> 3=$values}%1Subtract%2 members matching %3{/t}</td>
+
+</tr>
+{/foreach}
+{/foreach}
+
 </table>
 
 </fieldset>
-
 </form>
 
-<p>{t escape=no 1="<em>`$filterCount`</em>" 2="<strong>`$tally`</strong>"}%1 rules match a total of %2 active subscribers{/t}</p>
+<p>{t escape=no 1="<em>`$ruleCount`</em>" 2="<strong>`$tally`</strong>"}%1 rules match a total of %2 active subscribers{/t}</p>
 
 {literal}
 <script type="text/javascript">
-function fwAjaxCall(id, name, gid, l) {
-	$('#newFilter select').each(function() { $(this).hide(); });
+function _redirect(url) {
+	window.location.href = "{/literal}{$getURL}{literal}"+url;
+}
 
+function fwAjaxCall(id, name, gid, l, t) {
+	$('#newFilter select').each(function() { $(this).hide(); });
+	
+	var _t = (typeof(t) == 'undefined') ? 'and' : t;
+	
 	var p = (typeof(l) == 'undefined') ?
-		{ID: id, add: name, group: gid} :
-		{ID: id, add: name, group: gid, logic: l};
+		{ID: id, add: name, group: gid, type: _t} :
+		{ID: id, add: name, group: gid, logic: l, type: _t};
 
 	$('#filterWindow div.fwContent').load(
 		'ajax/group_edit.php',
@@ -174,6 +248,7 @@ function fwAjaxCall(id, name, gid, l) {
 	);
 	return false; // don't follow href
 }
+
 $().ready(function(){ 
 
 	$('#filterWindow a.fwClose').click(function() {

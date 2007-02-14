@@ -31,7 +31,4 @@
 
 
 /* FOR Drag n' Drop */
-img.handle {
-	cursor: move;
-	cursor: s-resize;
-}
+img.handle, div.handle {cursor: move;}
