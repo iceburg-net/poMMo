@@ -22,6 +22,9 @@
 // REWRITE ALL...
 
 class PommoSQL {
+	
+	
+	
 	// returns where clauses as array
 	// accepts a attribute filtering array.
 	//   array_key == column, value is filter table filter table (subscriber_pending, subscriber_data, subscribers)
@@ -31,6 +34,8 @@ class PommoSQL {
 	//   array('status' => array('equal: active'))
 	// accepts a table prefix (e.g. WHERE prefix.column = 'value')
 	// returns SQL WHERE + JOIN clauses (array)
+	
+	// DEPRECIATED....
 	function & fromFilter(&$in, $p = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -95,6 +100,7 @@ class PommoSQL {
 	}
 	
 	// get the column(s) logic + value(s)
+	// DEPRECIATED....
 	function getLogic(&$col, &$val, &$filters) {
 		if (is_array($val)) {
 			foreach($val as $v)
@@ -198,16 +204,16 @@ class PommoSQL {
 						case "not":
 							$sql.= $dbo->prepare("[ AND value NOT IN (%Q)]",array($v)); break;
 						case "less":
-							$sql.= $dbo->prepare("[ [AND value < %I]",array($v)); break;
+							$sql.= $dbo->prepare("[ AND value < %I ]",array($v)); break;
 						case "greater":
-							$sql.= $dbo->prepare("[ AND value > %I]",array($v)); break;
+							$sql.= $dbo->prepare("[ AND value > %I ]",array($v)); break;
 						case "true":
 							$sql.= " AND value = 'on'"; break;
 						case "false":
 							$sql.= " AND value != 'on'"; break;
 					}
-				$sql .= ")";
 			}
+			$sql .= ")";
 			array_push($o,$sql);
 		}
 		return $o;

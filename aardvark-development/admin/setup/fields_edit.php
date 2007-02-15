@@ -60,8 +60,8 @@ if (!empty ($_REQUEST['dVal-del'])) {
 		$smarty->assign('confirm',array(
 		 	'title' => Pommo::_T('Confirm Action'),
 		 	'nourl' =>  $_SERVER['PHP_SELF'].'?field_id='.$field['id'],
-		 	'yesurl' => $_SERVER['PHP_SELF'].'?field_id='.$field['id'].'&dVal-del=TRUE&dVal-force=TRUE&delOption='.$_POST['delOption'],
-		 	'msg' => sprintf(Pommo::_T('Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records.'), '<b>'.$_POST['delOption'].'</b>', '<em>'.$affected.'</em>')
+		 	'yesurl' => $_SERVER['PHP_SELF'].'?field_id='.$field['id'].'&dVal-del=TRUE&dVal-force=TRUE&delOption='.$_REQUEST['delOption'],
+		 	'msg' => sprintf(Pommo::_T('Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records.'), '<b>'.$_REQUEST['delOption'].'</b>', '<em>'.count($affected).'</em>')
 		 	));
 		 
 		 $smarty->display('admin/confirm.tpl');
@@ -69,12 +69,12 @@ if (!empty ($_REQUEST['dVal-del'])) {
 	}
 	else {
 		// delete option, no subscriber is affected || force given.
-		if (!PommoField::optionDel($field,$_POST['delOption']))
+		if (!PommoField::optionDel($field,$_REQUEST['delOption']))
 			Pommo::kill(Pommo::_T('Error with deletion.'));
 			
 		// flag subscribers for update
 		if(count($affected) > 0)
-			PommoSubscribers::flagByID($affected);
+			PommoSubscriber::flagByID($affected);
 		Pommo::redirect($_SERVER['PHP_SELF'].'?field_id='.$field['id']);
 	}
 }
