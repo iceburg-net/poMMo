@@ -504,7 +504,7 @@ class PommoSubscriber {
 		$query = "
 			UPDATE " . $dbo->table['subscribers'] ."
 			SET flag=9
-			WHERE id IN (%q)";
+			WHERE subscriber_id IN (%q)";
 		$query = $dbo->prepare($query,array($id));
 		
 		return $dbo->affected($query);
