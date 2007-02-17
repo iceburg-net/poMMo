@@ -125,6 +125,12 @@ class PommoTemplate extends Smarty {
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
+		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/function.validate.php');
+		
+		// shortcut for {validate} -- function defined in class.smartyvalidate.php
+		$this->register_function('fv', 'smarty_fieldValidate');
+		
+		$this->assign('vErr',array());
 	}
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
@@ -151,5 +157,40 @@ class PommoTemplate extends Smarty {
 		
 		$this->assign($_POST);
 	}
+}
+
+// poMMo --> 
+// provide a smarty function as a shortcut for {validate}
+function smarty_fieldValidate($params, &$smarty)
+{
+  static $pre = '';
+  static $post = '';
+  static $form = false;
+  
+  $f = (isset($params['validate'])) ? $params['validate'] : false;
+  $m = (isset($params['message'])) ? $params['message'] : false;
+  
+  $form = (isset($params['form'])) ? $params['form'] : $form;
+  
+  $pre = (isset($params['prepend'])) ? $params['prepend'] : $pre;
+  $post = (isset($params['append'])) ? $params['append'] : $post;
+  
+  $prepend = (isset($params['pre'])) ? $params['pre'] : $pre;
+  $append = (isset($params['post'])) ? $params['post'] : $post;
+  
+  $p = array(
+	'id' => $f,
+	'message' => (isset($smarty->_tpl_vars['vMsg'][$f])) ? $smarty->_tpl_vars['vMsg'][$f] : 'input error',
+	'append' => 'vErr'
+	);
+
+  if($form) 
+  	$p['form'] = $form;
+
+  if ($f) 
+  	return smarty_function_validate($p,$smarty);
+  if ($m && isset($smarty->_tpl_vars['vErr'][$m]))
+  	return $prepend.$smarty->_tpl_vars['vErr'][$m].$append;
+  return;
 }
 ?>
