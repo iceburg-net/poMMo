@@ -95,7 +95,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		$code = PommoPending::add($subscriber,'password');
 		PommoHelperMessages::sendConfirmation($pommo->_config['admin_email'], $code, 'password');
 		
-		$logger->addMsg(Pommo::_T('Password reset request recieved. Check your email.'));
+		$logger->addMsg(Pommo::_T('Password reset request received. Check your email.'));
 		$smarty->assign('captcha',FALSE);
 		
 	} else {

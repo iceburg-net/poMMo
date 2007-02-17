@@ -16,7 +16,7 @@
 <fieldset>
 <legend>{t}Activation Code{/t}</legend>
 
-{t}If you have recieved your verification email, enter the activation code below;{/t}
+{t}If you have received your verification email, enter the activation code below;{/t}
 
 <div>
 <input type="text" name="code" />

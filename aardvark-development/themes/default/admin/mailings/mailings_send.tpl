@@ -34,7 +34,7 @@
 <option value="{$key}"{if $mailgroup == $key} selected="selected"{/if}>{$group.name}</option>
 {/foreach}
 </select>
-<span class="notes">{t}(Select who should recieve the mailing){/t}</span>
+<span class="notes">{t}(Select who should receive the mailing){/t}</span>
 </div>
 
 <div>
