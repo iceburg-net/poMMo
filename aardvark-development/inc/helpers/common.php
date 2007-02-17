@@ -125,5 +125,10 @@ class PommoHelper {
 		}
 		return $o;
 	}
+	
+	// returns true if the page has been requested via a browser XMLHTTPRequest (AJAX call)
+	function isAjax() {
+		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+	}
 }
 ?>

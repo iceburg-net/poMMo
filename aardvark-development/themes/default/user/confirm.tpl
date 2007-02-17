@@ -6,7 +6,7 @@
 
 {include file="inc/messages.tpl"}
 
-{t}If you have recieved your verification email, enter the activation code below;{/t}
+{t}If you have received your verification email, enter the activation code below;{/t}
 
 <form method="get" action="">
 
