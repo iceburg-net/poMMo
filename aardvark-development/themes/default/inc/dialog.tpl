@@ -31,8 +31,7 @@ poMMo
 </div></div></div>
 
 <div>
-<input type="image" src="{$url.theme.shared}images/dialog/close.gif" class="jqmdClose jqmOut jqmClose" />
-<input type="image" src="{$url.theme.shared}images/dialog/close_hover.gif" class="jqmdClose jqmOver jqmClose hidden" />
+<input type="image" src="{$url.theme.shared}images/dialog/close.gif" class="jqmdClose jqmClose" />
 </div>
 
 </div>
@@ -40,13 +39,15 @@ poMMo
 {literal}
 <script type="text/javascript">
 $().ready(function() {
-$('input.jqmOut')
-	.mouseover(function(){ $(this).hide().siblings('input.jqmOver').show();  $})
-	.focus(function(){ var f=$(this).hide().siblings('input.jqmOver').show()[0]; f.hideFocus=true; f.focus(); });
-	
-$('input.jqmOver')
-	.mouseout(function(){ $(this).hide().siblings('input.jqmOut').show();  $})
-	.blur(function(){ $(this).hide().siblings('input.jqmOut').show(); });
+	// Close Button Highlighting for *IE* (since IE does not support :hover selector...)
+	$('input.jqmdClose')
+	.hover(
+		function(){ $(this).addClass('jqmdCloseFocus'); }, 
+		function(){ $(this).removeClass('jqmdCloseFocus'); })
+	.focus( 
+		function(){ this.hideFocus=true; $(this).addClass('jqmdCloseFocus'); })
+	.blur( 
+		function(){ $(this).removeClass('jqmdCloseFocus'); });
 });
 </script>
 {/literal}

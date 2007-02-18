@@ -51,9 +51,7 @@ div.jqmDialog {
 	overflow: hidden;
 	font-family:verdana,tahoma,helvetica;
 	width: 400px;
-	
 	position: relative;
-	margin: auto;
 }
 
 /* Title / Top Classes */
@@ -74,6 +72,7 @@ div.jqmdBC {
 	padding: 7px 7px 7px;
 	height: 180px;
 	overflow: auto;
+	* position: relative; /* Fix for overflow/relative bug; http://rowanw.com/bugs/overflow_relative.htm */
 }
 div.jqmdBL { background: url(../images/dialog/bl.gif) no-repeat left bottom; padding-left: 7px; }
 div.jqmdBR { background: url(../images/dialog/br.gif) no-repeat right bottom; padding-right: 7px; * zoom: 1 }
@@ -87,8 +86,14 @@ input.jqmdClose {
 	position: absolute;
 	right: 7px;
 	top: 4px;
-	outline: none;
+	padding: 0 0 0 19px;
+	height: 19px;
+	width: 0px;
+	background: url(../images/dialog/close.gif) no-repeat top left;
+	overflow: hidden;
 }
+
+input.jqmdCloseFocus {background-position: bottom left; outline: none;}
 
 div.jqmdBC button {
 	margin: 8px 10px 4px 10px;
