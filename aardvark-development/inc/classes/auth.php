@@ -63,7 +63,7 @@ class PommoAuth {
 	 * requested files are interpreted... With servlets,... the user objects are organzized as i describe
 	 * above but i don't know if there is a standard way for php?
 	 */
-	function getPermissionLevel($username = null) {
+	function getPermissionLevel($username = null) { return 5;
 		if ($username)
 			return 5;
 		return 0;

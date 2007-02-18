@@ -1,15 +1,13 @@
+<!--
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jq11.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/accordion.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js" ></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/slider.css" />
+-->
 
-<div id="throttleBody">
+<div id="tbody">
 
 <form action="{$smarty.server.PHP_SELF}" method="post">
-
-<input type="hidden" name="throttle-submit" value="true">
-<input id="vmps" type="hidden" name="mps" value="true">
-<input id="vbps" type="hidden" name="bps" value="true">
-<input id="vdp" type="hidden" name="dp" value="true">
-<input id="vdmpp" type="hidden" name="dmpp" value="true">
-<input id="vdbpp" type="hidden" name="dbpp" value="true">
 
 <fieldset>
 <legend>{t}Global Rates{/t}</legend>
@@ -20,7 +18,7 @@
 <a href="#" class="minus">-</a>
 <a href="#" class="plus">+</a>
 <div id="mps" class="track"><div class="handle"></div></div>
-<p>{t escape=no 1='<span class="out"></span>'}%1 per Second{/t}<br />{t escape=no 1='<span class="out"></span>'}%1 per Hour{/t}</p>
+<p>{t escape=no 1='<span class="out"></span> '}%1 per Second{/t}<br />{t escape=no 1='<span class="out"></span>'}%1 per Hour{/t}</p>
 </div>
 
 <h2>{t}Bandwidth Limit{/t}</h2>
@@ -29,7 +27,7 @@
 <a href="#" class="minus">-</a>
 <a href="#" class="plus">+</a>
 <div id="bps" class="track"><div class="handle"></div></div>
-<p>{t escape=no 1='<span class="out"></span> KB'}%1 per Second{/t}<br />{t escape=no 1='<span class="out"></span> MB'}%1 per Hour{/t}</p>
+<p>{t escape=no 1='<span class="out"></span> KB '}%1 per Second{/t}<br />{t escape=no 1='<span class="out"></span> MB'}%1 per Hour{/t}</p>
 </div>
 
 <input type="submit" value="{t}Update{/t}" />
@@ -51,7 +49,7 @@
 <a href="#" class="minus">-</a>
 <a href="#" class="plus">+</a>
 <div id="dp" class="track trackAlt"><div class="handle"></div></div>
-<p>{t escape=no 1='<span class="out"></span>'}%1 seconds{/t}</p>
+<p>{t escape=no 1='<span class="out"></span> '}%1 seconds{/t}</p>
 </div>
 
 <h2>{t}Mail Rate{/t}</h2>
@@ -60,7 +58,7 @@
 <a href="#" class="minus">-</a>
 <a href="#" class="plus">+</a>
 <div id="dmpp" class="track"><div class="handle"></div></div>
-<p>{t escape=no 1='<span class="out"></span>'}%1 per Period{/t}</p>
+<p>{t escape=no 1='<span class="out"></span> '}%1 per Period{/t}</p>
 </div>
 
 <h2>{t}Bandwidth Limit{/t}</h2>
@@ -69,7 +67,7 @@
 <a href="#" class="minus">-</a>
 <a href="#" class="plus">+</a>
 <div id="dbpp" class="track"><div class="handle"></div></div>
-<p>{t escape=no 1='<span class="out"></span> KB'}%1 per Period{/t}</p>
+<p>{t escape=no 1='<span class="out"></span> KB '}%1 per Period{/t}</p>
 </div>
 
 <input type="submit" value="{t}Update{/t}" />
@@ -77,6 +75,13 @@
 <div class="output alert">{if $output}{$output}{/if}</div>
 
 </fieldset>
+
+<input type="hidden" name="throttle-submit" value="true" />
+<input id="vmps" type="hidden" name="mps" value="true" />
+<input id="vbps" type="hidden" name="bps" value="true" />
+<input id="vdp" type="hidden" name="dp" value="true" />
+<input id="vdmpp" type="hidden" name="dmpp" value="true" />
+<input id="vdbpp" type="hidden" name="dbpp" value="true" />
 
 </form>
 
@@ -88,7 +93,7 @@
 
 $().ready(function(){
 	
-	assignForm($('#throttleBody')[0]);
+	assignForm($('#tbody')[0]);
 	
 	// .ready() doesn't seem to work .. slider vals are not initialized
 	setTimeout("tInit()",200);

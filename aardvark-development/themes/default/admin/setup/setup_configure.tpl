@@ -6,6 +6,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/accordion.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/slider.css" />
 {/capture}
 {include file="inc/admin.header.tpl"}
 
