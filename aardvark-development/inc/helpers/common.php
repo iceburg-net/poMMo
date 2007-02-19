@@ -126,6 +126,10 @@ class PommoHelper {
 		return $o;
 	}
 	
+	// trims an array of whitespace
+	function & trimArray(&$a) {array_walk($a,array('PommoHelper','trimValue')); return $a;}
+	function trimValue(&$value){$value = trim($value);}
+	
 	// returns true if the page has been requested via a browser XMLHTTPRequest (AJAX call)
 	function isAjax() {
 		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
