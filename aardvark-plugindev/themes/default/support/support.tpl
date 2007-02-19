@@ -1,4 +1,4 @@
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Support Page{/t}</h2>
 
@@ -24,4 +24,4 @@
 + Ensure max run time is 30 seconds if safe mode is enabled
 </pre>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

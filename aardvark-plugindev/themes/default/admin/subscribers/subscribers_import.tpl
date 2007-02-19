@@ -1,7 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Import Subscribers{/t}</h2>
 
@@ -17,7 +17,7 @@
 <form method="post" enctype="multipart/form-data" action="">
 <input type="hidden" name="MAX_FILE_SIZE" value="{$maxSize}" />{* <-- DO NOT CHANGE THE LOCATION OF THIS *}
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <fieldset>
 <legend>{t}Import{/t}</legend>
@@ -93,4 +93,4 @@ $().ready(function(){
 </script>
 {/literal}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

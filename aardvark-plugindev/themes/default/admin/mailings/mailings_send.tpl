@@ -1,8 +1,8 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
-{/capture}{include file="inc/tpl/admin.header.tpl"}
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
+{/capture}{include file="inc/admin.header.tpl"}
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <form method="post" action="">
 
@@ -34,7 +34,7 @@
 <option value="{$key}"{if $mailgroup == $key} selected="selected"{/if}>{$group.name}</option>
 {/foreach}
 </select>
-<span class="notes">{t}(Select who should recieve the mailing){/t}</span>
+<span class="notes">{t}(Select who should receive the mailing){/t}</span>
 </div>
 
 <div>
@@ -82,4 +82,4 @@
 
 </form>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

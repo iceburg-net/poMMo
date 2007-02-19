@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 // include the field prototype object 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
@@ -55,8 +62,8 @@ class PommoField {
 		if (!empty($row['field_array']))
 			$in['array'] = unserialize($row['field_array']);
 		
-		$o = PommoType::field();
-		return PommoAPI::getParams($o,$in);
+		$o = PommoAPI::getParams(PommoType::field(),$in);
+		return $o;
 	}
 	
 	// field validation
@@ -140,6 +147,30 @@ class PommoField {
 		return $o;
 	}
 	
+	// fetches field name(s) from the database [NAME ONLY!]
+	// accepts a filtering array -->
+	//   id (int || array) -> an array of field IDs
+	// returns an array of field names. Array key(s) correlates to field ID.
+	function & getNames($id = null) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$o = array();
+		
+		$query = "
+			SELECT field_id, field_name
+			FROM " . $dbo->table['fields']."
+			WHERE
+				1
+				[AND field_id IN(%C)]";
+		$query = $dbo->prepare($query,array($id));
+		
+		while ($row = $dbo->getRows($query))
+			$o[$row['field_id']] = $row['field_name'];
+			
+		return $o;
+	}
+	
 	// adds a field to the database
 	// accepts a field (array)
 	// returns the database ID of the added field or FALSE if failed
@@ -182,10 +213,7 @@ class PommoField {
 			$in['type']
 		));
 		
-		if (!$dbo->query($query))
-			return false;
-		
-		return $dbo->lastId();
+		return $dbo->lastId($query);
 	}
 	
 	// removes a field from the database
@@ -249,12 +277,12 @@ class PommoField {
 		$dbo =& $pommo->_dbo;
 		$logger =& $pommo->_logger;
 		
-		$value = explode(',',$value);
-		array_walk($value,'trim');
+		$value = PommoHelper::trimArray(explode(',',$value));
 		
 		// add value to the array
 		$field['array'] = array_unique(array_merge($field['array'],$value));
 		$o = serialize($field['array']);
+		
 		
 		$query = "
 			UPDATE " . $dbo->table['fields'] . "

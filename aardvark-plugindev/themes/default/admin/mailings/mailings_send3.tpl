@@ -2,16 +2,16 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.this}inc/css/mailings.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <div id="preview">
 
 <h2>{t}Preview Mailing{/t}</h2>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <div class="msgheaders">
 
@@ -83,4 +83,4 @@
 
 </div>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

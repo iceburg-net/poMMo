@@ -1,8 +1,8 @@
-{include file="inc/tpl/user.header.tpl"}
+{include file="inc/user.header.tpl"}
 
 <h2>{t}Update Activation{/t}</h2>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 {t}Hello!{/t} {t}Before you can update your records on unsubscribe, we must first verify your email address.{/t}
 
@@ -16,7 +16,7 @@
 <fieldset>
 <legend>{t}Activation Code{/t}</legend>
 
-{t}If you have recieved your verification email, enter the activation code below;{/t}
+{t}If you have received your verification email, enter the activation code below;{/t}
 
 <div>
 <input type="text" name="code" />
@@ -31,4 +31,4 @@
 </form>
 
 
-{include file="inc/tpl/user.footer.tpl"}
+{include file="inc/user.footer.tpl"}

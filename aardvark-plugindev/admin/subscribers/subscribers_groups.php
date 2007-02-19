@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**********************************
 	INITIALIZATION METHODS
@@ -35,8 +42,10 @@ if (!empty ($_POST['group_name'])) {
 		$logger->addMsg(sprintf(Pommo::_T('Group name (%s) already exists'),$_POST['group_name']));
 	else {
 		$group = PommoGroup::make(array('name' => $_POST['group_name']));
-		if (PommoGroup::add($group))
-			$logger->addMsg(sprintf(Pommo::_T('Group %s Added'),$_POST['group_name']));
+		$id = PommoGroup::add($group);
+		($id) ?
+			Pommo::redirect("groups_edit.php?group_id=$id") :
+			$logger->addMsg(Pommo::_T('Error with addition.'));
 	}
 }
 
@@ -46,7 +55,7 @@ if (!empty ($_GET['delete'])) {
 	if (empty($group))
 		Pommo::redirect($_SERVER['PHP_SELF']);
 
-	$affected = PommoGroup::filtersAffected($group['id']);
+	$affected = PommoGroup::rulesAffected($group['id']);
 
 	// See if this change will affect any subscribers, if so, confirm the change.
 	if ($affected > 1 && empty ($_GET['dVal-force'])) {
@@ -67,7 +76,7 @@ if (!empty ($_GET['delete'])) {
 }
 
 // Get array of mailing groups. Key is ID, value is name
-$groups = PommoGroup::get();
+$groups = PommoGroup::getNames();
 
 $smarty->assign('groups',$groups);
 $smarty->display('admin/subscribers/subscribers_groups.tpl');

@@ -1,24 +1,36 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
+$lang = false;
+if (isset($_POST['lang'])) {
+	define('_poMMo_lang', $_POST['lang']);
+	$lang = true;
+}
+	
 require('../bootstrap.php');
 $pommo->init(array('authLevel' => 1));		//array('keep' => TRUE;);
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
-
 
 echo "<div style='color:blue;'>-----begin-----<br>POMMO"; print_r($pommo->_auth); echo "<br>"; print_r($pommo->_auth); echo "<br>"; 
 echo "SESSION: "; print_r($_SESSION); echo "</div>-----end-----<br><br>";
@@ -28,42 +40,24 @@ echo "<h1>Welcome "; print_r($_SESSION['pommo'.$key]['username']);  echo "</h1><
 
 
 
+
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-//corinna TODO CORINNA
-// Distinguish between admin and normal users
-// if plugins are activated the admin gets a additional plugin config menu point
-/*if ($pommo->_useplugins) {
-	
-	// Rightmanagement: if (accesslevel == 5)
-	$accessLevel = $pommo->_auth->_permissionLevel;
-	
-	if (($user != 'admin') AND $accessLevel != 5) {
-		echo "<h1>show multiuser interface.</h1>";
-	}
-	
-	if (($user == 'admin') AND $accessLevel == 5) {
-		// Show additional functionality from the plugins: Plugin SETUP button
-		$smarty->assign('showplugin', TRUE);
-	}
-	
-}*/
-//corinna
-
-
-
 $smarty->assign('header',array(
 	'main' => 'poMMo '.$pommo->_config['version'],
 	'sub' => sprintf(Pommo::_T('Powerful mailing list software for %s'),$pommo->_config['list_name']) 
 	));
-	
+
+if($lang)
+	$logger->addErr(Pommo::_T('You have changed the language for this session. To make this the default language, you must update your config.php file.'));
+
+$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
 $smarty->display('admin/admin.tpl');
 Pommo::kill();
 
-
-//this ? > was forgotten or intended?
-?> 
+// was this ?> forgotten or is it intended? 
+?>

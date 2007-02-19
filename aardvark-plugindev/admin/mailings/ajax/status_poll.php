@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**********************************
 	INITIALIZATION METHODS
@@ -78,11 +85,23 @@ if ($json['status'] != 4) {
 $json['statusText'] = $statusText[$json['status']];
 
 // get last 50 unique notices
-$notices = PommoMailing::getNotices($mailing['id']);
 $oldNotices = $pommo->get('notices');
-$pommo->set(array('notices' => $notices));
-$json['notices'] = array_diff($notices,$oldNotices);
+$newNotices = PommoMailing::getNotices($mailing['id'], 50, true);
+$notices = array();
+foreach($newNotices as $time => $arr) {
+	if (!isset($oldNotices[$time])) {
+		$notices = array_merge($notices, $arr);
+		continue;	
+	}
+	foreach($arr as $notice) {
+		if (array_search($notice,$arr) === false) 
+			$notices[] = $notice;
+	}
+}
+$pommo->set(array('notices' => $newNotices));
+$json['notices'] = array_reverse($notices);
 
+// calculate sent
 $query = "
 	SELECT count(subscriber_id) 
 	FROM ".$dbo->table['queue']."

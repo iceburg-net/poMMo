@@ -1,4 +1,4 @@
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Edit Field{/t}</h2>
 
@@ -8,7 +8,7 @@
 
 {if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimage right" /> {$intro}</p>{/if}
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
  
 <form method="post" action="">
 <input type="hidden" name="field_id" value="{$field.id}" />
@@ -125,4 +125,4 @@
 </form>
 {/if}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

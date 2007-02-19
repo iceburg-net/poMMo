@@ -1,33 +1,37 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 die();
 ?>
 
-Mailing notices -- no dupes are displayed
+++ jqModal warning of !firefox on first run 
+write to jQ list w/ elegance of unobtrusive accordion load in config
 
-Test mailing exchanger from setup @ configure page
+http://www.pommo.org/community/viewtopic.php?id=292
 
-Toggle gettext emulation (phpgettext)
+http://www.pommo.org/community/viewtopic.php?id=288
 
+PR15
 ----
-"Hello. I have upload a file with about 35.000 emails.
++ message templates
++++ Set sockettimeout in spawn function
 
-All ok. But, after, when i need to select field i have this error:
-
-Fatal error: Maximum execution time of 30 seconds exceeded
-
-/inc/lib/safesql/SafeSQL.class.php on line 106"
-----
 
 [LEGACY POMMO]
   Port config parser + config.php/sample
@@ -40,7 +44,7 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 	
 
 [THEME]
-	ENHANCED DEFAULT SUBSCRIPTION FORM? -- THERE'S ALWAYS "PLAIN TEXT
+	ENHACE DEFAULT SUBSCRIPTION FORM -- PLAIN TEXT IS ALWAYS AVAILABLE...
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 	Use TableSorter/Table layout for field, group, and group filter display
 	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
@@ -53,33 +57,9 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 		MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
 
 	SHORT TERM: 
-	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
-	  
 	  (API) Maintenance : clean out old/not utilized activations from subscriber_update
 	  
 	  (feature) add message templating
-	  
-	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
-	  (enhancement) Setup > Config tabbed layout
-	  
-	  (feature) Add OR to group filtering
-	  	+ Utilize subquery method. Requires MySQL 4.1 .. GOOD!
-	  	+ Use http://interface.eyecon.ro/demos/sort_example.html  to move between && or ||
-	  	
-	  	----
-			SELECT count(subscriber_id)
-			from subscribers 
-			where 
-			status ='1' 
-			AND (
-			subscriber_id in 
-				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
-			AND subscriber_id in 
-				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
-			OR subscriber_id in
-				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
-			);
-	  	----
 	  	
 	  ADD Support Page (next to admin page in main menu bar)
 		+ Enhanced support library
@@ -89,8 +69,13 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 		+ Link to WIKI documentation
 			+ Make a user-contributed open WIKI documentation system
 			+ When support page is clicked, show specific support topics for that page
-	  	
-	MEDIUM TERM:
+			
+	  Importer:
+		+ Optimize
+		+ Convert uploaded files to UTF-8
+		+ Protection against timeouts, status?
+	
+	MEDIUM TERM: (PR16)
 	
 	  (API) SWITCH "phase1" dialogs of subscriber add/delete/search/export to INLINE DISPLAY vs. AJAX POLL 
  		 + Requires unobtrusive modal window (thickbox destroys event bindings). Keep eye on Gavin's plugin
@@ -98,30 +83,47 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 	  (API) Rewrite PommoThrottler() [ currently depricated with PR13 functionality ]
 	  (API) Better Organize inc/helpers/messages & validate... underutilized!
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
-	  
 	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
 	  
-	  
-	  (feature) Implement drag & drop between AND and OR filters (via table row handles)
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
 	  (feature) Add specific emails to a group
+	  	++ Allow rules to include base subscriber data such as IP && date_registered.
+	  	
 	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.
 	  (feature) Display flagged subscribers...
 	  (feature) Support SSL+TLS SMTP Connections
 	  
+	  PR16 -- hopefully have all strings in program, notify translators, ask for review of contributors section.
+	  
+	  
+	  (feature) Add "isEmpty" group rule
+	  
+	  Make groups_edit.php (rule creation page) more responsive.
+	 	++ vs. page reloads, add ajax rule CRUD & with an oncomplete which refreshes
+	 		group filter count + tally.	
+	 	++ Integrate taconite plugin to do the updates for groups_edit.php, 
+	 	  ecentually spread to mailings_status.php
+	 	++ ajax rewritted (see above)
+	 	
+	 (API) Increase subscriber management performance. 
+	 	++ Merge sorting && limiting && ordering into sql.gen.php 
+	 	  
+	  
 	LONG TERM:
+	
+	  (fix) Multiple SMTP servers -- appears to alternate.. queue does not appear to be processing relays simultaneously
+	  
+	  (feature) Bounced mail reading
+	  (feature) Add search capability to subscriber management
+	  (feature) Add theme selector
+	  
+	  (module) Visual Verrification / CAPTCHA @ subscribe form
+	  (design) client side validation of subscribe form (use validation.js), potential AJAX processing
 	
 	  (API) include some kind of bandwith throttling / DOS detection / firewalling to drop pages from offending IPs / halt system for 3 mins if too many page requests ??
 	  (API) Plugin architecture -- allow handler & manipulation injections/replacements to API functions
 	  	+ Can be used to chain the subscription process (process.php) through custom functions, add an extended authentication layer, etc.
 	  	
-	  (design) client side validation of subscribe form (use validation.js), potential AJAX processing
-	  (module) Visual Verrification / CAPTCHA @ subscribe form
-	  (feature) Bounced mail reading
-	  (feature) Add search capability to subscriber management
-	  
-	  (security) Implement Passwords on user information (login.php). Include customizable question/answer pair.
-
 
 [CORINNA]
 
@@ -129,9 +131,10 @@ Fatal error: Maximum execution time of 30 seconds exceeded
 		
 		(API) 		get rid of appendURL problem!
 					+ convert to $pommo->_state + save there
-
-					==> i tried to use POST method instead of GET					
-
+					
+			====>	BB: Corinna, See the new state handling in subscribers_manage & mailings_history
+			====>   BB: I've also added mailing composition to page states -- so user can bounce around program & not loose mailing data
+			
 		(arch)		module integration architecture
 					how hook in the modules?
 		

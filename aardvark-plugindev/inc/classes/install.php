@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 class PommoInstall {
  	
@@ -54,13 +61,12 @@ class PommoInstall {
  	function verify() {
  		global $pommo;
 		$dbo =& $pommo->_dbo;
- 		
  		if (is_object($dbo)) {
-			$sql = 'SHOW TABLES LIKE \'' . $dbo->table['groups'] . '\'';
-			if ($dbo->records($sql))
+			$query = "SHOW TABLES LIKE '%s'";
+			$query = $dbo->prepare($query,array($dbo->_prefix.'%'));
+			if ($dbo->records($query) > 10)
 				return true;
 		}
-	
 		return false;
  	}
  	

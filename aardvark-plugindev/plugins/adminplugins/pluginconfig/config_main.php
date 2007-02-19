@@ -24,7 +24,7 @@ $data = NULL;
 
 //print_r($pommo);
 
-$test = $pommo->_auth->dbCheckPermission('PLUGINADMIN');
+$test = $pommo->_auth->dbCheckPermission('ADMINPLUGIN');
 //echo "<b><i>TEST: " . $test . "</i></b><br>";
 
 

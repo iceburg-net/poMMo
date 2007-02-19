@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Project:     SmartyValidate: Form Validator for the Smarty Template Engine
  * File:        SmartyValidate.class.php
@@ -24,7 +23,7 @@
  * @copyright 2001-2005 New Digital Group, Inc.
  * @author Monte Ohrt <monte at newdigitalgroup dot com>
  * @package SmartyValidate
- * @version 2.8-dev
+ * @version 2.8
  */
 
 if(!defined('SMARTY_VALIDATE_DEFAULT_FORM'))

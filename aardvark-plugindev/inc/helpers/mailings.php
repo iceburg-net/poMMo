@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
  
 // include the mailing prototype object 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
@@ -257,11 +264,12 @@ class PommoMailing {
 			$in['charset'],
 			$in['status'],
 			$in['start']));
-		if (!$dbo->query($query))
-			return false;
 		
 		// fetch new subscriber's ID
-		$id = $dbo->lastId();
+		$id = $dbo->lastId($query);
+		
+		if (!$id)
+			return false;
 		
 		// insert current if applicable
 		if (!empty($in['status']) && $in['status'] == 1) {
@@ -289,6 +297,38 @@ class PommoMailing {
 		}
 			
 		return $id;
+	}
+	
+	// removes a mailing from the database
+	// accepts a single ID (int) or array of IDs 
+	// returns the # of deleted subscribers (int). 0 (false) if none.
+	function delete(&$id) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			DELETE
+			FROM " . $dbo->table['mailings'] . "
+			WHERE mailing_id IN(%c)";
+		$query = $dbo->prepare($query,array($id));
+		
+		$deleted = $dbo->affected($query);
+		
+		$query = "
+			DELETE
+			FROM " . $dbo->table['mailing_current'] . "
+			WHERE current_id IN(%c)";
+		$query = $dbo->prepare($query,array($id));
+		$dbo->query($query);
+		
+		$query = "
+			DELETE
+			FROM " . $dbo->table['mailing_notices'] . "
+			WHERE mailing_id IN(%c)";
+		$query = $dbo->prepare($query,array($id));
+		$dbo->query($query);
+		
+		return $deleted;
 	}
 	
 	// checks if a mailing is processing
@@ -319,8 +359,9 @@ class PommoMailing {
 	// gets *latest* notices from a mailing
 	// accepts mailing ID
 	// accepts a limit (def. 50) -- or 0
-	// returns an array of notices
-	function getNotices($id,$limit = 50) {
+	// returns an array of notices, if timestamp set to true, array will contain an array of keys that are timestamps, and value is an array of notices
+	//   e.g. array('<timestamp>' => array('notice1','notice2'))
+	function & getNotices($id,$limit = 50, $timestamp = FALSE) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -328,11 +369,26 @@ class PommoMailing {
 		if($limit == 0)
 			$limit = false;
 		
+		if (!$timestamp) {
 		$query = "
 			SELECT notice FROM ".$dbo->table['mailing_notices']."
 			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
 		$query = $dbo->prepare($query,array($id,$limit));
 		return $dbo->getAll($query,'assoc','notice');
+		}
+		
+		$o = array();
+		$query = "
+			SELECT touched,notice FROM ".$dbo->table['mailing_notices']."
+			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
+		$query = $dbo->prepare($query,array($id,$limit));
+		while ($row = $dbo->getRows($query)) {
+			if (!isset($o[$row['touched']]))
+				$o[$row['touched']] = array();
+			array_push($o[$row['touched']], $row['notice']);
+		}
+		return $o;
+		
 	}
 	
 }

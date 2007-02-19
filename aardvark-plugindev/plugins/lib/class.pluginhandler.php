@@ -100,7 +100,7 @@ class PluginHandler {
 		while ($row = $dbo->getRows($query)) {
 			$l = $row['user_logintries'];
 		}
-		$l += 1;
+		$l = $l + 1;
 		$query2 = "UPDATE ".$dbo->table['user']." SET user_logintries=".$l." WHERE user_name='".$username."' ";
 		$query2 = $dbo->prepare($query2);
 		$dbo->query($query2);

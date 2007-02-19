@@ -1,4 +1,4 @@
-{include file="inc/tpl/admin.header.tpl" sidebar='off'}
+{include file="inc/admin.header.tpl" sidebar='off'}
 
 <h2>{t}Upgrader{/t}</h2>
 
@@ -11,7 +11,7 @@
 
 <p><img src="{$url.theme.shared}images/icons/alert.png" alt="alert icon" class="navimage" /> {t}Welcome to the poMMo online upgrade process. This script will automatically upgrade your old version of poMMo.{/t}</p>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 {if !$upgraded}
 <form method="post" action="">
@@ -50,4 +50,4 @@
 
 <p><em>{t escape="no" url='<a href="http://pommo.sourceforge.net/">poMMo</a>'}Page fueled by %1 mailing management software.{/t}</em></p>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

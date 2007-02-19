@@ -2,7 +2,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
-{/capture}{include file="inc/tpl/admin.header.tpl"}
+{/capture}{include file="inc/admin.header.tpl"}
 
 <h2>{t}Embedded Subscription Forms{/t}</h2>
 
@@ -75,4 +75,4 @@ include('{$url.base}embed.form.php');
 
 </div>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

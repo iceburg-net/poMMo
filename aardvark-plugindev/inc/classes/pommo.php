@@ -1,22 +1,29 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /** 
  * Common class. Holds Configuration values, authentication state, etc.. (revived from session)
 */
 
 class Pommo {
-	var $_revision = 29; // poMMo's revision #
+	var $_revision = 33; // poMMo's revision #
 
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object
@@ -28,7 +35,10 @@ class Pommo {
 	var $_workDir; // poMMo's working (writable) directory (e.g. /home/www/site1/pommo/cache/)
 	var $_hostname; // WebServer hostname (e.g. www.site1.com) - null = autodetect
 	var $_hostport; // WebServer port (e.g. 80) - null = autodetect
+	var $_ssl; // bool - true if accessed via HTTPS
+	var $_http; // the "http(s)://hostname(:port)" full connection string
 	var $_language; // language to translate to (via Pommo::_T())
+	var $_slanguage; // the "session" language (if set)
 	var $_debug; // debug status, either 'on' or 'off'
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
 
@@ -39,7 +49,6 @@ class Pommo {
 	var $_useplugins = FALSE;	// main plugin switcher!
 	var $_plugindata;			// Contains plugins data needed after login process
 	//corinna
-	
 
 	// default constructor
 	function Pommo($baseDir) {
@@ -69,20 +78,23 @@ class Pommo {
 			Pommo::kill('Could not read config.php');
 
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
-		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
-		$this->_hostname = (empty($config['hostname'])) ? $_SERVER['HTTP_HOST'] : $config['hostname'];
 		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
+		$this->_logger->_verbosity = $this->_verbosity;
+		
+		// the regex strips port info from hostname
+		$this->_hostname = (empty($config['hostname'])) ? preg_replace('/:\d+$/i', '', $_SERVER['HTTP_HOST']) : $config['hostname'];
+		$this->_hostport = (empty($config['hostport'])) ? $_SERVER['SERVER_PORT'] : $config['hostport'];
+		$this->_ssl = (!isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) != 'on') ? false : true;
+		$this->_http = (($this->_ssl) ? 'https://' : 'http://') . $this->_hostname;
+		if ($this->_hostport != 80 && $this->_hostport != 443)
+			$this->_http .= ':'.$this->_hostport;
+			
 		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
-		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
-
+		$this->_slanguage = (defined('_poMMo_lang')) ? _poMMo_lang : false;
 
 		// Sets the variable TRUE/FALSE depending on text in config.php
 		$this->_useplugins = (!empty($config['useplugins']) AND  $config['useplugins']=='on') ? TRUE : FALSE; 
-
-		
-		// set logger verbosity
-		$this->_logger->_verbosity = $this->_verbosity;
 		
 		// include translation (l10n) methods if language is not English
 		$this->_l10n = FALSE;
@@ -133,7 +145,7 @@ class Pommo {
 		
 		// initialize database link
 		//WAS: $this->_dbo = @new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
-		//corinna
+		//corinna -> INSTALLER to generate tables
 		if ($this->_useplugins) { //AND Multiuser activated
 			$setPluginTables = TRUE;
 		} else {
@@ -141,7 +153,6 @@ class Pommo {
 		}
 		$this->_dbo = @new PommoDB($setPluginTables , $config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
 		//corinna
-
 
 		// turn off debugging if in user area
 		if($this->_section == 'user') {
@@ -152,7 +163,6 @@ class Pommo {
 		// if debugging is set in config.php, enable debugging on the database.
 		if ($this->_debug == 'on') 
 			$this->_dbo->debug(TRUE);
-
 
 		// ----------- PLUGINS ------------
 		// if plugins are enabled get additional plugin data with a db handler
@@ -173,8 +183,7 @@ class Pommo {
 			}
 			
 		} //plugin config load
-		
-		
+
 	} //preInit
 
 
@@ -186,74 +195,92 @@ class Pommo {
 	 *		session		:	explicity set session name. [default: null]
 	 * 		install		:	bypass loading of config/version checking [default: false]
      */
+
 	function init($args = array ()) {
-
-
-				$defaults = array (
-					'authLevel' => 1,
-					'keep' => FALSE,
-					'noSession' => FALSE,
-					'sessionID' => NULL,
-					'noDebug' => FALSE,
-					'install' => FALSE
-				);
+		
+		$defaults = array (
+			'authLevel' => 1,
+			'keep' => FALSE,
+			'noSession' => FALSE,
+			'sessionID' => NULL,
+			'noDebug' => FALSE,
+			'install' => FALSE
+		);
+	
+		// merge submitted parameters
+		$p = PommoAPI :: getParams($defaults, $args);
+		
+		// if debugging is set in config.php, enable debugging on the database.
+		if ($p['noDebug']) {
+			$this->_dbo->debug(FALSE);
+			$this->_debug = 'off';
 			
-				// merge submitted parameters
-				$p = PommoAPI :: getParams($defaults, $args);
-				
-				// if debugging is set in config.php, enable debugging on the database.
-				if ($p['noDebug']) {
-					$this->_dbo->debug(FALSE);
-					$this->_debug = 'off';
-					
-					// don't display PHP error messages [useful JSON ajax request]
-					if ($this->_verbosity > 1)
-						ini_set('display_errors', '0');
-				}
+			// don't display PHP error messages [useful JSON ajax request]
+			if ($this->_verbosity > 1)
+				ini_set('display_errors', '0');
+		}
+
+		// Bypass Reading of Config, SESSION creation, and authentication checks and return
+		//  if 'install' passed
+		if ($p['install'])
+			return;
+			
+		// read configuration data
+		$this->_config = PommoAPI :: configGetBase();
 		
-				// Bypass Reading of Config, SESSION creation, and authentication checks and return
-				//  if 'install' passed
-				if ($p['install'])
-					return;
-					
-				// read configuration data
-				$this->_config = PommoAPI :: configGetBase();
-				
-				
-				// Bypass SESSION creation, reading of config, authentication checks and return
-				//  if 'noSession' passed
-				if ($p['noSession'])
-					return;
 		
-				// start the session
-				if (!empty($p['sessionID']))
-					session_id($p['sessionID']);
-				
-				session_start();
-				
-				// generate unique session name
-				$key =& $this->_config['key'];
-				
-				if(empty($key))
-					$key = '123456';
-				
-				// create SESSION placeholder for if this is a new session
-				if (empty ($_SESSION['pommo'.$key])) {
-					$_SESSION['pommo'.$key] = array (
-						'data' => array (),
-						'state' => array (),
-						'username' => null //$this->_username,    //init empty session username
-					);
-				}
-				
-				$this->_session =& $_SESSION['pommo'.$key];
-				
-				// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
-				if (defined('_poMMo_support')) {
-					Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
-					$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
-				}
-				
+		// Bypass SESSION creation, reading of config, authentication checks and return
+		//  if 'noSession' passed
+		if ($p['noSession'])
+			return;
+
+		// start the session
+		if (!empty($p['sessionID']))
+			session_id($p['sessionID']);
+		$this->startSession();
+		
+		// generate unique session name
+		$key =& $this->_config['key'];
+		
+		if(empty($key))
+			$key = '123456';
+		
+		// create SESSION placeholder for if this is a new session
+		if (empty ($_SESSION['pommo'.$key])) {
+			$_SESSION['pommo'.$key] = array (
+				'data' => array (),
+				'state' => array (),
+				'username' => null
+			);
+		}
+		
+		$this->_session =& $_SESSION['pommo'.$key];
+		
+		// check for "session" language -- user defined language on the fly.
+		if ($this->_slanguage) 
+			$this->_session['slanguage'] = $this->_slanguage;
+			
+		if(isset($this->_session['slanguage'])) {
+			if($this->_session['slanguage'] == 'en')
+				$this->_l10n = FALSE;
+			else {
+				$this->_l10n = TRUE;
+				Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
+				PommoHelperL10n::init($this->_session['slanguage'], $this->_baseDir);
+			}
+			$this->_slanguage = $this->_session['slanguage'];
+		}
+		
+		// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
+		if (defined('_poMMo_support')) {
+			Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
+			$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
+		}
+		
+		/*// check authentication levels
+		$this->_auth = new PommoAuth(array (
+			'requiredLevel' => $p['authLevel']
+		));*/
 				//corinna
 				if ($this->_useplugins AND $this->_plugindata['pluginmultiuser']) {
 						Pommo::requireOnce($this->_baseDir.'plugins/lib/auth/class.multauth.php');
@@ -268,22 +295,13 @@ class Pommo {
 						));
 						//brice
 				}
-		
-				// clear SESSION 'data' unless keep is passed.
-				// TODO --> phase this out in favor of page state system? 
-				// -- add "persistent" flag & complicate state initilization...
-				if (!$p['keep'])
-					$this->_session['data'] = array ();
 
-
-/*
-echo "<div style='color:blue;'>-----begin-----<br>POMMO"; print_r($pommo->_auth); echo "<br>"; print_r($pommo->_auth); echo "<br>"; 
-echo "SESSION: "; print_r($_SESSION); echo "</div>-----end-----<br><br>";
-*/
-
-	} //init
-
-
+		// clear SESSION 'data' unless keep is passed.
+		// TODO --> phase this out in favor of page state system? 
+		// -- add "persistent" flag & complicate state initilization...
+		if (!$p['keep'])
+			$this->_session['data'] = array ();
+	}
 	
 	// reload base configuration from database
 	function reloadConfig() {
@@ -427,6 +445,13 @@ echo "SESSION: "; print_r($_SESSION); echo "</div>-----end-----<br><br>";
 			require ($file);
 			$files[$file] = TRUE;
 		}
+	}
+	
+	function startSession($name = null) {
+		static $start=false;
+		if (!$start)
+			session_start();
+		$start = true;
 	}
 }
 ?>

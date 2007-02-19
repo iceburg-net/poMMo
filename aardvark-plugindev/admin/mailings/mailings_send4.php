@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
  
 /**********************************
 	STARTUP ROUTINES
@@ -41,7 +48,9 @@ Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 $serial = (empty ($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 $relayID = (empty ($_GET['relayID'])) ? 1 : $_GET['relayID'];
 $code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
+$spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);
 $test = (empty($_GET['testMailing'])) ? false : true;
+
 
 /**********************************
 	INITIALIZATION METHODS
@@ -55,6 +64,7 @@ $logger = & $pommo->_logger;
 // NOTE: Be extra careful to check the success of queries/methods!
 $dbo->dieOnQuery(FALSE); 
 
+$mailingID = PommoMailCtl::getCurID(); // placeholder for when we'll add support for simultaneous mailings & require this var -- gets overwritten @ mailing initialization. 
 
 if (!$skipSecurity && $relayID < 1 && $relayID > 4)
 	PommoMailCtl::kill('Mailing stopped. Bad RelayID.', TRUE);
@@ -64,11 +74,14 @@ if($maxRunTime < 20) {
 	PommoMailCtl::kill('PHP Max Runtime is too low! Set higher.', TRUE);
 }
 
-$input = $pommo->get('mailingData');
-
-if (empty($input['config'])) {
+if ($spawn > 0)
+	$logger->addMsg("Background mailer re-spawned (#$spawn).", 2);
+else
 	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 3);
+
+$input = $pommo->get('mailingData');
 	
+if (empty($input['config'])) {
 	// get list exchanger & smtp values. If more than 1 smtp relay exist, enter "multimode"
 	$input['config'] = PommoAPI::configGet(array (
 		'list_exchanger',
@@ -111,9 +124,6 @@ if (empty($input['config'])) {
 
 	$pommo->set(array('mailingData' => array('config' => $config)));
 } 
-else {
-	$logger->addMsg(Pommo::_T('Background mailer spawned.'), 2);
-}
 
 $config =& $input['config'];
 
@@ -143,11 +153,12 @@ if (!$skipSecurity && $code != $mailing['code'])
 PommoMailCtl::poll();
 
 
-// If we're in multimode, spawn scripts (unless this is a spawn!)
-if ($config['multimode'] && !empty($_GET['spawn']) && !$test) {
+// If we're in multimode, spawn scripts (unless this is a respawn!)
+if ($config['multimode'] && $spawn == 0 && !$test) {
 	for ($i = 1; $i < 5; $i++) {
 		if(!empty($config['smtp_'.$i])) {
-			PommoMailCtl::respawn(array('spawn' => 'TRUE', 'relay_id' => $i));
+			$spawn++;
+			PommoMailCtl::respawn(array('code' => $code, 'relayID' => $i, 'serial' => $serial, 'spawn' => $spawn));
 			sleep(3); // prevent a shared throttler race
 		}
 	}
@@ -212,7 +223,7 @@ while(empty($subscribers)) {
 	
 	if((time() - $start) > $maxRunTime) {
 		$mailer->SmtpClose();
-		PommoMailCtl::respawn();
+		PommoMailCtl::respawn(array('code' => $code, 'relayID' => $relayID, 'serial' => $serial, 'spawn' => $spawn));
 		PommoMailCtl::kill('Max runtime reached. Respawning...');
 	}
 	
@@ -335,6 +346,6 @@ if ($test) {
 
 $mailer->SmtpClose();
 PommoMailCtl::update($sent, $failed, $emailHash);
-PommoMailCtl::respawn();
+PommoMailCtl::respawn(array('code' => $code, 'relayID' => $relayID, 'serial' => $serial, 'spawn' => $spawn));
 PommoMailCtl::kill('Queue empty or Runtime reached. Respawning...');
 ?>

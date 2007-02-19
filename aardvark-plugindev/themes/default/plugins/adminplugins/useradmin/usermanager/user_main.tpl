@@ -23,13 +23,13 @@
 {/capture}
 
 
-{include file="inc/tpl/admin.header.tpl"} {*sidebar='off'*}
+{include file="inc/admin.header.tpl"} {*sidebar='off'*}
 
 
 <h2>{t}poMMo User Manager{/t}</h2>
 
 {*<div id="boxMenu">*}
-	{include file="inc/tpl/messages.tpl"}
+	{include file="inc/messages.tpl"}
 
 
 <fieldset>
@@ -200,4 +200,4 @@
 	
 </div> <!--plugincontent-->
 			
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

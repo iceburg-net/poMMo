@@ -1,8 +1,9 @@
 <input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}" />
+<input type="hidden" id="fwRuleType" name="rule_type" value="{$type}" />
 <input type="hidden" id="fwMatchID" name="field_id" value="{$field.id}" />
 
 <p>
-{t}Add new filter:{/t} 
+{t}Add new rule:{/t} 
 
 {if $field.type == 'date'}
 	{t}value must be a date (mm/dd/yyyy){/t}
@@ -16,7 +17,7 @@
 {/if}
 </p>
 
-<table summary="filter setup">
+<table summary="rule setup">
 <tbody>
 <tr>
 <td valign="top">
@@ -119,10 +120,11 @@ $('#fwSubmit').oneclick(function() {
 	var _logic = $('#fwLogic').val();
 	var _group = $('#fwGroupID').val();
 	var _match = $('#fwMatchID').val();
+	var _type = $('#fwRuleType').val();
 	var _value = $('#fwValue input[@type=text], #fwValue select').serialize();
 
-	$.post("ajax/filter_update.php",
-		{ logic: _logic, group: _group, match: _match, value: _value },
+	$.post("ajax/rule_update.php",
+		{ logic: _logic, group: _group, match: _match, value: _value, type: _type },
 		function(out) {
 			var name = $('#filterWindow a.fwClose').attr('alt');
 			$('#newFilter select').each(function() { $(this).show().val(''); });
