@@ -44,7 +44,7 @@
 
 <div>
 <br clear="both" />
-<a href="ajax/config_throttle.php" class="jqModal"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Set mailing throttle values{/t}</a>
+<a href="ajax/config_throttle.php" id="throttleTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Set mailing throttle values{/t}</a>
 <span class="notes">{t}(controls mails per second, bytes per second, and domain limits){/t}</span>
 <br clear="both" />
 </div>
@@ -72,7 +72,6 @@
 
 </form>
 
-
 {literal}
 <script type="text/javascript">
 $().ready(function(){
@@ -80,7 +79,8 @@ $().ready(function(){
 		overlay: 0,
 		ajax: '@href',
 		target: '.jqmdMSG',
-		wrapClass: 'throttleWrap'
+		wrapClass: 'throttleWrap',
+		trigger: '#throttleTrigger'
 	}).jqDrag('div.jqmdTC');
 });
 </script>

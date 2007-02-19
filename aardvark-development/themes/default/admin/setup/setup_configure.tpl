@@ -54,17 +54,19 @@
 </div>
 <!-- end content (no footer)-->
 
-{include file="inc/dialog.tpl" dialogID="throttleWindow" dialogTitle=$throttleTitle dialogDrag=true dialogClass="throttleWindow" dialogBodyClass="jqmdTall"}
-{literal}
+{include file="inc/dialog.tpl" dialogID="throttleWindow" dialogTitle=$throttleTitle dialogDrag=true dialogClass="configWindow" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="smtpWindow" dialogTitle=$smtpTitle dialogDrag=true dialogClass="configWindow" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="testWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="configWindow"}
 
+{literal}
 <style>
-div.throttleWrap {
+div.configWrap {
 	position: absolute;
 	top: 30%;
 	left: 50%;
 }
 
-div.throttleWindow {
+div.configWindow {
 	left: -240px;
 	width: 480px;
 }
