@@ -7,15 +7,67 @@
 {fv validate="activate_sub"}
 {fv validate="activate_msg"}
 {fv validate="unsubscribe_suc"}
-
-{*
-<p>NOTIFICATION (email address(es))
-		(check) PENDING
-		(check) SUBSCRIBE
-		(check) UNSUBSCRIBE
-		(check) UPDATE</p> *}
+{fv validate="notify_email"}
+{fv validate="notify_subscribe"}
+{fv validate="notify_unsubscribe"}
+{fv validate="notify_update"}
+{fv validate="notify_pending"}
 
 <form action="{$smarty.server.PHP_SELF}" method="post">
+<fieldset>
+<legend>{t}notifications{/t}</legend>
+
+{t}Administrators can be sent a notification of subscription list changes.{/t}
+
+<div>
+<label for="notify_email">{t}Notification email(s):{/t}{fv message="notify_email"}</label>
+<input type="text" name="notify_email" value="{$notify_email|escape}" />
+<span class="notes">{t}(Notifications will be sent to the above address(es). Multiple addresses can be entered -- seperate with a comma.){/t}</span>
+</div>
+
+<div>
+<label for="notify_subject">{t}Subject Prefix:{/t}{fv message="notify_subject"}</label>
+<input type="text" name="notify_subject" value="{$notify_subject|escape}" />
+<span class="notes">{t}(The subject of Notification Mails will begin with this){/t}</span>
+</div>
+
+<div>
+<label for="notify_subscribe">{t escape=no 1="<strong>$t_subscribe</strong>"}Notify on %1{/t}{fv message="notify_subscribe"}</label>
+<input type="radio" name="notify_subscribe" value="on"{if $notify_subscribe == 'on'} checked="checked"{/if} /> {t}on{/t}
+<input type="radio" name="notify_subscribe" value="off"{if $notify_subscribe != 'on'} checked="checked"{/if} /> {t}off{/t}
+<span class="notes">{t}(sent upon successful subscription){/t}</span>
+</div>
+
+<div>
+<label for="notify_unsubscribe">{t escape=no 1="<strong>$t_unsubscribe</strong>"}Notify on %1{/t}{fv message="notify_unsubscribe"}</label>
+<input type="radio" name="notify_unsubscribe" value="on"{if $notify_unsubscribe == 'on'} checked="checked"{/if} /> {t}on{/t}
+<input type="radio" name="notify_unsubscribe" value="off"{if $notify_unsubscribe != 'on'} checked="checked"{/if} /> {t}off{/t}
+<span class="notes">{t}(sent upon successful unsubscription){/t}</span>
+</div>
+
+<div>
+<label for="notify_update">{t escape=no 1="<strong>$t_update</strong>"}Notify on %1{/t}{fv message="notify_update"}</label>
+<input type="radio" name="notify_update" value="on"{if $notify_update == 'on'} checked="checked"{/if} /> {t}on{/t}
+<input type="radio" name="notify_update" value="off"{if $notify_update != 'on'} checked="checked"{/if} /> {t}off{/t}
+<span class="notes">{t}(sent upon subscriber update){/t}</span>
+</div>
+
+<div>
+<label for="notify_pending">{t escape=no 1="<strong>$t_pending</strong>"}Notify on %1{/t}{fv message="notify_pending"}</label>
+<input type="radio" name="notify_pending" value="on"{if $notify_pending == 'on'} checked="checked"{/if} /> {t}on{/t}
+<input type="radio" name="notify_pending" value="off"{if $notify_pending != 'on'} checked="checked"{/if} /> {t}off{/t}
+<span class="notes">{t}(sent upon subscription attempt){/t}</span>
+</div>
+
+
+<div class="buttons">
+<input type="submit" value="{t}Update{/t}" />
+<img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
+</div>
+
+<div class="output alert">{if $output}{$output}{/if}</div>
+
+</fieldset>
 
 <fieldset>
 <legend>{t}subscribe{/t}</legend>

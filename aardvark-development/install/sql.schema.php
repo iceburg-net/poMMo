@@ -34,6 +34,7 @@ INSERT INTO :::config::: VALUES ('throttle_BPS', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
+INSERT INTO :::config::: VALUES ('notices', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('version', 'Aardvark PR14.4.1', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');

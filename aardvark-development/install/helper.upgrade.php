@@ -134,6 +134,10 @@ function PommoRevUpgrade($rev) {
 			"ALTER TABLE {$dbo->table['group_rules']} ADD `type` TINYINT( 1 ) NOT NULL DEFAULT '0'"
 			,"Adding OR support to Group Rules")) return false;
 			
+			if (!PommoInstall::incUpdate(10,
+			"INSERT INTO {$dbo->table['config']} (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES ('notices', '', '', 'off', 'off')"
+			,"Enabling Notification of Subscriber List Changes")) return false;
+			
 		default: 
 			return false;
 	} 

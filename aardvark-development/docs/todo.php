@@ -20,6 +20,8 @@
 die();
 ?>
 
+++ jqModal warning of !firefox on first run 
+write to jQ list w/ elegance of unobtrusive accordion load in config
 
 http://www.pommo.org/community/viewtopic.php?id=292
 
@@ -27,12 +29,7 @@ http://www.pommo.org/community/viewtopic.php?id=288
 
 PR15
 ----
-
-+ Groups displayed alphabetically
-+ tabbed config
-+ test mail processor from config
 + message templates
-+ admin notifications
 +++ Set sockettimeout in spawn function
 
 
@@ -60,16 +57,9 @@ PR15
 		MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
 
 	SHORT TERM: 
-	  (API) Replace all prototype/scriptaculous/lightbox with jQuery equivelent
-	  
 	  (API) Maintenance : clean out old/not utilized activations from subscriber_update
 	  
 	  (feature) add message templating
-	  
-	  (feature) Add Admin Notifications (assignable email addresse(s)) of a) new subscriptions b) subscription updates c) unsubscriptions & d) newsletter sent.
-	 
-	  (enhancement) Setup > Config tabbed layout
-	  	Test mailing exchanger from setup @ configure page
 	  	
 	  ADD Support Page (next to admin page in main menu bar)
 		+ Enhanced support library

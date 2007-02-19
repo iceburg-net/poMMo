@@ -59,7 +59,10 @@ if(isset($_POST['logout'])) {
 // make sure email is activated
 if (!PommoPending::actCodeTry(false, $subscriber['email'])) 
 	Pommo::redirect('update_activate.php?Email='.$subscriber['email']);
+	
 
+$config = PommoAPI::configGet(array('notices'));
+$notices = unserialize($config['notices']);
 
 if (!isset($_POST['d']))
 	$smarty->assign('d', $subscriber['data']); 
@@ -92,6 +95,10 @@ if (!empty ($_POST['update'])) {
 				} else {
 					Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 					PommoHelperMessages::sendConfirmation($newsub['email'], $code, 'update');
+					
+					if (isset($notices['update']) && $notices['update'] == 'on')
+						PommoHelperMessages::notify($notices, $newsub, 'update');
+					
 					$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 					PommoPending::actCodeDie($subscriber['email']);
 				}
@@ -100,8 +107,13 @@ if (!empty ($_POST['update'])) {
 		else {
 			if (!PommoSubscriber::update($newsub))
 				$logger->addErr('Error updating subscriber.');
-			else
+			else {
 				$logger->addMsg(Pommo::_T('Your records have been updated.'));
+				
+				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+				if (isset($notices['update']) && $notices['update'] == 'on')
+					PommoHelperMessages::notify($notices, $newsub, 'update');	
+			}
 		}
 	}
 }
@@ -117,6 +129,12 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		$dbvalues = PommoAPI::configGet(array('messages'));
 		$messages = unserialize($dbvalues['messages']);
 		$logger->addMsg($messages['unsubscribe']['suc']);
+		
+		if (isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') {
+			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+			PommoHelperMessages::notify($notices, $subscriber, 'unsubscribe');
+		}
+		
 		$smarty->assign('unsubscribe', TRUE);
 		PommoPending::actCodeDie($subscriber['email']);
 	}

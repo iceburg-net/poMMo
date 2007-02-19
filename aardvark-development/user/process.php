@@ -83,12 +83,14 @@ if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'], arra
 $config = PommoAPI::configGet(array (
 	'site_success', // URL to redirect to on success, null is us (default)
 	'site_confirm', // URL users will see upon subscription attempt, null is us (default)
-	'list_confirm' // Requires email confirmation
+	'list_confirm', // Requires email confirmation
+	'notices'
 ));
+$notices = unserialize($config['notices']);
+Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 
 if ($config['list_confirm'] == 'on') { // email confirmation required. 
 	// add user as "pending"
-	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 	
 	$subscriber['pending_code'] = PommoHelper::makeCode();
 	$subscriber['pending_type'] = 'add';
@@ -102,6 +104,9 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	else {
 		
 		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
+			if (isset($notices['pending']) && $notices['pending'] == 'on')
+				PommoHelperMessages::notify($notices, $subscriber, 'pending');
+			
 			if ($config['site_confirm'])
 				Pommo::redirect($config['site_confirm']);
 			$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
@@ -121,6 +126,9 @@ else { // no email confirmation required
 		$smarty->assign('back', TRUE);
 	}
 	else {
+		if (isset($notices['subscribe']) && $notices['subscribe'] == 'on')
+				PommoHelperMessages::notify($notices, $subscriber, 'subscribe');
+				
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);
 		
