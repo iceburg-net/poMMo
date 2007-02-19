@@ -90,7 +90,6 @@
 {literal}
 <script type="text/javascript">
 
-
 $().ready(function(){
 	
 	assignForm($('#tbody')[0]);

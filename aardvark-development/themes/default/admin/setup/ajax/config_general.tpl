@@ -56,13 +56,16 @@
 <option value="mail"{if $list_exchanger == 'mail'} selected="selected"{/if}>{t}PHP Mail Function{/t}</option>
 <option value="smtp"{if $list_exchanger == 'smtp'} selected="selected"{/if}>SMTP Relay</option>
 </select>
+&nbsp;&nbsp; - &nbsp;&nbsp; <a href="ajax/test_exchanger.php" id="testTrigger">{t}Test Exchanger{/t}</a>
 <span class="notes">{t}(Select Mail Exchanger){/t}</span>
 </div>
 
 {if $list_exchanger == 'smtp'}
 <div>
-<a href="setup_smtp.php"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
+<br clear="both" />
+<a href="ajax/config_smtp.php" id="smtpTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
 <span class="notes">{t}(configure SMTP relays){/t}</span>
+<br clear="both" />
 </div>
 {/if}
 
@@ -71,3 +74,25 @@
 <div class="output alert">{if $output}{$output}{/if}</div>
 
 </form>
+
+{literal}
+<script type="text/javascript">
+$().ready(function(){
+	$('#smtpWindow').jqm({
+		overlay: 0,
+		ajax: '@href',
+		target: '.jqmdMSG',
+		wrapClass: 'configWrap',
+		trigger: '#smtpTrigger'
+	}).jqDrag('div.jqmdTC');
+	
+	$('#testWindow').jqm({
+		overlay: 0,
+		ajax: '@href',
+		target: '.jqmdMSG',
+		wrapClass: 'configWrap',
+		trigger: '#testTrigger'
+	}).jqDrag('div.jqmdTC');
+});
+</script>
+{/literal}
