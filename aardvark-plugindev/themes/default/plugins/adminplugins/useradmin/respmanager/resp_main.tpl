@@ -23,7 +23,7 @@
 {/capture}
 
 
-{include file="inc/tpl/admin.header.tpl"} {*sidebar='off'*}
+{include file="inc/admin.header.tpl"} {*sidebar='off'*}
 
 
 <h2>{t}Responsible Persons Management{/t}</h2>
@@ -41,7 +41,7 @@ recive mails about A & C except when he is grouped in this other groups too) he 
 directly with "his" Manager B.
 
 {*<div id="boxMenu">*}
-	{include file="inc/tpl/messages.tpl"}
+	{include file="inc/messages.tpl"}
 
 
 
@@ -291,4 +291,4 @@ directly with "his" Manager B.
 
 	</div> <!-- plugincontent -->
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

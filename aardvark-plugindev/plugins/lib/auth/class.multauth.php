@@ -108,6 +108,7 @@ class MultAuth {
 				$_SESSION['pommo'.$key]['md5pass'] = $md5pass;
 				$_SESSION['pommo'.$key]['id'] = $this->user->getUserID();
 				$_SESSION['pommo'.$key]['permlvl'] = $this->user->getPermissionLevel();
+				//TODO!!!!! ändern in User files!!
 				$dbhelper->dbWriteLastLogin($username);
 				$dbhelper->dbIncreaseLoginTries($username);
 				$this->authenticated = TRUE;

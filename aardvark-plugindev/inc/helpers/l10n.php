@@ -1,47 +1,78 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 class PommoHelperL10n {
 	function init($language, $baseDir) {
 
 		if (!is_file($baseDir . 'language/' . $language . '/LC_MESSAGES/pommo.mo'))
 			Pommo::kill('Unknown Language (' .$language . ')');
-
-		// check for gettext support
-		if (!function_exists('gettext'))
-			Pommo::kill('No PHP Gettext Support for non-English (' .$language . ') translation!');
-
-		// set the locale
-		if (!PommoHelperL10n::_setLocale(LC_MESSAGES, $language)) {
 			
-			if (!strpos($language,'_')) {
-			$language = $language.'_'.strtoupper($language);
-			}
-			
-			Pommo::kill('Locale for (' .$language . ') not supported by local system');
+		// if LC_MESSAGES is not available.. make it (helpful for win32)
+		if (!defined('LC_MESSAGES')) define('LC_MESSAGES', 6);
+
+		// load gettext emulation layer if PHP is not compiled w/ gettext support
+		if (!function_exists('gettext')) {
+			Pommo::requireOnce($baseDir.'inc/lib/gettext/gettext.php');
+			Pommo::requireOnce($baseDir.'inc/lib/gettext/gettext.inc');
 		}
-
-		// set gettext environment
-		$domain = 'pommo';
-		bindtextdomain($domain, $baseDir . 'language');
-		textdomain($domain);
-		if (function_exists('bind_textdomain_codeset')) {
-			bind_textdomain_codeset($domain, 'UTF-8');
+		
+		// set the locale
+		if (!PommoHelperL10n::_setLocale(LC_MESSAGES, $language, $baseDir)) {
+			
+			// *** SYSTEM LOCALE COULD NOT BE USED, USE EMULTATION ****
+			Pommo::requireOnce($baseDir.'inc/lib/gettext/gettext.php');
+			Pommo::requireOnce($baseDir.'inc/lib/gettext/gettext.inc');
+			if (!PommoHelperL10n::_setLocaleEmu(LC_MESSAGES, $language, $baseDir))
+				Pommo::kill('Error setting up language translation!');
+		}
+		else {
+		
+			// *** SYSTEM LOCALE WAS USED ***
+			if (!defined('_poMMo_gettext')) {	
+				// set gettext environment
+				$domain = 'pommo';
+				bindtextdomain($domain, $baseDir . 'language');
+				textdomain($domain);
+				if (function_exists('bind_textdomain_codeset'))
+					bind_textdomain_codeset($domain, 'UTF-8');
+			}
 		}
 	}
+	
+	function _setlocaleEmu($category, $locale, $baseDir) {
+		$domain = 'pommo';
+		$encoding = 'UTF-8';
 
-	// taken from Gallery2
-	function _setlocale($category, $locale) {
+		T_setlocale($category, $locale);
+		T_bindtextdomain($domain, $baseDir . '/language');
+		T_bind_textdomain_codeset($domain, $encoding);
+		T_textdomain($domain);
+		
+		return true;
+	}
+
+	// setlocale modified from from Gallery2
+	function _setlocale($category, $locale, $baseDir) {
+		
+		if (defined('_poMMo_gettext'))
+			return PommoHelperL10n::_setLocaleEmu($category, $locale, $baseDir);
 		
 		// append _LC to locale
 		if (!strpos($locale,'_')) {
@@ -84,10 +115,14 @@ class PommoHelperL10n {
 	}
 
 	function translate($msg) {
+		if (defined('_poMMo_gettext'))
+			return T_($msg);
 		return gettext($msg);
 	}
 
 	function translatePlural($msg, $plural, $count) {
+		if (defined('_poMMo_gettext'))
+			return T_ngettext($msg, $plural, $count);
 		return ngettext($msg, $plural, $count);
 	}
 

@@ -1,4 +1,4 @@
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Plugin Configuration{/t}</h2>
 
@@ -15,7 +15,7 @@
 
 <!--</div>--> <!--boxmenu-->
 
-	{include file="inc/tpl/messages.tpl"}
+	{include file="inc/messages.tpl"}
 	
 	<div id="plugincontent">
 
@@ -201,4 +201,4 @@
 	</div> <!-- plugincontent -->
 
 <!--</div>--> <!--boxmenu closed at the top-->
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

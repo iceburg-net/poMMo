@@ -1,19 +1,30 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 // common SQL clauses
+// REWRITE ALL...
 
 class PommoSQL {
+	
+	
+	
 	// returns where clauses as array
 	// accepts a attribute filtering array.
 	//   array_key == column, value is filter table filter table (subscriber_pending, subscriber_data, subscribers)
@@ -23,6 +34,8 @@ class PommoSQL {
 	//   array('status' => array('equal: active'))
 	// accepts a table prefix (e.g. WHERE prefix.column = 'value')
 	// returns SQL WHERE + JOIN clauses (array)
+	
+	// DEPRECIATED....
 	function & fromFilter(&$in, $p = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -87,6 +100,7 @@ class PommoSQL {
 	}
 	
 	// get the column(s) logic + value(s)
+	// DEPRECIATED....
 	function getLogic(&$col, &$val, &$filters) {
 		if (is_array($val)) {
 			foreach($val as $v)
@@ -104,5 +118,199 @@ class PommoSQL {
 			}
 		}
 	}
+	
+	
+				
+	// A group "rules" array consists of the filtering rules which make up a group
+	//  it resembles:
+	//	$rules[rule_id] = array (
+	//		'field_id' => $row['field_id'],
+  	//		'logic' => $row['logic'],
+	//		'value' => $row['value'],
+	//	);
+	
+	
+	// seperates and, or, and group inclusion/exclusion rules
+	// accepts a group rules array
+	// returns a seperated rules array
+	function & sortRules(&$rules) {
+		$o = array(
+			'and' => array(),
+			'or' => array(),
+			'include' => array(),
+			'exclude' => array()
+		);
+		
+		foreach($rules as $id => $r) {
+			
+			if($r['or'])
+				$o['or'][$id] = $r;
+			else 
+			switch ($r['logic']) {
+				case 'is_in':
+					$o['include'][$id] = $r['value'];
+					break;
+				case 'not_in':
+					$o['exclude'][$id] = $r['value'];
+					break;
+				default:
+					$o['and'][$id] = $r;
+					break;
+			}		
+		}
+		return $o;
+	}
+	
+	
+	// LOGIC is either; "is, is not, less, greater, true, false, NOT IN, IN"
+	
+	// A "logic array" resembles:
+	//  $logic[field_id] = array(
+	//		[logic] => array(values)
+	//		is_in => array(1,2)
+	//	);
+	
+	// accepts a group rules array
+	// returns a logic array
+	function & sortLogic(&$rules) {
+		$o = array();
+		
+		foreach($rules as $r) {
+			if(!isset($o[$r['field_id']]))
+				$o[$r['field_id']] = array();
+			if(!isset($o[$r['field_id']][$r['logic']]))
+				$o[$r['field_id']][$r['logic']] = array();
+			array_push($o[$r['field_id']][$r['logic']], $r['value']);
+		}
+		
+		return $o;
+	}
+	
+	// accepts a logic array
+	// returns an array or SQL sub queries
+	function & getSubQueries(&$in) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$o = array();
+		foreach($in as $fid => $a) {
+			$sql = "subscriber_id IN
+				(select subscriber_id from {$dbo->table['subscriber_data']} WHERE field_id=$fid ";
+				
+			foreach($a as $logic => $v) {
+				switch ($logic) {
+						case "is" :
+							$sql.= $dbo->prepare("[ AND value IN (%Q)]",array($v)); break;
+						case "not":
+							$sql.= $dbo->prepare("[ AND value NOT IN (%Q)]",array($v)); break;
+						case "less":
+							$sql.= $dbo->prepare("[ AND value < %I ]",array($v)); break;
+						case "greater":
+							$sql.= $dbo->prepare("[ AND value > %I ]",array($v)); break;
+						case "true":
+							$sql.= " AND value = 'on'"; break;
+						case "false":
+							$sql.= " AND value != 'on'"; break;
+					}
+			}
+			$sql .= ")";
+			array_push($o,$sql);
+		}
+		return $o;
+	}
+	
+	// generate the group SQL subselects
+	// accepts a group object
+	function groupSQL(&$group, $tally = false, $status = 1) {
+		// used to prevent against group include/exclude recursion
+		static $groups;
+		if (!isset ($groups[$group['id']])) 
+			$groups[$group['id']] = TRUE;
+		
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		/*
+		SELECT count(subscriber_id)
+			from subscribers 
+			where 
+			status ='1' 
+			AND ( // base group
+			subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =3 and value IN ('on'))
+			AND subscriber_id in 
+				(select subscriber_id from subscriber_data  where  field_id =4 and value NOT IN ('lemur'))
+			OR subscriber_id in
+				(select subscriber_id from subscriber_data  where  field_id =5 and value NOT IN ('on'))
+			)
+			AND subscriber_ID NOT IN(  // exclude group
+				SELECT subscriber_id from subscribers where status ='1' AND (
+					subscriber_id in
+						(select ... zzz)
+					AND subsriber_id in
+						(select ... zzz)
+					OR subscriber_id in
+						(select ... zzz)
+				)
+			)
+			OR subscriber_ID IN(  // include group
+				SELECT subscriber_id from subscribers where status ='1' AND (
+					subscriber_id in
+						(select ... zzz)
+					AND subsriber_id in
+						(select ... zzz)
+					OR subscriber_id in
+						(select ... zzz)
+				)
+			)
+			*/
+			
+		$rules = PommoSQL::sortRules($group['rules']);
+		$ands = PommoSQL::getSubQueries(PommoSQL::sortLogic($rules['and']));
+		$ors = (empty($rules['or'])) ? 
+			array() : 
+			PommoSQL::getSubQueries(PommoSQL::sortLogic($rules['or']));
+		
+		$sql = ($tally) ?
+			'SELECT count(subscriber_id) ' :
+			'SELECT subscriber_id ';
+	
+		$sql .= "
+			FROM {$dbo->table['subscribers']}
+			WHERE status=".intval($status);
+			
+		if(!empty($ands)) {
+			$sql .= " AND (\n";
+		
+			foreach($ands as $k => $s) {
+				if($k != 0)
+					$sql .= "\n AND ";
+				$sql .= $s;
+			}
+			foreach($ors as $s)
+				$sql .= "\n OR $s";
+				
+			$sql .="\n)";
+		}
+		
+		foreach($rules['exclude'] as $gid) {
+			if (!isset($groups[$gid])) {
+				$sql .= "\nAND subscriber_id NOT IN (\n";
+				$sql .= PommoSQL::groupSQL(current(PommoGroup::get(array('id' => $gid))));
+				$sql .= "\n)";
+			}
+		}
+		
+		foreach($rules['include'] as $gid) {
+			if (!isset($groups[$gid])) {
+				$sql .= "\nOR subscriber_id IN (\n";
+				$sql .= PommoSQL::groupSQL(current(PommoGroup::get(array('id' => $gid))));
+				$sql .= "\n)";
+			}
+		}
+		
+		return $sql;
+	}
+	
 }
 ?>

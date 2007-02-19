@@ -34,11 +34,12 @@ INSERT INTO :::config::: VALUES ('throttle_BPS', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
+INSERT INTO :::config::: VALUES ('notices', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR14.3', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR14.4.1', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');
 INSERT INTO :::config::: VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on');
-INSERT INTO :::config::: VALUES ('revision', '28', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '32', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
@@ -58,13 +59,14 @@ CREATE TABLE :::fields::: (
 
 -- GROUP_CRITERIA  
 
-CREATE TABLE :::group_criteria::: (
-  `criteria_id` int(10) unsigned NOT NULL auto_increment,
+CREATE TABLE :::group_rules::: (
+  `rule_id` int(10) unsigned NOT NULL auto_increment,
   `group_id` int(10) unsigned NOT NULL default '0',
   `field_id` tinyint(3) unsigned NOT NULL default '0',
+  `type` tinyint(1) NOT NULL default '0' COMMENT '0: OFF, (and), 1: ON (or)',  
   `logic` enum('is','not','greater','less','true','false','is_in','not_in') NOT NULL,
   `value` text,
-  PRIMARY KEY  (`criteria_id`),
+  PRIMARY KEY  (`rule_id`),
   KEY `group_id` (`group_id`)
 );
 

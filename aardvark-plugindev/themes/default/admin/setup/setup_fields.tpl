@@ -4,7 +4,7 @@
 {* Styling of CSS table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Fields Page{/t}</h2>
 
@@ -12,7 +12,7 @@
 
 <form method="post" action="">
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <fieldset>
 <legend>{t}Fields{/t}</legend>
@@ -90,8 +90,11 @@
 
 </div>
 
-<p>{t escape=no}Fields in <strong>bold</strong> are required.{/t}</p>
-<p>{t escape=no 1='<span class="green">' 2='</span>'}Fields in %1green%2 are active.{/t}</p>
+<p>
+{t escape=no 1='<strong>' 2='</strong>'}%1Bold%2 fields are required.{/t} 
+{t escape=no 1='<span class="green">' 2='</span>'}%1Green%2 fields are active.{/t}
+</p>
+
 
 
 {literal}
@@ -131,7 +134,6 @@ $().ready(function(){
 		accept : 'sortable',
 		handle: 'img.handle',
 		opacity: 0.8,
-		revert: true,
 		tolerance: 'intersect',
 		onStop: function() {
 			var s = $.SortSerialize('grid');
@@ -141,9 +143,9 @@ $().ready(function(){
 	pommoSort.init();
 
 });
-
+// old prototype code
 //Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_fieldOrder.php', {onComplete:function(request){new Effect.Highlight('fieldOrder',{});}, parameters:Sortable.serialize('fieldOrder'), evalScripts:true, asynchronous:true})}});
 </script>
 {/literal}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 class PommoMailCtl {
  	
@@ -252,6 +259,7 @@ class PommoMailCtl {
 		if(!is_numeric($relay) || $relay == 0)
 			return array();
 		
+		// release from the queue (only if serials match)
 		if(!PommoMailCtl::queueRelease($relay))
 			PommoMailCtl::kill('Unable to release queue.');
 		
@@ -279,7 +287,17 @@ class PommoMailCtl {
 	// returns success (bool)
 	function queueRelease($relay) {
 		global $pommo;
+		global $mailingID;
+		global $skipSecurity;
+		global $serial;
 		$dbo =& $pommo->_dbo;
+		$logger =& $pommo->_logger;
+		
+		// make sure the serial matches before releasing -- this prevents double sending
+		//  it is helpful when a user resumes/restarts/dethaws a mailing while a background
+		//  script is currently processing (which will have a queue checked out)
+		
+		// code removed...
 		
 		$query = "
 			UPDATE ".$dbo->table['queue']."
@@ -319,17 +337,16 @@ class PommoMailCtl {
 	}
 	
 	
-	function respawn($p = array()) {
+	function respawn($p = array(), $page = false) {
 		global $pommo;
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 		
-		global $relayID;
-		global $serial;
-		global $code;
-		$defaults = array('relayID' => $relayID, 'serial' => $serial, 'spawn' => 'TRUE', 'code' => $code);
+		$defaults = array('code' => null, 'relayID' => null, 'serial' => null, 'spawn' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
-		PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$p['code'].'&relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
+		if (!$page)
+			$page = $pommo->_baseUrl.'admin/mailings/mailings_send4.php';
+			
+		return PommoMailCtl::spawn($page.'?securityCode='.$p['code'].'&relayID='.$p['relayID'].'&serial='.$p['serial'].'&spawn='.$p['spawn']);
 	}
 	
 	// spawns a page in the background, used by mail processor.
@@ -342,17 +359,17 @@ class PommoMailCtl {
 
 		$errno = '';
 		$errstr = '';
-		$port = $pommo->_hostport;
-		$host = $pommo->_hostname;
-
-		// strip port information from hostname
-		$host = preg_replace('/:\d+$/i', '', $host);
 
 		// NOTE: fsockopen() SSL Support requires PHP 4.3+ with OpenSSL compiled in
-		$ssl = (strpos($pommo->_http, 'https://')) ? 'ssl://' : '';
+		$ssl = ($pommo->_ssl) ? 'ssl://' : '';
 
 		$out = "GET $page HTTP/1.1\r\n";
-		$out .= "Host: " . $host . "\r\n";
+		$out .= "Host: " . $pommo->_hostname . ":".$pommo->_hostport."\r\n";
+		$out .= 'User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2.1) ';
+		$out .= "Gecko/20021204\r\n";
+		$out .= "Keep-Alive: 300\r\n";
+		$out .= "Connection: keep-alive\r\n";
+		$out .= "Referer: $pommo->_http\r\n";
 
 		// to allow for basic .htaccess http authentication, 
 		//   uncomment and fill in the following;
@@ -360,7 +377,10 @@ class PommoMailCtl {
 
 		$out .= "\r\n";
 		
-		$socket = fsockopen($ssl . $host, $port, $errno, $errstr, 10);
+		if ($pommo->_verbosity < 3)
+			echo 'Attempting to spawn '.(($ssl) ? 'https://' : 'http://').$pommo->_hostname.':'.$pommo->_hostport.$page.'<br />';
+		
+		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 10);
 
 		if ($socket) {
 			fwrite($socket, $out);
@@ -428,6 +448,16 @@ class PommoMailCtl {
 			$dbo->query($query);
 		}
 		return;
+	}
+	
+	// temporary function to get the current mailing ID.. will be removed when
+	//  simultaneous mailings support is enabled
+	function getCurID() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "SELECT current_id FROM {$dbo->table['mailing_current']} LIMIT 1";
+		return $dbo->query($query,0);
 	}
 	
 }

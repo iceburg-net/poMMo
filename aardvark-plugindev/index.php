@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**********************************
 	INITIALIZATION METHODS
@@ -20,32 +27,27 @@ $pommo->init(array('authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-
-
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-
 // log the user out if requested
 if (isset($_GET['logout'])) {
-	$pommo->_auth->logout(); //session destroy is done here
+	$pommo->_auth->logout();
 	header('Location: ' . $pommo->_http . $pommo->_baseUrl . 'index.php');
 }
 
-
-if ($pommo->_auth->isAuthenticated()) { // AND !empty($_SESSION['pommo']['username'])
-		// If user is authenticated (has logged in), redirect to admin.php
-		Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'admin/admin.php');
+// check if user is already logged in
+if ($pommo->_auth->isAuthenticated()) {
+	// If user is authenticated (has logged in), redirect to admin.php
+	Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'admin/admin.php');
 }
-
-
 // Check if user submitted correct username & password. If so, Authenticate.
 elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST['password'])) {	
 
-
+	//corinna
 	// If plugins enabled and the check for other users in DB is enabled
 	if ($pommo->_useplugins AND $pommo->_plugindata['pluginmultiuser']) {
 		
@@ -76,37 +78,34 @@ elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST
 		
 	
 	} else {
-		
-		//---Standard pommo login---
+	//corinna ---> 
+	// ---- STANDARD POMMO LOGIN -----
 
-/*} else {*/
-
-			$auth = PommoAPI::configGet(array (
-				'admin_username',
-				'admin_password'
-			));
-			if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
-				
+		$auth = PommoAPI::configGet(array (
+			'admin_username',
+			'admin_password'
+		));
+		if ($_POST['username'] == $auth['admin_username'] && md5($_POST['password']) == $auth['admin_password']) {
+			
+			
+			// don't perform maintenance if accessing support area
+			if(!isset($_GET['referer']) || !basename($_GET['referer']) == 'support.php') {
 				// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
 				PommoHelperMaintenance::perform();
-		
-				$pommo->_auth->login($_POST['username']);
-				
-				Pommo::redirect($pommo->_http . $_POST['referer']);
 			}
-			else {
-				//corinna: TODO: Don't know if this is useful
-				if ($pommo->_useplugins) {
-					$logger->addMsg(sprintf(Pommo::_T('Maybe you forgot to enable useradmin plugin in %sGENERAL PLUGIN SETUP%s to use this feature (requires admin login).'), '<a href="' 
-						. $pommo->_baseUrl . 'plugins/adminplugins/pluginconfig/config_main.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
-				}
-				//corinna
-				
-				$logger->addMsg(Pommo::_T('Failed login attempt. Try again.'));
-			}
-	}
+	
+			$pommo->_auth->login($_POST['username']);
+			
+			Pommo::redirect($pommo->_http . $_POST['referer']);
+		}
+		else {
+			$logger->addMsg(Pommo::_T('Failed login attempt. Try again.'));
+		}
 
+	//corinna
+	}
+	//corinna
 }
 elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 	// Check if a reset password request has been received
@@ -135,7 +134,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		$code = PommoPending::add($subscriber,'password');
 		PommoHelperMessages::sendConfirmation($pommo->_config['admin_email'], $code, 'password');
 		
-		$logger->addMsg(Pommo::_T('Password reset request recieved. Check your email.'));
+		$logger->addMsg(Pommo::_T('Password reset request received. Check your email.'));
 		$smarty->assign('captcha',FALSE);
 		
 	} else {

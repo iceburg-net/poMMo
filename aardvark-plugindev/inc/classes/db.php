@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 // TODO: $sql should always be passed by reference... look @ ways of doing this. ie. see Affected($sql) function
 //   Write better documentation &/or change to ezSQL ;)
@@ -25,69 +32,76 @@ class PommoDB {
 	var $_dieOnQuery;
 	var $_debug;
 	var $_database; // name of database
+	var $_prefix; // table prefix
 	var $table; // array of tables. array_key = nickname, value = table name in DB
 
 	var $_safeSQL; // holds Monte's SafeSQL Class , referenced via prepare()
 	var $_results; // array holding unique results (for use with executing queries within loops & not overwriting the loops conditional resultset)
 
-
-	//TODO CORINNA
-	//WAS: function PommoDB($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
+	//was: function PommoDB($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
+	//CORINNA
 	function PommoDB($setPluginTables, $username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
 
 		// turn off magic quotes runtime
 		if (get_magic_quotes_runtime())
 			if (!set_magic_quotes_runtime(0))
 				Pommo::kill('Could not turn off PHP\'s magic_quotes_runtime');
-		
+				
+		$this->_prefix = $tablePrefix;
 		$this->_database = $database;
 		$this->table = array (
-			'config' => $tablePrefix . 'config',
-			'fields' => $tablePrefix . 'fields',
-			'group_criteria' => $tablePrefix . 'group_criteria',
-			'groups' => $tablePrefix . 'groups',
-			'mailing_notices' => $tablePrefix . 'mailing_notices',
-			'mailing_current' => $tablePrefix . 'mailing_current',
-			'mailings' => $tablePrefix . 'mailings',
-			'subscriber_data' => $tablePrefix . 'subscriber_data',
-			'subscriber_pending' => $tablePrefix . 'subscriber_pending',
-			'subscriber_update' => $tablePrefix . 'subscriber_update',
-			'subscribers' => $tablePrefix . 'subscribers',
-			'queue' => $tablePrefix . 'queue',
-			'updates' => $tablePrefix . 'updates');		
+			'config' => '`'.$tablePrefix . 'config`',
+			'fields' => '`'.$tablePrefix . 'fields`',
+			'group_criteria' => '`'.$tablePrefix . 'group_criteria`', // PHASE OUT
+			'group_rules' => '`'.$tablePrefix . 'group_rules`',
+			'groups' => '`'.$tablePrefix . 'groups`',
+			'mailing_notices' => '`'.$tablePrefix . 'mailing_notices`',
+			'mailing_current' => '`'.$tablePrefix . 'mailing_current`',
+			'mailings' => '`'.$tablePrefix . 'mailings`',
+			'subscriber_data' => '`'.$tablePrefix . 'subscriber_data`',
+			'subscriber_pending' => '`'.$tablePrefix . 'subscriber_pending`',
+			'subscriber_update' => '`'.$tablePrefix . 'subscriber_update`',
+			'subscribers' => '`'.$tablePrefix . 'subscribers`',
+			'queue' => '`'.$tablePrefix . 'queue`',
+			'updates' => '`'.$tablePrefix . 'updates`');		
 
-		//TODO CORINNA
+		//CORINNA i do a override, for conflicts avoidance
+		//TODO select through a if or someting
 		if ($setPluginTables) { //AND multiuser is activated! -> checked in pommo this time. QUICK & DIRTY
-			$pluginTablePrefix = "pommomod_";
-			$this->table = array (			//TODO: corinna add this to the array! Not entire array again!
 
-				'config' => $tablePrefix . 'config',
-				'fields' => $tablePrefix . 'fields',
-				'group_criteria' => $tablePrefix . 'group_criteria',
-				'groups' => $tablePrefix . 'groups',
-				'mailing_notices' => $tablePrefix . 'mailing_notices',
-				'mailing_current' => $tablePrefix . 'mailing_current',
-				'mailings' => $tablePrefix . 'mailings',
-				'subscriber_data' => $tablePrefix . 'subscriber_data',
-				'subscriber_pending' => $tablePrefix . 'subscriber_pending',
-				'subscriber_update' => $tablePrefix . 'subscriber_update',
-				'subscribers' => $tablePrefix . 'subscribers',
-				'queue' => $tablePrefix . 'queue',
-				'updates' => $tablePrefix . 'updates',
+			//TODO  question-> the same as pommo-prefix or to we put
+			//$tablePrefix . plugin . databasetablename?
+
+			$pluginTablePrefix = "pommomod_";	
+			$this->table = array (
+				'config' => '`'.$tablePrefix . 'config`',
+				'fields' => '`'.$tablePrefix . 'fields`',
+				'group_criteria' => '`'.$tablePrefix . 'group_criteria`', // PHASE OUT
+				'group_rules' => '`'.$tablePrefix . 'group_rules`',
+				'groups' => '`'.$tablePrefix . 'groups`',
+				'mailing_notices' => '`'.$tablePrefix . 'mailing_notices`',
+				'mailing_current' => '`'.$tablePrefix . 'mailing_current`',
+				'mailings' => '`'.$tablePrefix . 'mailings`',
+				'subscriber_data' => '`'.$tablePrefix . 'subscriber_data`',
+				'subscriber_pending' => '`'.$tablePrefix . 'subscriber_pending`',
+				'subscriber_update' => '`'.$tablePrefix . 'subscriber_update`',
+				'subscribers' => '`'.$tablePrefix . 'subscribers`',
+				'queue' => '`'.$tablePrefix . 'queue`',
+				'updates' => '`'.$tablePrefix . 'updates`',
 			
-				'bounce' => $pluginTablePrefix . 'bounce',
-				'list' => $pluginTablePrefix . 'list',
-				'list_rp' => $pluginTablePrefix . 'list_rp',
-				'mailingqueue' => $pluginTablePrefix . 'mailingqueue',
-				'plugin' => $pluginTablePrefix . 'plugin',
-				'plugincategory' => $pluginTablePrefix . 'plugincategory',
-				'plugindata' => $pluginTablePrefix . 'plugindata',
-				'responsibleperson' => $pluginTablePrefix . 'responsibleperson',
-				'rp_group' => $pluginTablePrefix . 'rp_group',
-				'user' => $pluginTablePrefix . 'user',
-				'permgroup' => $pluginTablePrefix . 'permgroup',
-				'pg_perm' => $pluginTablePrefix . 'pg_perm',
-				'permission' => $pluginTablePrefix . 'permission'
+				'bounce' => '`'.$pluginTablePrefix. 'bounce`',
+				'list' => '`'.$pluginTablePrefix. 'list`',
+				'list_rp' => '`'.$pluginTablePrefix. 'list_rp`',
+				'mailingqueue' => '`'.$pluginTablePrefix. 'mailingqueue`',
+				'plugin' => '`'.$pluginTablePrefix. 'plugin`',
+				'plugincategory' => '`'.$pluginTablePrefix. 'plugincategory`',
+				'plugindata' => '`'.$pluginTablePrefix. 'plugindata`',
+				'responsibleperson' => '`'.$pluginTablePrefix. 'responsibleperson`',
+				'rp_group' => '`'.$pluginTablePrefix. 'rp_group`',
+				'user' => '`'.$pluginTablePrefix. 'user`',
+				'permgroup' => '`'.$pluginTablePrefix. 'permgroup`',
+				'pg_perm' => '`'.$pluginTablePrefix. 'pg_perm`',
+				'permission' => '`'.$pluginTablePrefix. 'permission`'
 			);
 		}
 		//TODO CORINNA
@@ -205,10 +219,12 @@ class PommoDB {
 			if ($this->_dieOnQuery)
 				Pommo::kill('MySQL Query Failed.'.$query);
 		}
-
-		if (is_numeric($row))
-			$this->_result = mysql_result($this->_result, $row, $col); // func returns false on failure
-
+		
+		if (is_numeric($row)) {
+			$this->_result = ($this->records() === 0) ? false :
+				mysql_result($this->_result, $row, $col);
+		}
+		
 		// return the result
 		return $this->_result;
 	}
@@ -223,7 +239,7 @@ class PommoDB {
 	function affected($sql = NULL) {
 		if ($sql)
 			$this->query($sql);
-		$x = mysql_affected_rows($this->_link);
+			
 		return ($this->_result) ? mysql_affected_rows($this->_link) : 0;
 	}
 
@@ -232,13 +248,16 @@ class PommoDB {
 	function records($sql = NULL) {
 		if ($sql)
 			$this->query($sql);
-
+			
 		return ($this->_result) ? mysql_num_rows($this->_result) : 0;
 	}
 
-	// returns the ID of the pkey from an INSERT Statement
-	function lastId() {
-		return mysql_insert_id($this->_link);
+	// returns the ID of the pkey from an INSERT Statement FALSE if bad result
+	function lastId($sql = NULL) {
+		if ($sql)
+			$this->query($sql);
+			
+		return ($this->_result) ? mysql_insert_id($this->_link) : false;
 	}
 
 	// closes the mySql link & frees the resources
@@ -274,8 +293,10 @@ class PommoDB {
 			if (!empty ($sql))
 				if ($this->query($sql))
 					array_push($set, $this->_result);
-				else
-					return false;
+				else {
+					$set = false;
+					return $set;
+				}
 		}
 		
 		// Fetch row from result set at end of result stack

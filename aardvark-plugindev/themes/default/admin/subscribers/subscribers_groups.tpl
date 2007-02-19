@@ -1,15 +1,17 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Styling of CSS table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
-{/capture}{include file="inc/tpl/admin.header.tpl"}
+{/capture}{include file="inc/admin.header.tpl"}
 
 <h2>{t}Groups Page{/t}</h2>
 
-<p><img src="{$url.theme.shared}images/icons/groups.png" class="navimage right" alt="groups icon" />{t}Create groups of subscribers based off the values of subscriber fields. You can then mail subscribers belonging to a group instead your entire list.{/t}</p>
+<p><img src="{$url.theme.shared}images/icons/groups.png" class="navimage right" alt="groups icon" />
+{t escape=no 1="<a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a>"}Subscriber Groups allow you to mail subsets of subscribers instead of the entire list. Groups are defined by customizable matching rules, and members are automatically assigned based off their %1subscriber field%2 values.{/t}
+</p>
 
 <form method="post" action="">
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <fieldset>
 <legend>{t}New group{/t}</legend>
@@ -40,7 +42,7 @@
 <span>{t}Group Name{/t}</span>	
 </div>
 
-{foreach from=$groups key=id item=group}
+{foreach from=$groups key=id item=name}
 <div class="{cycle values="r1,r2,r3"} sortable" id="id{$id}">
 <span>
 <button onclick="window.location.href='{$smarty.server.PHP_SELF}?group_id={$id}&amp;delete=TRUE'; return false;"><img src="{$url.theme.shared}images/icons/delete.png" alt="delete icon" /></button>
@@ -51,7 +53,7 @@
 </span>
 
 <span>
-{$group.name}
+{$name}
 </span>
 </div>
 {/foreach}
@@ -61,4 +63,4 @@
 
 
 </fieldset>
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

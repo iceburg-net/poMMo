@@ -20,11 +20,11 @@ $().ready(function() {
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="inc/tpl/user.header.tpl" sidebar='off'}
+{include file="inc/user.header.tpl" sidebar='off'}
 
 <h2>{t}Mailings History{/t}</h2>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <form method="post" action="" id="orderForm">
 
@@ -131,6 +131,6 @@ $().ready(function() {
 </form>
 
 {* Include Pagination *}
-{include file="inc/tpl/pager.tpl"}
+{include file="inc/pager.tpl"}
 
-{include file="inc/tpl/user.footer.tpl"}
+{include file="inc/user.footer.tpl"}

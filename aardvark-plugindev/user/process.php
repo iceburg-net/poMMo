@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2005 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**********************************
 	INITIALIZATION METHODS
@@ -36,7 +43,6 @@ $referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$
 // append stored input
 $smarty->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
 
-
 /**********************************
 	VALIDATE INPUT
  *********************************/
@@ -49,7 +55,7 @@ $subscriber = array(
 	'registered' => time(),
 	'ip' => $_SERVER['REMOTE_ADDR'],
 	'status' => 1,
-	'data' => $_POST['d'],
+	'data' => @$_POST['d'],
 );
 
 // ** check for correct email syntax
@@ -77,12 +83,14 @@ if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'], arra
 $config = PommoAPI::configGet(array (
 	'site_success', // URL to redirect to on success, null is us (default)
 	'site_confirm', // URL users will see upon subscription attempt, null is us (default)
-	'list_confirm' // Requires email confirmation
+	'list_confirm', // Requires email confirmation
+	'notices'
 ));
+$notices = unserialize($config['notices']);
+Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 
 if ($config['list_confirm'] == 'on') { // email confirmation required. 
 	// add user as "pending"
-	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 	
 	$subscriber['pending_code'] = PommoHelper::makeCode();
 	$subscriber['pending_type'] = 'add';
@@ -96,6 +104,9 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	else {
 		
 		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
+			if (isset($notices['pending']) && $notices['pending'] == 'on')
+				PommoHelperMessages::notify($notices, $subscriber, 'pending');
+			
 			if ($config['site_confirm'])
 				Pommo::redirect($config['site_confirm']);
 			$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
@@ -115,11 +126,15 @@ else { // no email confirmation required
 		$smarty->assign('back', TRUE);
 	}
 	else {
+		if (isset($notices['subscribe']) && $notices['subscribe'] == 'on')
+				PommoHelperMessages::notify($notices, $subscriber, 'subscribe');
+				
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);
 		
-		$messages = unserialize(PommoAPI::configGet('messages'));
-		$logger->addMsg($messages['subscribe_suc']);
+		$dbvalues = PommoAPI::configGet('messages');
+		$messages = unserialize($dbvalues['messages']);
+		$logger->addMsg($messages['subscribe']['suc']);
 	}
 	
 }

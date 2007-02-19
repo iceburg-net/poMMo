@@ -19,7 +19,7 @@ $().ready(function() {
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl" sidebar='off'}
+{include file="inc/admin.header.tpl" sidebar='off'}
 
 <ul class="inpage_menu">
 <li><a href="admin_mailings.php">{t 1=$returnStr}Return to %1{/t}</a></li>
@@ -27,7 +27,7 @@ $().ready(function() {
 
 <h2>{t}Mailings History{/t}</h2>
 
-{include file="inc/tpl/messages.tpl"}
+{include file="inc/messages.tpl"}
 
 <form method="post" action="" id="orderForm">
 
@@ -151,6 +151,6 @@ $().ready(function() {
 </form>
 
 {* Include Pagination *}
-{include file="inc/tpl/pager.tpl"}
+{include file="inc/pager.tpl"}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

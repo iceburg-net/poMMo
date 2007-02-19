@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>poMMo support v0.02</h2>
 
@@ -28,4 +28,4 @@ $().ready(function() {
 </script>
 {/literal}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

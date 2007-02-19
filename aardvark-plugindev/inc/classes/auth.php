@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 // authentication object. Handles logged in user, permission level.
 class PommoAuth {
@@ -44,19 +51,7 @@ class PommoAuth {
 
 	// TODO -> extend this when multi-user support is implemented. For now default to 5 if a user
 	// is logged in (successfully authenticated). 5 should be max (administrator/superuser privileges)
-	
-	/*
-	 * corinna: OO Design proposal:
-	 * Classes for the User type instead of a permission level
-	 * interface iUser (maybe add this later -> less administration effort? for all this classes)
-	 * admins are a Object AdminUser(derived from iUser)
-	 * When multi user support is enabled the users are of the type class ExtendedUser, and this class has overloaded existing functions 
-	 * and extended functionality (Permission Handling, ...)
-	 * The problem with PHP is the non persistence, e.g. that the objects are deleted when the 
-	 * requested files are interpreted... With servlets,... the user objects are organzized as i describe
-	 * above but i don't know if there is a standard way for php?
-	 */
-	function getPermissionLevel($username = null) {
+	function getPermissionLevel($username = null) { //return 5; ??
 		if ($username)
 			return 5;
 		return 0;
@@ -78,7 +73,8 @@ class PommoAuth {
 	function isAuthenticated() {
 		return (empty($this->_username)) ? false : true;
 	}
-	
+
+
 	function dbCheckPermission() {
 		//TODO
 		if (($this->_username == 'admin') AND $this->isAuthenticated()) {
@@ -86,6 +82,6 @@ class PommoAuth {
 		}
 		return FALSE;
 	}
-	
+
 }
 ?>

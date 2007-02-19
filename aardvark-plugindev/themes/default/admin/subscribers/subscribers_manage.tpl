@@ -18,7 +18,7 @@ $().ready(function() {
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
-{include file="inc/tpl/admin.header.tpl" sidebar='off'}
+{include file="inc/admin.header.tpl" sidebar='off'}
 
 <ul class="inpage_menu">
 <li><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
@@ -172,7 +172,7 @@ $().ready(function() {
 </table>
 
 {* Include Pagination *}
-{include file="inc/tpl/pager.tpl"}
+{include file="inc/pager.tpl"}
 
 {literal}
 <script type="text/javascript">
@@ -256,4 +256,4 @@ function updateTable(o) {
 {/literal}
 {/if}
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

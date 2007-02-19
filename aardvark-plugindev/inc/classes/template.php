@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 // include smarty template class
 Pommo :: requireOnce($GLOBALS['pommo']->_baseDir . 'inc/lib/smarty/Smarty.class.php');
 
@@ -22,7 +29,7 @@ class PommoTemplate extends Smarty {
 		global $pommo;
 
 		// set theme -- TODO; extend this to the theme selector
-		$this->_pommoTheme = 'default';
+		$this->_pommoTheme = 'custom';
 
 		// set smarty directories
 		$this->_themeDir = $pommo->_baseDir . 'themes/';
@@ -67,41 +74,15 @@ class PommoTemplate extends Smarty {
 		// destroy pagination data if not in use
 		if(isset($_SESSION['SmartyPaginate']) && $_SESSION['SmartyPaginate']['default']['url'] != $_SERVER['PHP_SELF'])
 			unset($_SESSION['SmartyPaginate']);
+
 			
-			
-			
-		//TODO CORINNA
-// zusammrenfügen		
-if ($pommo->_useplugins)  { //AND () multiuser active AND authenticated
+		//CORINNA -> relict?
+		if ($pommo->_useplugins)  { //AND () multiuser active AND authenticated
 	
-	//if ($pommo->_auth->isAuthenticated()) {
+			$this->assign('showplugin', TRUE);
+			$this->assign('showbounce', TRUE);
 		
-		//echo "<h2>Authenticated: {$pommo->_auth->getUsertype()}</h2>";
-		$this->assign('showplugin', TRUE);
-		$this->assign('showbounce', TRUE);
-		
-	//}
-			//if (($pommo->_auth->_username != 'admin') OR $pommo->_auth->_permissionLevel != 5) {
-			//echo "<h2>{$pommo->_auth->getUsertype()}</h2>";
-		/*	if ($pommo->_auth->getUsertype() == 'simpleuser') {
-				echo "<h1>show multiuser interface.</h1>";
-			}*/
-			//if (($pommo->_auth->_username == 'admin') AND $pommo->_auth->_permissionLevel == 5) {
-//			if ($pommo->_auth->getUsertype() == 'adminuser') {
-				// Show additional functionality from the plugins: Plugin SETUP button
-				//$this->assign('showplugin', TRUE);
-	//		}
-	//}
-	 /*else {
-		//hier nix mehr
-		$pommo->_logger->addMsg("template.php: WEGDENKEN: not authenticaterd<br>");
-	}*/
-} /*else {
-	$pommo->_logger->addMsg("template.php: Activate Plugins or user/password error<br>");
-}*/
-		//TODO CORINNA end
-			
-			
+		}
 	}
 
 	// display function falls back to "default" theme if theme file not found
@@ -153,6 +134,12 @@ if ($pommo->_useplugins)  { //AND () multiuser active AND authenticated
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
+		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/function.validate.php');
+		
+		// shortcut for {validate} -- function defined in class.smartyvalidate.php
+		$this->register_function('fv', 'smarty_fieldValidate');
+		
+		$this->assign('vErr',array());
 	}
 
 	// Loads field data into template, as well as _POST (or a saved subscribeForm). 
@@ -179,5 +166,40 @@ if ($pommo->_useplugins)  { //AND () multiuser active AND authenticated
 		
 		$this->assign($_POST);
 	}
+}
+
+// poMMo --> 
+// provide a smarty function as a shortcut for {validate}
+function smarty_fieldValidate($params, &$smarty)
+{
+  static $pre = '';
+  static $post = '';
+  static $form = false;
+  
+  $f = (isset($params['validate'])) ? $params['validate'] : false;
+  $m = (isset($params['message'])) ? $params['message'] : false;
+  
+  $form = (isset($params['form'])) ? $params['form'] : $form;
+  
+  $pre = (isset($params['prepend'])) ? $params['prepend'] : $pre;
+  $post = (isset($params['append'])) ? $params['append'] : $post;
+  
+  $prepend = (isset($params['pre'])) ? $params['pre'] : $pre;
+  $append = (isset($params['post'])) ? $params['post'] : $post;
+  
+  $p = array(
+	'id' => $f,
+	'message' => (isset($smarty->_tpl_vars['vMsg'][$f])) ? $smarty->_tpl_vars['vMsg'][$f] : 'input error',
+	'append' => 'vErr'
+	);
+
+  if($form) 
+  	$p['form'] = $form;
+
+  if ($f) 
+  	return smarty_function_validate($p,$smarty);
+  if ($m && isset($smarty->_tpl_vars['vErr'][$m]))
+  	return $prepend.$smarty->_tpl_vars['vErr'][$m].$append;
+  return;
 }
 ?>

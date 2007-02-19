@@ -1,15 +1,22 @@
 <?php
-/** [BEGIN HEADER] **
- * COPYRIGHT: (c) 2006 Brice Burgess / All Rights Reserved    
- * LICENSE: http://www.gnu.org/copyleft.html GNU/GPL 
- * AUTHOR: Brice Burgess <bhb@iceburg.net>
- * SOURCE: http://pommo.sourceforge.net/
- *
- *  :: RESTRICTIONS ::
- *  1. This header must accompany all portions of code contained within.
- *  2. You must notify the above author of modifications to contents within.
+/**
+ * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
- ** [END HEADER]**/
+ * This file is part of poMMo (http://www.pommo.org)
+ * 
+ * poMMo is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published 
+ * by the Free Software Foundation; either version 2, or any later version.
+ * 
+ * poMMo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with program; see the file docs/LICENSE. If not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 // include the group prototype object 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
@@ -20,9 +27,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  *	group_id		(int)		Database ID/Key
  *	group_name		(str)		Descriptive name for field (used for short identification)
  *	
- * ==Additional Columns from group_criteria==
+ * ==Additional Columns from group_rules==
  * 
- *  criteria_id		(int)		Database ID/Key
+ *  rule_id		(int)		Database ID/Key
  *  group_id		(int)		Correlating Group ID
  *  field_id		(int)		Correlating Field ID
  *  logic			(enum)		'is','not','greater','less','true','false','is_in','not_in'
@@ -39,9 +46,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	
  	// ============ NON STATIC METHODS ===================
  	function PommoGroup($groupID = NULL, $status = 1) {
- 		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		$this->_status = $status;
  		if (!is_numeric($groupID)) {
+ 			$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  			$this->_group = null;
  			$this->_name = Pommo::_T('All Subscribers');
  			$this->_memberIDs = null;
@@ -77,7 +84,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		return PommoAPI::getParams($o, $in);
 	}
 	
-	// make a group template based off a database row (group/group_criteria schema)
+	// make a group template based off a database row (group/group_rules schema)
 	// accepts a group template (assoc array)  
 	// return a group object (array)
 	function & makeDB(&$row) {
@@ -91,6 +98,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// group validation
 	// accepts a group object (array)
 	// returns true if group ($in) is valid, false if not
+	
+	// TODO -> add validation of group array
 	function validate(&$in) {
 		global $pommo;
 		$logger =& $pommo->_logger;
@@ -99,8 +108,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 
 		if (empty($in['name']))
 			$invalid[] = 'name';
-		if (!is_array($in['criteria']))
-			$invalid[] = 'criteria';
+		if (!is_array($in['rules']))
+			$invalid[] = 'rules';
 			
 		if (!empty($invalid)) {
 			$logger->addErr("Group failed validation on; ".implode(',',$invalid),1);
@@ -123,26 +132,28 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$o = array();
 		
 		$query = "
-			SELECT g.group_id, g.group_name, c.criteria_id, c.field_id, c.logic, c.value
+			SELECT g.group_id, g.group_name, c.rule_id, c.field_id, c.logic, c.value, c.type
 			FROM " . $dbo->table['groups']." g
-			LEFT JOIN " . $dbo->table['group_criteria']." c 
+			LEFT JOIN " . $dbo->table['group_rules']." c 
 				ON (g.group_id = c.group_id)
 			WHERE
 				1
-				[AND g.group_id IN(%C)]";
+				[AND g.group_id IN(%C)]
+			ORDER BY g.group_name";
 		$query = $dbo->prepare($query,array($p['id']));
 		
 		while ($row = $dbo->getRows($query)) {
 			if (empty($o[$row['group_id']]))
 				$o[$row['group_id']] = PommoGroup::makeDB($row);
 			
-			if(!empty($row['criteria_id'])) {
+			if(!empty($row['rule_id'])) {
 				$c = array (
 					'field_id' => $row['field_id'],
 					'logic' => $row['logic'],
 					'value' => $row['value'],
+					'or' => ($row['type'] == 0) ? false : true
 				);
-				$o[$row['group_id']]['criteria'][$row['criteria_id']] = $c;
+				$o[$row['group_id']]['rules'][$row['rule_id']] = $c;
 			}
 		}
 		
@@ -151,20 +162,21 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	
 	// fetches group name(s) from the database
 	// accepts a filtering array -->
-	//   id (array) -> an array of field IDs
+	//   id (int || array) -> an array of field IDs
 	// returns an array of group names. Array key(s) correlates to group ID.
-	function & getName($id = array()) {
+	function & getNames($id = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$o = array();
 		
 		$query = "
-			SELECT *
+			SELECT group_id, group_name
 			FROM " . $dbo->table['groups']."
 			WHERE
 				1
-				[AND group_id IN(%C)]";
+				[AND group_id IN(%C)]
+			ORDER BY group_name";
 		$query = $dbo->prepare($query,array($id));
 		
 		while ($row = $dbo->getRows($query))
@@ -181,22 +193,15 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	function & getMemberIDs($group, $status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
+		$pommo->requireOnce($pommo->_baseDir. 'inc/classes/sql.gen.php');
 		
-		if (empty($group['criteria'])) {
+		if (empty($group['rules'])) {
 			$o = array();
 			return $o;
 		}
 		
-		$f = array();
-		
-		foreach($group['criteria'] as $c)
-			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
-
-		if(!is_numeric($status))
-			Pommo::kill('Invalid status passed to getMemberIDs()', TRUE);
-		$f['subscribers'] = array('status' => array("equal: $status"));
-		
-		return PommoSubscriber::getIDByAttr($f);
+		$query = PommoSQL::groupSQL($group, false, $status);
+		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	
 	// Returns the # of members in a group
@@ -204,37 +209,16 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// accepts filter by status (int) either 1 (active) (default), 0 (inactive), 2 (pending)
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns a tally (int)
-	function & tally($group, $status = 1) {
+	function tally($group, $status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		$pommo->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/sql.gen.php');
+		$pommo->requireOnce($pommo->_baseDir. 'inc/classes/sql.gen.php');
 		
-		if (empty($group['criteria']))
-			return array();
-		
-		$f = array();
-		
-		foreach($group['criteria'] as $c)
-			$f['subscriber_data'][$c['field_id']][] = "{$c['logic']}: {$c['value']}";
+		if (empty($group['rules']))
+			return 0;
 			
-		if(!is_numeric($status))
-			Pommo::kill('Invalid status passed to tally()', TRUE);
-		$f['subscribers'] = array('status' => array("equal: $status"));
+		$query = PommoSQL::groupSQL($group, true, $status);
 		
-		$sql = array('where' => array(), 'join' => array());
-		if (!empty($f['subscribers']))
-			$sql = array_merge_recursive($sql, PommoSQL::fromFilter($f['subscribers'],'s'));
-		
-		$sql = array_merge_recursive($sql, PommoSQL::fromFilter($f['subscriber_data'],'d'));
-		
-		$joins = implode(' ',$sql['join']);
-		$where = implode(' ',$sql['where']);
-		
-		$query = "
-			SELECT count(DISTINCT s.subscriber_id)
-			FROM ". $dbo->table['subscribers']." s
-			".$joins."
-			WHERE 1 ".$where;
 		return $dbo->query($query,0);
 	}
 	
@@ -255,11 +239,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		$query = $dbo->prepare($query,@array(
 			$in['name']
 		));
-		
-		if (!$dbo->query($query))
-			return false;
-		
-		return $dbo->lastId();
+
+		return $dbo->lastId($query);
 	}
 	
 	// removes a group from the database
@@ -277,9 +258,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		
 		$affected = $dbo->affected($query);
 	
-		// remove filters referencing this group
+		// remove rules referencing this group
 		$query = "
-			DELETE FROM ".$dbo->table['group_criteria']."
+			DELETE FROM ".$dbo->table['group_rules']."
 			WHERE 
 				group_id IN (%c)
 				OR (value IN (%c) AND (logic='is_in' OR logic='not_in'))";
@@ -288,16 +269,16 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 		return $affected;
 	}
 	
-	// Returns the # of filters affected by a group deletion
+	// Returns the # of rules affected by a group deletion
 	// accepts a single ID (int) or array of IDs.
-	// Returns a count (int) of affected filters. 0 if none.
-	function filtersAffected($id = array()) {
+	// Returns a count (int) of affected rules. 0 if none.
+	function rulesAffected($id = array()) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
-			SELECT DISTINCT count(criteria_id)
-			FROM ".$dbo->table['group_criteria']."
+			SELECT DISTINCT count(rule_id)
+			FROM ".$dbo->table['group_rules']."
 			WHERE 
 				group_id IN (%c)
 				OR (value IN (%c) AND (logic='is_in' OR logic='not_in'))";
@@ -317,7 +298,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			FROM ".$dbo->table['groups']."
 			WHERE group_name='%s'";
 		$query=$dbo->prepare($query,array($name));
-		return (intval($dbo->query($query,0)) > 0) ? true : false;
+		return (bool) $dbo->query($query,0);
 	}
 	
 	// renames a group

@@ -1,4 +1,4 @@
-{include file="inc/tpl/admin.header.tpl"}
+{include file="inc/admin.header.tpl"}
 
 <h2>{t}Plugin Menu{/t}</h2>
 
@@ -29,4 +29,4 @@
 
 </div>
 
-{include file="inc/tpl/admin.footer.tpl"}
+{include file="inc/admin.footer.tpl"}

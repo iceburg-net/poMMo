@@ -8,7 +8,7 @@ INSERT INTO :::fields::: (`field_id`, `field_active`, `field_ordering`, `field_n
 (8, 'on', 3, 'Animal', 'Favorite Animal', '', 'a:10:{i:0;s:4:"Dogs";i:1;s:4:"Cats";i:2;s:7:"Parrots";i:3;s:9:"Aardvarks";i:4;s:6:"Lemurs";i:5;s:6:"Snails";i:6;s:6:"Snakes";i:7;s:5:"Bears";i:8;s:8:"Manatees";i:9;s:7:"Shrimps";}', 'off', 'multiple'),
 (9, 'off', 4, 'Purchases', 'Field Prompt', '0', 'a:0:{}', 'off', 'number');
 
-INSERT INTO :::group_criteria::: (`criteria_id`, `group_id`, `field_id`, `logic`, `value`) VALUES 
+INSERT INTO :::group_rules::: (`rule_id`, `group_id`, `field_id`, `logic`, `value`) VALUES 
 (1, 1, 4, 'true', NULL),
 (2, 2, 2, 'greater', '20'),
 (4, 3, 8, 'is', 'Manatees'),
