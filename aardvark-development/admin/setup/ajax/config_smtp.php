@@ -21,8 +21,8 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-require ('../../bootstrap.php');
-$pommo->init();
+require ('../../../bootstrap.php');
+$pommo->init(array('noDebug' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -49,6 +49,7 @@ if (!empty ($_POST['addSmtpServer'])) {
 	);
 	$input['smtp_' . key($_POST['addSmtpServer'])] = serialize($server);
 	PommoAPI::configUpdate($input, TRUE);
+	$update = true;
 }
 elseif (!empty ($_POST['updateSmtpServer'])) {
 	$key = key($_POST['updateSmtpServer']);
@@ -56,15 +57,21 @@ elseif (!empty ($_POST['updateSmtpServer'])) {
 		'host' => $_POST['host'][$key], 'port' => $_POST['port'][$key], 'auth' => $_POST['auth'][$key], 'user' => $_POST['user'][$key], 'pass' => $_POST['pass'][$key]);
 	$input['smtp_' . $key] = serialize($server);
 	PommoAPI::configUpdate( $input, TRUE);
+	$update = true;
 }
 elseif (!empty ($_POST['deleteSmtpServer'])) {
 	$input['smtp_' . key($_POST['deleteSmtpServer'])] = '';
 	PommoAPI::configUpdate( $input, TRUE);
+	$update = true;
 }
 elseif (!empty ($_POST['throttle_SMTP'])) {
 	$input['throttle_SMTP'] = $_POST['throttle_SMTP'];
 	PommoAPI::configUpdate( $input);
+	$update = true;
 }
+
+if(isset($update))
+	$smarty->assign('output',($update)?Pommo::_T('Configuration Updated.'):Pommo::_T('Please review and correct errors with your submission.'));
 
 // Get the SMTP settings from DB
 $smtpConfig = PommoAPI::configGet(array (
@@ -122,6 +129,6 @@ $smarty->assign('smtpStatus',$smtpStatus);
 $smarty->assign('smtp', $smtp);
 $smarty->assign('throttle_SMTP', $smtpConfig['throttle_SMTP']);
 
-$smarty->display('admin/setup/setup_smtp.tpl');
+$smarty->display('admin/setup/ajax/config_smtp.tpl');
 Pommo::kill();
 ?>

@@ -116,4 +116,29 @@ class PommoHelperMessages {
 
 		return $messages;
 	}
+	
+	function testExchanger($to,$exchanger) {
+		global $pommo;
+		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
+		
+		$subject = Pommo::_T('poMMo test message');
+		$body = sprintf(Pommo::_T("This message indicates that poMMo is able to use the %s exchanger."),$exchanger);
+		
+		$mail = new PommoMailer();
+	
+		// allow mail to be sent, even if demo mode is on
+		$mail->toggleDemoMode("off");
+	
+		// send the confirmation mail
+		$mail->prepareMail($subject, $body);
+		
+		$ret = true;
+		if (!$mail->bmSendmail($to)) {
+			$logger->addErr(Pommo::_T('Error Sending Mail'));
+			$ret = false;
+		}
+		// reset demo mode to default
+		$mail->toggleDemoMode();
+		return $ret;
+	}
 }

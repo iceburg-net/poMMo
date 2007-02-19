@@ -33,6 +33,9 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
 $smarty->assign('throttleTitle',Pommo::_T('Throttle Settings'));
+$smarty->assign('smtpTitle',Pommo::_T('SMTP Settings'));
+$smarty->assign('testTitle',Pommo::_T('Test Exchanger'));
+
 $smarty->display('admin/setup/setup_configure.tpl');
 Pommo::kill();
 ?>
