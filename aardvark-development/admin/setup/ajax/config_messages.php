@@ -40,16 +40,28 @@ if (isset($_POST['restore'])) {
 		case 'subscribe' : $messages = PommoHelperMessages::ResetDefault('subscribe'); break;
 		case 'activate' : $messages = PommoHelperMessages::resetDefault('activate'); break;
 		case 'unsubscribe' : $messages = PommoHelperMessages::resetDefault('unsubscribe'); break;
-		var_dump($_POST['restore']); die();
 	}
 	// reset _POST.
 	$_POST = array(); 
+}
+
+// ADD CUSTOM VALIDATOR FOR CHARSET
+function check_notifyMails($value, $empty, & $params, & $formvars) {
+	$mails = PommoHelper::trimArray(explode(',',$value));
+	$ret = true;
+	foreach($mails as $mail)
+		if (!empty($mail) && !PommoHelper::isEmail($mail))
+			$ret = false;
+	return $ret;
 }
 
 SmartyValidate :: connect($smarty);
 if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	SmartyValidate::register_form('messages', true);
+	
+	// register custom criteria
+	SmartyValidate::register_criteria('isMails','check_notifyMails', 'messages');
 	
 
 	SmartyValidate :: register_validator('subscribe_sub', 'subscribe_sub', 'notEmpty', false, false, 'trim', 'messages');
@@ -60,6 +72,12 @@ if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 	SmartyValidate :: register_validator('activate_msg', 'activate_msg:!\[\[URL\]\]!i', 'isRegExp', false, false, 'trim', 'messages');
 	
 	SmartyValidate :: register_validator('unsubscribe_suc', 'unsubscribe_suc', 'notEmpty', false, false, 'trim', 'messages');
+	
+	SmartyValidate :: register_validator('notify_email','notify_email','isMails', false, false, false, 'messages');   
+	SmartyValidate :: register_validator('notify_subscribe','notify_subscribe:!^(on|off)$!','isRegExp', false, false, false, 'messages');   
+	SmartyValidate :: register_validator('notify_unsubscribe','notify_unsubscribe:!^(on|off)$!','isRegExp', false, false, false, 'messages');   
+	SmartyValidate :: register_validator('notify_update','notify_update:!^(on|off)$!','isRegExp', false, false, false, 'messages');   
+	SmartyValidate :: register_validator('notify_pending','notify_pending:!^(on|off)$!','isRegExp', false, false, false, 'messages');   
 	
 	
 	$vMsg = array();
@@ -74,30 +92,41 @@ if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 	$smarty->assign('vMsg', $vMsg);
 
 	// populate _POST with info from database (fills in form values...)
-	if (empty($messages)) {
-		$dbvalues = PommoAPI::configGet(array('messages'));
+	$dbvalues = PommoAPI::configGet(array(
+		'messages',
+		'notices'));
 		
-		if (empty($dbvalues['messages'])) 
-			$messages = PommoHelperMessages::resetDefault('all'); 
-		else
-			$messages = unserialize($dbvalues['messages']);
-	}
-
-	if (isset($messages['subscribe'])) {
-		$_POST['subscribe_msg'] = $messages['subscribe']['msg'];
-		$_POST['subscribe_sub'] = $messages['subscribe']['sub'];
-		$_POST['subscribe_suc'] = $messages['subscribe']['suc'];
-	}
+	$notices = unserialize($dbvalues['notices']);
+	$messages = unserialize($dbvalues['messages']);
+		
+	if (empty($messages)) 
+		$messages = PommoHelperMessages::resetDefault('all');
+		
+	if (empty($notices)) 
+		$notices = array(
+			'email' => $pommo->_config['admin_email'],
+			'subject' => Pommo::_T('[poMMo Notice]'),
+			'subscribe' => 'off',
+			'unsubscribe' => 'off',
+			'update' => 'off',
+			'pending' => 'off');
+			
+	$p = array();	
+	$p['notify_email'] = $notices['email'];
+	$p['notify_subject'] = $notices['subject'];
+	$p['notify_subscribe'] = $notices['subscribe'];
+	$p['notify_unsubscribe'] = $notices['unsubscribe'];
+	$p['notify_update'] = $notices['update'];
+	$p['notify_pending'] = $notices['pending'];
 	
-	if (isset($messages['activate'])) {
-		$_POST['activate_msg'] = $messages['activate']['msg'];
-		$_POST['activate_sub'] = $messages['activate']['sub'];
-	}
+	$p['subscribe_msg'] = $messages['subscribe']['msg'];
+	$p['subscribe_sub'] = $messages['subscribe']['sub'];
+	$p['subscribe_suc'] = $messages['subscribe']['suc'];
+	$p['activate_msg'] = $messages['activate']['msg'];
+	$p['activate_sub'] = $messages['activate']['sub'];
+	$p['unsubscribe_suc'] = $messages['unsubscribe']['suc'];
 	
-	if (isset($messages['unsubscribe'])) {
-		$_POST['unsubscribe_suc'] = $messages['unsubscribe']['suc'];
-	}
-	
+	$smarty->assign($p);
 } 
 else {
 	// ___ USER HAS SENT FORM ___
@@ -115,9 +144,17 @@ else {
 		$messages['activate']['sub'] = $_POST['activate_sub']; 
 		
 		$messages['unsubscribe'] = array();
-		$messages['unsubscribe']['suc'] = $_POST['unsubscribe_suc']; 
+		$messages['unsubscribe']['suc'] = $_POST['unsubscribe_suc'];
 		
-		$input = array('messages' => serialize($messages));
+		$notices = array();
+		$notices['email'] = $_POST['notify_email'];
+		$notices['subject'] = $_POST['notify_subject'];
+		$notices['subscribe'] = $_POST['notify_subscribe'];
+		$notices['unsubscribe'] = $_POST['notify_unsubscribe'];
+		$notices['update'] = $_POST['notify_update'];
+		$notices['pending'] = $_POST['notify_pending'];
+		
+		$input = array('messages' => serialize($messages),'notices' => serialize($notices));
 		PommoAPI::configUpdate( $input, TRUE);
 		
 		$smarty->assign('output',Pommo::_T('Settings updated.'));
@@ -127,6 +164,12 @@ else {
 		$smarty->assign('output',Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
+
+$smarty->assign('t_subscribe',Pommo::_T('Subscription'));
+$smarty->assign('t_unsubscribe',Pommo::_T('Unsubscription'));
+$smarty->assign('t_pending',Pommo::_T('Pending'));
+$smarty->assign('t_update',Pommo::_T('Update'));
+
 $smarty->assign($_POST);
 $smarty->display('admin/setup/ajax/config_messages.tpl');
 Pommo::kill();

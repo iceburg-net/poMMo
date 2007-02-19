@@ -141,4 +141,58 @@ class PommoHelperMessages {
 		$mail->toggleDemoMode();
 		return $ret;
 	}
+	
+	function notify(&$notices,&$sub,$type) {
+		global $pommo;
+		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
+		
+		$mails = PommoHelper::trimArray(explode(',',$notices['email']));
+		if(empty($mails[0]))
+			return;
+			
+		$subject = $notices['subject'].' ';
+		$body = sprintf(Pommo::_T('poMMo %s Notice'),$type);
+		$body .= "  [".date("F j, Y, g:i a")."]\n\n";
+		
+		$body .= "EMAIL: ".$sub['email']."\n";
+		$body .= "IP: ".$sub['ip']."\n";
+		$body .= "REGISTERED: ".date("F j, Y, g:i a",$sub['registered'])."\n";
+		$body .= "DATA:\n";
+		
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+		$fields = PommoField::getNames();
+		
+		foreach($sub['data'] as $fid => $v)
+			$body .= "\t".$fields[$fid].": $v\n";
+				
+		switch($type) {
+			case 'subscribe':
+				$subject .= Pommo::_T('new subscriber!');
+				break;
+			case 'unsubscribe':
+				$subject .= Pommo::_T('user unsubscribed.');
+				break;
+			case 'pending':
+				$subject .= Pommo::_T('new pending!');
+				break;
+			case 'update':
+				$subject .= Pommo::_T('subscriber updated.');
+				break;
+		}
+		
+		$mail = new PommoMailer();
+	
+		// allow mail to be sent, even if demo mode is on
+		$mail->toggleDemoMode("off");
+	
+		// send the confirmation mail
+		$mail->prepareMail($subject, $body);
+		
+		foreach($mails as $to)
+			$mail->bmSendmail($to);
+			
+		// reset demo mode to default
+		$mail->toggleDemoMode();
+		return;
+	}
 }

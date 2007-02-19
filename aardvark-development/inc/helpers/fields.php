@@ -162,8 +162,7 @@ class PommoField {
 			FROM " . $dbo->table['fields']."
 			WHERE
 				1
-				[AND field_id IN(%C)]
-			ORDER BY group_name";
+				[AND field_id IN(%C)]";
 		$query = $dbo->prepare($query,array($id));
 		
 		while ($row = $dbo->getRows($query))
