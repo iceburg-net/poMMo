@@ -25,23 +25,23 @@
 class PluginConfig { //implements iPlugin
 	
 	// UNIQUE Name of the Plugin
-	private $pluginname = "pluginconfig";
-	private $pommo;
-	private $logger;
-	private $configdbhandler;
+	var $pluginname = "pluginconfig";
+	var $pommo;
+	var $logger;
+	var $configdbhandler;
 	
 
-	public function __construct($pommo) {
+	function PLuginConfig($pommo) {
 		$this->pommo = $pommo;
 		$this->logger = $pommo->_logger;
-		$this->configdbhandler = new ConfigDBHandler($pommo->_dbo);
+		$this->configdbhandler = new ConfigDBHandler();
 	}
 	
-	public function __destruct() {
+	function __destruct() {
 	}
 
 
-	public function isActive() {
+	function isActive() {
 		// Parameter 'PLUGINNAME' is the uniquename of the plugin
 		// return $this->userdbhandler->dbPluginIsActive($this->pluginname);
 		// This plugin should always be activated! You can only activate/deactivate it through 
@@ -49,6 +49,7 @@ class PluginConfig { //implements iPlugin
 		// maybe check if $useplugins in config.php is activated/deactivated
 		return TRUE; 
 	}
+	
 	public function getPermission($user) {
 		//TODO select the permissions from DB 
 		// like isActive()
@@ -101,7 +102,7 @@ class PluginConfig { //implements iPlugin
 	
 	//TODO: make atomic action for data consistency?
 	//$changed[0] = $this->authdbhandler->dbActivatePlugin($pluginid, $active);
-	public function editSetup($old, $new) {
+	function editSetup($old, $new) {
 		
 		//TODO -> prevent WARNING
 		$keyarray = array_keys($new);
@@ -122,14 +123,14 @@ class PluginConfig { //implements iPlugin
 		
 	}
 	
-	public function switchPlugin($pluginid, $setto) {
+	function switchPlugin($pluginid, $setto) {
 		$ret = $this->configdbhandler->dbSwitchPlugin($pluginid, $setto);
 		$setted = ($setto=='1') ? 'on' : 'off';
 		$str = "Plugin id {$pluginid}: State changed to {$setted}. ($ret records altered.)";
 		$this->logger->addMsg($str);	
 	}
 	
-	public function switchCategory($catid, $setto) {
+	function switchCategory($catid, $setto) {
 		$ret = $this->configdbhandler->dbSwitchCategory($catid, $setto);
 		$setted = ($setto=='1') ? 'on' : 'off';
 		$str = "Category id " . $catid . ": " . $ret . " records to " . $setted;

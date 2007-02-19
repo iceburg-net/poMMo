@@ -19,19 +19,19 @@
 
 class DbAuth {
 	
-	private $name = "dbauth";
-	private $dbconfig;
+	var $name = "dbauth";
+	var $dbconfig;
 
 
-	public function __construct() {
+	function DbAuth() {
 		$this->dbconfig = array();
 		$this->getConfigFromDb();
 	}
-	public function __destruct() {
+	function __destruct() {
 		unset($this->dbconfig);
 	}
 
-	public function getName() {
+	function getName() {
 		return $this->name;
 	}
 
@@ -39,7 +39,7 @@ class DbAuth {
 	/**
 	 * if the user & password is found in the database return TRUE; else FALSE;
 	 */
-	public function verifyUser($user, $md5pass) {
+	function verifyUser($user, $md5pass) {
 
 		global $pommo;
 		$dbo = clone $pommo->_dbo;
@@ -58,7 +58,6 @@ class DbAuth {
 			}
 		}
 		
-		//$pommo->_logger->addMsg("USER not found / not verified FALSE.");
 		return FALSE;
 		
 	} //verifyUser
@@ -68,7 +67,7 @@ class DbAuth {
 	/**
 	 * Read config controlled by GENERAL PLUGIN SETUP
 	 */
-	public function getConfigFromDb() {
+	function getConfigFromDb() {
 
 		global $pommo;
 		$dbo = clone $pommo->_dbo;
@@ -88,7 +87,7 @@ class DbAuth {
 
 		return $data;
 		
-	} //dbGetConfigByName
+	} //dbGetConfigFromDb
 
 
 

@@ -1,6 +1,33 @@
-{include file="inc/tpl/admin.header.tpl"}
+{capture name=head} {* used to inject content into the HTML <head> *}
+	{* Include in-place editing of subscriber table *}
+	<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
+	<script type="text/javascript">{literal}
+		$().ready(function() {
+			$('#orderForm select').change(function() {
+				$('#orderForm')[0].submit();
+			});
+		});
+		{/literal}
+	</script>
+
+	{* Styling of user table *}
+	<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
+	<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
+	
+{/capture}
+
+
+{include file="inc/tpl/admin.header.tpl"} {*sidebar='off'*}
+
 
 <h2>{t}Responsible Persons Management{/t}</h2>
+
 Idea for this: Here you should declare responsible persons for subscriber groups,
 that are persons who manage the "product management", these persons are inserted in the 
 Reply field. example: when a user has questions / needs support from his responsible person,
@@ -12,42 +39,52 @@ one for each product A,B,C (on sign up there were 3 checkboxes with: Are you int
 and the subscriber can choose) and when a subscriber has questions about B he (he does not 
 recive mails about A & C except when he is grouped in this other groups too) he can mail 
 directly with "his" Manager B.
-<div id="boxMenu">
 
-	<div>
-		<a class="pommoClose" href="../useradmin.php" style="float: right; line-height:18px;">
-		<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
-		{t}Return to User Management Menu{/t}
-		</a>
-	</div><div class="clear"></div>
-
+{*<div id="boxMenu">*}
 	{include file="inc/tpl/messages.tpl"}
-</div>
 
 
+
+<fieldset>
+<legend>{t}Sorting and Navigation{/t}</legend>
+<ul class="inpage_menu">
+	<li>
+		<label for="info">{t}Extended Info{/t}</label>
+		<select name="info">
+			<option value="show"{if $state.info == 'show'} selected="selected"{/if}>{t}show{/t}</option>
+			<option value="hide"{if $state.info == 'hide'} selected="selected"{/if}>{t}hide{/t}</option>
+		</select>
+	</li>
+	<li><a href="../useradmin.php" title="{t}Return to User Management Menu{/t}">
+		&raquo; {t}Return to User Management Menu{/t}</a></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>{t}Use Cases{/t}</legend>
+<ul class="inpage_menu">
+	<li><a href="ajax/resp_add.php?height=400&amp;width=500" title="{t}Add a new Responsible Person{/t}" class="thickbox">
+		&raquo; {t}Add a new Responsible Person{/t}</a>((Data for responsible persons, realname, bounceemail)</li>
+	<li><a href="ajax/resp_disable.php?height=400&amp;width=500" title="{t}Disable all responsible persons{/t}" class="thickbox">
+		&raquo; {t}Disable all responsible persons{/t}</a>(A connection person - group)</li>
+</ul>
+</fieldset>
 
 
 
 <div id="plugincontent">
 
-		<div align="center"><i>({t 1=$nrresp}%1 responsibilities{/t})</i></div>
-
-
-		<form method="POST" action="" name="addResp">
-			<input type="hidden" name="action" value="add">
-			<a href="" onClick="document.addList.submit()"><b>&raquo; Add responsible person (Data for responsible persons, realname, bounceemail or so) (AJAX)</b></a><br>
-		</form>
-		<form method="POST" action="" name="addResp">
-			<input type="hidden" name="action" value="add">
-			<a href="" onClick="document.addList.submit()"><b>&raquo; Add responsibility (A connection person - group)(AJAX)</b></a><br>
-		</form>
+		<br>
+		<p class="count">({t 1=$nrresp}%1 responsibilities{/t})</p>
+		<br><br>
 
 		{if ($nrresp <= 0) } 
 			<p style="align:center;"><i>No responsible person found.</i></p>
 		{else}
 		
 		
-			<table border="0" border="0" cellspacing="1" cellpadding="3" width="100%" style="font-size:12px;">
+			<table summary="user details" id="users">
 			
 			{foreach key=key item=item from=$resp}
 			

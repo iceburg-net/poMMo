@@ -13,64 +13,82 @@
  ** [END HEADER]**/
 
 
-class SimpleUser implements User {
+class SimpleUser {
 
-	private $_usertype;
-	private $_uid;
-	private $_username;
-	private $_md5pass;
-	private $_permissionLevel;
-	private $_authenticated;
+	var $_usertype;
+	var $_uid;
+	var $_username;
+	var $_md5pass;
+	var $_permissionLevel;
 	
-	private $_authmethod;
-	private $_verifier;
+	var $_verifier;
+	var $dbauth;
+	var $sldapauth;
+	var $qldapauth;
 	
-	private $dbauth;
-	private $sldapauth;
-	private $qldapauth;
-	
-	public function __construct($username, $md5pass) {
+	function SimpleUser($username, $md5pass) {
+
 		$this->_usertype = "simpleuser";
 		$this->_uid = NULL;
 		$this->_username = $username;
 		$this->_md5pass = $md5pass;
 		$this->_permissionLevel = 0;
-		$this->_authenticated = FALSE;
 		
-		$this->dbauth = FALSE;
-		$this->sldapauth = FALSE;
-		$this->qldapauth = FALSE;
+		$this->_verifier = NULL;
 		
-		$this->_authmethod = array();
-		$this->_verifier = array();
+		global $pommo;
+		
+		
+		$this->dbauth = $pommo->_plugindata['authmethod']['dbauth'];
+		$this->sldapauth = $pommo->_plugindata['authmethod']['simpleldapauth'];
+		$this->qldapauth = $pommo->_plugindata['authmethod']['queryldapauth'];
+		
+		if ($pommo->_plugindata['authmethod']['dbauth']) {
+			Pommo::requireOnce($pommo->_baseDir.'plugins/lib/auth/methods/class.dbauth.php');
+			$this->_verifier['dbauth'] = new DbAuth();
+			//$this->dbauth = $pommo->_plugindata['authmethod']['dbauth'];
+		}
+		if ($pommo->_plugindata['authmethod']['simpleldapauth']) {
+			Pommo::requireOnce($pommo->_baseDir.'plugins/lib/auth/methods/class.simpleldapauth.php');
+			$this->_verifier['simpleldapauth'] = new SimpleLdapAuth();
+			//$this->sldapauth =  $pommo->_plugindata['authmethod']['simpleldapauth'];
+		}
+		if ($pommo->_plugindata['authmethod']['queryldapauth']) {
+			Pommo::requireOnce($pommo->_baseDir.'plugins/lib/auth/methods/class.queryldapauth.php');
+			$this->_verifier['queryldapauth'] = new QueryLdapAuth();
+			//$this->qldapauth =  $pommo->_plugindata['authmethod']['queryldapauth'];
+		}
+		
 	} //Constructor
-	public function __destruct() {
+	
+	function __destruct() {
 		unset($this->_uid);
 		unset($this->_username);
 		unset($this->_md5pass);
 		unset($this->_permissionLevel);
-		unset($this->_authenticated);
-		
-		//unset
-		$this->dbauth = FALSE;
-		$this->sldapauth = FALSE;
-		$this->qldapauth = FALSE;
-		
-		unset($this->_authmethod);
-		unset($this->_verifier);
 	} //Destructor
+
+
+	function getPermissionLevel() {
+		return $this->_permissionLevel;
+	}
+	function getUserID() {
+		return $this->_uid;
+	}
+
+
+
+
 	
 	/**
 	 *  authenticate with auth methods that are activated in the GENERAL PLUGIN SETUP
 	 */
-	public function authenticate() {
+	function authenticate() {
 
 		global $pommo;
 
-		if (isset($this->_authmethod) AND isset($this->_verifier)) {
-			
 			$dba = $sldapa = $qldapa = FALSE;
-			
+		
 			
 			// AUTH METHODS COMBINATIONS
 			
@@ -81,8 +99,7 @@ class SimpleUser implements User {
 				
 				$dba = $this->_verifier['dbauth']->verifyUser($this->_username, $this->_md5pass);
 				$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: dbauth active AND {$dba}.</div>');
-				$this->_authenticated = $dba;
-				
+				$this->_permissionLevel = $this->dbGetPermissionLevel();
 				return $dba;
 				
 			} elseif (!$this->dbauth AND $this->sldapauth AND !$this->qldapauth) {
@@ -91,8 +108,7 @@ class SimpleUser implements User {
 				
 				$sldapa = $this->_verifier['simpleldapauth']->verifyUser($this->_username, $this->_md5pass);
 				$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: simpleldapauth active AND {$sldapa}.</div>');
-				$this->_authenticated = $sldapa;
-				
+				$this->_permissionLevel = $this->dbGetPermissionLevel();
 				return $sldapa;
 				
 			} elseif (!$this->dbauth AND !$this->sldapauth AND $this->qldapauth) {
@@ -101,7 +117,7 @@ class SimpleUser implements User {
 				
 				$qldapa = $this->_verifier['queryldapauth']->verifyUser($this->_username, $this->_md5pass);
 				$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: queryldapauth active AND {$qldapa}.</div>');
-				$this->_authenticated = $qldapa;
+				$this->_permissionLevel = $this->dbGetPermissionLevel();
 				return $qldapa;
 			
 			} elseif ($this->dbauth AND $this->sldapauth AND !$this->qldapauth) {
@@ -116,31 +132,34 @@ class SimpleUser implements User {
 					//passed both
 					$this->dbWriteLastLogin($this->_username);
 					$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: dbauth&sldap active, passed both: {$dba} - {$sldapa}.</div>');
-					$this->_authenticated = TRUE;
+					$this->_permissionLevel = $this->dbGetPermissionLevel();
 					return TRUE;
+					
 				} elseif (!$dba AND $sldapa) {
 					// not in db but ldap passed
 					//TODO if (dbauth_writeldapusertodb)
 					$this->dbAddLDAPUser($this->_username, $this->_md5pass);
-					$this->dbWriteLastLogin($this->_username);
+					//$this->dbWriteLastLogin($this->_username);
 					$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: dbauth&sldap active, ldap passed, db not: {$dba} - {$sldapa}.</div>');
-					$this->_authenticated = TRUE;
+					$this->_permissionLevel = $this->dbGetPermissionLevel();
 					return TRUE;
 
 				// FALSE
 				} elseif ($dba AND !$sldapa) {
 					//in db but not ldapauth
 					$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: dbauth&sldap active AND db passed, ldap not: {$dba} - {$sldapa}.</div>');
-					$this->_authenticated = FALSE;
+					$this->_permissionLevel = 0;
 					return FALSE;
+					
 				} elseif (!$dba AND !$sldapa ) {
 					// both not passed
 					$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: dbauth&sldap active, both not passed: {$dba} - {$sldapa}.</div>');
-					$this->_authenticated = FALSE;
+					$this->_permissionLevel = 0;
 					return FALSE;
+					
 				} else {
 					$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: dbauth&sldap active, something else wrong: {$dba} - {$sldapa}.</div>');
-					$this->_authenticated = FALSE;
+					$this->_permissionLevel = 0;
 					return FALSE;
 				}
 				
@@ -148,209 +167,41 @@ class SimpleUser implements User {
 			
 			//FALSES
 			} elseif (!$this->dbauth AND !$this->sldapauth AND !$this->qldapauth) {
-				$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: all three auth methods active.</div>');
+				$pommo->_logger->addMsg('SimpleUser: No authmethod set. See General Plugin Setup.');
+				$this->_permissionLevel = 0;
 				return FALSE;
 			} else {
 				$pommo->_logger->addMsg('<div style="color: blue;">SimpleUser: Corrupted auth methods.</div>');
+				$this->_permissionLevel = 0;
 				return FALSE;
 			}
-	
-		} else {
-			$pommo->_logger->addMsg('SimpleUser: No authmethod set. See General Plugin Setup.');
-			$this->_authenticated = FALSE;
-			return FALSE;
-		}
 		
 	} //authenticate
-
-
-	public function isAuthenticated() {
-		if (isset($this->_authenticated))
-			return $this->_authenticated;
-		else
-			return FALSE;
-	}
-	public function getUsertype() {
-		return $this->_usertype;
-	}
-	public function getUsername() {
-		return $this->_username;
-	}
-	public function getPermissionLevel() {
-		return $this->_permissionLevel;
-	}
-	
-	
-	/**
-	 * The $authmethod is selected , maybe move all this tho the constructor? -> shorter
-	 * Get the activated authentication methods db/ldap from db and generate a checkl object for each one
-	 * and store them in the verifier array.
-	 */
-	public function setAuthMethod() {
-
-		global $pommo;
-		$this->_authmethod = $this->dbGetAuthMethod();
-		
-		for ($i = 0; $i < sizeof($this->_authmethod); $i++) {
-			 
-			switch ($this->_authmethod[$i]) {
-
-					case 'dbauth':
-							Pommo::requireOnce($pommo->_baseDir.'plugins/lib/auth/methods/class.dbauth.php');
-							$this->_verifier['dbauth'] = new DbAuth();
-							$this->dbauth = TRUE;
-						break;
-					
-					case 'simpleldapauth':
-							Pommo::requireOnce($pommo->_baseDir.'plugins/lib/auth/methods/class.simpleldapauth.php');
-							$this->_verifier['simpleldapauth'] = new SimpleLdapAuth();
-							$this->sldapauth = TRUE;
-						break;
-							
-					case 'queryldapauth':
-							Pommo::requireOnce($pommo->_baseDir.'plugins/lib/auth/methods/class.queryldapauth.php');
-							$this->_verifier['queryldapauth'] = new QueryLdapAuth();
-							$this->qldapauth = TRUE;
-						break;
-							
-					default:
-							//TODO return a standard authentication object, nor none?
-							$pommo->_logger->addMsg("No Authentication Method set. Check the General plugin Setup.<br>");	
-						break;
-						
-				} //switch
-				
-		} //for
-			
-	} //setAuthMethod
 	
 
 
-
-	/**
-	 * Get the active authentication methods from DB
-	 * returns a array of activated auth methods
-	 */
-	private function dbGetAuthMethod() {
+	function dbGetPermissionLevel() {
 		
 		global $pommo;
+		//$this->dbo =& $pommo->_dbo; 
 		$dbo = clone $pommo->_dbo;
 		
-		$m = array();
+		$a = array();
 		
-		// other query
-		$query = "SELECT plugin_uniquename FROM " . $dbo->table['plugin'] .
-				" WHERE (plugin_uniquename = 'simpleldapauth' AND plugin_active = 1) OR " .
-				" (plugin_uniquename = 'queryldapauth' AND plugin_active = 1) OR " .
-				" (plugin_uniquename = 'dbauth' AND plugin_active = 1)";
+		$query = "SELECT user_permissionlvl FROM " . $dbo->table['user'] . 
+			" WHERE user_name = '". $this->_username ."' LIMIT 1 "; 
 
-		// Can be a array if more plugins are activated
-		
 		$query = $dbo->prepare($query);
 		
-		$i = 0;
-		while ($row = $dbo->getRows($query)) {
-			$m[$i] = $row['plugin_uniquename'];
-			$i++;
-		}
-		return $m;
+		if ($row = $dbo->getRows($query))
+			$a = $row['user_permissionlvl'];
 		
-	} //dbGetAuthMethod
-
-
-
-	 
-	public function dbWriteLastLogin($username) {
+		return $a;
 	
-		global $pommo;
-		$dbo = $pommo->_dbo;
-		
-		$sql = $dbo->_safeSQL->query("UPDATE %s SET user_lastlogin=NOW() WHERE user_name='%s' ",
-				array($dbo->table['user'], $username) );
-			$dbo->query($sql);
-		$sql = $dbo->_safeSQL->query("UPDATE %s SET user_lastlogin=NOW() WHERE user_name='%s' ",
-				array($dbo->table['user'], $username) );
-			$dbo->query($sql);
-	}
+	} //dbGetPermissionLevel
 	
-	public function dbAddLDAPUser($user, $pass) {
-
-		global $pommo;
-		$dbo = $pommo->_dbo;
-
-		$sql = $dbo->_safeSQL->query("INSERT INTO %s (user_name, user_pass, user_perm, user_created) " .
-				"VALUES ('%s', '%s', NULL, NOW()) ",
-				array($dbo->table['user'], $user, $pass ) );
-			$dbo->query($sql);
-	}
-	 
-	 
-	 
-	 
-
-
 
 } //SimpleUser
 
-
-/***
- 	public function authenticate($user, $md5pass) {
-		
-		//TODO
-		// IF NOT IN DB auth per LDAP and then insert in DB
-		// with flag for administrator
-	
-	/*	if ($this->dbauth->authenticate($user, $md5pass)) {
-			echo "JA-true<br>";
-		} else {
-			echo "NEIN-FALSE<br>";
-		}
-		if ($this->ldapauth->authenticate($user, $md5pass)) {
-			echo "LDAP JA-true<br>";
-		} else {
-			echo "LDAP NEIN-FALSE<br>";
-		}	
-		* /
-		
-	
-		$ldapa = $this->ldapauth->authenticate($user, $md5pass);	
-		// if true??
-		$dba = $this->dbauth->authenticate($user, $md5pass);	//$md5pass
-
-		// TRUES!
-		if ($ldapa && $dba) {
-			// LDAP auth ok und db auth auch
-			$pommo->_logger->addMsg("authenticated with both.");
-			$this->dbhandler->dbWriteLastLogin($user); 
-			return TRUE;
-		} elseif ($ldapa && !$dba) {
-			// LDAP ok aber db nicht
-			$pommo->_logger->addMsg("with LDAP but not in DB.");
-			// das das fehlt in DB schreiben
-			$this->dbhandler->dbAddLDAPUser($user, $md5pass);	// ein komisches Passwort generieren
-			$this->dbhandler->dbWriteLastLogin($user); 
-			return TRUE;	//!! IF  	dbldap_insertldaptodb aus CONFIG!!!
-		} elseif (!$ldapa && $dba) {
-			//DB ok aber LDAP nicht
-			$pommo->_logger->addMsg("with DB but not in LDAP.");
-			// das das fehlt in DB schreiben
-			$this->dbhandler->dbWriteLastLogin($user); 
-			return FALSE;
-			
-		// FALSES!
-		} elseif (!$ldapa && !$dba) {
-			$pommo->_logger->addMsg("both authentication failed.");
-			return FALSE;
-		} else {
-			$pommo->_logger->addMsg("both not passed.");
-			return FALSE;
-		}
-		
-
-
-	
-	} //authenticate
-
- */
 
 ?>

@@ -14,7 +14,7 @@
 
 
 
-require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/respmanager/class.db_resphandler.php'); 
+//require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/respmanager/class.db_resphandler.php'); 
 //require_once ($pommo->_baseDir.'/inc/class.pager.php');
 
 
@@ -24,37 +24,37 @@ class RespPlugin {
 
 	// UNIQUE Name of the Plugin i decided to do this so some can select his plugins configuration
 	// from the database through this name.
-	private $pluginname = "respmanager";	
+	var $pluginname = "respmanager";	
 	
-	private $dbo;
-	private $logger;
-	private $pommo;
+	var $dbo;
+	var $logger;
+	var $pommo;
 	
-	private $respdbhandler;
+	var $respdbhandler;
 	
 
-	public function __construct($pommo) {
+	function RespPlugin($pommo) {
 		$this->dbo = $pommo->_dbo;
 		$this->logger = $pommo->_logger;
 		$this->pommo = $pommo;
 		
 		$this->respdbhandler = new RespDBHandler($this->dbo);
 	}
-	public function __destruct() {
+	function __destruct() {
 	}
 
-	public function isActive() {
+	function isActive() {
 		// Parameter 'PLUGINNAME' is the uniquename of the plugin
 		return $this->userdbhandler->dbPluginIsActive($this->pluginname);
 	}
 	
-	public function getPermission($user) {
+	function getPermission($user) {
 		//TODO select the permissions from DB 
 		return TRUE;
 	}
 	
 	
-	public function execute($data) {	
+	function execute($data) {	
 
 		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();
@@ -110,15 +110,15 @@ class RespPlugin {
 	
 	
 	
-	public function addResponsiblePerson($uid, $realname, $surname, $bounce) {
+	function addResponsiblePerson($uid, $realname, $surname, $bounce) {
 		return $this->respdbhandler->dbAddResponsiblePerson($uid, $realname, $surname, $bounce);
 		
 	}
-	public function deleteResponsiblePerson($uid) {
+	function deleteResponsiblePerson($uid) {
 		return $this->respdbhandler->dbDeleteResponsiblePerson($uid);
 		
 	}
-	public function editResponsiblePerson($uid, $realname, $surname, $bounce) {
+	function editResponsiblePerson($uid, $realname, $surname, $bounce) {
 		return $this->respdbhandler->dbAddResponsiblePerson($uid, $realname, $surname, $bounce);
 		
 	}

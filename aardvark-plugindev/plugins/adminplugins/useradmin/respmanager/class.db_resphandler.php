@@ -13,19 +13,21 @@
  ** [END HEADER]**/
 
 
-require_once ($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
+//require_once ($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
 
+
+//Das weg
 // Cool DB Query Wrapper from Monte Ohrt
 require_once ($pommo->_baseDir.'inc/lib/safesql/SafeSQL.class.php');
 
 
-class RespDBHandler implements iDbHandler {
+class RespDBHandler { //implements iDbHandler {
 
-	private $dbo;
-	private $safesql;
+	var $dbo;
+	var $safesql;		//das weg und mit dbo->prepare()
 
 
-	public function __construct($dbo) {
+	function RespDBHandler($dbo) {
 		$this->dbo = $dbo;
 		$this->safesql = $dbo->_safeSQL;
 	}
@@ -36,7 +38,7 @@ class RespDBHandler implements iDbHandler {
 
 
 	/** Returns if the Plugin itself is active */
-	public function & dbPluginIsActive($pluginame) {
+	function & dbPluginIsActive($pluginame) {
 		$sql = $this->safesql->query("SELECT plugin_active FROM %s " .
 				"WHERE plugin_uniquename='%s' ", 
 			array('pommomod_plugin', $pluginame) );
@@ -45,7 +47,7 @@ class RespDBHandler implements iDbHandler {
 
 
 	/* Custom DB fetch functions */
-	public function dbFetchRespMatrix() {
+	function dbFetchRespMatrix() {
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, r.rp_realname, r.rp_bounceemail, r.rp_sonst " .	//user_pass,
 				//"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
 				"FROM %s AS u RIGHT JOIN %s as r ON u.user_id=r.user_id ORDER BY u.user_name ", 
@@ -65,7 +67,7 @@ class RespDBHandler implements iDbHandler {
 		return $user;
 	}
 
-	public function dbFetchRespGroups() {
+	function dbFetchRespGroups() {
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, r.rp_realname, r.rp_bounceemail, r.rp_sonst, " .
 				"g.group_id, g.group_name " .	//user_pass,
 				//"FROM %s AS u LEFT JOIN %s AS p ON u.user_perm=p.perm_id ORDER BY u.user_id",
@@ -92,7 +94,7 @@ class RespDBHandler implements iDbHandler {
 	}
 
 	
-	public function dbFetchRespLists() {
+	function dbFetchRespLists() {
 		$sql = $this->safesql->query("SELECT rp.user_id, u.user_name, l.list_id, l.list_name, l.list_desc, l.list_created, l.list_sentmailings, l.list_active, l.list_senderinfo " .
 				"FROM %s AS l LEFT JOIN %s AS lrp ON l.list_id = lrp.list_id " .
 				"LEFT JOIN %s AS rp ON lrp.user_id = rp.user_id  " .
@@ -132,7 +134,7 @@ class RespDBHandler implements iDbHandler {
 	
 
 	
-	public function dbFetchUser() {
+	function dbFetchUser() {
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name " .	//user_pass,
 				"FROM %s AS u ORDER BY u.user_id",
 				//"FROM %s AS u RIGHT JOIN %s as r ON u.user_id=r.user_id ", 
@@ -149,7 +151,7 @@ class RespDBHandler implements iDbHandler {
 	}
 	
 	
-	public function dbFetchUserData($userid) {
+	function dbFetchUserData($userid) {
 		$sql = $this->safesql->query("SELECT r.user_id, u.user_name, r.rp_realname, r.rp_bounceemail " .	//user_pass,
 				"FROM %s AS u RIGHT JOIN %s as r ON u.user_id=r.user_id WHERE u.user_id=%i LIMIT 1", 
 			array( 'pommomod_user',  'pommomod_responsibleperson', $userid ) );
@@ -168,7 +170,7 @@ class RespDBHandler implements iDbHandler {
 	
 	
 	
-	public function dbAddResponsiblePerson( $uid, $realname, $bounce ) {
+	function dbAddResponsiblePerson( $uid, $realname, $bounce ) {
 			$sql = $this->safesql->query("INSERT INTO %s (user_id, rp_realname, rp_bounceemail, rp_sonst) VALUES ('%s', '%s', '%s', '%s', 'blah'); ",
 				array('pommomod_responsibleperson', $uid, $realname, $bounce ) );
 				
@@ -180,7 +182,7 @@ class RespDBHandler implements iDbHandler {
 	}
 	
 	// zB für neu zu weisungen?
-	public function dbEditResponsiblePerson( $uid, $realname, $bounce ) {
+	function dbEditResponsiblePerson( $uid, $realname, $bounce ) {
 		$sql = $this->safesql->query("UPDATE %s SET rp_realname='%s', rp_bounceemail='%s'
 				WHERE user_id=%i",
 			array('pommomod_responsibleperson', $realname, $bounce, $uid ) );
@@ -192,7 +194,7 @@ class RespDBHandler implements iDbHandler {
 		}
 	}
 	
-	public function dbDeleteResponsiblePerson( $uid ) {
+	function dbDeleteResponsiblePerson( $uid ) {
 			$sql = $this->safesql->query("DELETE FROM %s WHERE user_id=%i LIMIT 1",
 				array('pommomod_responsibleperson', $uid) );
 			if (!$this->dbo->query($sql)) {
@@ -203,7 +205,7 @@ class RespDBHandler implements iDbHandler {
 	}
 	
 	
-	public function dbGetGroups() {
+	function dbGetGroups() {
 		$groups = array ();
 		$sql = $this->safesql->query("SELECT group_id, group_name FROM %s ORDER BY group_name",
 			array($this->dbo->table['groups']) );

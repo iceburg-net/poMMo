@@ -13,26 +13,26 @@
  ** [END HEADER]**/
 
 
-class ListDBHandler implements iDbHandler {
+class ListDBHandler { //implements iDbHandler {
 
-	private $dbo;
-	private $safesql;
+	var $dbo;
+	var $safesql;
 
 
-	public function __construct($dbo) {
+	function ListDBHandler($dbo) {
 		$this->dbo = $dbo;
 		$this->safesql = $dbo->_safeSQL;
 	}
 
 	/** Returns if the Plugin itself is active */
-	public function & dbPluginIsActive($pluginame) {
+	function & dbPluginIsActive($pluginame) {
 		$sql = $this->safesql->query("SELECT plugin_active FROM %s WHERE plugin_uniquename='%s' ", 
 			array(pommomod_plugin, $pluginame) );
 		return $this->dbo->query($sql, 0);	//row 0
 	}
 	
 	
-	public function dbFetchLists() {
+	function dbFetchLists() {
 		$sql = $this->safesql->query("SELECT rp.user_id, u.user_name, l.list_id, l.list_name, l.list_desc, l.list_created, l.list_sentmailings, l.list_active, l.list_senderinfo " .
 				"FROM %s AS l LEFT JOIN %s AS lrp ON l.list_id = lrp.list_id " .
 				"LEFT JOIN %s AS rp ON lrp.user_id = rp.user_id  " .
@@ -86,7 +86,7 @@ class ListDBHandler implements iDbHandler {
 		echo "<div style='background-color:red;'>"; echo $this->dbo->affected(); echo "</div>";
 		return $user;
 	}*/
-	public function dbFetchUserLists() {
+	function dbFetchUserLists() {
 		$sql = $this->safesql->query("SELECT u.user_id, u.user_name, p.perm_name, count(lu.list_id) AS numlist " .	
 				"FROM %s AS u LEFT JOIN %s AS lu ON u.user_id=lu.user_id " .
 				//"LEFT JOIN %s AS l ON lu.list_id=l.list_id " .
@@ -113,7 +113,7 @@ class ListDBHandler implements iDbHandler {
 		return $user;
 	}
 	
-	public function dbGetListsForUser($userid) {
+	function dbGetListsForUser($userid) {
 		$sql1 = $this->safesql->query("SELECT lu.user_id, l.list_id, l.list_name, l.list_desc " .
 				"FROM %s AS l, %s AS lu WHERE l.list_id=lu.list_id AND lu.user_id=%i",	//
 			array('pommomod_list', 'pommomod_list_rp', $userid) );
@@ -131,7 +131,7 @@ class ListDBHandler implements iDbHandler {
 	}
 	
 
-	public function dbAddList($name, $desc, $email, $user, $group) {
+	function dbAddList($name, $desc, $email, $user, $group) {
 			// SELECT USER ID
 			$sql = $this->safesql->query("INSERT INTO %s (list_name, list_desc, list_created, list_sentmailings, list_active, list_senderinfo) " .
 					"VALUES ('%s', '%s', NOW(), '0', TRUE, 'Ab. S. Ender'); ",
@@ -147,7 +147,7 @@ class ListDBHandler implements iDbHandler {
 			}
 	}
 	
-	public function dbDeleteList($listid, $userid) {
+	function dbDeleteList($listid, $userid) {
 		$sql = $this->safesql->query("DELETE FROM %s WHERE list_id=%i",
 			array('pommomod_list', $listid ) );
 		$sql2 = $this->safesql->query("DELETE FROM %s WHERE list_id=%i AND user_id=%i",
@@ -160,7 +160,7 @@ class ListDBHandler implements iDbHandler {
 			return ($affected == 0) ? FALSE : $affected;*/
 		}
 	}
-	public function dbEditList($listid, $name, $desc) {
+	function dbEditList($listid, $name, $desc) {
 		$sql = $this->safesql->query("UPDATE %s SET list_name='%s', list_desc='%s'  
 				WHERE list_id=%i",
 			array('pommomod_list', $name, $desc, $listid ) );
@@ -172,7 +172,7 @@ class ListDBHandler implements iDbHandler {
 		}
 	}
 	
-	public function dbGetListInfo($listid, $userid) {
+	function dbGetListInfo($listid, $userid) {
 		/*$sql = $this->safesql->query("SELECT l.list_id, l.list_name, lu.user_id " .
 				"FROM %s AS lu, %s AS l WHERE l.list_id=%i AND lu.user_id=%i", 
 			array('pommomod_list_user', 'pommomod_list', $listid) );*/
@@ -196,22 +196,22 @@ class ListDBHandler implements iDbHandler {
 		return $listinfo;
 	}
 	
-function & dbGetMailGroups($where = NULL) {
-
-	$whereStr = '';
-	if (is_numeric($where))
-		$whereStr = " WHERE group_id=".$where." ";
-		//$whereStr = ' WHERE group_id=\''.$where.'\'';
-
-	$groups = array ();
-	$sql = $this->safesql->query("SELECT group_id, group_name FROM %s %s ORDER BY group_name",
-		array($this->dbo->table['groups'], $whereStr) );
-		
-	while ($row = $this->dbo->getRows($sql, TRUE)) {
-		$groups[$row[0]] = $row[1];
+	function & dbGetMailGroups($where = NULL) {
+	
+		$whereStr = '';
+		if (is_numeric($where))
+			$whereStr = " WHERE group_id=".$where." ";
+			//$whereStr = ' WHERE group_id=\''.$where.'\'';
+	
+		$groups = array ();
+		$sql = $this->safesql->query("SELECT group_id, group_name FROM %s %s ORDER BY group_name",
+			array($this->dbo->table['groups'], $whereStr) );
+			
+		while ($row = $this->dbo->getRows($sql, TRUE)) {
+			$groups[$row[0]] = $row[1];
+		}
+		return $groups;
 	}
-	return $groups;
-}
 
 } //ListDBHandler
 

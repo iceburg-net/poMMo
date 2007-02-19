@@ -1,40 +1,77 @@
-{include file="inc/tpl/admin.header.tpl"}
+{capture name=head} {* used to inject content into the HTML <head> *}
+	{* Include in-place editing of subscriber table *}
+	<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
+	<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
+	<script type="text/javascript">{literal}
+		$().ready(function() {
+			$('#orderForm select').change(function() {
+				$('#orderForm')[0].submit();
+			});
+		});
+		{/literal}
+	</script>
+
+	{* Styling of user table *}
+	<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
+	<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
+	
+{/capture}
+
+
+{include file="inc/tpl/admin.header.tpl"} {*sidebar='off'*}
 
 <h2>{t}Mailing List Management Management{/t}</h2>
 
-<div id="boxMenu">
-
-	<div>
-		<a class="pommoClose" href="../useradmin.php" style="float: right; line-height:18px;">
-		<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
-		{t}Return to User Management Menu{/t}
-		</a>
-	</div><div class="clear"></div>
-
+{*<div id="boxMenu">*}
 	{include file="inc/tpl/messages.tpl"}
-</div>
 
 
 
+<fieldset>
+<legend>{t}Sorting and Navigation{/t}</legend>
+<ul class="inpage_menu">
+	<li>
+		<label for="info">{t}Extended Info{/t}</label>
+		<select name="info">
+			<option value="show"{if $state.info == 'show'} selected="selected"{/if}>{t}show{/t}</option>
+			<option value="hide"{if $state.info == 'hide'} selected="selected"{/if}>{t}hide{/t}</option>
+		</select>
+	</li>
+	<li><a href="../useradmin.php" title="{t}Return to User Management Menu{/t}">
+		&raquo; {t}Return to User Management Menu{/t}</a></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>{t}Use Cases{/t}</legend>
+<ul class="inpage_menu">
+	<li><a href="ajax/list_add.php?height=400&amp;width=500" title="{t}Add a new Mailing List{/t}" class="thickbox">
+		&raquo; {t}Add a new Mailing List{/t}</a></li>
+	<li><a href="ajax/list_disable.php?height=400&amp;width=500" title="{t}Add Permission Group{/t}" class="thickbox">
+		&raquo; {t}Deactivate all mailing lists{/t}</a></li>
+</ul>
+</fieldset>
 
 
 <div id="plugincontent">
 
-		<div align="center"><i>({t 1=$nrlists}%1 lists{/t})</i></div>
-
-		<form method="POST" action="" name="addList">
-			<input type="hidden" name="action" value="add">
-			<a href="" onClick="document.addList.submit()"><b>&raquo; Add new 
-				mailing listAJAX</b></a><br>
-		</form>
+		<br>
+		<p class="count">({t 1=$nrlists}%1 lists{/t})</p>
+		<br><br>
 
 		{if ($nrlists <= 0) } 
 			<p style="align:center;"><i>No Mailing List found.</i></p>
 		{else}
 		
-		
-			<table border="0" border="0" cellspacing="1" cellpadding="3" width="100%"
-			style="font-size:12px;">{*Why is the font always so big in certain forms?*}
+			<table summary="user details" id="users">
+			{*<table border="0" border="0" cellspacing="1" cellpadding="3" width="100%"
+			style="font-size:12px;">*}{*Why is the font always so big in certain forms?*}
 			
 			{foreach key=key item=item from=$list}
 			
@@ -44,11 +81,11 @@
 						{assign var="titel" value=FALSE}
 
 						<tr><td colspan="5" style="height:10px; border-color: white; "></td></tr>
-						<tr style="background-color: pink;"><td colspan="5">
+						<tr style="background-color: lightgrey;"><td colspan="5">
 							<div>Noone administrates this mailing lists:</div>
 						</td></tr>
 					{/if}
-					<tr  style="background-color: pink;">
+					<tr  style="background-color: lightgrey;">
 						<td>
 						Mailing List: <b>{$item.name}</b> (id: {$item.lid})
 						</td>

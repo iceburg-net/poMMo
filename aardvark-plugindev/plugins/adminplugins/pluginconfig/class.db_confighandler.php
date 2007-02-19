@@ -12,32 +12,36 @@
  * 
  ** [END HEADER]**/
 
-class ConfigDBHandler implements iDbHandler {
+class ConfigDBHandler { //implements iDbHandler {
 
-	private $dbo;
-	private $safesql;
 
-	public function __construct($dbo) {
-		$this->dbo = $dbo;
-		$this->safesql = $dbo->_safeSQL;
+	function ConfigDBHandler() {
 	}
 
 	/** Returns if the Plugin itself is active */
-	public function & dbPluginIsActive($pluginname) {
+	function & dbPluginIsActive($pluginname) {
 		// The plugin administration plugin should always be active
 		return TRUE;
 	}
 	
 
 	/* Get all active Plugins + configuration in a Matrix */
-	public function dbGetPluginMatrix() {
-		$sql = $this->safesql->query("SELECT plugin_id, plugin_uniquename, plugin_name, plugin_desc, plugin_active, " .
+	function dbGetPluginMatrix() {
+		
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
+		
+		
+		$query = "SELECT plugin_id, plugin_uniquename, plugin_name, plugin_desc, plugin_active, " .
 				"c.cat_id, cat_name, cat_active, plugin_version " .
-				"FROM %s AS p RIGHT JOIN %s AS c ON p.cat_id=c.cat_id WHERE c.cat_active=1 " .
-				"ORDER BY cat_name",
-			array( 'pommomod_plugin', 'pommomod_plugincategory' ) );
-		$i=0; $plugins = NULL;
-		while ($row = $this->dbo->getRows($sql)) {
+				"FROM ".$dbo->table['plugin']." AS p RIGHT JOIN ".$dbo->table['plugincategory']." AS c ON p.cat_id=c.cat_id WHERE c.cat_active=1 " .
+				"ORDER BY cat_name, plugin_id";
+		
+		$query = $dbo->prepare($query);
+		
+		$i=0; $plugins = array();
+		
+		while ($row = $dbo->getRows($query)) {
 			$plugins[$i] = array(
 				'pid' 		=> $row['plugin_id'],
 				'uniquename'=> $row['plugin_uniquename'],
@@ -51,25 +55,29 @@ class ConfigDBHandler implements iDbHandler {
 				);
 			$i++;
 		}
+		
 		return $plugins;
 	}
 
 	/* Get categories, that are active Or inactive, or all */
-	public function dbGetCategories($active = NULL) {	
-		$sql = NULL;
+	function dbGetCategories($active = NULL) {	
+		
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
+		
+		$query = NULL;
 		if ($active == 'inactive') {	//ALL INACTIVE
-			$sql = $this->safesql->query("SELECT cat_id, cat_name, cat_desc, cat_active FROM %s WHERE cat_active=0 ",
-				array( 'pommomod_plugincategory') );
+			$query = "SELECT cat_id, cat_name, cat_desc, cat_active FROM ".$dbo->table['plugincategory']." WHERE cat_active=0 ";
 		} elseif ($active == 'active') {	//ACTIVE ONES
-			$sql = $this->safesql->query("SELECT cat_id, cat_name, cat_desc, cat_active FROM %s WHERE cat_active=1 ",
-				array( 'pommomod_plugincategory') );
+			$query = "SELECT cat_id, cat_name, cat_desc, cat_active FROM ".$dbo->table['plugincategory']." WHERE cat_active=1 ";
 		} else {	//ALL CATEGORIES
-			$sql = $this->safesql->query("SELECT cat_id, cat_name, cat_desc, cat_active FROM %s ORDER BY cat_active ",
-				array( 'pommomod_plugincategory' ) );
+			$query = "SELECT cat_id, cat_name, cat_desc, cat_active FROM ".$dbo->table['plugincategory']." ORDER BY cat_active ";
 		}
 		
+		$query = $dbo->prepare($query);
+		
 		$i=0; $cat = NULL;
-		while ($row = $this->dbo->getRows($sql)) {
+		while ($row = $dbo->getRows($query)) {
 			$cat[$i] = array(
 				'cid' 		=> $row['cat_id'],
 				'name'		=> $row['cat_name'],
@@ -84,12 +92,18 @@ class ConfigDBHandler implements iDbHandler {
 
 
 	/** Get the setup values for one given Plugin ID */
-	public function & dbGetPluginSetup($pluginid) {
-		$sql = $this->safesql->query("SELECT data_id, data_name, data_value, data_type, data_desc, plugin_id " .
-				"FROM %s WHERE plugin_id=%i",
-			array('pommomod_plugindata', $pluginid) );
+	function & dbGetPluginSetup($pluginid) {
+		
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
+		
+		$query = "SELECT data_id, data_name, data_value, data_type, data_desc, plugin_id " .
+				"FROM ".$dbo->table['plugindata']." WHERE plugin_id=".$pluginid;
+
+		$query = $dbo->prepare($query);
+
 		$i=0;
-		while ($row = $this->dbo->getRows($sql)) {
+		while ($row = $dbo->getRows($query)) {
 			$data[$i] = array(
 				'data_id' 		=> $row['data_id'],
 				'data_name'		=> $row['data_name'],
@@ -112,16 +126,25 @@ class ConfigDBHandler implements iDbHandler {
 	 * $nevval is a array with all the information
 	 * returns the amount of changed "items"
 	 */
-	public function dbUpdatePluginData($id, $newval) {
-		$sql = $this->safesql->query("UPDATE %s SET data_value='%s' WHERE data_id=%i",
-			array('pommomod_plugindata', $newval, $id ) );
-		return $this->dbo->query($sql);
+	function dbUpdatePluginData($id, $newval) {
+		
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
+		
+		$query = "UPDATE ".$dbo->table['plugindata']." SET data_value='".$newval."' WHERE data_id=".$id;
+		$query = $dbo->prepare($query);
+		
+		return $dbo->query($query);
+
 	}
 	
 
-	public function dbSwitchPlugin($pluginid, $setto) {	// = NULL
+	function dbSwitchPlugin($pluginid, $setto) {	// = NULL
 
-		$sql = NULL;
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
+		
+		$query = NULL;
 		// TODO -> This feature below is not needed. I want to be able to activate the options independently e.g. 
 		//			if one wants to activate db auth and ldap auth he hast du activate both this plugins
 		// Switch all other options from this category. (Mostly we want only 1 configuration active e.g. the authentication method)
@@ -130,27 +153,33 @@ class ConfigDBHandler implements iDbHandler {
 		/*if (!setto) {
 			$sql = $this->safesql->query("UPDATE %s SET NOT(plugin_active) WHERE plugin_id=%i",
 				array('pommomod_plugin', $pluginid ) );
-		} else {*/
-			$sql = $this->safesql->query("UPDATE %s SET plugin_active=%i WHERE plugin_id=%i",
-				array('pommomod_plugin', $setto, $pluginid ) );
-		//}
-		return $this->dbo->query($sql);
+		*/
+
+		$query = "UPDATE ".$dbo->table['plugin']." SET plugin_active=".$setto." WHERE plugin_id=".$pluginid;
+		$query = $dbo->prepare($query);
+			
+		return $dbo->query($query);
 	}
 	
 	
-	public function dbSetPlugins($state) {	// = NULL
+	function dbSetPlugins($state) {	// = NULL
+
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
 
 		if (($state == "ON") OR ($state == "OFF")) {
 			
 			if ($state == "ON") $to = "TRUE"; else $to = "FALSE";
-			$sql = NULL;
-			$sql = $this->safesql->query("UPDATE %s SET plugin_active=%s",
-				array('pommomod_plugin', $to ) );
-			return $this->dbo->query($sql);
+			
+			$query = NULL;
+			$query = "UPDATE ".$dbo->table['plugin']." SET plugin_active=".$to;
+			$query = $dbo->prepare($query);
+			
+			return $dbo->query($query);
 		
-		} else {
-			return FALSE;
-		}
+		} 
+		return FALSE;
+	
 	}
 
 
@@ -162,11 +191,15 @@ class ConfigDBHandler implements iDbHandler {
 	 * Updates category data, sets the given category as active/inactive 
 	 * and returns the amaount of changed data values.
 	 */
-	public function dbSwitchCategory($catid, $setto) {
-		$sql = $this->safesql->query("UPDATE %s SET cat_active=%i WHERE cat_id=%i",
-				array('pommomod_plugincategory', $setto, $catid ) );
-		//returns count of changed data values!
-		return $this->dbo->query($sql);
+	function dbSwitchCategory($catid, $setto) {
+		
+		global $pommo;
+		$dbo = clone $pommo->_dbo;
+		
+		$query = "UPDATE ".$dbo->table['plugincategory']." SET cat_active=".$setto." WHERE cat_id=".$catid;
+		$query = $dbo->prepare($query);
+		
+		return $dbo->query($query);
 	}
 
 

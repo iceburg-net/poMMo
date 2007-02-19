@@ -20,7 +20,7 @@ class QueryLdapAuth {
 	private $ldapconf;	
 
 
-	public function __construct() {
+	public function QueryLdapAuth() {
 		$this->ldapconf = array();
 		$this->getConfigFromDb();
 	}

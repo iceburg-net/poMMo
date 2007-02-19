@@ -18,35 +18,35 @@ class ListPlugin {
 
 	// UNIQUE Name of the Plugin i decided to do this so some can select his plugins configuration
 	// from the database through this name.
-	private $pluginname = "listmanager";	
+	var $pluginname = "listmanager";	
 	
-	private $logger;
-	private $pommo;
+	var $logger;
+	var $pommo;
 	
-	private $listdbhandler;
+	var $listdbhandler;
 	
 
-	public function __construct($pommo) {
+	function ListPlugin($pommo) {
 		$this->pommo = $pommo;
 		$this->logger = $pommo->_logger;
 		
 		$this->listdbhandler = new ListDBHandler($pommo->_dbo);
 	}
-	public function __destruct() {
+	function __destruct() {
 	}
 
-	public function isActive() {
+	function isActive() {
 		// Parameter 'PLUGINNAME' is the uniquename of the plugin
 		return $this->listdbhandler->dbPluginIsActive($this->pluginname);
 	}
 	
-	public function getPermission($user) {
+	function getPermission($user) {
 		//TODO select the permissions from DB 
 		return TRUE;
 	}
 	
 	
-	public function execute($data) {	
+	function execute($data) {	
 
 		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();
@@ -90,13 +90,13 @@ class ListPlugin {
 	
 	
 	//TODO some checks
-	public function addList($name, $desc, $email, $user, $group) {
+	function addList($name, $desc, $email, $user, $group) {
 		return $this->listdbhandler->dbAddList($name, $desc, $email, $user, $group);
 	}
-	public function editList($listid, $name, $desc) {
+	function editList($listid, $name, $desc) {
 		return $this->listdbhandler->dbEditList($listid, $name, $desc);
 	}
-	public function deleteList($id, $userid) {
+	function deleteList($id, $userid) {
 		return $this->listdbhandler->dbDeleteList($id, $userid);
 	}
 	

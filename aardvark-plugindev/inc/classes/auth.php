@@ -79,5 +79,13 @@ class PommoAuth {
 		return (empty($this->_username)) ? false : true;
 	}
 	
+	function dbCheckPermission() {
+		//TODO
+		if (($this->_username == 'admin') AND $this->isAuthenticated()) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 }
 ?>

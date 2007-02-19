@@ -14,13 +14,12 @@
 
 require ('../../../../bootstrap.php');
 
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+$pommo->init();
 
-$pommo->requireOnce($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
 $pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/useradmin/listmanager/class.db_listhandler.php');
 $pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/useradmin/listmanager/class.listplugin.php');
 
-$pommo->init();
+
 $data = NULL;
 
 $listplugin = new ListPlugin($pommo);
@@ -54,7 +53,6 @@ if ($_REQUEST['action']) {
 		}
 	}
 	
-	//echo "<div style='color:red'>"; print_r($_REQUEST); echo "</div>";
 }
 
 
