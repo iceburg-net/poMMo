@@ -147,6 +147,31 @@ class PommoField {
 		return $o;
 	}
 	
+	// fetches field name(s) from the database [NAME ONLY!]
+	// accepts a filtering array -->
+	//   id (int || array) -> an array of field IDs
+	// returns an array of field names. Array key(s) correlates to field ID.
+	function & getNames($id = null) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$o = array();
+		
+		$query = "
+			SELECT field_id, field_name
+			FROM " . $dbo->table['fields']."
+			WHERE
+				1
+				[AND field_id IN(%C)]
+			ORDER BY group_name";
+		$query = $dbo->prepare($query,array($id));
+		
+		while ($row = $dbo->getRows($query))
+			$o[$row['field_id']] = $row['field_name'];
+			
+		return $o;
+	}
+	
 	// adds a field to the database
 	// accepts a field (array)
 	// returns the database ID of the added field or FALSE if failed
