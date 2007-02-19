@@ -13,18 +13,19 @@
  ** [END HEADER]**/
 
 require ('../../../bootstrap.php');
+$pommo->init();
+$logger = & $pommo->_logger;
 
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
-
-$pommo->requireOnce($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
+$pommo->requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
 $pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.db_confighandler.php');
 $pommo->requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.pluginconfig.php');
-/*Pommo::requireOnce($pommo->_baseDir.'plugins/lib/interfaces/interface.dbhandler.php');
-Pommo::requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.db_confighandler.php');
-Pommo::requireOnce($pommo->_baseDir.'plugins/adminplugins/pluginconfig/class.pluginconfig.php');*/
 
-$pommo->init();
 $data = NULL;
+
+//print_r($pommo);
+
+$test = $pommo->_auth->dbCheckPermission('PLUGINADMIN');
+//echo "<b><i>TEST: " . $test . "</i></b><br>";
 
 
 /**
@@ -68,7 +69,9 @@ $pluginconfig = new PluginConfig($pommo);
 
 // Some Validation with a inherited class
 //$blah = PommoValidate::subscriberData($_REQUEST); //$blah = FALSE;
+
 $blah = "TRUE";
+
 if ($blah) {
 	//$data = $pluginconfig->extractData($_REQUEST); //validated data
 	// data validator in the extract Data function??

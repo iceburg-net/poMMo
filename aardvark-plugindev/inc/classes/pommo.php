@@ -35,9 +35,11 @@ class Pommo {
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_session;  // pointer to this install's/instance values in $_SESSION
 
-	//corinna TODO -> think of some mechanism, or put it to the config file
-	var $_useplugins = TRUE;	// main plugin switcher!
+	//corinna 
+	var $_useplugins = FALSE;	// main plugin switcher!
+	var $_plugindata;			// Contains plugins data needed after login process
 	//corinna
+	
 
 	// default constructor
 	function Pommo($baseDir) {
@@ -73,6 +75,11 @@ class Pommo {
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_language = (empty($config['lang'])) ? 'en' : strtolower($config['lang']);
 		$this->_http = ((@strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://') . $this->_hostname;
+
+
+		// Sets the variable TRUE/FALSE depending on text in config.php
+		$this->_useplugins = (!empty($config['useplugins']) AND  $config['useplugins']=='on') ? TRUE : FALSE; 
+
 		
 		// set logger verbosity
 		$this->_logger->_verbosity = $this->_verbosity;
@@ -126,14 +133,14 @@ class Pommo {
 		
 		// initialize database link
 		//WAS: $this->_dbo = @new PommoDB($config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
-		//TODO CORINNA
+		//corinna
 		if ($this->_useplugins) { //AND Multiuser activated
 			$setPluginTables = TRUE;
 		} else {
 			$setPluginTables = FALSE;
 		}
 		$this->_dbo = @new PommoDB($setPluginTables , $config['db_username'], $config['db_password'], $config['db_database'], $config['db_hostname'], $config['db_prefix']);
-		//TODO CORINNA
+		//corinna
 
 
 		// turn off debugging if in user area
@@ -145,8 +152,31 @@ class Pommo {
 		// if debugging is set in config.php, enable debugging on the database.
 		if ($this->_debug == 'on') 
 			$this->_dbo->debug(TRUE);
+
+
+		// ----------- PLUGINS ------------
+		// if plugins are enabled get additional plugin data with a db handler
+		//TODO:!!!!!!!!!! PLUGIN INSTALLER!!!! check if the tables exists!!!!! or you cannot install the plugins
+		if ($this->_useplugins) {
 			
-	}
+			Pommo::requireOnce($this->_baseDir . 'plugins/lib/class.pluginhandler.php');
+			$pluginhandler = new PluginHandler();
+		
+			$this->_plugindata['pluginmultiuser'] = $pluginhandler->dbGetPluginEnabled('useradmin');
+		
+			if ($this->_plugindata['pluginmultiuser']) {
+				$this->_plugindata['authmethod'] = array(
+					'dbauth' => $pluginhandler->dbGetPluginEnabled('dbauth'),
+					'simpleldapauth' => $pluginhandler->dbGetPluginEnabled('simpleldapauth'),
+					'queryldapauth' => $pluginhandler->dbGetPluginEnabled('queryldapauth')
+				);
+			}
+			
+		} //plugin config load
+		
+		
+	} //preInit
+
 
 	/** 
 	 * init -> called by page to load page state, populate config, and track authentication. 
@@ -156,121 +186,104 @@ class Pommo {
 	 *		session		:	explicity set session name. [default: null]
 	 * 		install		:	bypass loading of config/version checking [default: false]
      */
-
 	function init($args = array ()) {
-		
-		$defaults = array (
-			'authLevel' => 1,
-			'keep' => FALSE,
-			'noSession' => FALSE,
-			'sessionID' => NULL,
-			'noDebug' => FALSE,
-			'install' => FALSE
-		);
-	
-		// merge submitted parameters
-		$p = PommoAPI :: getParams($defaults, $args);
-		
-		// if debugging is set in config.php, enable debugging on the database.
-		if ($p['noDebug']) {
-			$this->_dbo->debug(FALSE);
-			$this->_debug = 'off';
-			
-			// don't display PHP error messages [useful JSON ajax request]
-			if ($this->_verbosity > 1)
-				ini_set('display_errors', '0');
-		}
 
-		// Bypass Reading of Config, SESSION creation, and authentication checks and return
-		//  if 'install' passed
-		if ($p['install'])
-			return;
-			
-		// read configuration data
-		$this->_config = PommoAPI :: configGetBase();
-		
-		
-		// Bypass SESSION creation, reading of config, authentication checks and return
-		//  if 'noSession' passed
-		if ($p['noSession'])
-			return;
 
-		// start the session
-		if (!empty($p['sessionID']))
-			session_id($p['sessionID']);
-		session_start();
-		
-		// generate unique session name
-		$key =& $this->_config['key'];
-		
-		if(empty($key))
-			$key = '123456';
-		
-		// create SESSION placeholder for if this is a new session
-		if (empty ($_SESSION['pommo'.$key])) {
-			$_SESSION['pommo'.$key] = array (
-				'data' => array (),
-				'state' => array (),
-				//WAS:'username' => null				//corinna: TODO put away?
-				'username' => null, //$this->_username,    //init empty session username
-				'sonstiges' => 'blah'
-			);
-		}
-		
-		$this->_session =& $_SESSION['pommo'.$key];
-		
-		// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
-		if (defined('_poMMo_support')) {
-			Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
-			$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
-		}
-		
-		
-		//TODO CORINNA! This will change
-		// will be a MultAuth obj
-		// check authentication levels
-		
-		if ($this->_useplugins) { //TODO AND ($multiuser ist aktiv!!!!)
+				$defaults = array (
+					'authLevel' => 1,
+					'keep' => FALSE,
+					'noSession' => FALSE,
+					'sessionID' => NULL,
+					'noDebug' => FALSE,
+					'install' => FALSE
+				);
 			
+				// merge submitted parameters
+				$p = PommoAPI :: getParams($defaults, $args);
+				
+				// if debugging is set in config.php, enable debugging on the database.
+				if ($p['noDebug']) {
+					$this->_dbo->debug(FALSE);
+					$this->_debug = 'off';
 					
-				
-				Pommo::requireOnce($this->_baseDir.'plugins/lib/auth/class.multauth.php');
-				
-				// generate a EMPTY MultAuth object
-				// _auth holds naw a object that is capable of generating a Userobject of
-				// type SimpleUser or AdminUser, (that can authenticate by itself with 
-				// the various authentication methods)
-				// in index.php before authenticate() you have to generate this obj firts
-				// tramits constructUser
-				
-				// _auth is EMPTY when $pommo is generated!
-				// at this time the login procedure is not yet executed!
-				if (!$this->_auth) {
-					$this->_auth = new MultAuth();  //array ( 'requiredLevel' => $p['authLevel']));
-				} else {
-					echo "auth exists";
-				
+					// don't display PHP error messages [useful JSON ajax request]
+					if ($this->_verbosity > 1)
+						ini_set('display_errors', '0');
 				}
-		} else {
 		
-				//brice
-				$this->_auth = new PommoAuth(array (
-					'requiredLevel' => $p['authLevel']
-				));
-				//brice
+				// Bypass Reading of Config, SESSION creation, and authentication checks and return
+				//  if 'install' passed
+				if ($p['install'])
+					return;
+					
+				// read configuration data
+				$this->_config = PommoAPI :: configGetBase();
+				
+				
+				// Bypass SESSION creation, reading of config, authentication checks and return
+				//  if 'noSession' passed
+				if ($p['noSession'])
+					return;
+		
+				// start the session
+				if (!empty($p['sessionID']))
+					session_id($p['sessionID']);
+				
+				session_start();
+				
+				// generate unique session name
+				$key =& $this->_config['key'];
+				
+				if(empty($key))
+					$key = '123456';
+				
+				// create SESSION placeholder for if this is a new session
+				if (empty ($_SESSION['pommo'.$key])) {
+					$_SESSION['pommo'.$key] = array (
+						'data' => array (),
+						'state' => array (),
+						'username' => null //$this->_username,    //init empty session username
+					);
+				}
+				
+				$this->_session =& $_SESSION['pommo'.$key];
+				
+				// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
+				if (defined('_poMMo_support')) {
+					Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
+					$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
+				}
+				
+				//corinna
+				if ($this->_useplugins AND $this->_plugindata['pluginmultiuser']) {
+						Pommo::requireOnce($this->_baseDir.'plugins/lib/auth/class.multauth.php');
+						$this->_auth = new MultAuth(array (
+							'requiredLevel' => $p['authLevel']
+						));
+				//corinna
+				} else {
+						//brice
+						$this->_auth = new PommoAuth(array (
+							'requiredLevel' => $p['authLevel']
+						));
+						//brice
+				}
+		
+				// clear SESSION 'data' unless keep is passed.
+				// TODO --> phase this out in favor of page state system? 
+				// -- add "persistent" flag & complicate state initilization...
+				if (!$p['keep'])
+					$this->_session['data'] = array ();
 
-		}
-	
-		//CORINNA
 
-		// clear SESSION 'data' unless keep is passed.
-		// TODO --> phase this out in favor of page state system? 
-		// -- add "persistent" flag & complicate state initilization...
-		if (!$p['keep'])
-			$this->_session['data'] = array ();
-			
+/*
+echo "<div style='color:blue;'>-----begin-----<br>POMMO"; print_r($pommo->_auth); echo "<br>"; print_r($pommo->_auth); echo "<br>"; 
+echo "SESSION: "; print_r($_SESSION); echo "</div>-----end-----<br><br>";
+*/
+
 	} //init
-	
+
+
 	
 	// reload base configuration from database
 	function reloadConfig() {

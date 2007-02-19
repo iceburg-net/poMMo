@@ -30,68 +30,58 @@
  * - This is some kind of linux style root user, whitch is a common way.
  */
 
-class AdminUser implements User {
+class AdminUser {
 	
-	private $_usertype;
-	private $_uid;
-	private $_username;
-	private $_md5pass;
-	private $_permissionLevel;
-	private $_authenticated;
+	var $_usertype;
+	var $_uid;
+	var $_username;
+	var $_md5pass;
+	var $_permissionLevel;
 
 
-	public function __construct($username, $md5pass) {
+
+	function AdminUser($username, $md5pass) {
 		$this->_usertype = "adminuser";
 		$this->_uid = NULL;
 		$this->_username = $username;
 		$this->_md5pass = $md5pass;
 		$this->_permissionLevel = 0;
-		$this->_authenticated = FALSE;
 	} //Constructor
 
-	public function __destruct() {
+	// afaik destructors in php4 are not used
+	function __destruct() {
 		unset($this->_uid);
 		unset($this->_username);
 		unset($this->_md5pass);
 		unset($this->_permissionLevel);
-		unset($this->_authenticated);
 	} //Destructor
 	
 
 	/**
 	 * authenticate standard administrator way, data lies in the config table
 	 */
-	public function authenticate() {
+	function authenticate() {
 
 		global $pommo;
 
 		if ($this->dbVerifyAdmin()) {
 			$pommo->_logger->addMsg("Administrator found. Welcome.");
-			$this->_authenticated = TRUE;
 			return TRUE;
 		} else {
-			$this->_authenticated = FALSE;
 			return FALSE;
 		}
 		
 	} //authenticate
 
-
-	public function isAuthenticated() {
-		if (isset($this->_authenticated))
-			return $this->_authenticated;
-		else
-			return FALSE;
-	}
-	public function getUsertype() {
-		return $this->_usertype;
-	}
-	public function getUsername() {
-		return $this->_username;
-	}
-	public function getPermissionLevel() {
+	
+	function getPermissionLevel() {
 		return $this->_permissionLevel;
 	}
+	
+	function getUserID() {
+		return $this->_uid;
+	}
+
 
 	/**
 	 *  don' allow access from outside: private
@@ -100,10 +90,10 @@ class AdminUser implements User {
 	 *
 	 *	returns TRUE if administrator is ok, else FALSE
 	 */ 
-	private function dbVerifyAdmin() {
+	function dbVerifyAdmin() {
 
 		global $pommo;
-		//TODO clone question -> talk to brice about this
+		//TODO clone question
 		$dbo = clone $pommo->_dbo;
 
 		$a = array();
@@ -127,6 +117,8 @@ class AdminUser implements User {
 		
 	} //dbVerifyAdmin
 	
+	
+
 	
 } //AdminUser
 

@@ -15,20 +15,17 @@
 	INITIALIZATION METHODS
  *********************************/
 require('../bootstrap.php');
-$pommo->init();
+$pommo->init(array('authLevel' => 1));		//array('keep' => TRUE;);
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 
-//corinna
-echo "<div style='color:green;'>$ pommo: ";
-print_r($pommo);
-echo "<br><br> $ session: ";
-print_r($_SESSION);
-echo "<br><br> $ request: ";
-print_r($_REQUEST);
-echo "</div>";
-//corinna
+echo "<div style='color:blue;'>-----begin-----<br>POMMO"; print_r($pommo->_auth); echo "<br>"; print_r($pommo->_auth); echo "<br>"; 
+echo "SESSION: "; print_r($_SESSION); echo "</div>-----end-----<br><br>";
+
+$key = "123456";
+echo "<h1>Welcome "; print_r($_SESSION['pommo'.$key]['username']);  echo "</h1><br>";
+
 
 
 /**********************************
@@ -67,54 +64,6 @@ $smarty->assign('header',array(
 $smarty->display('admin/admin.tpl');
 Pommo::kill();
 
-
-
-
-
-
-/* OLD DELETE
-//<corinna>
-
-//TODO store user information from $poMMo
-//echo "<h3>SESSION:"; print_r($_SESSION); echo "</h3>";
-//echo "<h3>poMMo:"; print_r($poMMo); echo "</h3>";
-$loggeduser = & $poMMo->_loggeduser;
-$user = $loggeduser['user'];
-$perm = $loggeduser['perm'];
-
-//if ($useplugins)
-if (($user != 'admin') AND $useplugins) {	// wenn einer user sich einloggt!
-
-	require_once ($pommo->_baseDir . '/plugins/multiuser/class.multiuser.php'); 
-	$multiuser = new MultiUser($poMMo);
-	$multiuser->display();
-	
-}
-
-//else
-if ($user == 'admin') {	// proceed in the normal way
-
-	$smarty = & bmSmartyInit();
-	
-	$smarty->assign('header',array(
-		'main' => _T('poMMo Aardvark').' '.$poMMo->_config['version'],
-		'sub' => _T('Powerful mailing list software for').' '.$poMMo->_config['list_name'] 
-		));
-	
-	
-	if ($useplugins) {
-		// Show additional functionality from the plugins
-		// Plugin SETUP should be showed
-		$smarty->assign('showplugin', TRUE);
-	}
-	
-	$smarty->display('admin/admin.tpl');
-
-} //corinna
-
-bmKill();
-
-*/
 
 //this ? > was forgotten or intended?
 ?> 

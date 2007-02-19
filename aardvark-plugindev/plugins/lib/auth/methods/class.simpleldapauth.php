@@ -20,7 +20,7 @@ class SimpleLdapAuth {
 	private $ldapconf;	
 
 
-	public function __construct() {
+	public function SimpleLdapAuth() {
 		$this->ldapconf = array();
 		$this->getConfigFromDb();
 	}

@@ -79,13 +79,15 @@ class PommoDB {
 				'list' => $pluginTablePrefix . 'list',
 				'list_rp' => $pluginTablePrefix . 'list_rp',
 				'mailingqueue' => $pluginTablePrefix . 'mailingqueue',
-				'perm' => $pluginTablePrefix . 'perm',
 				'plugin' => $pluginTablePrefix . 'plugin',
 				'plugincategory' => $pluginTablePrefix . 'plugincategory',
 				'plugindata' => $pluginTablePrefix . 'plugindata',
 				'responsibleperson' => $pluginTablePrefix . 'responsibleperson',
 				'rp_group' => $pluginTablePrefix . 'rp_group',
-				'user' => $pluginTablePrefix . 'user'
+				'user' => $pluginTablePrefix . 'user',
+				'permgroup' => $pluginTablePrefix . 'permgroup',
+				'pg_perm' => $pluginTablePrefix . 'pg_perm',
+				'permission' => $pluginTablePrefix . 'permission'
 			);
 		}
 		//TODO CORINNA

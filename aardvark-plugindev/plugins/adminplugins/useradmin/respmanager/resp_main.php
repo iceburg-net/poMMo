@@ -13,10 +13,13 @@
  ** [END HEADER]**/
 
 require ('../../../../bootstrap.php');
-require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/respmanager/class.respplugin.php');
-
 
 $pommo->init();	
+
+require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/respmanager/class.respplugin.php');
+require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/respmanager/class.db_resphandler.php'); 
+
+
 
 $data = NULL;
 $respplugin = new RespPlugin($pommo);

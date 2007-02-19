@@ -14,13 +14,15 @@
 
 // MultiUser Authentication class
 // this class exchanges the inc/classes/auth.php class PommoAuth {}
-// FACTORY PATTERN Authentication Method Chooser
 
 
-Pommo::requireOnce($this->_baseDir.'plugins/lib/auth/class.user.php');
+Pommo::requireOnce($this->_baseDir . 'plugins/lib/class.pluginhandler.php');
+Pommo::requireOnce($this->_baseDir . 'plugins/lib/auth/class.simpleuser.php');
+Pommo::requireOnce($this->_baseDir . 'plugins/lib/auth/class.adminuser.php');
 
 
-/* Defines the authentication method use 
+/**
+ * Defines the authentication method use 
  * database auth, LDAP auth ....
  * This is defined in the GENERAL PLUGIN SECTION, where you can choose
  * one or more of these options (all methods for very restrictive and 
@@ -29,10 +31,279 @@ Pommo::requireOnce($this->_baseDir.'plugins/lib/auth/class.user.php');
  */
 class MultAuth { 
 
-	private $user;
+	var $user;
+	var $authenticated;
+
+	var $_username;	// current logged in user (default: null|session value)
+	var $_permissionLevel; // permission level of logged in user
+	var $_requiredLevel; // required level of permission (default: 1)
 	
-	public function __construct($args = array ()) {
+	
+
+	function MultAuth($args = array ()) {
+
+		global $pommo;
+
+		$this->user = null;
+		$this->authenticated = FALSE;
+
+		$defaults = array (
+			'username' => null,
+			'requiredLevel' => 0
+		);
+		
+		$p = PommoAPI :: getParams($defaults, $args);
+		
+		
+		if (empty($pommo->_session['username']))
+			$pommo->_session['username'] = $_SESSION['pommo123456']['username'];//$p['username'];
+		
+
+		
+		$this->_username = & $pommo->_session['username'];
+		$this->_permissionLevel = $_SESSION['pommo123456']['permlvl'];//$this->getPermissionLevel($this->_username);
+		$this->_requiredLevel = $p['requiredLevel'];
+		
+
+		if ($p['requiredLevel'] > $this->_permissionLevel) {
+			global $pommo;
+			Pommo::kill(sprintf(Pommo::_T('Denied access. You must %slogin%s to access this page...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+		}
+		
+	} //constructor
+
+
+
+
+
+
+	function authenticate($username, $md5pass) {
+		
+		// auth process dann in dbauth und so
+		
+		global $pommo;
+
+		$dbhelper = new PluginHandler();
+		$alias = $dbhelper->dbGetAdminAlias();
+		
+
+		//construct the user object	
+		if ($username == $alias) {
+			$this->user = new AdminUser($alias, $md5pass);
+		} else {
+
+			if ($pommo->_plugindata['pluginmultiuser']) {
+				$this->user = new SimpleUser($username, $md5pass);
+			} else {
+				$pommo->_logger->addMsg("MultAuth: plugins not enabled. try to enable in config.php");
+			}
+
+		}
+		
+		// if userobject is constructed do the authentication
+		if ($this->user) {
+			if ( $this->user->authenticate() ) {
+				$key = '123456';
+				$_SESSION['pommo'.$key]['username'] = $username;
+				$_SESSION['pommo'.$key]['md5pass'] = $md5pass;
+				$_SESSION['pommo'.$key]['id'] = $this->user->getUserID();
+				$_SESSION['pommo'.$key]['permlvl'] = $this->user->getPermissionLevel();
+				$dbhelper->dbWriteLastLogin($username);
+				$dbhelper->dbIncreaseLoginTries($username);
+				$this->authenticated = TRUE;
+				return TRUE;
+			} else {
+				$this->authenticated = FALSE;
+				session_destroy();
+				return FALSE;
+			}
+		} else {
+			$pommo->_logger->addMsg("MultAuth: authenticate: No user object found.");
+			$this->authenticated = FALSE;
+			return FALSE;
+		}
+		
+			
+	} //authenticate
+
+
+	function isAuthenticated() {
+		return $this->authenticated;
+	}
+
+
+	function getPermissionLevel($username = null) {
+		/*if ($username)
+			return 5;
+		return 0;*/
+		
+		if ($this->username AND $this->authenticated) {
+			$key = '123456';
+			$permlvl = $_SESSION['pommo'.$key]['id'];
+			
+			return $permlvl;
+		}
+		
+		// no permission
+		return 0;
+	}
+	
+	function logout() {
+		$this->_username = null;
+		$this->_permissionLevel = 0;
+		session_destroy();
+		return;
+	}
+	
+	function login($username) {
+		$this->_username = $username;
+		return;
+	}
+	
+
+
+	/**
+	 * permissiontype is a STRING that denotes the permission needed/enabled for a user to enter the site
+	 */
+	/**
+	 all permissions table:
+	 SELECT user_name, permgroup_name, perm_name FROM pommomod_user AS u RIGHT JOIN pommomod_permgroup AS pg ON u.permgroup_id=pg.permgroup_id
+RIGHT JOIN pommomod_pg_perm AS pgp ON pg.permgroup_id=pgp.permgroup_id 
+RIGHT JOIN pommomod_permission AS p ON pgp.perm_id=p.perm_id
+ORDER BY user_name
+
+
+1 permission for a user:
+SELECT user_name, permgroup_name, perm_name FROM pommomod_user AS u RIGHT JOIN pommomod_permgroup AS pg ON u.permgroup_id=pg.permgroup_id
+RIGHT JOIN pommomod_pg_perm AS pgp ON pg.permgroup_id=pgp.permgroup_id 
+RIGHT JOIN pommomod_permission AS p ON pgp.perm_id=p.perm_id
+WHERE u.user_name='corinna' AND p.perm_name='PLUGINADMIN'
+ORDER BY user_name
+	 */
+	function dbCheckPermission($permissiontype) {
+	
+		if ($this->_username == 'admin'){ // AND $this->isAuthenticated()) {
+		
+			return TRUE;
+		
+		} else {
+			global $pommo;
+			//$this->dbo =& $pommo->_dbo; 
+			$dbo = clone $pommo->_dbo;
+			
+			//a = array();
+			
+			$query = "SELECT user_name, permgroup_name, perm_name " .
+					"FROM ".$dbo->table['user']." AS u RIGHT JOIN ".$dbo->table['permgroup']." AS pg ON u.permgroup_id=pg.permgroup_id " .
+					"RIGHT JOIN ".$dbo->table['pg_perm']." AS pgp ON pg.permgroup_id=pgp.permgroup_id " .
+					"RIGHT JOIN ".$dbo->table['permission']." AS p ON pgp.perm_id=p.perm_id " .
+					"WHERE u.user_name='".$this->_username."' AND p.perm_name='".$permissiontype."' ";
+	
+			$query = $dbo->prepare($query);
+			
+			if ($row = $dbo->getRows($query)) {
+				if ($dbo->affected() == 1) {
+					$pommo->_logger->addMsg("PERMISSION found for this plugin");
+					return TRUE;	
+				} else {
+					Pommo::kill("Permission not found");
+					return FALSE;
+				}
+			}
+			
+			Pommo::kill("Permission not found!");
+			return FALSE;
+		}
+		
+		Pommo::kill("Permission error");
+		return FALSE;
+		
+	} //dbCheckPermission
+
+
+
+
+
+} //MultAuth
+
+/*
+ * 
+ * 
+ * 
+ * 
+ * 	function MultAuth() {
+		
+		global $pommo;
+		
+		$this->user = null;
+		$this->md5pass = null;
+		$this->id = null;
+		$this->permlvl = null;
+		
+		// Take session data
+		session_start();
+		
+		if ($_SESSION['pommo']) {
+			$this->user = $_SESSION['pommo']['coruser'];
+			$this->md5pass = $_SESSION['pommo']['corpass'];
+			$this->id = $_SESSION['pommo']['corid'];
+			$this->permlvl = $_SESSION['pommo']['corid'];
+		} else {
+			//echo "HTTPPPPPPPPPP:".$this->_http;
+			//echo "BASEURLLLLLLL:".$this->_baseUrl;	
+			//Pommo::redirect($pommo->_http . $pommo->_baseUrl . 'index.php');
+		}
+		
+	} //constructor
+
+
+
+	function authenticate($user, $md5pass) {
+		
+		if ($user == "corinna" AND $md5pass == "corinna") {
+			$_SESSION['pommo']['coruser'] = $user;
+			$_SESSION['pommo']['corpass'] = $md5pass;
+			$_SESSION['pommo']['corid'] = 5;
+			$_SESSION['pommo']['permlvl'] = 5;
+			return TRUE;
+
+		} else {
+
+			session_destroy();
+
+			return FALSE;
+
+		}
+		
+	} //authenticate
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+	var $authenticated;
+	
+	
+	function MultAuth() {
+
 		$this->user = NULL;
+		$this->authenticated = FALSE;
+		
+		$key = "123456";
+		if (!empty($_SESSION['pommo'.$key]['username'])) {
+			echo "not empty";
+			
+		} else {
+			//Pommo::kill(sprintf(Pommo::_T('Multiuser: Denied access. You must %slogin%s to access this page...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+		}
+		
+		
+	
 	} //Constructor
 
 
@@ -40,158 +311,90 @@ class MultAuth {
 	// depending if the loginscreen name is the admin alias or an other login name
 	// because the authentication process is done later then the $pommo generating
 	// i designed it a separate function
-	public function constructUser($username, $md5pass) {
+	function constructUser($username, $md5pass) {
 
-		$alias = $this->dbGetAdminAlias();
+		global $pommo;
+
+		//$dbhelper = new PluginHandler();
+		$alias = "admin"; //$dbhelper->dbGetAdminAlias();
 		
+	
 		if ($username == $alias) {
 			$this->user = new AdminUser($alias, $md5pass);
 		} else {
-			$this->user = new SimpleUser($username, $md5pass);
-			$this->user->setAuthMethod();
+			if ($pommo->_plugindata['pluginmultiuser']) {
+				$this->user = new SimpleUser($username, $md5pass);
+			} else {
+				$pommo->_logger->addMsg("MultAuth: constructuser: plugins not enabled. try to enable in config.php");
+			}
 		}
 		
 	} //constructuser
 
 
-	// Function needed becaus in index.php before the authentication 
+	// Function needed because in index.php before the authentication 
 	// process we execute this function
-	public function isAuthenticated() {
-		if (isset($this->user)) {
-			return $this->user->isAuthenticated();
-		} else {
-			return FALSE;
-		}
+	function isAuthenticated() {
+
+		//  maybe recheck here with authenticate?
+
+
+	
+		return FALSE;
+	
 	}
 
 
 	//if daten vorhanden sonst FALSE
-	public function authenticate() {
+	function authenticate() {
+	
+		global $pommo; 
+		
 		if ($this->user) {
-			return $this->user->authenticate();	
+			if ( $this->user->authenticate() ) {
+				$this->authenticated = TRUE;
+				return TRUE;
+			} else {
+				$this->authenticated = TRUE;
+				return FALSE;
+			}
 		} else {
-			//TODO message
+			$pommo->_logger->addMsg("MultAuth: authenticate: No user object found.");
 			return FALSE;
 		}
 	}
 
 
 
-	public function logout() {
+	function logout() {
 		unset($this->user);
+		unset($this->authenticated);
 		session_destroy();
 		return;
 	}
 
 
 	// default constructor. Get current logged in user from session. Check for permissions.
-	public function login() {
+	function login() {
+		
+		$key = "123456";
+		
+		if ($this->user AND $this->authenticated) {
 
-		global $pommo;
-
-		if (isset($this->user) AND $this->user->isAuthenticated()) {
-
-			$key = "123456";	//hmmmmm
-			
 			if (!empty ($_SESSION['pommo'.$key])) {
-				$_SESSION['pommo'.$key]['username'] = $this->user->getUsername();
-				$_SESSION['pommo'.$key]['sonstiges'] = "blahblahblah";
+				$_SESSION['pommo'.$key]['username'] = $this->user->_username;
+				$_SESSION['pommo'.$key]['usertype'] = $this->user->_usertype;
+				$_SESSION['pommo'.$key]['uid'] = $this->user->_id;
 			} else {
-				Pommo::kill(sprintf(Pommo::_T('Denied access. You must %slogin%s to access this page (Session empty*)...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+				Pommo::kill(sprintf(Pommo::_T('MultiUser: No Session.')));
 			}
-			$pommo->_session =& $_SESSION['pommo'.$key];
-
-			/*echo "<div style='color: red;'>session:";
-			print_r($_SESSION);
-			echo "<br><br>pommo->_session: ";
-			print_r($_SESSION);
-			echo "<br>";*/
 			
 		} else {
-			Pommo::kill(sprintf(Pommo::_T('Denied access. You must %slogin%s to access this page(user not set*)...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
+			Pommo::kill(sprintf(Pommo::_T('Multiuser: Denied access. You must %slogin%s to access this page...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));		
 		}
-		
-		
-		/*
-		 * 		if (empty ($_SESSION['pommo'.$key])) {
-			$_SESSION['pommo'.$key] = array (
-				'data' => array (),
-				'state' => array (),
-				//WAS:'username' => null				//corinna: TODO put away?
-				'username' => null, //$this->_username,    //init empty session username
-				'sonstiges' => 'blah'
-			);
-		}
-		
-		
-		$this->_session =& $_SESSION['pommo'.$key];
-		
-		 */
-		
-		
-		
-		/*global $pommo;
-		
-		$defaults = array (
-			'username' => null,
-			'requiredLevel' => 0
-		);
-		//$p = PommoAPI :: getParams($defaults, $args);
-		
-		if (empty($pommo->_session['username']))
-			$pommo->_session['username'] = $this->user->//$p['username'];
-		
-		$this->_username = & $pommo->_session['username'];
-		//$this->_permissionLevel = $this->getPermissionLevel($this->_username);
-		$this->_permissionLevel = 5;
-
-		if ($p['requiredLevel'] > $this->_permissionLevel) {
-			global $pommo;
-			Pommo::kill(sprintf(Pommo::_T('Denied access. You must %slogin%s to access this page...'), '<a href="' . $pommo->_baseUrl . 'index.php?referer=' . $_SERVER['PHP_SELF'] . '">', '</a>'));
-		}
-		*/
-	}
-
-	// return FALSE if there is no user object
-	/*
-
-
-	public function getUsertype() {
-		if (isset($this->user)) {
-			return $this->user->getUsertype();	
-		} else {
-			return FALSE;
-		}
-	}*/
 	
-	
-	
+	} //login
 
-	/* Returns the alias for the Administrator if its different than 'admin'
-	 * This name is written in the config table of the pommo main db
-	 */
-	private function dbGetAdminAlias() {
-		
-		global $pommo;
-		$dbo = clone $pommo->_dbo;
-		
-		$a = array();
-		
-		$query = "SELECT config_value FROM " . $dbo->table['config'] . 
-			" WHERE config_name = 'admin_username' LIMIT 1 "; 
-
-		$query = $dbo->prepare($query);
-		
-		if ($row = $dbo->getRows($query))
-			$a = $row['config_value'];
-		
-		return $a;
-		
-	} //dbGetAdminAlias
-
-
-
-} //MultAuth
-
+ */
 	
 ?>

@@ -13,6 +13,10 @@
  
  VERY BETA!!!
  
+ - php DLL Libraries die gebraucht werden.
+ - Abhängigkeiten 
+ - WIKI
+ 
  
  
  

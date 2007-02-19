@@ -12,44 +12,30 @@
  * 
  ** [END HEADER]**/
 
-require_once ($pommo->_baseDir.'plugins/adminplugins/useradmin/usermanager/class.db_userhandler.php'); 
-//require_once ($pommo->_baseDir.'inc/lib/class.pager.php');
 
 
 class UserPlugin { //implements plugin
 
 	// UNIQUE Name of the Plugin i decided to do this so some can select his plugins configuration
 	// from the database through this name.
-	private $pluginname = "useradmin";	
-	
-	private $dbo;
-	private $logger;
-	private $pommo;
-	
-	private $userdbhandler;
+	var $pluginname = "useradmin";	
+	var $userdbhandler;
 	
 
-	public function __construct($pommo) {
-		$this->dbo = $pommo->_dbo;
-		$this->logger = $pommo->_logger;
-		$this->pommo = $pommo;
-		
-		$this->userdbhandler = new UserDBHandler($this->dbo);
+	function UserPlugin() {
+		$this->userdbhandler = new UserDBHandler();
 	}
 	
-	public function __destruct() {
+	function __destruct() {
 		//UNSET
-		//$data['action'] = "etwasanderes";
-		//$data['mailid'] = "andereid";	
-		//echo "destructed";
 	}
 
-	public function isActive() {
+	function isActive() {
 		// Parameter 'PLUGINNAME' is the uniquename of the plugin
 		return $this->userdbhandler->dbPluginIsActive($this->pluginname);
 	}
 	
-	public function getPermission($user) {
+	function getPermission($user) {
 		//TODO select the permissions from DB 
 		return TRUE;
 	}
@@ -57,7 +43,9 @@ class UserPlugin { //implements plugin
 	
 	// This should be named showUserMatrix()
 	// But i think execute as main function for this plugin to show all the users is ok.
-	public function execute($data) {	
+	function execute($data) {	
+		
+		global $pommo;
 		
 		// TODO test this
 		if (!$this->isActive()) {
@@ -69,11 +57,14 @@ class UserPlugin { //implements plugin
 		}
 		
 		
+		
 		// Smarty Init
-		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
+		Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();
+		$smarty->assign('returnStr', Pommo::_T('poMMo User Manager'));
+		
 
-		if ($data['showAddForm']) { // == 'addForm') {
+	/*	if ($data['showAddForm']) { // == 'addForm') {
 			$smarty->assign('showAddForm', TRUE);
 			$smarty->assign('usergroups', $this->userdbhandler->dbFetchPermNames());
 			$smarty->assign('actionStr', 'Add new User');
@@ -106,7 +97,7 @@ class UserPlugin { //implements plugin
 			$smarty->assign('showGroupEditForm', TRUE);
 			$smarty->assign('groupinfo', $this->userdbhandler->dbFetchPermInfo($data['groupid']));
 		}
-
+		*/
 
 		/* We need a sorting mechanism here too
 		//if (empty($this->poMMo->_state)) {
@@ -140,12 +131,12 @@ class UserPlugin { //implements plugin
 		
 		
 		// Permission Groups Matrix
-		$perm =  $this->userdbhandler->dbFetchPermissionMatrix();
+		$perm =  $this->userdbhandler->dbFetchPermissionGroupMatrix();
 		$smarty->assign('permgroups', $perm);
 		$smarty->assign('nrperm' , count($perm)); 
 
 		// User Matrix
-		$user = $this->userdbhandler->dbFetchUserMatrix();		//$smarty->assign('mailings', $this->getMailingQueue($start, $limit, $sortBy, $sortOrder));
+		$user = $this->userdbhandler->dbFetchUserMatrix();
 		$smarty->assign('user' , $user); 
 		$smarty->assign('nrusers' , count($user)); 
 		
@@ -161,15 +152,15 @@ class UserPlugin { //implements plugin
 
 	/* USE CASES user */
 	
-	public function addUser($user, $pass, $passcheck, $group) {
+	function addUser($user, $pass, $passcheck, $group) {
 
-		$this->logger->addMsg("<h1>USER NAME!!!!!!! IM PLUGIN</h1>");
-
+		global $pommo;
+		
 		//TODO mache string aus permission -> soll array sein / SMARTY VALIDATOR
 		if (empty($user) OR empty($pass) OR empty($passcheck)) {//OR empty($group)) {
 			// No parameter should be empty
 			$str = "({$user}, {$group})";
-			$this->logger->addMsg('Add User: Parameter is empty. ' . $str);	
+			$pommo->_logger->addMsg('Add User: Parameter is empty. ' . $str);	
 
 		} else {
 			
@@ -177,42 +168,43 @@ class UserPlugin { //implements plugin
 			if (md5($pass) == md5($passcheck)) { //was &&
 				$ret = $this->userdbhandler->dbAddUser($user, $pass, $group);
 				if (!is_numeric($ret)) {
-					$this->logger->addMsg("Add User: User could not be added: ".$ret);
+					$pommo->_logger->addMsg("Add User: User could not be added: ".$ret);
 					return FALSE;
 				} else {
 					if ($ret == 1) {
-						$this->logger->addMsg('Add User: User added.');
+						$pommo->_logger->addMsg('Add User: User added.');
 						return TRUE;
 					} else {
-						$this->logger->addMsg(_T('Add User: Problem during adding user.'));	
+						$pommo->_logger->addMsg(_T('Add User: Problem during adding user.'));	
 						return FALSE;
 					}
 				}
 				
 			} else {
-				$this->logger->addMsg(_T('Add User: Password check failed.'));
+				$pommo->_logger->addMsg(_T('Add User: Password check failed.'));
 				return FALSE;
 			}
 		}
 	} //AddUser
 	
 	
-	public function deleteUser($userid) {
+	function deleteUser($userid) {
+		global $pommo;
 		if (!empty($userid)) {
 			return $this->userdbhandler->dbDeleteUser($userid);
 		} else {
-			$this->logger->addMsg(_T('Could not delete: No user id given.'));
+			$pommo->_logger->addMsg('Could not delete: No user id given.'); // why _T not permitted
 			return FALSE;
 		}
 
 	}
 	
-	public function editUser($id, $user, $pass, $group) {
+	function editUser($id, $user, $pass, $group) {
 		//if eines leer -> fehler
-		
+		global $pommo;
 		// Es darf nicht nogroup ausgewählt sein
 		if ($group=='nogroup') {
-			$this->logger->addMsg("No Permissiongroup selected.");
+			$pommo->_logger->addMsg("No Permissiongroup selected.");
 			return FALSE;
 		}
 		
@@ -233,7 +225,8 @@ class UserPlugin { //implements plugin
 	/* USE CASES permission group */
 	//TODO Fehlerbehandlung
 	
-	public function addPermGroup($name, $perm, $desc) {
+	function addPermGroup($name, $perm, $desc) {
+		
 		//Checks
 		$ret = $this->userdbhandler->dbAddPermGroup($name, $perm, $desc);
 		if ($ret == 1) {
@@ -241,15 +234,17 @@ class UserPlugin { //implements plugin
 			return TRUE;
 		} else {
 			//Fehlermeldung über logger
+			global $pommo;
+			//$pommo->_logger->addMsg(printf(_T('Permission Group could not be added.')));
 			return FALSE;
 		}
 	}
 	
-	public function deletePermGroup($groupid) {
+	function deletePermGroup($groupid) {
 		return $this->userdbhandler->dbDeletePermGroup($groupid);
 	}
 	
-	public function editPermGroup($groupid, $name, $perm, $desc) {
+	function editPermGroup($groupid, $name, $perm, $desc) {
 		return $this->userdbhandler->dbEditPermGroup($groupid, $name, $perm, $desc);
 	}
 	

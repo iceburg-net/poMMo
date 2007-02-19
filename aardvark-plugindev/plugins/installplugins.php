@@ -13,9 +13,11 @@
  ** [END HEADER]**/
 
 require('../bootstrap.php');
-$pommo->init();
+$pommo->init(array('authLevel' => 1));
 
-if ($pommo->_useplugins) {
+$install = TRUE;
+
+if ($install) {
 	
 	$prefix = "pommo_";		// Change this to $pommo->tables->...
 	$pluginprefix = "pommomod_";
@@ -36,11 +38,11 @@ if ($pommo->_useplugins) {
 	
 	
 	$sqltab[] = $safesql->query("DROP TABLE IF EXISTS `%sbounce` , `%smailingqueue`, " .
-			"`%slist` , `%slist_rp` , `%srp_group`, `%sresponsibleperson` , `%suser`, `%sperm`, " .
+			"`%slist` , `%slist_rp` , `%srp_group`, `%sresponsibleperson` , `%suser`, `%spermgroup`, `%spermission`, `%spg_perm`, " .
 			"`%splugin`, `%splugincategory` , `%splugindata`  ", 
 			array($pluginprefix,$pluginprefix,$pluginprefix,$pluginprefix,$pluginprefix,
 				  $pluginprefix,$pluginprefix,$pluginprefix,$pluginprefix,$pluginprefix,
-				  $pluginprefix) );
+				  $pluginprefix,$pluginprefix,$pluginprefix) );
 
 
 		/****************************** CREATE TABLES *********************************/  
@@ -109,37 +111,31 @@ if ($pommo->_useplugins) {
 
 		// SHOULD BE NAMED PERMGROUP
 		// little bit messy
-		$sqltab[] = $safesql->query("CREATE TABLE `%sperm` ( " .
-							"`perm_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
-							"`perm_name` VARCHAR( 75 ) NOT NULL UNIQUE, " .
-							"`perm_perm` VARCHAR( 200 ) NOT NULL , " .
-							"`perm_desc` VARCHAR( 250 ) NOT NULL  " .
-							//"`perm_id` VARCHAR( 250 ) NOT NULL  " .
+		$sqltab[] = $safesql->query("CREATE TABLE `%spermgroup` ( " .
+							"`permgroup_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
+							"`permgroup_name` VARCHAR( 75 ) NOT NULL UNIQUE, " .
+							"`permgroup_desc` VARCHAR( 250 ) NOT NULL  " .
 							") %s %s; ",
 						array($pluginprefix, $dbstr, $charset) );
 
-		/*$sqltab[] = $safesql->query("CREATE TABLE `%spermission` ( " .
+		$sqltab[] = $safesql->query("CREATE TABLE `%spermission` ( " .
 							"`perm_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
-							"`perm_send` BOOL NOT NULL  DEFAULT '0', " .
-							"`perm_compose` BOOL NOT NULL  DEFAULT '0', " .
-							"`perm_history` BOOL NOT NULL  DEFAULT '0', " .
-							//TODO corinna and so on, decide this with brice
-							"`` BOOL NOT NULL  DEFAULT '0' " .
+							"`perm_name` VARCHAR( 75 ) NOT NULL UNIQUE " .
 							") %s %s; ",
-						array($pluginprefix, $dbstr, $charset) );*/
+						array($pluginprefix, $dbstr, $charset) );
 
 
 		$sqltab[] = $safesql->query("CREATE TABLE `%suser` ( " .
 							"`user_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY , " .
 							"`user_name` VARCHAR( 75 ) NOT NULL UNIQUE , " .
 							"`user_pass` VARCHAR( 150 ) NOT NULL , " .										//MD5
-							"`perm_id` SMALLINT UNSIGNED NOT NULL REFERENCES %sperm(perm_id) , " .
-							"`user_created` DATETIME NOT NULL , " .											//TIMESTAMP
+							"`user_created` DATETIME NOT NULL , " .
 							"`user_lastlogin` DATETIME NOT NULL , " .
 							"`user_logintries` SMALLINT UNSIGNED NOT NULL, " .					//AUTO_INCREMENT
 							"`user_lastedit` DATETIME NOT NULL , " .
-							//TODO add"`user_permissionlvl` TINYINT NOT NULL DEFAULT '0'', " . `user_permissionlvl` TINYINT NOT NULL DEFAULT '0'
-							"`user_active` BOOL NOT NULL  DEFAULT '0' " .
+							"`user_permissionlvl` TINYINT NOT NULL DEFAULT '1', " .
+							"`user_active` BOOL NOT NULL  DEFAULT '0' , " .
+							"`permgroup_id` SMALLINT UNSIGNED NULL REFERENCES %spermgroup(permgroup_id) " .
 							") %s %s; ",
 						array($pluginprefix, $pluginprefix, $dbstr, $charset) );
 
@@ -167,6 +163,15 @@ if ($pommo->_useplugins) {
 
 
 		/* n:m Relations */
+		
+		$sqltab[] = $safesql->query("CREATE TABLE `%spg_perm` ( " .
+							"`permgroup_id` SMALLINT UNSIGNED NOT NULL REFERENCES %spermgroup(permgroup_id) , " .
+							"`perm_id` SMALLINT UNSIGNED NOT NULL REFERENCES %spermission(perm_id) , " .
+							"`pgp_grant` BOOL NOT NULL DEFAULT FALSE  " .
+							/* sonstige daten wie zuteilungsdatum oder so??*/
+							") %s %s; ",
+						array($pluginprefix, $pluginprefix, $pluginprefix, $dbstr, $charset) );
+		
 		$sqltab[] = $safesql->query("CREATE TABLE `%slist_rp` ( " .
 							"`list_id` SMALLINT UNSIGNED NOT NULL REFERENCES %slist(list_id) , " .
 							"`user_id` SMALLINT UNSIGNED NOT NULL REFERENCES %sresponsibleperson(user_id)  " .
@@ -331,11 +336,28 @@ $sql[] = $safesql->query("INSERT INTO %slist (list_id, list_name, list_senderinf
 		(5, 'neich', 'Ab. S. Ender', 'blah', '2007-01-12 18:26:00', 0, 1),
 		(6, 'neich', 'Ab. S. Ender', 'blah', '2007-01-12 18:41:33', 0, 1); ", array($pluginprefix) );
 
+
 $sql[] = $safesql->query("INSERT INTO %slist_rp (list_id, user_id) VALUES (1, 1), (2, 1), (3, 2); ", array($pluginprefix) );
 
-$sql[] = $safesql->query("INSERT INTO %sperm (perm_id, perm_name, perm_perm, perm_desc) 
+
+//permission data
+//TODO ADD the right things! 'send, compose, maillists, history, bounce, useradmin, subscribers, groups' 'send, compose',
+
+$sql[] = $safesql->query("INSERT INTO %spermgroup (permgroup_id, permgroup_name, permgroup_desc) 
+		VALUES (1, 'Admin', 'Admingroup can do all'),
+				(2, 'Senders', 'This group can only send'); ", array($pluginprefix) );
+
+$sql[] = $safesql->query("INSERT INTO %spermission (perm_id, perm_name) 
+		VALUES (1, 'SEND'), (2, 'COMPOSE'), (3, 'PLUGINSETUP'), (4, 'PLUGINADMIN'), (5, 'HISTORY'); ", array($pluginprefix) );
+
+$sql[] = $safesql->query("INSERT INTO %spg_perm (permgroup_id, perm_id, pgp_grant) 
+		VALUES (1, 1, FALSE),  (1, 2, FALSE), (1, 3, FALSE), (1, 4, FALSE), (1, 5, FALSE), (2, 1, FALSE), (2, 2, FALSE), (2, 5, FALSE); ", array($pluginprefix) );
+/*OLD
+ * $sql[] = $safesql->query("INSERT INTO %sperm (perm_id, perm_name, perm_perm, perm_desc) 
 		VALUES (1, 'Admin', 'send, compose, maillists, history, bounce, useradmin, subscribers, groups', 'Admingroup can do all'),
 				(2, 'Senders', 'send, compose', 'This group can only send'); ", array($pluginprefix) );
+*/			
+				
 
 $sql[] = $safesql->query("INSERT INTO %sresponsibleperson (user_id, rp_realname, rp_bounceemail, rp_sonst) 
 		VALUES (1, 'Corinna Thoeni', 'corinn@gmx.net', 'blah'),
@@ -344,12 +366,12 @@ $sql[] = $safesql->query("INSERT INTO %sresponsibleperson (user_id, rp_realname,
 
 $sql[] = $safesql->query("INSERT INTO %srp_group (user_id, group_id) VALUES (1, 4), (1, 3), (1, 2), (4, 1), (2, 2); ", array($pluginprefix) );
 
-$sql[] = $safesql->query("INSERT INTO %suser (user_id, user_name, user_pass, perm_id, user_created, user_lastlogin, user_logintries, 
-			user_lastedit, user_active) VALUES 
-(1, 'corinna', 'cedb35a74c19383eb196cb02636dd045', 1, '2006-12-11 18:10:51', '2007-01-19 18:08:51', 0, '2006-12-14 13:11:07', 1),
-(2, 'franz', 'e7f169c9a5847fc2e7825747a2d52dfe', 2, '2006-12-11 18:11:26', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:24', 1),
-(3, 'franziska', '5eedb9ea471e2661e6483f0a3ba19804', 1, '2006-12-11 18:11:41', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:14', 1),
-(4, 'sonscheice', '498d3c6bfa033f6dc1be4fcc3c370aa7', 1, '2007-01-18 17:10:00', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:00', 1);", 
+$sql[] = $safesql->query("INSERT INTO %suser (user_id, user_name, user_pass, permgroup_id, user_created, user_lastlogin, user_logintries, 
+			user_lastedit, user_active, user_permissionlvl) VALUES 
+(1, 'corinna', 'cedb35a74c19383eb196cb02636dd045', 1, '2006-12-11 18:10:51', '2007-01-19 18:08:51', 0, '2006-12-14 13:11:07', 1, 1),
+(2, 'franz', 'e7f169c9a5847fc2e7825747a2d52dfe', 2, '2006-12-11 18:11:26', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:24', 1, 2),
+(3, 'franziska', '5eedb9ea471e2661e6483f0a3ba19804', 1, '2006-12-11 18:11:41', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:14', 1, 3),
+(4, 'sonscheice', '4c87310c446f36f101b8fafb569c5e6c', 1, '2007-01-18 17:10:00', '0000-00-00 00:00:00', 0, '2007-01-18 17:10:00', 1, 4);", 
 		array($pluginprefix));
 
 
@@ -358,7 +380,7 @@ $sql[] = $safesql->query("INSERT INTO %suser (user_id, user_name, user_pass, per
 
 			// Execute queries 
 			for ($i = 0; $i < sizeof($sql); $i++) {
-					$result = mysql_query($sql[$i]) or die("<b style='color: green; '>Query failed: " . mysql_error() . 
+					$result = mysql_query($sql[$i]) or die("<b style='color: red; '>Query failed: " . mysql_error() . 
 											"<br> --->Statement" . $sql[$i] . "</b><br>");
 					echo $sql[$i]; echo "<br> --->"; echo "<b>". $result. "</b><br>";
 			}
