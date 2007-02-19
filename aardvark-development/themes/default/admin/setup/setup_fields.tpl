@@ -140,7 +140,6 @@ $().ready(function(){
 		accept : 'sortable',
 		handle: 'img.handle',
 		opacity: 0.8,
-		revert: true,
 		tolerance: 'intersect',
 		onStop: function() {
 			var s = $.SortSerialize('grid');

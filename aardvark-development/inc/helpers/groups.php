@@ -138,7 +138,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 				ON (g.group_id = c.group_id)
 			WHERE
 				1
-				[AND g.group_id IN(%C)]";
+				[AND g.group_id IN(%C)]
+			ORDER BY g.group_name";
 		$query = $dbo->prepare($query,array($p['id']));
 		
 		while ($row = $dbo->getRows($query)) {
@@ -174,7 +175,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			FROM " . $dbo->table['groups']."
 			WHERE
 				1
-				[AND group_id IN(%C)]";
+				[AND group_id IN(%C)]
+			ORDER BY group_name";
 		$query = $dbo->prepare($query,array($id));
 		
 		while ($row = $dbo->getRows($query))
