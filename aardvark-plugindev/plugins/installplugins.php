@@ -140,6 +140,7 @@ if ($install) {
 							"`user_lastedit` DATETIME NOT NULL , " .
 							"`user_permissionlvl` TINYINT NOT NULL DEFAULT '1', " .
 							"`user_active` BOOL NOT NULL  DEFAULT '0' , " .
+							"`user_authtype` enum( 'POMMODB', 'LDAP', 'QLDAP', 'HTACCESS', 'EXDB') NOT NULL  DEFAULT 'POMMODB' , " .
 							"`permgroup_id` SMALLINT UNSIGNED NULL REFERENCES %spermgroup(permgroup_id) " .
 							") %s %s; ",
 						array($pluginprefix, $pluginprefix, $dbstr, $charset) );

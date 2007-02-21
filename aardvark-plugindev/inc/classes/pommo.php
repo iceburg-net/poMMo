@@ -116,7 +116,7 @@ class Pommo {
 				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
 			} else {
 				//$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
-				$baseUrl = preg_replace('@/(inc|setup|user|install|plugins(/lib|/lib/interfaces|/adminplugins|/adminplugins(/useradmin|/useradmin(/listmanager|/respmanager|/usermanager)|/pluginconfig))|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				$baseUrl = preg_replace('@/(inc|setup|user|install|plugins(/lib|/lib/interfaces|/adminplugins|/adminplugins(/listmanager|/respmanager|/usermanager|/pluginconfig))|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
 				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
 			}
 		}

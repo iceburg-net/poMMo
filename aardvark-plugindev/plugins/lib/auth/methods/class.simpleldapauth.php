@@ -21,19 +21,19 @@
 
 class SimpleLdapAuth {
 	
-	private $name = "simpleldapauth";
-	private $ldapconf;	
+	var $name = "simpleldapauth";
+	var $ldapconf;	
 
 
-	public function SimpleLdapAuth() {
+	function SimpleLdapAuth() {
 		$this->ldapconf = array();
 		$this->getConfigFromDb();
 	}
-	public function __destruct() {
+	function __destruct() {
 		unset($this->ldapconf);
 	}
 
-	public function getName() {
+	function getName() {
 		return $this->name;
 	}
 
@@ -42,7 +42,10 @@ class SimpleLdapAuth {
  	 * Simple connect to LDAP server
  	 * bind ok -> authenticated
  	 */
- 	public function verifyUser($user, $md5pass) {
+ 	function verifyUser($user, $md5pass) {
+
+		//echo "pass: ";
+		//print_r($md5pass); echo "<br>";
 
 		global $pommo;
 
@@ -129,7 +132,7 @@ class SimpleLdapAuth {
 	 * load configuration data stored in the database 
 	 * specified in GENERAL PLUGIN SETUP
 	 */ 
-  	public function getConfigFromDb() {
+  	function getConfigFromDb() {
 
 		global $pommo;
 		$dbo = clone $pommo->_dbo;

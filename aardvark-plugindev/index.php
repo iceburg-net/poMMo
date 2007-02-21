@@ -51,7 +51,7 @@ elseif (isset($_POST['submit']) && !empty ($_POST['username']) && !empty ($_POST
 	// If plugins enabled and the check for other users in DB is enabled
 	if ($pommo->_useplugins AND $pommo->_plugindata['pluginmultiuser']) {
 		
-		if ($pommo->_auth->authenticate($_POST['username'], md5($_POST['password']))) {
+		if ($pommo->_auth->authenticate($_POST['username'], $_POST['password'])) {	//md5($_POST['password']))) {
 			
 				// LOGIN SUCCESS -- PERFORM MAINTENANCE, SET AUTH, REDIRECT TO REFERER
 				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');

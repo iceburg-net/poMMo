@@ -32,72 +32,22 @@
 {*corinna TODO: rights/permissionmanagement in PommoTemplate class TODO:corinna *}
 {if $showplugin}
 
-	<li><a href="{$url.base}plugins/adminplugins/adminplugins.php">{t}Plugins{/t}</a>
-		{if $section == "plugins/adminplugins"}
+	<li><a href="{$url.base}plugins/adminplugins/plugins.php">{t}Additional{/t}</a>
+	
+		{* TODO a wildcard to select all in plugins/adminplugins *}
+		{if $section == "plugins/adminplugins" OR $section == "plugins/adminplugins/listmanager" OR
+			$section == "plugins/adminplugins/pluginconfig" OR $section == "plugins/adminplugins/respmanager" OR
+			$section == "plugins/adminplugins/usermanager"}
 			<ul>
-				<li><a href="useradmin/useradmin.php">{t}Administration Tasks{/t}</a></li>
-				<li><a href="pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
-				{if $showbounce}
-				<li><a href="{$url.base}plugins/bounce/bounce_index.php">{t}Bounce Mailbox{/t}</a></li>
-				{/if}
+				<li><a href="{$url.base}plugins/adminplugins/usermanager/user_main.php">{t}User Administration{/t}</a></li>
+				<li><a href="{$url.base}plugins/adminplugins/listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
+				<li><a href="{$url.base}plugins/adminplugins/respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>				
+				<li><a href="{*{$url.base}plugins/adminplugins/bounce/bounce_index.php*}">{t}Bounce Mailbox{/t}</a></li>
+				<li><a href="{$url.base}plugins/adminplugins/pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
 			</ul>
 		{/if}
-		{if $section == "plugins/adminplugins/pluginconfig"}
-			<ul>
-				<li><a href="../useradmin/useradmin.php">{t}Administration Tasks{/t}</a></li>
-				<li><a href="config_main.php">{t}General Plugin Setup{/t}</a></li>
-			</ul>
-		{/if}
-		{if $section == "plugins/adminplugins/useradmin"}
-		<ul>
-			<li><a href="useradmin.php">{t}Administration Tasks{/t}</a>
-				<ul>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="usermanager/user_main.php">{t}User Administration{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>
-				</ul>		
-			</li>
-			<li><a href="../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
-		</ul>
-		{/if}
-		{if $section == "plugins/adminplugins/useradmin/listmanager"}
-		<ul>
-			<li><a href="../useradmin.php">{t}Administration Tasks{/t}</a>
-				<ul>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="list_main.php">{t}Mailing Lists{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="../usermanager/user_main.php">{t}User Administration{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="../respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>
-				</ul>		
-			</li>
-			<li><a href="../../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
-		</ul>
-		{/if}	
-		{if $section == "plugins/adminplugins/useradmin/usermanager"}
-		<ul>
-			<li><a href="../useradmin.php">{t}Administration Tasks{/t}</a>
-				<ul>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="../listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="user_main.php">{t}User Administration{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="../respmanager/resp_main.php">{t}Responsible Persons{/t}</a></li>
-				</ul>		
-			</li>
-			<li><a href="../../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
-		</ul>
-		{/if}	
-		{if $section == "plugins/adminplugins/useradmin/respmanager"}
-		<ul>
-			<li><a href="../useradmin.php">{t}Administration Tasks{/t}</a>
-				<ul>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="../listmanager/list_main.php">{t}Mailing Lists{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="../usermanager/user_main.php">{t}User Administration{/t}</a></li>
-					<li style="margin-left: 12px; background-color: #FFF;"><a href="resp_main.php">{t}Responsible Persons{/t}</a></li>
-				</ul>		
-			</li>
-			<li><a href="../../pluginconfig/config_main.php">{t}General Plugin Setup{/t}</a></li>
-		</ul>
-		{/if}	
-	</li>
-	{/if}
+	
+{/if}
 {*corinna*}
 
 </ul>

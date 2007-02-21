@@ -54,14 +54,14 @@ class PluginConfig { //implements iPlugin
 		return TRUE; 
 	}
 	
-	public function getPermission($user) {
+	function getPermission($user) {
 		//TODO select the permissions from DB 
 		// like isActive()
 		return TRUE;
 	}
 	
 	
-	public function execute($data) {
+	function execute($data) {
 
 		Pommo::requireOnce($this->pommo->_baseDir.'inc/classes/template.php');
 		$smarty = new PommoTemplate();

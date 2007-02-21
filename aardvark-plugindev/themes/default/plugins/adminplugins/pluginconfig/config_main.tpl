@@ -5,7 +5,7 @@
 <!--<div id="boxMenu">-->
 
 	<div>
-		<a class="pommoClose" href="../adminplugins.php" style="float: right; line-height:18px; " >
+		<a class="pommoClose" href="../plugins.php" style="float: right; line-height:18px; " >
 		<img src="{$url.theme.shared}/images/icons/left.png" width="21" height="21" align="absmiddle" border="0">&nbsp;
 		{t}Return to Plugin Menu{/t}
 		</a>

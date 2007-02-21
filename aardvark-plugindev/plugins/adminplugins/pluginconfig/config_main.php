@@ -30,7 +30,7 @@ $data = NULL;
 
 //print_r($pommo);
 
-$test = $pommo->_auth->dbCheckPermission('ADMINPLUGIN');
+$test = $pommo->_auth->dbCheckPermission('PLUGINCONF');
 //echo "<b><i>TEST: " . $test . "</i></b><br>";
 
 
