@@ -1,3 +1,4 @@
+<?php
 /**
  * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
  * 
@@ -17,20 +18,34 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
- In order to enable plugins:
+/**********************************
+	INITIALIZATION METHODS
+ *********************************/
+require('../../bootstrap.php');
+$pommo->init();
+$logger = & $pommo->_logger;
+$dbo = & $pommo->_dbo;
+
+$pommo->_auth->dbCheckPermission(array("PLUGINCONF", "USER", "LIST", "RESPPERS"));
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
  
- -	Enable plugins in the config.php file in the poMMo root.
- 	//TODO config file was changed
- 	Set the value $useplugins = TRUE;
- 	MAYBE put this in the pommo CLASS $pommo->_useplugins = TRUE;
- 	IN inc/classes/pommo.php!!!!!!!!!!!!!!
- 	// TODO REVISION mechanism from single user pommo
- 
- -	Generate TABLES in the database with the script:
- 	yourpommourl/plugins/installplugins.php
- 	It contains some basic configurations. To edit the configurations use the pluginmanager plugin.
- 	All configs should be editeble through the database.
- 	
- 
- There are some constraints -> e.g. the authentication plugins
- Maybe some constraints will be added in the future.
+if ($pommo->_useplugins) {
+
+	Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+	$smarty = new PommoTemplate();
+	
+	
+	//$smarty->display('show', );
+	
+	$smarty->display('plugins/adminplugins/plugins.tpl');
+	Pommo::kill();
+	
+} else {
+	// Plugins are not activated and/or
+	// no permission page	
+}
+
+?>
+

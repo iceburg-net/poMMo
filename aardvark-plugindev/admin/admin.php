@@ -32,6 +32,8 @@ $pommo->init(array('authLevel' => 1));		//array('keep' => TRUE;);
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
+//$pommo->_auth->dbCheckPermission("");
+
 echo "<div style='color:blue;'>-----begin-----<br>POMMO"; print_r($pommo->_auth); echo "<br>"; print_r($pommo->_auth); echo "<br>"; 
 echo "SESSION: "; print_r($_SESSION); echo "</div>-----end-----<br><br>";
 

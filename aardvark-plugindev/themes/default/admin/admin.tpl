@@ -35,10 +35,13 @@
 	{*corinna Display this only if plugins are activated in $pommo->_useplugins *}
 	{if $showplugin}
 		<div>
-			<a href="{$url.base}plugins/adminplugins/adminplugins.php">
+			<a href="{$url.base}plugins/adminplugins/plugins.php">
 			<img src="" class="navimage" width="64" height="64" />
-			{t}Setup Plugins{/t}</a> - 
-			{t}Set up all the Plugins: Authentication methods, User Administration, and more...{/t}
+			{t}Additional Functionality{/t}</a> - 
+			{t}PLUGINS LINK! Set up all the Plugins: Authentication methods, User Administration, and more...
+				Define permissions, mailing lists, responsible persons, bounce settings and
+				many more...
+			{/t}
 		</div>
 	{/if}
 	{*corinna End additional plugin functionality *}

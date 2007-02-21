@@ -123,7 +123,6 @@ class AdminUser {
 		
 	} //dbVerifyAdmin
 	
-	
 
 	
 } //AdminUser

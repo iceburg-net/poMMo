@@ -20,19 +20,19 @@
 
 class QueryLdapAuth {
 	
-	private $name = "queryldapauth";
-	private $ldapconf;	
+	var $name = "queryldapauth";
+	var $ldapconf;	
 
 
-	public function QueryLdapAuth() {
+	function QueryLdapAuth() {
 		$this->ldapconf = array();
 		$this->getConfigFromDb();
 	}
-	public function __destruct() {
+	function __destruct() {
 		unset($this->ldapconf);
 	}
 
-	public function getName() {
+	function getName() {
 		return $this->name;
 	}
 	
@@ -41,7 +41,7 @@ class QueryLdapAuth {
  	 * Query from a LDAP server
  	 * TODO: implement query
  	 */
- 	public function verifyUser($user, $md5pass) {
+ 	function verifyUser($user, $md5pass) {
 
 		global $pommo;
 
@@ -129,7 +129,7 @@ class QueryLdapAuth {
 	 * load configuration data stored in the database 
 	 * specified in GENERAL PLUGIN SETUP
 	 */ 
-  	public function getConfigFromDb() {
+  	function getConfigFromDb() {
 
 		global $pommo;
 		$dbo = clone $pommo->_dbo;

@@ -82,50 +82,6 @@ class PluginHandler {
 
 
 
-	function dbWriteLastLogin($username) {
-	
-		global $pommo;
-		$dbo = clone $pommo->_dbo;
-		
-		$query = "UPDATE ".$dbo->table['user']." SET user_lastlogin=NOW() WHERE user_name='".$username."' ";
-		$query = $dbo->prepare($query);
-		$dbo->query($query);
-		
-	} //dbWriteLastLogin
-	
-	function dbIncreaseLoginTries($username) {
-		
-		global $pommo;
-		$dbo = clone $pommo->_dbo;
-
-		$query = "SELECT user_logintries FROM ".$dbo->table['user']." WHERE user_name='".$username."' LIMIT 1 ";
-		$query = $dbo->prepare($query);
-		
-		$l = array();
-		while ($row = $dbo->getRows($query)) {
-			$l = $row['user_logintries'];
-		}
-		$l = $l + 1;
-		$query2 = "UPDATE ".$dbo->table['user']." SET user_logintries=".$l." WHERE user_name='".$username."' ";
-		$query2 = $dbo->prepare($query2);
-		$dbo->query($query2);
-				
-	} //dbIncreaseLoginTries
-	
-	function dbAddLDAPUser($user, $pass) {
-
-		global $pommo;
-		$dbo = clone $pommo->_dbo;
-
-		$query = "INSERT INTO ".$dbo->table['user']." (user_name, user_pass, permgroup_id, user_created) " .
-				 "VALUES ('".$user."', '".md5($pass)."', NULL, NOW()) ";
-		$query = $dbo->prepare($query);
-		$dbo->query($query);
-
-	} //addLDAPUser
-
-
-
 
 	/**
 	 * Get the active authentication methods from DB
