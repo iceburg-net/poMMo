@@ -20,6 +20,9 @@
 
 <h3>{t}Unsubscribe{/t}</h3>
 
+<label>{t}Comments{/t}:</label>
+<textarea name="comments" rows="3" cols="33" maxlength="255">{if isset($d.$key)}{$d.$key}{elseif $field.normally}{$field.normally}{/if}</textarea>
+
 <div class="buttons">
 
 <button type="submit" name="unsubscribe" value="true" class="warn">

@@ -17,7 +17,7 @@
 <div class="jqmdBL"><div class="jqmdBR"><div class="jqmdBC{if $dialogBodyClass} {$dialogBodyClass}{/if}">
 
 <div class="jqmdMSG{if $dialogMsgClass} {$dialogMsgClass}{/if}">
-{if $dialogContent}{$dialogContent}{else}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" /></a>{t}Please Wait{/t}...{/if}
+{if $dialogContent}{$dialogContent}{else}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{/if}
 </div>
 
 </div></div></div>

@@ -31,6 +31,11 @@ z/************************/
 .jqmOverlay { background-color: #FFF; }
 .jqDrag {cursor: move;}
 
+/* Background iframe styling for IE6. Prevents ActiveX bleed-through (<select> form elements, etc.) */
+* iframe.jqm {position:absolute;top:0;left:0;z-index:-1;
+	width: expression(this.parentNode.offsetWidth+'px');
+	height: expression(this.parentNode.offsetHeight+'px');
+}
 
 /* jqmModal dialog CSS courtesy of;
 	Brice Burgess <bhb@iceburg.net> */
