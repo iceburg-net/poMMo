@@ -8,9 +8,7 @@
 <input type="hidden" name="updateForm" value="true" />
 
 <div class="notes">
-
 <p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}%1Fields%2 are required{/t}</p>
-
 </div>
 
 <div>
@@ -30,7 +28,10 @@
 
 {foreach name=fields from=$fields key=key item=field}
 <div>
+{* DON'T DISPLAY COMMENT FIELDS ON UPDATE FORM. A COMMENT FIELD IS PROVIDED @ user/update.tpl FOR UNSUBSCRIBE *}
+{if $field.type != 'comment'}
 <label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
+{/if}
 
 {if $field.type == 'text' || $field.type == 'number'}
 <input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{/if} />
@@ -49,10 +50,7 @@
 {elseif $field.type == 'date'}
 <input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|date_format:"%m/%d/%Y"}"{/if} />
 
-{else}
-<p class="error">{t}Unsupported field type{/t}</p>
 {/if}
-
 </div>
 
 {/foreach}

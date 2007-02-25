@@ -144,9 +144,7 @@
 				break;
 			}
 			// shorten
-			$in[$id] = ($field['type'] == 'comment') ?
-				substr($in[$id],0,255) :
-				substr($in[$id],0,60);
+			$in[$id] = substr($in[$id],0,60);
 		}
 		// prune
 		if($p['prune'])

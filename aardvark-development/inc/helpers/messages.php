@@ -142,13 +142,13 @@ class PommoHelperMessages {
 		return $ret;
 	}
 	
-	function notify(&$notices,&$sub,$type) {
+	function notify(&$notices,&$sub,$type,$comments=false) {
 		global $pommo;
 		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
 		
 		$mails = PommoHelper::trimArray(explode(',',$notices['email']));
 		if(empty($mails[0]))
-			return;
+			$mails = array($pommo->_config['admin_email']);
 			
 		$subject = $notices['subject'].' ';
 		$body = sprintf(Pommo::_T('poMMo %s Notice'),$type);
@@ -156,7 +156,8 @@ class PommoHelperMessages {
 		
 		$body .= "EMAIL: ".$sub['email']."\n";
 		$body .= "IP: ".$sub['ip']."\n";
-		$body .= "REGISTERED: ".date("F j, Y, g:i a",$sub['registered'])."\n";
+		$body .= "REGISTERED: ".date("F j, Y, g:i a",$sub['registered'])."\n\n";
+		if($comments) $body .= "COMMENTS: $comments \n\n";
 		$body .= "DATA:\n";
 		
 		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');

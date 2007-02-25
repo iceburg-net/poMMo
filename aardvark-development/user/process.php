@@ -76,6 +76,8 @@ if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'], arra
 	Pommo::kill();
 }
 
+$comments = (isset($_POST['comments'])) ? substr($_POST['comments'],0,255) : false;
+
 /**********************************
 	ADD SUBSCRIBER
  *********************************/
@@ -104,8 +106,8 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	else {
 		
 		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
-			if (isset($notices['pending']) && $notices['pending'] == 'on')
-				PommoHelperMessages::notify($notices, $subscriber, 'pending');
+			if ($comments || isset($notices['pending']) && $notices['pending'] == 'on')
+				PommoHelperMessages::notify($notices, $subscriber, 'pending', $comments);
 			
 			if ($config['site_confirm'])
 				Pommo::redirect($config['site_confirm']);
@@ -126,8 +128,8 @@ else { // no email confirmation required
 		$smarty->assign('back', TRUE);
 	}
 	else {
-		if (isset($notices['subscribe']) && $notices['subscribe'] == 'on')
-				PommoHelperMessages::notify($notices, $subscriber, 'subscribe');
+		if ($comments || isset($notices['subscribe']) && $notices['subscribe'] == 'on')
+				PommoHelperMessages::notify($notices, $subscriber, 'subscribe',$comments);
 				
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);

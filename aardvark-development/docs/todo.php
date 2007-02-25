@@ -20,6 +20,7 @@
 die();
 ?>
 
+(( UNCATEGORIZED ))
 ++ jqModal warning of !firefox on first run 
 write to jQ list w/ elegance of unobtrusive accordion load in config
 
@@ -32,7 +33,7 @@ add; http://spamcheck.sitesell.com/
 	http://www.thinkvitamin.com/features/design/html-emails
 	
 	to wiki
-	
+	{* DON'T DISPLAY COMMENT FIELDS ON UPDATE FORM. A COMMENT FIELD IS PROVIDED @ BOTTOM FOR UNSUBSCRIBE *}
 
 make all multi-byte safe -- see function overloading for common functions to replace
 	http://us3.php.net/manual/en/ref.mbstring.php
@@ -42,6 +43,12 @@ make all multi-byte safe -- see function overloading for common functions to rep
 PR15
 ----
 + message templates
+
+
+PR15.1
+-------
+Get rid of activation/logout scheme. Make hash of user email ++ ip||id||time regisered, and mail that for activation
+Provide unsubscribe link in template
 +++ Set sockettimeout in spawn function
 
 
@@ -132,6 +139,8 @@ PR15
 	  
 	  (module) Visual Verrification / CAPTCHA @ subscribe form
 	  (design) client side validation of subscribe form (use validation.js), potential AJAX processing
+	  
+	  (cleanup) vs. smarty->assign($_POST), just use the {$smarty.post} global in templates...
 	
 	  (API) include some kind of bandwith throttling / DOS detection / firewalling to drop pages from offending IPs / halt system for 3 mins if too many page requests ??
 	  (API) Plugin architecture -- allow handler & manipulation injections/replacements to API functions

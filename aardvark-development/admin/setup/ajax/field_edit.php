@@ -52,35 +52,34 @@ if (!empty ($_POST['dVal-add'])) {
 
 // check if user requestedfield_id='.$field['id'] to remove an option
 if (!empty ($_REQUEST['dVal-del'])) {
-	if(empty ($_REQUEST['delOption']))
-		Pommo::redirect($_SERVER['PHP_SELF'].'?field_id='.$field['id']);
-		
-	$affected = PommoField::subscribersAffected($field['id'],$_REQUEST['delOption']);
-	if(count($affected) > 0 && empty($_GET['dVal-force'])) {
-		$smarty->assign('confirm',array(
-		 	'title' => Pommo::_T('Confirm Action'),
-		 	'nourl' =>  $_SERVER['PHP_SELF'].'?field_id='.$field['id'],
-		 	'yesurl' => $_SERVER['PHP_SELF'].'?field_id='.$field['id'].'&dVal-del=TRUE&dVal-force=TRUE&delOption='.$_REQUEST['delOption'],
-		 	'msg' => sprintf(Pommo::_T('Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records.'), '<b>'.$_REQUEST['delOption'].'</b>', '<em>'.count($affected).'</em>')
-		 	));
-		 
-		 $smarty->display('admin/confirm.tpl');
-		 Pommo::kill();
-	}
-	else {
-		// delete option, no subscriber is affected || force given.
-		if (!PommoField::optionDel($field,$_REQUEST['delOption']))
-			Pommo::kill(Pommo::_T('Error with deletion.'));
-			
-		// flag subscribers for update
-		if(count($affected) > 0)
-			PommoSubscriber::flagByID($affected);
-		Pommo::redirect($_SERVER['PHP_SELF'].'?field_id='.$field['id']);
+	if(!empty ($_REQUEST['delOption'])) {
+		$affected = PommoField::subscribersAffected($field['id'],$_REQUEST['delOption']);
+		if(count($affected) > 0 && empty($_REQUEST['dVal-force'])) {
+			$smarty->assign('confirm',array(
+			 	'title' => Pommo::_T('Confirm Action'),
+			 	'nourl' =>  $_SERVER['PHP_SELF'].'?field_id='.$field['id'],
+			 	'yesurl' => $_SERVER['PHP_SELF'].'?field_id='.$field['id'].'&dVal-del=TRUE&dVal-force=TRUE&delOption='.$_REQUEST['delOption'],
+			 	'msg' => sprintf(Pommo::_T('Deleting option %1$s will affect %2$s subscribers who have selected this choice. They will be flagged as needing to update their records.'), '<b>'.$_REQUEST['delOption'].'</b>', '<em>'.count($affected).'</em>'),
+			 	'targetID' => 'editWindow',
+			 	'ajaxConfirm' => true
+			 	));
+			 $smarty->display('admin/confirm.tpl');
+		}
+		else {
+			// delete option, no subscriber is affected || force given.
+			if (!PommoField::optionDel($field,$_REQUEST['delOption']))
+				Pommo::kill(Pommo::_T('Error with deletion.'));
+				
+			// flag subscribers for update
+			if(count($affected) > 0)
+				PommoSubscriber::flagByID($affected);
+			Pommo::redirect($_SERVER['PHP_SELF'].'?field_id='.$field['id']);
+		}
+	$_POST = array();
 	}
 }
 
 $smarty->assign('field', $field);
-
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	SmartyValidate :: connect($smarty, true);
@@ -123,6 +122,8 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		if (!PommoField::update($update))
 			Pommo::kill(Pommo::_T('Error with deletion.'));
 		$logger->addMsg(Pommo::_T('Settings updated.'));
+		
+		$_POST['updated'] = 1;
 
 	} else {
 		// __ FORM NOT VALID

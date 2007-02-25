@@ -10,9 +10,7 @@
 {/if}
 
 <div class="notes">
-
 <p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}%1Fields%2 are required{/t}</p>
-
 </div>
 
 <div>
@@ -41,8 +39,9 @@
 {elseif $field.type == 'date'}
 <input type="text" class="datepicker" size="12" name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|escape}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
 
-{else}
-<p class="error">{t}Unsupported field type{/t}</p>
+{elseif $field.type == 'comment'}
+<textarea name="comments" rows="3" cols="33" maxlength="255">{if isset($d.$key)}{$d.$key}{elseif $field.normally}{$field.normally}{/if}</textarea>
+
 {/if}
 
 </div>

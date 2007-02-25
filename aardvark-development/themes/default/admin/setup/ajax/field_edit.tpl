@@ -5,7 +5,6 @@
 {fv validate="field_required"}
 {fv validate="field_active"}
 
-
 <p>
 {$intro}
 </p>
@@ -14,6 +13,7 @@
  
 <form action="{$smarty.server.PHP_SELF}" method="post">
 <input type="hidden" name="field_id" value="{$field.id}" />
+<input type="hidden" name="success" value="{$updated}" />
   
 <fieldset>
 <legend>'{$field_name}' parameters</legend>
@@ -30,12 +30,16 @@
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}Prompt for field on the Subscription Form. e.g. %1Type your city%2{/t}</div>
 </div>
 
+{if $field.type != 'comment'}
 <div>
 <label for="field_required">{t}Required:{/t}{fv message="field_required"}</label>
 <input type="radio" name="field_required" value="on"{if $field_required == 'on'} checked="checked"{/if} /> yes
 <input type="radio" name="field_required" value="off"{if $field_required != 'on'} checked="checked"{/if} /> no
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}Toggle to require field on Subscription Form (user cannot leave blank if %1yes%2){/t}</div>
 </div>
+{else}
+<input type="hidden" name="field_required" value="off" />
+{/if}
 
 <div>
 <label for="field_active">{t}Active:{/t}{fv message="field_active"}</label>
@@ -84,7 +88,7 @@
 </form>
 
 {if $field.type == 'multiple'}
-<form method="post" action="" id="dVal" name="dVal">
+<form action="{$smarty.server.PHP_SELF}" method="post" id="dVal" name="dVal">
 <input type="hidden" name="field_id" value="{$field.id}" />
 
 <fieldset>

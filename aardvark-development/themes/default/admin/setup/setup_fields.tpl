@@ -153,6 +153,8 @@ $().ready(function(){
 		trigger: '.editTrigger',
 		onLoad: function(){assignForm(this);}
 	}).jqDrag('div.jqmdTC');
+	
+	$('#confirm').jqm({trigger:false,modal:true,zIndex:5000});
 });
 
 function assignForm(scope) {
@@ -162,23 +164,24 @@ function assignForm(scope) {
 			$('input[@type=submit]', scope).hide();
 			$('img[@name=loading]', scope).show();
 		},
-		success: function() { 
+		success: function() {
 			assignForm(this); 
 			$('div.output',this).fadeOut(5000); 
 			
-			var name=$('input[@name=field_name]',this).val();
-			var req=$('input[@name=field_required]:checked',this).val();
-			var active=$('input[@name=field_active]:checked',this).val();
-			
-			if(req == 'on')
-				name='<strong>'+name+'</strong>';
-			
-			var e=$('#id'+$('input[@name=field_id]',this).val()+' span.name').html(name);
-			
-			if(active == 'on')
-				e.addClass('green');
-			else
-				e.removeClass('green');
+			if($('input[@name=success]',this).val()) {
+				var name=$('input[@name=field_name]',this).val();
+				var req=$('input[@name=field_required]:checked',this).val();
+				var active=$('input[@name=field_active]:checked',this).val();
+				
+				if(req == 'on')
+					name='<strong>'+name+'</strong>';
+				
+				var e=$('#id'+$('input[@name=field_id]',this).val()+' span.name').html(name);
+				
+				if(active == 'on')
+					e.addClass('green');
+				else
+					e.removeClass('green');}
 			}
 		}
 	);
@@ -188,5 +191,6 @@ function assignForm(scope) {
 
 {capture name=dialogs}
 {include file="inc/dialog.tpl" dialogID="editWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="confirm" dialogTitle=$confirm.title dialogClass="jqmdWide"}
 {/capture}
 {include file="inc/admin.footer.tpl"}

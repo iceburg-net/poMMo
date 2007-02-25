@@ -65,7 +65,7 @@ $config = PommoAPI::configGet(array('notices'));
 $notices = unserialize($config['notices']);
 
 if (!isset($_POST['d']))
-	$smarty->assign('d', $subscriber['data']); 
+	$smarty->assign('d', $subscriber['data']);
 
 if (!empty ($_POST['update'])) {
 	// validate new subscriber info (also converts dates to ints)
@@ -118,6 +118,9 @@ if (!empty ($_POST['update'])) {
 	}
 }
 elseif (!empty ($_POST['unsubscribe'])) {
+	
+	$comments = (isset($_POST['comments'])) ? substr($_POST['comments'],0,255) : false;
+	
 	$newsub = array(
 		'id' => $subscriber['id'],
 		'status' => 0,
@@ -130,9 +133,9 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		$messages = unserialize($dbvalues['messages']);
 		$logger->addMsg($messages['unsubscribe']['suc']);
 		
-		if (isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') {
+		if ($comments || isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') {
 			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-			PommoHelperMessages::notify($notices, $subscriber, 'unsubscribe');
+			PommoHelperMessages::notify($notices, $subscriber, 'unsubscribe',$comments);
 		}
 		
 		$smarty->assign('unsubscribe', TRUE);
