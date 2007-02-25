@@ -36,6 +36,7 @@
 	//     to a UNIX TIMESTAMP. This is necessary for quick SQL comparisson of dates, etc.
 	//   NOTE: has the MAGIC FUNCTINALITY of changing "true"/"false" to checkbox "on"/off equivelent
 	//   NOTE: has the MAGIC FUNCTIONALITY of trimming leading and trailing whitepace
+	//   NOTE: has the MAGIC FUNCTIONALITY of shortening value to 60 characters (or 255 if a comment type)
 	
 	// TODO -> should fields be passed by reference? e.g. are they usually already available when subscriberData() is called?
 	function subscriberData(&$in, $p = array()) {
@@ -141,7 +142,11 @@
 						$valid = false;
 					}
 				break;
-			}	
+			}
+			// shorten
+			$in[$id] = ($field['type'] == 'comment') ?
+				substr($in[$id],0,255) :
+				substr($in[$id],0,60);
 		}
 		// prune
 		if($p['prune'])

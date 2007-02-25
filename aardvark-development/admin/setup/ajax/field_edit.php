@@ -21,7 +21,7 @@
 /**********************************
 	INITIALIZATION METHODS
 *********************************/
-require ('../../bootstrap.php');
+require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
@@ -38,7 +38,7 @@ $smarty->prepareForForm();
 
 $field = PommoField::get(array('id' => $_REQUEST['field_id']));
 if (count($field) < 1)
-	Pommo::redirect('setup_fields.php');
+	Pommo::kill();
 $field =& current($field); // reference the first field returned by PommoField::getById
 
 
@@ -83,14 +83,16 @@ $smarty->assign('field', $field);
 
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
-
 	SmartyValidate :: connect($smarty, true);
+	
 	SmartyValidate :: register_validator('field_name', 'field_name', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('field_prompt', 'field_prompt', 'notEmpty', false, false, 'trim');
-
-	$formError = array ();
-	$formError['field_name'] = $formError['field_prompt'] = Pommo::_T('Cannot be empty.');
-	$smarty->assign('formError', $formError);
+	SmartyValidate :: register_validator('field_required','field_required:!^(on|off)$!','isRegExp');   
+	SmartyValidate :: register_validator('field_active','field_active:!^(on|off)$!','isRegExp'); 
+	
+	$vMsg = array ();
+	$vMsg['field_name'] = $vMsg['field_prompt'] = Pommo::_T('Cannot be empty.');
+	$smarty->assign('vMsg', $vMsg);
 
 	// populate _POST with info from database (fills in form values...)
 	@ $_POST['field_name'] = $field['name'];
@@ -128,24 +130,34 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	}
 }
 
+$f_text = sprintf(Pommo::_T('%s - Any value will be accepted for text fields. They are useful for collecting names, addresses, etc.'),'<strong>'.$field['name'].' ('.Pommo::_T('Text').')</strong>');
+$f_check = sprintf(Pommo::_T('%s - Checkboxes can be toggled ON or OFF. They are useful for opt-ins and agreements.'),'<strong>'.$field['name'].' ('.Pommo::_T('Checkbox').')</strong>');
+$f_num = sprintf(Pommo::_T('%s - Only Numeric values will be accepted for number fields.'),'<strong>'.$field['name'].' ('.Pommo::_T('Number').')</strong>');
+$f_date = sprintf(Pommo::_T('%s - Only calendar values will be accepted for this field. A date selector (calendar popup) will appear next to the field to aid the subscriber in selecting a date.'),'<strong>'.$field['name'].' ('.Pommo::_T('Date').')</strong>');
+$f_mult = sprintf(Pommo::_T('%s - Subscribers will be able to select a value from the options you provide below. Multiple choice fields have reliable values for organizing, and are useful for collecting Country, Interests, etc.'),'<strong>'.$field['name'].' ('.Pommo::_T('Multiple Choice').')</strong>');
+$f_comm = sprintf(Pommo::_T('%s -. If a subscriber enters a value for a comment field, it will be mailed to the admin notification email.'),'<strong>'.$field['name'].' ('.Pommo::_T('Comment').')</strong>');
+
 switch ($field['type']) {
 		case 'text' :
-			$smarty->assign('intro', Pommo::_T('This is a <b>TEXT</b> field. Subscribers will be allowed to type any value for this field. Text fields are useful for collecting names, cities, and such.'));
+			$smarty->assign('intro', $f_text);
 			break;
 		case 'checkbox' :
-			$smarty->assign('intro', Pommo::_T('This is a <b>CHECKBOX</b> field. Subscribers will be allowed to toggle this field ON and OFF. Checkboxes are useful for subscriber acceptance and opt-ins.'));
+			$smarty->assign('intro', $f_check);
 			break;
 		case 'number' :
-			$smarty->assign('intro', Pommo::_T('This is a <b>NUMBER</b> field. Only numeric values will be accepted for this field. Number fields are useful for collecting ages, quantities, and such.'));
+			$smarty->assign('intro', $f_num);
 			break;
 		case 'date' :
-			$smarty->assign('intro', Pommo::_T('This is a <b>DATE</b> field. Only calendar values will be accepted for this field. A date selector (calendar popup) will appear next to the field to aid the subscriber in selecting a date.'));
+			$smarty->assign('intro', $f_date);
 			break;
 		case 'multiple' :
-			$smarty->assign('intro', Pommo::_T('This is a <b>MULTIPLE CHOICE</b> field. Subscribers will be able to select a value from the options you provide below. Multiple choice fields have reliable values, and are useful for collecting Country, income range, pre-defined sizes and such.'));
+			$smarty->assign('intro', $f_mult);
+			break;
+		case 'comment' :
+			$smarty->assign('intro', $f_comm);
 			break;
 	}
 	
 $smarty->assign($_POST);
-$smarty->display('admin/setup/fields_edit.tpl');
+$smarty->display('admin/setup/ajax/field_edit.tpl');
 Pommo::kill();

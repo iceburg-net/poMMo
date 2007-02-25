@@ -4,7 +4,7 @@
 {fv validate="email"}
 
 <div id="ebody">
-{t escape=no 1="<strong>$exchanger</strong>"}A test message will be sent to the supplied recipient. If you recieve it, poMMo can use the %1 exchanger. Remember to check your SPAM folder too.{/t}
+{t escape=no 1="<strong>$exchanger</strong>"}A test message will be sent to the supplied recipient. If you receive it, poMMo can use the %1 exchanger. Remember to check your SPAM folder too.{/t}
 
 <form action="{$smarty.server.PHP_SELF}" method="post">
 

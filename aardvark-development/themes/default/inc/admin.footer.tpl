@@ -10,5 +10,7 @@
 </div>
 <!-- end footer -->
 
+{$smarty.capture.dialogs}
+
 </body>
 </html>

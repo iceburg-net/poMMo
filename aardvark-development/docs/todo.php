@@ -27,6 +27,18 @@ http://www.pommo.org/community/viewtopic.php?id=292
 
 http://www.pommo.org/community/viewtopic.php?id=288
 
+add; http://spamcheck.sitesell.com/  
+	http://www.alistapart.com/articles/cssemail/
+	http://www.thinkvitamin.com/features/design/html-emails
+	
+	to wiki
+	
+
+make all multi-byte safe -- see function overloading for common functions to replace
+	http://us3.php.net/manual/en/ref.mbstring.php
+
+
+
 PR15
 ----
 + message templates
@@ -86,6 +98,7 @@ PR15
 	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
 	  
 	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
+	  
 	  (feature) Add specific emails to a group
 	  	++ Allow rules to include base subscriber data such as IP && date_registered.
 	  	

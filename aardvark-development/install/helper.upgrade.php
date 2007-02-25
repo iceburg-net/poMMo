@@ -138,6 +138,10 @@ function PommoRevUpgrade($rev) {
 			"INSERT INTO {$dbo->table['config']} (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES ('notices', '', '', 'off', 'off')"
 			,"Enabling Notification of Subscriber List Changes")) return false;
 			
+			if (!PommoInstall::incUpdate(11,
+			"ALTER TABLE {$dbo->table['fields']} CHANGE `field_type` `field_type` ENUM( 'checkbox', 'multiple', 'text', 'date', 'number', 'comment' ) DEFAULT NULL"
+			,"Adding 'comments' field type")) return false;
+			
 		default: 
 			return false;
 	} 

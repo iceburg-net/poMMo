@@ -54,24 +54,11 @@
 </div>
 <!-- end content (no footer)-->
 
-{include file="inc/dialog.tpl" dialogID="throttleWindow" dialogTitle=$throttleTitle dialogDrag=true dialogClass="configWindow" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="smtpWindow" dialogTitle=$smtpTitle dialogDrag=true dialogClass="configWindow" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="testWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="configWindow"}
+{include file="inc/dialog.tpl" dialogID="throttleWindow" dialogTitle=$throttleTitle dialogDrag=true dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="smtpWindow" dialogTitle=$smtpTitle dialogDrag=true dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="testWindow" dialogTitle=$testTitle dialogDrag=true}
 
 {literal}
-<style>
-div.configWrap {
-	position: absolute;
-	top: 30%;
-	left: 50%;
-}
-
-div.configWindow {
-	left: -240px;
-	width: 480px;
-}
-</style>
-
 <script type="text/javascript">
 
 $().ready(function(){ 
@@ -89,6 +76,11 @@ $().ready(function(){
 		$(this).load(url,function(){ assignForm(this); });
 	});
 	
+	$('div.jqmDialog').jqm({
+		trigger:false,
+		overlay:0,
+		ajax:'@href',
+		target:'.jqmdMSG'}).jqDrag('div.jqmdTC');
 });
 
 function assignForm(scope) {
@@ -104,7 +96,5 @@ function assignForm(scope) {
 		}
 	);
 }
-</script>
-
 </script>
 {/literal}

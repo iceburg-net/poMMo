@@ -32,7 +32,7 @@ msgstr "Enviar"
 #. poMMo/themes/default/admin/mailings/admin_mailings.tpl
 #: pommo_theme_lang.php:9 pommo_theme_lang.php:1758
 msgid "History"
-msgstr "Histórico"
+msgstr "Histï¿½rico"
 
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #. poMMo/themes/default/admin/subscribers/subscribers_import.tpl
@@ -73,7 +73,7 @@ msgstr "Grupos"
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:24 pommo_theme_lang.php:1779
 msgid "Setup"
-msgstr "Configuração"
+msgstr "Configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #. poMMo/themes/default/admin/setup/setup_throttle.tpl
@@ -96,23 +96,23 @@ msgstr "Campos"
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #: pommo_theme_lang.php:33
 msgid "Setup Form"
-msgstr "Formulário de configuração"
+msgstr "Formulï¿½rio de configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #: pommo_theme_lang.php:36
 msgid "Demonstration mode is ON."
-msgstr "Modo de demonstração está LIGADO."
+msgstr "Modo de demonstraï¿½ï¿½o estï¿½ LIGADO."
 
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #: pommo_theme_lang.php:39
 msgid "Demonstration mode is OFF."
-msgstr "Modo de demonstração está DESLIGADO."
+msgstr "Modo de demonstraï¿½ï¿½o estï¿½ DESLIGADO."
 
 #. poMMo/themes/default/inc/tpl/admin.footer.tpl
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:42 pommo_theme_lang.php:1827
 msgid "Page fueled by %1 mailing management software."
-msgstr "Página gerada pelo %1, sistema de gerenciamento de mailing."
+msgstr "Pï¿½gina gerada pelo %1, sistema de gerenciamento de mailing."
 
 #. poMMo/themes/default/inc/tpl/admin.header.tpl
 #. poMMo/themes/default/user/update.tpl
@@ -131,24 +131,24 @@ msgstr "Importar"
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:51 pommo_theme_lang.php:207 pommo_theme_lang.php:1806
 msgid "Admin Page"
-msgstr "Página de administração"
+msgstr "Pï¿½gina de administraï¿½ï¿½o"
 
 #. poMMo/themes/default/inc/tpl/user.footer.tpl
 #: pommo_theme_lang.php:54
 #, fuzzy
 msgid "Page fueled by %1 mailing management software"
-msgstr "Página gerada pelo %1, sistema de gerenciamento de mailing."
+msgstr "Pï¿½gina gerada pelo %1, sistema de gerenciamento de mailing."
 
 #. poMMo/themes/default/user/update.tpl
 #: pommo_theme_lang.php:57
 msgid "Subscriber Update"
-msgstr "Atualização de cadastro"
+msgstr "Atualizaï¿½ï¿½o de cadastro"
 
 #. poMMo/themes/default/user/update.tpl
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:63 pommo_theme_lang.php:354
 msgid "Unsubscribe"
-msgstr "Cancelar inscrição"
+msgstr "Cancelar inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/user/update.tpl
 #: pommo_theme_lang.php:66
@@ -189,7 +189,7 @@ msgstr ""
 #: pommo_theme_lang.php:1395
 #, fuzzy
 msgid "Subject"
-msgstr "Título:"
+msgstr "Tï¿½tulo:"
 
 #. poMMo/themes/default/user/mailings.tpl
 #. poMMo/themes/default/admin/mailings/mailings_history.tpl
@@ -280,7 +280,7 @@ msgstr "Assinatura da lista"
 #. poMMo/themes/default/user/process.tpl
 #: pommo_theme_lang.php:129
 msgid "Back to Subscription Form"
-msgstr "Voltar para o formulário de inscrição"
+msgstr "Voltar para o formulï¿½rio de inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/user/process.tpl
 #. poMMo/themes/default/user/pending.tpl
@@ -316,8 +316,8 @@ msgid ""
 "In order to check your subscription status, update your information, or "
 "unsubscribe, you must enter your email address in the field below."
 msgstr ""
-"Para verificar o estado do seu registro, atualizar informações ou sair da "
-"lista, você deve informar o seu endereço de email no campo abaixo."
+"Para verificar o estado do seu registro, atualizar informaï¿½ï¿½es ou sair da "
+"lista, vocï¿½ deve informar o seu endereï¿½o de email no campo abaixo."
 
 #. poMMo/themes/default/user/login.tpl
 #: pommo_theme_lang.php:144 pommo_theme_lang.php:150
@@ -337,19 +337,19 @@ msgstr "Seu Email:"
 #. poMMo/themes/default/user/pending.tpl
 #: pommo_theme_lang.php:153
 msgid "Pending Changes"
-msgstr "Mudanças pendentes"
+msgstr "Mudanï¿½as pendentes"
 
 #. poMMo/themes/default/user/pending.tpl
 #: pommo_theme_lang.php:159
 #, fuzzy
 msgid "SEND another confirmation email"
-msgstr "Clique para *enviar* outro email de confirmação"
+msgstr "Clique para *enviar* outro email de confirmaï¿½ï¿½o"
 
 #. poMMo/themes/default/user/pending.tpl
 #: pommo_theme_lang.php:162
 #, fuzzy
 msgid "CANCEL your pending request"
-msgstr "Clique para *cancelar* sua requisição pendente"
+msgstr "Clique para *cancelar* sua requisiï¿½ï¿½o pendente"
 
 #. poMMo/themes/default/user/update_activate.tpl
 #: pommo_theme_lang.php:165
@@ -369,8 +369,8 @@ msgid ""
 "Before you can update your records on unsubscribe, we must first verify your "
 "email address."
 msgstr ""
-"Para verificar o estado do seu registro, atualizar informações ou sair da "
-"lista, você deve informar o seu endereço de email no campo abaixo."
+"Para verificar o estado do seu registro, atualizar informaï¿½ï¿½es ou sair da "
+"lista, vocï¿½ deve informar o seu endereï¿½o de email no campo abaixo."
 
 #. poMMo/themes/default/user/update_activate.tpl
 #: pommo_theme_lang.php:174
@@ -387,7 +387,7 @@ msgstr ""
 #. poMMo/themes/default/user/confirm.tpl
 #: pommo_theme_lang.php:180 pommo_theme_lang.php:192
 msgid ""
-"If you have recieved your verification email, enter the activation code "
+"If you have received your verification email, enter the activation code "
 "below;"
 msgstr ""
 
@@ -400,18 +400,18 @@ msgstr ""
 #. poMMo/themes/default/user/confirm.tpl
 #: pommo_theme_lang.php:186
 msgid "Subscriber Confirmation"
-msgstr "Confirmação do assinante"
+msgstr "Confirmaï¿½ï¿½o do assinante"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:201
 #, fuzzy
 msgid "Installation"
-msgstr "Instalação do poMMo"
+msgstr "Instalaï¿½ï¿½o do poMMo"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:204
 msgid "Online install"
-msgstr "Instalação online"
+msgstr "Instalaï¿½ï¿½o online"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:210
@@ -421,14 +421,14 @@ msgid ""
 "database and set your language successfully. Fill in the values below, and "
 "you'll be on your way!"
 msgstr ""
-"Bem vindo ao processo de instalação do poMMo. Nós conectamos ao banco de "
+"Bem vindo ao processo de instalaï¿½ï¿½o do poMMo. Nï¿½s conectamos ao banco de "
 "dados e definimos o idioma com sucesso. Informe os valores abaixo para "
-"seguir a instalação."
+"seguir a instalaï¿½ï¿½o."
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:213
 msgid "Configuration Options"
-msgstr "Opções de configuração"
+msgstr "Opï¿½ï¿½es de configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:216
@@ -438,7 +438,7 @@ msgstr "Nome do Mailing:"
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:219
 msgid "(ie. Brice's Mailing List)"
-msgstr "(ex.: Mailing do João)"
+msgstr "(ex.: Mailing do Joï¿½o)"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:222
@@ -454,7 +454,7 @@ msgstr "(ex.: Site do poMMo)"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:228 pommo_theme_lang.php:729
 msgid "Website URL:"
-msgstr "Endereço do Website:"
+msgstr "Endereï¿½o do Website:"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:231
@@ -471,7 +471,7 @@ msgstr "Senha do Administrador:"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:237 pommo_theme_lang.php:699 pommo_theme_lang.php:705
 msgid "(you will use this to login)"
-msgstr "(você irá usar para fazer o login)"
+msgstr "(vocï¿½ irï¿½ usar para fazer o login)"
 
 #. poMMo/themes/default/install.tpl
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
@@ -494,7 +494,7 @@ msgstr "Email do administrador:"
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:249
 msgid "(enter your valid email address)"
-msgstr "(informe seu endereço de email válido)"
+msgstr "(informe seu endereï¿½o de email vï¿½lido)"
 
 #. poMMo/themes/default/install.tpl
 #: pommo_theme_lang.php:252
@@ -505,7 +505,7 @@ msgstr "Instalar"
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:255 pommo_theme_lang.php:1812
 msgid "To disable debugging"
-msgstr "Para desabilitar depuração"
+msgstr "Para desabilitar depuraï¿½ï¿½o"
 
 #. poMMo/themes/default/install.tpl
 #. poMMo/themes/default/upgrade.tpl
@@ -518,23 +518,23 @@ msgstr "Clique aqui"
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:261 pommo_theme_lang.php:1818
 msgid "To enable debugging"
-msgstr "Para habilitar depuração"
+msgstr "Para habilitar depuraï¿½ï¿½o"
 
 #. poMMo/themes/default/install.tpl
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:267 pommo_theme_lang.php:1824
 msgid "Continue to login page"
-msgstr "Continuar para a página de entrada"
+msgstr "Continuar para a pï¿½gina de entrada"
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:270
 msgid "Subscription Forms"
-msgstr "Formulários de assinatura"
+msgstr "Formulï¿½rios de assinatura"
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:273
 msgid "Default Subscription Form"
-msgstr "Formulário de inscrição padrão"
+msgstr "Formulï¿½rio de inscriï¿½ï¿½o padrï¿½o"
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:276
@@ -542,13 +542,13 @@ msgid ""
 "Preview the default subscription form. Its look and feel can be adjusted "
 "through the theme template ([theme]/user/subscribe.tpl)."
 msgstr ""
-"Visualizar o formulário de inscrição padrão. Para alterar o visual, "
-"modifique através do modelo no arquivo ([theme]/user/subscribe.tpl)."
+"Visualizar o formulï¿½rio de inscriï¿½ï¿½o padrï¿½o. Para alterar o visual, "
+"modifique atravï¿½s do modelo no arquivo ([theme]/user/subscribe.tpl)."
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:279
 msgid "Embedded Subscription From"
-msgstr "Formulário de inscrição embutido"
+msgstr "Formulï¿½rio de inscriï¿½ï¿½o embutido"
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:282
@@ -556,13 +556,13 @@ msgid ""
 "Preview subscription forms that you can embed into an area of an existing "
 "webpage."
 msgstr ""
-"Visualisar formularios de inscrição que podem ser incluídos em um website "
+"Visualisar formularios de inscriï¿½ï¿½o que podem ser incluï¿½dos em um website "
 "existente."
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:285
 msgid "HTML Subscription Form"
-msgstr "Formulário de inscrição HTML"
+msgstr "Formulï¿½rio de inscriï¿½ï¿½o HTML"
 
 #. poMMo/themes/default/admin/setup/setup_form.tpl
 #: pommo_theme_lang.php:288
@@ -571,13 +571,13 @@ msgid ""
 "Generate a plain HTML subscription form that you can customize to fit your "
 "site."
 msgstr ""
-"Gerar um arquivo HTML de inscrição para que você customize e possa incluir "
+"Gerar um arquivo HTML de inscriï¿½ï¿½o para que vocï¿½ customize e possa incluir "
 "em seu site."
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:294
 msgid "Message Settings"
-msgstr "Configurações da mensagem"
+msgstr "Configuraï¿½ï¿½es da mensagem"
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:297
@@ -587,9 +587,9 @@ msgid ""
 "unsubscribe, or update their records. You can also configure the messages "
 "displayed when the user successfully completes this task."
 msgstr ""
-"Você pode personalizar as messagens que o poMMo envia quando os usuários se "
-"inscrevem, cancelam a inscrição ou atualizam seus registros. Você pode "
-"também personalizar as mensagens que são exibidas quando o usuário completa "
+"Vocï¿½ pode personalizar as messagens que o poMMo envia quando os usuï¿½rios se "
+"inscrevem, cancelam a inscriï¿½ï¿½o ou atualizam seus registros. Vocï¿½ pode "
+"tambï¿½m personalizar as mensagens que sï¿½o exibidas quando o usuï¿½rio completa "
 "uma tarefa com sucesso."
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
@@ -603,7 +603,7 @@ msgstr "Nota:"
 msgid ""
 "Using %1[[url]]%2 in the message body will reference the confirmation link."
 msgstr ""
-"Utilizando '[[url]]' no corpo da mensagem irá incluir o link de confirmação."
+"Utilizando '[[url]]' no corpo da mensagem irï¿½ incluir o link de confirmaï¿½ï¿½o."
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #. poMMo/themes/default/subscribe/form.subscribe.tpl
@@ -619,12 +619,12 @@ msgstr "Assinar"
 #: pommo_theme_lang.php:309 pommo_theme_lang.php:336 pommo_theme_lang.php:1470
 #: pommo_theme_lang.php:1632
 msgid "Subject:"
-msgstr "Título:"
+msgstr "Tï¿½tulo:"
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:312 pommo_theme_lang.php:339
 msgid "(Subject of Sent Email)"
-msgstr "(Título do email enviado)"
+msgstr "(Tï¿½tulo do email enviado)"
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send2.tpl
@@ -636,7 +636,7 @@ msgstr "Mensagem:"
 #: pommo_theme_lang.php:318 pommo_theme_lang.php:345
 #, fuzzy
 msgid "(Use %1[[url]]%2 for the confirm link at least once)"
-msgstr "(Utilize o [[url]] para confirmação ao menos uma vez)"
+msgstr "(Utilize o [[url]] para confirmaï¿½ï¿½o ao menos uma vez)"
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:321 pommo_theme_lang.php:357
@@ -661,7 +661,7 @@ msgstr "Atualizar"
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:330 pommo_theme_lang.php:351 pommo_theme_lang.php:366
 msgid "Restore to Defaults"
-msgstr "Restaurar padrões"
+msgstr "Restaurar padrï¿½es"
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
 #: pommo_theme_lang.php:333
@@ -774,12 +774,12 @@ msgstr ""
 #: pommo_theme_lang.php:432
 #, fuzzy
 msgid "Restore Defaults"
-msgstr "Restaurar padrões"
+msgstr "Restaurar padrï¿½es"
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:435
 msgid "Fields Page"
-msgstr "Página dos campos"
+msgstr "Pï¿½gina dos campos"
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:441
@@ -805,18 +805,18 @@ msgstr "Texto"
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:453
 msgid "Number"
-msgstr "Número"
+msgstr "Nï¿½mero"
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:456
 #, fuzzy
 msgid "Checkbox"
-msgstr "Caixa de verificação"
+msgstr "Caixa de verificaï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:459
 msgid "Multiple Choice"
-msgstr "Múltipla escolha"
+msgstr "Mï¿½ltipla escolha"
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:462
@@ -843,8 +843,8 @@ msgid ""
 "Change the ordering of fields on the subscription form by dragging and "
 "dropping the order icon"
 msgstr ""
-"Mude a ordem dos campos no formulário de inscrição usando a opção de clicar "
-"e arrastar no ícone da ordem."
+"Mude a ordem dos campos no formulï¿½rio de inscriï¿½ï¿½o usando a opï¿½ï¿½o de clicar "
+"e arrastar no ï¿½cone da ordem."
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:474
@@ -882,23 +882,23 @@ msgstr "Nome do campo"
 #: pommo_theme_lang.php:489
 #, fuzzy
 msgid "Fields in <strong>bold</strong> are required."
-msgstr "Nomes em <strong>negrito</strong> estão ativos."
+msgstr "Nomes em <strong>negrito</strong> estï¿½o ativos."
 
 #. poMMo/themes/default/admin/setup/setup_fields.tpl
 #: pommo_theme_lang.php:492
 #, fuzzy
 msgid "Fields in %1green%2 are active."
-msgstr "Campos em %1negrito%2 são obrigatórios"
+msgstr "Campos em %1negrito%2 sï¿½o obrigatï¿½rios"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:495
 msgid "Embedded Subscription Forms"
-msgstr "Formulários de inscrição embutidos"
+msgstr "Formulï¿½rios de inscriï¿½ï¿½o embutidos"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:498
 msgid "Return to Subscription Forms"
-msgstr "Voltar aos formulários de inscrição"
+msgstr "Voltar aos formulï¿½rios de inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:501
@@ -907,20 +907,20 @@ msgid ""
 "You can use the PHP include listed below, or embed the actual HTML. "
 "Remember, you can also direct subscribers to the "
 msgstr ""
-"Formulários de inscrição podem ser facilmente incluídos em seu website "
-"usando uma linha de código. Você pode usar o código PHP listado a seguir ou "
-"incluir o código HTML atual. Lembre-se que você pode também direcionar os "
-"usuários para o "
+"Formulï¿½rios de inscriï¿½ï¿½o podem ser facilmente incluï¿½dos em seu website "
+"usando uma linha de cï¿½digo. Vocï¿½ pode usar o cï¿½digo PHP listado a seguir ou "
+"incluir o cï¿½digo HTML atual. Lembre-se que vocï¿½ pode tambï¿½m direcionar os "
+"usuï¿½rios para o "
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:504
 msgid "Default Subscribe Form"
-msgstr "Formulário de inscrição padrão"
+msgstr "Formulï¿½rio de inscriï¿½ï¿½o padrï¿½o"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:507 pommo_theme_lang.php:519
 msgid "Mini Subscription Form"
-msgstr "Mini formulário de inscrição"
+msgstr "Mini formulï¿½rio de inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:510
@@ -944,18 +944,18 @@ msgstr "URL"
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:525
 msgid "Full Subscription Form"
-msgstr "Formulário de inscrição completo"
+msgstr "Formulï¿½rio de inscriï¿½ï¿½o completo"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:528
 msgid "This prints the entire subscription form."
-msgstr "Imprime todo o formulário de inscrição"
+msgstr "Imprime todo o formulï¿½rio de inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
 #: pommo_theme_lang.php:537 pommo_theme_lang.php:879
 msgid "Subscription Form"
-msgstr "Formulário de Inscrição"
+msgstr "Formulï¿½rio de Inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:543
@@ -965,13 +965,13 @@ msgstr "Editar campo"
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:546
 msgid "Return to Fields Page"
-msgstr "Voltar para a página de campos"
+msgstr "Voltar para a pï¿½gina de campos"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:549
 #, fuzzy
 msgid "Short Name:"
-msgstr "Número da porta:"
+msgstr "Nï¿½mero da porta:"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:552
@@ -989,13 +989,13 @@ msgstr "De:"
 #, fuzzy
 msgid "Prompt for field on the Subscription Form. e.g. %1Type your city%2"
 msgstr ""
-"Essa pergunta será utilizada no formulário de inscrição. Ex.: 'Qual é a sua "
+"Essa pergunta serï¿½ utilizada no formulï¿½rio de inscriï¿½ï¿½o. Ex.: 'Qual ï¿½ a sua "
 "cidade?'"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:561
 msgid "Required:"
-msgstr "Obrigatório:"
+msgstr "Obrigatï¿½rio:"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:564
@@ -1004,7 +1004,7 @@ msgid ""
 "Toggle to require field on Subscription Form (user cannot leave blank if %"
 "1yes%2)"
 msgstr ""
-"Marque este campo para torna-lo obrigatório no formulário de inscrição. ex.: "
+"Marque este campo para torna-lo obrigatï¿½rio no formulï¿½rio de inscriï¿½ï¿½o. ex.: "
 "campo deve ser preenchido."
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
@@ -1016,18 +1016,18 @@ msgstr ""
 #: pommo_theme_lang.php:570
 #, fuzzy
 msgid "Toggle display of field for Subscription Form"
-msgstr "Marque este campo para torná-lo invisível no formulário de inscrição."
+msgstr "Marque este campo para tornï¿½-lo invisï¿½vel no formulï¿½rio de inscriï¿½ï¿½o."
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:573 pommo_theme_lang.php:579 pommo_theme_lang.php:585
 msgid "Default:"
-msgstr "Padrão:"
+msgstr "Padrï¿½o:"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:576 pommo_theme_lang.php:582 pommo_theme_lang.php:588
 #, fuzzy
 msgid "If provided, this value will appear pre-filled on the subscription form"
-msgstr "Se informado, este valor será preenchido no formulário de inscrição"
+msgstr "Se informado, este valor serï¿½ preenchido no formulï¿½rio de inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:594
@@ -1038,17 +1038,17 @@ msgstr ""
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:597
 msgid "type option(s)"
-msgstr "digite opções"
+msgstr "digite opï¿½ï¿½es"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:600
 msgid "Add Option(s)"
-msgstr "Adicionar Opções"
+msgstr "Adicionar Opï¿½ï¿½es"
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
 #: pommo_theme_lang.php:603
 msgid "Remove Selected Option"
-msgstr "Remover opção selecionada"
+msgstr "Remover opï¿½ï¿½o selecionada"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:612
@@ -1106,7 +1106,7 @@ msgstr "Conectado ao servidor SMTP"
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:642
 msgid "Unable to connect to SMTP server"
-msgstr "Impossível conectar ao servidor SMTP"
+msgstr "Impossï¿½vel conectar ao servidor SMTP"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:645
@@ -1121,7 +1121,7 @@ msgstr "(IP ou nome do SMTP)"
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:651
 msgid "Port Number:"
-msgstr "Número da porta:"
+msgstr "Nï¿½mero da porta:"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:654
@@ -1131,17 +1131,17 @@ msgstr "(Porta # do servidor SMTP  [normalmente 25])"
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:657
 msgid "SMTP Authentication:"
-msgstr "Autenticação SMTP:"
+msgstr "Autenticaï¿½ï¿½o SMTP:"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:660
 msgid "(Toggle SMTP Authentication [usually off])"
-msgstr "(Habilitar autenticação SMTP [normalmente desligado])"
+msgstr "(Habilitar autenticaï¿½ï¿½o SMTP [normalmente desligado])"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:663
 msgid "SMTP Username:"
-msgstr "Usuário SMTP:"
+msgstr "Usuï¿½rio SMTP:"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:666 pommo_theme_lang.php:672
@@ -1161,7 +1161,7 @@ msgstr "Atualizar Relay #%1"
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:678
 msgid "This is your default relay"
-msgstr "Este é seu relay padrão"
+msgstr "Este ï¿½ seu relay padrï¿½o"
 
 #. poMMo/themes/default/admin/setup/setup_smtp.tpl
 #: pommo_theme_lang.php:681
@@ -1181,10 +1181,10 @@ msgid ""
 "parameters, end enable demonstration mode. If you enable demonstration mode, "
 "no emails will be sent from the system."
 msgstr ""
-"Utilize esta página para configurar o poMMo. Você pode alterar informações "
-"de login, definir seu website, definir parâmetros do mailing e habilitar o "
-"modo de demonstração. Se você habilitar o modo de demonstração, nenhum email "
-"será enviado pelo sistema."
+"Utilize esta pï¿½gina para configurar o poMMo. Vocï¿½ pode alterar informaï¿½ï¿½es "
+"de login, definir seu website, definir parï¿½metros do mailing e habilitar o "
+"modo de demonstraï¿½ï¿½o. Se vocï¿½ habilitar o modo de demonstraï¿½ï¿½o, nenhum email "
+"serï¿½ enviado pelo sistema."
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:693
@@ -1194,7 +1194,7 @@ msgstr "Administrativo"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:696
 msgid "Administrator Username:"
-msgstr "Usuário administrador:"
+msgstr "Usuï¿½rio administrador:"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:717
@@ -1219,7 +1219,7 @@ msgstr "(O nome do seu Website)"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:732
 msgid "(Web address of your Website)"
-msgstr "(O endereço do seu website)"
+msgstr "(O endereï¿½o do seu website)"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:735
@@ -1264,17 +1264,17 @@ msgstr ""
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:759
 msgid "Demonstration Mode:"
-msgstr "Modo de demonstração:"
+msgstr "Modo de demonstraï¿½ï¿½o:"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:762
 msgid "(Toggle Demonstration Mode)"
-msgstr "(Trocar modo de demonstração)"
+msgstr "(Trocar modo de demonstraï¿½ï¿½o)"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:765
 msgid "Email Confirmation:"
-msgstr "Confirmação de email:"
+msgstr "Confirmaï¿½ï¿½o de email:"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:768
@@ -1300,7 +1300,7 @@ msgstr "De:"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:780
 msgid "(Default name mails will be sent from)"
-msgstr "(Nome padrão no envio das mensagens)"
+msgstr "(Nome padrï¿½o no envio das mensagens)"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -1311,7 +1311,7 @@ msgstr "Email:"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:786
 msgid "(Default email mails will be sent from)"
-msgstr "(Email padrão no envio das mensagens)"
+msgstr "(Email padrï¿½o no envio das mensagens)"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:789
@@ -1326,7 +1326,7 @@ msgstr ""
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:795
 msgid "Advanced"
-msgstr "Avançado"
+msgstr "Avanï¿½ado"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -1334,7 +1334,7 @@ msgstr "Avançado"
 #: pommo_theme_lang.php:798 pommo_theme_lang.php:1515
 #: pommo_theme_lang.php:1647
 msgid "Character Set:"
-msgstr "Codificação:"
+msgstr "Codificaï¿½ï¿½o:"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -1409,7 +1409,7 @@ msgstr ""
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:837
 msgid "PHP Mail Function"
-msgstr "Função Mail do PHP"
+msgstr "Funï¿½ï¿½o Mail do PHP"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:840
@@ -1450,7 +1450,7 @@ msgstr ""
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
 #: pommo_theme_lang.php:864
 msgid "Setup Page"
-msgstr "Página de configuração"
+msgstr "Pï¿½gina de configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
 #: pommo_theme_lang.php:870
@@ -1459,7 +1459,7 @@ msgid ""
 "Set your mailing list name, its default behavior, and the administrator's "
 "information."
 msgstr ""
-"poMMo. Defina o nome da sua lista, seu comportamento padrão e informações "
+"poMMo. Defina o nome da sua lista, seu comportamento padrï¿½o e informaï¿½ï¿½es "
 "sobre o administrador."
 
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
@@ -1470,12 +1470,12 @@ msgstr "Campos do assinante"
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
 #: pommo_theme_lang.php:876
 msgid "Choose the information you'd like to collect from your subscribers."
-msgstr "Escolha as informações que você deseja receber de seus assinantes."
+msgstr "Escolha as informaï¿½ï¿½es que vocï¿½ deseja receber de seus assinantes."
 
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
 #: pommo_theme_lang.php:882
 msgid "Preview and Generate the subscription form for your website."
-msgstr "Visualize e crie formulários de inscrição para seu website."
+msgstr "Visualize e crie formulï¿½rios de inscriï¿½ï¿½o para seu website."
 
 #. poMMo/themes/default/admin/subscribers/ajax/group_field.tpl
 #. poMMo/themes/default/admin/subscribers/ajax/group_edit.tpl
@@ -1552,7 +1552,7 @@ msgstr ""
 #: pommo_theme_lang.php:930
 #, fuzzy
 msgid ".TXT - Only Email Addresses"
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #. poMMo/themes/default/admin/subscribers/ajax/subscriber_export.tpl
 #. poMMo/themes/default/admin/subscribers/subscribers_import.tpl
@@ -1571,13 +1571,13 @@ msgstr "Exportar para CSV"
 #: pommo_theme_lang.php:939
 #, fuzzy
 msgid "All Pages"
-msgstr "Página de administração"
+msgstr "Pï¿½gina de administraï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/subscribers/ajax/subscriber_export.tpl
 #: pommo_theme_lang.php:942
 #, fuzzy
 msgid "Current Page"
-msgstr "Página de configuração"
+msgstr "Pï¿½gina de configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/subscribers/ajax/subscriber_export.tpl
 #. poMMo/themes/default/admin/subscribers/import_csv.tpl
@@ -1615,7 +1615,7 @@ msgstr "Importar assinantes"
 #: pommo_theme_lang.php:966
 #, fuzzy
 msgid "Email Addresses:"
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #. poMMo/themes/default/admin/subscribers/ajax/subscriber_del.tpl
 #: pommo_theme_lang.php:969
@@ -1676,12 +1676,12 @@ msgstr ""
 #: pommo_theme_lang.php:1866
 #, fuzzy
 msgid "%1Fields%2 are required"
-msgstr "Campos em %1negrito%2 são obrigatórios"
+msgstr "Campos em %1negrito%2 sï¿½o obrigatï¿½rios"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_groups.tpl
 #: pommo_theme_lang.php:1005 poMMo/admin/subscribers/groups_edit.php:37
 msgid "Groups Page"
-msgstr "Página dos grupos"
+msgstr "Pï¿½gina dos grupos"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_groups.tpl
 #: pommo_theme_lang.php:1008
@@ -1723,7 +1723,7 @@ msgstr "Todos os assinantes"
 #: pommo_theme_lang.php:1053 pommo_theme_lang.php:1056
 #, fuzzy
 msgid "Return to Subscribers Page"
-msgstr "Voltar para a página de campos"
+msgstr "Voltar para a pï¿½gina de campos"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_manage.tpl
 #: pommo_theme_lang.php:1065
@@ -1735,7 +1735,7 @@ msgstr "Todos os assinantes"
 #: pommo_theme_lang.php:1068
 #, fuzzy
 msgid "Unsubscribed"
-msgstr "Cancelar inscrição"
+msgstr "Cancelar inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_manage.tpl
 #: pommo_theme_lang.php:1071
@@ -1768,7 +1768,7 @@ msgstr ""
 #: pommo_theme_lang.php:1095
 #, fuzzy
 msgid "time last updated"
-msgstr "Configurações atualizadas."
+msgstr "Configuraï¿½ï¿½es atualizadas."
 
 #. poMMo/themes/default/admin/subscribers/subscribers_manage.tpl
 #: pommo_theme_lang.php:1110
@@ -1794,7 +1794,7 @@ msgstr "%1 assinantes"
 #: pommo_theme_lang.php:1122
 #, fuzzy
 msgid "Registered"
-msgstr "Obrigatório:"
+msgstr "Obrigatï¿½rio:"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_manage.tpl
 #: pommo_theme_lang.php:1125
@@ -1836,7 +1836,7 @@ msgstr "Sim"
 #. poMMo/themes/default/admin/confirm.tpl
 #: pommo_theme_lang.php:1155 pommo_theme_lang.php:1788
 msgid "No"
-msgstr "Não"
+msgstr "Nï¿½o"
 
 #. poMMo/themes/default/admin/subscribers/import_txt.tpl
 #. poMMo/themes/default/admin/subscribers/import_csv.tpl
@@ -1850,7 +1850,7 @@ msgstr "Processando Mailing"
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
 #: pommo_theme_lang.php:1161 poMMo/admin/subscribers/subscribers_manage.php:37
 msgid "Subscribers Page"
-msgstr "Página dos Assinantes"
+msgstr "Pï¿½gina dos Assinantes"
 
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
 #: pommo_theme_lang.php:1167
@@ -1858,8 +1858,8 @@ msgid ""
 "subscribers. See an overview of your current and pending subscribers. You "
 "can add, delete, and edit subscribers from here."
 msgstr ""
-"Assinantes. Tenha uma visão geral sobre seus assinantes atuais e pendentes. "
-"Você pode adicionar, excluir e editar os assinantes aqui."
+"Assinantes. Tenha uma visï¿½o geral sobre seus assinantes atuais e pendentes. "
+"Vocï¿½ pode adicionar, excluir e editar os assinantes aqui."
 
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
 #: pommo_theme_lang.php:1173
@@ -1868,7 +1868,7 @@ msgid ""
 "Subscribers. You can import large amounts of subscribers using files stored "
 "on your computer."
 msgstr ""
-"Assinantes. Você poderá importar uma grande quanditade de assinantes "
+"Assinantes. Vocï¿½ poderï¿½ importar uma grande quanditade de assinantes "
 "armazenados em arquivos no seu computador."
 
 #. poMMo/themes/default/admin/subscribers/admin_subscribers.tpl
@@ -1877,8 +1877,8 @@ msgid ""
 "Manage \"mailing groups\" from this area. Mailing groups allow you to mail "
 "subsets of your subscribers, rather than just the entire list."
 msgstr ""
-"Gerenciar \"grupos de mailing\" nesta área. Grupos de Mailing permitem você "
-"filtrar seus assinantes ao invés de usar toda lista."
+"Gerenciar \"grupos de mailing\" nesta ï¿½rea. Grupos de Mailing permitem vocï¿½ "
+"filtrar seus assinantes ao invï¿½s de usar toda lista."
 
 #. poMMo/themes/default/admin/subscribers/subscribers_import.tpl
 #: pommo_theme_lang.php:1185
@@ -1916,7 +1916,7 @@ msgstr ""
 #: pommo_theme_lang.php:1200
 #, fuzzy
 msgid "List of Email Addresses"
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #. poMMo/themes/default/admin/subscribers/subscribers_import.tpl
 #: pommo_theme_lang.php:1209
@@ -2052,7 +2052,7 @@ msgstr ""
 #. poMMo/themes/default/admin/subscribers/groups_edit.tpl
 #: pommo_theme_lang.php:1287
 msgid "No groups have been assigned."
-msgstr "Nenhum grupo foi atribuído."
+msgstr "Nenhum grupo foi atribuï¿½do."
 
 #. poMMo/themes/default/admin/subscribers/groups_edit.tpl
 #: pommo_theme_lang.php:1290
@@ -2103,7 +2103,7 @@ msgstr ""
 #: pommo_theme_lang.php:1332
 #, fuzzy
 msgid "Recipient"
-msgstr "destinatários."
+msgstr "destinatï¿½rios."
 
 #. poMMo/themes/default/admin/mailings/ajax/mailing_test.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
@@ -2156,7 +2156,7 @@ msgstr "Stauts"
 #: pommo_theme_lang.php:1407 poMMo/admin/mailings/ajax/status_poll.php:49
 #, fuzzy
 msgid "Finished"
-msgstr "Mailing concluído"
+msgstr "Mailing concluï¿½do"
 
 #. poMMo/themes/default/admin/mailings/mailings_history.tpl
 #: pommo_theme_lang.php:1410
@@ -2167,7 +2167,7 @@ msgstr "Stauts"
 #: pommo_theme_lang.php:1416
 #, fuzzy
 msgid "Message Preview"
-msgstr "Configurações da mensagem"
+msgstr "Configuraï¿½ï¿½es da mensagem"
 
 #. poMMo/themes/default/admin/mailings/mailings_history.tpl
 #: pommo_theme_lang.php:1422
@@ -2190,7 +2190,7 @@ msgstr ""
 #: pommo_theme_lang.php:1431
 #, fuzzy
 msgid "Complete"
-msgstr "Importação completa!"
+msgstr "Importaï¿½ï¿½o completa!"
 
 #. poMMo/themes/default/admin/mailings/mailings_history.tpl
 #: pommo_theme_lang.php:1437
@@ -2202,7 +2202,7 @@ msgstr "Cancelar Mailing"
 #: pommo_theme_lang.php:1440 pommo_theme_lang.php:1443
 #, fuzzy
 msgid "View Last Notices"
-msgstr "Limpar últimos 50 avisos"
+msgstr "Limpar ï¿½ltimos 50 avisos"
 
 #. poMMo/themes/default/admin/mailings/mailings_history.tpl
 #: pommo_theme_lang.php:1446
@@ -2218,12 +2218,12 @@ msgstr "Excluir campo"
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1464
 msgid "Mailing Parameters"
-msgstr "Parâmetros do maling"
+msgstr "Parï¿½metros do maling"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1467
 msgid "Fields in %1bold%2 are required"
-msgstr "Campos em %1negrito%2 são obrigatórios"
+msgstr "Campos em %1negrito%2 sï¿½o obrigatï¿½rios"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1473 pommo_theme_lang.php:1500
@@ -2263,7 +2263,7 @@ msgstr "Todos os assinantes"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1494
-msgid "(Select who should recieve the mailing)"
+msgid "(Select who should receive the mailing)"
 msgstr "(Escolha quem deve receber o mailing)"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -2275,7 +2275,7 @@ msgstr "Voltar para"
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1548
 msgid "(Select Character Set of Mailings)"
-msgstr "(Selecione a codificação dos Mailings)"
+msgstr "(Selecione a codificaï¿½ï¿½o dos Mailings)"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send2.tpl
@@ -2326,7 +2326,7 @@ msgstr "Escolha um campo do assinante"
 #: pommo_theme_lang.php:1572
 #, fuzzy
 msgid "Default value"
-msgstr "Padrão:"
+msgstr "Padrï¿½o:"
 
 #. poMMo/themes/default/admin/mailings/mailings_send2.tpl
 #: pommo_theme_lang.php:1575
@@ -2338,7 +2338,7 @@ msgstr "Instalar"
 #: pommo_theme_lang.php:1578
 #, fuzzy
 msgid "Formating options"
-msgstr "Opções de configuração"
+msgstr "Opï¿½ï¿½es de configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/mailings/mailings_send2.tpl
 #: pommo_theme_lang.php:1581
@@ -2390,7 +2390,7 @@ msgstr ""
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
 #: pommo_theme_lang.php:1626
 msgid "Preview Mailing"
-msgstr "Pré-visualizar mailing"
+msgstr "Prï¿½-visualizar mailing"
 
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
 #: pommo_theme_lang.php:1629 pommo_theme_lang.php:1650
@@ -2406,7 +2406,7 @@ msgstr "Para:"
 #: pommo_theme_lang.php:1638
 #, fuzzy
 msgid "recipients"
-msgstr "destinatários."
+msgstr "destinatï¿½rios."
 
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
 #: pommo_theme_lang.php:1641
@@ -2427,7 +2427,7 @@ msgstr "Corpo HTML:"
 #: pommo_theme_lang.php:1656 pommo_theme_lang.php:1659
 #, fuzzy
 msgid "Preview Message"
-msgstr "Pré-visualizar mailing"
+msgstr "Prï¿½-visualizar mailing"
 
 #. poMMo/themes/default/admin/mailings/mailings_send3.tpl
 #: pommo_theme_lang.php:1662
@@ -2489,7 +2489,7 @@ msgstr ""
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1695
 msgid "Mailing Finished"
-msgstr "Mailing concluído"
+msgstr "Mailing concluï¿½do"
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1698 poMMo/admin/subscribers/import_txt.php:63
@@ -2502,7 +2502,7 @@ msgstr "Voltar para"
 #: pommo_theme_lang.php:1701 pommo_theme_lang.php:1749
 #: poMMo/user/mailings.php:41 poMMo/admin/mailings/mailings_history.php:35
 msgid "Mailings Page"
-msgstr "Página de Mailings"
+msgstr "Pï¿½gina de Mailings"
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1704
@@ -2519,7 +2519,7 @@ msgstr ""
 #: pommo_theme_lang.php:1710
 #, fuzzy
 msgid "Last 50 notices"
-msgstr "Limpar últimos 50 avisos"
+msgstr "Limpar ï¿½ltimos 50 avisos"
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1716
@@ -2572,7 +2572,7 @@ msgstr "Visualize os mailings que foram enviados."
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1764
 msgid "Admin Menu"
-msgstr "Menu de Administração"
+msgstr "Menu de Administraï¿½ï¿½o"
 
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1770
@@ -2581,7 +2581,7 @@ msgid ""
 "status and history can also be viewed from here."
 msgstr ""
 "Envie mailings para a lista inteira ou a um filtro dos assinantes. O status "
-"e o histórico de envio também podem ser vistos aqui."
+"e o histï¿½rico de envio tambï¿½m podem ser vistos aqui."
 
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1776
@@ -2589,8 +2589,8 @@ msgid ""
 "Here you can list, add, delete, import, export, and update your subscribers. "
 "You can also create groups (subsets) of your subsribers from here."
 msgstr ""
-"Aqui você pode listar, adicionar, excluir, importar, exportar e atualizar "
-"seus assinantes. Você pode também criar grupos (filtros) de seus assinantes."
+"Aqui vocï¿½ pode listar, adicionar, excluir, importar, exportar e atualizar "
+"seus assinantes. Vocï¿½ pode tambï¿½m criar grupos (filtros) de seus assinantes."
 
 #. poMMo/themes/default/admin/confirm.tpl
 #: pommo_theme_lang.php:1782
@@ -2601,7 +2601,7 @@ msgstr "Confirmar"
 #. poMMo/themes/default/support/support.lib.tpl
 #: pommo_theme_lang.php:1785 pommo_theme_lang.php:1833
 msgid "Confirm your action."
-msgstr "Confirme sua ação."
+msgstr "Confirme sua aï¿½ï¿½o."
 
 #. poMMo/themes/default/admin/confirm.tpl
 #: pommo_theme_lang.php:1791
@@ -2624,7 +2624,7 @@ msgstr "Atualizador poMMo"
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:1803
 msgid "Online Upgrade Script"
-msgstr "Script de atualização Online"
+msgstr "Script de atualizaï¿½ï¿½o Online"
 
 #. poMMo/themes/default/upgrade.tpl
 #: pommo_theme_lang.php:1809
@@ -2637,7 +2637,7 @@ msgstr ""
 #: pommo_theme_lang.php:1830
 #, fuzzy
 msgid "Support Page"
-msgstr "Página de configuração"
+msgstr "Pï¿½gina de configuraï¿½ï¿½o"
 
 #. poMMo/themes/default/subscribe/form.subscribe.tpl
 #: pommo_theme_lang.php:1836
@@ -2648,19 +2648,19 @@ msgstr ""
 #. poMMo/themes/default/subscribe/form.update.tpl
 #: pommo_theme_lang.php:1845 pommo_theme_lang.php:1878
 msgid "Choose Selection"
-msgstr "Escolha uma opção"
+msgstr "Escolha uma opï¿½ï¿½o"
 
 #. poMMo/themes/default/subscribe/form.subscribe.tpl
 #. poMMo/themes/default/subscribe/form.update.tpl
 #: pommo_theme_lang.php:1851 pommo_theme_lang.php:1881
 #, fuzzy
 msgid "Unsupported field type"
-msgstr "Tipo de campo não suportado."
+msgstr "Tipo de campo nï¿½o suportado."
 
 #. poMMo/themes/default/subscribe/subscribe.tpl
 #: pommo_theme_lang.php:1857 pommo_theme_lang.php:1860
 msgid "Subscription"
-msgstr "Inscrição"
+msgstr "Inscriï¿½ï¿½o"
 
 #. poMMo/themes/default/subscribe/form.update.tpl
 #: pommo_theme_lang.php:1863
@@ -2716,7 +2716,7 @@ msgstr "Redefinir senha"
 #: pommo_theme_lang.php:1911
 #, fuzzy
 msgid "Username"
-msgstr "Usuário SMTP:"
+msgstr "Usuï¿½rio SMTP:"
 
 #. poMMo/themes/default/index.tpl
 #: pommo_theme_lang.php:1914
@@ -2788,7 +2788,7 @@ msgstr ""
 #: pommo_theme_lang.php:1953
 #, fuzzy
 msgid "November"
-msgstr "Número"
+msgstr "Nï¿½mero"
 
 #. poMMo/themes/shared/datepicker/datepicker.tpl
 #: pommo_theme_lang.php:1956
@@ -2855,27 +2855,27 @@ msgstr ""
 #: poMMo/inc/helpers/filters.php:104
 #, fuzzy
 msgid "is not"
-msgstr "não é"
+msgstr "nï¿½o ï¿½"
 
 #: poMMo/inc/helpers/filters.php:105
 #, fuzzy
 msgid "is checked"
-msgstr "Está marcado"
+msgstr "Estï¿½ marcado"
 
 #: poMMo/inc/helpers/filters.php:106
 #, fuzzy
 msgid "is not checked"
-msgstr "Não está marcado"
+msgstr "Nï¿½o estï¿½ marcado"
 
 #: poMMo/inc/helpers/filters.php:107
 #, fuzzy
 msgid "is greater than"
-msgstr "É maior que"
+msgstr "ï¿½ maior que"
 
 #: poMMo/inc/helpers/filters.php:108
 #, fuzzy
 msgid "is less than"
-msgstr "É menor que"
+msgstr "ï¿½ menor que"
 
 #: poMMo/inc/helpers/filters.php:109
 msgid "or in group"
@@ -2888,7 +2888,7 @@ msgstr ""
 #: poMMo/inc/helpers/pending.php:327
 #, fuzzy, php-format
 msgid "You may now %1$s login %2$s with username: %3$s and password: %4$s "
-msgstr "Você poderá agora acessar com o usuário: %1$s e senha: %2$s "
+msgstr "Vocï¿½ poderï¿½ agora acessar com o usuï¿½rio: %1$s e senha: %2$s "
 
 #: poMMo/inc/helpers/pending.php:369
 msgid "Activation Expired. You must re-verify your email."
@@ -2905,18 +2905,18 @@ msgid ""
 "address before adding you as a subscriber. Please click the link below to be "
 "added ->"
 msgstr ""
-"Você solicitou se inscrever na lista %s. Para continuar será necessario "
-"validar seu endereço de email antes de terminar o cadastro. Por favor clique "
+"Vocï¿½ solicitou se inscrever na lista %s. Para continuar serï¿½ necessario "
+"validar seu endereï¿½o de email antes de terminar o cadastro. Por favor clique "
 "no link a seguir para continuar ->"
 
 #: poMMo/inc/helpers/messages.php:82 poMMo/inc/helpers/messages.php:89
 #: poMMo/inc/helpers/messages.php:96 poMMo/inc/helpers/messages.php:108
 msgid "If you have received this message in error, please ignore it."
-msgstr "Se você recebeu esta mensagem com erro, por favor ignore."
+msgstr "Se vocï¿½ recebeu esta mensagem com erro, por favor ignore."
 
 #: poMMo/inc/helpers/messages.php:83
 msgid "Subscription request"
-msgstr "Pedido de inscrição"
+msgstr "Pedido de inscriï¿½ï¿½o"
 
 #: poMMo/inc/helpers/messages.php:84
 msgid "Welcome to our mailing list. Enjoy your stay."
@@ -2925,7 +2925,7 @@ msgstr "Bem vindo ao nosso mailing. Aproveite."
 #: poMMo/inc/helpers/messages.php:89
 #, fuzzy, php-format
 msgid "You have requested to activate your records for %s."
-msgstr "Você solicitou trocar sua senha para %s."
+msgstr "Vocï¿½ solicitou trocar sua senha para %s."
 
 #: poMMo/inc/helpers/messages.php:89
 #, php-format
@@ -2943,18 +2943,18 @@ msgstr ""
 #: poMMo/inc/helpers/messages.php:96
 #, php-format
 msgid "You have requested to change your password for %s."
-msgstr "Você solicitou trocar sua senha para %s."
+msgstr "Vocï¿½ solicitou trocar sua senha para %s."
 
 #: poMMo/inc/helpers/messages.php:96 poMMo/inc/helpers/messages.php:108
 #, fuzzy
 msgid "Please validate this request by clicking the link below ->"
 msgstr ""
-"Antes de processar esta requisição, será necessário validar seu email "
+"Antes de processar esta requisiï¿½ï¿½o, serï¿½ necessï¿½rio validar seu email "
 "clicando no link a seguir ->"
 
 #: poMMo/inc/helpers/messages.php:97
 msgid "Change Password request"
-msgstr "Solicitação de troca de senha"
+msgstr "Solicitaï¿½ï¿½o de troca de senha"
 
 #: poMMo/inc/helpers/messages.php:98
 msgid "Your password has been reset. Enjoy!"
@@ -2962,16 +2962,16 @@ msgstr "Sua senha foi redefinida."
 
 #: poMMo/inc/helpers/messages.php:103
 msgid "You have successfully unsubscribed. Enjoy your travels."
-msgstr "Você foi removido do mailing com sucesso."
+msgstr "Vocï¿½ foi removido do mailing com sucesso."
 
 #: poMMo/inc/helpers/messages.php:108
 #, fuzzy, php-format
 msgid "You have requested to update your records for %s."
-msgstr "Você solicitou trocar sua senha para %s."
+msgstr "Vocï¿½ solicitou trocar sua senha para %s."
 
 #: poMMo/inc/helpers/messages.php:109
 msgid "Update Records request"
-msgstr "Solicitação de alteração de cadastro"
+msgstr "Solicitaï¿½ï¿½o de alteraï¿½ï¿½o de cadastro"
 
 #: poMMo/inc/helpers/messages.php:110
 msgid "Your records have been updated. Enjoy!"
@@ -2980,7 +2980,7 @@ msgstr "Seus registros foram alterados."
 #: poMMo/inc/helpers/validate.php:69
 #, fuzzy, php-format
 msgid "%s is a required field."
-msgstr "é um campo necessário."
+msgstr "ï¿½ um campo necessï¿½rio."
 
 #: poMMo/inc/helpers/validate.php:87 poMMo/inc/helpers/validate.php:100
 #: poMMo/inc/helpers/validate.php:110
@@ -3005,7 +3005,7 @@ msgstr "Erro do banco de dados:"
 #: poMMo/inc/classes/auth.php:46
 #, fuzzy, php-format
 msgid "Denied access. You must %slogin%s to access this page..."
-msgstr "Acesso negado. Você deve fazer o %s logon %s para acessar esta página."
+msgstr "Acesso negado. Vocï¿½ deve fazer o %s logon %s para acessar esta pï¿½gina."
 
 #: poMMo/inc/classes/db.php:72
 msgid "Could not establish database connection."
@@ -3054,8 +3054,8 @@ msgstr ""
 msgid ""
 "Cannot write to Work Directory (%s). Make sure it has the proper permissions."
 msgstr ""
-"Servidor web não conseguiu gravar no diretório de trabalho. Tenha certeza "
-"que as permissões estão corretas."
+"Servidor web nï¿½o conseguiu gravar no diretï¿½rio de trabalho. Tenha certeza "
+"que as permissï¿½es estï¿½o corretas."
 
 #: poMMo/inc/classes/pommo.php:124
 #, php-format
@@ -3066,7 +3066,7 @@ msgstr ""
 
 #: poMMo/inc/classes/pommo.php:127 poMMo/inc/classes/pommo.php:129
 msgid "Could not create directory"
-msgstr "Impossível criar diretório"
+msgstr "Impossï¿½vel criar diretï¿½rio"
 
 #: poMMo/inc/classes/pommo.php:336
 msgid "Redirecting, please wait..."
@@ -3079,7 +3079,7 @@ msgstr ""
 #: poMMo/inc/classes/template.php:88
 #, fuzzy, php-format
 msgid "Template file (%s) not found in default or current theme"
-msgstr "Arquivo de modelo não foi encontrado no tema padrão."
+msgstr "Arquivo de modelo nï¿½o foi encontrado no tema padrï¿½o."
 
 #: poMMo/inc/classes/template.php:110
 msgid "prev"
@@ -3093,7 +3093,7 @@ msgstr "Texto"
 #: poMMo/inc/classes/api.php:71
 #, php-format
 msgid "Error loading configuration. Have you %s installed %s ?"
-msgstr "Erro ao carregar configuração. Você %s instalou %s ?"
+msgstr "Erro ao carregar configuraï¿½ï¿½o. Vocï¿½ %s instalou %s ?"
 
 #: poMMo/inc/classes/api.php:72
 #, php-format
@@ -3108,7 +3108,7 @@ msgstr "Erro ao enviar email"
 #: poMMo/inc/classes/mailer.php:288
 #, fuzzy, php-format
 msgid "Mail to: %s not sent. Demonstration mode is active."
-msgstr "Modo de demonstração está LIGADO."
+msgstr "Modo de demonstraï¿½ï¿½o estï¿½ LIGADO."
 
 #: poMMo/user/update.php:69
 msgid "Emails must match."
@@ -3125,8 +3125,8 @@ msgid ""
 "The system could not process your request. Perhaps you already have "
 "requested a change?"
 msgstr ""
-"Sistema não conseguiu processar seu pedido corretamente. Talvez você já "
-"tenha solicitado uma alteração?"
+"Sistema nï¿½o conseguiu processar seu pedido corretamente. Talvez vocï¿½ jï¿½ "
+"tenha solicitado uma alteraï¿½ï¿½o?"
 
 #: poMMo/user/update.php:90
 #, php-format
@@ -3135,7 +3135,7 @@ msgstr "%s Clique aqui %s  para tentar novamente"
 
 #: poMMo/user/update.php:94
 msgid "Update request received."
-msgstr "Solicitação de alteração recebida."
+msgstr "Solicitaï¿½ï¿½o de alteraï¿½ï¿½o recebida."
 
 #: poMMo/user/update.php:94 poMMo/user/process.php:107
 #: poMMo/user/update_activate.php:59
@@ -3143,8 +3143,8 @@ msgid ""
 "A confirmation email has been sent. You should receive this letter within "
 "the next few minutes. Please follow its instructions."
 msgstr ""
-"Um email de confirmação foi enviado. Você deverá receber um email em "
-"instantes. Por favor siga as instruções. "
+"Um email de confirmaï¿½ï¿½o foi enviado. Vocï¿½ deverï¿½ receber um email em "
+"instantes. Por favor siga as instruï¿½ï¿½es. "
 
 #: poMMo/user/update.php:103
 #, fuzzy
@@ -3158,11 +3158,11 @@ msgstr "Corpo do mailing"
 
 #: poMMo/user/process.php:63 poMMo/admin/mailings/ajax/mailing_test2.php:54
 msgid "Invalid Email Address"
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #: poMMo/user/process.php:107
 msgid "Subscription request received."
-msgstr "Solicitação de assintante recebida."
+msgstr "Solicitaï¿½ï¿½o de assintante recebida."
 
 #: poMMo/user/process.php:110
 msgid "Problem sending mail! Please contact the administrator."
@@ -3175,7 +3175,7 @@ msgstr "logon do assinante"
 #: poMMo/user/login.php:47 poMMo/admin/setup/setup_configure.php:82
 #: poMMo/admin/mailings/mailings_send.php:102
 msgid "Invalid email address"
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #: poMMo/user/login.php:75
 #, fuzzy
@@ -3198,8 +3198,8 @@ msgid ""
 "A confirmation email has been sent to %s. It should arrive within the next "
 "few minutes. Please follow its instructions to complete your request. Thanks!"
 msgstr ""
-"Um email de confirmação foi enviado para %s que deverá chegar em alguns "
-"instantes. Por favor siga as instruções para completar o processo. Obrigado!"
+"Um email de confirmaï¿½ï¿½o foi enviado para %s que deverï¿½ chegar em alguns "
+"instantes. Por favor siga as instruï¿½ï¿½es para completar o processo. Obrigado!"
 
 #: poMMo/user/pending.php:68
 msgid "Your pending request has been cancelled."
@@ -3220,11 +3220,11 @@ msgstr ""
 
 #: poMMo/user/confirm.php:40
 msgid "No code given."
-msgstr "Nenhum código recebido."
+msgstr "Nenhum cï¿½digo recebido."
 
 #: poMMo/user/confirm.php:49
 msgid "Invalid code! Make sure you copied it correctly from the email."
-msgstr "Código inválido! Tenha certeza que foi copiado corretamente do email."
+msgstr "Cï¿½digo invï¿½lido! Tenha certeza que foi copiado corretamente do email."
 
 #: poMMo/admin/setup/form_generate.php:46
 msgid ""
@@ -3235,7 +3235,7 @@ msgstr ""
 #: poMMo/admin/setup/form_generate.php:60
 #, fuzzy, php-format
 msgid "%sFields%s are required"
-msgstr "Campos em %1negrito%2 são obrigatórios"
+msgstr "Campos em %1negrito%2 sï¿½o obrigatï¿½rios"
 
 #: poMMo/admin/setup/ajax/fields_order.php:41
 #, fuzzy
@@ -3248,16 +3248,16 @@ msgstr "Filtro atualizado"
 #: poMMo/admin/mailings/mailings_send.php:100
 #: poMMo/admin/mailings/mailings_send2.php:67 poMMo/install/install.php:63
 msgid "Cannot be empty."
-msgstr "Não pode ser vazio."
+msgstr "Nï¿½o pode ser vazio."
 
 #: poMMo/admin/setup/setup_messages.php:72
 msgid "You must include \"[[URL]]\" for the confirm link"
-msgstr "Você devera incluir \"[[URL]]\" para o link de confirmação"
+msgstr "Vocï¿½ devera incluir \"[[URL]]\" para o link de confirmaï¿½ï¿½o"
 
 #: poMMo/admin/setup/setup_messages.php:125
 #: poMMo/admin/setup/fields_edit.php:122
 msgid "Settings updated."
-msgstr "Configurações atualizadas."
+msgstr "Configuraï¿½ï¿½es atualizadas."
 
 #: poMMo/admin/setup/setup_messages.php:129
 #: poMMo/admin/setup/fields_edit.php:126
@@ -3275,11 +3275,11 @@ msgid ""
 "<em>MULTIPLE CHOICE</em>, <em>CHECK BOX</em>, or <em>DATE</em> depending on "
 "kind of information it collects."
 msgstr ""
-"Campos do assinante são utilizados para obter e ordenar informações no "
-"cadastro dos assinantes. Qualquer quantidade de campos pode ser atribuído ao "
-"formulário de inscrição. Cada campo pode ser classificado como <em>TEXTO</"
-"em>, <em>NÚMERO</em>, <em>MÚLTIPLA ESCOLHA</em>, <em>CAIXA DE VERIFICAÇÃO</"
-"em> ou <em>DATA</em> dependendo do tipo de informação que será coletada."
+"Campos do assinante sï¿½o utilizados para obter e ordenar informaï¿½ï¿½es no "
+"cadastro dos assinantes. Qualquer quantidade de campos pode ser atribuï¿½do ao "
+"formulï¿½rio de inscriï¿½ï¿½o. Cada campo pode ser classificado como <em>TEXTO</"
+"em>, <em>Nï¿½MERO</em>, <em>Mï¿½LTIPLA ESCOLHA</em>, <em>CAIXA DE VERIFICAï¿½ï¿½O</"
+"em> ou <em>DATA</em> dependendo do tipo de informaï¿½ï¿½o que serï¿½ coletada."
 
 #: poMMo/admin/setup/setup_fields.php:51 poMMo/admin/setup/fields_edit.php:48
 #: poMMo/admin/subscribers/subscribers_groups.php:47
@@ -3295,7 +3295,7 @@ msgstr ""
 #: poMMo/admin/subscribers/subscribers_groups.php:62
 #, fuzzy
 msgid "Confirm Action"
-msgstr "Confirme sua ação."
+msgstr "Confirme sua aï¿½ï¿½o."
 
 #: poMMo/admin/setup/setup_fields.php:70
 #, php-format
@@ -3314,8 +3314,8 @@ msgid ""
 "Deleting option %1$s will affect %2$s subscribers who have selected this "
 "choice. They will be flagged as needing to update their records."
 msgstr ""
-"Excluindo a opção %1$s irá afetar %2$s para assinantes que tenham "
-"selecionado esta opção. Eles serão marcados para atualizar os registros."
+"Excluindo a opï¿½ï¿½o %1$s irï¿½ afetar %2$s para assinantes que tenham "
+"selecionado esta opï¿½ï¿½o. Eles serï¿½o marcados para atualizar os registros."
 
 #: poMMo/admin/setup/fields_edit.php:132
 #, fuzzy
@@ -3324,8 +3324,8 @@ msgid ""
 "for this field. Text fields are useful for collecting names, cities, and "
 "such."
 msgstr ""
-"Este é um campo baseado em <b>TEXTO</b>. Assinantes poderão digitar qualquer "
-"valor neste campo. Campos de texto são úteis para nomes, cidades e outros."
+"Este ï¿½ um campo baseado em <b>TEXTO</b>. Assinantes poderï¿½o digitar qualquer "
+"valor neste campo. Campos de texto sï¿½o ï¿½teis para nomes, cidades e outros."
 
 #: poMMo/admin/setup/fields_edit.php:135
 #, fuzzy
@@ -3334,8 +3334,8 @@ msgid ""
 "field ON and OFF. Checkboxes are useful for subscriber acceptance and opt-"
 "ins."
 msgstr ""
-"Este é um campo baseado em <b>TEXTO</b>. Assinantes poderão digitar qualquer "
-"valor neste campo. Campos de texto são úteis para nomes, cidades e outros."
+"Este ï¿½ um campo baseado em <b>TEXTO</b>. Assinantes poderï¿½o digitar qualquer "
+"valor neste campo. Campos de texto sï¿½o ï¿½teis para nomes, cidades e outros."
 
 #: poMMo/admin/setup/fields_edit.php:138
 #, fuzzy
@@ -3343,8 +3343,8 @@ msgid ""
 "This is a <b>NUMBER</b> field. Only numeric values will be accepted for this "
 "field. Number fields are useful for collecting ages, quantities, and such."
 msgstr ""
-"Este é um campo baseado em <b>TEXTO</b>. Assinantes poderão digitar qualquer "
-"valor neste campo. Campos de texto são úteis para nomes, cidades e outros."
+"Este ï¿½ um campo baseado em <b>TEXTO</b>. Assinantes poderï¿½o digitar qualquer "
+"valor neste campo. Campos de texto sï¿½o ï¿½teis para nomes, cidades e outros."
 
 #: poMMo/admin/setup/fields_edit.php:141
 msgid ""
@@ -3361,8 +3361,8 @@ msgid ""
 "reliable values, and are useful for collecting Country, income range, pre-"
 "defined sizes and such."
 msgstr ""
-"Este é um campo baseado em <b>TEXTO</b>. Assinantes poderão digitar qualquer "
-"valor neste campo. Campos de texto são úteis para nomes, cidades e outros."
+"Este ï¿½ um campo baseado em <b>TEXTO</b>. Assinantes poderï¿½o digitar qualquer "
+"valor neste campo. Campos de texto sï¿½o ï¿½teis para nomes, cidades e outros."
 
 #: poMMo/admin/setup/setup_configure.php:84 poMMo/install/install.php:64
 msgid "Passwords must match."
@@ -3370,16 +3370,16 @@ msgstr "Senhas precisam coincidir."
 
 #: poMMo/admin/setup/setup_configure.php:86 poMMo/install/install.php:65
 msgid "Must be a valid URL"
-msgstr "Deve ser uma URL válida"
+msgstr "Deve ser uma URL vï¿½lida"
 
 #: poMMo/admin/setup/setup_configure.php:88
 #: poMMo/admin/mailings/mailings_send.php:101
 msgid "Invalid Character Set"
-msgstr "Codificação inválida"
+msgstr "Codificaï¿½ï¿½o invï¿½lida"
 
 #: poMMo/admin/setup/setup_configure.php:133
 msgid "Configuration Updated."
-msgstr "Configuração atualizada."
+msgstr "Configuraï¿½ï¿½o atualizada."
 
 #: poMMo/admin/subscribers/ajax/subscriber_add2.php:39
 #: poMMo/admin/subscribers/ajax/subscriber_add2.php:42
@@ -3392,7 +3392,7 @@ msgstr "Erro ao alterar ordem"
 #: poMMo/admin/subscribers/ajax/subscriber_add2.php:39
 #, fuzzy
 msgid "Invalid email."
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #: poMMo/admin/subscribers/ajax/subscriber_add2.php:54
 msgid "Invalid or missing information."
@@ -3402,25 +3402,25 @@ msgstr ""
 #: poMMo/admin/subscribers/ajax/subscriber_add2.php:67
 #, fuzzy, php-format
 msgid "Subscriber %s added!"
-msgstr "Página dos Assinantes"
+msgstr "Pï¿½gina dos Assinantes"
 
 #: poMMo/admin/subscribers/ajax/subscriber_add2.php:66
 #, fuzzy
 msgid ""
 "Subscriber has been flagged for update due to invalid or missing information."
 msgstr ""
-"%1 assinantes serão importados. Destes, %2 serão marcados para correção por "
-"serem inválidos."
+"%1 assinantes serï¿½o importados. Destes, %2 serï¿½o marcados para correï¿½ï¿½o por "
+"serem invï¿½lidos."
 
 #: poMMo/admin/subscribers/ajax/subscriber_del2.php:55
 #, fuzzy
 msgid "No subscribers were removed."
-msgstr "Solicitação de cancelamento de inscrição recebida."
+msgstr "Solicitaï¿½ï¿½o de cancelamento de inscriï¿½ï¿½o recebida."
 
 #: poMMo/admin/subscribers/ajax/subscriber_del2.php:57
 #, fuzzy, php-format
 msgid "You have removed %s subscribers!"
-msgstr "Você selecionou para sair da lista %s."
+msgstr "Vocï¿½ selecionou para sair da lista %s."
 
 #: poMMo/admin/subscribers/ajax/subscriber_update.php:38
 #: poMMo/admin/subscribers/ajax/subscriber_update.php:42
@@ -3434,7 +3434,7 @@ msgstr "Erro ao alterar ordem"
 #: poMMo/admin/subscribers/ajax/subscriber_update.php:42
 #, fuzzy
 msgid "Invalid Email."
-msgstr "Endereço de email inválido"
+msgstr "Endereï¿½o de email invï¿½lido"
 
 #: poMMo/admin/subscribers/ajax/subscriber_update.php:59
 #, fuzzy
@@ -3453,26 +3453,26 @@ msgstr ""
 
 #: poMMo/admin/subscribers/subscribers_groups.php:71
 msgid "Group cannot be deleted."
-msgstr "Grupo não pode ser excluído"
+msgstr "Grupo nï¿½o pode ser excluï¿½do"
 
 #: poMMo/admin/subscribers/subscribers_groups.php:73
 #, php-format
 msgid "%s deleted."
-msgstr "%s excluído."
+msgstr "%s excluï¿½do."
 
 #: poMMo/admin/subscribers/import_txt.php:63
 #: poMMo/admin/subscribers/import_csv2.php:80
 #, fuzzy
 msgid "Complete!"
-msgstr "Importação completa!"
+msgstr "Importaï¿½ï¿½o completa!"
 
 #: poMMo/admin/subscribers/import_csv2.php:79
 #, fuzzy, php-format
 msgid ""
 "%s subscribers imported! Of these, %s were flagged to update their records."
 msgstr ""
-"%1 assinantes serão importados. Destes, %2 serão marcados para correção por "
-"serem inválidos."
+"%1 assinantes serï¿½o importados. Destes, %2 serï¿½o marcados para correï¿½ï¿½o por "
+"serem invï¿½lidos."
 
 #: poMMo/admin/subscribers/import_csv2.php:79
 #, php-format
@@ -3488,7 +3488,7 @@ msgstr "Nome do grupo"
 #: poMMo/admin/mailings/mailings_send.php:79
 #: poMMo/admin/mailings/mailings_send3.php:50
 msgid "Demonstration Mode is on. No Emails will be sent."
-msgstr "Modo de demonstração esta ligado. Nenhum email será enviado."
+msgstr "Modo de demonstraï¿½ï¿½o esta ligado. Nenhum email serï¿½ enviado."
 
 #: poMMo/admin/mailings/ajax/status_poll.php:47
 msgid "Stopped"
@@ -3520,7 +3520,7 @@ msgstr ""
 
 #: poMMo/admin/mailings/mailings_send.php:103
 msgid "Invalid Input"
-msgstr "Entrada inválida"
+msgstr "Entrada invï¿½lida"
 
 #: poMMo/admin/mailings/mailings_send3.php:79
 #, fuzzy
@@ -3552,8 +3552,8 @@ msgid "Failed login attempt. Try again."
 msgstr "Erro no login. Tente novamente."
 
 #: poMMo/index.php:97
-msgid "Password reset request recieved. Check your email."
-msgstr "Solicitação de alteração de senha recebida. Verifique seu email."
+msgid "Password reset request received. Check your email."
+msgstr "Solicitaï¿½ï¿½o de alteraï¿½ï¿½o de senha recebida. Verifique seu email."
 
 #: poMMo/index.php:102
 msgid "Captcha did not match. Try again."
@@ -3565,15 +3565,15 @@ msgstr ""
 
 #: poMMo/install/install.php:66
 msgid "Must be a valid email"
-msgstr "Deve ser um email válido"
+msgstr "Deve ser um email vï¿½lido"
 
 #: poMMo/install/install.php:106
 msgid "Installation Complete! You may now login and setup poMMo."
-msgstr "Instalação concluída! Você poderá fazer o login e configurar o poMMo."
+msgstr "Instalaï¿½ï¿½o concluï¿½da! Vocï¿½ poderï¿½ fazer o login e configurar o poMMo."
 
 #: poMMo/install/install.php:107
 msgid "Login Username: "
-msgstr "Nome de usuário:"
+msgstr "Nome de usuï¿½rio:"
 
 #: poMMo/install/install.php:108
 msgid "Login Password: "
@@ -3612,26 +3612,26 @@ msgstr ""
 #~ "list."
 #~ msgstr ""
 #~ "Crie grupos de assinantes baseado em valores de campos do cadastro do "
-#~ "assinante. Você poderá enviar emails pertencendo a esse filtro ao invés "
+#~ "assinante. Vocï¿½ poderï¿½ enviar emails pertencendo a esse filtro ao invï¿½s "
 #~ "de todo o grupo."
 
 #~ msgid "Group %s Added"
 #~ msgstr "Grupo %s adicionado"
 
 #~ msgid "If you would like to update your records click %1here%2"
-#~ msgstr "Se você deseja atualizar seu registro clique %1aqui%2"
+#~ msgstr "Se vocï¿½ deseja atualizar seu registro clique %1aqui%2"
 
 #~ msgid "Important URLs"
 #~ msgstr "URLs importantes"
 
 #~ msgid "Default Form"
-#~ msgstr "Formulário padrão"
+#~ msgstr "Formulï¿½rio padrï¿½o"
 
 #~ msgid "Embedded Form"
-#~ msgstr "Formulário embutido"
+#~ msgstr "Formulï¿½rio embutido"
 
 #~ msgid "Embedded Mini Form"
-#~ msgstr "Mini formulário embutido"
+#~ msgstr "Mini formulï¿½rio embutido"
 
 #~ msgid "Messages"
 #~ msgstr "Mensagens"
@@ -3640,7 +3640,7 @@ msgstr ""
 #~ msgstr "Adicionar novo"
 
 #~ msgid "No fields have been assigned."
-#~ msgstr "Nenhum campo foi atribuído"
+#~ msgstr "Nenhum campo foi atribuï¿½do"
 
 #~ msgid "Name:"
 #~ msgstr "Nome:"
@@ -3649,8 +3649,8 @@ msgstr ""
 #~ "A descriptive name to help you identify this field. End users will never "
 #~ "see this."
 #~ msgstr ""
-#~ "Um nome descritivo para ajudar a identificar este campo. Usuários finais "
-#~ "não terão acesso."
+#~ "Um nome descritivo para ajudar a identificar este campo. Usuï¿½rios finais "
+#~ "nï¿½o terï¿½o acesso."
 
 #~ msgid "Prompt:"
 #~ msgstr "Pergunta:"
@@ -3659,10 +3659,10 @@ msgstr ""
 #~ msgstr "Oculto:"
 
 #~ msgid "The initial state of the checkbox on the subscription form"
-#~ msgstr "O estado inicial da caixa de verificação no formulário de inscrição"
+#~ msgstr "O estado inicial da caixa de verificaï¿½ï¿½o no formulï¿½rio de inscriï¿½ï¿½o"
 
 #~ msgid "Initial value selected on the subscription form"
-#~ msgstr "Valor inicial selecionado no formulário de inscrição"
+#~ msgstr "Valor inicial selecionado no formulï¿½rio de inscriï¿½ï¿½o"
 
 #~ msgid "SMTP Servers: %1 Click Here %2 to setup your relays."
 #~ msgstr "Servidores SMTP: %1 clique aqui %2 para configurar os relays."
@@ -3674,7 +3674,7 @@ msgstr ""
 #~ msgstr "Visualizar assinantes"
 
 #~ msgid "Subscribers per Page:"
-#~ msgstr "Assinantes por página:"
+#~ msgstr "Assinantes por pï¿½gina:"
 
 #~ msgid "select"
 #~ msgstr "Marcar"
@@ -3722,13 +3722,13 @@ msgstr ""
 #~ msgstr "Nenhum filtro foi selecionado."
 
 #~ msgid "The following will be deleted"
-#~ msgstr "O seguinte sera excluído"
+#~ msgstr "O seguinte sera excluï¿½do"
 
 #~ msgid "Click to Delete"
 #~ msgstr "Clique para excluir"
 
 #~ msgid "The following will be added as subscribers"
-#~ msgstr "O seguinte será adicionado aos assinantes"
+#~ msgstr "O seguinte serï¿½ adicionado aos assinantes"
 
 #~ msgid "Click to Add"
 #~ msgstr "Clique para adicionar"
@@ -3737,22 +3737,22 @@ msgstr ""
 #~ msgstr "Enviar um arquivo diferente"
 
 #~ msgid "Preview Import"
-#~ msgstr "Verificar importação"
+#~ msgstr "Verificar importaï¿½ï¿½o"
 
 #~ msgid "%1 Duplicate"
 #~ msgstr "%1 duplicado"
 
 #~ msgid "Upload Success"
-#~ msgstr "Envio concluído"
+#~ msgstr "Envio concluï¿½do"
 
 #~ msgid ""
 #~ "Optionally, you may match the values to a subscriber field. If an "
 #~ "imported subscriber is missing a value for a required field, they will be "
 #~ "%1 flagged %2 to update their information."
 #~ msgstr ""
-#~ "Opcionalmente, você pode associar valores aos campos do assinante. Se um "
-#~ "campo estiver com dados faltando, eles serão %1 marcados %2  para "
-#~ "correção."
+#~ "Opcionalmente, vocï¿½ pode associar valores aos campos do assinante. Se um "
+#~ "campo estiver com dados faltando, eles serï¿½o %1 marcados %2  para "
+#~ "correï¿½ï¿½o."
 
 #~ msgid "Field #%1"
 #~ msgstr "Campo #%1"
@@ -3761,13 +3761,13 @@ msgstr ""
 #~ msgstr "Clique para visualizar."
 
 #~ msgid "poMMo Setup"
-#~ msgstr "poMMo Configuração"
+#~ msgstr "poMMo Configuraï¿½ï¿½o"
 
 #~ msgid "Bounce/Return:"
-#~ msgstr "Endereço de retorno:"
+#~ msgstr "Endereï¿½o de retorno:"
 
 #~ msgid "Mailing Subject:"
-#~ msgstr "Título do Mailing:"
+#~ msgstr "Tï¿½tulo do Mailing:"
 
 #~ msgid "Use WYSIWYG Editor"
 #~ msgstr "Usar editor Visual (WYSIWYG)"
@@ -3788,7 +3788,7 @@ msgstr ""
 #~ msgstr "Limpar avisos"
 
 #~ msgid "Too many notices. Displaying the last 50..."
-#~ msgstr "Muitos avisos. Mostrando os últimos 50..."
+#~ msgstr "Muitos avisos. Mostrando os ï¿½ltimos 50..."
 
 #~ msgid ""
 #~ "Hello and welcome to the poMMo \"Aardvark\" release. The \"A\" in "
@@ -3796,19 +3796,19 @@ msgstr ""
 #~ "poMMo. Much development is underway, so please report your findings and "
 #~ "suggestions to the %1."
 #~ msgstr ""
-#~ "Olá, seja bem vindo ao poMMo release \"Aardvark\". O \"A\" no Aardvark "
-#~ "quer dizer \"alpha\" e é a primeira versão do poMMo.  O sistema está em "
-#~ "constante desenvolvimento, então por favor envie suas criticas e "
-#~ "sugestões para o %1."
+#~ "Olï¿½, seja bem vindo ao poMMo release \"Aardvark\". O \"A\" no Aardvark "
+#~ "quer dizer \"alpha\" e ï¿½ a primeira versï¿½o do poMMo.  O sistema estï¿½ em "
+#~ "constante desenvolvimento, entï¿½o por favor envie suas criticas e "
+#~ "sugestï¿½es para o %1."
 
 #~ msgid ""
 #~ "This area allows you to configure poMMo and its default behavior. Set "
 #~ "mailing list parameters, choose the information you'd like to collect "
 #~ "from subscribers, and generate subscription forms from here."
 #~ msgstr ""
-#~ "Esta área permite que você configure o poMMo e o seu comportamento "
-#~ "padrão. Defina os parâmetros, escolha as informações que você deseja "
-#~ "coletar dos assinantes e gerar formularios de inscrição daqui."
+#~ "Esta ï¿½rea permite que vocï¿½ configure o poMMo e o seu comportamento "
+#~ "padrï¿½o. Defina os parï¿½metros, escolha as informaï¿½ï¿½es que vocï¿½ deseja "
+#~ "coletar dos assinantes e gerar formularios de inscriï¿½ï¿½o daqui."
 
 #~ msgid "The poMMo Website"
 #~ msgstr "Website do poMMo"
@@ -3817,10 +3817,10 @@ msgstr ""
 #~ msgstr "Links"
 
 #~ msgid "You must first login before accessing this area."
-#~ msgstr "Você deve primeiro fazer o login para acessar esta área."
+#~ msgstr "Vocï¿½ deve primeiro fazer o login para acessar esta ï¿½rea."
 
 #~ msgid "USERNAME"
-#~ msgstr "USUÁRIO"
+#~ msgstr "USUï¿½RIO"
 
 #~ msgid "PASSWORD"
 #~ msgstr "SENHA"
@@ -3829,13 +3829,13 @@ msgstr ""
 #~ msgstr "para refazer"
 
 #~ msgid "Unsubscription request"
-#~ msgstr "Requisição de cancelamento"
+#~ msgstr "Requisiï¿½ï¿½o de cancelamento"
 
 #~ msgid "Maximum failures reached. CSV processing aborted."
-#~ msgstr "Número máximo de falhas alcançado. Processamento do CSV cancelado."
+#~ msgstr "Nï¿½mero mï¿½ximo de falhas alcanï¿½ado. Processamento do CSV cancelado."
 
 #~ msgid "Line #%s could not be processed."
-#~ msgstr "#%s linhas não foram processadas."
+#~ msgstr "#%s linhas nï¿½o foram processadas."
 
 #~ msgid "Line #%s had too many fields."
 #~ msgstr "Linha #%s tem muitos campos."
@@ -3844,25 +3844,25 @@ msgstr ""
 #~ msgstr "Linha #%s tem o email em um campo diferente."
 
 #~ msgid "Line #%s had more than one email address."
-#~ msgstr "Linha #%s tem mais de um endereço de email."
+#~ msgstr "Linha #%s tem mais de um endereï¿½o de email."
 
 #~ msgid "Line #%s had no email address."
-#~ msgstr "Linha #%s não tem endereço de email."
+#~ msgstr "Linha #%s nï¿½o tem endereï¿½o de email."
 
 #~ msgid "Subscriber on line %1$s has an unknown option (%2$s) for field %3$s"
 #~ msgstr ""
-#~ "Assinante na linha %1$s tem uma opção desconhecida (%2$s) para o campo %3"
+#~ "Assinante na linha %1$s tem uma opï¿½ï¿½o desconhecida (%2$s) para o campo %3"
 #~ "$s"
 
 #~ msgid "Subscriber on line %1$s has an invalid date (%2$s) for field %3$s"
 #~ msgstr ""
-#~ "Assinante na linha %1$s tem uma data inválida (%2$s) para o campo %3$s"
+#~ "Assinante na linha %1$s tem uma data invï¿½lida (%2$s) para o campo %3$s"
 
 #~ msgid "Subscriber on line %1$s has a non number (%2$s) for field %3$s"
-#~ msgstr "Assinante na linha %1$s não é numérico (%2$s) para o campo %3$s"
+#~ msgstr "Assinante na linha %1$s nï¿½o ï¿½ numï¿½rico (%2$s) para o campo %3$s"
 
 #~ msgid "Subscriber on line %1$s has a empty required field (%2$s)"
-#~ msgstr "Assinante na linha %1$s tem um campo vazio obrigatório (%2$s)"
+#~ msgstr "Assinante na linha %1$s tem um campo vazio obrigatï¿½rio (%2$s)"
 
 #~ msgid "Test sent to %s"
 #~ msgstr "Teste enviado para %s"
@@ -3874,38 +3874,38 @@ msgstr ""
 #~ msgstr "Erro cancelando o pedido. Entre em contato com o administrador."
 
 #~ msgid "Subscription Successful. Redirecting..."
-#~ msgstr "Inscrição bem sucedida. Redirecionando....."
+#~ msgstr "Inscriï¿½ï¿½o bem sucedida. Redirecionando....."
 
 #~ msgid "Could not reset password. Contact Administrator."
 #~ msgstr ""
-#~ "Não foi possível redefinir a senha. Entre em contato com o administrador."
+#~ "Nï¿½o foi possï¿½vel redefinir a senha. Entre em contato com o administrador."
 
 #~ msgid "Can only reset the administrator password"
-#~ msgstr "Somemente é possível redefinir a senha do adminstrador"
+#~ msgstr "Somemente ï¿½ possï¿½vel redefinir a senha do adminstrador"
 
 #~ msgid "Unknown type. Contact Administrator."
 #~ msgstr "Tipo desconhecido. Contate o administrador"
 
 #~ msgid "Field cannot be deleted."
-#~ msgstr "Campo não pode ser excluído."
+#~ msgstr "Campo nï¿½o pode ser excluï¿½do."
 
 #~ msgid "Remove Option"
-#~ msgstr "Remover opção"
+#~ msgstr "Remover opï¿½ï¿½o"
 
 #~ msgid "Is"
-#~ msgstr "é"
+#~ msgstr "ï¿½"
 
 #~ msgid ""
 #~ "NOTE: You can select multiple values by holding the SHIFT or CONTROL keys"
 #~ msgstr ""
-#~ "OBSERVAÇÃO: você pode selecionar múltiplos valores pressionando as teclas "
+#~ "OBSERVAï¿½ï¿½O: vocï¿½ pode selecionar mï¿½ltiplos valores pressionando as teclas "
 #~ "SHIFT ou CONTROL"
 
 #~ msgid "Is Before"
-#~ msgstr "É antes"
+#~ msgstr "ï¿½ antes"
 
 #~ msgid "Is After"
-#~ msgstr "É depois"
+#~ msgstr "ï¿½ depois"
 
 #~ msgid "Go Back"
 #~ msgstr "Voltar"
@@ -3924,7 +3924,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Could not add filter. Perhaps it negates the effect of an existing one?"
-#~ msgstr "Não foi possível adicionar filtro. Talvez ele negue um existente?"
+#~ msgstr "Nï¿½o foi possï¿½vel adicionar filtro. Talvez ele negue um existente?"
 
 #~ msgid "Subscribers Manage"
 #~ msgstr "Gerenciar assinantes"
@@ -3933,8 +3933,8 @@ msgstr ""
 #~ "A mailing is already taking place. Please allow it to finish before "
 #~ "creating another. Return to the %s Mailing Page %s"
 #~ msgstr ""
-#~ "Um mailing está em andamento. Aguarde o término para criar outro. Voltar "
-#~ "para %s página do Mailing %s"
+#~ "Um mailing estï¿½ em andamento. Aguarde o tï¿½rmino para criar outro. Voltar "
+#~ "para %s pï¿½gina do Mailing %s"
 
 #~ msgid "success!"
 #~ msgstr "sucesso!"

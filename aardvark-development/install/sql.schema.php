@@ -52,7 +52,7 @@ CREATE TABLE :::fields::: (
   `field_normally` varchar(60) default NULL,
   `field_array` text,
   `field_required` enum('on','off') NOT NULL default 'off',
-  `field_type` enum('checkbox','multiple','text','date','number') default NULL,
+  `field_type` enum('checkbox','multiple','text','date','number','comment') default NULL,
   PRIMARY KEY  (`field_id`),
   KEY `active` (`field_active`,`field_ordering`)
 );
