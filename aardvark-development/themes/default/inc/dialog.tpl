@@ -10,66 +10,45 @@
 	dialogContent
 *}
 
-<div id="{if $dialogID}{$dialogID}{else}dialog{/if}" class="jqmDialog hidden{if $dialogClass} {$dialogClass}{/if}">
-<div class="jqmdTL"><div class="jqmdTR"><div class="jqmdTC {if $dialogDrag}dragHandle{/if}">
-{if $dialogTitle}
-{$dialogTitle}
-{else}
-poMMo
-{/if}
+<div id="{if $dialogID}{$dialogID}{else}dialog{/if}" class="jqmDialog{if $dialogClass} {$dialogClass}{/if}">
+<div class="jqmdTL"><div class="jqmdTR"><div class="jqmdTC {if $dialogDrag}jqDrag{/if}">
+{if $dialogTitle}{$dialogTitle}{else}poMMo{/if}
 </div></div></div>
 <div class="jqmdBL"><div class="jqmdBR"><div class="jqmdBC{if $dialogBodyClass} {$dialogBodyClass}{/if}">
 
 <div class="jqmdMSG{if $dialogMsgClass} {$dialogMsgClass}{/if}">
-{if $dialogContent}
-{$dialogContent}
-{else}
-<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" /></a>{t}Please Wait{/t}...
-{/if}
+{if $dialogContent}{$dialogContent}{else}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" /></a>{t}Please Wait{/t}...{/if}
 </div>
 
 </div></div></div>
-
-<div>
-<input type="image" src="{$url.theme.shared}images/dialog/close.gif" class="jqmdClose jqmClose" />
+<input type="image" src="{$url.theme.shared}images/dialog/close.gif" class="jqmdX jqmClose" />
 </div>
 
-</div>
 
+{* Cache Dialog Images... *}
+{if !$smarty.capture.dialogCache}
+{capture name=dialogCache}1{/capture}
 {literal}
 <script type="text/javascript">
 $().ready(function() {
-	// Close Button Highlighting for *IE* (since IE does not support :hover selector...)
-	$('input.jqmdClose')
+	// Close Button Highlighting. IE doesn't support :hover. Surprise?
+	$('input.jqmdX')
 	.hover(
-		function(){ $(this).addClass('jqmdCloseFocus'); }, 
-		function(){ $(this).removeClass('jqmdCloseFocus'); })
+		function(){ $(this).addClass('jqmdXFocus'); }, 
+		function(){ $(this).removeClass('jqmdXFocus'); })
 	.focus( 
-		function(){ this.hideFocus=true; $(this).addClass('jqmdCloseFocus'); })
+		function(){ this.hideFocus=true; $(this).addClass('jqmdXFocus'); })
 	.blur( 
-		function(){ $(this).removeClass('jqmdCloseFocus'); });
+		function(){ $(this).removeClass('jqmdXFocus'); });
+		
+	// Work around for IE's lack of :focus CSS selector
+	if($.browser.msie)
+		$('div.jqmDialog :input:visible')
+			.focus(function(){$(this).addClass('iefocus');})
+			.blur(function(){$(this).removeClass('iefocus');});
 });
 </script>
 {/literal}
-
-{* Cache Dialog Images... *}
-{if !$dialogCache}
-{assign var='dialogCache' value=true}
-
-<!-- optional: image cacheing. Any images contained in this div will be
-	loaded offscreen, and thus cached -->
-{literal}
-<style type="text/css">
-/* Caching CSS courtesf of;
-	Klaus Hartl <klaus.hartl@stilbuero.de> */
-@media projection, screen {
-     div.imgCache { position: absolute; left: -8000px; top: -8000px; }
-     div.imgCache img { display:block; }
-}
-@media print { div.imgCache { display: none; } }
-</style>
-{/literal}
-
 <div class="imgCache">
 	<img src="{$url.theme.shared}images/loader.gif" />
 	<img src="{$url.theme.shared}images/dialog/close.gif" />

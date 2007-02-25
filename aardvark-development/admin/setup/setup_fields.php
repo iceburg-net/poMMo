@@ -35,8 +35,6 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
-$smarty->assign('intro', Pommo::_T('Subscriber fields are used to gather and sort information on your list members. Any number of fields can be assigned to the subscription form.  Each field is categorized as either <em>TEXT</em>, <em>NUMBER</em>, <em>MULTIPLE CHOICE</em>, <em>CHECK BOX</em>, or <em>DATE</em> depending on kind of information it collects.'));
-
 // add field if requested, redirect to its edit page on success
 if (!empty ($_POST['field_name'])) {
 	$field = PommoField::make(array(
@@ -46,10 +44,10 @@ if (!empty ($_POST['field_name'])) {
 		'required' => 'off',
 		'active' => 'off'
 	));
-	$id = PommoField::add($field);
-	($id) ?
-		Pommo::redirect("fields_edit.php?field_id=$id") :
+	if (!PommoField::add($field))
 		$logger->addMsg(Pommo::_T('Error with addition.'));
+	
+		
 }
 
 // check for a deletion request

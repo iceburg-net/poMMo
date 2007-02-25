@@ -75,13 +75,7 @@
 {literal}
 <script type="text/javascript">
 $().ready(function(){
-	$('#throttleWindow').jqm({
-		overlay: 0,
-		ajax: '@href',
-		target: '.jqmdMSG',
-		wrapClass: 'throttleWrap',
-		trigger: '#throttleTrigger'
-	}).jqDrag('div.jqmdTC');
+	$('#throttleWindow').jqmAddTrigger($('#throttleTrigger'));
 });
 </script>
 {/literal}

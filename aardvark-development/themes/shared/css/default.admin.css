@@ -326,8 +326,6 @@ select.pvInvalid {
 .clear { clear: both; }
 .right { float: right; }
 
-.dragHandle { cursor: move; }
-
 div.pager {
 	text-align:center;
 }

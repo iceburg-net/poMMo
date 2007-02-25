@@ -5,80 +5,63 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  * 
- * $Version: 2007.02.14 +r6
+ * $Version: 2007.02.24 +r8
  */
 (function($) {
-$.fn.jqm=function(o,x,y){
+$.fn.jqm=function(o){
 var _o = {
 zIndex: 3000,
 overlay: 50,
 overlayClass: 'jqmOverlay',
-wrapClass: 'jqmWrap',
 closeClass: 'jqmClose',
 trigger: '.jqModal',
 ajax: false,
 target: false,
-autofire: false,
-focus: false
+modal: false,
+onShow: false,
+onHide: false,
+onLoad: false
 };
-$.jqm.serial++; s = $.jqm.serial;
-hash[s] = {c:$.extend(_o, o),active:false,w:this,o:false,u:$('input,select,button',this)[0]||this[0],cb:[($.isFunction(x))?x:false,($.isFunction(y))?y:false]};
-$(_o.trigger).bind("click",{'s':s},function(e) {
-	return (!hash[e.data.s]['active'])?$.jqm.open(e.data.s,this):false;});
-if(_o.autofire) $(_o.trigger).click();
-return this;
-}
-$.fn.jqmClose=function(){var p=this.parent();
-	this.hide().insertBefore(p); p.remove(); return this;}
+return this.each(function(){if(this._jqm)return; s++; this._jqm=s;
+hash[s]={c:$.extend(_o, o),a:false,w:$(this).addClass('jqmID'+s),s:s};
+if(_o.trigger)$(this).jqmAddTrigger(_o.trigger);
+});}
+
+$.fn.jqmAddClose=function(e){hs(this,e,'jqmHide'); return this;}
+$.fn.jqmAddTrigger=function(e){hs(this,e,'jqmShow'); return this;}
+$.fn.jqmShow=function(t){return this.each(function(){if(!hash[this._jqm].a)$.jqm.open(this._jqm,t)});}
+$.fn.jqmHide=function(t){return this.each(function(){if(hash[this._jqm].a)$.jqm.close(this._jqm,t)});}
+
 $.jqm = {
-open:function(s,t){
-	var h=hash[s]; h.t=t;
-	var c=h.c; h.cc='.'+c.closeClass;
-	var z=c.zIndex; if (c.focus) z+=10; if (c.overlay == 0) z-=5;
-	if(!$.isFunction(h.q)) h.q=function(){return $.jqm.close(s)};
-	h['active']=true;
+open:function(s,t){var h=hash[s], c=h.c,cc='.'+c.closeClass, z=(/^\d+$/.test(h.w.css('z-index')))?h.w.css('z-index'):c.zIndex;h.t=t;h.a=true;if(z<3)z=5;h.w.css('z-index',z);
+ var o=$('<div></div>').css({'z-index':z-1,opacity:c.overlay/100,height:'100%',width:'100%',position:'fixed',left:0,top:0}).addClass(c.overlayClass);
 
-	var f=$('<iframe></iframe>').css({'z-index':z-2,opacity:0});
-	var o=$('<div></div>').css({'z-index':z-1,opacity:c.overlay/100}).addClass(c.overlayClass);
-	$([f[0],o[0]]).css({height:$.jqm.pageHeight(),width:'100%',position:'absolute',left:0,top:0});
+ if(c.modal) {if(ma.length == 0)mf('bind');ma.push(s);o.css('cursor','wait');}
+ else if(c.overlay > 0)h.w.jqmAddClose(o);
+ else o=false;
 
-	if (c.focus) { if($.jqm.x.length == 0) $.jqm.ffunc('bind'); $.jqm.x.push(s);
-		o=f.add(o[0]).css('cursor','wait');}
-	else if (c.overlay > 0){o.bind('click', h.q); o=($.jqm.ie6)?f.add(o[0]):o;}
-	else o=($.jqm.ie6)?f.css('height','100%').prependTo(h.w):false;
-	if (o) h.o=o.appendTo('body');
+ if(ie6){$('html,body').css('height','100%');if(o)o=o.css({position:'absolute'}).each(function(){for(y in {Top:1,Left:1})this.style.setExpression(y.toLowerCase(),"(_=(document.documentElement.scroll"+y+" || document.body.scroll"+y+"))+'px'");});}
+ if(o)h.o=o.appendTo('body');
 
-	h.w.wrap('<div class="'+c.wrapClass+'" id="jqmID'+s+'" style="z-index:'+z+'"></div>');
-	if (c.ajax) { var r=c.target; r=(r)?(typeof r == 'string')?$(r,h.w):$(r):h.w;
-		var url=c.ajax; url=(url.substr(0,1) == '@')?$(t).attr(url.substring(1)):url;
-		r.load(url, function() {$(h.cc,h.w).bind('click',h.q);}); }
-	else h.w.find(h.cc).bind('click',h.q);
+ if(c.ajax) {var r=c.target,u=c.ajax; 
+  r=(r)?(typeof r == 'string')?$(r,h.w):$(r):h.w; u=(u.substr(0,1) == '@')?$(t).attr(u.substring(1)):u;
+  r.load(u,function(){if(c.onLoad)c.onLoad.call(this,h);if(cc)h.w.jqmAddClose($(cc,h.w));f(h);});}
+ else if(cc)h.w.jqmAddClose($(cc,h.w));
 
-	(h.cb[0])?h.cb[0](h):h.w.show(); h.u.focus();
-	return false;
+ (c.onShow)?c.onShow(h):h.w.show();f(h);return false;
 },
-close:function(s){var h=hash[s]; h['active'] = false;
-	$(h.cc,h.w[0]).unbind('click',h.q);
-	var x=$.jqm.x; if(x.length != 0) { x.pop(); 
-		if (x.length == 0) $.jqm.ffunc('unbind'); }
-	(h.cb[1])?h.cb[1](h):h.w.jqmClose(); if(h.o) h.o.remove();
-	return false;
-},
-pageHeight:function(){var d=document.documentElement;
-	return Math.max(document.body.scrollHeight,d.offsetHeight,d.clientHeight || 0,window.innerHeight || 0);
-},
-hash: {},
-serial: 0,
-x: [],
-f:function(e) { var s=$.jqm.x[$.jqm.x.length-1];
-	if($(e.target).parents('#jqmID'+s).length == 0) { hash[s].u.focus(); return false;} return true;
-},
-ffunc:function(t) {$()[t]("keypress",$.jqm.f)[t]("keydown",$.jqm.f)[t]("mousedown",$.jqm.f);},
-ie6:$.browser.msie && typeof XMLHttpRequest == 'function'
-};
-var hash=$.jqm.hash;
+close:function(s){var h=hash[s];h.a=false;
+ if(ma.length != 0){ma.pop();if(ma.length == 0)mf('unbind');}
+ if(h.c.onHide)h.c.onHide(h);else{h.w.hide();if(h.o)h.o.remove();} return false;
+}};
+var s=0,hash={},ma=[],ie6=$.browser.msie && typeof XMLHttpRequest == 'function',
+f=function(h){if(ie6)if($('iframe.jqmIF',h.w).length == 0)$('<iframe class="jqmIF" style="width:expression(this.parentNode.offsetWidth+\'px\');height:expression(this.parentNode.offsetHeight+\'px\');"></iframe>').css({'z-index':-1,opacity:0,position:'absolute',left:0,top:0}).prependTo(h.w);
+ h.f=$(':input:visible',h.w)[0]||h.w[0];h.f.focus();},
+mf=function(t){$()[t]("keypress",m)[t]("keydown",m)[t]("mousedown",m);},
+m=function(e) {var h=hash[ma[ma.length-1]], r=(!$(e.target).parents('.jqmID'+h.s).length == 0);if(!r)h.f.focus();return r;},
+hs=function(w,e,y){var s=[];w.each(function(){s.push(this._jqm)});
+ $(e).each(function(){if(this[y])$.extend(this[y],s);else{this[y]=s;$(this).click(function(){for(i in {jqmShow:1,jqmHide:1})for(s in this[i]){if(s == 'indexOf')continue;hash[this[i][s]].w[i](this)};return false;});}});};
 })(jQuery);
-
 /*
  * jqDnR - Minimalistic Drag'n'Resize for jQuery.
  *

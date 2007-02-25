@@ -165,7 +165,5 @@ function tUpdate(o) { //console.log(o);
 	// update form element
 	$('#v'+p.type).val(v);
 }
-
-
 </script>
 {/literal}

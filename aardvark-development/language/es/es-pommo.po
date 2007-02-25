@@ -396,7 +396,7 @@ msgstr ""
 #. poMMo/themes/default/user/confirm.tpl
 #: pommo_theme_lang.php:180 pommo_theme_lang.php:192
 msgid ""
-"If you have recieved your verification email, enter the activation code "
+"If you have received your verification email, enter the activation code "
 "below;"
 msgstr ""
 
@@ -2302,7 +2302,7 @@ msgstr "Todos los ficheros (%s)|%s"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1494
-msgid "(Select who should recieve the mailing)"
+msgid "(Select who should receive the mailing)"
 msgstr ""
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -3570,7 +3570,7 @@ msgid "Failed login attempt. Try again."
 msgstr ""
 
 #: poMMo/index.php:97
-msgid "Password reset request recieved. Check your email."
+msgid "Password reset request received. Check your email."
 msgstr ""
 
 #: poMMo/index.php:102

@@ -78,21 +78,8 @@
 {literal}
 <script type="text/javascript">
 $().ready(function(){
-	$('#smtpWindow').jqm({
-		overlay: 0,
-		ajax: '@href',
-		target: '.jqmdMSG',
-		wrapClass: 'configWrap',
-		trigger: '#smtpTrigger'
-	}).jqDrag('div.jqmdTC');
-	
-	$('#testWindow').jqm({
-		overlay: 0,
-		ajax: '@href',
-		target: '.jqmdMSG',
-		wrapClass: 'configWrap',
-		trigger: '#testTrigger'
-	}).jqDrag('div.jqmdTC');
+	$('#smtpWindow').jqmAddTrigger($('#smtpTrigger'));
+	$('#testWindow').jqmAddTrigger($('#testTrigger'));
 });
 </script>
 {/literal}

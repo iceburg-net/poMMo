@@ -32,7 +32,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  *	field_normally	(str)			Default value of field on subscriber form
  *	field_array		(str)			A serialized array of  the field such as the options of multiple choice fields (drop down select)
  *	field_required	('on','off')	If field is required for subscription
- *	field_type		(enum)			checkbox, multiple, text, date, number
+ *	field_type		(enum)			checkbox, multiple, text, date, number, comment
  */
  
 class PommoField {
@@ -85,6 +85,7 @@ class PommoField {
 			case "text":
 			case "date":
 			case "number":
+			case "comment":
 				break;
 			default:
 				$invalid[] = 'type'; 

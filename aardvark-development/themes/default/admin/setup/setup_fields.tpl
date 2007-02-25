@@ -1,14 +1,19 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jq11.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
-{* Styling of CSS table *}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
 {/capture}
 {include file="inc/admin.header.tpl"}
 
 <h2>{t}Fields Page{/t}</h2>
 
-{if $intro}<p><img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimage right" /> {$intro}</p>{/if}
+<p>
+<img src="{$url.theme.shared}images/icons/fields.png" alt="fields icon" class="navimage right" />
+{t escape=no 1="<a href='`$url.base`admin/subscribers/subscribers_groups.php'>" 2="</a>"}Subscriber fields allow you to collect information on list members. They are typically displayed on the subscription form, although "hidden" ones can be used for administrative purposes. %1Groups%2 are based on subscriber field values.{/t}
+</p>
 
 <form method="post" action="">
 
@@ -23,13 +28,14 @@
 </div>
 
 <div>
-<label for="field_type">{t}Value type:{/t}</label>
+<label for="field_type">{t}Field type:{/t}</label>
 <select name="field_type" id="field_type">
 <option value="text">{t}Text{/t}</option>
 <option value="number">{t}Number{/t}</option>
 <option value="checkbox">{t}Checkbox{/t}</option>
 <option value="multiple">{t}Multiple Choice{/t}</option>
 <option value="date">{t}Date{/t}</option>
+<option value="comment">{t}Comment{/t}</option>
 </select>
 </div>
 
@@ -58,7 +64,7 @@
 <span>{t}Field Name{/t}</span>
 </div>
 
-{foreach name=fields from=$fields key=key item=field}
+{foreach from=$fields key=key item=field}
 
 <div class="{cycle values="r1,r2,r3"} sortable" id="id{$key}">
 
@@ -72,22 +78,15 @@
 </span>
 
 <span>
-<a href="fields_edit.php?field_id={$key}"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></a>
+<a href="ajax/field_edit.php?field_id={$key}" class="editTrigger"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></a>
 </span>
 
 <span>
 <img src="{$url.theme.shared}images/icons/order.png" alt="order icon" class="handle" id="a{$key}" />
 </span>
 
-<span{if $field.active == 'on'} class="green"{/if}>
-{if $field.required == 'on'}
-<strong>
-{$field.name}
-</strong>
-{else}
-{$field.name}
-{/if}
-- <em>{$field.type}</em>
+<span class="name{if $field.active == 'on'} green{/if}">
+{if $field.required == 'on'}<strong>{$field.name}</strong>{else}{$field.name}{/if}
 </span>
 
 </div>
@@ -100,7 +99,6 @@
 {t escape=no 1='<strong>' 2='</strong>'}%1Bold%2 fields are required.{/t} 
 {t escape=no 1='<span class="green">' 2='</span>'}%1Green%2 fields are active.{/t}
 </p>
-
 
 
 {literal}
@@ -147,11 +145,48 @@ $().ready(function(){
 		}
 	});
 	pommoSort.init();
-
+	
+	$('#editWindow').jqm({
+		modal: true,
+		ajax: '@href',
+		target: '.jqmdMSG',
+		trigger: '.editTrigger',
+		onLoad: function(){assignForm(this);}
+	}).jqDrag('div.jqmdTC');
 });
-// old prototype code
-//Sortable.create('fieldOrder',{tag:'div', handle: 'handle', onUpdate:function(){new Ajax.Updater('ajaxOutput', 'ajax_fieldOrder.php', {onComplete:function(request){new Effect.Highlight('fieldOrder',{});}, parameters:Sortable.serialize('fieldOrder'), evalScripts:true, asynchronous:true})}});
+
+function assignForm(scope) {
+	$('form',scope).ajaxForm( { 
+		target: scope,
+		beforeSubmit: function() {
+			$('input[@type=submit]', scope).hide();
+			$('img[@name=loading]', scope).show();
+		},
+		success: function() { 
+			assignForm(this); 
+			$('div.output',this).fadeOut(5000); 
+			
+			var name=$('input[@name=field_name]',this).val();
+			var req=$('input[@name=field_required]:checked',this).val();
+			var active=$('input[@name=field_active]:checked',this).val();
+			
+			if(req == 'on')
+				name='<strong>'+name+'</strong>';
+			
+			var e=$('#id'+$('input[@name=field_id]',this).val()+' span.name').html(name);
+			
+			if(active == 'on')
+				e.addClass('green');
+			else
+				e.removeClass('green');
+			}
+		}
+	);
+}
 </script>
 {/literal}
 
+{capture name=dialogs}
+{include file="inc/dialog.tpl" dialogID="editWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{/capture}
 {include file="inc/admin.footer.tpl"}

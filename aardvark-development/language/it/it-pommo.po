@@ -101,12 +101,12 @@ msgstr "Modulo impostazioni"
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #: pommo_theme_lang.php:36
 msgid "Demonstration mode is ON."
-msgstr "Il modo di dimostrazione é ATTIVATO."
+msgstr "Il modo di dimostrazione ï¿½ ATTIVATO."
 
 #. poMMo/themes/default/inc/tpl/admin.sidebar.tpl
 #: pommo_theme_lang.php:39
 msgid "Demonstration mode is OFF."
-msgstr "Il modo di dimostrazione é DISATTIVATO."
+msgstr "Il modo di dimostrazione ï¿½ DISATTIVATO."
 
 #. poMMo/themes/default/inc/tpl/admin.footer.tpl
 #. poMMo/themes/default/upgrade.tpl
@@ -389,7 +389,7 @@ msgstr ""
 #. poMMo/themes/default/user/confirm.tpl
 #: pommo_theme_lang.php:180 pommo_theme_lang.php:192
 msgid ""
-"If you have recieved your verification email, enter the activation code "
+"If you have received your verification email, enter the activation code "
 "below;"
 msgstr ""
 
@@ -424,7 +424,7 @@ msgid ""
 "you'll be on your way!"
 msgstr ""
 "Benvenuti al processo d'installazione online di poMMo. La connessione con la "
-"banca dati ha avuto successo e la lingua é stata assegnata. Inserisci i tuoi "
+"banca dati ha avuto successo e la lingua ï¿½ stata assegnata. Inserisci i tuoi "
 "dati nel modulo sottostante per concludere l'installazione."
 
 #. poMMo/themes/default/install.tpl
@@ -590,7 +590,7 @@ msgid ""
 "displayed when the user successfully completes this task."
 msgstr ""
 "Puoi customizzare le notizie che poMMo invia quando nuovi user si abbonano, "
-"cancellano l' abbonamento o modificano i loro dati. In piú puoi cambiare le "
+"cancellano l' abbonamento o modificano i loro dati. In piï¿½ puoi cambiare le "
 "notizie visualizzate quando i user applicano i loro cambiamenti."
 
 #. poMMo/themes/default/admin/setup/setup_messages.tpl
@@ -685,10 +685,10 @@ msgid ""
 "controlled. Additionally, you can limit the mails and kilobytes sent to a "
 "single domain during a specified time frame."
 msgstr ""
-"poMMo é capabile di limitare il numero di email spedite e la quantitá in "
-"kilobytes (Cosi é possibile evitare un overload su un server comune come "
+"poMMo ï¿½ capabile di limitare il numero di email spedite e la quantitï¿½ in "
+"kilobytes (Cosi ï¿½ possibile evitare un overload su un server comune come "
 "hotmail/yahoo.com). Puo essere controllato il volume delle email e la "
-"larghezza di banda. In piú puoi limitare il numero delle email e kilobytes "
+"larghezza di banda. In piï¿½ puoi limitare il numero delle email e kilobytes "
 "spedite a un singolo dominio in un periodo di tempo specificato."
 
 #. poMMo/themes/default/admin/setup/setup_throttle.tpl
@@ -938,9 +938,9 @@ msgid ""
 "email exists as a registered subscriber, it redirects to the subscriber "
 "update page. If not, it redirects to the the default subscription form."
 msgstr ""
-"Questa opzione attiverá un modulo che richiederá un indirizzo email del "
+"Questa opzione attiverï¿½ un modulo che richiederï¿½ un indirizzo email del "
 "user. Se l'indirizzo email digitato corrisponde ad un abbonato, il modulo "
-"sará rediretto sulla pagina d'impostazioni del user. Altrimenti l'user sará "
+"sarï¿½ rediretto sulla pagina d'impostazioni del user. Altrimenti l'user sarï¿½ "
 "rediretto al modulo d'abbonamento predefinito."
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
@@ -962,7 +962,7 @@ msgstr "Modulo d'abbonamento completo"
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #: pommo_theme_lang.php:528
 msgid "This prints the entire subscription form."
-msgstr "Questo visualizzerá l'intero modulo di registrazione."
+msgstr "Questo visualizzerï¿½ l'intero modulo di registrazione."
 
 #. poMMo/themes/default/admin/setup/form_embed.tpl
 #. poMMo/themes/default/admin/setup/admin_setup.tpl
@@ -1041,7 +1041,7 @@ msgstr "Valore predefinito:"
 #, fuzzy
 msgid "If provided, this value will appear pre-filled on the subscription form"
 msgstr ""
-"Un valore specificato qui sará inserito nel modulo d'abbonamento come valore "
+"Un valore specificato qui sarï¿½ inserito nel modulo d'abbonamento come valore "
 "predefinito."
 
 #. poMMo/themes/default/admin/setup/fields_edit.tpl
@@ -1325,7 +1325,7 @@ msgstr "Nome mittente:"
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #: pommo_theme_lang.php:780
 msgid "(Default name mails will be sent from)"
-msgstr "(Questo nome sará inserito come mittente dell'email)"
+msgstr "(Questo nome sarï¿½ inserito come mittente dell'email)"
 
 #. poMMo/themes/default/admin/setup/setup_configure.tpl
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -1919,7 +1919,7 @@ msgid ""
 "values as well as their email. CSV files should have one subscriber(email) "
 "per line with field information seperated by commas(%1,%2)."
 msgstr ""
-"poMMo é capabile di importare liste di abbonati da files %1 CSV %2. Il tuo "
+"poMMo ï¿½ capabile di importare liste di abbonati da files %1 CSV %2. Il tuo "
 "file CSV deve contenere un abbonato(email) per riga con le informazioni per "
 "le caselle separate da virgole (,)."
 
@@ -2002,9 +2002,9 @@ msgid ""
 "exclude members of other groups."
 msgstr ""
 "I Gruppi sono costituiti da \"filtri\" che mettono in relazione valori "
-"caselle e altri gruppi. Per esempio, se raccogli informazioni su \"etá\" e "
-"\"paese\", é possibile estrarre abbonati maggiori a 21 anni dal Giappone "
-"creando due filtri, uno che paragona la casella \"etá\" con il valore "
+"caselle e altri gruppi. Per esempio, se raccogli informazioni su \"etï¿½\" e "
+"\"paese\", ï¿½ possibile estrarre abbonati maggiori a 21 anni dal Giappone "
+"creando due filtri, uno che paragona la casella \"etï¿½\" con il valore "
 "GREATER THAN 20, e un altro che paragona \"paese\" EQUAL TO \"Giappone\"."
 
 #. poMMo/themes/default/admin/subscribers/groups_edit.tpl
@@ -2083,7 +2083,7 @@ msgstr ""
 #. poMMo/themes/default/admin/subscribers/groups_edit.tpl
 #: pommo_theme_lang.php:1287
 msgid "No groups have been assigned."
-msgstr "Non é stato assegnato un gruppo."
+msgstr "Non ï¿½ stato assegnato un gruppo."
 
 #. poMMo/themes/default/admin/subscribers/groups_edit.tpl
 #: pommo_theme_lang.php:1290
@@ -2295,7 +2295,7 @@ msgstr "Tutti gli abbonati"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
 #: pommo_theme_lang.php:1494
-msgid "(Select who should recieve the mailing)"
+msgid "(Select who should receive the mailing)"
 msgstr "(Seleziona i riceventi del mailing)"
 
 #. poMMo/themes/default/admin/mailings/mailings_send.tpl
@@ -2499,10 +2499,10 @@ msgid ""
 "also be adjusted -- although you must pause and revive the mailing before "
 "changes take effect."
 msgstr ""
-"Il processo di inviazione sará effettuato nel background. Puoi chiudere il "
+"Il processo di inviazione sarï¿½ effettuato nel background. Puoi chiudere il "
 "browser window, visitare altri siti o fare lavori su poMMo. Impostazioni per "
-"il throttling possono essere aggiornati, peró é necessario di fermare e "
-"riattivare il mailing cosicché le nuove impostazioni terranno effetto."
+"il throttling possono essere aggiornati, perï¿½ ï¿½ necessario di fermare e "
+"riattivare il mailing cosicchï¿½ le nuove impostazioni terranno effetto."
 
 #. poMMo/themes/default/admin/mailings/mailing_status.tpl
 #: pommo_theme_lang.php:1686
@@ -2601,7 +2601,7 @@ msgstr "Crea ed invia un mailing."
 #. poMMo/themes/default/admin/mailings/admin_mailings.tpl
 #: pommo_theme_lang.php:1761
 msgid "View mailings that have already been sent."
-msgstr "Vedi mailings che sono giá stati inviati."
+msgstr "Vedi mailings che sono giï¿½ stati inviati."
 
 #. poMMo/themes/default/admin/admin.tpl
 #: pommo_theme_lang.php:1764
@@ -2666,7 +2666,7 @@ msgid ""
 "Welcome to the poMMo online upgrade process. This script will automatically "
 "upgrade your old version of poMMo."
 msgstr ""
-"Benvenuti al processo di upgrade online di poMMo. Questo script aggiornerá "
+"Benvenuti al processo di upgrade online di poMMo. Questo script aggiornerï¿½ "
 "automaticamente la versione precedente di poMMo."
 
 #. poMMo/themes/default/support/support.tpl
@@ -2896,27 +2896,27 @@ msgstr ""
 #: poMMo/inc/helpers/filters.php:104
 #, fuzzy
 msgid "is not"
-msgstr "non é (is not)"
+msgstr "non ï¿½ (is not)"
 
 #: poMMo/inc/helpers/filters.php:105
 #, fuzzy
 msgid "is checked"
-msgstr "é attivo"
+msgstr "ï¿½ attivo"
 
 #: poMMo/inc/helpers/filters.php:106
 #, fuzzy
 msgid "is not checked"
-msgstr "non é attivo (is not checked)"
+msgstr "non ï¿½ attivo (is not checked)"
 
 #: poMMo/inc/helpers/filters.php:107
 #, fuzzy
 msgid "is greater than"
-msgstr "é maggiore a (is greater than)"
+msgstr "ï¿½ maggiore a (is greater than)"
 
 #: poMMo/inc/helpers/filters.php:108
 #, fuzzy
 msgid "is less than"
-msgstr "é minore a (is less than)"
+msgstr "ï¿½ minore a (is less than)"
 
 #: poMMo/inc/helpers/filters.php:109
 msgid "or in group"
@@ -2999,12 +2999,12 @@ msgstr "Richiesta modifica password"
 
 #: poMMo/inc/helpers/messages.php:98
 msgid "Your password has been reset. Enjoy!"
-msgstr "La vostra password é stata resettata. Enjoy!"
+msgstr "La vostra password ï¿½ stata resettata. Enjoy!"
 
 #: poMMo/inc/helpers/messages.php:103
 msgid "You have successfully unsubscribed. Enjoy your travels."
 msgstr ""
-"Il tuo abbonamento é stato cancellato. Ti auguriamo il meglio per il futuro."
+"Il tuo abbonamento ï¿½ stato cancellato. Ti auguriamo il meglio per il futuro."
 
 #: poMMo/inc/helpers/messages.php:108
 #, fuzzy, php-format
@@ -3022,7 +3022,7 @@ msgstr "I tuoi dati sono statimodificati. Enjoy!"
 #: poMMo/inc/helpers/validate.php:69
 #, fuzzy, php-format
 msgid "%s is a required field."
-msgstr "é un valore obbligatorio."
+msgstr "ï¿½ un valore obbligatorio."
 
 #: poMMo/inc/helpers/validate.php:87 poMMo/inc/helpers/validate.php:100
 #: poMMo/inc/helpers/validate.php:110
@@ -3090,7 +3090,7 @@ msgid ""
 "Work Directory (%s) not found! Make sure it exists and the webserver can "
 "write to it. You can change its location from the config.php file."
 msgstr ""
-"Work directory non é stata trovata! Assicurati che esiste e il server web ha "
+"Work directory non ï¿½ stata trovata! Assicurati che esiste e il server web ha "
 "i permessi necessari (write). In caso di cambio direttoria modifica il file "
 "'config.php'."
 
@@ -3111,7 +3111,7 @@ msgstr ""
 
 #: poMMo/inc/classes/pommo.php:127 poMMo/inc/classes/pommo.php:129
 msgid "Could not create directory"
-msgstr "Non é stato possibile creare la direttoria"
+msgstr "Non ï¿½ stato possibile creare la direttoria"
 
 #: poMMo/inc/classes/pommo.php:336
 msgid "Redirecting, please wait..."
@@ -3124,7 +3124,7 @@ msgstr "Sito web di poMMo"
 #: poMMo/inc/classes/template.php:88
 #, fuzzy, php-format
 msgid "Template file (%s) not found in default or current theme"
-msgstr "Template file non é stato trovato nel tema predefinito."
+msgstr "Template file non ï¿½ stato trovato nel tema predefinito."
 
 #: poMMo/inc/classes/template.php:110
 msgid "prev"
@@ -3154,7 +3154,7 @@ msgstr "Errore durante la inviazione del mailing"
 #: poMMo/inc/classes/mailer.php:288
 #, fuzzy, php-format
 msgid "Mail to: %s not sent. Demonstration mode is active."
-msgstr "Il modo di dimostrazione é ATTIVATO."
+msgstr "Il modo di dimostrazione ï¿½ ATTIVATO."
 
 #: poMMo/user/update.php:69
 msgid "Emails must match."
@@ -3189,7 +3189,7 @@ msgid ""
 "A confirmation email has been sent. You should receive this letter within "
 "the next few minutes. Please follow its instructions."
 msgstr ""
-"Una email di confermazione é stata inviata che dovrebbe giungere fra pochi "
+"Una email di confermazione ï¿½ stata inviata che dovrebbe giungere fra pochi "
 "minuti. Segui le istruzioni indicate."
 
 #: poMMo/user/update.php:103
@@ -3229,7 +3229,7 @@ msgstr "Indirizzo email invalido"
 #, fuzzy
 msgid "Email address not found! Please try again."
 msgstr ""
-"Questo indirizzo email non é stato trovato nella banca dati. Riprova per "
+"Questo indirizzo email non ï¿½ stato trovato nella banca dati. Riprova per "
 "favore."
 
 #: poMMo/user/login.php:76
@@ -3248,13 +3248,13 @@ msgid ""
 "A confirmation email has been sent to %s. It should arrive within the next "
 "few minutes. Please follow its instructions to complete your request. Thanks!"
 msgstr ""
-"Una email di confermazione é stata inviata a %s che dovrebbe giungere fra "
+"Una email di confermazione ï¿½ stata inviata a %s che dovrebbe giungere fra "
 "pochi minuti. Per favore segui le istruzioni indicate per finire la "
 "registrazione. Grazie!"
 
 #: poMMo/user/pending.php:68
 msgid "Your pending request has been cancelled."
-msgstr "La registrazione/richiesta in corso é stata cancellata."
+msgstr "La registrazione/richiesta in corso ï¿½ stata cancellata."
 
 #: poMMo/user/pending.php:76
 msgid "You have pending changes. Please respond to your confirmation email"
@@ -3272,7 +3272,7 @@ msgstr ""
 
 #: poMMo/user/confirm.php:40
 msgid "No code given."
-msgstr "Non é stato definito un codice."
+msgstr "Non ï¿½ stato definito un codice."
 
 #: poMMo/user/confirm.php:49
 msgid "Invalid code! Make sure you copied it correctly from the email."
@@ -3329,8 +3329,8 @@ msgid ""
 "kind of information it collects."
 msgstr ""
 "Caselle abbonati ti permettono di raccogliere e classificare informazioni "
-"sugli abbonati alla mailing list. É possibile assegnare ogni numero di "
-"caselle poi visualizzati nel modulo d'abbonamento. Ogni valore é "
+"sugli abbonati alla mailing list. ï¿½ possibile assegnare ogni numero di "
+"caselle poi visualizzati nel modulo d'abbonamento. Ogni valore ï¿½ "
 "categorizzato come <em>TESTO</em>, <em>NUMERO</em>, <em>MULTIPLE CHOICE</"
 "em>, <em>CHECK BOX</em>, o <em>DATA</em> in dipendenza dal tipo di dati che "
 "scegli raccogliere."
@@ -3381,7 +3381,7 @@ msgid ""
 "for this field. Text fields are useful for collecting names, cities, and "
 "such."
 msgstr ""
-"Questa casella é del tipo <b>TESTO</b>. Abbonati saranno in grado di "
+"Questa casella ï¿½ del tipo <b>TESTO</b>. Abbonati saranno in grado di "
 "digitare qualsiasi valore per questa casella. Caselle testo sono utili per "
 "aquisire nomi, citta, ..."
 
@@ -3392,7 +3392,7 @@ msgid ""
 "field ON and OFF. Checkboxes are useful for subscriber acceptance and opt-"
 "ins."
 msgstr ""
-"Questa casella é del tipo <b>CHECKBOX</b>. Abbonati saranno in grado di "
+"Questa casella ï¿½ del tipo <b>CHECKBOX</b>. Abbonati saranno in grado di "
 "scegliere fra i stati attivato/disattivato (ON/OFF). Checkboxes sono utili "
 "per far scegliere gli user di essere inclusi/esclusi da qualcosa."
 
@@ -3402,7 +3402,7 @@ msgid ""
 "This is a <b>NUMBER</b> field. Only numeric values will be accepted for this "
 "field. Number fields are useful for collecting ages, quantities, and such."
 msgstr ""
-"Questa casella é del tipo <b>TESTO</b>. Abbonati saranno in grado di "
+"Questa casella ï¿½ del tipo <b>TESTO</b>. Abbonati saranno in grado di "
 "digitare qualsiasi valore per questa casella. Caselle testo sono utili per "
 "aquisire nomi, citta, ..."
 
@@ -3421,7 +3421,7 @@ msgid ""
 "reliable values, and are useful for collecting Country, income range, pre-"
 "defined sizes and such."
 msgstr ""
-"Questa casella é del tipo <b>MULTIPLE CHOICE</b>. Abbonati saranno in grado "
+"Questa casella ï¿½ del tipo <b>MULTIPLE CHOICE</b>. Abbonati saranno in grado "
 "di selezionare un valore dalle opzioni indicate sotto. Caselle Multiple "
 "choice contengono valori reliabili e sono utili per aquisire informazioni "
 "come paese, redditi,..."
@@ -3432,7 +3432,7 @@ msgstr "Le password non coincidono."
 
 #: poMMo/admin/setup/setup_configure.php:86 poMMo/install/install.php:65
 msgid "Must be a valid URL"
-msgstr "La URL non é valida"
+msgstr "La URL non ï¿½ valida"
 
 #: poMMo/admin/setup/setup_configure.php:88
 #: poMMo/admin/mailings/mailings_send.php:101
@@ -3501,7 +3501,7 @@ msgstr "Indirizzo email invalido"
 #: poMMo/admin/subscribers/ajax/subscriber_update.php:59
 #, fuzzy
 msgid "Fields failed validation"
-msgstr "Validazione del filtro é fallita"
+msgstr "Validazione del filtro ï¿½ fallita"
 
 #: poMMo/admin/subscribers/subscribers_groups.php:41
 #, php-format
@@ -3522,7 +3522,7 @@ msgstr "Gruppo non puo essere cancellato."
 #: poMMo/admin/subscribers/subscribers_groups.php:73
 #, php-format
 msgid "%s deleted."
-msgstr "%s é stato cancellato."
+msgstr "%s ï¿½ stato cancellato."
 
 #: poMMo/admin/subscribers/import_txt.php:63
 #: poMMo/admin/subscribers/import_csv2.php:80
@@ -3552,7 +3552,7 @@ msgstr "Nome del gruppo"
 #: poMMo/admin/mailings/mailings_send.php:79
 #: poMMo/admin/mailings/mailings_send3.php:50
 msgid "Demonstration Mode is on. No Emails will be sent."
-msgstr "Il modo di dimostrazione e attivato. Non sará inviata alcuna email."
+msgstr "Il modo di dimostrazione e attivato. Non sarï¿½ inviata alcuna email."
 
 #: poMMo/admin/mailings/ajax/status_poll.php:47
 msgid "Stopped"
@@ -3616,7 +3616,7 @@ msgid "Failed login attempt. Try again."
 msgstr "Tentativo login fallito. Riprova."
 
 #: poMMo/index.php:97
-msgid "Password reset request recieved. Check your email."
+msgid "Password reset request received. Check your email."
 msgstr "Richiesta modifica password ricevuta. Vedi i tuoi email."
 
 #: poMMo/index.php:102
@@ -3658,7 +3658,7 @@ msgid ""
 "poMMo appears to be up to date. If you want to force an upgrade, %s click "
 "here %s"
 msgstr ""
-"Questa versione di poMMo non é piu recente. Se desideri forzare un update, %"
+"Questa versione di poMMo non ï¿½ piu recente. Se desideri forzare un update, %"
 "s clicca qui %s"
 
 #: poMMo/install/upgrade.php:68
@@ -3680,7 +3680,7 @@ msgstr "Upgrade fallito!"
 #~ "list."
 #~ msgstr ""
 #~ "Crea gruppi di abbonati basati sulle informazioni collezionate dagli "
-#~ "abbonati. Sará possibile inviare email a abbonati appartenenti ad un "
+#~ "abbonati. Sarï¿½ possibile inviare email a abbonati appartenenti ad un "
 #~ "gruppo (al posto della lista intera)."
 
 #~ msgid "Group %s Added"
@@ -3708,7 +3708,7 @@ msgstr "Upgrade fallito!"
 #~ msgstr "Genera casella nuova"
 
 #~ msgid "No fields have been assigned."
-#~ msgstr "Non é stata assegnata una casella."
+#~ msgstr "Non ï¿½ stata assegnata una casella."
 
 #~ msgid "Name:"
 #~ msgstr "Nome:"
@@ -3717,7 +3717,7 @@ msgstr "Upgrade fallito!"
 #~ "A descriptive name to help you identify this field. End users will never "
 #~ "see this."
 #~ msgstr ""
-#~ "Un nome descrittivo che aiuterá ad identificare questa casella (non "
+#~ "Un nome descrittivo che aiuterï¿½ ad identificare questa casella (non "
 #~ "visibile agli abbonati)."
 
 #~ msgid "Prompt:"
@@ -3740,7 +3740,7 @@ msgstr "Upgrade fallito!"
 #~ "with a backslash (\\)."
 #~ msgstr ""
 #~ "NOTA: Puoi inserire valori multipli, separate da virgole. Per includere "
-#~ "caratteri speciali come virgole é necessario che siano preceduti da un "
+#~ "caratteri speciali come virgole ï¿½ necessario che siano preceduti da un "
 #~ "backslash (\\)."
 
 #~ msgid "SMTP Servers: %1 Click Here %2 to setup your relays."
@@ -3789,7 +3789,7 @@ msgstr "Upgrade fallito!"
 #~ msgstr "Escludi abbonati che hanno %1 uguale a (equal to) %2"
 
 #~ msgid "Include subscribers who have %1 greater than %2"
-#~ msgstr "Includi abbonati che hanno %1 piú grande di (greater) %2"
+#~ msgstr "Includi abbonati che hanno %1 piï¿½ grande di (greater) %2"
 
 #~ msgid "Include subscribers who have %1 less than %2"
 #~ msgstr "Includi abbonati che hanno %1 meno che (less than) %2"
@@ -3801,7 +3801,7 @@ msgstr "Upgrade fallito!"
 #~ msgstr "Includi abbonati che hanno attivato"
 
 #~ msgid "No filters have been assigned."
-#~ msgstr "Non é stato assegnato un filtro."
+#~ msgstr "Non ï¿½ stato assegnato un filtro."
 
 #~ msgid "The following will be deleted"
 #~ msgstr "I dati sottostanti verranno cancellati"
@@ -3832,7 +3832,7 @@ msgstr "Upgrade fallito!"
 #~ "imported subscriber is missing a value for a required field, they will be "
 #~ "%1 flagged %2 to update their information."
 #~ msgstr ""
-#~ "É possibile paragonare valori con caselle abbonati. Se un data record di "
+#~ "ï¿½ possibile paragonare valori con caselle abbonati. Se un data record di "
 #~ "un abbonato importato da un file contiene alcune caselle vuote che nelle "
 #~ "impostazioni sono state dichiarate obbligatorie, saranno %1 marcate %2 "
 #~ "per aggiornamento."
@@ -3878,8 +3878,8 @@ msgstr "Upgrade fallito!"
 #~ "this one completes. Visit this page to check on the status of this "
 #~ "mailing."
 #~ msgstr ""
-#~ "Un mailing é attualmente in corso. Non sará possibile generare nuovi "
-#~ "mailings fino che il mailing attuale sará finito. Visita questa pagina "
+#~ "Un mailing ï¿½ attualmente in corso. Non sarï¿½ possibile generare nuovi "
+#~ "mailings fino che il mailing attuale sarï¿½ finito. Visita questa pagina "
 #~ "per vedere lo stato del mailing in corso."
 
 #~ msgid ""
@@ -3889,7 +3889,7 @@ msgstr "Upgrade fallito!"
 #~ "suggestions to the %1."
 #~ msgstr ""
 #~ "Benvenuti al release \"Aardvark\" di poMMo. La \"A\" in Aardvark sta per "
-#~ "\"alpha\" e significa che questa é una versione prematura di poMMo. Molti "
+#~ "\"alpha\" e significa che questa ï¿½ una versione prematura di poMMo. Molti "
 #~ "lavori sono momentaneamente in corso, e vi chiediamo di inviare rapporti "
 #~ "e suggestioni a %1."
 
@@ -3925,11 +3925,11 @@ msgstr "Upgrade fallito!"
 
 #~ msgid "Maximum failures reached. CSV processing aborted."
 #~ msgstr ""
-#~ "L'importo massimo di errori é stato raggiunto. Il processo CSV é stato "
+#~ "L'importo massimo di errori ï¿½ stato raggiunto. Il processo CSV ï¿½ stato "
 #~ "terminato."
 
 #~ msgid "Line #%s could not be processed."
-#~ msgstr "Riga #%s non é stata processata."
+#~ msgstr "Riga #%s non ï¿½ stata processata."
 
 #~ msgid "Line #%s had too many fields."
 #~ msgstr "Riga #%s contiene troppe caselle."
@@ -3939,7 +3939,7 @@ msgstr "Upgrade fallito!"
 #~ "Riga #%s contiene l'indirizzo email in una casella differente (cell)."
 
 #~ msgid "Line #%s had more than one email address."
-#~ msgstr "Riga #%s contiene piú di un indirizzo email."
+#~ msgstr "Riga #%s contiene piï¿½ di un indirizzo email."
 
 #~ msgid "Line #%s had no email address."
 #~ msgstr "Riga #%s non contiene indirizzi email."
@@ -3974,7 +3974,7 @@ msgstr "Upgrade fallito!"
 
 #~ msgid "Error cancelling your request. Contact the administrator."
 #~ msgstr ""
-#~ "Un errore é occorso durante la cancellazione della richiesta. Per favore "
+#~ "Un errore ï¿½ occorso durante la cancellazione della richiesta. Per favore "
 #~ "contatta l'administratore."
 
 #~ msgid "Subscription Successful. Redirecting..."
@@ -3982,10 +3982,10 @@ msgstr "Upgrade fallito!"
 
 #~ msgid "Could not reset password. Contact Administrator."
 #~ msgstr ""
-#~ "La password non é stata cambiata. Per favore contatta l'administratore."
+#~ "La password non ï¿½ stata cambiata. Per favore contatta l'administratore."
 
 #~ msgid "Can only reset the administrator password"
-#~ msgstr "É possibile solo di cambiare la password del administratore."
+#~ msgstr "ï¿½ possibile solo di cambiare la password del administratore."
 
 #~ msgid "Unknown type. Contact Administrator."
 #~ msgstr "Tipo ignoto. Per favore contatta l'administratore."
@@ -4000,18 +4000,18 @@ msgstr "Upgrade fallito!"
 #~ "This is a <b>NUMBER</b> based field -- <b>UNSUPPORTED</b>. Support for "
 #~ "this type will be added later."
 #~ msgstr ""
-#~ "Questa casella é del tipo <b>NUMERO</b> -- <b>UNSUPPORTED</b>. Support "
+#~ "Questa casella ï¿½ del tipo <b>NUMERO</b> -- <b>UNSUPPORTED</b>. Support "
 #~ "for this type will be added later."
 
 #~ msgid ""
 #~ "This is a <b>DATE</b> based field -- <b>UNSUPPORTED</b>. Support for this "
 #~ "type will be added later."
 #~ msgstr ""
-#~ "Questa casella é del tipo <b>DATA</b>. -- <b>UNSUPPORTED</b>. Support for "
+#~ "Questa casella ï¿½ del tipo <b>DATA</b>. -- <b>UNSUPPORTED</b>. Support for "
 #~ "this type will be added later."
 
 #~ msgid "Is"
-#~ msgstr "é (is)"
+#~ msgstr "ï¿½ (is)"
 
 #~ msgid ""
 #~ "NOTE: You can select multiple values by holding the SHIFT or CONTROL keys"
@@ -4042,7 +4042,7 @@ msgstr "Upgrade fallito!"
 #~ msgid ""
 #~ "Could not add filter. Perhaps it negates the effect of an existing one?"
 #~ msgstr ""
-#~ "Non é stato possibilie aggiungere il filtro. (Possibilmente é in "
+#~ "Non ï¿½ stato possibilie aggiungere il filtro. (Possibilmente ï¿½ in "
 #~ "contrario agli effetti di un filtro esistente)."
 
 #~ msgid "Subscribers Manage"
@@ -4052,7 +4052,7 @@ msgstr "Upgrade fallito!"
 #~ "A mailing is already taking place. Please allow it to finish before "
 #~ "creating another. Return to the %s Mailing Page %s"
 #~ msgstr ""
-#~ "Un mailing é attualmente in corso. Prima di creare un mailing nuovo il "
+#~ "Un mailing ï¿½ attualmente in corso. Prima di creare un mailing nuovo il "
 #~ "mailing attuale deve essere concluso. Ritorna alla %s pagina mailing %s"
 
 #~ msgid "poMMo Aardvark"
@@ -4062,12 +4062,12 @@ msgstr "Upgrade fallito!"
 #~ "poMMo appears to already by installed. If you would like to clear all "
 #~ "data and re-install poMMo, delete your database."
 #~ msgstr ""
-#~ "poMMo sembra di essere giá installato. Se scegli di cancellare tutti i "
+#~ "poMMo sembra di essere giï¿½ installato. Se scegli di cancellare tutti i "
 #~ "dati e reinstallare poMMo, cancella anche la banca dati."
 
 #~ msgid "Error installing. Could not read sql.schema.php"
 #~ msgstr ""
-#~ "Errore durante la installazione. Non é stato possibile accedere al file "
+#~ "Errore durante la installazione. Non ï¿½ stato possibile accedere al file "
 #~ "'sql.schema.php'"
 
 #~ msgid "Bumping poMMo version to: "
@@ -4075,7 +4075,7 @@ msgstr "Upgrade fallito!"
 
 #~ msgid "Failed to properly serialize update %s : %s"
 #~ msgstr ""
-#~ "É fallito il tentativo di serializzare l'update %s: %s (Failed to "
+#~ "ï¿½ fallito il tentativo di serializzare l'update %s: %s (Failed to "
 #~ "properly serialize update)"
 
 #~ msgid "success!"
