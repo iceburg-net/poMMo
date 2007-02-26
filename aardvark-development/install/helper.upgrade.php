@@ -127,8 +127,7 @@ function PommoRevUpgrade($rev) {
 			
 			if (!PommoAPI::configUpdate(array('revision' => 33,'version' => 'Aardvark SVN'), true))
 				return false;
-		case 33: // Aardvark PR14.4.1
-			// gets executed by Upgrade from ^^
+		case 33: // Aardvark PR15 changes
 			
 			if (!PommoInstall::incUpdate(9,
 			"ALTER TABLE {$dbo->table['group_rules']} ADD `type` TINYINT( 1 ) NOT NULL DEFAULT '0'"
