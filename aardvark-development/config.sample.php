@@ -1,15 +1,17 @@
-<?php die(); // DO NOT REMOVE THIS LINE! SERIOUS SECURITY RISK IF REMOVED! ?>
-==========================================================
+<?php die(); /* DO NOT REMOVE THIS LINE! SERIOUS SECURITY RISK IF REMOVED! */ ?>
+====================================================================
 Welcome to the poMMo Configuration File! From here you setup your database and
   other preferences.
   
 IMPORTANT: This file must be named "config.php" and saved in the "root"
   directory of your poMMo installation (where bootstrap.php is).
-==========================================================
+  
+See config.simple.sample.php for a condensed, readable config file.
+====================================================================
 
 ::: MySQL Database Information :::
 
-Set the MySQL database poMMo should use **
+Set the MySQL database poMMo should use
 
 	[db_database] = "pommo"
 	
@@ -17,11 +19,12 @@ Set the MySQL username **
 
 	[db_username] = "pommo"
 
-Set the MySQL password **
+Set the MySQL password
 
 	[db_password] = "pommo"
 	
-Set the MySQL hostname (generally "localhost") **
+Set the MySQL hostname (usually "localhost"). 
+	NOTE; Remote MySQL servers (e.g. mysql.yourwebhost.com) can be used.
 
 	[db_hostname] = "localhost"
 	
@@ -44,9 +47,10 @@ Set this to your desired locale. Current languages available are;
 	
 
 ::: Optional Configuration :::
-==========================================================
-Below Options are intended for debugging and overriding automatic configuration
-==========================================================
+====================================================================
+Below Options are intended for debugging or overriding 
+automatic configuration.
+====================================================================
 
 Set debug mode. Enable (on) or disable(off). Debug mode is useful for providing
   information to developers
@@ -59,7 +63,8 @@ Set the verbosity level of logging (1: Debugging 2: Informational 3: Important[d
 
 
 ::: Overrides :::
-  Uncomment (remove the leading "**") to define the following settings
+  Uncomment (remove the leading "**") to define the following settings.
+  NOTE: These settings are auto-detected by default, and best left unchanged.
   
 Set the Base URL.
   This is the path to poMMo relative to the WEB. Below are examples with value;
