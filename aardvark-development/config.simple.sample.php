@@ -1,4 +1,4 @@
-<?php die(); // DO NOT REMOVE THIS LINE! SERIOUS SECURITY RISK IF REMOVED! ?>
+<?php die(); /* DO NOT REMOVE THIS LINE! SERIOUS SECURITY RISK IF REMOVED! */ ?>
 ==========================================================
 Welcome to the poMMo Configuration File! From here you setup your database and
   other preferences.
@@ -16,7 +16,8 @@ IMPORTANT: This file must be named "config.php" and saved in the "root"
 [debug] = off
 [verbosity] = 3
 
-** [baseURL] = "/mysite/newsletter/";
+The following are auto-detected, and are best left commented out.
 ** [workDir] = "/path/to/pommoCache"
+** [baseURL] = "/mysite/newsletter/";
 ** [hostname] = www.mysite.com
 ** [hostport] = 8080
