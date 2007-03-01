@@ -37,7 +37,28 @@ add; http://spamcheck.sitesell.com/
 
 make all multi-byte safe -- see function overloading for common functions to replace
 	http://us3.php.net/manual/en/ref.mbstring.php
+	
+write a single javascript include file which groups javascripts based on the page's requirements ?
 
+add ajax history plugin to setup, fields
+
+suppress errors in ajax requests that return JSON
+
+able to set max runtime from config
+
+able to set htaccess values from config
+
+
+examine Pommo::init( noDebug = TRUE) calls
+
+CHECKS:
+	MySQL V.
+	PHP V.
+	ERROR REPORTING
+	ERROR DISPLAY
+	SAFE MODE
+	TIMEOUT VALUE
+	
 
 
 PR15
