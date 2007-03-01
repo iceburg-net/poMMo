@@ -37,9 +37,7 @@ $mailing = current(PommoMailing::get(array('active' => TRUE)));
 
 $json = array('success' => TRUE);
 switch ($_GET['cmd']) {
-	case 'cancel' : // cancel/end mailing
-		PommoMailCtl::finish($mailing['id'], TRUE);
-		break;
+	case 'cancel' : // cancel a mailing
 	case 'restart' : // restart mailing
 	case 'stop' :  // pause mailing
 		$query = "
@@ -50,8 +48,8 @@ switch ($_GET['cmd']) {
 		if (!$dbo->query($query))
 			$json['success'] = FALSE;
 		
-		if($_GET['cmd'] == 'restart') 
-			PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$mailing['code']);
+		if($_GET['cmd'] == 'restart' || $_GET['cmd'] == 'cancel') 
+			PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?id='.$mailing['id'].'&code='.$mailing['code']);
 		
 		break;
 }
