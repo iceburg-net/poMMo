@@ -176,10 +176,6 @@ class Pommo {
 		if ($p['noDebug']) {
 			$this->_dbo->debug(FALSE);
 			$this->_debug = 'off';
-			
-			// don't display PHP error messages [useful JSON ajax request]
-			if ($this->_verbosity > 1)
-				ini_set('display_errors', '0');
 		}
 
 		// Bypass Reading of Config, SESSION creation, and authentication checks and return

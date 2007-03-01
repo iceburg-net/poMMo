@@ -18,6 +18,12 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+// while poMMo is in development state, we'll attempt to display PHP notices, warnings, errors
+ini_set('display_errors', '1');
+
+error_reporting(E_ALL); /* show notices */
+// error_reporting(E_ALL ^ E_NOTICE); /* suppress notices */
+
 // Start Output buffering
 ob_start();
 
