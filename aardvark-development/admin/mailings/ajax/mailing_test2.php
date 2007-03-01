@@ -78,7 +78,7 @@ $queue = array($key);
 if(!PommoMailCtl::queueMake($queue))
 	jsonKill('Unable to populate queue',$key);
 			
-if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?testMailing=TRUE&securityCode='.$code))
+if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?test=TRUE&code='.$code))
 	jsonKill('Unable to spawn background mailer',$key);
 
 $json = "{success: true, msg: \"".Pommo::_T('Mail Sent.')."\"}";

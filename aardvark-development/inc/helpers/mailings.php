@@ -372,7 +372,7 @@ class PommoMailing {
 		if (!$timestamp) {
 		$query = "
 			SELECT notice FROM ".$dbo->table['mailing_notices']."
-			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
+			WHERE mailing_id = %i ORDER BY touched DESC, id DESC [LIMIT %I]";
 		$query = $dbo->prepare($query,array($id,$limit));
 		return $dbo->getAll($query,'assoc','notice');
 		}
@@ -380,7 +380,7 @@ class PommoMailing {
 		$o = array();
 		$query = "
 			SELECT touched,notice FROM ".$dbo->table['mailing_notices']."
-			WHERE mailing_id = %i ORDER BY touched DESC [LIMIT %I]";
+			WHERE mailing_id = %i ORDER BY touched DESC, id DESC [LIMIT %I]";
 		$query = $dbo->prepare($query,array($id,$limit));
 		while ($row = $dbo->getRows($query)) {
 			if (!isset($o[$row['touched']]))

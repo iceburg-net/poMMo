@@ -83,7 +83,7 @@ CREATE TABLE :::groups::: (
 
 CREATE TABLE :::mailing_current::: (
   `current_id` int(10) unsigned NOT NULL,
-  `command` enum('none','restart','stop') NOT NULL default 'none',
+  `command` enum('none','restart','stop','cancel') NOT NULL default 'none',
   `serial` int unsigned default NULL,
   `securityCode` char(32) default NULL,
   `notices` longtext default NULL,
@@ -98,6 +98,7 @@ CREATE TABLE :::mailing_notices::: (
   `mailing_id` int(10) unsigned NOT NULL,
   `notice` varchar(255) NOT NULL,
   `touched` timestamp NOT NULL,
+  `id` smallint(5) unsigned NOT NULL,
   KEY `mailing_id` (`mailing_id`)
 );
 
