@@ -217,7 +217,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			SELECT COUNT(subscriber_id) 
 			FROM ".$dbo->table['queue']."
 			WHERE status=0";
-		if($dbo->query($query,0) < 1) {
+		if($dbo->query($query,0) < 1) { // no unsent mails left in queue
 			$this->_mailer->SmtpClose();
 			PommoMailCtl::finish($this->_id);
 			$this->shutdown(Pommo::_T('Mailing Complete.'));
@@ -294,8 +294,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			
 			// repopulate throttler's queue if empty
 			if (!$this->_throttler->mailsInQueue()) {
-				$this->pullQueue();
-				$this->pushThrottler();
+				$this->update(); // mark sent
+				$this->pullQueue(); // get unsent
+				$this->pushThrottler(); // push unsent
 			}
 			
 			// attempt to pull email from throttler's queue
