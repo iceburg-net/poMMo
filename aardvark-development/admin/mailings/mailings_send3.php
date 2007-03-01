@@ -68,7 +68,7 @@ if (!empty ($_GET['sendaway'])) {
 		if(!PommoMailCtl::queueMake($group->_memberIDs))
 			Pommo::kill('Unable to populate queue');
 
-		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?securityCode='.$code))
+		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?code='.$code))
 			Pommo::kill('Unable to spawn background mailer');
 
 		// clear mailing composistion data from session

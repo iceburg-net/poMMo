@@ -64,8 +64,10 @@ class PommoHelperPersonalize {
 		$matches = array();
 		$pattern = '/\[\[([^\]|]+)(?:\|([^\]]+))?]]/';
 		
-		if (preg_match_all($pattern, $body, $matches) < 1)
-			return array();
+		if (preg_match_all($pattern, $body, $matches) < 1) {
+			$a = array();
+			return $a;
+		}
 		
 		// add field_id to name
 		

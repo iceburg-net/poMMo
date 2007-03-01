@@ -141,6 +141,14 @@ function PommoRevUpgrade($rev) {
 			"ALTER TABLE {$dbo->table['fields']} CHANGE `field_type` `field_type` ENUM( 'checkbox', 'multiple', 'text', 'date', 'number', 'comment' ) DEFAULT NULL"
 			,"Adding 'comments' field type")) return false;
 			
+			if (!PommoInstall::incUpdate(12,
+			"ALTER TABLE {$dbo->table['mailing_notices']} ADD `id` SMALLINT UNSIGNED NULL"
+			,"Adding id to mailing notices")) return false;
+			
+			if (!PommoInstall::incUpdate(13,
+			"ALTER TABLE {$dbo->table['mailing_current']} CHANGE `command` `command` ENUM( 'none', 'restart', 'stop', 'cancel' ) NOT NULL DEFAULT 'none'"
+			,"Adding cancel type to mailing commands")) return false;
+			
 		default: 
 			return false;
 	} 

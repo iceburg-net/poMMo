@@ -162,7 +162,7 @@ class PommoThrottler {
 	// ------------------------------
 
 	// bThrottler() - simple initialization of class variables.
-	function PommoThrottler($p = array(), & $queue, & $history, &$sent, &$sentBytes) { 
+	function PommoThrottler($p = array(), & $history, &$sent, &$sentBytes) { 
 		global $pommo;
 		
 		$this->logger =& $pommo->_logger;
@@ -175,16 +175,16 @@ class PommoThrottler {
 		$this->_genesis = $p['genesis'];
 		
 		$this->_domain =& $history;
-		$this->_queue =& $queue;
 		
 		$this->_sentBytes =& $sentBytes;
 		$this->_sentMails =& $sent;
 		
 		$this->_startTime = time();
-		$this->_quarantine = array ();
 		$this->_messages = array ();
 		
 		$this->_mode = $this->smartInit();
+		
+		$this->clearQueue();
 		
 		// alter adjustment to better handle very slow MPS settings
 		if ($this->_targetMPS < 0.35)
@@ -202,6 +202,16 @@ class PommoThrottler {
 	// PARENT METHODS (executed by mailing script)
 	// -----------------------------------------------------------
 
+	function clearQueue() {
+		$this->_quarantine = array();
+		$this->_queue = array();
+		return;
+	}
+	
+	function pushQueue(&$q) {
+		$this->_queue = & $q;
+		return;
+	}
 
 	// updateBytes() - Updates the bytes sent. Called by parent when byte throttling is enabled.
 	function updateBytes($bytes = 0, $domain = FALSE) {
@@ -218,7 +228,7 @@ class PommoThrottler {
 
 	// mailsInQueue() - Returns TRUE if there are mails left to process
 	function mailsInQueue() {
-		if (empty ($this->_queue) && empty ($this->_quarantine))
+		if (empty ($this->_queue))
 			return FALSE;
 		return TRUE;
 	}
