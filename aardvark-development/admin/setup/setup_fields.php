@@ -44,10 +44,12 @@ if (!empty ($_POST['field_name'])) {
 		'required' => 'off',
 		'active' => 'off'
 	));
-	if (!PommoField::add($field))
-		$logger->addMsg(Pommo::_T('Error with addition.'));
 	
-		
+	$id = PommoField::add($field);
+	if ($id)
+		$smarty->assign('added',$id);
+	else
+		$logger->addMsg(Pommo::_T('Error with addition.'));
 }
 
 // check for a deletion request

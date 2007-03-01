@@ -83,7 +83,7 @@ class PommoPending {
 	// get a pending entry from a code
 	// accepts a pending code (str)
 	// returns pending object (array) or false if not found.
-	function & get($code = null){
+	function get($code = null){
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -95,16 +95,16 @@ class PommoPending {
 			WHERE pending_code='%s' LIMIT 1";
 		$query = $dbo->prepare($query,array($code));
 		while ($row = $dbo->getRows($query)) 
-			$o[$row['pending_id']] = PommoPending::MakeDB($row);
+			$o = PommoPending::MakeDB($row);
 		
-		return (empty($o)) ? false : current($o);
+		return (empty($o)) ? false : $o;
 	}
 	
 	// get a pending entry from a email address
 	//  only includes active && pending subscribers
 	// accepts a pending code (str)
 	// returns pending object (array) or false if not found.
-	function & getByEmail($email = null){
+	function getByEmail($email = null){
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -122,17 +122,17 @@ class PommoPending {
 				AND s.status IN(1,2) 
 			LIMIT 1";
 		$query = $dbo->prepare($query,array($email));
-		while ($row = $dbo->getRows($query)) 
-			$o[$row['pending_id']] = PommoPending::MakeDB($row);
-		
-		return (empty($o)) ? false : current($o);
+		while ($row = $dbo->getRows($query))
+			$o = PommoPending::MakeDB($row);
+			
+		return (empty($o)) ? false : $o;
 	}
 	
 	// get a pending entry from a subscriber ID
 	//  only includes active && pending subscribers
 	// accepts a subscriber ID (int)
 	// returns pending object (array) or false if not found.
-	function & getBySubID($id = null){
+	function getBySubID($id = null){
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -144,11 +144,9 @@ class PommoPending {
 			WHERE subscriber_id=%i LIMIT 1";
 		$query = $dbo->prepare($query,array($id));
 		while ($row = $dbo->getRows($query)) 
-			$o[$row['pending_id']] = PommoPending::MakeDB($row);
+			$o = PommoPending::MakeDB($row);
 		
-		$o = (empty($o)) ? false : current($o);
-		
-		return $o;
+		return (empty($o)) ? false : $o;
 	}
 	
 	// checks to see if a subscriber ID has a pending request

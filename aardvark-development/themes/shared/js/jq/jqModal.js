@@ -7,6 +7,8 @@
  * 
  * $Version: 2007.02.25 +r9
  */
+ 
+ // r10 changes; focus element re-calculated every modal click -- probably not good.
 (function($) {
 $.fn.jqm=function(o){
 var _o = {
@@ -43,10 +45,10 @@ open:function(s,t){var h=hash[s],c=h.c,cc='.'+c.closeClass,z=(/^\d+$/.test(h.w.c
 
  if(c.ajax) {var r=c.target,u=c.ajax;
   r=(r)?(typeof r == 'string')?$(r,h.w):$(r):h.w; u=(u.substr(0,1) == '@')?$(t).attr(u.substring(1)):u;
-  r.load(u,function(){if(c.onLoad)c.onLoad.call(this,h);if(cc)h.w.jqmAddClose($(cc,h.w));f(h);});}
+  r.load(u,function(){if(c.onLoad)c.onLoad.call(this,h);if(cc)h.w.jqmAddClose($(cc,h.w));e(h);});}
  else if(cc)h.w.jqmAddClose($(cc,h.w));
 
- (c.onShow)?c.onShow(h):h.w.show();f(h);return false;
+ (c.onShow)?c.onShow(h):h.w.show();e(h);return false;
 },
 close:function(s){var h=hash[s];h.a=false;
  if(ma.length != 0){ma.pop();if(ma.length == 0)mf('unbind');}
@@ -54,10 +56,10 @@ close:function(s){var h=hash[s];h.a=false;
 }};
 var s=0,hash={},ma=[],ie6=$.browser.msie && typeof XMLHttpRequest == 'function',
 i=$('<iframe class="jqm"></iframe>').css({opacity:0}),
-f=function(h){if(ie6)if(h.o)h.o.html('<p style="width:100%;height:100%"/>').prepend(i);else if($('iframe.jqm',h.w).length == 0)h.w.prepend(i);
- h.f=$(':input:visible',h.w)[0]||h.w[0];h.f.focus();},
+e=function(h){if(ie6)if(h.o)h.o.html('<p style="width:100%;height:100%"/>').prepend(i);else if($('iframe.jqm',h.w).length == 0)h.w.prepend(i); f(h);},
+f=function(h){h.f=$(':input:visible:first',h.w);if(h.f.length > 0)h.f[0].focus();},
 mf=function(t){$()[t]("keypress",m)[t]("keydown",m)[t]("mousedown",m);},
-m=function(e) {var h=hash[ma[ma.length-1]], r=(!$(e.target).parents('.jqmID'+h.s).length == 0);if(!r)h.f.focus();return r;},
+m=function(e) {var h=hash[ma[ma.length-1]], r=(!$(e.target).parents('.jqmID'+h.s).length == 0);if(!r)f(h);return r;},
 hs=function(w,e,y){var s=[];w.each(function(){s.push(this._jqm)});
  $(e).each(function(){if(this[y])$.extend(this[y],s);else{this[y]=s;$(this).click(function(){for(var i in {jqmShow:1,jqmHide:1})for(var s in this[i])if(hash[this[i][s]])hash[this[i][s]].w[i](this);return false;});}});};
 })(jQuery);

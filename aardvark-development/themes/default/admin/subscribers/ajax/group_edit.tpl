@@ -1,41 +1,39 @@
 <input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}" />
 <input type="hidden" id="fwMatchID" name="match_id" value="{$match_id}" />
 
-<div>{t}Add new rule:{/t}</div>
+
+<div style="width: 100%; text-align: center; margin: 40px 0; font-size: 130%;">
 
 <select name="logic" id="fwLogic">
 <option value="is_in">{t}Include{/t}</option>
 <option value="not_in">{t}Exclude{/t}</option>
 </select>
 
-{t 1=$match_name}subscribers belonging to group %1{/t}
+{t escape=no 1="<strong>$match_name</strong>"}members in group %1.{/t}
 
-<div class="buttons">
-
-<input type="button" value="{t}Add{/t}" id="fwSubmit" />
+<div>
+	<input type="submit" value="{t}Add{/t}" id="fwSubmit" />
+	<input type="submit" value="{t}Cancel{/t}" class="jqmClose" />
+</div>
 
 </div>
 
+
 {literal}
 <script type="text/javascript">
-$('#fwSubmit').oneclick(function() {
+$('#fwSubmit').one("click", function() {
 	var _logic = $('#fwLogic').val();
-	var _group = $('#fwGroupID').val();
 	var _match = $('#fwMatchID').val();
 
 	$.post("ajax/rule_update.php",
-		{ logic: _logic, group: _group, match: _match },
+		{ logic: _logic, group: groupID, match: _match },
 		function(out) {
-			var name = $('#filterWindow a.fwClose').attr('alt');
-			$('#newFilter select').each(function() { $(this).show().val(''); });
-			$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({
-				to: name,
-				className:'fwTransfer',
-				duration: 300,
-				complete: function() { location.reload(true); }
-			})});
+			setTimeout("location.reload(true);",1000);
+			$('#dialog').jqmHide();
 		}
 	);
+	
+	$('#dialog div.jqmdMSG').html(origHTML);
 });
 </script>
 {/literal}

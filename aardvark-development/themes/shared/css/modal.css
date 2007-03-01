@@ -80,7 +80,7 @@ div.jqmdTR { background: url(../images/dialog/sprite.gif) no-repeat right 0px; p
 div.jqmdBC {
 	background: #FFF url(../images/dialog/bc.gif) repeat-x center bottom;
 	padding: 7px 7px 7px;
-	height: 180px;
+	height: 215px;
 	overflow: auto;
 }
 div.jqmdBL { background: url(../images/dialog/bl.gif) no-repeat left bottom; padding-left: 7px; }
@@ -102,7 +102,7 @@ input.jqmdX {
 }
 input.jqmdXFocus {background-position: bottom left; outline: none;}
 
-div.jqmdBC button, div.jqmdBC input[type="submit"] {
+div.jqmdMSG button, div.jqmdMSG input[type="submit"] {
 	margin: 8px 10px 4px 10px;
 	color: #777;
 	background-color: #fff;

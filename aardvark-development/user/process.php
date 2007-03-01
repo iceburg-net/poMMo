@@ -106,6 +106,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	else {
 		
 		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
+			$subscriber['registered'] = date("F j, Y, g:i a",$subscriber['registered']);
 			if ($comments || isset($notices['pending']) && $notices['pending'] == 'on')
 				PommoHelperMessages::notify($notices, $subscriber, 'pending', $comments);
 			
@@ -128,8 +129,9 @@ else { // no email confirmation required
 		$smarty->assign('back', TRUE);
 	}
 	else {
+		$subscriber['registered'] = date("F j, Y, g:i a",$subscriber['registered']);
 		if ($comments || isset($notices['subscribe']) && $notices['subscribe'] == 'on')
-				PommoHelperMessages::notify($notices, $subscriber, 'subscribe',$comments);
+			PommoHelperMessages::notify($notices, $subscriber, 'subscribe',$comments);
 				
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);

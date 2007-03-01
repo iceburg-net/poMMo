@@ -100,6 +100,10 @@
 {t escape=no 1='<span class="green">' 2='</span>'}%1Green%2 fields are active.{/t}
 </p>
 
+{if $added}
+<a href="ajax/field_edit.php?field_id={$added}" id="added" class="hidden"></a>
+{/if}
+
 
 {literal}
 <script type="text/javascript">
@@ -154,6 +158,12 @@ $().ready(function(){
 		onLoad: function(){assignForm(this);}
 	}).jqDrag('div.jqmdTC');
 	
+	if($('#added')[0]) {
+		var a = $('#added');
+		$('#editWindow').jqmAddTrigger(a);
+		a.click();
+	}
+	
 	$('#confirm').jqm({trigger:false,modal:true,zIndex:5000});
 });
 
@@ -188,6 +198,8 @@ function assignForm(scope) {
 }
 </script>
 {/literal}
+
+
 
 {capture name=dialogs}
 {include file="inc/dialog.tpl" dialogID="editWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
