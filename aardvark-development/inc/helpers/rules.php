@@ -53,7 +53,8 @@ class PommoRules {
 			'multiple' => array('is','not'),
 			'text' => array('is','not'),
 			'date' => array('is','not','greater','less'),
-			'number' => array('is','not','greater','less')
+			'number' => array('is','not','greater','less'),
+			'comment' => array()
 		);
 		
 		foreach ($fields as $field)

@@ -48,6 +48,12 @@ able to set max runtime from config
 
 able to set htaccess values from config
 
+REBUILD INTERFACE.JS -- no need for transferTo?
+
+Fix Validation on rule editing
+
+Fix multiple choice multiple options in rule editing
+
 
 examine Pommo::init( noDebug = TRUE) calls
 

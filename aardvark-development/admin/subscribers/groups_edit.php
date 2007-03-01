@@ -100,6 +100,8 @@ foreach($rules as $key => $a) {
 			$rules[$key][$k] = $groups[$gid]['name'];
 }
 
+$smarty->assign('dialogTitle',Pommo::_T("Add Rule"));
+
 $smarty->assign('group',$group);
 $smarty->assign('fields',$fields);
 $smarty->assign('logicNames',PommoRules::getEnglish());

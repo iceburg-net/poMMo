@@ -1,10 +1,5 @@
-<input type="hidden" id="fwGroupID" name="group_id" value="{$group_id}" />
-<input type="hidden" id="fwRuleType" name="rule_type" value="{$type}" />
-<input type="hidden" id="fwMatchID" name="field_id" value="{$field.id}" />
 
-<p>
-{t}Add new rule:{/t} 
-
+<div class="alert">
 {if $field.type == 'date'}
 	{t}value must be a date (mm/dd/yyyy){/t}
 
@@ -13,14 +8,12 @@
 
 {elseif $field.type == 'text'}
 	{t}value must not be blank{/t}
-
 {/if}
-</p>
+</div>
 
-<table summary="rule setup">
-<tbody>
-<tr>
-<td valign="top">
+<div style="width: 100%; text-align: center; margin: 15px 0;">
+
+
 {t}Match subscribers where{/t} <strong>{$field.name}</strong>
 
 <select name="logic" id="fwLogic">
@@ -29,113 +22,115 @@
 {/foreach}
 </select>
 
-</td>
-
 {if $field.type == 'multiple'}
+	<hr />
+	{t}Value(s){/t}
+	
+	<div id="values">
 
-<td valign="top" id="fwValue">
-<select name="v" class="pvEmpty">
-{foreach from=$field.array item=option}
-<option{if $option == $firstVal} selected="selected"{/if}>{$option}</option>
-{/foreach}
-</select>
-
-<input type="button" value="+" id="fwAddValue" />
-
-{* If we're editing, add another input populated w/ value *}
-{foreach name=outter from=$values item=val}
-<div>
-<select name="v" class="pvEmpty">
-{foreach name=inner from=$field.array item=option}
-<option{if $option == $val} selected="selected"{/if}>{$option}</option>
-{/foreach}
-</select>
-
-<input type="button" value="-" class="fwDelVal" />
-
-</div>
-{/foreach}
-
-</td>
-
+	<div>
+		<select name="v" class="pV pvEmpty">
+		{foreach from=$field.array item=option}
+		<option{if $option == $firstVal} selected="selected"{/if}>{$option}</option>
+		{/foreach}
+		</select>
+		
+		<input type="submit" value="+" id="fwAddValue" />
+	</div>
+	
+	{* If we're editing, add another input populated w/ value *}
+	{foreach name=outter from=$values item=val}
+		<div>
+			<select name="v" class="pV pvEmpty">
+			{foreach name=inner from=$field.array item=option}
+			<option{if $option == $val} selected="selected"{/if}>{$option}</option>
+			{/foreach}
+			</select>
+			
+			<input type="submit" value="-" class="fwDelVal" />
+		</div>
+	{/foreach}
+	
+	</div>
+	
+	<hr />
 {elseif $field.type != 'checkbox'}
-
-<td valign="top" id="fwValue">
-<input type="text" name="v" value="{$firstVal}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
-<input type="button" value="+" id="fwAddValue" />
-
-{* If we're editing, add another input populated w/ value *}
-{foreach name=outter from=$values item=val}
-<div>
-<input type="text" name="v" value="{$val}" class="pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
-
-<input type="button" value="-" class="fwDelVal" />
-
-</div>
-{/foreach}
-
-</td>
-
+	<hr />
+	{t}Value(s){/t}
+	
+	<div id="values">
+	
+	<div>
+	<input type="text" name="v" value="{$firstVal}" class="pV pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
+	<input type="submit" value="+" id="fwAddValue" />
+	</div>
+	
+	
+	{* If we're editing, add another input populated w/ value *}
+	{foreach name=outter from=$values item=val}
+		<div>
+		<input type="text" value="{$val}" name="v" class="pV pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
+		<input type="submit" value="-" class="fwDelVal" />
+		</div>
+	{/foreach}
+	
+	</div>
+	
+	<hr />
 {/if}
 
-</tr>
-</tbody>
-</table>
-
-<div class="buttons">
-
-<input type="button" value="{if $firstVal}{t}Update{/t}{else}{t}Add{/t}{/if}" id="fwSubmit" />
+<div>
+	<input type="submit" value="{if $firstVal}{t}Update{/t}{else}{t}Add{/t}{/if}" id="fwSubmit" />
+	<input type="submit" value="{t}Cancel{/t}" class="jqmClose" />
+</div>
 
 </div>
+
 
 {literal}
 <script type="text/javascript">
-// need these for ie -- IE can't find functions declared here due to scoping??
+
+// stretch window
+$('#dialog div.jqmdBC').addClass('jqmdTall');
+
 $('#fwAddValue').click(function() {
-	$(this).parent().append('<div></div>');
-	e = $('*:first-child', $(this).parent()).get(0);
-	$('div:last-child', $(this).parent()).
-		append($(e).clone().val('')).
-		append(' <input type="button" value="-" />');
-
-	$('div:last-child input[@type=button]', $(this).parent()).oneclick(function() {
-		$(this).parent().remove();
-		PommoValidate.reset();
-		PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
-	});
-
+	var add = $('<div><input type="submit" value="-" class="fwDelVal" /></div>');
+	$(this).siblings(':input').clone().prependTo(add[0]);
+	$('#values').append(add[0])
+		.find(':input.fwDelVal:last')
+		.one('click', function() {
+			$(this).parent().remove();
+			PommoValidate.reset();
+			PommoValidate.init('#values .pV', '#fwSubmit', false);
+			return false;
+		});
+		
 	PommoValidate.reset();
-	PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
+	PommoValidate.init('#values .pV', '#fwSubmit', false);
+	return false;
 });
 
-$('#fwValue input.fwDelVal').each(function(){
-	$(this).oneclick(function() {
-		$(this).parent().remove();
-		PommoValidate.reset();
-		PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
-	});
+$('#values input.fwDelVal').one('click', function() {
+	$(this).parent().remove();
+	PommoValidate.reset();
+	PommoValidate.init('#values .pV', '#fwSubmit', false);
+	return false;
 });
 
-$('#fwSubmit').oneclick(function() {
+
+$('#fwSubmit').one("click",function() {
 	var _logic = $('#fwLogic').val();
-	var _group = $('#fwGroupID').val();
-	var _match = $('#fwMatchID').val();
-	var _type = $('#fwRuleType').val();
-	var _value = $('#fwValue input[@type=text], #fwValue select').serialize();
+	var _group = groupID;
+	var _match = fieldID;
+	var _type = ruleType;
+	var _value = $('#values .pV').serialize();
 
 	$.post("ajax/rule_update.php",
 		{ logic: _logic, group: _group, match: _match, value: _value, type: _type },
 		function(out) {
-			var name = $('#filterWindow a.fwClose').attr('alt');
-			$('#newFilter select').each(function() { $(this).show().val(''); });
-			$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({
-				to: name,
-				className:'fwTransfer',
-				duration: 300,
-				complete: function() { location.reload(true); }
-			})});
-		}
-	);
+			setTimeout("location.reload(true);",1000);
+			$('#dialog').jqmHide();
+		});
 });
 </script>
 {/literal}

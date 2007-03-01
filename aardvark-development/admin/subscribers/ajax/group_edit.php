@@ -35,31 +35,43 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
+
+$gid = $_POST['groupID'];
+$fid = $_POST['fieldID'];
+$type = $_POST['ruleType'];
+
+$andOr = (isset($_POST['andOr'])) ? $_POST['andOr'] : 'and';
+
+$logic = (isset($_POST['logic']) && $_POST['logic'] != "0") ? $_POST['logic'] : false;
+
+if(!is_numeric($gid) || !is_numeric($fid) || ($type != 'group' && $type != 'field') || ($andOr != 'or' && $andOr != 'and'))
+	die('invalid input');
+
+
 // current group
-$group = current(PommoGroup::get(array('id' => $_POST['group'])));
+$group = current(PommoGroup::get(array('id' => $gid)));
 
 
-if ($_POST['add'] == 'group') {
-	$match = PommoGroup::getNames($_POST['ID']);
+if ($type == 'group') {
+	$match = PommoGroup::getNames($fid);
 	$key = key($match);
 	
-	$smarty->assign('group_id',$group['id']);
 	$smarty->assign('match_name',$match[$key]);
 	$smarty->assign('match_id',$key);
 	
 	$smarty->display('admin/subscribers/ajax/group_edit.tpl');
 	Pommo::kill();
 }
-elseif ($_POST['add'] == 'field') {
+elseif ($type == 'field') {
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 	
 	// check to see if we're editing
 	
 	$values = array();
-	if (isset($_POST['logic'])) { // logic is passed only when edit button is clicked..
+	if ($logic) { // logic is passed *only* when edit button is clicked..
 		foreach($group['rules'] as $rule) {
-			if($rule['logic'] == $_POST['logic'] && $rule['field_id'] == $_POST['ID'])
+			if($rule['logic'] == $logic && $rule['field_id'] == $fid)
 				$values[] = $rule['value'];
 		}
 	}
@@ -67,10 +79,10 @@ elseif ($_POST['add'] == 'field') {
 	$smarty->assign('values',$values);
 	$smarty->assign('firstVal',$firstVal);
 	
-	$field = current(PommoField::get(array('id' =>$_POST['ID'])));
+	$field = current(PommoField::get(array('id' => $fid)));
 	
-	if (isset($_POST['logic'])) {
-		$logic = array($_POST['logic'] => PommoRules::getEnglish($_POST['logic']));
+	if ($logic) {
+		$logic = array($logic => PommoRules::getEnglish($logic));
 	}
 	else {
 		$logic = array();
@@ -80,11 +92,10 @@ elseif ($_POST['add'] == 'field') {
 				$logic[$l] = PommoRules::getEnglish($l);
 	}
 	
-	$smarty->assign('group_id',$group['id']);
 	$smarty->assign('field',$field);
 	$smarty->assign('logic',$logic);
-	$smarty->assign('type',$_POST['type']);
 	
+
 	$smarty->display('admin/subscribers/ajax/group_field.tpl');
 	Pommo::kill();
 	

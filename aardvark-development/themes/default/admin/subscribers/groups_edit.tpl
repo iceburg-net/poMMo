@@ -1,8 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jq11.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
 {/capture}
@@ -39,11 +38,6 @@
 
 <div id="newFilter">
 
-{* filterWindow popup *}
-<div id="filterWindow">
-<a href="#" class="fwClose" alt="field_id">{t}Close window{/t}</a>
-<div class="fwContent"></div>
-</div>
 
 <div>
 <label for="field">{t escape=no 1="<strong><a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a></strong>"}Select a %1 field %2 to filter{/t}</label>
@@ -69,6 +63,7 @@
 </fieldset>
 
 {* **** DISPLAY GROUP RULES **** *}
+{cycle reset=true print=false advance=false values="r1,r2,r3"}
 
 <fieldset>
 <legend>{t}Group Rules{/t}</legend>
@@ -136,7 +131,7 @@
 <td colspan="6" style="padding: 5px; position: relative;">
 	<center>
 	{t}"OR" RULES{/t} <br />
-	{t escape=no 1='<strong>' 2='</strong>'}OR, MATCH %1ANY%2 OF THE FOLLOWING{/t}
+	{t escape=no 1='<strong>' 2='</strong>'}<strong>OR</strong>, MATCH %1ANY%2 OF THE FOLLOWING{/t}
 	</center>
 </td>
 </tr>
@@ -182,7 +177,7 @@
 <tr class="alert">{* **** GROUP IN/EX CLUSIONS **** *}
 <td colspan="6" style="padding: 5px;">
 	<center>
-	{t 1=$t_include}AND, ADD OR SUBTRACT MEMBERS OF OTHER GROUPS{/t} <br />
+	{t escape=no 1=$t_include}<strong>AND</strong>, ADD OR SUBTRACT MEMBERS IN OTHER GROUPS{/t} <br />
 	</center>
 </td>
 </tr>
@@ -198,13 +193,12 @@
 </tr>
 {/foreach}
 {foreachelse}
+<tr class="r1"><td colspan="5">{t}No rules have been added{/t}</td></tr>
 {/foreach}
 
 {foreach from=$rules.exclude key=field_id item=rule}
 {foreach from=$rule key=logic_id item=values}
 <tr class="{cycle values="r1,r2,r3"}">
-
-{debug}
 
 <td colspan="2"><a href="{$getURL}&delete={$field_id|escape}&logic=not_in"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
 
@@ -221,49 +215,70 @@
 
 <p>{t escape=no 1="<em>`$ruleCount`</em>" 2="<strong>`$tally`</strong>"}%1 rules match a total of %2 active subscribers{/t}</p>
 
+{include file="inc/dialog.tpl" dialogTitle=$dialogTitle dialogID="dialog" dialogDrag=true dialogClass="jqmdWide"}
+
 {literal}
 <script type="text/javascript">
-function _redirect(url) {
-	window.location.href = "{/literal}{$getURL}{literal}"+url;
-}
 
-function fwAjaxCall(id, name, gid, l, t) {
-	$('#newFilter select').each(function() { $(this).hide(); });
+// globals
+var fieldID = false, 
+	groupID = false, 
+	ruleType = false,
+	andOr = 'and',
+	logic = 0,
+	origHTML = $('#dialog div.jqmdMSG').html();
 	
-	var _t = (typeof(t) == 'undefined') ? 'and' : t;
+function _redirect(url) {window.location.href = "{/literal}{$getURL}{literal}"+url;}
+
+function fwAjaxCall(fid,type,gid,_logic,_andOr) {
+	fieldID = fid;
+	groupID = gid;
+	ruleType = type;
+	andOr = _andOr;
+	logic = _logic;
 	
-	var p = (typeof(l) == 'undefined') ?
-		{ID: id, add: name, group: gid, type: _t} :
-		{ID: id, add: name, group: gid, logic: l, type: _t};
-
-	$('#filterWindow div.fwContent').load(
-		'ajax/group_edit.php',
-		p,
-		function() {
-			$('#filterWindow a.fwClose').attr("alt",name);
-			$('#'+name).TransferTo({to:'filterWindow',className:'fwTransfer', duration: 300, complete:function(to){$(to).fadeIn(200)}});
-			PommoValidate.reset();
-			PommoValidate.init('#fwValue input[@name=v]', '#fwSubmit', false);
-		}
-	);
-	return false; // don't follow href
+	$('#dialog').jqmShow();
 }
-
+		
 $().ready(function(){ 
-
-	$('#filterWindow a.fwClose').click(function() {
-		var name = $(this).attr('alt');
-		$('#newFilter select').each(function() { $(this).show().val(''); });
-		$('#filterWindow').fadeOut(200, function(){$(this).TransferTo({to: name,className:'fwTransfer', duration: 300})});
-		return false;
-	});
-
+	
+	$('#dialog').jqm({
+		modal: true, 
+		trigger: false, 
+		onShow: function(h) {
+			h.w.show();
+			$('div.jqmdMSG',h.w).load(
+				'ajax/group_edit.php',
+				{fieldID:fieldID, ruleType:ruleType, groupID:groupID, logic:logic, andOr: andOr},
+				function() { $('#dialog').jqmAddClose($('.jqmClose',this)); });
+		},
+		onHide: function(h) {
+			h.o.remove();
+			h.w.fadeOut(1200);
+			$('div.jqmdMSG',h.w).html(origHTML);
+			
+			// reset selects
+			$('select').each(function() { 
+				var o = this.options;
+				o[0].selected = true;
+			});
+			
+			// reset globals
+			andOr = 'and';
+			logic = 0;
+			
+		}}).jqDrag('div.jqmdTC');
+	
 	$('#newFilter select').change(function() {
-		var name = $(this).name(); // "field" or "group"
-		var id = $(this).val(); // group or field ID
-		var gid = $(this).attr("alt"); // this group's ID
-		if(id != '') 
-			fwAjaxCall(id, name, gid);
+		ruleType = this.name;
+		groupID =$(this).attr('alt');
+		fieldID = $(this).val();
+		
+		if(fieldID == '')
+			return false;
+			
+		$('#dialog').jqmShow();
+		return false;
 	});
 });
 </script>

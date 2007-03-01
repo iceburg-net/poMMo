@@ -63,7 +63,7 @@
 {if $list_exchanger == 'smtp'}
 <div>
 <br clear="both" />
-<a href="ajax/config_smtp.php" id="smtpTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="back icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
+<a href="ajax/config_smtp.php" id="smtpTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
 <span class="notes">{t}(configure SMTP relays){/t}</span>
 <br clear="both" />
 </div>

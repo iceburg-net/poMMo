@@ -56,20 +56,37 @@ if (!$pending) {
 $config = PommoAPI::configGet(array (
 	'site_success',
 	'messages',
+	'notices'
 ));
 $messages = unserialize($config['messages']);
+$notices = unserialize($config['notices']);
 
 if(PommoPending::perform($pending)) {
 	switch ($pending['type']) {
 		case "add" :
 			$logger->addMsg($messages['subscribe']['suc']);
+			if (isset($notices['subscribe']) && $notices['subscribe'] == 'on') {
+				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+				PommoHelperMessages::notify($notices, current(PommoSubscriber::get(array('id' => $pending['subscriber_id']))), 'subscribe');
+			}
 			if (!empty($config['site_success']))
 				Pommo::redirect($config['site_success']);
 			break;
 		case "change" :
+			if (isset($notices['update']) && $notices['update'] == 'on') {
+				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+				PommoHelperMessages::notify($notices, current(PommoSubscriber::get(array('id' => $pending['subscriber_id']))), 'update');
+			}
 			$logger->addMsg($messages['update']['suc']);
 			break;
 		case "del" :
+			if (isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') {
+				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+				PommoHelperMessages::notify($notices, current(PommoSubscriber::get(array('id' => $pending['subscriber_id']))), 'unsubscribe');
+			}
 			$logger->addMsg($messages['unsubscribe']['suc']);
 			break;
 		case "password" :

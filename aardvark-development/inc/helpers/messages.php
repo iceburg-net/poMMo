@@ -156,7 +156,7 @@ class PommoHelperMessages {
 		
 		$body .= "EMAIL: ".$sub['email']."\n";
 		$body .= "IP: ".$sub['ip']."\n";
-		$body .= "REGISTERED: ".date("F j, Y, g:i a",$sub['registered'])."\n\n";
+		$body .= "REGISTERED: ".$sub['registered']."\n\n";
 		if($comments) $body .= "COMMENTS: $comments \n\n";
 		$body .= "DATA:\n";
 		
