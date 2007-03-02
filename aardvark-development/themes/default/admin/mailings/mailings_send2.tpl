@@ -58,7 +58,7 @@
 
 </div>
 
-<div id="selectField">
+<div id="selectField" class="advanced">
 
 <div>
 <label for="field">{t}Insert field{/t}:</label>
@@ -115,7 +115,8 @@
 <div>
 <textarea id="body" name="body" rows="10" cols="120" style="width: 100%;">{$body}</textarea>
 </div>
-<div><span class="error">{validate id="body" message=$formError.body}</span></div>
+
+<div class="error">{validate id="body" message=$formError.body}</div>
 
 </fieldset>
 
@@ -150,7 +151,8 @@
 <label for="body"><span class="required">{t}Message:{/t}</span></label>
 <textarea rows="10" cols="120" id="body" name="body">{$body}</textarea>
 </div>
-<div><span class="error">{validate id="body" message=$formError.body}</span></div>
+
+<div class="error">{validate id="body" message=$formError.body}</div>
 
 </fieldset>
 
@@ -168,15 +170,6 @@
 {literal}
 <script type="text/javascript">
 $(function() {
-
-	/********
-
-	$("#altGen").click(function(){
-		$("#altbody").val(xinha_editors.body.getHTML());
-		return false;
-	});
-
-	***********/
 
 	function displayMailMerge() {
 		$("#mergeopen").toggleClass('selected');
@@ -196,8 +189,8 @@ $(function() {
 			return false;
 		}
 
-		// sting to append
-		var str = '[['+($("#field").val())+(($("#default").val() == '') ? '' : '|'+$("#default").val())+']]';
+		// string to append
+		var str = '[[' + ($("#field").val()) + ( ( $("#default").val() == '' ) ? '' : '|' + $("#default").val() ) + ']]';
 
 		if (!xinha_enabled) {
 			// append to plain text editor (regular textarea)
