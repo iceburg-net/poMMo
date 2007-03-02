@@ -102,7 +102,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
    		
    		/*** TRAP FATAL ERROR TECHNIQUE!!! ***/
    		// error handling
-		error_reporting(E_ALL|E_STRICT);
+		error_reporting(E_ALL);
 		ini_set('display_errors',0);
 		ini_set('log_errors',1);
 		ini_set('log_errors_max_len',0);
