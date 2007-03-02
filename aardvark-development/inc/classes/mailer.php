@@ -103,7 +103,7 @@ class PommoMailer extends PHPMailer {
 		
 		$langPath = $pommo->_baseDir . 'inc/lib/phpmailer/language/';
 		if (!$this->SetLanguage('en', $langPath))
-			Pommo::kill('bMailer(): Unable to set language.');
+			return false;
 	}
 
 	// toggles demonstration mode on or off if sepcified, or else uses the configured mode. Returns value.

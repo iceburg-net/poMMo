@@ -295,7 +295,7 @@ class PommoThrottler {
 
 					// calculate average bytes per mailing [calculated from first 10 mails to avoid large computation]
 					if ($this->_sentMails <= 10) {
-						$this->_averageBytes = $this->_sentBytes / $this->_sentMails;
+						$this->_averageBytes = ($this->_sentMails == 0) ? $this->_sentBytes : $this->_sentBytes / $this->_sentMails;
 					}
 
 					$this->logger->addMsg('BPS Throttle -> calculated to ' . $this->_actualBPS . 'BPS with average message size of ' . $this->_averageBytes . ' bytes and a total of ' . $this->_sentBytes . ' bytes sent.', 2);

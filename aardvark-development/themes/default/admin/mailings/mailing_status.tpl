@@ -87,22 +87,21 @@ pommo = {
 		this.attempt = 1;
 		this.cmd = false;
 		this.status = false;
+		this.polling = true;
 		
 		$('#commands a.cmd').click(function() { return pommo.click(this); });
 		
 		this.poll();
 	},
-	poll: function() {
+	poll: function(stopPoll) {
 		
 		
-		this.polling = true;
-		
+		if(typeof stopPoll == 'undefined') var stopPoll = false;
+		console.log(stopPoll);
 		
 		$.post("ajax/status_poll.php?id={/literal}{$mailing.id}{literal}&attempt="+pommo.attempt, {}, function(out) {
 			
-			
 			pommo.disabled = false; // enable commands after AJAX success
-			
 			
 			eval("var json = " + out);
 			if (typeof(json.status) == 'undefined')
@@ -152,11 +151,14 @@ pommo = {
 			if ($('#notices li').size() > 50) {
 				$('#notices li').each(function(i){ if (i > 40) $(this).remove(); });
 			}
+			
+			if(stopPoll) return;
 
 			pommo.attempt = (json.incAttempt) ? pommo.attempt + 1 : 1;
 
 			// repoll
-			if(json.status == 1 || pommo.cmd) {
+			if(pommo.cmd || json.status == 1) {
+				pommo.polling = true;
 				if(pommo.attempt == 1)
 					setTimeout('pommo.poll()',5500);
 				else if(pommo.attempt == 2)
@@ -164,8 +166,10 @@ pommo = {
 				else
 					setTimeout('pommo.poll()',8500);
 			}
-			else
-				pommo.polling = false;
+			else {
+				pommo.polling = false
+				setTimeout('pommo.poll(true)',4500);
+			}
 		});
 
 	},
@@ -180,9 +184,9 @@ pommo = {
 			eval("var json = " + out);
 				if (typeof(json.success) == 'undefined')
 					alert('ajax error!');
-
-			if (!pommo.polling)
-				pommo.poll(true);
+				
+				if(!pommo.polling)
+					pommo.poll();
 		});
 	},
 	click: function(e) {

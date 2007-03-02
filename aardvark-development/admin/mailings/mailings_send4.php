@@ -65,8 +65,13 @@ $config = PommoAPI::configGet(array(
  * MAILING INITIALIZATION
  *********************************/
 
+// calculate spawn # (number of times this MTA has spawned under this serial)
+$pommo->_session['spawn'] = (isset($pommo->_session['spawn'])) ? $pommo->_session['spawn']+1 : 1;
+$p['spawn'] = $pommo->_session['spawn'];
+
+// initialize MTA
 $mailing = new PommoMTA($p);
-$logger->addMsg(Pommo::_T('Spawned MTA for Mailing #'.$mailing->_id), 3, TRUE);
+$logger->addMsg(sprintf(Pommo::_T('Started Mailing MTA. Spawn #%s.'),$p['spawn']),3,TRUE);
 
 // poll mailing status
 $mailing->poll();

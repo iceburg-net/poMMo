@@ -9,6 +9,9 @@
  */
  
  // r10 changes; focus element re-calculated every modal click -- probably not good.
+ // 	ie6 sets body width to 100%
+ 
+ // TODO; 1.1.2 pushstack
 (function($) {
 $.fn.jqm=function(o){
 var _o = {
@@ -41,7 +44,7 @@ open:function(s,t){var h=hash[s],c=h.c,cc='.'+c.closeClass,z=(/^\d+$/.test(h.w.c
  else o=false;
 
  h.o=(o)?o.addClass(c.overlayClass).appendTo('body'):false;
- if(ie6){$('html,body').css('height','100%');if(o){o=o.css({position:'absolute'})[0];for(var y in {Top:1,Left:1})o.style.setExpression(y.toLowerCase(),"(_=(document.documentElement.scroll"+y+" || document.body.scroll"+y+"))+'px'");}}
+ if(ie6){$('html,body').css({height:'100%',width:'100%'});if(o){o=o.css({position:'absolute'})[0];for(var y in {Top:1,Left:1})o.style.setExpression(y.toLowerCase(),"(_=(document.documentElement.scroll"+y+" || document.body.scroll"+y+"))+'px'");}}
 
  if(c.ajax) {var r=c.target,u=c.ajax;
   r=(r)?(typeof r == 'string')?$(r,h.w):$(r):h.w; u=(u.substr(0,1) == '@')?$(t).attr(u.substring(1)):u;
