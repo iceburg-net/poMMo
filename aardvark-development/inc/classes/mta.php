@@ -356,10 +356,17 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			die();
 		}
 		
+		// respawn the mailing
 		$this->_mailer->SmtpClose();
-		if(!PommoMailCtl::respawn(array('code' => $this->_code, 'serial' => $this->_serial, 'id' => $this->_id)))
-			$this->shutdown('*** RESPAWN FAILED! ***');
+		
+		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?'.
+			'code='.$this->_code.
+			'&serial='.$this->_serial.
+			'&id='.$this->_id))
+				$this->shutdown('*** RESPAWN FAILED! ***');
+				
 		$this->shutdown(sprintf(Pommo::_T('Runtime (%s seconds) reached, respawning.'),$this->_maxRunTime), false);
+		
 	}
 	
 	// updates the queue and notices
