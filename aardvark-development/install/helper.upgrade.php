@@ -131,7 +131,7 @@ function PommoRevUpgrade($rev) {
 			
 			if (!PommoAPI::configUpdate(array('revision' => 33,'version' => 'Aardvark SVN'), true))
 				return false;
-		case 33: // Aardvark PR15 changes
+		case 33: // -> Aardvark PR15
 			
 			if (!PommoInstall::incUpdate(9,
 			"ALTER TABLE {$dbo->table['group_rules']} ADD `type` TINYINT( 1 ) NOT NULL DEFAULT '0'"
@@ -153,6 +153,8 @@ function PommoRevUpgrade($rev) {
 			"ALTER TABLE {$dbo->table['mailing_current']} CHANGE `command` `command` ENUM( 'none', 'restart', 'stop', 'cancel' ) NOT NULL DEFAULT 'none'"
 			,"Adding cancel type to mailing commands")) return false;
 			
+			// end of upgrade (break)
+			break;
 		default: 
 			return false;
 	} 
