@@ -70,6 +70,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 	// the throttle object
 	var $_throttler;	
 	
+	// filename of error log for trapping PHP errors
+	var $_errorLog;
+	
 	function PommoMTA($args = array()) {
 		
 		$defaults = array (
@@ -97,8 +100,18 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		// register shutdown method
    		register_shutdown_function(array(&$this, "shutdown"));
    		
-   		// register error handler
-   		set_error_handler(array(&$this, "error"));
+   		/*** TRAP FATAL ERROR TECHNIQUE!!! ***/
+   		// error handling
+		error_reporting(E_ALL|E_STRICT);
+		ini_set('display_errors',0);
+		ini_set('log_errors',1);
+		ini_set('log_errors_max_len',0);
+		ini_set('html_errors',0);
+				
+		// obtain an exclusive temp file name
+		$this->_errorLog = tempnam($pommo->_workDir.'/','ERROR_LOG');
+		ini_set('error_log',$this->_errorLog);
+		
    		
    		// set parameters from URL
 		$this->_code = (empty($_GET['code'])) ? 'invalid' : $_GET['code'];
@@ -422,8 +435,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 	}
 	
 	
-	function shutdown($msg = false, $destroy = true, $error = false) {
-		
+	function shutdown($msg = false, $destroy = true) {
 		// prevent recursion
 		static $static = false;
 		if($static) exit();
@@ -432,83 +444,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
-		// DATA DUMP *temp*
-		if(!$msg || $error) {
-			$output = "--- poMMo MTA DEBUG --- \n";
-			
-			$output .= "RUNTIME: ".(time() - $this->_start);
-	
-			$output .= "[[ ERROR ]] \n".$error;
-			
-			$backtrace = (function_exists('debug_backtrace')) ? debug_backtrace() : 'not supported';
-			
-			if(is_array($backtrace)) {
-			$bto = '';
-			foreach ($backtrace as $bt) {
-				$args = '';
-				foreach ($bt['args'] as $a) {
-					if (!empty ($args)) {
-						$args .= ', ';
-					}
-					switch (gettype($a)) {
-						case 'integer' :
-						case 'double' :
-							$args .= $a;
-							break;
-						case 'string' :
-							$a = htmlspecialchars(substr($a, 0, 64)) . ((strlen($a) > 64) ? '...' : '');
-							$args .= "\"$a\"";
-							break;
-						case 'array' :
-							$args .= 'Array(' . count($a) . ')';
-							break;
-						case 'object' :
-							$args .= 'Object(' . get_class($a) . ')';
-							break;
-						case 'resource' :
-							$args .= 'Resource(' . strstr($a, '#') . ')';
-							break;
-						case 'boolean' :
-							$args .= $a ? 'True' : 'False';
-							break;
-						case 'NULL' :
-							$args .= 'Null';
-							break;
-						default :
-							$args .= 'Unknown';
-					}
-				}
-				@ $bto .= "<b>file:</b> {$bt['line']} - {$bt['file']}<br />\n";
-				@ $bto .= "<b>call:</b> {$bt['class']}{$bt['type']}{$bt['function']}($args)<br />\n";
-			}
-			$backtrace = $bto;
-			}
-		
-			$output .= "[[BACKTRACE]]:".$backtrace."\n\n[[VARIABLES]]\n\n";
-			
-			$output .= "Connection Aborted: ".((connection_aborted())?'true' : 'false')."\n\n";
-			$output .= "MAX EXECUTION: ".ini_get('max_execution_time')."\n\n";
-			
-			$x = print_r($this,true);
-			$output .= "MTA:: \n".$x;
-			
-			$x = print_r($pommo,true);
-			$output .= "\n\nPOMMO:: \n".$x;
-			
-			if (!$handle = fopen($pommo->_workDir.'/DEBUG'.time(), 'w'))
-				$msg = '**** DEBUG FILE COULD NOT BE WRITTEN TO WORK DIRECTORY ****';
-			else {
-				if (fwrite($handle, $output) === FALSE)
-					$msg = '**** DEBUG FILE COULD NOT BE WRITTEN TO WORK DIRECTORY ****';
-				elseif(!$error)
-					$msg = '**** DEBUG FILE WRITTEN TO WORK DIRECTORY ****';
-					
-				fclose($handle);
-			}
-			
-		}
-		
-		$msg = ($msg) ? $msg : '*** ERROR *** PHP Invoked Shutdown Function. Runtime: '.(time() - $this->_start).' seconds.';
+		$msg = ($msg) ? $msg : '*** ERROR THROWN *** PHP Invoked Shutdown Function. Processor Abruptly Terminated. See ERROR_LOG_0,1 IN WORK DIRECTORY. Runtime: '.(time() - $this->_start).' seconds.';
 		
 		$logger->addMsg($msg,3,TRUE);
 		echo $msg;
@@ -518,39 +454,14 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		
 		if($destroy)
 			session_destroy();
+		
+		// copy the error log
+		if(is_file($pommo->_workDir . '/ERROR_LOG_0'))
+			copy($pommo->_workDir . '/ERROR_LOG_0',$pommo->_workDir . '/ERROR_LOG_1');
+		
+		rename($this->_errorLog, $pommo->_workDir . '/ERROR_LOG_0');
 			
 		exit($msg);
 	}
-	
-	// the error handler
-	function error($errno, $errstr, $errfile, $errline, $errcontext) {
-		$error = "*** PHP ERROR NO. $errno ***\n";
-		$error .= "\tERROR: $errstr \n";
-		$error .= "\tFILE: $errfile \n";
-		$error .= "\tLINE: $errline \n";
-		
-		// $this->shutdown('*** ERROR THROWN IN MTA! SEE DEBUG FILE IN WORKDIR ***',true);
-		
-		switch ($errno) {
-			case E_NOTICE:
-			case E_USER_NOTICE:
-				global $pommo;
-				$logger =& $pommo->_logger;
-				$logger->addMsg($error,1);	
-				break;
-			case E_USER_WARNING:
-			case E_WARNING:
-				global $pommo;
-				$logger =& $pommo->_logger;
-				$logger->addMsg($error,3);	
-				break;
-			case E_USER_ERROR:
-			case E_ERROR:
-				$this->shutdown('*** FATAL ERROR THROWN IN MTA! SEE DEBUG FILE IN WORKDIR ***',true,$error);
-				break;
-		}
-		return;
-	}
-	
  }
  ?>	
