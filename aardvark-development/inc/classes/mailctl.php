@@ -92,6 +92,8 @@ class PommoMailCtl {
 
 		if ($socket) {
 			fwrite($socket, $out);
+			sleep(1);
+			fclose($socket); // spawned script must have ignore_user_abort, eh? ;)
 		} else {
 			$logger->addMsg(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr);
 			return false;

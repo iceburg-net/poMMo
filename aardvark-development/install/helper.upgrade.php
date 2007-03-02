@@ -28,6 +28,10 @@ function PommoUpgrade() {
 	// fetch the current/old revision
 	$config = PommoAPI::configGet('revision');
 	
+	// if forced upgrade was requested, fake an earlier version.
+	if($config['revision'] == $pommo->_revision)
+		$config['revision'] = $config['revision'] - 1;
+		
 	while($config['revision'] < $pommo->_revision) {
 		if(!PommoRevUpgrade(intval($config['revision'])))
 			return false;
