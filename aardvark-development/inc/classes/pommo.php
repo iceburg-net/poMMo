@@ -107,7 +107,7 @@ class Pommo {
 				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
 				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
 			} else {
-				$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax)?)$@i', '', dirname($_SERVER['PHP_SELF']));
+				$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax|/mailing)?)$@i', '', dirname($_SERVER['PHP_SELF']));
 				$this->_baseUrl = ($baseUrl == '/') ? $baseUrl : $baseUrl . '/';
 			}
 		}

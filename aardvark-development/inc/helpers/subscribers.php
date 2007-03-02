@@ -175,6 +175,7 @@ class PommoSubscriber {
 				s.email,
 				s.time_touched,
 				s.time_registered,
+				s.flag,
 				INET_NTOA(s.ip) ip,
 				s.status,
 				p.pending_code,
