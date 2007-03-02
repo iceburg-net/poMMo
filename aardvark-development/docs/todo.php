@@ -54,6 +54,8 @@ Fix Validation on rule editing
 
 Fix multiple choice multiple options in rule editing
 
+clear W.D. on upgrade
+
 
 examine Pommo::init( noDebug = TRUE) calls
 

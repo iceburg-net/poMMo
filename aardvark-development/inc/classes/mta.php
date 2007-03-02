@@ -357,7 +357,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		}
 		
 		$this->_mailer->SmtpClose();
-		PommoMailCtl::respawn(array('code' => $this->_code, 'serial' => $this->_serial, 'id' => $this->_id));
+		if(!PommoMailCtl::respawn(array('code' => $this->_code, 'serial' => $this->_serial, 'id' => $this->_id)))
+			$this->shutdown('*** RESPAWN FAILED! ***');
 		$this->shutdown(sprintf(Pommo::_T('Runtime (%s seconds) reached, respawning.'),$this->_maxRunTime), false);
 	}
 	
