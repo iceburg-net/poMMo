@@ -24,10 +24,13 @@
 define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init(array('install' => TRUE));
+$logger =& $pommo->_logger;
 
+// ignore user abort
+ignore_user_abort(true);
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
-$code = (empty($_GET['securityCode'])) ? null : $_GET['securityCode'];
+$code = (empty($_GET['code'])) ? null : $_GET['code'];
 $spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);
 
 $fileContent = "<?php die(); ?>\n[code] = $code\n[spawn] = $spawn\n";
@@ -39,13 +42,29 @@ if (fwrite($handle, $fileContent) === FALSE)
 	die('Unable to write to test file');
 	
 fclose($handle);
-
+	
+	
 if($spawn > 0)
 	die();
 
 sleep(1);
 
-$page = $pommo->_baseUrl.'support/tests/mailing.test2.php';
-PommoMailCtl::respawn(array('code' => $code, 'spawn' => $spawn), $page);
+// respawn test
+if (!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?'.
+	'code='.$code.
+	'&spawn='.$spawn)) {
+
+	$fileContent .= '[error] = true';
+	$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w');
+	fwrite($handle, $fileContent);
+	fclose($handle);
 	
+	$errors = $logger->getAll();
+	
+	$fileContent = print_r($errors,true);
+	$handle = fopen($pommo->_workDir . '/MAILING_TEST', 'w');
+	fwrite($handle, $fileContent);
+	fclose($handle);
+}
+
 die();

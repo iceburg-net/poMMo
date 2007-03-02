@@ -40,7 +40,7 @@ $dbo->dieOnQuery(FALSE);
  *********************************/
 $p = array(
 	'queueSize' => 100,
-	'maxRunTime' => 80,
+	'maxRunTime' => 15,
 	'serial' => $serial
 );
 
