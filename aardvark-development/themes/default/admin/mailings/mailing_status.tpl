@@ -20,18 +20,18 @@
 	<div class="error uniq" id="init">{t}Initializing...{/t}</div>
 
 	<div class="hidden uniq" id="started">
-		<div class="first"><a class="cmd" href="#stop"><img src="{$url.theme.shared}images/icons/pause-small.png" alt="pause icon" />{t}Pause Mailing{/t}</a></div>
-		<div class="second"><a class="cmd" href="#restart">{t}Resume Mailing{/t} <img src="{$url.theme.shared}images/icons/restart-small.png" alt="restart icon" /></a></div>
+		<div class="first"><a class="cmd" href="#stop"><img src="{$url.theme.shared}images/icons/pause-small.png" alt=" icon" />{t}Pause Mailing{/t}</a></div>
+		<div class="second"><a class="cmd" href="#restart">{t}Resume Mailing{/t} <img src="{$url.theme.shared}images/icons/restart-small.png" alt="icon" /></a></div>
 	</div>
 	
 	<div class="hidden uniq" id="stopped">
-		<div class="first"><a class="cmd" href="#restart"><img src="{$url.theme.shared}images/icons/restart-small.png" alt="pause icon" /> {t}Resume Mailing{/t}</a></div>
-		<div class="second"><a class="cmd" href="#cancel">{t}Cancel Mailing{/t}	<img src="{$url.theme.shared}images/icons/stopped-small.png" alt="restart icon" /></a></div>
+		<div class="first"><a class="cmd" href="#restart"><img src="{$url.theme.shared}images/icons/restart-small.png" alt="icon" /> {t}Resume Mailing{/t}</a></div>
+		<div class="second"><a class="cmd" href="#cancel">{t}Cancel Mailing{/t}	<img src="{$url.theme.shared}images/icons/stopped-small.png" alt="icon" /></a></div>
 	</div>
 	
 	<div class="hidden uniq" id="frozen">
-		<div class="first"><a class="cmd" href="#restart"><img src="{$url.theme.shared}images/icons/restart-small.png" alt="pause icon" />{t}Dethaw Mailing{/t}</a></div>
-		<div class="second"><a class="cmd" href="#cancel">{t}Cancel Mailing{/t}	<img src="{$url.theme.shared}images/icons/stopped-small.png" alt="restart icon" /></a></div>
+		<div class="first"><a class="cmd" href="#restart"><img src="{$url.theme.shared}images/icons/restart-small.png" alt="icon" />{t}Resume Mailing{/t}</a></div>
+		<div class="second"><a class="cmd" href="#cancel">{t}Cancel Mailing{/t}	<img src="{$url.theme.shared}images/icons/stopped-small.png" alt="icon" /></a></div>
 	</div>
 	
 	{* Hidden until mailing is finished *}
