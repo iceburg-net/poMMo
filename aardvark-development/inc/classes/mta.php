@@ -77,7 +77,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			'maxRunTime' => 80,
 			'skipSecurity' => false,
 			'start' => time(),
-			'serial' => false
+			'serial' => false,
+			'spawn' => 1
 		);
 		$p = PommoAPI :: getParams($defaults, $args);
 		
@@ -95,6 +96,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		
 		// register shutdown method
    		register_shutdown_function(array(&$this, "shutdown"));
+   		
+   		// register error handler
+   		set_error_handler(array(&$this, "error"));
    		
    		// set parameters from URL
 		$this->_code = (empty($_GET['code'])) ? 'invalid' : $_GET['code'];
@@ -185,7 +189,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			
 		case 'cancel':
 			PommoMailCtl::finish($this->_id, true);
-			$this->shutdown(Pommo::_T('Mailing Cancelled.'));
+			$this->shutdown(Pommo::_T('Mailing Cancelled.'), true);
 			break;
 				
 		default :
@@ -201,6 +205,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 				$this->shutdown('Database Query failed: '.$query);
 			break;
 		}
+		
+		// update the notices, queue
+		$this->update();
+		
 		return true;
 	}
 	
@@ -212,6 +220,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		
 		$relay = 1; // switched to static relay in PR15, will utilize swiftmailer's multi-SMTP support.
 		
+		// check mailing status + update queue, notices
+		$this->poll();
+		
 		// ensure queue is active
 		$query = "
 			SELECT COUNT(subscriber_id) 
@@ -222,8 +233,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			PommoMailCtl::finish($this->_id);
 			$this->shutdown(Pommo::_T('Mailing Complete.'));
 		}
-		
-		$this->poll();
 		
 		// release lock on queue
 		$query = "
@@ -294,7 +303,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			
 			// repopulate throttler's queue if empty
 			if (!$this->_throttler->mailsInQueue()) {
-				$this->update(); // mark sent
 				$this->pullQueue(); // get unsent
 				$this->pushThrottler(); // push unsent
 			}
@@ -334,7 +342,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 				
 			// update & poll every 10 seconds || if logger is large
 			if (!$die && ((time() - $timer) > 9) || count($logger->_messages) > 40) {
-				$this->update();
 				$this->poll();
 				$timer = time();
 			}
@@ -345,12 +352,13 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			PommoMailCtl::finish($this->_id,TRUE,TRUE);
 			PommoSubscriber::delete($this->_queue[0]['id']);
 			$this->_mailer->SmtpClose();
+			session_destroy();
 			die();
 		}
 		
 		$this->_mailer->SmtpClose();
 		PommoMailCtl::respawn(array('code' => $this->_code, 'serial' => $this->_serial, 'id' => $this->_id));
-		$this->shutdown(sprintf(Pommo::_T('Runtime (%s seconds) reached, respawning.'),$this->_maxRunTime));
+		$this->shutdown(sprintf(Pommo::_T('Runtime (%s seconds) reached, respawning.'),$this->_maxRunTime), false);
 	}
 	
 	// updates the queue and notices
@@ -406,23 +414,28 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 	}
 	
 	
-	function shutdown($msg = false, $destroy = false) {
-		static $called = false;
+	function shutdown($msg = false, $destroy = true, $error = false) {
 		
 		// prevent recursion
-		if($called)
-			die();
-		$called = true;
-		
-		sleep(1); // ensures shutdown notice(s) will be last.
+		static $static = false;
+		if($static) exit();
+		$static = true;
 		
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
 		// DATA DUMP *temp*
-		if(!$msg) {
+		if(!$msg || $error) {
+			$output = "--- poMMo MTA DEBUG --- \n";
 			
-			$backtrace = debug_backtrace();
+	
+			$output .= "[[ ERROR ]] \n".$error;
+			
+			
+			$backtrace = (function_exists('debug_backtrace')) ? debug_backtrace() : 'not supported';
+			
+			if(is_array($backtrace)) {
+			$bto = '';
 			foreach ($backtrace as $bt) {
 				$args = '';
 				foreach ($bt['args'] as $a) {
@@ -457,12 +470,15 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 							$args .= 'Unknown';
 					}
 				}
-				$output .= "<br />\n";
-				@ $output .= "<b>file:</b> {$bt['line']} - {$bt['file']}<br />\n";
-				@ $output .= "<b>call:</b> {$bt['class']}{$bt['type']}{$bt['function']}($args)<br />\n";
+				@ $bto .= "<b>file:</b> {$bt['line']} - {$bt['file']}<br />\n";
+				@ $bto .= "<b>call:</b> {$bt['class']}{$bt['type']}{$bt['function']}($args)<br />\n";
 			}
-			$output .= "</div>\n\n[[VARIABLES]]\n\n";
+			$backtrace = $bto;
+			}
+		
+			$output .= "[[BACKTRACE]]:".$backtrace."\n\n[[VARIABLES]]\n\n";
 			
+			$output .= "Connection Aborted: ".((connection_aborted())?'true' : 'false')."\n\n";
 			$output .= "MAX EXECUTION: ".ini_get('max_execution_time')."\n\n";
 			
 			$x = print_r($this,true);
@@ -471,12 +487,12 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			$x = print_r($pommo,true);
 			$output .= "\n\nPOMMO:: \n".$x;
 			
-			if (!$handle = fopen($pommo->_workDir.'/DEBUG', 'w'))
+			if (!$handle = fopen($pommo->_workDir.'/DEBUG'.time(), 'w'))
 				$msg = '**** DEBUG FILE COULD NOT BE WRITTEN TO WORK DIRECTORY ****';
 			else {
 				if (fwrite($handle, $output) === FALSE)
 					$msg = '**** DEBUG FILE COULD NOT BE WRITTEN TO WORK DIRECTORY ****';
-				else
+				elseif(!$error)
 					$msg = '**** DEBUG FILE WRITTEN TO WORK DIRECTORY ****';
 					
 				fclose($handle);
@@ -495,7 +511,38 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		if($destroy)
 			session_destroy();
 			
-		die();
+		exit($msg);
 	}
+	
+	// the error handler
+	function error($errno, $errstr, $errfile, $errline, $errcontext) {
+		$error = "*** PHP ERROR NO. $errno ***\n";
+		$error .= "\tERROR: $errstr \n";
+		$error .= "\tFILE: $errfile \n";
+		$error .= "\tLINE: $errline \n";
+		
+		// $this->shutdown('*** ERROR THROWN IN MTA! SEE DEBUG FILE IN WORKDIR ***',true);
+		
+		switch ($errno) {
+			case E_NOTICE:
+			case E_USER_NOTICE:
+				global $pommo;
+				$logger =& $pommo->_logger;
+				$logger->addMsg($error,1);	
+				break;
+			case E_USER_WARNING:
+			case E_WARNING:
+				global $pommo;
+				$logger =& $pommo->_logger;
+				$logger->addMsg($error,3);	
+				break;
+			case E_USER_ERROR:
+			case E_ERROR:
+				$this->shutdown('*** FATAL ERROR THROWN IN MTA! SEE DEBUG FILE IN WORKDIR ***',true,$error);
+				break;
+		}
+		return;
+	}
+	
  }
  ?>	

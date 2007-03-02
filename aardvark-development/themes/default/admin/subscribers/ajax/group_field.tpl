@@ -35,7 +35,7 @@
 		{/foreach}
 		</select>
 		
-		<input type="submit" value="+" id="fwAddValue" />
+		<input type="submit" value="+" class="fwAddValue" />
 	</div>
 	
 	{* If we're editing, add another input populated w/ value *}
@@ -62,7 +62,7 @@
 	
 	<div>
 	<input type="text" name="v" value="{$firstVal}" class="pV pvEmpty{if $field.type == 'number'} pvNumber{elseif $field.type == 'date'} pvDate{/if}" />
-	<input type="submit" value="+" id="fwAddValue" />
+	<input type="submit" value="+" class="fwAddValue" />
 	</div>
 	
 	
@@ -93,11 +93,9 @@
 // stretch window
 $('#dialog div.jqmdBC').addClass('jqmdTall');
 
-$('#fwAddValue').click(function() {
-	var add = $('<div><input type="submit" value="-" class="fwDelVal" /></div>');
-	$(this).siblings(':input').clone().prependTo(add[0]);
-	$('#values').append(add[0])
-		.find(':input.fwDelVal:last')
+$('#values input.fwAddValue').click(function() {
+	var add = $(this).parent().clone().find(':input:last').val('-').end();
+	$('#values').append(add).find(':input:last')
 		.one('click', function() {
 			$(this).parent().remove();
 			PommoValidate.reset();
