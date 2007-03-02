@@ -348,9 +348,9 @@ class Pommo {
 			}
 			else {
 				$logger =& $pommo->_logger;
+				$logger->addErr($msg);
 				Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 				$smarty = new PommoTemplate();
-				$logger->addErr($msg);
 				$smarty->assign('fatalMsg',TRUE);
 				$smarty->display('message.tpl');
 			}	

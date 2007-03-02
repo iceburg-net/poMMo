@@ -59,7 +59,7 @@ class PommoMailCtl {
 	
 	
 	// spawns a page in the background, used by mail processor.
-	function spawn($page) {
+	function spawn($page, $fail = false) {
 		global $pommo;
 		$logger =& $pommo->_logger;
 
@@ -73,45 +73,46 @@ class PommoMailCtl {
 		$ssl = ($pommo->_ssl) ? 'ssl://' : '';
 
 		$out = "GET $page HTTP/1.1\r\n";
-		$out .= "Host: " . $pommo->_hostname . ":".$pommo->_hostport."\r\n";
-		$out .= 'User-Agent: poMMo\r\n';
+		$out .= "Host: " . $pommo->_hostname . "\r\n";
+		
 		//$out .= 'User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2.1) Gecko/20021204\r\n';
 		//$out .= "Keep-Alive: 300\r\n";
 		//$out .= "Connection: keep-alive\r\n";
-		$out .= "Referer: $pommo->_http\r\n";
+		//$out .= "Referer: $pommo->_http\r\n";
 
 		// to allow for basic .htaccess http authentication, 
 		//   uncomment and fill in the following;
 		// $out .= "Authorization: Basic " . base64_encode('username:password')."\r\n";
 
-		$out .= "\r\n";
+		$out .= "Connection: Close\r\n\r\n";
+
+		$spawnPage = $out;
 		
 		$logger->addMsg('Attempting to spawn '.(($ssl) ? 'https://' : 'http://').$pommo->_hostname.':'.$pommo->_hostport.$page,2,TRUE);
 		
+		if($fail)
+			$pommo->_hostport = $pommo->_hostport+3433;
+			
 		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 10);
+
+		// LOG SPAWN ATTEMPTS TO FILE *TEMP, DEBUG*
+		if(is_file($pommo->_workDir . '/SPAWN_0'))
+			copy($pommo->_workDir . '/SPAWN_0',$pommo->_workDir . '/SPAWN_1');
+			
+		if ($handle = fopen($pommo->_workDir . '/SPAWN_0', 'w')) {
+			fwrite($handle, $out);
+			fclose($handle);
+		}
 
 		if ($socket) {
 			fwrite($socket, $out);
 			sleep(1);
 			fclose($socket); // spawned script must have ignore_user_abort, eh? ;)
 		} else {
-			$logger->addMsg(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr);
+			$logger->addMsg(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr,3,TRUE);
 			return false;
 		}
-
 		return true;
-	}
-	
-	function respawn($p = array(), $page = false) {
-		global $pommo;
-		
-		$defaults = array('code' => null, 'id' => null, 'serial' => null);
-		$p = PommoAPI :: getParams($defaults, $p);
-		
-		if (!$page)
-			$page = $pommo->_baseUrl.'admin/mailings/mailings_send4.php';
-			
-		return PommoMailCtl::spawn($page.'?code='.$p['code'].'&serial='.$p['serial'].'&id='.$p['id']);
 	}
 	
 	// mark (serialize) a mailing

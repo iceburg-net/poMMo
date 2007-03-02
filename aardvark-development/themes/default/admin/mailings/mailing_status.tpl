@@ -97,7 +97,6 @@ pommo = {
 		
 		
 		if(typeof stopPoll == 'undefined') var stopPoll = false;
-		console.log(stopPoll);
 		
 		$.post("ajax/status_poll.php?id={/literal}{$mailing.id}{literal}&attempt="+pommo.attempt, {}, function(out) {
 			
