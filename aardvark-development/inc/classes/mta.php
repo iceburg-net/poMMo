@@ -429,9 +429,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		if(!$msg || $error) {
 			$output = "--- poMMo MTA DEBUG --- \n";
 			
+			$output .= "RUNTIME: ".(time() - $this->_start);
 	
 			$output .= "[[ ERROR ]] \n".$error;
-			
 			
 			$backtrace = (function_exists('debug_backtrace')) ? debug_backtrace() : 'not supported';
 			
