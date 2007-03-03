@@ -52,7 +52,7 @@ sleep(1);
 // respawn test
 if (!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?'.
 	'code='.$code.
-	'&spawn='.$spawn)) {
+	'&spawn='.$spawn),true) {
 
 	$fileContent .= '[error] = true';
 	$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w');
