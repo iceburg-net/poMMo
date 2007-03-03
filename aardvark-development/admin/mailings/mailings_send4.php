@@ -32,7 +32,11 @@ $dbo = & $pommo->_dbo;
 
 // don't die on query so we can capture logs'
 // NOTE: Be extra careful to check the success of queries/methods!
-$dbo->dieOnQuery(FALSE); 
+$dbo->dieOnQuery(FALSE);
+
+// turn logging off unless verbosity is 1
+if($pommo->_verbosity > 1)
+	$dbo->debug(FALSE);
 
 // start error logging
 $pommo->logErrors();

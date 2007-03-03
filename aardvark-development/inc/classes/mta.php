@@ -99,7 +99,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
    		
    		// set parameters from URL
 		$this->_code = (empty($_GET['code'])) ? 'invalid' : $_GET['code'];
-		$this->_test = (empty($_GET['test'])) ? false : true;
+		$this->_test = isset($_GET['test']);
 		$this->_id = (isset($_GET['id']) && is_numeric($_GET['id'])) ? $_GET['id'] : false;
 		
 		// verify and initialize the current mailing
@@ -209,7 +209,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		return true;
 	}
 	
-	
 	// pulls from the queue
 	function pullQueue() {
 		global $pommo;
@@ -225,12 +224,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			SELECT COUNT(subscriber_id) 
 			FROM ".$dbo->table['queue']."
 			WHERE status=0";
-		if($dbo->query($query,0) < 1) { // no unsent mails left in queue
-			$this->_mailer->SmtpClose();
-			PommoMailCtl::finish($this->_id);
-			$this->shutdown(Pommo::_T('Mailing Complete.'));
-		}
-		
+		if($dbo->query($query,0) < 1) // no unsent mails left in queue, mailing complete!
+			$this->stop(true);
+
 		// release lock on queue
 		$query = "
 			UPDATE ".$dbo->table['queue']."
@@ -294,9 +290,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
-		$die = false;
 		$timer = time();
-		while(!$die) {
+		while(true) {
 			
 			// repopulate throttler's queue if empty
 			if (!$this->_throttler->mailsInQueue()) {
@@ -331,39 +326,17 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 					$logger->addMsg('Added ' . $bytes . ' bytes to throttler.', 1);
 				}
 			}
-			
-			
-			 // check to see if we have exceeded max runtime
-			 if ((time() - $this->_start) > $this->_maxRunTime)
-				$die = TRUE;
-				
+
 			// update & poll every 10 seconds || if logger is large
-			if (!$die && ((time() - $timer) > 9) || count($logger->_messages) > 40) {
+			if (((time() - $timer) > 9) || count($logger->_messages) > 40) {
 				$this->poll();
 				$timer = time();
 			}
+			
+			// check to see if we have exceeded max runtime
+			if ((time() - $this->_start) > $this->_maxRunTime)
+				$this->stop();
 		}
-		
-		// don't respawn if this is a test mailing
-		if ($this->_test) {
-			PommoMailCtl::finish($this->_id,TRUE,TRUE);
-			PommoSubscriber::delete($this->_queue[0]['id']);
-			$this->_mailer->SmtpClose();
-			session_destroy();
-			die();
-		}
-		
-		// respawn the mailing
-		$this->_mailer->SmtpClose();
-		
-		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?'.
-			'code='.$this->_code.
-			'&serial='.$this->_serial.
-			'&id='.$this->_id))
-				$this->shutdown('*** RESPAWN FAILED! ***');
-				
-		$this->shutdown(sprintf(Pommo::_T('Runtime (%s seconds) reached, respawning.'),$this->_maxRunTime), false);
-		
 	}
 	
 	// updates the queue and notices
@@ -418,12 +391,39 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		return;
 	}
 	
+	function stop($finish = false) {
+		$this->_mailer->SmtpClose();
+		
+		if ($this->_test) { // don't respawn if this is a test mailing
+			PommoMailCtl::finish($this->_id,TRUE,TRUE);
+			PommoSubscriber::delete(current($this->_hash));
+			session_destroy();
+			exit();
+		}
+		
+		if($finish) {
+			PommoMailCtl::finish($this->_id);
+			$this->shutdown(Pommo::_T('Mailing Complete.'));
+		}
+		
+		// respwn
+		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?'.
+			'code='.$this->_code.
+			'&serial='.$this->_serial.
+			'&id='.$this->_id))
+				$this->shutdown('*** RESPAWN FAILED! ***');
+				
+		$this->shutdown(sprintf(Pommo::_T('Runtime (%s seconds) reached, respawning.'),$this->_maxRunTime), false);
+	}
 	
 	function shutdown($msg = false, $destroy = true) {
 		// prevent recursion
 		static $static = false;
 		if($static) exit();
 		$static = true;
+		
+		if($this->_test)
+			exit();
 		
 		global $pommo;
 		$logger =& $pommo->_logger;
