@@ -388,13 +388,12 @@ $.fn.tabs = function(initial, settings) {
                 var clicked = this;
                 var toHide = $('>' + settings.tabStruct + ':visible', container);
 
-                if (typeof onClick == 'function' && onClick(clicked, toShow[0], toHide[0]) == false && !init && trueClick) {
+				// bb: if onClick function returns false, halt tab activation.
+                if (typeof onClick == 'function' && onClick(clicked, toShow[0], toHide[0]) == false && trueClick) {
                 	container['locked'] = false;
                 	return false;
                 }
                 
-                init = false;
-
                 // switch tab, animation prevents browser scrolling to the fragment
                 function switchTab() {
                     if (settings.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
@@ -530,6 +529,4 @@ for (var i = 0; i < tabEvents.length; i++) {
         };
     })(tabEvents[i]);
 }
-
-var init=true; // True if no has been activated. When true, the onClick function's return will have no effect.
 })(jQuery);

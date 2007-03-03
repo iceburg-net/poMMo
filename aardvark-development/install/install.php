@@ -99,7 +99,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				// generate key to uniquely identify this installation
 				$key = PommoHelper::makeCode(6);
 				PommoAPI::configUpdate(array('key' => $key),TRUE);
-
+				
+				$pommo->reloadConfig();
+				
 				// load configuration [depricated?], set message defaults.
 				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
 				PommoHelperMessages::resetDefault('all');
@@ -107,8 +109,6 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');
 				$logger->addMsg(Pommo::_T('Login Password: ') . $pass);
-				
-				$pommo->reloadConfig();
 				
 				$smarty->assign('installed', TRUE);
 			} else {

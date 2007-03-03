@@ -73,7 +73,7 @@ class PommoAPI {
 			elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
 		}
 		
-		if ($pommo->_debug == 'on')
+		if ($pommo->_debug)
 			$dbo->debug(TRUE);
 		
 		$dbo->dieOnQUery(TRUE);

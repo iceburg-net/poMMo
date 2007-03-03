@@ -269,7 +269,6 @@ class PommoMailer extends PHPMailer {
 				// check for personalization personaliztion and override message body
 				if ($this->_personalize) {
 					global $pommo;
-					Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php');
 					$this->Body = PommoHelperPersonalize::body($this->_body, $subscriber, $pommo->_session['personalization_body']);
 					if (!empty($this->_altbody))
 						$this->AltBody = PommoHelperPersonalize::body($this->_altbody,$subscriber,$pommo->_session['personalization_altbody']);

@@ -26,7 +26,7 @@ $serial = (empty($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mta.php');
 
-$pommo->init(array('sessionID' => $serial, 'keep' => TRUE, 'authLevel' => 0, 'noDebug' => TRUE));
+$pommo->init(array('sessionID' => $serial, 'keep' => TRUE, 'authLevel' => 0));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -34,18 +34,15 @@ $dbo = & $pommo->_dbo;
 // NOTE: Be extra careful to check the success of queries/methods!
 $dbo->dieOnQuery(FALSE); 
 
+// start error logging
+$pommo->logErrors();
 
 /**********************************
 	STARTUP ROUTINES
  *********************************/
-$p = array(
-	'queueSize' => 100,
-	'maxRunTime' => 15,
-	'serial' => $serial
-);
-
 $config = PommoAPI::configGet(array(
 	'list_exchanger',
+	'maxRuntime',
 	'smtp_1',
 	'smtp_2',
 	'smtp_3',
@@ -56,6 +53,12 @@ $config = PommoAPI::configGet(array(
 	'throttle_DP',
 	'throttle_DMPP',
 	'throttle_DBPP'));
+	
+$p = array(
+	'queueSize' => 100,
+	'maxRunTime' => $config['maxRuntime'],
+	'serial' => $serial
+);
 
 // NOTE: PR15 removed multimode (simultaneous SMTP relays) variables + functionality!
 //	we will be migrating to swiftmailer, and its multi-SMTP support/balancing in PR16-ish.
@@ -80,9 +83,8 @@ $mailing->poll();
 // check if message body contains personalizations
 // personalizations are cached in session
 
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php'); // require once here so that mailer can use
 if(!isset($pommo->_session['personalization'])) {
-	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php');
-	
 	$pommo->_session['personalization'] = FALSE;
 	$matches = array();
 	preg_match('/\[\[[^\]]+]]/', $mailing->_mailing['body'], $matches);

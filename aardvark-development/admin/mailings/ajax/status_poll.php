@@ -22,14 +22,19 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
-$pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));
+$pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-$pommo->toggleEscaping(); // _T and logger responses will be wrapped in htmlspecialchars
+
+/**********************************
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+ Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
 
 
 $json = array(

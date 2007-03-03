@@ -88,6 +88,11 @@ if (empty($_REQUEST['continue'])) {
 	} else {
 		$logger->addErr(Pommo::_T('Upgrade Failed!'));
 	}
+	
+	// clear the working Directory
+	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+	if(!PommoHelperMaintenance::delDir($pommo->_workDir))
+		$logger->addErr('Unable to Clear Working Directory (non fatal)');
 }
 
 $smarty->display('upgrade.tpl');

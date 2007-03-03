@@ -28,36 +28,24 @@ http://www.pommo.org/community/viewtopic.php?id=292
 
 http://www.pommo.org/community/viewtopic.php?id=288
 
-add; http://spamcheck.sitesell.com/  
+add to wiki --> http://spamcheck.sitesell.com/  
 	http://www.alistapart.com/articles/cssemail/
-	http://www.thinkvitamin.com/features/design/html-emails
-	
-	to wiki
-	{* DON'T DISPLAY COMMENT FIELDS ON UPDATE FORM. A COMMENT FIELD IS PROVIDED @ BOTTOM FOR UNSUBSCRIBE *}
+	http://www.thinkvitamin.com/features/design/html-emails	
 
 make all multi-byte safe -- see function overloading for common functions to replace
 	http://us3.php.net/manual/en/ref.mbstring.php
 	
 write a single javascript include file which groups javascripts based on the page's requirements ?
 
-add ajax history plugin to setup, fields
+Fix multiple choice multiple options in rule editing  ** needs jQuery Patch
 
-suppress errors in ajax requests that return JSON
-
-able to set max runtime from config
-
-able to set htaccess values from config
-
-REBUILD INTERFACE.JS -- no need for transferTo?
-
-Fix Validation on rule editing
-
-Fix multiple choice multiple options in rule editing
-
-clear W.D. on upgrade
+Phase out pommo->init('keep') and data->set || -> get routines. Use States & auto clear states
 
 
-examine Pommo::init( noDebug = TRUE) calls
+AJAX requests: disable debugging (unless verbosity < 3)
+
+all JSON returns need to have json. ... prefix, disable error display
+
 
 CHECKS:
 	MySQL V.
@@ -66,6 +54,7 @@ CHECKS:
 	ERROR DISPLAY
 	SAFE MODE
 	TIMEOUT VALUE
+	
 	
 
 

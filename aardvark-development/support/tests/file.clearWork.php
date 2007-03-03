@@ -25,30 +25,6 @@ define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init();
 
-function delDir($dirName) {
-	global $pommo;
-	
-	if (empty ($dirName)) 
-		return true;
-		
-	if (file_exists($dirName)) {
-		$dir = dir($dirName);
-		while ($file = $dir->read()) {
-			if ($file != '.' && $file != '..') {
-				if (is_dir($dirName . '/' . $file)) {
-					delDir($dirName . '/' . $file);
-				} else {
-					unlink($dirName . '/' . $file) or die('File ' . $dirName . '/' . $file . ' couldn\'t be deleted!');
-				}
-			}
-		}
-		$dir->close();
-		if ($dirName != $pommo->_workDir)
-			@ rmdir($dirName) or die('Folder ' . $dirName . ' couldn\'t be deleted!');
-	} else {
-		return false;
-	}
-	return true;
-}
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
 
-echo (delDir($pommo->_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';
+echo (PommoHelperMaintenance::delDir($pommo->_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';

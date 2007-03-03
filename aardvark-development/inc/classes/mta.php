@@ -70,9 +70,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 	// the throttle object
 	var $_throttler;	
 	
-	// filename of error log for trapping PHP errors
-	var $_errorLog;
-	
 	function PommoMTA($args = array()) {
 		
 		$defaults = array (
@@ -99,19 +96,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		
 		// register shutdown method
    		register_shutdown_function(array(&$this, "shutdown"));
-   		
-   		/*** TRAP FATAL ERROR TECHNIQUE!!! ***/
-   		// error handling
-		error_reporting(E_ALL);
-		ini_set('display_errors',0);
-		ini_set('log_errors',1);
-		ini_set('log_errors_max_len',0);
-		ini_set('html_errors',0);
-				
-		// obtain an exclusive temp file name
-		$this->_errorLog = tempnam($pommo->_workDir.'/','ERROR_LOG');
-		ini_set('error_log',$this->_errorLog);
-		
    		
    		// set parameters from URL
 		$this->_code = (empty($_GET['code'])) ? 'invalid' : $_GET['code'];
@@ -455,12 +439,6 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		if($destroy)
 			session_destroy();
 		
-		// copy the error log
-		if(is_file($pommo->_workDir . '/ERROR_LOG_0'))
-			copy($pommo->_workDir . '/ERROR_LOG_0',$pommo->_workDir . '/ERROR_LOG_1');
-		
-		rename($this->_errorLog, $pommo->_workDir . '/ERROR_LOG_0');
-			
 		exit($msg);
 	}
  }

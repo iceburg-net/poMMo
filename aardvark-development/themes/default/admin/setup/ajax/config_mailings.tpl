@@ -7,6 +7,7 @@
 {fv validate="demo_mode"}
 {fv validate="public_history"}
 {fv validate="list_charset"}
+{fv validate="maxRuntime"}
 
 <form action="{$smarty.server.PHP_SELF}" method="post">
 
@@ -63,6 +64,12 @@
 <option value="GB2312"{if $list_charset == 'GB2312'} selected="selected"{/if}>{t}Simplified Chinese (GB2312){/t}</option>
 </select>
 <span class="notes">{t}(Select Default Character Set of Mailings){/t}</span>
+</div>
+
+<div>
+<label for="maxRuntime"><span class="required">{t}Runtime:{/t}</span>{fv message="maxRuntime"}</label>
+<input type="text" name="maxRuntime" value="{$maxRuntime|escape}" size="4" maxlength="5" />
+<span class="notes">{t}(Seconds a processing script runs for. Default: 80, Minimum: 15){/t}</span>
 </div>
 
 <input type="submit" value="{t}Update{/t}" />

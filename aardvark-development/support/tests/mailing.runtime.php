@@ -22,15 +22,56 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
-	
 require ('../../bootstrap.php');
 $pommo->init();
 
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
+set_time_limit(0);
+
 $code = PommoHelper::makeCode();
 
-if(!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.runtime3.php?securityCode='.$code)) 
-	Pommo::kill('Spawn Failed! You must correct this before poMMo can send mailings.');
+if(!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.runtime2.php?code='.$code)) 
+	Pommo::kill('Initial Spawn Failed! You must correct this before poMMo can send mailings.');
+
+echo 'Initial Run Time: '.ini_get('max_execution_time').' seconds <br>';
+echo '<br/> This test takes at least 90 seconds. Upon completetion "SUCCESS" will be printed. If you do not see "SUCCESS", the max runtime should be set near the second highest "reported working" value.';
+echo '<hr>';
+echo '<b>Reported working value(s)</b><br />';
+ob_flush(); flush();
+
+sleep(5);
+
+if (!is_file($pommo->_workDir . '/mailing.test.php')) {
+	// make sure we can write to the file
+	if (!$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w')) 
+		Pommo::kill('Unable to write to test file!');
+	fclose($handle);
+	unlink($pommo->_workDir.'/mailing.test.php');
 	
-Pommo::redirect($pommo->_baseUrl.'support/tests/mailing.runtime2.php?code='.$code);
+	Pommo::kill('Initial Spawn Failed (test file not written to)! Test the mail processor.');
+}
+
+$die = false;
+$time = 0;
+while(!$die) {
+	sleep(10);
+	$o = PommoHelper::parseConfig($pommo->_workDir . '/mailing.test.php');
+	if (!isset($o['code']) || $o['code'] != $code) {
+		unlink($pommo->_workDir.'/mailing.test.php');
+		Pommo::kill('Spawning Failed. Codes did not match.');	
+	}
+	if(!isset($o['time']) || $time >= $o['time'] || $o['time'] == 90)
+		$die = true;
+	$time = $o['time'];
+		
+	echo "$time seconds <br />";
+	ob_flush(); flush();
+}
+unlink($pommo->_workDir.'/mailing.test.php');
+
+
+if($time == 90)
+	Pommo::kill('SUCCESS');
+
+Pommo::kill('FAILED -- Your webserver or a 3rd party tool is force terminating PHP. Mailings may freeze. If you are having problems with frozen mailings, try setting the Mailing Runtime Value to '.($time-10).' or below');

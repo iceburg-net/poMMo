@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-$pommo->init(array('noDebug' => TRUE));
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
@@ -65,8 +65,11 @@ if (!SmartyValidate :: is_registered_form('mailings') || empty ($_POST)) {
 	SmartyValidate :: register_validator('list_charset', 'list_charset', 'isCharSet', false, false, 'trim', 'mailings');
 	SmartyValidate :: register_validator('public_history','public_history:!^(on|off)$!','isRegExp', false, false, false, 'mailings');   
 	SmartyValidate :: register_validator('demo_mode','demo_mode:!^(on|off)$!','isRegExp', false, false, false, 'mailings');   
+	SmartyValidate :: register_validator('list_fromname', 'list_fromname', 'notEmpty', false, false, 'trim', 'mailings');
+	SmartyValidate :: register_validator('maxRuntime', 'maxRuntime', 'isInt', false, false, 'trim', 'mailings');
 	
 	$vMsg = array();
+	$vMsg['maxRuntime'] = Pommo::_T('Enter a number.');
 	$vMsg['list_fromname'] = Pommo::_T('Cannot be empty.');
 	$vMsg['list_fromemail'] = $vMsg['list_frombounce'] = Pommo::_T('Invalid email address');
 	$smarty->assign('vMsg', $vMsg);
@@ -77,7 +80,8 @@ if (!SmartyValidate :: is_registered_form('mailings') || empty ($_POST)) {
 		'list_fromemail',
 		'list_frombounce',
 		'list_charset',
-		'public_history'
+		'public_history',
+		'maxRuntime'
 	));
 	$dbVals['demo_mode'] = (!empty ($pommo->_config['demo_mode']) && ($pommo->_config['demo_mode'] == "on")) ? 'on' : 'off';
 	$smarty->assign($dbVals);

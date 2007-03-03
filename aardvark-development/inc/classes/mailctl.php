@@ -59,7 +59,7 @@ class PommoMailCtl {
 	
 	
 	// spawns a page in the background, used by mail processor.
-	function spawn($page, $fail = false) {
+	function spawn($page, $log = false) {
 		global $pommo;
 		$logger =& $pommo->_logger;
 
@@ -90,18 +90,17 @@ class PommoMailCtl {
 		
 		$logger->addMsg('Attempting to spawn '.(($ssl) ? 'https://' : 'http://').$pommo->_hostname.':'.$pommo->_hostport.$page,2,TRUE);
 		
-		if($fail)
-			$pommo->_hostport = $pommo->_hostport+3433;
-			
 		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 10);
 
 		// LOG SPAWN ATTEMPTS TO FILE *TEMP, DEBUG*
-		if(is_file($pommo->_workDir . '/SPAWN_0'))
-			copy($pommo->_workDir . '/SPAWN_0',$pommo->_workDir . '/SPAWN_1');
-			
-		if ($handle = fopen($pommo->_workDir . '/SPAWN_0', 'w')) {
-			fwrite($handle, $out);
-			fclose($handle);
+		if($log) {
+			if(is_file($pommo->_workDir . '/SPAWN_0'))
+				copy($pommo->_workDir . '/SPAWN_0',$pommo->_workDir . '/SPAWN_1');
+				
+			if ($handle = fopen($pommo->_workDir . '/SPAWN_0', 'w')) {
+				fwrite($handle, $out);
+				fclose($handle);
+			}
 		}
 
 		if ($socket) {
