@@ -24,7 +24,7 @@
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
-$pommo->init(array('noDebug' => TRUE));
+$pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 

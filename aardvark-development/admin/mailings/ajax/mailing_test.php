@@ -24,7 +24,7 @@
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
-$pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));
+$pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 	

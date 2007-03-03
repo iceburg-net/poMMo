@@ -153,6 +153,10 @@ function PommoRevUpgrade($rev) {
 			"ALTER TABLE {$dbo->table['mailing_current']} CHANGE `command` `command` ENUM( 'none', 'restart', 'stop', 'cancel' ) NOT NULL DEFAULT 'none'"
 			,"Adding cancel type to mailing commands")) return false;
 			
+			if (!PommoInstall::incUpdate(14,
+			"INSERT INTO {$dbo->table['config']} (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES ('maxRuntime', '', '', 'off', 'on')"
+			,"Enabling Mailing Runtime to be set in Config")) return false;
+			
 			// end of upgrade (break)
 			break;
 		default: 

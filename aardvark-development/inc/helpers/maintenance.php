@@ -49,5 +49,31 @@
  		$config = PommoHelper::parseConfig($pommo->_workDir . '/maintenance.php');
  		return $config['baseURL'];
  	}
+ 	
+ 	// recursively deletes the contents of a directory
+ 	function delDir($dirName) {
+		global $pommo;
+		if (empty ($dirName)) 
+			return true;
+			
+		if (file_exists($dirName)) {
+			$dir = dir($dirName);
+			while ($file = $dir->read()) {
+				if ($file != '.' && $file != '..') {
+					if (is_dir($dirName . '/' . $file)) {
+						PommoHelperMaintenance::delDir($dirName . '/' . $file);
+					} else {
+						unlink($dirName . '/' . $file) or die('File ' . $dirName . '/' . $file . ' couldn\'t be deleted!');
+					}
+				}
+			}
+			$dir->close();
+			if ($dirName != $pommo->_workDir)
+				@ rmdir($dirName) or die('Folder ' . $dirName . ' couldn\'t be deleted!');
+		} else {
+			return false;
+		}
+		return true;
+	}
  }
 ?>

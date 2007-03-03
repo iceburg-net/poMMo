@@ -25,9 +25,21 @@ require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
 
-$pommo->init(array('noDebug' => TRUE));
+$pommo->init();
 $dbo = & $pommo->_dbo;
 $logger = & $pommo->_logger;
+
+
+
+/**********************************
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+ Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+
+// TODO page needs rewrite to utilize the json class for output. e.g. admin/mailings/ajax/status_poll.php
+
 
 function jsonKill($msg, $success = FALSE) {
 	$status = ($success) ? "true" : "false";

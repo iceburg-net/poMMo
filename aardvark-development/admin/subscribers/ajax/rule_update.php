@@ -26,7 +26,7 @@ Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 
-$pommo->init(array('noDebug' => TRUE));
+$pommo->init();
 $dbo = & $pommo->_dbo;
 
 switch($_POST['logic']) {

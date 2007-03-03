@@ -93,6 +93,10 @@
 // stretch window
 $('#dialog div.jqmdBC').addClass('jqmdTall');
 
+// apply validation
+PommoValidate.reset();
+PommoValidate.init('#values .pV', '#fwSubmit', false);
+
 $('#values input.fwAddValue').click(function() {
 	var add = $(this).parent().clone().find(':input:last').val('-').end();
 	$('#values').append(add).find(':input:last')
@@ -114,7 +118,6 @@ $('#values input.fwDelVal').one('click', function() {
 	PommoValidate.init('#values .pV', '#fwSubmit', false);
 	return false;
 });
-
 
 $('#fwSubmit').one("click",function() {
 	var _logic = $('#fwLogic').val();

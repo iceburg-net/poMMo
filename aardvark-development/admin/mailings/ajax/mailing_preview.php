@@ -26,9 +26,9 @@ Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $config = PommoAPI::configGet('public_history');
 if($config['public_history'] == 'on') {
-	$pommo->init(array('noDebug' => TRUE, 'keep' => TRUE, 'authLevel' => 0));
+	$pommo->init(array('keep' => TRUE, 'authLevel' => 0));
 } else {
-	$pommo->init(array('noDebug' => TRUE, 'keep' => TRUE));	
+	$pommo->init(array('keep' => TRUE));	
 }
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;

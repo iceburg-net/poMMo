@@ -74,7 +74,7 @@ Set the Base URL.
   
   NOTE: Include trailing slash
 
-	** [baseURL] = "/mysite/newsletter/";
+	** [baseURL] = "/mysite/newsletter/"
 
 Set the "working" Cache Directory
   poMMo uses this directory to cache templates. By default, it

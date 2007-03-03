@@ -62,10 +62,11 @@
 <script type="text/javascript">
 
 $().ready(function(){ 
-
+		
 	$('#setup').Accordion({
 		header: 'div.acMenu'
 	});
+
 	
 	$('#setup div.acMenu').hover(
 		function() { $(this).css('text-decoration','underline'); },
@@ -81,6 +82,21 @@ $().ready(function(){
 		overlay:0,
 		ajax:'@href',
 		target:'.jqmdMSG'}).jqDrag('div.jqmdTC');
+	
+	switch(location.hash) {
+		case '#users': $('#setup').activate(0);
+			break;
+		case '#general':  $('#setup').activate(1);
+			break;
+		case '#mailings':  $('#setup').activate(2);
+			break;
+		case '#messages':  $('#setup').activate(3);
+			break;
+	}
+
+		
+		
+	
 });
 
 function assignForm(scope) {

@@ -22,50 +22,36 @@
 	INITIALIZATION METHODS
  *********************************/
 define('_poMMo_support', TRUE);
-require ('../../bootstrap.php');
-$pommo->init();
 
-
-$code = $_GET['code'];
-
-echo 'Initial Run Time: '.ini_get('max_execution_time').' seconds <br>';
-echo '<br/> This test takes at least 90 seconds. Upon completetion "SUCCESS" will be printed. If you do not see "SUCCESS", the max runtime should be set to the highest "reported working" value.';
-echo '<hr>';
-echo '<b>Reported working value(s)</b><br />';
-ob_flush(); flush();
-
-sleep(3);
-
-if (!is_file($pommo->_workDir . '/mailing.test.php')) {
-	// make sure we can write to the file
-	if (!$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w')) 
-		die('Unable to write to test file!');
-	fclose($handle);
-	unlink($pommo->_workDir.'/mailing.test.php');
+$maxRunTime = 80;
+if (ini_get('safe_mode'))
+	$maxRunTime = ini_get('max_execution_time') - 10;
+else
+	set_time_limit(0);
 	
-	die('Initial Spawn Failed (test file could not be written)! Did you try to "refresh" this test? close and try again.');
+ignore_user_abort(true);
+
+require ('../../bootstrap.php');
+$pommo->init(array('noSession' => TRUE));
+
+$code = (empty($_GET['code'])) ? null : $_GET['code'];
+
+if (!$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w')) 
+	die('Unable to write to test file');
+
+for($i=0; $i <= 90; $i+=5) {
+	
+	$fileContent = "<?php die(); ?>\n[code] = $code\n[time] = $i\n";
+	
+	rewind($handle);
+	
+	if (fwrite($handle, $fileContent) === FALSE) 
+		die('Unable to write to test file');
+	
+	
+	sleep(5);
 }
 
-$die = false;
-$time = 0;
-while(!$die) {
-	sleep(10);
-	$o = PommoHelper::parseConfig($pommo->_workDir . '/mailing.test.php');
-	if (!isset($o['code']) || $o['code'] != $code) {
-		unlink($pommo->_workDir.'/mailing.test.php');
-		die ('Spawning Failed. Codes did not match.');	
-	}
-	if(!isset($o['time']) || $time >= $o['time'] || $o['time'] == 90)
-		$die = true;
-	$time = $o['time'];
-		
-	echo "$time seconds <br />";
-	ob_flush(); flush();
-}
-unlink($pommo->_workDir.'/mailing.test.php');
-
-
-if($time == 90)
-	die('SUCCESS');
-
-die('FAILED -- A 3rd party tool or webserver "script timeout setting" is terminating PHP. You must adjust your max runtime value.');
+fclose($handle);
+	
+die();

@@ -39,7 +39,7 @@ class Pommo {
 	var $_http; // the "http(s)://hostname(:port)" full connection string
 	var $_language; // language to translate to (via Pommo::_T())
 	var $_slanguage; // the "session" language (if set)
-	var $_debug; // debug status, either 'on' or 'off'
+	var $_debug; // debug status (bool)
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
 
 	var $_config; // configuration array to hold values loaded from the DB
@@ -73,7 +73,7 @@ class Pommo {
 			Pommo::kill('Could not read config.php');
 
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
-		$this->_debug = (empty($config['debug'])) ? 'off' : $config['debug']; 
+		$this->_debug = (empty($config['debug'])) ? false : true; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_logger->_verbosity = $this->_verbosity;
 		
@@ -139,13 +139,19 @@ class Pommo {
 
 		// turn off debugging if in user area
 		if($this->_section == 'user') {
-			$this->_debug = 'off';
+			$this->_debug = false;
 			$this->_dbo->debug(FALSE);
 		}
 		
 		// if debugging is set in config.php, enable debugging on the database.
-		if ($this->_debug == 'on') 
-			$this->_dbo->debug(TRUE);
+		if ($this->_debug)  {
+			
+			// don't enable debugging in ajax requests unless verbosity is < 3 
+			if (PommoHelper::isAjax() && $this->_verbosity > 2)
+				$this->_debug = false;
+			else
+				$this->_dbo->debug(TRUE);
+		}
 
 	}
 
@@ -165,19 +171,13 @@ class Pommo {
 			'keep' => FALSE,
 			'noSession' => FALSE,
 			'sessionID' => NULL,
-			'noDebug' => FALSE,
 			'install' => FALSE
 		);
 	
 		// merge submitted parameters
 		$p = PommoAPI :: getParams($defaults, $args);
 		
-		// if debugging is set in config.php, enable debugging on the database.
-		if ($p['noDebug']) {
-			$this->_dbo->debug(FALSE);
-			$this->_debug = 'off';
-		}
-
+		
 		// Bypass Reading of Config, SESSION creation, and authentication checks and return
 		//  if 'install' passed
 		if ($p['install'])
@@ -357,7 +357,7 @@ class Pommo {
 		}
 		
 		// output debugging info if enabled (in config.php)
-		if ($pommo->_debug == 'on') { // don't debug if section == user.'
+		if ($pommo->_debug) {
 			if (is_object($pommo)) {
 				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
 				$debug = new PommoHelperDebug();
@@ -396,6 +396,29 @@ class Pommo {
 		if (!$start)
 			session_start();
 		$start = true;
+	}
+	
+	// error log, E_ERROR trapping
+	//  CAN NOT BE CALLED STATICALLY!
+	function logErrors() {
+		// error handling
+		error_reporting(E_ALL);
+		ini_set('display_errors',0);
+		ini_set('log_errors',1);
+		ini_set('log_errors_max_len',0);
+		ini_set('html_errors',0);
+				
+		// obtain an exclusive temp file name
+		//$this->_errorLog = tempnam($pommo->_workDir.'/','ERROR_LOG');
+		if(is_file($this->_workDir . '/ERROR_LOG_0'))
+			rename($this->_workDir . '/ERROR_LOG_0', $this->_workDir . '/ERROR_LOG_1');
+		if (!$handle = fopen($this->_workDir . '/ERROR_LOG_0','w')) {
+			$this->_logger->addErr(Pommo::_T('Can write to ERROR_LOG. Check work directory permissions!'));
+			return;
+		}
+		
+		// set log file
+		ini_set('error_log',$this->_workDir . '/ERROR_LOG_0');
 	}
 }
 ?>
