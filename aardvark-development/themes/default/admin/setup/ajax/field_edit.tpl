@@ -19,13 +19,13 @@
 <legend>'{$field_name}' parameters</legend>
 
 <div>
-<label for="field_name"><span class="required">{t}Short Name:{/t}</span>{fv message="field_name"}</label>
+<label for="field_name"><strong class="required">{t}Short Name:{/t}</strong>{fv message="field_name"}</label>
 <input type="text" name="field_name" value="{$field_name|escape}"/>
 <div class="notes">{t}Identifying name. NOT displayed on Subscription Form or seen by users.{/t}</div>
 </div>
 
 <div>
-<label for="field_prompt"><span class="required">{t}Form Name:{/t}</span>{fv message="field_prompt"}</label>
+<label for="field_prompt"><strong class="required">{t}Form Name:{/t}</strong>{fv message="field_prompt"}</label>
 <input type="text" name="field_prompt" value="{$field_prompt|escape}"/>
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}Prompt for field on the Subscription Form. e.g. %1Type your city%2{/t}</div>
 </div>

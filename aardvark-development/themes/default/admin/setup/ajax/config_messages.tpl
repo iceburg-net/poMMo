@@ -59,7 +59,6 @@
 <span class="notes">{t}(sent upon subscription attempt){/t}</span>
 </div>
 
-
 <div class="buttons">
 <input type="submit" value="{t}Update{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
@@ -73,19 +72,19 @@
 <legend>{t}subscribe{/t}</legend>
 
 <div>
-<label for="subscribe_sub"><span class="required">{t}Subject:{/t}</span>{fv message="subscribe_sub"}</label>
+<label for="subscribe_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="subscribe_sub"}</label>
 <input type="text" name="subscribe_sub" value="{$subscribe_sub|escape}" />
 <div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
 <div>
-<label for="subscribe_msg"><span class="required">{t}Message:{/t}</span>{fv message="subscribe_msg"}</label>
+<label for="subscribe_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="subscribe_msg"}</label>
 <textarea name="subscribe_msg" rows="8" cols="44">{$subscribe_msg|escape}</textarea>
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
 </div>
 
 <div>
-<label for="subscribe_suc"><span class="required">{t}Success:{/t}</span>{fv message="subscribe_suc"}</label>
+<label for="subscribe_suc"><strong class="required">{t}Success:{/t}</strong>{fv message="subscribe_suc"}</label>
 <textarea name="subscribe_suc" rows="3" cols="44">{$subscribe_suc|escape}</textarea>
 <div class="notes">{t}(Message displayed upon success){/t}</div>
 </div>
@@ -100,18 +99,17 @@
 
 </fieldset>
 
-
 <fieldset>
 <legend>{t}activate Records{/t}</legend>
 
 <div>
-<label for="activate_sub"><span class="required">{t}Subject:{/t}</span>{fv message="activate_sub"}</label>
+<label for="activate_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="activate_sub"}</label>
 <input type="text" name="activate_sub" value="{$activate_sub|escape}" />
 <div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
 <div>
-<label for="activate_msg"><span class="required">{t}Message:{/t}</span>{fv message="activate_msg"}</label>
+<label for="activate_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="activate_msg"}</label>
 <textarea name="activate_msg" rows="8" cols="44">{$activate_msg|escape}</textarea>
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
 </div>
@@ -126,12 +124,11 @@
 
 </fieldset>
 
-
 <fieldset>
 <legend>{t}Unsubscribe{/t}</legend>
 
 <div>
-<label for="unsubscribe_suc"><span class="required">{t}Success:{/t}</span>{fv message="unsubscribe_suc"}</label>
+<label for="unsubscribe_suc"><strong class="required">{t}Success:{/t}</strong>{fv message="unsubscribe_suc"}</label>
 <textarea name="unsubscribe_suc" rows="3" cols="44">{$unsubscribe_suc|escape}</textarea>
 <div class="notes">{t}(Message displayed upon success){/t}</div>
 </div>

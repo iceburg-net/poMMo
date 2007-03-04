@@ -12,19 +12,19 @@
 <form action="{$smarty.server.PHP_SELF}" method="post">
 
 <div>
-<label for="list_fromname"><span class="required">{t}From Name:{/t}</span>{fv message="list_fromname"}</label>
+<label for="list_fromname"><strong class="required">{t}From Name:{/t}</strong>{fv message="list_fromname"}</label>
 <input type="text" name="list_fromname" value="{$list_fromname|escape}" />
 <span class="notes">{t}(Default name mails will be sent from){/t}</span>
 </div>
 
 <div>
-<label for="list_fromemail"><span class="required">{t}From Email:{/t}</span>{fv message="list_fromemail"}</label>
+<label for="list_fromemail"><strong class="required">{t}From Email:{/t}</strong>{fv message="list_fromemail"}</label>
 <input type="text" name="list_fromemail" value="{$list_fromemail|escape}" />
 <span class="notes">{t}(Default email mails will be sent from){/t}</span>
 </div>
 
 <div>
-<label for="list_frombounce"><span class="required">{t}Bounce Address:{/t}</span>{fv message="list_frombounce"}</label>
+<label for="list_frombounce"><strong class="required">{t}Bounce Address:{/t}</strong>{fv message="list_frombounce"}</label>
 <input type="text" name="list_frombounce" value="{$list_frombounce|escape}" />
 <span class="notes">{t}(Returned emails will be sent to this address){/t}</span>
 </div>
@@ -50,7 +50,7 @@
 </div>
 
 <div>
-<label for="list_charset"><span class="required">{t}Character Set:{/t}</span>{fv message="list_charset"}</label>
+<label for="list_charset"><strong class="required">{t}Character Set:{/t}</strong>{fv message="list_charset"}</label>
 <select name="list_charset">
 <option value="UTF-8"{if $list_charset == 'UTF-8'} selected="selected"{/if}>{t}UTF-8 (recommended){/t}</option>
 <option value="ISO-8859-1"{if $list_charset == 'ISO-8859-1'} selected="selected"{/if}>{t}Western (ISO-8859-1){/t}</option>
@@ -67,7 +67,7 @@
 </div>
 
 <div>
-<label for="maxRuntime"><span class="required">{t}Runtime:{/t}</span>{fv message="maxRuntime"}</label>
+<label for="maxRuntime"><strong class="required">{t}Runtime:{/t}</strong>{fv message="maxRuntime"}</label>
 <input type="text" name="maxRuntime" value="{$maxRuntime|escape}" size="4" maxlength="5" />
 <span class="notes">{t}(Seconds a processing script runs for. Default: 80, Minimum: 15){/t}</span>
 </div>

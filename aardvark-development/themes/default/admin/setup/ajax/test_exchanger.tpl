@@ -4,7 +4,8 @@
 {fv validate="email"}
 
 <div id="ebody">
-{t escape=no 1="<strong>$exchanger</strong>"}A test message will be sent to the supplied recipient. If you receive it, poMMo can use the %1 exchanger. Remember to check your SPAM folder too.{/t}
+
+<p>{t escape=no 1="<strong>$exchanger</strong>"}A test message will be sent to the supplied recipient. If you receive it, poMMo can use the %1 exchanger. Remember to check your SPAM folder too.{/t}</p>
 
 <form action="{$smarty.server.PHP_SELF}" method="post">
 
@@ -12,8 +13,8 @@
 <legend>{t}Recipient{/t}</legend>
 
 <div>
-<label class="required" for="email">{t}Email:{/t}</label>
-<input type="text" name="email" value="{$email|escape}"/>
+<label for="email"><strong class="required">{t}Email:{/t}</strong></label>
+<input type="text" name="email" value="{$email|escape}" />
 <span class="notes">{t}(address to send test message to){/t}</span>
 </div>
 

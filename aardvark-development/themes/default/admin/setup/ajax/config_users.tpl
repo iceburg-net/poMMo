@@ -8,7 +8,7 @@
 <form action="{$smarty.server.PHP_SELF}" method="post">
 
 <div>
-<label for="admin_username"><span class="required">{t}Administrator Username:{/t}</span>{fv message="admin_username"}</label>
+<label for="admin_username"><strong class="required">{t}Administrator Username:{/t}</strong>{fv message="admin_username"}</label>
 <input type="text" name="admin_username" value="{$admin_username|escape}" />
 <span class="notes">{t}(you will use this to login){/t}</span>
 </div>
@@ -26,7 +26,7 @@
 </div>
 
 <div>
-<label for="admin_email"><span class="required">{t}Administrator Email:{/t}</span>{fv message="admin_email"}</label>
+<label for="admin_email"><strong class="required">{t}Administrator Email:{/t}</strong>{fv message="admin_email"}</label>
 <input type="text" name="admin_email" value="{$admin_email|escape}" />
 <span class="notes">{t}(email address of administrator){/t}</span>
 </div>

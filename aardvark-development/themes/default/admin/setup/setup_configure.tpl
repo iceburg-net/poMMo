@@ -1,7 +1,7 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jq11.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/accordion.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js" ></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
@@ -51,6 +51,7 @@
 </div>
 
 <br class="clear" />
+
 </div>
 <!-- end content (no footer)-->
 
@@ -60,29 +61,27 @@
 
 {literal}
 <script type="text/javascript">
-
 $().ready(function(){ 
-		
+
 	$('#setup').Accordion({
 		header: 'div.acMenu'
 	});
 
-	
 	$('#setup div.acMenu').hover(
 		function() { $(this).css('text-decoration','underline'); },
 		function() { $(this).css('text-decoration','none'); });
-	
+
 	$('div.ajaxLoad').each(function() {
 		var url = $('a',this).click(function(){ return false; }).attr('href');
 		$(this).load(url,function(){ assignForm(this); });
 	});
-	
+
 	$('div.jqmDialog').jqm({
 		trigger:false,
 		overlay:0,
 		ajax:'@href',
 		target:'.jqmdMSG'}).jqDrag('div.jqmdTC');
-	
+
 	switch(location.hash) {
 		case '#users': $('#setup').activate(0);
 			break;
@@ -94,9 +93,6 @@ $().ready(function(){
 			break;
 	}
 
-		
-		
-	
 });
 
 function assignForm(scope) {
