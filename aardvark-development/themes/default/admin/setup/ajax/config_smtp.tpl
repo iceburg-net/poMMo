@@ -33,13 +33,13 @@
 
 <div>
 <label for="host[{$id}]">{t}SMTP Host:{/t}</label>
-<input type="text" name="host[{$id}]" value="{$smtp[$id].host|escape}"  />
+<input type="text" name="host[{$id}]" value="{$smtp[$id].host|escape}" />
 <div class="notes">{t}(IP Address or Name of SMTP server){/t}</div>
 </div>
 
 <div>
 <label for="port[{$id}]">{t}Port Number:{/t}</label>
-<input type="text" name="port[{$id}]" value="{$smtp[$id].port|escape}"  />
+<input type="text" name="port[{$id}]" value="{$smtp[$id].port|escape}" />
 <div class="notes">{t}(Port # of SMTP server [usually 25]){/t}</div>
 </div>
 
@@ -51,13 +51,13 @@
 </div>
 
 <div>
-<label for="user[{$id}]">{t}SMTP Username:{/t} </label>
+<label for="user[{$id}]">{t}SMTP Username:{/t}</label>
 <input type="text" name="user[{$id}]" value="{$smtp[$id].user|escape}" />
 <div class="notes">{t}(optional){/t}</div>
 </div>
 
 <div>
-<label for="pass[{$id}]">{t}SMTP Password:{/t} </label>
+<label for="pass[{$id}]">{t}SMTP Password:{/t}</label>
 <input type="text" name="pass[{$id}]" value="{$smtp[$id].pass|escape}" />
 <div class="notes">{t}(optional){/t}</div>
 </div>
@@ -68,7 +68,7 @@
 {if $id == 1}
  - {t}This is your default relay{/t}
 {else}
-<input type="submit" name="deleteSmtpServer[{$id}]" id="deleteSmtpServer{$id}" value="{t 1=$id}Remove Relay #%1{/t}">
+<input type="submit" name="deleteSmtpServer[{$id}]" id="deleteSmtpServer{$id}" value="{t 1=$id}Remove Relay #%1{/t}" />
 {/if}
 <div class="output alert">{if $output}{$output}{/if}</div>
 </div>
@@ -81,11 +81,11 @@
 {/if}
 
 </form>
+
 </div>
 
 {literal}
 <script type="text/javascript">
-
 $().ready(function(){
 	var form = $('#sbody form');
 	form.find('.onChange').change(function() { form.submit(); });

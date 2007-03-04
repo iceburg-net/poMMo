@@ -12,19 +12,19 @@
 <form action="{$smarty.server.PHP_SELF}" method="post">
 
 <div>
-<label for="list_name"><span class="required">{t}List Name:{/t}</span>{fv message="list_name"}</label>
+<label for="list_name"><strong class="required">{t}List Name:{/t}</strong>{fv message="list_name"}</label>
 <input type="text" name="list_name" value="{$list_name|escape}" />
 <span class="notes">{t}(The name of your Mailing List){/t}</span>
 </div>
 
 <div>
-<label for="site_name"><span class="required">{t}Website Name:{/t}</span>{fv message="site_name"}</label>
+<label for="site_name"><strong class="required">{t}Website Name:{/t}</strong>{fv message="site_name"}</label>
 <input type="text" name="site_name" value="{$site_name|escape}" />
 <span class="notes">{t}(The name of your Website){/t}</span>
 </div>
 
 <div>
-<label for="site_url"><span class="required">{t}Website URL:{/t}</span>{fv message="site_url"}</label>
+<label for="site_url"><strong class="required">{t}Website URL:{/t}</strong>{fv message="site_url"}</label>
 <input type="text" name="site_url" value="{$site_url|escape}" />
 <span class="notes">{t}(Web address of your Website){/t}</span>
 </div>
@@ -50,7 +50,7 @@
 </div>
 
 <div>
-<label for="list_exchanger"><span class="required">{t}Mail Exchanger:{/t}</span>{fv message="list_exchanger"}</label>
+<label for="list_exchanger"><strong class="required">{t}Mail Exchanger:{/t}</strong>{fv message="list_exchanger"}</label>
 <select name="list_exchanger">
 <option value="sendmail"{if $list_exchanger == 'sendmail'} selected="selected"{/if}>Sendmail</option>
 <option value="mail"{if $list_exchanger == 'mail'} selected="selected"{/if}>{t}PHP Mail Function{/t}</option>
