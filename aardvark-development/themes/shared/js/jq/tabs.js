@@ -62,7 +62,7 @@
  *                                that should be disabled on initialization. Default value: null.
  * @option Boolean bookmarkable Boolean flag indicating if support for bookmarking and history (via
  *                              changing hash in the URL of the browser) is enabled. Default value:
- *                              false, unless the History/Remote plugin is included. In that case the
+ *                              false, unless the History/ plugin is included. In that case the
  *                              default value becomes true. @see $.ajaxHistory.initialize
  * @option Boolean remote Boolean flag indicating that tab content has to be loaded remotely from
  *                        the url given in the href attribute of the tab menu anchor elements.
@@ -388,10 +388,12 @@ $.fn.tabs = function(initial, settings) {
                 var clicked = this;
                 var toHide = $('>' + settings.tabStruct + ':visible', container);
 
-				// bb: if onClick function returns false, halt tab activation.
-                if (typeof onClick == 'function' && onClick(clicked, toShow[0], toHide[0]) == false && trueClick) {
-                	container['locked'] = false;
-                	return false;
+				// bb: if onClick function returns false, halt tab activation. // only execute callback on TRUE CLICK! 
+                if (typeof onClick == 'function' && trueClick) {
+                	if (!onClick(clicked, toShow[0], toHide[0])) {
+                		container['locked'] = false;
+                		return false;
+                	}
                 }
                 
                 // switch tab, animation prevents browser scrolling to the fragment
