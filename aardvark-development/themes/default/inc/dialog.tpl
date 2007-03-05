@@ -21,7 +21,9 @@
 </div>
 
 </div></div></div>
+{if !$dialogNoClose}
 <input type="image" src="{$url.theme.shared}images/dialog/close.gif" class="jqmdX jqmClose" />
+{/if}
 </div>
 
 

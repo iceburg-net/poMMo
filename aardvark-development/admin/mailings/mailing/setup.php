@@ -43,17 +43,21 @@ $dbvalues = PommoAPI::configGet(array(
 	'list_fromname',
 	'list_fromemail',
 	'list_frombounce',
-	'list_charset'
+	'list_charset',
+	'list_wysiwyg'
 ));
 
 // Initialize page state with default values overriden by those held in $_REQUEST
-$state =& PommoAPI::stateInit('mailing_composition',array(
+$state =& PommoAPI::stateInit('mailing',array(
 	'fromname' => $dbvalues['list_fromname'],
 	'fromemail' => $dbvalues['list_fromemail'],
 	'frombounce' => $dbvalues['list_frombounce'],
 	'list_charset' => $dbvalues['list_charset'],
+	'wysiwyg' => $dbvalues['list_wysiwyg'],
+	'mailgroup' => 'all',
 	'subject' => '',
-	'mailgroup' => 'all'
+	'body' => '',
+	'altbody' => ''
 ),
 $_POST);
 

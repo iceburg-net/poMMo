@@ -77,7 +77,7 @@ class PommoInstall {
  		global $pommo;
  		$dbo =& $pommo->_dbo;
  		$logger =& $pommo->_logger;
- 		
+ 			
  		if (!is_numeric($serial))
  			Pommo::kill('Invalid serial passed; '.$serial);
  			
@@ -86,8 +86,10 @@ class PommoInstall {
 		$query = "
 			SELECT serial FROM ".$dbo->table['updates']." 
 			WHERE serial=%i";
+			
 		$query = $dbo->prepare($query,array($serial));
 		if ($dbo->records($query)) {
+			var_dump($serial);
 			$msg .= "skipped.";
 			$logger->addMsg($msg);
 			return true;
@@ -95,9 +97,11 @@ class PommoInstall {
 			
 		$query = $dbo->prepare($sql);
 		if (!$dbo->query($query)) {
-			$msg .= "FAILED.";
+			$msg .= ($GLOBALS['pommoLooseUpgrade']) ?
+				'IGNORED.' : 'FAILED';
 			$logger->addErr($msg);
-			return false;
+			
+			return $GLOBALS['pommoLooseUpgrade'];
 		}
 		
 		$query = "

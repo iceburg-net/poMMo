@@ -73,7 +73,7 @@ class Pommo {
 			Pommo::kill('Could not read config.php');
 
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
-		$this->_debug = (empty($config['debug'])) ? false : true; 
+		$this->_debug = (strtolower($config['debug']) != 'on') ? false : true; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_logger->_verbosity = $this->_verbosity;
 		
@@ -337,7 +337,7 @@ class Pommo {
 	// kill => used to terminate a script
 	function kill($msg = NULL, $backtrace = FALSE) {
 		global $pommo;
-
+		
 		// output passed message
 		if ($msg || !ob_get_length()) {
 			

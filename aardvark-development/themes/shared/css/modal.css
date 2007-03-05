@@ -114,6 +114,9 @@ div.jqmDialog input:focus, div.jqmDialog input.iefocus { background-color: #eaff
 /* Misc Styling */
 div.jqmdWide { width: 560px; margin-left: -280px; }
 div.jqmdTall { height: 370px; }
+div.jqmdShort { height: 115px; }
+
+div.darkOverlay { background-color: #333; }
 
 
 /* Caching CSS courtesf of;

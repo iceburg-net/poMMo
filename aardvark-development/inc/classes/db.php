@@ -95,7 +95,9 @@ class PommoDB {
 	}
 
 	function dieOnQuery($val) {
-		return ($val) ? $this->_dieOnQuery = TRUE : $this->_dieOnQuery = FALSE;
+		if (is_bool($val))
+			return $this->_dieOnQuery = $val;
+		return false;
 	}
 
 	// alias to SafeSQL->Query(); See inc/lib/safesql/README for usage
