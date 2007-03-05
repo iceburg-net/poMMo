@@ -74,6 +74,9 @@
 				continue;
 			}
 			
+			// shorten
+			$in[$id] = substr($in[$id],0,255);
+			
 			switch ($field['type']) {
 				case "checkbox":
 					if (strtolower($in[$id]) == 'true')
@@ -143,8 +146,6 @@
 					}
 				break;
 			}
-			// shorten
-			$in[$id] = substr($in[$id],0,60);
 		}
 		// prune
 		if($p['prune'])
