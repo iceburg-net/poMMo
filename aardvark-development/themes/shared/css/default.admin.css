@@ -326,9 +326,9 @@ select.pvInvalid {
 .clear { clear: both; }
 .right { float: right; }
 
-div.pager {
-	text-align:center;
-}
+div.pager {text-align:center;}
+
+div.helpToggle img {cursor: pointer;}
 
 /* make the button look like a link */
 #resetPassword {

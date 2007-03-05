@@ -160,8 +160,12 @@
 
 <input type="submit" id="bForm-submit" name="preview" value="{t}Continue{/t}" />
 <a href="mailings_send.php">{t}Cancel{/t}</a>
-
 </div>
+
+<button type="submit" name="altGen" id="altGen" onclick="xinhaSubmit()">
+<img src="{$url.theme.shared}images/icons/down.png" alt="down icon" /> {t}Copy text from HTML Message{/t}
+</button>
+
 
 {/if}
 

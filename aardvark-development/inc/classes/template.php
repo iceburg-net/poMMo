@@ -40,7 +40,7 @@ class PommoTemplate extends Smarty {
 		$this->plugins_dir = array (
 				'plugins', // the default under SMARTY_DIR
 				$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext');
-
+				
 		// set base/core variables available to all template
 		$this->assign('url', array (
 			'theme' => array (
@@ -95,7 +95,7 @@ class PommoTemplate extends Smarty {
 			$this->assign('messages', $pommo->_logger->getMsg());
 		if ($pommo->_logger->isErr())
 			$this->assign('errors', $pommo->_logger->getErr());
-
+			
 		return parent :: display($resource_name, $cache_id = null, $compile_id = null, $display = false);
 	}
 

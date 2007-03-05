@@ -73,7 +73,6 @@ if (empty($_REQUEST['continue'])) {
 	if (isset ($_REQUEST['debugInstall']))
 		$dbo->debug(TRUE);
 
-	$dbo->dieOnQuery(FALSE);
 	if (PommoUpgrade()) {
 		$logger->addErr(Pommo::_T('Upgrade Complete!'));
 
@@ -89,10 +88,14 @@ if (empty($_REQUEST['continue'])) {
 		$logger->addErr(Pommo::_T('Upgrade Failed!'));
 	}
 	
-	// clear the working Directory
+	// clear the working directory template files
+	$smarty->display('upgrade.tpl');
+	
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
-	if(!PommoHelperMaintenance::delDir($pommo->_workDir))
+	if(!PommoHelperMaintenance::delDir($pommo->_workDir.'/pommo/smarty'))
 		$logger->addErr('Unable to Clear Working Directory (non fatal)');
+	
+	Pommo::kill();	
 }
 
 $smarty->display('upgrade.tpl');

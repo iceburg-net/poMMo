@@ -18,30 +18,39 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-// poMMo update routines
-
-// upgrades poMMo
-// returns bool (true if upgraded)
+ 
 function PommoUpgrade() {
 	global $pommo;
-	
+	$dbo =& $pommo->_dbo;
+		
 	// fetch the current/old revision
 	$config = PommoAPI::configGet('revision');
 	
-	// if forced upgrade was requested, fake an earlier version.
-	if($config['revision'] == $pommo->_revision)
+	// halts upgrade on failed query
+	$GLOBALS['pommoLooseUpgrade'] = FALSE;
+	
+	// if forced upgrade was requested, fake an earlier version,
+	//	disable die on failed queries
+	if($config['revision'] == $pommo->_revision) {
 		$config['revision'] = $config['revision'] - 1;
-		
-	while($config['revision'] < $pommo->_revision) {
+		$GLOBALS['pommoLooseUpgrade'] = TRUE;
+		$dbo->dieOnQuery(false);
+	}
+
+	while($config['revision'] < $pommo->_revision) { 
 		if(!PommoRevUpgrade(intval($config['revision'])))
 			return false;
 		$config = PommoAPI::configGet('revision');
 	}
+	$dbo->dieOnQuery(true);
 	return true;
 }
 
+// update routines
+
 // upgrades to a revisions steps
-function PommoRevUpgrade($rev) {
+//	if strict is true, return on query failure, if false, continue
+function PommoRevUpgrade($rev, $strict = true) {
 	global $pommo;
 	$logger =& $pommo->_logger;
 	$dbo =& $pommo->_dbo;
@@ -154,8 +163,21 @@ function PommoRevUpgrade($rev) {
 			,"Adding cancel type to mailing commands")) return false;
 			
 			if (!PommoInstall::incUpdate(14,
-			"INSERT INTO {$dbo->table['config']} (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES ('maxRuntime', '', '', 'off', 'on')"
+			"INSERT INTO {$dbo->table['config']} (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES ('maxRuntime', '80', '', 'off', 'on')"
 			,"Enabling Mailing Runtime to be set in Config")) return false;
+			
+			if (!PommoInstall::incUpdate(15,
+			"INSERT INTO {$dbo->table['config']} (`config_name`, `config_value`, `config_description`, `autoload`, `user_change`) VALUES ('list_wysiwyg', 'on', '', 'off', 'off')"
+			,"Persisting State of WYSIWYG Editor Toggle")) return false;
+			
+			if (!PommoInstall::incUpdate(16,
+			"ALTER TABLE {$dbo->table['subscriber_data']} CHANGE `value` `value` CHAR( 60 ) NOT NULL"
+			,"Tuning Subscriber Data Table")) return false;
+			
+			if (!PommoInstall::incUpdate(17,
+			"ALTER TABLE {$dbo->table['subscribers']} CHANGE `email` `email` CHAR( 60 ) NOT NULL"
+			,"Tuning Subscribers Table")) return false;
+			
 			
 			// end of upgrade (break)
 			break;

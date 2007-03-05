@@ -11,18 +11,23 @@ CREATE TABLE :::config::: (
 
 INSERT INTO :::config::: VALUES ('admin_username', 'admin', 'Username', 'off', 'on');
 INSERT INTO :::config::: VALUES ('admin_password', 'c40d70861d2b0e48a8ff2daa7ca39727', 'Password', 'off', 'on');
+INSERT INTO :::config::: VALUES ('admin_email', 'nesta@iceburg.net', 'Administrator Email', 'on', 'on');
 INSERT INTO :::config::: VALUES ('site_name', 'A', 'Website Name', 'on', 'on');
 INSERT INTO :::config::: VALUES ('site_url', 'http://66.111.62.220/pommo', 'Website URL', 'on', 'on');
 INSERT INTO :::config::: VALUES ('site_success', '', 'Signup Success URL', 'off', 'on');
+INSERT INTO :::config::: VALUES ('site_confirm', '', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_name', 'A', 'List Name', 'on', 'on');
-INSERT INTO :::config::: VALUES ('admin_email', 'nesta@iceburg.net', 'Administrator Email', 'on', 'on');
 INSERT INTO :::config::: VALUES ('list_fromname', 'poMMo Administrative Team', 'From Name', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_fromemail', 'pommo@yourdomain.com', 'From Email', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_frombounce', 'bounces@yourdomain.com', 'Bounces', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_exchanger', 'sendmail', 'List Exchanger', 'off', 'on');
 INSERT INTO :::config::: VALUES ('list_confirm', 'on', 'Confirmation Messages', 'off', 'on');
+INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
+INSERT INTO :::config::: VALUES ('list_wysiwyg', 'on', '', 'off', 'off');
+INSERT INTO :::config::: VALUES ('maxRuntime', '80', '', 'off', 'on');
+INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
+INSERT INTO :::config::: VALUES ('notices', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('demo_mode', 'on', 'Demonstration Mode', 'on', 'on');
-INSERT INTO :::config::: VALUES ('site_confirm', '', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('smtp_1', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('smtp_2', '', '', 'off', 'off');
 INSERT INTO :::config::: VALUES ('smtp_3', '', '', 'off', 'off');
@@ -33,13 +38,9 @@ INSERT INTO :::config::: VALUES ('throttle_DMPP', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_BPS', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('messages', '', '', 'off', 'off');
-INSERT INTO :::config::: VALUES ('notices', '', '', 'off', 'off');
-INSERT INTO :::config::: VALUES ('maxRuntime', '', '', 'off', 'on');
-INSERT INTO :::config::: VALUES ('list_charset', 'UTF-8', '', 'off', 'on');
+INSERT INTO :::config::: VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on');
 INSERT INTO :::config::: VALUES ('version', 'Aardvark PR15', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');
-INSERT INTO :::config::: VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on');
 INSERT INTO :::config::: VALUES ('revision', '33', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
@@ -143,7 +144,7 @@ CREATE TABLE :::subscriber_data::: (
   `data_id` bigint(20) unsigned NOT NULL auto_increment,
   `field_id` int(10) unsigned NOT NULL default '0',
   `subscriber_id` int(10) unsigned NOT NULL default '0',
-  `value` varchar(60) NOT NULL default '',
+  `value` char(60) NOT NULL default '',
   PRIMARY KEY  (`data_id`),
   KEY `subscriber_id` (`subscriber_id`,`field_id`)
 );
@@ -164,7 +165,7 @@ CREATE TABLE :::subscriber_pending::: (
 -- SUBSCRIBER_UPDATE
 
 CREATE TABLE :::subscriber_update::: (
-  `email` varchar(60) NOT NULL,
+  `email` char(60) NOT NULL,
   `code` char(32) NOT NULL ,
   `activated` datetime NULL default NULL ,
   `touched` timestamp(14) NOT NULL,
@@ -176,7 +177,7 @@ PRIMARY KEY ( `email` )
 
 CREATE TABLE :::subscribers::: (
   `subscriber_id` int(10) unsigned NOT NULL auto_increment,
-  `email` varchar(60) NOT NULL default '',
+  `email` char(60) NOT NULL default '',
   `time_touched` timestamp(14) NOT NULL,
   `time_registered` datetime NOT NULL,
   `flag` tinyint(1) NOT NULL default '0' COMMENT '0: NULL, 1-8: REMOVE, 9: UPDATE',

@@ -51,8 +51,11 @@
  	}
  	
  	// recursively deletes the contents of a directory
- 	function delDir($dirName) {
-		global $pommo;
+ 	// if files is passed, only a directories files will be removed
+ 	function delDir($dirName, $orig = false) {
+		if (!$orig)
+			$orig = $dirName;
+			
 		if (empty ($dirName)) 
 			return true;
 			
@@ -61,14 +64,14 @@
 			while ($file = $dir->read()) {
 				if ($file != '.' && $file != '..') {
 					if (is_dir($dirName . '/' . $file)) {
-						PommoHelperMaintenance::delDir($dirName . '/' . $file);
+						PommoHelperMaintenance::delDir($dirName . '/' . $file, $orig);
 					} else {
 						unlink($dirName . '/' . $file) or die('File ' . $dirName . '/' . $file . ' couldn\'t be deleted!');
 					}
 				}
 			}
 			$dir->close();
-			if ($dirName != $pommo->_workDir)
+			if ($dirName != $orig)
 				@ rmdir($dirName) or die('Folder ' . $dirName . ' couldn\'t be deleted!');
 		} else {
 			return false;

@@ -1,7 +1,8 @@
 {if $success}
 <input type="hidden" id="success" value="{$success}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...
-{else}
+{php}return;{/php}
+{/if}
 
 {* Field Validation - see docs/template.txt documentation *}
 {* {fv form='general'} *}
@@ -16,7 +17,7 @@
 {include file="inc/messages.tpl"}
 </div>
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
 
 <p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}Fields in %1bold%2 are required{/t}</p>
 
@@ -77,4 +78,3 @@
 </div>
 
 </form>
-{/if}

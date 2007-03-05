@@ -1,11 +1,14 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
+<script type="text/javascript" src="{$url.theme.shared}js/tinymce/tiny_mce.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jq11.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/history.js" ></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/tabs.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
+
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/tabs.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
 {/capture}
 {include file="inc/admin.header.tpl" sidebar='off'}
 
@@ -26,50 +29,266 @@
 	</ul>
 </div>
 
+{capture name=personalize}
+<div class="helpToggle">
+<img src="{$url.theme.shared}images/icons/help.png" alt="help icon" style="float: left; margin: 0 10px; 0 5px;" />
+<p>
+{t}Mailings may be personalized. A subscriber's information will be substituted in place of personalization placeholders. Any subscriber field can be used in a personalization placeholder. If the subscriber is missing a value for a personalization, a default substitution may be supplied.{/t}
+<br /><br />
+{t escape=no 1='<tt>' 2='</tt>'}For instance, you may begin a mailing with "Dear %1[[first_name|Subscriber]]%2 ..." -- 'first_name' is the name of a subscriber field, and 'Subscriber' is the default substitution.{/t}
+</p>
+</div>
+
+<div class="alert">
+<strong>{t}Syntax{/t}</strong> --&gt; <br />
+{t}[[Field_Name]] or [[Field_Name|Default]]{/t}
+</div>
+
+<hr />
+
+<p>
+<label for="field">{t}Personalization{/t}:</label>
+<select id="field">
+<option value="">{t}choose field{/t}</option>
+<option value="Email">{t}Email{/t}</option>
+{foreach from=$fields key=id item=field}
+<option value="{$field.name}">{$field.name}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+<label for="default">{t}Default{/t}:</label>
+<input type="text" id="default" />
+</p>
+
+
+<div class="buttons">
+<input type="submit" id="insert" value="{t}Insert{/t}" />
+</div>		
+{/capture}
+
+{capture name=specialLink}
+a
+{/capture}
+
 {literal}
 <script type="text/javascript">
+/* TabWizzard JS (c) 2007 Brice Burgess, <bhb@iceburg.net>
+	Licensed under the GPL */
+	
+var pommo = {
+	clickedTab: false,
+	isTiny: false,
+	isForm: false,
+	ajaxQueue: [], // for synchronous ajax
+	
+	// prepares forms of class ajax to be submitted via ajax
+	//	returns jQuery object of affected elements
+	
+	assignForm: function(scope) {
+		
+		return this.isForm = $('form.ajax',scope).ajaxForm( { 
+			target: scope,
+			beforeSubmit: function() {
+				$('input[@type=submit]', scope).hide();
+				$('img[@name=loading]', scope).show();
+			},
 
-// globals
-clickedTab = false; // tab to open
+			success: function() {
+
+				pommo.assignForm(this);
+				$('div.output',this).fadeTo(5000,0.35);
+				
+				if($('#success')[0]) // form passed server side validation
+					pommo.switchTab();
+				else // form failed server side validation, reassign
+					pommo.assignForm(this);
+			}
+		});
+	},
+	
+	// prepares a textarea of class wysiwyg as a wysiwyg editor
+	//	returns jQuery object of affected elements
+	
+	makeTiny: function(scope) {
+		return this.isTiny = $('textarea.wysiwyg',scope).each(function(){
+			var id = this.attributes.getNamedItem("name").value;
+			tinyMCE.execCommand('mceAddControl', false, id);
+		});
+	},
+	
+	// removes wysiwyg functionality on textareas
+	
+	brakeTiny: function(scope) {
+		$('textarea.wysiwyg',scope).each(function(){
+			var id = this.attributes.getNamedItem("name").value;
+			tinyMCE.execCommand('mceFocus', false, id);                    
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+		});
+		return this.isTiny = $('.__NO_CLASS');
+	},
+	
+	// Special submit function for COMPOSE tab
+	
+	bodySubmit: function(scope) {
+	
+		var bodies = {
+			body: (this.isTiny.length > 0) ? 
+				tinyMCE.getContent() : $('textarea[@name=body]',scope).val(),
+			altbody:
+				$('textarea[@name=altbody]',scope).val()
+		};
+
+		$('#wait').jqmShow();
+				
+		$.ajax({
+			type: "POST",
+			url: "mailing/ajax.savebody.php",
+			data: bodies,
+			dataType: 'json',
+			success: function(json){
+				if(!json.success)
+					return;
+				
+				pommo.brakeTiny($('form'));
+				pommo.switchTab();
+				$('#wait').jqmHide();
+			}
+		});
+	},
+	
+	// triggers the clicked tab, or proceed to "next" tab (extraced from #success value)
+	//	optionally, the tabIndex can be passed
+		
+	switchTab: function(tabIndex) {
+		
+		if (typeof tabIndex != 'undefined') {
+			$('#mailing').triggerTab(tabIndex);
+			return;
+		}
+		
+		if(this.clickedTab) $(this.clickedTab).trigger('triggerTab'); // load clicked tab
+		else $('#mailing').triggerTab($('#success').val()); // load "next" tab
+	},
+	
+	// sends ajax requests in synchronous order
+	syncAjax: function() {
+		var url = this.ajaxQueue.pop();
+		if (url)
+			$.ajax({
+				url: url,
+				success: function() {
+					pommo.syncAjax();
+				}
+			});
+		return;
+	},
+	
+	sendAjax: function(url) {
+		this.ajaxQueue.push(url);
+		this.syncAjax();
+		return;
+	}
+	
+}
 
 $().ready(function(){ 
+	
 	$('#mailing').tabs({
 		remote: true,
 		onClick: function(tab, loading, current){
-			$('form',current).submit();
-			clickedTab = tab;
-			return false; // prevent tab from activating
+				
+			pommo.clickedTab = tab;
+			
+			// if a form is present, prevent clicked tab from activiating.
+			//	tab will activate if form is valid, via the ajaxForm onSuccess function
+			
+			if(pommo.isForm.length > 0) {
+				pommo.isForm.submit();
+				return false; 
+			}
+			
+			if($('textarea[@name=body]',current).length > 0) {
+				pommo.bodySubmit(current);
+				return false;
+			}
+			
+			return true;
+			
 			}, 
 		onShow: function(tab, loading, current){
-			assignForm(loading);
-			clickedTab = false;
-			},
-		onHide: function(){ return;
-			}});
-
+			
+			// assign wysiwyg and ajax form functionality
+			
+			pommo.makeTiny(loading);
+			pommo.assignForm(loading);
+			pommo.clickedTab = false;
+			}	
+		});
+		
+	// initialize wait dialog
+	
+	$('#wait').jqm({
+		trigger: false, 
+		modal: true,
+		overlay: 0
+	});
+	
+	// initialize other dialogs
+	
+	$('#personalize').jqm({trigger: false}).jqDrag('div.jqmdTC');
+	
+	// initialize help buttons
+	
+	$('div.helpToggle img:first').click(function() {
+		$(this).siblings('p').toggle();
+		return false;
+	});
 
 });
 
-function assignForm(scope) {
-	$('form',scope).ajaxForm( { 
-		target: scope,
-		beforeSubmit: function() {
-			$('input[@type=submit]', scope).hide();
-			$('img[@name=loading]', scope).show();
-		},
-		success: function() { 
-			assignForm(this); 
-			$('div.output',this).fadeTo(5000,0.35);
-			
-			if($('#success')[0] && clickedTab)
-				$(clickedTab).trigger('triggerTab'); // load clicked tab
-			else
-				$('#mailing').triggerTab($('#success').val()); // load "next" tab
-			}
-		}
-	);
+// initialize wysiwyg namespace
+
+var lang="{/literal}{$lang}{literal}";
+var s=',separator,';
+
+// poMMo languages not supported by TinyMCE:
+switch (lang) {
+	case 'bg':
+	case 'en-uk':
+		lang='en';
+		break;
 }
+
+tinyMCE.init({
+	mode : "none",
+	theme : "advanced",
+	plugins : "style",
+	language: lang,
+	theme_advanced_buttons1 : 
+		'bold,italic,underline,strikethrough'+s+
+		'bullist,numlist'+s+
+		'link,unlike,image'+s+
+		'hr,sub,sup,charmap'+s+
+		'forecolor,backcolor,styleprops'+s+
+		'undo,redo'
+		,
+	theme_advanced_buttons2 : 
+		'justifyleft,justifycenter,justifyright,justifyfull'+s+
+		'outdent,indent'+s+
+		'formatselect,fontselect,fontsizeselect'+s+
+		'removeformat'
+		,
+	theme_advanced_buttons3 : ""
+});
+
 </script>
 {/literal}
+
+{capture name=dialogs}
+{include file="inc/dialog.tpl" dialogID="wait" dialogNoClose=true dialogBodyClass="jqmdShort"}
+{include file="inc/dialog.tpl" dialogID="personalize" dialogContent=$smarty.capture.personalize dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{/capture}
 
 {include file="inc/admin.footer.tpl"}

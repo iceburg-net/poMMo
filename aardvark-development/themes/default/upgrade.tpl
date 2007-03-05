@@ -48,6 +48,4 @@
 
 <p><a href="{$url.base}"><img src="{$url.theme.shared}images/icons/back.png" alt="back icon" class="navimage" /> {t}Continue to login page{/t}</a></p>
 
-<p><em>{t escape="no" url='<a href="http://pommo.sourceforge.net/">poMMo</a>'}Page fueled by %1 mailing management software.{/t}</em></p>
-
 {include file="inc/admin.footer.tpl"}
