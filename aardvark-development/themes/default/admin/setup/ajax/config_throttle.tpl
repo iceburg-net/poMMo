@@ -102,7 +102,7 @@ function tInit() {
 		var o={
 			accept: '.handle',
 			values: [[slides[i],0]],
-			onChange: function(xp, yp, x, y) { var e=this.parentNode; tUpdate({type: e.id,x:x,e:e}); }};
+			onSlide: function(xp, yp, x, y) { var e=this.parentNode; tUpdate({type: e.id,x:x,e:e}); }};
 		if (i == 'dmpp')
 			o.fractions = 5;
 		tUpdate({type: i, x: slides[i], e: $('#'+i).Slider(o)[0]});
