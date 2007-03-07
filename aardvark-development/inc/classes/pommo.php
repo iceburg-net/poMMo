@@ -410,12 +410,16 @@ class Pommo {
 				
 		// obtain an exclusive temp file name
 		//$this->_errorLog = tempnam($pommo->_workDir.'/','ERROR_LOG');
-		if(is_file($this->_workDir . '/ERROR_LOG_0'))
-			rename($this->_workDir . '/ERROR_LOG_0', $this->_workDir . '/ERROR_LOG_1');
+		
+		
+		if (filesize($this->_workDir . '/ERROR_LOG_0'))
+			rename($this->_workDir . '/ERROR_LOG_0', $this->_workDir . '/ERROR_LOG_'.time());
+			
 		if (!$handle = fopen($this->_workDir . '/ERROR_LOG_0','w')) {
 			$this->_logger->addErr(Pommo::_T('Can write to ERROR_LOG. Check work directory permissions!'));
 			return;
 		}
+		fclose($handle);
 		
 		// set log file
 		ini_set('error_log',$this->_workDir . '/ERROR_LOG_0');

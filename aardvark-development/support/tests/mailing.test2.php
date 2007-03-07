@@ -26,12 +26,17 @@ require ('../../bootstrap.php');
 $pommo->init(array('install' => TRUE));
 $logger =& $pommo->_logger;
 
+// start error logging
+$pommo->logErrors();
+
 // ignore user abort
 ignore_user_abort(true);
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 
 $code = (empty($_GET['code'])) ? null : $_GET['code'];
 $spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);
+
+trigger_error('Testing Log, Spawn #'.$spawn);
 
 $fileContent = "<?php die(); ?>\n[code] = $code\n[spawn] = $spawn\n";
 
@@ -52,7 +57,7 @@ sleep(1);
 // respawn test
 if (!PommoMailCtl::spawn($pommo->_baseUrl.'support/tests/mailing.test2.php?'.
 	'code='.$code.
-	'&spawn='.$spawn),true) {
+	'&spawn='.$spawn,true)) {
 
 	$fileContent .= '[error] = true';
 	$handle = fopen($pommo->_workDir . '/mailing.test.php', 'w');

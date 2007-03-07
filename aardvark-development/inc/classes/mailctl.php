@@ -93,7 +93,7 @@ class PommoMailCtl {
 		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 10);
 
 		// LOG SPAWN ATTEMPTS TO FILE *TEMP, DEBUG*
-		if($log) {
+		if($log || $pommo->_debug) {
 			if(is_file($pommo->_workDir . '/SPAWN_0'))
 				copy($pommo->_workDir . '/SPAWN_0',$pommo->_workDir . '/SPAWN_1');
 				
@@ -108,7 +108,9 @@ class PommoMailCtl {
 			sleep(1);
 			fclose($socket); // spawned script must have ignore_user_abort, eh? ;)
 		} else {
-			$logger->addMsg(Pommo::_T('Error Spawning Page') . ' ** Errno : Errstr: ' . $errno . ' : ' . $errstr,3,TRUE);
+			$msg = time().' >>> Error Spawning Page! ** Errno : Errstr: ' . $errno . ' : ' . $errstr;
+			$logger->addMsg($msg,3,TRUE);
+			trigger_error($msg);
 			return false;
 		}
 		return true;
