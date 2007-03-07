@@ -407,7 +407,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		}
 		
 		// respwn
-		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?'.
+		if (!PommoMailCtl::spawn($GLOBALS['pommo']->_baseUrl.'admin/mailings/mailings_send4.php?'.
 			'code='.$this->_code.
 			'&serial='.$this->_serial.
 			'&id='.$this->_id))
