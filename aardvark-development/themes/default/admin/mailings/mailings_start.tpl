@@ -33,9 +33,9 @@
 <div class="helpToggle">
 <img src="{$url.theme.shared}images/icons/help.png" alt="help icon" style="float: left; margin: 0 10px; 0 5px;" />
 <p>
-{t}Mailings may be personalized. A subscriber's information will be substituted in place of personalization placeholders. Any subscriber field can be used in a personalization placeholder. If the subscriber is missing a value for a personalization, a default substitution may be supplied.{/t}
+{t escape=no 1="<a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a>"}Any %1subscriber field%2 may be used to personalize the message. If the subscriber is missing a value for a personalization, a default substitution may be supplied. Values are injected into mailings to personalize them per individual.{/t}
 <br /><br />
-{t escape=no 1='<tt>' 2='</tt>'}For instance, you may begin a mailing with "Dear %1[[first_name|Subscriber]]%2 ..." -- 'first_name' is the name of a subscriber field, and 'Subscriber' is the default substitution.{/t}
+{t escape=no 1='<tt>' 2='</tt>'}For instance, you may begin a mailing with "Dear %1[[first_name|Subscriber]]%2, Happy New Year!". In this example 'first_name' is the name of a subscriber field, and 'Subscriber' is the default substitution.{/t}
 </p>
 </div>
 
@@ -48,9 +48,12 @@
 
 <p>
 <label for="field">{t}Personalization{/t}:</label>
-<select id="field">
+<select name="field">
 <option value="">{t}choose field{/t}</option>
-<option value="Email">{t}Email{/t}</option>
+<option value="email">{t}Email{/t}</option>
+<option value="ip">{t}IP Address{/t}</option>
+<option value="registered">{t}Registered{/t}</option>
+<option value="">-----------</option>
 {foreach from=$fields key=id item=field}
 <option value="{$field.name}">{$field.name}</option>
 {/foreach}
@@ -59,17 +62,45 @@
 
 <p>
 <label for="default">{t}Default{/t}:</label>
-<input type="text" id="default" />
+<input type="text" name="default" />
 </p>
 
-
 <div class="buttons">
-<input type="submit" id="insert" value="{t}Insert{/t}" />
+<input type="submit" class="tinyInject" value="{t}Insert{/t}" />
+<input type="submit" class="jqmClose" value="{t}Cancel{/t}" />
 </div>		
 {/capture}
 
 {capture name=specialLink}
-a
+<div class="alert">
+<p>
+{t escape=no 1="<strong>" 2="</strong>"}%1Unsubscribe%2: Personalized URL of subscriber update/unsubscribe page.{/t}
+</p>
+
+<p>
+{t escape=no 1="<strong>" 2="</strong>" 3="<a href='`$url.base`admin/setup/setup_configure.php#mailings'>" 4='</a>'}%1Web Link%2: URL to view this mailing on your website (note: %3public mailings%4 must be enabled){/t}
+</p>
+
+<p>
+{t escape=no 1="<strong>" 2="</strong>"}%1ID%2: Outputs the subscriber's unique ID. This is useful for tracking reads/reporting.{/t}
+</p>
+
+</div>
+
+<hr />
+
+<p>
+<label for="field">{t}Special Link{/t}:</label>
+<select name="field">
+<option value="!unsubscribe">{t}Unsubscribe{/t}</option>
+<option value="!weblink">{t}Web Link{/t}</option>
+</select>
+</p>
+
+<div class="buttons">
+<input type="submit" class="tinyInject" value="{t}Insert{/t}" />
+<input type="submit" class="jqmClose" value="{t}Cancel{/t}" />
+</div>	
 {/capture}
 
 {literal}
@@ -237,7 +268,7 @@ $().ready(function(){
 	
 	// initialize other dialogs
 	
-	$('#personalize').jqm({trigger: false}).jqDrag('div.jqmdTC');
+	var dialogs = $('#personalize,#specialLink').jqm({trigger: false}).jqDrag('div.jqmdTC');
 	
 	// initialize help buttons
 	
@@ -245,7 +276,38 @@ $().ready(function(){
 		$(this).siblings('p').toggle();
 		return false;
 	});
-
+	
+	// initialize personalization ++ special link injection buttons
+	$('input.tinyInject',dialogs).click(function() {
+		
+		var 
+			parent=$(this).parents('div.jqmDialog:first'),
+			v=$('select',parent);
+			d=$('input[@name=default]'),
+			out='',
+			_value=v.val(),
+			_default=(d[0] && d.val() != '') ? '|'+d.val() : '';
+		
+		if (_value == '') {
+			alert ('{/literal}{t}You must choose a field{/t}{literal}');
+			return false;
+		}
+		
+		out='[['+_value+_default+']]';
+		
+		// reset select, default
+		var o = v[0].options; o[0].selected = true;
+		d.val('');
+		
+		if (pommo.isTiny.length > 0) {
+			$(tinyMCE.getInstanceById('body').getBody()).append(out);
+			tinyMCE.updateContent(out); }
+		else
+			$('textarea[@name=body]')[0].value += out;
+		
+		parent.jqmHide();
+		return false;
+	});
 });
 
 // initialize wysiwyg namespace
@@ -289,6 +351,7 @@ tinyMCE.init({
 {capture name=dialogs}
 {include file="inc/dialog.tpl" dialogID="wait" dialogNoClose=true dialogBodyClass="jqmdShort"}
 {include file="inc/dialog.tpl" dialogID="personalize" dialogContent=$smarty.capture.personalize dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="specialLink" dialogContent=$smarty.capture.specialLink dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

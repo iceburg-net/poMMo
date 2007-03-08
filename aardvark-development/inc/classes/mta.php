@@ -428,7 +428,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
-		$msg = ($msg) ? $msg : '*** ERROR THROWN *** PHP Invoked Shutdown Function. Processor Abruptly Terminated. See ERROR_LOG_0,1 IN WORK DIRECTORY. Runtime: '.(time() - $this->_start).' seconds.';
+		$msg = ($msg) ? $msg : '*** ERROR THROWN *** PHP Invoked Shutdown Function. Processor Abruptly Terminated. See ERROR_LOG IN WORK DIRECTORY. Runtime: '.(time() - $this->_start).' seconds.';
 		
 		$logger->addMsg($msg,3,TRUE);
 		echo $msg;
