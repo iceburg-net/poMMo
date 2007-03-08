@@ -11,13 +11,14 @@
 <form action="{$smarty.server.PHP_SELF}" method="post">
 
 <div class="compose">
-<h4>{t}Mailing Body{/t}</h4>
+<h4>{t}HTML Message{/t}</h4>
 <textarea name="body" {if $wysiwyg == 'on'}class="wysiwyg"{/if}>{$body}</textarea>
+<span class="notes">({t}Leave blank to only send text version{/t})</span>
 </div>
 
 <ul class="inpage_menu">
 <li><a href="#" id="e_toggle"><img src="{$url.theme.shared}images/icons/viewhtml.png" alt="icon" border="0" align="absmiddle" /> {t escape=no 1="<span id='toggleText'>$toggleText</span>"}Toggle %1{/t}</a></li>
-<li><a href="#">{t}Insert Special Link{/t}</a></li>
+<li><a href="#" id="e_specialLink">{t}Insert Special Link{/t}</a></li>
 <li><a href="#" id="e_personalize">{t}Add Personalization{/t}</a></li>
 <li><a href="#"><img src="{$url.theme.shared}images/icons/edit.png" alt="icon" border="0" align="absmiddle" /> {t}Save as Template{/t}</a></li>
 </ul>
@@ -25,6 +26,7 @@
 <div class="compose">
 <h4>{t}Text Version{/t}</h4>
 <textarea name="altbody">{$altbody}</textarea>
+<span class="notes">({t}Leave blank to send only HTML{/t})</span>
 </div>
 
 <ul class="inpage_menu">
@@ -77,9 +79,12 @@ $().ready(function() {
 	});
 	
 	$('#e_personalize').click(function() {
-		
 		$('#personalize').jqmShow();
-		
+		return false;
+	});
+	
+	$('#e_specialLink').click(function() {
+		$('#specialLink').jqmShow();
 		return false;
 	});
 });

@@ -23,6 +23,7 @@
  *********************************/
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -41,8 +42,9 @@ if ($pommo->_config['demo_mode'] == 'on')
 	$logger->addMsg(Pommo::_T('Demonstration Mode is on -- no Emails will actually be sent. This is good for testing settings.'));
 
 
-// assign language
+// assign language (for wysiwyg)
 $smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
+$smarty->assign('fields',PommoField::get());
 
 $smarty->display('admin/mailings/mailings_start.tpl');
 Pommo::kill();

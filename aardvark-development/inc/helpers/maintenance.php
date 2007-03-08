@@ -26,6 +26,18 @@
  		if(is_file($pommo->_workDir.'/import.csv'))
  			if (!unlink($pommo->_workDir.'/import.csv'))
  				Pommo::kill('Unable to remove import.csv');
+ 				
+ 		// truncate error log
+ 		if (filesize($pommo->_workDir . '/ERROR_LOG') > 25)
+			rename($pommo->_workDir . '/ERROR_LOG', $pommo->_workDir . '/ERROR_LOG_OLD');
+			
+		if (!$handle = fopen($pommo->_workDir . '/ERROR_LOG','w')) {
+			$pommo->_logger->addErr(Pommo::_T('Can write to ERROR_LOG. Check work directory permissions!'));
+			return;
+		}
+		fwrite($handle,"<?php die(); ?>\n");
+		fclose($handle);
+ 		
  		return true;
  		
  	}

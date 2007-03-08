@@ -75,8 +75,19 @@ class PommoField {
 		
 		$invalid = array();
 		
-		if (empty($in['name'])) 
-			$invalid[] = 'name';	
+		if (empty($in['name']) || substr($in['name'],0,1) == '!') 
+			$invalid[] = 'name';
+		else {
+			switch (strtolower($in['name'])) {
+				case 'email':
+				case 'ip':
+				case 'registered':
+					$invalid[] = 'name';
+					break;
+				default:
+					break;
+			}	
+		}
 		if (empty($in['prompt'])) 
 			$invalid[] = 'prompt';
 		switch ($in['type']) {

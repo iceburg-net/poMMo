@@ -23,7 +23,6 @@
  *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
@@ -65,7 +64,6 @@ $_POST);
 
 
 @$smarty->assign('toggleText',($state['wysiwyg'] == 'on') ? 'HTML' : 'WYSIWYG');
-$smarty->assign('fields',PommoField::get());
 $smarty->assign($state);
 $smarty->display('admin/mailings/mailing/compose.tpl');
 Pommo::kill();

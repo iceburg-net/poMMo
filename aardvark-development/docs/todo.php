@@ -67,8 +67,10 @@ PR15.1
 -------
 Get rid of activation/logout scheme. Make hash of user email ++ ip||id||time regisered, and mail that for activation
 Provide unsubscribe link in template
-+++ Set sockettimeout in spawn function
 
+PENDING SUBSCRIBERS -->
+mountainash88: people never verifiy
+mountainash88: a button to re-mind would be nice
 
 [LEGACY POMMO]
   Port config parser + config.php/sample
@@ -83,7 +85,6 @@ Provide unsubscribe link in template
 [THEME]
 	ENHACE DEFAULT SUBSCRIPTION FORM -- PLAIN TEXT IS ALWAYS AVAILABLE...
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
-	Use TableSorter/Table layout for field, group, and group filter display
 	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
 	ReStripe rows on delete/tableSort
 	ELEMENTS with TITLE="??" : Title needs to be translated -- use SAME text as INNERHTML/LINK text
@@ -122,8 +123,6 @@ Provide unsubscribe link in template
 	  (API) - override PHPMailers error handling to use logger -- see extending PHPMailer Example @ website
 	  (API) - Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
 	  
-	  (feature) Add 'comment' type to subscriber field which outputs a text area configured to certain # of chars & whose styling is handled via theme template
-	  
 	  (feature) Add specific emails to a group
 	  	++ Allow rules to include base subscriber data such as IP && date_registered.
 	  	
@@ -133,7 +132,6 @@ Provide unsubscribe link in template
 	  
 	  PR16 -- hopefully have all strings in program, notify translators, ask for review of contributors section.
 	  
-	  
 	  (feature) Add "isEmpty" group rule
 	  
 	  Make groups_edit.php (rule creation page) more responsive.
@@ -141,7 +139,7 @@ Provide unsubscribe link in template
 	 		group filter count + tally.	
 	 	++ Integrate taconite plugin to do the updates for groups_edit.php, 
 	 	  ecentually spread to mailings_status.php
-	 	++ ajax rewritted (see above)
+	 	++ ajax rewrite (see above)
 	 	
 	 (API) Increase subscriber management performance. 
 	 	++ Merge sorting && limiting && ordering into sql.gen.php 

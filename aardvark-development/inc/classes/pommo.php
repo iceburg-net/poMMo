@@ -407,22 +407,9 @@ class Pommo {
 		ini_set('log_errors',1);
 		ini_set('log_errors_max_len',0);
 		ini_set('html_errors',0);
-				
-		// obtain an exclusive temp file name
-		//$this->_errorLog = tempnam($pommo->_workDir.'/','ERROR_LOG');
-		
-		
-		if (filesize($this->_workDir . '/ERROR_LOG_0'))
-			rename($this->_workDir . '/ERROR_LOG_0', $this->_workDir . '/ERROR_LOG_'.time());
-			
-		if (!$handle = fopen($this->_workDir . '/ERROR_LOG_0','w')) {
-			$this->_logger->addErr(Pommo::_T('Can write to ERROR_LOG. Check work directory permissions!'));
-			return;
-		}
-		fclose($handle);
 		
 		// set log file
-		ini_set('error_log',$this->_workDir . '/ERROR_LOG_0');
+		ini_set('error_log',$this->_workDir . '/ERROR_LOG');
 	}
 }
 ?>
