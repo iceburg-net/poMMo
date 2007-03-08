@@ -2,6 +2,7 @@
 
 <form method="post" action="">
 <input type="hidden" name="formSubmitted" value="1" />
+<input type="hidden" name="code" value="{$code}" />
 
 <fieldset>
 <legend>{t}Your Information{/t}</legend>
@@ -13,7 +14,7 @@
 
 <div>
 <label class="required" for="email"><strong>{t}Your Email:{/t}</strong></label>
-<input type="text" size="32" maxlength="60" name="Email" id="email" value="{$Email|escape}" readonly="readonly" />
+<input type="text" size="32" maxlength="60" name="email" id="email" value="{$email|escape}" readonly="readonly" />
 </div>
 
 <div>

@@ -14,9 +14,8 @@
 {include file="subscribe/form.update.tpl"}
 
 <form method="post" action="">
-<input type="hidden" name="Email" value="{$Email}" />
-
-<input type="submit" name="logout" value="{t}Logout{/t}" />
+<input type="hidden" name="email" value="{$email}" />
+<input type="hidden" name="code" value="{$code}" />
 
 <h3>{t}Unsubscribe{/t}</h3>
 

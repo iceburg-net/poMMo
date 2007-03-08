@@ -23,20 +23,22 @@
  *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+$pommo->init();
 
-$config = PommoAPI::configGet('public_history');
-if($config['public_history'] == 'on') {
-	$pommo->init(array('keep' => TRUE, 'authLevel' => 0));
-} else {
-	$pommo->init(array('keep' => TRUE));	
-}
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-$input = (isset($_GET['mail_id'])) ? 
+$input = (isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) ? 
 	current(PommoMailing::get(array('id' => $_GET['mail_id']))) :
-	$input = $pommo->_session['state']['mailings_send2'];
+	$input = $pommo->_session['state']['mailing'];
+	
+/**********************************
+	SETUP TEMPLATE, PAGE
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
-die($input['body']);
-
+$smarty->assign($input);
+$smarty->display('inc/mailing.tpl');
+Pommo::kill();
 ?>

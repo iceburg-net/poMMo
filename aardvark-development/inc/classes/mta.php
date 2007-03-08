@@ -113,6 +113,9 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 			$this->shutdown('Unable to initialize mailing.');
 		$this->_id = $this->_mailing['id'];
 		
+		// make sure the $_GET global holds the mailing id (used in personalizations, etc.)
+		$_GET['id'] = $this->_id;
+		
 		// security routines
 		if($this->_mailing['end'] > 0)
 			$this->shutdown(Pommo::_T('Mailing Complete.'));

@@ -51,7 +51,7 @@ $smarty->assign('returnStr', Pommo::_T('Mailings Page'));
 $state =& PommoAPI::stateInit('mailings_history',array(
 	'limit' => 10,
 	'sort' => 'started',
-	'order' => 'asc'),
+	'order' => 'desc'),
 	$_REQUEST);
 	
 $tally = PommoMailing::tally();
@@ -61,6 +61,13 @@ $smarty->addPager($state['limit'], $tally);
 $start = SmartyPaginate::getCurrentIndex();
 SmartyPaginate::assign($smarty);
 
+// if mail_id is passed, display the mailing.
+if(isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) {
+	$input = current(PommoMailing::get(array('id' => $_GET['mail_id'])));
+	$smarty->assign($input);
+	$smarty->display('inc/mailing.tpl');
+	Pommo::kill();
+}
 
 // Fetch Mailings
 $mailings = PommoMailing::get(array(
@@ -70,16 +77,6 @@ $mailings = PommoMailing::get(array(
 	'limit' => $state['limit'],
 	'offset' => $start));
 	
-// calculates Mails / Hour
-foreach(array_keys($mailings) as $key) {
-	$m =& $mailings[$key];
-	if(!empty($m['end']) && !empty($m['sent'])) {
-		$runtime = strtotime($m['end'])-strtotime($m['start']);
-		$m['mph'] = ($runtime == 0)? $m['sent']*3600 : round(($m['sent'] / ($runtime)) * 3600);
-	}
-	else
-		$m['mph'] = 0;
-}
 
 $smarty->assign('state',$state);
 $smarty->assign('mailings', $mailings);

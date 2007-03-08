@@ -41,6 +41,7 @@ Fix multiple choice multiple options in rule editing  ** needs jQuery Patch
 
 Phase out pommo->init('keep') and data->set || -> get routines. Use States & auto clear states
 
+FIREWALL/DOS PROTECTION: Mailer, only allow x amount of mails from an IP in y time.
 
 AJAX requests: disable debugging (unless verbosity < 3)
 
