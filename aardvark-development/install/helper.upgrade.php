@@ -18,7 +18,6 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
- 
 function PommoUpgrade() {
 	global $pommo;
 	$dbo =& $pommo->_dbo;
@@ -178,6 +177,9 @@ function PommoRevUpgrade($rev, $strict = true) {
 			"ALTER TABLE {$dbo->table['subscribers']} CHANGE `email` `email` CHAR( 60 ) NOT NULL"
 			,"Tuning Subscribers Table")) return false;
 			
+			if (!PommoInstall::incUpdate(18,
+			"DROP TABLE {$dbo->table['subscriber_update']}"
+			,"Dropping previous activate routines")) return false;
 			
 			// end of upgrade (break)
 			break;

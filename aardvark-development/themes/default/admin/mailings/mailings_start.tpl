@@ -94,6 +94,7 @@
 <select name="field">
 <option value="!unsubscribe">{t}Unsubscribe{/t}</option>
 <option value="!weblink">{t}Web Link{/t}</option>
+<option value="!id">{t}ID{/t}</option>
 </select>
 </p>
 

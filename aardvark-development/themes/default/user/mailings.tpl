@@ -3,7 +3,6 @@
 
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
 
 {literal}
@@ -18,7 +17,6 @@ $().ready(function() {
 
 {* Styling of table *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
 {/capture}
 {include file="inc/user.header.tpl" sidebar='off'}
 
@@ -91,7 +89,7 @@ $().ready(function() {
 <tr>
 <td>
 <p class="hidden">{$id}</p>
-<a href="../admin/mailings/ajax/mailing_preview.php?mail_id={$id}&amp;height=320&amp;width=480" title="View Message" class="thickbox">{t}View{/t}</a>
+<a href="mailings.php?mail_id={$id}" title="{t}View{/t}">{t}View{/t}</a>
 </td>
 
 <td>{$o.subject}</td>

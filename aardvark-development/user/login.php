@@ -68,7 +68,7 @@ if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 			else {
 				// __ EMAIL IN SUBSCRIBERS TABLE, REDIRECT
 				SmartyValidate :: disconnect();
-				Pommo::redirect('update_activate.php?Email='.$_POST['Email']);
+				Pommo::redirect('activate.php?email='.$_POST['Email']);
 			}
 		}
 		else {

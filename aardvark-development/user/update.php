@@ -39,10 +39,10 @@ $smarty = new PommoTemplate();
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
 $smarty->prepareForSubscribeForm(); 
 
-$_POST['Email'] = $smarty->get_template_vars('Email');
-$subscriber = current(PommoSubscriber::get(array('email' => $_POST['Email'], 'status' => 1)));
+// fetch the subscriber, validate code
+$subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
 
-if (empty($subscriber))
+if (empty($subscriber) || md5($subscriber['id'].$subscriber['registered']) != $_REQUEST['code'])
 	Pommo::redirect('login.php');
 	
 // check if we have pending request
@@ -50,17 +50,8 @@ if (PommoPending::isPending($subscriber['id'])) {
 	$input = urlencode(serialize(array('Email' => $_POST['Email'])));
 	Pommo::redirect('pending.php?input='.$input);
 }
-	
-if(isset($_POST['logout'])) {
-	PommoPending::actCodeDie($subscriber['email']);
-	Pommo::redirect('login.php');
-}
-	
-// make sure email is activated
-if (!PommoPending::actCodeTry(false, $subscriber['email'])) 
-	Pommo::redirect('update_activate.php?Email='.$subscriber['email']);
-	
 
+	
 $config = PommoAPI::configGet(array('notices'));
 $notices = unserialize($config['notices']);
 
@@ -100,7 +91,6 @@ if (!empty ($_POST['update'])) {
 						PommoHelperMessages::notify($notices, $newsub, 'update');
 					
 					$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
-					PommoPending::actCodeDie($subscriber['email']);
 				}
 			}
 		}
@@ -139,10 +129,11 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		}
 		
 		$smarty->assign('unsubscribe', TRUE);
-		PommoPending::actCodeDie($subscriber['email']);
 	}
 }
 
+$smarty->assign('email',$subscriber['email']);
+$smarty->assign('code',$_REQUEST['code']);
 $smarty->display('user/update.tpl');
 Pommo::kill();
 ?>

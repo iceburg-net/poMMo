@@ -150,6 +150,7 @@ class PommoTemplate extends Smarty {
 		}
 			
 		// process.php appends serialized values to _GET['input']
+		// TODO --> look into this behavior... necessary?
 		if (isset ($_GET['input'])) 
 			$this->assign(unserialize($_GET['input']));
 		elseif (isset($_GET['Email'])) 

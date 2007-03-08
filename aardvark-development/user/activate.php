@@ -23,7 +23,6 @@
  *********************************/
 require ('../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
 
 $pommo->init(array('authLevel' => 0,'noSession' => true));
 $logger = & $pommo->_logger;
@@ -36,31 +35,24 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
 // make sure email be valid
-$email = $_REQUEST['Email'];
-if (!PommoHelper::isDupe($email))
-	Pommo::redirect('login.php');
 
-// verify activation code (if sent) || that user is not already activated
-$code = (isset($_GET['codeTry'])) ? $_GET['code'] : false;
-if (PommoPending::actCodeTry($code, $email)) {
-	$input = urlencode(serialize(array('Email' => $email)));
-	Pommo::redirect('update.php?input='.$input);
-}
-if ($code !== false)
-	$logger->addErr(Pommo::_T('Invalid Activation Code!'));
+$subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
+if (empty($subscriber))
+	Pommo::redirect('login.php');
 
 
 // check for request to send activation code
 if (!empty($_GET['send'])) {
-	$code = PommoPending::actCodeGet($email);
+	$code = md5($subscriber['id'].$subscriber['registered']);
 	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-	if (!PommoHelperMessages::sendConfirmation($email, $code, 'activate'))
+	if (!PommoHelperMessages::sendConfirmation($subscriber['email'], $code, 'activate'))
 		$logger->addErr(Pommo::_T('Error sending mail')); 
 	else
-		$logger->addMsg(Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
+		Pommo::redirect('activate.php?sent=true&email='.$subscriber['email']);
 }
 
-$smarty->assign('Email', $email);
-$smarty->display('user/update_activate.tpl');
+$smarty->assign('sent', (isset($_GET['sent']))?true:false);
+$smarty->assign('email', $subscriber['email']);
+$smarty->display('user/activate.tpl');
 Pommo::kill();
 ?>

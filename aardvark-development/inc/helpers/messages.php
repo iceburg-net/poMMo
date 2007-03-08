@@ -37,7 +37,7 @@ class PommoHelperMessages {
 		$subject = $messages[$type]['sub'];
 	
 		$url = ($type == 'activate') ? 
-			$pommo->_http.$pommo->_baseUrl.'user/update_activate.php?codeTry=true&Email='.$to.'&code='.$confirmation_key :
+			$pommo->_http.$pommo->_baseUrl.'user/update.php?email='.$to.'&code='.$confirmation_key :
 			$pommo->_http.$pommo->_baseUrl.'user/confirm.php?code='.$confirmation_key;
 			
 		$body = preg_replace('@\[\[URL\]\]@i',$url,$messages[$type]['msg']);
@@ -87,8 +87,8 @@ class PommoHelperMessages {
 		
 		if ($section == 'all' || $section == 'activate') {
 		$messages['activate'] = array();
-		$messages['activate']['msg'] =  sprintf(Pommo::_T('You have requested to activate your records for %s.'),$pommo->_config['list_name']).' '.sprintf(Pommo::_T('Your activation code is %s'),"[[CODE]]\r\n\r\n").Pommo::_T('You can access your records by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
-		$messages['activate']['sub'] = Pommo::_T('Verify your address'); 
+		$messages['activate']['msg'] =  sprintf(Pommo::_T('Someone has requested to access your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('You may edit your information or unsubscribe by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['activate']['sub'] = sprintf(Pommo::_T('%s: Information Access.'),$pommo->_config['list_name']); 
 		}
 		
 		

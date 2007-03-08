@@ -81,8 +81,7 @@ class PommoHelperPersonalize {
 		return $matches;
 	}
 	
-	
-	// personalizes a message body
+	// personalizes a message body || subject
 	// accepts message
 	// accepts subscriber object (single subscriber)
 	// accepts personalization array
@@ -91,9 +90,31 @@ class PommoHelperPersonalize {
 		$body = $msg;
 		foreach($p[0] as $key => $search) {
 		
-			// lookup replace string (or if it is Email, replace with email address)
-			$replace = ($p[1][$key] == 'Email') ? $s['email'] : 
-				$s['data'][ ($p[3][$key]) ];
+			// lookup replace string
+			
+			switch (strtolower($p[1][$key])) {
+				case 'email':
+					$replace = $s['email'];
+					break;
+				case 'ip':
+					$replace = $s['ip'];
+					break;
+				case 'registered':
+					$replace = $s['registered'];
+					break;
+				case '!unsubscribe':
+					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/update.php?email='.$s['email'].'&code='.md5($s['id'].$s['registered']);
+					break;
+				case '!weblink':
+					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/mailings.php?mail_id='.$_GET['id'];
+					break;
+				case '!id':
+					$replace = 's'.$s['id'];
+					break;
+				default:
+					$replace = $s['data'][ ($p[3][$key]) ];
+					break;
+			}
 			
 			// attempt to add default if replacement is empty
 			if (empty($replace))
