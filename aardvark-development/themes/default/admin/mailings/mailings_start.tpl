@@ -118,7 +118,7 @@ var pommo = {
 	// prepares forms of class ajax to be submitted via ajax
 	//	returns jQuery object of affected elements
 	
-	assignForm: function(scope) {
+	assignForm: function(scope, callback) {
 		
 		return this.isForm = $('form.ajax',scope).ajaxForm( { 
 			target: scope,
@@ -131,6 +131,10 @@ var pommo = {
 
 				pommo.assignForm(this);
 				$('div.output',this).fadeTo(5000,0.35);
+				
+				if($.isFunction(callback)) {
+					return callback();
+				}
 				
 				if($('#success')[0]) // form passed server side validation
 					pommo.switchTab();
@@ -163,8 +167,8 @@ var pommo = {
 	
 	// Special submit function for COMPOSE tab
 	
-	bodySubmit: function(scope) {
-	
+	bodySubmit: function(scope, callback) {
+			
 		var bodies = {
 			body: (this.isTiny.length > 0) ? 
 				tinyMCE.getContent() : $('textarea[@name=body]',scope).val(),
@@ -183,8 +187,13 @@ var pommo = {
 				if(!json.success)
 					return;
 				
-				pommo.brakeTiny($('form'));
-				pommo.switchTab();
+				// if callback is passed as a function, execute on success vs. switching tab.
+				if($.isFunction(callback))
+					callback();
+				else {
+					pommo.brakeTiny($('form'));
+					pommo.switchTab();
+				}
 				$('#wait').jqmHide();
 			}
 		});
@@ -267,8 +276,26 @@ $().ready(function(){
 		overlay: 0
 	});
 	
-	// initialize other dialogs
+	// initialize template dialog
+	$('#addTemplate').jqm({
+		trigger: false,
+		ajax: 'mailing/ajax.addtemplate.php',
+		target: 'div.jqmdMSG',
+		onHide: function(h) {
+			// reset the dialog html to loading state
+			$('div.jqmdMSG',h.w).html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{literal}');	
+			h.o.remove();
+			h.w.fadeOut(800);
+		},
+		onLoad: function(h) {
+			var scope = $('div.jqmdMSG',h.w);
+			pommo.assignForm(scope,function() {
+				$('#addTemplate').jqmAddClose('.jqmClose',scope);
+			});
+		}
+	}).jqDrag('div.jqmdTC');
 	
+	// initialize personalization, special link dialogs 
 	var dialogs = $('#personalize,#specialLink').jqm({trigger: false}).jqDrag('div.jqmdTC');
 	
 	// initialize help buttons
@@ -353,6 +380,7 @@ tinyMCE.init({
 {include file="inc/dialog.tpl" dialogID="wait" dialogNoClose=true dialogBodyClass="jqmdShort"}
 {include file="inc/dialog.tpl" dialogID="personalize" dialogContent=$smarty.capture.personalize dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {include file="inc/dialog.tpl" dialogID="specialLink" dialogContent=$smarty.capture.specialLink dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="addTemplate" dialogTitle=$t_saveTemplate dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

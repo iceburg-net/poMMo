@@ -18,22 +18,6 @@ textarea.wysiwyg {
 
 h4 { color: green; }
 
-/** LEGACY, REMOVE **/
-#body {
-	width: 368px;
-}
-
-div.msgheaders, div.msgpreview {
-	padding: 5px;
-}
-div.msgheaders {
-	background: #E6ECDA;
-}
-div.msgpreview {
-	background: #F6F8F1;
-}
-/** END LEGACY **/
-
 /************************/
 /* Mailing Body Preview */
 /************************/

@@ -182,4 +182,23 @@ class PommoType {
 	}
 	
 	
+	/**
+	 * Template: A Template for Mailings
+	 * ==SQL Schema==
+	 *	template_id		(int)		Database ID/Key
+	 *	name			(str)		Descriptive name for field (used for short identification)
+	 *	description		(str)		Summary of Template
+	 *  body			(str)		HTML body
+	 *  altbody			(str)		Text body
+	 */
+	
+	function template() {
+		return array(
+			'id' => null,
+			'name' => null,
+			'description' => null,
+			'body' => null,
+			'altbody' => null
+		);
+	}
 }

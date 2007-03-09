@@ -36,32 +36,47 @@ $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
 
-if(!empty($_POST['template']) && is_numeric($_POST['template'])) {
+if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
+	// ___ USER HAS NOT SENT FORM ___
+
+	SmartyValidate :: connect($smarty, true);
+
+	SmartyValidate :: register_validator('name', 'name', 'notEmpty', false, false, 'trim');
+	SmartyValidate :: register_validator('description', 'description', 'dummyValid', false, false, 'trim');
+
+	$vMsg = array ();
+	$vMsg['name'] = Pommo::_T('Cannot be empty.');
+	$smarty->assign('vMsg', $vMsg);
 	
-	// check if we are to load a template
-	if(isset($_POST['load'])) {
-		$template = current(PommoMailingTemplate::get(array('id' => $_POST['template'])));
-		$pommo->_session['state']['mailing']['body'] = $template['body'];
-		$pommo->_session['state']['mailing']['altbody'] = $template['altbody'];
+} else {
+	// ___ USER HAS SENT FORM ___
+	SmartyValidate :: connect($smarty);
+
+	if (SmartyValidate :: is_valid($_POST)) {
+		// __ FORM IS VALID
 		
-		$smarty->assign('success',3);
-				
-	}
-	// check if we are to delete a template
-	elseif(isset($_POST['delete'])) {
-		if(PommoMailingTemplate::delete($_POST['template']))
-			$logger->addMsg(Pommo::_T('Template Deleted'));
+		$t = PommoMailingTemplate::make(array(
+			'name' => $_POST['name'],
+			'description' => $_POST['description'],
+			'body' => $pommo->_session['state']['mailing']['body'],
+			'altbody' => $pommo->_session['state']['mailing']['altbody']
+		));
+		$id = PommoMailingTemplate::add($t);
+		
+		if ($id) {
+			$logger->addMsg(sprintf(Pommo::_T('Template %s saved.'),'<strong>'.$_POST['name'].'</strong>'));
+			$smarty->assign('success',true);
+		}
 		else
-			$logger->addMsg(Pommo::_T('Error with deletion.'));
+			$logger->addMsg(Pommo::_T('Error with addition.'));
+		
+		
+	} else {
+		// __ FORM NOT VALID
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 
-// check if we should skip
-if(isset($_POST['skip']))
-	$smarty->assign('success',3);
-else
-	$smarty->assign('templates',PommoMailingTemplate::getNames());
-	
-$smarty->display('admin/mailings/mailing/templates.tpl');
+$smarty->display('admin/mailings/mailing/ajax.addtemplate.tpl');
 Pommo::kill();
 ?>

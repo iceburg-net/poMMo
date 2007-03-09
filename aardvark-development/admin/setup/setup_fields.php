@@ -75,7 +75,7 @@ if (!empty ($_GET['delete'])) {
 		else {
 			(PommoField::delete($field['id'])) ?
 				Pommo::redirect($_SERVER['PHP_SELF']) :
-				$logger->addMsg(Pommo::_T('Error with delete.'));
+				$logger->addMsg(Pommo::_T('Error with deletion.'));
 		}
 	}
 }
