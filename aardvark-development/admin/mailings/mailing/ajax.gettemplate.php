@@ -21,32 +21,24 @@
 /**********************************
 	INITIALIZATION METHODS
  *********************************/
-require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+require ('../../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/templates.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
+
 /**********************************
-	SETUP TEMPLATE, PAGE
+	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-
-if (PommoMailing::isCurrent())
-	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
-
-if ($pommo->_config['demo_mode'] == 'on')
-	$logger->addMsg(Pommo::_T('Demonstration Mode is on -- no Emails will actually be sent. This is good for testing settings.'));
+Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
 
 
-// assign language (for wysiwyg)
-$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
-$smarty->assign('fields',PommoField::get());
-
-$smarty->assign('t_saveTemplate',Pommo::_T('Save Template'));
-$smarty->display('admin/mailings/mailings_start.tpl');
-Pommo::kill();
+$template = PommoMailingTemplate::getDescriptions(array('id' => $_GET['id']));
+if(empty($template[$_GET['id']]))
+	die('Unknown');
+die($template[$_GET['id']]);
 ?>

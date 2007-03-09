@@ -192,6 +192,18 @@ CREATE TABLE :::subscribers::: (
   KEY `flag` (`flag`)
 );
 
+
+-- TEMPLATES
+
+CREATE TABLE :::templates::: (
+  `template_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR( 60 ) NOT NULL DEFAULT 'name',
+  `description` VARCHAR( 255 ) NULL ,
+  `body` MEDIUMTEXT NULL ,
+  `altbody` MEDIUMTEXT NULL,
+  PRIMARY KEY (`template_id`)
+);
+
 -- UPDATES
 
 CREATE TABLE :::updates::: (

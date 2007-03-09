@@ -181,7 +181,11 @@ function PommoRevUpgrade($rev, $strict = true) {
 			"DROP TABLE {$dbo->table['subscriber_update']}"
 			,"Dropping previous activate routines")) return false;
 			
-			// end of upgrade (break)
+			if (!PommoInstall::incUpdate(19,
+			"CREATE TABLE {$dbo->table['templates']} (`template_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR( 60 ) NOT NULL DEFAULT 'name',`description` VARCHAR( 255 ) NULL ,`body` MEDIUMTEXT NULL ,`altbody` MEDIUMTEXT NULL, PRIMARY KEY(`template_id`))"
+			,"Adding mailing template support")) return false;
+			
+			// end of upgrade (break), no revision bump.
 			break;
 		default: 
 			return false;

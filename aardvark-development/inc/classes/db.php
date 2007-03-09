@@ -50,7 +50,7 @@ class PommoDB {
 		$this->table = array (
 			'config' => '`'.$tablePrefix . 'config`',
 			'fields' => '`'.$tablePrefix . 'fields`',
-			'group_criteria' => '`'.$tablePrefix . 'group_criteria`', // PHASE OUT
+			'group_criteria' => '`'.$tablePrefix . 'group_criteria`', // PHASE OUT (PR14)
 			'group_rules' => '`'.$tablePrefix . 'group_rules`',
 			'groups' => '`'.$tablePrefix . 'groups`',
 			'mailing_notices' => '`'.$tablePrefix . 'mailing_notices`',
@@ -58,8 +58,9 @@ class PommoDB {
 			'mailings' => '`'.$tablePrefix . 'mailings`',
 			'subscriber_data' => '`'.$tablePrefix . 'subscriber_data`',
 			'subscriber_pending' => '`'.$tablePrefix . 'subscriber_pending`',
-			'subscriber_update' => '`'.$tablePrefix . 'subscriber_update`',
+			'subscriber_update' => '`'.$tablePrefix . 'subscriber_update`', // PHASE OUT (PR15)
 			'subscribers' => '`'.$tablePrefix . 'subscribers`',
+			'templates' => '`'.$tablePrefix . 'templates`',
 			'queue' => '`'.$tablePrefix . 'queue`',
 			'updates' => '`'.$tablePrefix . 'updates`');		
 
