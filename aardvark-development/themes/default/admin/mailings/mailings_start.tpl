@@ -138,8 +138,6 @@ var pommo = {
 				
 				if($('#success')[0]) // form passed server side validation
 					pommo.switchTab();
-				else // form failed server side validation, reassign
-					pommo.assignForm(this);
 			}
 		});
 	},
@@ -277,6 +275,7 @@ $().ready(function(){
 	});
 	
 	// initialize template dialog
+	
 	$('#addTemplate').jqm({
 		trigger: false,
 		ajax: 'mailing/ajax.addtemplate.php',
@@ -291,6 +290,26 @@ $().ready(function(){
 			var scope = $('div.jqmdMSG',h.w);
 			pommo.assignForm(scope,function() {
 				$('#addTemplate').jqmAddClose('.jqmClose',scope);
+			});
+		}
+	}).jqDrag('div.jqmdTC');
+	
+	// initialize test mailing dialog
+	
+	$('#testMailing').jqm({
+		trigger: false,
+		ajax: 'ajax/mailing_test.php',
+		target: 'div.jqmdMSG',
+		onHide: function(h) {
+			// reset the dialog html to loading state
+			$('div.jqmdMSG',h.w).html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{literal}');	
+			h.o.remove();
+			h.w.fadeOut(800);
+		},
+		onLoad: function(h) {
+			var scope = $('div.jqmdMSG',h.w);
+			pommo.assignForm(scope,function() {
+				$('#testMailing').jqmAddClose('.jqmClose',scope);
 			});
 		}
 	}).jqDrag('div.jqmdTC');
@@ -381,6 +400,7 @@ tinyMCE.init({
 {include file="inc/dialog.tpl" dialogID="personalize" dialogContent=$smarty.capture.personalize dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {include file="inc/dialog.tpl" dialogID="specialLink" dialogContent=$smarty.capture.specialLink dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {include file="inc/dialog.tpl" dialogID="addTemplate" dialogTitle=$t_saveTemplate dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="testMailing" dialogTitle=$t_testMailing dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

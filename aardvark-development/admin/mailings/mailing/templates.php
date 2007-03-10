@@ -35,7 +35,6 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
-
 if(!empty($_POST['template']) && is_numeric($_POST['template'])) {
 	
 	// check if we are to load a template
@@ -57,7 +56,7 @@ if(!empty($_POST['template']) && is_numeric($_POST['template'])) {
 }
 
 // check if we should skip
-if(isset($_POST['skip']))
+if(isset($_POST['template']) && !isset($_POST['delete']))
 	$smarty->assign('success',3);
 else
 	$smarty->assign('templates',PommoMailingTemplate::getNames());

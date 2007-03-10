@@ -6,7 +6,7 @@
 <div id="boxMenu">
 
 <div>
-<a href="{$url.base}admin/mailings/mailings_send.php"><img src="{$url.theme.shared}images/icons/typewritter.png" alt="typewritter icon" class="navimage" />{t}Send{/t}</a> - {t}Create and send a mailing.{/t}
+<a href="{$url.base}admin/mailings/mailings_start.php"><img src="{$url.theme.shared}images/icons/typewritter.png" alt="typewritter icon" class="navimage" />{t}Send{/t}</a> - {t}Create and send a mailing.{/t}
 </div>
 
 <div>
