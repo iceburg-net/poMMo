@@ -37,7 +37,7 @@ Set the table prefix
 ::: Language Information :::
 Set this to your desired locale. Current languages available are;
  bg - Bulgarian				es - Spanish
- br - Brazilian Portugese	fr - French
+ pt - Brazilian Portugese	fr - French
  da - Danish				it - Italian
  de - German				nl - Dutch
  en - English				ro - Romanian
