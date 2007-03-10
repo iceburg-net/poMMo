@@ -39,7 +39,7 @@ if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
 if ($pommo->_config['demo_mode'] == 'on')
-	$logger->addMsg(Pommo::_T('Demonstration Mode is on -- no Emails will actually be sent. This is good for testing settings.'));
+	$logger->addMsg(sprintf(Pommo::_T('%sDemonstration Mode%s is on -- no Emails will actually be sent. This is good for testing settings.'),'<a href="'.$pommo->_baseUrl.'admin/setup/setup_configure.php#mailings">','</a>'));
 
 
 // assign language (for wysiwyg)
