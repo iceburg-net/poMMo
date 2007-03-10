@@ -114,7 +114,7 @@ if ($current) {
 }
 		
 if ($pommo->_config['demo_mode'] == 'on')
-	$logger->addErr(Pommo::_T('Demonstration Mode is on. No Emails will be sent.'));
+	$logger->addMsg(sprintf(Pommo::_T('%sDemonstration Mode%s is on -- no Emails will actually be sent. This is good for testing settings.'),'<a href="'.$pommo->_baseUrl.'admin/setup/setup_configure.php#mailings">','</a>'));
 
 $smarty->assign('fields',PommoField::get());
 $smarty->display('admin/mailings/ajax/mailing_test.tpl');

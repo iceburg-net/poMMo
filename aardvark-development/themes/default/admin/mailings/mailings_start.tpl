@@ -303,8 +303,12 @@ $().ready(function(){
 		onHide: function(h) {
 			// reset the dialog html to loading state
 			$('div.jqmdMSG',h.w).html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{literal}');	
+			
 			h.o.remove();
 			h.w.fadeOut(800);
+			
+			// set pommo.isForm to false (empty array) to allow tab switching (it was set via assignForm() )
+			pommo.isForm = [];
 		},
 		onLoad: function(h) {
 			var scope = $('div.jqmdMSG',h.w);
@@ -371,10 +375,11 @@ switch (lang) {
 }
 
 tinyMCE.init({
-	mode : "none",
-	theme : "advanced",
-	plugins : "style",
+	mode : 'none',
+	theme : 'advanced',
+	plugins : 'style',
 	language: lang,
+	entity_encoding: 'raw',
 	theme_advanced_buttons1 : 
 		'bold,italic,underline,strikethrough'+s+
 		'bullist,numlist'+s+
@@ -389,7 +394,9 @@ tinyMCE.init({
 		'formatselect,fontselect,fontsizeselect'+s+
 		'removeformat'
 		,
-	theme_advanced_buttons3 : ""
+	theme_advanced_buttons3 : "",
+	extended_valid_elements : "style[dir<ltr?rtl|lang|media|title|type]", // can add more entities, see tinymce page!
+	remove_linebreaks : false
 });
 
 </script>

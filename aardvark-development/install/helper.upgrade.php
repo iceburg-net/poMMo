@@ -185,6 +185,20 @@ function PommoRevUpgrade($rev, $strict = true) {
 			"CREATE TABLE {$dbo->table['templates']} (`template_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR( 60 ) NOT NULL DEFAULT 'name',`description` VARCHAR( 255 ) NULL ,`body` MEDIUMTEXT NULL ,`altbody` MEDIUMTEXT NULL, PRIMARY KEY(`template_id`))"
 			,"Adding mailing template support")) return false;
 			
+			// custom update 20, install default template
+			$query = "
+			SELECT serial FROM ".$dbo->table['updates']." 
+			WHERE serial=%i";
+			$query = $dbo->prepare($query,array('20'));
+			if (!$dbo->records($query)) {
+				$file = $pommo->_baseDir."install/sql.templates.php";
+				if(PommoInstall::parseSQL(false,$file)) {
+					$query = "INSERT INTO ".$dbo->table['updates']."(serial) VALUES(%i)";
+					$query = $dbo->prepare($query,array('20'));	
+					$dbo->query($query);
+				}
+			}
+			
 			// end of upgrade (break), no revision bump.
 			break;
 		default: 
