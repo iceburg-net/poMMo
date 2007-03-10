@@ -80,6 +80,7 @@ die();
 	  		- Allow rules to include base subscriber data such as IP && date_registered.
 	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.
 	  (feature) Display & mail flagged subscribers
+	  (feature) Version Detection, Alerting.
 	  
 	  (fix) Resolve character set issues (http://tinymce.moxiecode.com/punbb/viewtopic.php?pid=17351#p17351)	
 	 

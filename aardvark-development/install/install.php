@@ -102,9 +102,13 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				
 				$pommo->reloadConfig();
 				
-				// load configuration [depricated?], set message defaults.
+				// load configuration [depricated?], set message defaults, load templates
 				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
 				PommoHelperMessages::resetDefault('all');
+				
+				$file = $pommo->_baseDir."install/sql.templates.php";
+				if(!PommoInstall::parseSQL(false,$file))
+					$logger->addErr('Error Loading Default Mailing Templates.');
 
 				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');
