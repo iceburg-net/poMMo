@@ -46,6 +46,7 @@ if ($pommo->_config['demo_mode'] == 'on')
 $smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
 $smarty->assign('fields',PommoField::get());
 
+$smarty->assign('t_testMailing',Pommo::_T('Test Mailing'));
 $smarty->assign('t_saveTemplate',Pommo::_T('Save Template'));
 $smarty->display('admin/mailings/mailings_start.tpl');
 Pommo::kill();

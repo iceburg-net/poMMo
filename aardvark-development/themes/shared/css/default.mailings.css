@@ -18,24 +18,13 @@ textarea.wysiwyg {
 
 h4 { color: green; }
 
-/************************/
-/* Mailing Body Preview */
-/************************/
-
-#preview img {
-	display: block;
+div.msgpreview {
+	padding: 12px;
 }
-#preview div a {
-	border: none;
-}
-#preview .edit {
-	float: right;
-	width: 70px;
-	text-align: center;
-}
-#preview .edit img {
-	margin: 0 auto;
-	border: none;
+div.msgpreview {
+	margin: 5px;
+	background-color: #FFF;
+	border: 1px solid green;
 }
 
 /*******************/

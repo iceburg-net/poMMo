@@ -23,6 +23,7 @@
  *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
@@ -33,12 +34,89 @@ $dbo = & $pommo->_dbo;
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
+$smarty->prepareForForm();
+
+$current = PommoMailing::isCurrent();
+
+
+if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
+	// ___ USER HAS NOT SENT FORM ___
+
+	SmartyValidate :: connect($smarty, true);
+
+	SmartyValidate :: register_validator('email', 'email', 'isEmail', false, false, 'trim');
+	$vMsg = array ();
+	$vMsg['email'] = Pommo::_T('Invalid email address');
+	$smarty->assign('vMsg', $vMsg);
+	
+} else {
+	// ___ USER HAS SENT FORM ___
+	SmartyValidate :: connect($smarty);
+
+	if (SmartyValidate :: is_valid($_POST) && !$current) {
+		// __ FORM IS VALID
+		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+		
+		// get a copy of the message state
+		// composition is valid (via preview.php)
+		$state = $pommo->_session['state']['mailing'];
+		
+		// create temp subscriber
+		$subscriber = array(
+			'email' => $_POST['email'],
+			'registered' => time(),
+			'ip' => $_SERVER['REMOTE_ADDR'],
+			'status' => 0,
+			'data' => $_POST['d']);
+		PommoValidate::subscriberData($subscriber['data'],array('active' => FALSE, 'ignore' => TRUE, 'log' => false));
+		$key = PommoSubscriber::add($subscriber);
+		if (!$key)
+			$logger->addErr('Unable to Add Subscriber');
+		else { // temp subscriber created
+			$state['tally'] = 1;
+			$state['group'] = Pommo::_T('Test Mailing');
+			
+			if($state['ishtml'] == 'off') {
+				$state['body'] = $state['altbody'];
+				$state['altbody'] = '';
+			} 
+			
+			// create mailing
+			$mailing = PommoMailing::make(array(), TRUE);
+			$state['status'] = 1;
+			$state['current_status'] = 'stopped';
+			$state['command'] = 'restart';
+			$mailing = PommoHelper::arrayIntersect($state, $mailing);
+			$code = PommoMailing::add($mailing);
+			
+			// populate queue
+			$queue = array($key);
+			if(!PommoMailCtl::queueMake($queue))
+				$logger->addErr('Unable to Populate Queue');
+			
+			// spawn mailer
+			else if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?test=TRUE&code='.$code))
+				$logger->addErr('Unable to spawn background mailer');
+			else 
+				$smarty->assign('sent',$_POST['email']);
+		}
+	} else {
+		// __ FORM NOT VALID
+		//$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
+	}
+}
+
+if ($current) {
+	$logger->addMsg(Pommo::_T('A mailing is currently taking place. Please try again later.'));
+	$smarty->assign($_POST);
+}
+		
+if ($pommo->_config['demo_mode'] == 'on')
+	$logger->addErr(Pommo::_T('Demonstration Mode is on. No Emails will be sent.'));
 
 $smarty->assign('fields',PommoField::get());
-
-if ($pommo->_config['demo_mode'] == 'on')
-	$smarty->assign('msg',Pommo::_T('Demonstration Mode is on. No Emails will be sent.'));
-
 $smarty->display('admin/mailings/ajax/mailing_test.tpl');
 Pommo::kill();
 ?>

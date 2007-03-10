@@ -1,17 +1,27 @@
-<div id="addOut" class="error"></div>
-<div class="warn"></div>
+{* Field Validation - see docs/template.txt documentation *}
+{fv prepend='<span class="error">' append='</span>'}
+{fv validate="email"}
 
-<p>{t}Welcome to the test mailer! Verify a mailing looks correct and that the mailer works by sending a message to yourself.{/t}</p>
+{include file="inc/messages.tpl"}
 
-{if $msg}<div class="warn">{$msg}</div>{/if}
+{if $sent}
+	<div class="alert">
+	{t escape=no 1="<strong>`$sent`</strong>"}Mailing sent to %1{/t}
+	</div>
+{/if}
 
-<form method="post" action="" id="testForm">
+<p>
+{t}Verify the appeareance of a mailing by sending a message to yourself.{/t}
+</p>
+
+<form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
+
 <fieldset>
 <legend>{t}Recipient{/t}</legend>
 
 <div>
-<label class="required" for="email">{t}Email:{/t}</label>
-<input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email" />
+<label class="required" for="email">{t}Email:{/t}{fv message="email"}</label>
+<input type="text" size="32" maxlength="60" name="email" value="{$email|escape}" />
 <input type="submit" value="{t}Send Mailing{/t}"/>
 </div>
 
@@ -53,33 +63,3 @@
 </fieldset>
 
 </form>
-
-{literal}
-<script type="text/javascript">
-$().ready(function(){
-
-	$('#testForm').submit(function() {
-		var input = $(this).formToArray();
-
-		url = "ajax/mailing_test2.php";
-
-		$.post(url, input, function(json) {
-			eval("var args = " + json);
-
-			if (typeof(args.success) == 'undefined') {
-				alert('ajax error!');
-				return;	
-			}
-
-			$('#addOut').html(args.msg);
-
-			if(args.success)
-				$('#testForm input[@type="submit"]').hide();
-		});
-
-		return false;
-	});
-
-});
-</script>
-{/literal}
