@@ -74,15 +74,19 @@
 {capture name=specialLink}
 <div class="alert">
 <p>
-{t escape=no 1="<strong>" 2="</strong>"}%1Unsubscribe%2: Personalized URL of subscriber update/unsubscribe page.{/t}
+<strong>{t}Unsubscribe{/t}</strong>: {t}Personalized URL of subscriber update/unsubscribe page.{/t}
 </p>
 
 <p>
-{t escape=no 1="<strong>" 2="</strong>" 3="<a href='`$url.base`admin/setup/setup_configure.php#mailings'>" 4='</a>'}%1Web Link%2: URL to view this mailing on your website (note: %3public mailings%4 must be enabled){/t}
+<strong>{t}Web Link{/t}</strong>: {t escape=no  1="<a href='`$url.base`admin/setup/setup_configure.php#mailings'>" 2='</a>'}URL to view this mailing on your website (note: %1public mailings%2 must be enabled){/t}
 </p>
 
 <p>
-{t escape=no 1="<strong>" 2="</strong>"}%1ID%2: Outputs the subscriber's unique ID. This is useful for tracking reads/reporting.{/t}
+<strong>{t}Subscriber ID{/t}</strong>: {t}Outputs the subscriber's unique ID.{/t} {t}This is useful for tracking "open rates" and such.{/t}
+</p>
+
+<p>
+<strong>{t}Mailing ID{/t}</strong>: {t}Outputs the mailing ID.{/t} {t}This is useful for tracking "open rates" and such.{/t}
 </p>
 
 </div>
@@ -94,7 +98,8 @@
 <select name="field">
 <option value="!unsubscribe">{t}Unsubscribe{/t}</option>
 <option value="!weblink">{t}Web Link{/t}</option>
-<option value="!id">{t}ID{/t}</option>
+<option value="!subscriber_id">{t}Subscriber ID{/t}</option>
+<option value="!mailing_id">{t}Mailing ID{/t}</option>
 </select>
 </p>
 
@@ -283,8 +288,12 @@ $().ready(function(){
 		onHide: function(h) {
 			// reset the dialog html to loading state
 			$('div.jqmdMSG',h.w).html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{literal}');	
+			
 			h.o.remove();
 			h.w.fadeOut(800);
+			
+			// set pommo.isForm to false (empty array) to allow tab switching (it was set via assignForm() )
+			pommo.isForm = [];
 		},
 		onLoad: function(h) {
 			var scope = $('div.jqmdMSG',h.w);

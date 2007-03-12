@@ -108,8 +108,11 @@ class PommoHelperPersonalize {
 				case '!weblink':
 					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/mailings.php?mail_id='.$_GET['id'];
 					break;
-				case '!id':
-					$replace = 's'.$s['id'];
+				case '!subscriber_id':
+					$replace = $s['id'];
+					break;
+				case '!mailing_id':
+					$replace = $_GET['id'];
 					break;
 				default:
 					$replace = $s['data'][ ($p[3][$key]) ];
