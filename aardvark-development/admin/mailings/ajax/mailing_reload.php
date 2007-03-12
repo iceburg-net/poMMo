@@ -40,26 +40,25 @@ foreach($groups as $group)
 	if ($group['name'] == $mailing['group'])
 		$gid = $group['id'];
 
-PommoAPI::stateReset(array('mailings_send','mailings_send2'));
+PommoAPI::stateReset(array('mailing'));
 
-$state =& PommoAPI::stateInit('mailings_send',array(
+$dbvalues = PommoAPI::configGet(array(
+	'list_wysiwyg'
+));
+
+// Initialize page state with default values overriden by those held in $_REQUEST
+$state =& PommoAPI::stateInit('mailing',array(
 	'fromname' => $mailing['fromname'],
 	'fromemail' => $mailing['fromemail'],
 	'frombounce' => $mailing['frombounce'],
 	'list_charset' => $mailing['charset'],
+	'wysiwyg' => $dbvalues['list_wysiwyg'],
+	'mailgroup' => $gid,
 	'subject' => $mailing['subject'],
-	'ishtml' => $mailing['ishtml'],
-	'mailgroup' => $gid
-	));
-
-$altInclude = (empty($mailing['altbody'])) ? 'no' : 'yes';
-
-$state =& PommoAPI::stateInit('mailings_send2',array(
 	'body' => $mailing['body'],
-	'altbody' => $mailing['altbody'],
-	'altInclude' => $altInclude,
-	'editorType' => 'wysiwyg'
-	));
+	'altbody' => $mailing['altbody']
+),
+$_POST);
 
-Pommo::redirect($pommo->_baseUrl.'admin/mailings/mailings_send.php');
+Pommo::redirect($pommo->_baseUrl.'admin/mailings/mailings_start.php');
 ?>

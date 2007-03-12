@@ -31,7 +31,9 @@
 
 <ul class="inpage_menu">
 <li><a href="#" id="e_altbody"><img src="{$url.theme.shared}images/icons/reload.png" alt="icon" border="0" align="absmiddle" /> {t}Copy text from HTML Message{/t}</a></li>
+<li><input type="submit" id="submit" name="submit" value="{t}Continue{/t}" /></li>
 </ul>
+
 
 </form>
 
@@ -92,6 +94,12 @@ $().ready(function() {
 		pommo.bodySubmit(scope,function() {
 			$('#addTemplate').jqmShow();
 		});
+		return false;
+	});
+	
+	$('#submit').click(function() {
+		pommo.clickedTab = $('#mailing ul li:last-child:eq(0) a');
+		pommo.bodySubmit(scope);
 		return false;
 	});
 });

@@ -4,7 +4,7 @@
 <li><a href="{$url.base}admin/mailings/admin_mailings.php">{t}Mailings{/t}</a>
 	{if $section == "mailings"}
 	<ul>
-	<li><a href="mailings_send.php">{t}Send{/t}</a></li>
+	<li><a href="mailings_start.php">{t}Send{/t}</a></li>
 	<li><a href="mailings_history.php">{t}History{/t}</a></li>
 	</ul>
 	{/if}

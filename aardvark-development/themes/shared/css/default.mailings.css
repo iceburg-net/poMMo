@@ -27,6 +27,11 @@ div.msgpreview {
 	border: 1px solid green;
 }
 
+.fragment input[type="submit"] {
+	color: #0067ff;
+	background-color: #e5f2ff;
+}
+
 /*******************/
 /* Status Page CSS */
 /*******************/

@@ -7,8 +7,26 @@
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/tabs.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
+
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/tabs.css" />
+<!--[if lte IE 7]>
+{literal}
+<style type="text/css" media="projection, screen">
+.anchors { /* auto clear */
+    display: inline-block; /* @ IE 7 */
+    _height: 1%; /* @ IE 6 */
+}
+.anchors a {
+    float: left;
+}
+.anchors .tabs-disabled a {
+    filter: alpha(opacity=40);
+    zoom: 1; /* trigger filter */
+}
+{/literal}
+</style>
+<![endif]-->
 {/capture}
 {include file="inc/admin.header.tpl" sidebar='off'}
 
@@ -141,8 +159,10 @@ var pommo = {
 					return callback();
 				}
 				
-				if($('#success')[0]) // form passed server side validation
+				if($('#success',scope).length > 0) { // form passed server side validation
 					pommo.switchTab();
+				}
+			
 			}
 		});
 	},
@@ -206,7 +226,6 @@ var pommo = {
 	//	optionally, the tabIndex can be passed
 		
 	switchTab: function(tabIndex) {
-		
 		if (typeof tabIndex != 'undefined') {
 			$('#mailing').triggerTab(tabIndex);
 			return;
@@ -259,7 +278,6 @@ $().ready(function(){
 			}
 			
 			return true;
-			
 			}, 
 		onShow: function(tab, loading, current){
 			
