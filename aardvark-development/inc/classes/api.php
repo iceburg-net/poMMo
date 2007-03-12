@@ -69,8 +69,8 @@ class PommoAPI {
 		
 		if(!defined('_poMMo_support'))
 			if (!$revision)
-				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Have you %s installed %s ?'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
-			elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. Have you %s upgraded %s ?'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
+				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
+			elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
 		}
 		
 		if ($pommo->_debug)

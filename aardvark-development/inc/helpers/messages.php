@@ -88,7 +88,7 @@ class PommoHelperMessages {
 		if ($section == 'all' || $section == 'activate') {
 		$messages['activate'] = array();
 		$messages['activate']['msg'] =  sprintf(Pommo::_T('Someone has requested to access your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('You may edit your information or unsubscribe by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
-		$messages['activate']['sub'] = sprintf(Pommo::_T('%s: Information Access.'),$pommo->_config['list_name']); 
+		$messages['activate']['sub'] = sprintf(Pommo::_T('%s: Account Access.'),$pommo->_config['list_name']); 
 		}
 		
 		

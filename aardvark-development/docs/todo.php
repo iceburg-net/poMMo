@@ -60,6 +60,7 @@ die();
 	  		- "smart" column assignments
 	  		- Performance increases
 	  		- Convert uploaded files to UTF-8
+	  		- Configurable delimiter (e.g. allow ";")
 	  		
 	  	
 	  (feature) Support SSL+TLS SMTP Connections
