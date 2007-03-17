@@ -83,7 +83,7 @@
 						$in[$id] = 'on';
 					if (strtolower($in[$id]) == 'false')
 						$in[$id] = '';
-					if ($in[$id] != 'on' && $in['id'] != '') {
+					if ($in[$id] != 'on' && $in[$id] != '') {
 						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
 							unset($in[$id]);
 							break;
