@@ -220,6 +220,7 @@ class SafeSQL_MySQL extends SafeSQL {
 \*======================================================================*/
 	function _sql_escape($var) {
 		if(is_array($var)) {
+		  $_newvar = array();
 			foreach($var as $_element) {
 				$_newvar[] = $this->_sql_escape($_element);
 			}
