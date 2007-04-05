@@ -40,35 +40,35 @@ $().ready(function() {
 <ul class="inpage_menu">
 
 <li>
-<label for="status">{t}View{/t}</label>
+<label>{t}View{/t} 
 <select name="status">
 <option value="1"{if $state.status == 1} selected="selected"{/if}>{t}Active Subscribers{/t}</option>
 <option value="1">------------------</option>
 <option value="0"{if $state.status == 0} selected="selected"{/if}>{t}Unsubscribed{/t}</option>
 <option value="2"{if $state.status == 2} selected="selected"{/if}>{t}Pending{/t}</option>
-</select>
+</select></label>
 </li>
 
 <li>
-<label for="group">{t}Belonging to Group{/t}</label>
+<label>{t}Belonging to Group{/t} 
 <select name="group">
 <option value="all"{if $state.group == 'all'} selected="selected"{/if}>{t}All Subscribers{/t}</option>
 <option value="all">---------------</option>
 {foreach from=$groups key=id item=g}
 <option value="{$id}"{if $state.group == $id} selected="selected"{/if}>{$g.name}</option>
 {/foreach}
-</select>
+</select></label>
 </li>
 
 <li>
-<label for="limit">{t}# per page{/t}</label>
+<label>{t}# per page{/t} 
 <select name="limit">
 <option value="10"{if $state.limit == '10'} selected="selected"{/if}>10</option>
 <option value="50"{if $state.limit == '50'} selected="selected"{/if}>50</option>
 <option value="150"{if $state.limit == '150'} selected="selected"{/if}>150</option>
 <option value="300"{if $state.limit == '300'} selected="selected"{/if}>300</option>
 <option value="500"{if $state.limit == '500'} selected="selected"{/if}>500</option>
-</select>
+</select></label>
 </li>
 
 </fieldset>
@@ -79,29 +79,29 @@ $().ready(function() {
 <ul class="inpage_menu">
 
 <li>
-<label for="sort">{t}Sort by{/t}</label>
+<label>{t}Sort by{/t} 
 <select name="sort">
 <option value="email"{if $state.sort == 'email'} selected="selected"{/if}>{t}email{/t}</option>
 <option value="time_registered"{if $state.sort == 'time_registered'} selected="selected"{/if}>{t}time registered{/t}</option>
 <option value="time_touched"{if $state.sort == 'time_touched'} selected="selected"{/if}>{t}time last updated{/t}</option>
 <option value="ip"{if $state.sort == 'ip'} selected="selected"{/if}>{t}IP Address{/t}</option>
-</select>
+</select></label>
 </li>
 
 <li>
-<label for="order">{t}Order by{/t}</label>
+<label>{t}Order by{/t} 
 <select name="order">
 <option value="asc"{if $state.order == 'asc'} selected="selected"{/if}>{t}ascending{/t}</option>
 <option value="desc"{if $state.order == 'desc'} selected="selected"{/if}>{t}descending{/t}</option>
-</select>
+</select></label>
 </li>
 
 <li>
-<label for="info">{t}Extended Info{/t}</label>
+<label>{t}Extended Info{/t} 
 <select name="info">
 <option value="show"{if $state.info == 'show'} selected="selected"{/if}>{t}show{/t}</option>
 <option value="hide"{if $state.info == 'hide'} selected="selected"{/if}>{t}hide{/t}</option>
-</select>
+</select></label>
 </li>
 
 </ul>
