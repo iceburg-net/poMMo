@@ -85,6 +85,9 @@ $().ready(function() {
 <option value="time_registered"{if $state.sort == 'time_registered'} selected="selected"{/if}>{t}time registered{/t}</option>
 <option value="time_touched"{if $state.sort == 'time_touched'} selected="selected"{/if}>{t}time last updated{/t}</option>
 <option value="ip"{if $state.sort == 'ip'} selected="selected"{/if}>{t}IP Address{/t}</option>
+{foreach from=$fields key=id item=f}
+<option value="{$id}"{if $state.sort == $id} selected="select"{/if}>{$f.name}</option>
+{/foreach}
 </select></label>
 </li>
 
