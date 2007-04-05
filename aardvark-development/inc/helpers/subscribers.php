@@ -180,10 +180,14 @@ class PommoSubscriber {
 				s.status,
 				p.pending_code,
 				p.pending_array,
-				p.pending_type
+				p.pending_type,
+				d.value
 			FROM 
 				" . $dbo->table['subscribers']." s
 				LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id)
+ 		        LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data']. " WHERE field_id " .
+		  (is_numeric($p['sort']) ? ' = '.(int)($p['sort']) : 'IS NULL').
+		   " ) AS d ON (s.subscriber_id = d.subscriber_id)
 			WHERE
 				1
 				[AND s.subscriber_id IN(%C)]
@@ -191,7 +195,7 @@ class PommoSubscriber {
 				[AND s.email IN (%Q)]
 				[ORDER BY %S] [%S]
 				[LIMIT %I, %I]";
-		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
+		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], (is_numeric($p['sort']) ? 'value' : $p['sort']), $p['order'], $p['offset'], $p['limit']));
 		
 		while ($row = $dbo->getRows($query)) 
 			$o[$row['subscriber_id']] = (empty($row['pending_code'])) ?
