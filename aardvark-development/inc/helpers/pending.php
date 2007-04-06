@@ -95,7 +95,7 @@ class PommoPending {
 			WHERE pending_code='%s' LIMIT 1";
 		$query = $dbo->prepare($query,array($code));
 		while ($row = $dbo->getRows($query)) 
-			$o = PommoPending::MakeDB($row);
+			$o = PommoPending::makeDB($row);
 		
 		return (empty($o)) ? false : $o;
 	}
@@ -123,7 +123,7 @@ class PommoPending {
 			LIMIT 1";
 		$query = $dbo->prepare($query,array($email));
 		while ($row = $dbo->getRows($query))
-			$o = PommoPending::MakeDB($row);
+			$o = PommoPending::makeDB($row);
 			
 		return (empty($o)) ? false : $o;
 	}
@@ -144,7 +144,7 @@ class PommoPending {
 			WHERE subscriber_id=%i LIMIT 1";
 		$query = $dbo->prepare($query,array($id));
 		while ($row = $dbo->getRows($query)) 
-			$o = PommoPending::MakeDB($row);
+			$o = PommoPending::makeDB($row);
 		
 		return (empty($o)) ? false : $o;
 	}
