@@ -201,8 +201,8 @@ class PommoSubscriber {
 		
 		while ($row = $dbo->getRows($query)) 
 			$o[$row['subscriber_id']] = (empty($row['pending_code'])) ?
-				PommoSubscriber::MakeDB($row) :
-				PommoSubscriber::MakeDB($row, TRUE);
+				PommoSubscriber::makeDB($row) :
+				PommoSubscriber::makeDB($row, TRUE);
 		
 		// fetch data
 		if (!empty($o)) {
