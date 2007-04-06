@@ -180,15 +180,17 @@ class PommoSubscriber {
 				s.status,
 				p.pending_code,
 				p.pending_array,
-				p.pending_type,
-				d.value
-			FROM 
+				p.pending_type".
+		  (is_numeric($p['sort']) ? ", d.value" : '').
+		  " FROM 
 				" . $dbo->table['subscribers']." s
-				LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id)
- 		        LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data']. " WHERE field_id " .
-		  (is_numeric($p['sort']) ? ' = '.(int)($p['sort']) : 'IS NULL').
-		   " ) AS d ON (s.subscriber_id = d.subscriber_id)
-			WHERE
+				LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id) ".
+		  (is_numeric($p['sort']) ? 
+		   "LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data']. 
+		   " WHERE field_id = ".(int)($p['sort'])." ) AS d".
+		   " ON (s.subscriber_id = d.subscriber_id)"
+		   : '').
+		  " WHERE
 				1
 				[AND s.subscriber_id IN(%C)]
 				[AND s.status=%I]
