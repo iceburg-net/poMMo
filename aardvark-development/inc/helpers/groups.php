@@ -65,7 +65,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	}
  	
  	// returns ordered / filtered / limited member IDs -- scoped to current group member IDs
- 	function & members($p = array()) {
+ 	function members($p = array()) {
  		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		if(is_array($this->_memberIDs)) 
  			$p['id'] =& $this->_memberIDs;
