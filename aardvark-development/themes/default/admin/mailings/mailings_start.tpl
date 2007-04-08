@@ -327,6 +327,7 @@ $().ready(function(){
 		trigger: false,
 		ajax: 'ajax/mailing_test.php',
 		target: 'div.jqmdMSG',
+		modal: true,
 		onHide: function(h) {
 			// reset the dialog html to loading state
 			$('div.jqmdMSG',h.w).html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{literal}');	

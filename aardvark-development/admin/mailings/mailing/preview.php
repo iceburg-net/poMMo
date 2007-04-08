@@ -64,6 +64,8 @@ $state =& PommoAPI::stateInit('mailing',array(
 ),
 $_POST);
 
+$state['charset'] = $state['list_charset'];
+
 // validate composition
 $tempbody = trim($state['body']);
 $tempalt = trim($state['altbody']);

@@ -96,7 +96,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 	$formError = array ();
 	$formError['fromname'] = $formError['subject'] = Pommo::_T('Cannot be empty.');
-	$formError['list_charset'] = Pommo::_T('Invalid Character Set');
+	$formError['charset'] = Pommo::_T('Invalid Character Set');
 	$formError['fromemail'] = $formError['frombounce'] = Pommo::_T('Invalid email address');
 	$formError['ishtml'] = $formError['mailgroup'] = Pommo::_T('Invalid Input');
 	$smarty->assign('formError', $formError);

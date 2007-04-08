@@ -88,6 +88,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			$state['status'] = 1;
 			$state['current_status'] = 'stopped';
 			$state['command'] = 'restart';
+			$state['charset'] = $state['list_charset'];
 			$mailing = PommoHelper::arrayIntersect($state, $mailing);
 			$code = PommoMailing::add($mailing);
 			
