@@ -82,9 +82,9 @@ class PommoSubscriber {
 		}
 
 		$o = ($pending) ?
-			PommoType::subscriberPending() :
-			PommoType::subscriber();
-		return PommoAPI::getParams($o,$in);
+			PommoAPI::getParams(PommoType::subscriberPending(),$in) :
+			PommoAPI::getParams(PommoType::subscriber(),$in);
+		return $o;
 	}
 	
 	// subscriber validation
@@ -181,7 +181,7 @@ class PommoSubscriber {
 				p.pending_code,
 				p.pending_array,
 				p.pending_type".
-		  (is_numeric($p['sort']) ? ", d.value" : '').
+		  (is_numeric($p['sort']) ? ", d.value" : ''). // dkg: If sort is numeric, we are sorting by a subscriber field value and need to add the additional left join.
 		  " FROM 
 				" . $dbo->table['subscribers']." s
 				LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id) ".
