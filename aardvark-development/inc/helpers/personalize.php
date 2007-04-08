@@ -22,12 +22,20 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/fields.
 
 class PommoHelperPersonalize {
 	
+	/*
+	 * COMPATIBILITY ISSUE WITH REGEX ON WINDOWS (IIS) -- DEPRICATING IN FAVOR OF
+	 * PommoHelperPersonalize::search()  and PommoHelperPersonalize::replace()
+	 * 
+	 * LEAVING IN SOURCE FOR REFERENCE....
+	 */
+	 
+	/*
 	// scans a message body and returns an array of applicable personaliztions
 	// accepts a message body (str)
 	// returns a personalization array (array of 4 arrays) 
 	//  array[0] == fulltext replace, array[1] == field_name, array[2] == default value, array[3] == field_id
 
-	/* e.g.
+	e.g.
 	 array(4) {
 	  [0]=> -- FULLTEXT REPLACE(s)
 	  array(2) {
@@ -57,7 +65,7 @@ class PommoHelperPersonalize {
 	  		[2] =>
 	  		string(1) "7"
 	  	}
-	} */
+	} 
 	function & get(&$body) {
 		$fields = PommoField::get();
 		
@@ -127,6 +135,83 @@ class PommoHelperPersonalize {
 		}
 		return $body;
 	}
+	
+	*/
+	
+	// scan a body and return an array of applicable personaliztions
+	// accepts a message body (str)
+	// returns a personalization array (array of personalizations)
+	//  e.g. array('search' => full_text_replace, 'field' => field_name, 'default' => default_value, 'field_id' => field_id);
+	function & search(&$body) {
+		$personalizations = array();
+			
+		$matches = array();
+		$pattern = '/\[\[[^\]]+\]\]/';
+		if (preg_match_all($pattern, $body, $matches) < 1)
+			return $personalizations;
+		
+		$fields = PommoField::get();
+		foreach($matches[0] as $str) {
+			$p = array();
+			$p['search'] = $str;
+			$a = explode('|',trim($str,'[]'));
+			$p['field'] = $a[0];
+			$p['default'] = (isset($a[1])) ? $a[1] : false;
+			foreach($fields as $f) 
+				if ($f['name'] == $p['field'])
+					$p['field_id'] = $f['id'];
+			array_push($personalizations,$p);
+		}
+		return $personalizations;
+	}
+	
+	// personalizes a body
+	// accepts message
+	// accepts subscriber object (single subscriber)
+	// accepts personalization array
+	// returns a personalized body
+	function replace(&$msg, &$s, &$personalizations) {
+		$body = $msg;
+		foreach($personalizations as $p) {
+		
+			// lookup replace string
+			switch (strtolower($p['field'])) {
+				case 'email':
+					$replace = $s['email'];
+					break;
+				case 'ip':
+					$replace = $s['ip'];
+					break;
+				case 'registered':
+					$replace = $s['registered'];
+					break;
+				case '!unsubscribe':
+					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/update.php?email='.$s['email'].'&code='.md5($s['id'].$s['registered']);
+					break;
+				case '!weblink':
+					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/mailings.php?mail_id='.$_GET['id'];
+					break;
+				case '!subscriber_id':
+					$replace = $s['id'];
+					break;
+				case '!mailing_id':
+					$replace = $_GET['id'];
+					break;
+				default:
+					$replace = $s['data'][$p['field_id']];
+					break;
+			}
+			
+			// attempt to add default if replacement is empty
+			if (empty($replace))
+				$replace = $p['default'];
+				
+			$body = str_replace($p['search'], $replace, $body);
+		}
+		return $body;
+	}
+	
+	
 	
 }
 ?>
