@@ -75,7 +75,7 @@ class PommoField {
 		
 		$invalid = array();
 		
-		if (empty($in['name']) || substr($in['name'],0,1) == '!') 
+		if (empty($in['name']) || substr($in['name'],0,1) == '!' || strpos($in['name'],'|')) 
 			$invalid[] = 'name';
 		else {
 			switch (strtolower($in['name'])) {
