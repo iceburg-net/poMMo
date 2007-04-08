@@ -160,7 +160,7 @@ var pommo = {
 				}
 				
 				if($('#success',scope).length > 0) { // form passed server side validation
-					pommo.switchTab();
+					pommo.switchTab($('#success',scope).val());
 				}
 			
 			}
@@ -226,13 +226,10 @@ var pommo = {
 	//	optionally, the tabIndex can be passed
 		
 	switchTab: function(tabIndex) {
-		if (typeof tabIndex != 'undefined') {
+		if(this.clickedTab) 
+			$(this.clickedTab).trigger('triggerTab');
+		else 
 			$('#mailing').triggerTab(tabIndex);
-			return;
-		}
-		
-		if(this.clickedTab) $(this.clickedTab).trigger('triggerTab'); // load clicked tab
-		else $('#mailing').triggerTab($('#success').val()); // load "next" tab
 	},
 	
 	// sends ajax requests in synchronous order
