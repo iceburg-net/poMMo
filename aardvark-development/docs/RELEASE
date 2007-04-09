@@ -1,41 +1,80 @@
-=== Release Notes for Aardvark PR14.4.1 ===
- .: Released Janurary 23, 2007
-
-[Improvements]
-  * Licensing Updates
-  * Extended Win32 support for translations
-  
-[Bug Fixes]
-
-  * Resolved fatal error on user update page
-  * Subscribe Success message is now displayed when Email Confirmation is disabled
-  * Fixed default queue size (was incorrectly set to 10 -- unecessary respawns)
-  
- 
-=== Release Notes for Aardvark PR14.4 ===
- .: Released Janurary 22, 2007
+=== Release Notes for poMMo Aardvark PR15 ===
+ .: Released April 08, 2007
  
 [Additions]
 
-  * Ability to select language "per session" from admin page
-  * Added Gettext Emulation Layer
-      + Will "fallback" to if gettext or locale is not available to system
+  * Added support for Mailing Templates
+      + Included a default CSS-based template
+  * New Background Mailing Processor
+      + Improved protection against timeouts
+      + Enhanced error handling, logging
+      + Reliable and easily extendable
+  * New Mailing Composition process
+  * Added support for "OR" Group Filtering Rules (vs. "AND" only)
+  * Toggable administrator notification(s) on subsription, unsubscription, 
+    subscriber update, etc.
+  * Added support to sort subscribers by subscriber field values from the
+    subscriber manage page (rekt)
+  * Maximum mailing runtime can now be configured from setup > mailings page
+  * Added TinyMCE javascript WYSIWYG editor + Language Packs
+  * WYSIWYG Toggle Status is now persistent (remembered between sessions)
+  * Special links (unsubscribe, view on web, and mailing_id) can now be 
+    added to message body
+  * Added support for for personalising unsubscribe link, web link, unique ID, 
+    subscriber IP, and subscriber registration date.
+  * Throttle settings can now be incremented/decremented through buttons
+  * Added "comment" subscriber field type to recieve messages from subscribers
+  * Added /docs/OVERVIEW file to explain organization hieararchy for developers
+  * Added /docs/template.txt to explain template changes and additions
+  * Errors and Spawn attempts are now logged to working_director/ERROR_LOG
+  * Added ability to test mailing processor from configuration
+  * Added a donation button to admin page
 
 [Improvements]
 
-  * Enhanced mailing respawn method
-  * Pre-init mailing notices are now logged (improved debugging of mailer)
-  * Added error protection to database layer
-  * Table names in all database queries are now escaped with backticks (`)
-  * Clarified subscriber groups (text, redirect to "rules")
-  * Subscriber Update form will not auto-populate default/"normally" values
-  * Improved accuracy of mailing processor test (support library)
- 
+  * Updated mailing runtime test for accuracy
+  * Improved group rule creation and display
+  * Rewritten group SQL query generator
+  * Migration to jQuery 1.1, Javascript improvements+library updates
+  * Improved poMMo configuration interface
+  * Simplified form field validation in template files
+  * Javascript cleanup, removal of xinha and scriptaculous
+  * API Improvements
+  * Increased subscriber fields page interactivity.
+  * Enhanced Mailing Status Page
+      + Javascript and Markup optimizations
+      + fixed flicker
+      + protection against redundant command execution
+  * Massive improvements to Mail Processor and spawning
+  * Enhanced AJAX and JSON request handling
+  * Improved maintenance routine, cleanup
+  * Optimized I/O during mailing personalizations
+  * Improved mail processor test
+  * Simplified Subcriber Activation Routines (update/unsubscribe)
+  * Enhanced mailing preview, public mailings display
+  
 [Bug Fixes]
 
-  * Fixed notice ordering
-  * Fixed Russian Translation
-  * Duplicate mailing notices are properly handled
-  * Respawning now supports SSL, custom ports, and custom SSL ports out-of-box.
-  * Expired subscriber activation codes no longer result in blank page with timestamp.
-  * Mailing commands are now force-displayed when a frozen mailing is detected
+  * Fixed Frozen Mailing bug in Relation to Mailings containing Personalizations
+  * Moved the default theme's styling and images to a shared directory so
+    styling is not interrupted when using small custom themes (of only a few files)
+  * Fixed issue with install detection routine
+  * Fixed deletion of options in multiple choice type subscriber fields.
+  * Fixed subscriber::flagByID()
+  * Corrected misspellings
+  * Groups are now alphabetically ordered
+  * Fixed "space bug" in multiple choice subscriber field options
+  * Language file updates
+  * Addressed several division by 0 scenarios
+  * Forced upgrades no longer skip current revision update routines
+  * Moved Brazilian Portugese language from "BR" to "PT" in accordance with ISO-639
+  * Subscriber data is now truncated to 255 (from 60) on the program 
+    level (still limited by database)
+  * Frozen mailing fixes
+  * Prevented namespace collisions between new subscriber fields and 
+    mailing special links or personalizations.
+  * Test mailings will now complain if a current mailing is taking place
+  * Installer (clean install) now adds default mailing templates
+  * PHP Notice supressions
+  * Fixed personalization regex to better support win32 / IIS
+  

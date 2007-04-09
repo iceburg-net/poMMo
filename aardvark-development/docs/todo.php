@@ -24,7 +24,7 @@ die();
   Port config parser + config.php/sample
 
 [BEFORE Aardvark Final]
-	+ Remove language from default distribution, seperate download. ? opt.
+	+ Remove languages from default distribution, seperate download. ? opt.
 	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
 	+ Rewrite validate.js for scoping by table row
 
