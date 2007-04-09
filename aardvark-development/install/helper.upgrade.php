@@ -139,7 +139,7 @@ function PommoRevUpgrade($rev, $strict = true) {
 			
 			if (!PommoAPI::configUpdate(array('revision' => 33,'version' => 'Aardvark SVN'), true))
 				return false;
-		case 33: // -> Aardvark PR15
+		case 33: // (svn development) -> Aardvark PR15
 			
 			if (!PommoInstall::incUpdate(9,
 			"ALTER TABLE {$dbo->table['group_rules']} ADD `type` TINYINT( 1 ) NOT NULL DEFAULT '0'"
@@ -199,8 +199,15 @@ function PommoRevUpgrade($rev, $strict = true) {
 				}
 			}
 			
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 34,'version' => 'Aardvark PR15'), true))
+				return false;
+			
+		case 34: // Aardvark PR15 Release
+				
 			// end of upgrade (break), no revision bump.
 			break;
+			
 		default: 
 			return false;
 	} 
