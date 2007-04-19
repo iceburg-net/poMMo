@@ -33,7 +33,7 @@
 <h4>PHP Include</h4>
 
 <code>
-include('{$url.base}embed.mini.php');
+include('{$url.base}embed.miniform.php');
 </code>
 
 <h4>HTML Source</h4>
