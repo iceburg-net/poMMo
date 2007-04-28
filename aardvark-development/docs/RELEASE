@@ -1,8 +1,9 @@
 === Release Notes for poMMo Aardvark PR15.1 ===
  .: Released April 28, 2007
- 
+
 [Bug Fixes]
 
+  * Upgraders are given the default CSS template
   * Suppressed PHP Notices
   * Fixed reloading and previewing of plain text mailings
   * Fixed loading of sample data from support library
@@ -10,4 +11,3 @@
   * Bandwidth throttle calculations have been corrected to use kilobytes instead of bytes
   * Restored no limit throttling and default throttle values
   * Corrected example include of embedded subscription form
-  
