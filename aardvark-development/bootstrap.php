@@ -21,8 +21,8 @@
 // while poMMo is in development state, we'll attempt to display PHP notices, warnings, errors
 ini_set('display_errors', '1');
 
-error_reporting(E_ALL); /* show notices */
-// error_reporting(E_ALL ^ E_NOTICE); /* suppress notices */
+// error_reporting(E_ALL); // [DEVELOPMENT]
+error_reporting(E_ALL ^ E_NOTICE); // [RELEASE] 
 
 // Start Output buffering
 ob_start();
