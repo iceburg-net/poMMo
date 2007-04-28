@@ -24,6 +24,7 @@
 </div>
 
 <input type="submit" value="{t}Update{/t}" />
+<input type="submit" name="throttle_restore" value="{t}Restore Defaults{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
 <div class="output alert">{if $output}{$output}{/if}</div>
 
@@ -64,6 +65,7 @@
 </div>
 
 <input type="submit" value="{t}Update{/t}" />
+<input type="submit" name="throttle_restore" value="{t}Restore Defaults{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
 <div class="output alert">{if $output}{$output}{/if}</div>
 

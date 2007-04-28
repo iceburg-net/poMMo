@@ -242,7 +242,7 @@ class PommoThrottler {
 	// returns status of byte tracking - '1' if disabled, '2' if enabled, '3' if domain enabled, '4' if both enabled
 	function byteTracking() {
 		$mask = 1;
-		if ($this->_targetBPS)
+		if ($this->_targetBPS > 0)
 			$mask += 1;
 		if ($this->_domBPP > 0)
 			$mask += 2;
