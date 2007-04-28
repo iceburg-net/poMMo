@@ -46,6 +46,12 @@ $dbvalues = PommoAPI::configGet(array(
 	'list_wysiwyg'
 ));
 
+// if this is a plain text mailing, switch body + altbody.
+if($mailing['ishtml'] == 'off') {
+	$mailing['altbody'] = $mailing['body'];
+	$mailing['body'] = null;
+}
+
 // Initialize page state with default values overriden by those held in $_REQUEST
 $state =& PommoAPI::stateInit('mailing',array(
 	'fromname' => $mailing['fromname'],

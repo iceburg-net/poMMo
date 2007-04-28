@@ -18,15 +18,19 @@ textarea.wysiwyg {
 
 h4 { color: green; }
 
+
 div.msgpreview {
 	padding: 12px;
-}
-div.msgpreview {
 	margin: 5px;
 	background-color: #FFF;
 	border: 1px solid green;
 }
 
+div.msgpreview pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
 .fragment input[type="submit"] {
 	color: #0067ff;
 	background-color: #e5f2ff;
