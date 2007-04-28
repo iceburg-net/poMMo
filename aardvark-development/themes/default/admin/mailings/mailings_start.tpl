@@ -421,7 +421,8 @@ tinyMCE.init({
 		,
 	theme_advanced_buttons3 : "",
 	extended_valid_elements : "style[dir<ltr?rtl|lang|media|title|type]", // can add more entities, see tinymce page!
-	remove_linebreaks : false
+	remove_linebreaks : false,
+	convert_urls : false
 });
 
 </script>
