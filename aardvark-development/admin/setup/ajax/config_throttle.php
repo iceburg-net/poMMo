@@ -46,7 +46,7 @@ elseif(!empty($_POST['throttle-submit'])) {
 		$_POST['mps'] : 3;
 	
 	$input['throttle_BPS'] = (is_numeric($_POST['bps']) && $_POST['bps'] >= 0 && $_POST['bps'] <= 400) ?
-		 $_POST['bps'] : 0;
+		 $_POST['bps']*1024 : 0;
 		
 	$input['throttle_DP'] = (is_numeric($_POST['dp']) && $_POST['dp'] >= 5 && $_POST['dp'] <= 20) ?
 		 $_POST['dp'] : 10;
@@ -55,7 +55,7 @@ elseif(!empty($_POST['throttle-submit'])) {
 		 $_POST['dmpp'] : 0;
 		
 	$input['throttle_DBPP'] = (is_numeric($_POST['dbpp']) && $_POST['dbpp'] >= 0 && $_POST['dbpp'] <= 200) ?
-		 $_POST['dbpp'] : 0;
+		 $_POST['dbpp']*1024 : 0;
 
 	if(!empty($input)) {
 		PommoAPI::configUpdate($input,TRUE);
