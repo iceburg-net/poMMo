@@ -34,7 +34,7 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
 // Read user requested changes	
-if (!empty($_POST['throttle-restore'])) {
+if (!empty($_POST['throttle_restore'])) {
 	$input = array ('throttle_MPS' => 3, 'throttle_BPS' => 0, 'throttle_DP' => 10, 'throttle_DBPP' => 0,'throttle_DMPP' => 0);
 	PommoAPI::configUpdate($input,TRUE);
 }
@@ -42,22 +42,21 @@ elseif(!empty($_POST['throttle-submit'])) {
 	
 	$input = array();
 	
-	if(is_numeric($_POST['mps']) && $_POST['mps'] >= 0 && $_POST['mps'] <= 5)
-		$input['throttle_MPS'] = $_POST['mps'];
-		
-	if(is_numeric($_POST['bps']) && $_POST['bps'] >= 0 && $_POST['bps'] <= 400)
-		$input['throttle_BPS'] = $_POST['bps'];
-		
-	if(is_numeric($_POST['dp']) && $_POST['dp'] >= 5 && $_POST['dp'] <= 20)
-		$input['throttle_DP'] = $_POST['dp'];
-		
-	if(is_numeric($_POST['dmpp']) && $_POST['dmpp'] >= 0 && $_POST['dmpp'] <= 5)
-		$input['throttle_DMPP'] = $_POST['dmpp'];
-		
-	if(is_numeric($_POST['dbpp']) && $_POST['dbpp'] >= 0 && $_POST['dbpp'] <= 200)
-		$input['throttle_DBPP'] = $_POST['dbpp'];
-		
+	$input['throttle_MPS'] = (is_numeric($_POST['mps']) && $_POST['mps'] >= 0 && $_POST['mps'] <= 5) ? 
+		$_POST['mps'] : 3;
 	
+	$input['throttle_BPS'] = (is_numeric($_POST['bps']) && $_POST['bps'] >= 0 && $_POST['bps'] <= 400) ?
+		 $_POST['bps'] : 0;
+		
+	$input['throttle_DP'] = (is_numeric($_POST['dp']) && $_POST['dp'] >= 5 && $_POST['dp'] <= 20) ?
+		 $_POST['dp'] : 10;
+		
+	$input['throttle_DMPP'] = (is_numeric($_POST['dmpp']) && $_POST['dmpp'] >= 0 && $_POST['dmpp'] <= 5) ? 
+		 $_POST['dmpp'] : 0;
+		
+	$input['throttle_DBPP'] = (is_numeric($_POST['dbpp']) && $_POST['dbpp'] >= 0 && $_POST['dbpp'] <= 200) ?
+		 $_POST['dbpp'] : 0;
+
 	if(!empty($input)) {
 		PommoAPI::configUpdate($input,TRUE);
 		$smarty->assign('output',Pommo::_T('Configuration Updated.'));

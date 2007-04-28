@@ -11,7 +11,7 @@
       + Reliable and easily extendable
   * New Mailing Composition process
   * Added support for "OR" Group Filtering Rules (vs. "AND" only)
-  * Toggable administrator notification(s) on subsription, unsubscription, 
+  * Toggable administrator notification(s) on subscription, unsubscription, 
     subscriber update, etc.
   * Added support to sort subscribers by subscriber field values from the
     subscriber manage page (rekt)
@@ -20,11 +20,11 @@
   * WYSIWYG Toggle Status is now persistent (remembered between sessions)
   * Special links (unsubscribe, view on web, and mailing_id) can now be 
     added to message body
-  * Added support for for personalising unsubscribe link, web link, unique ID, 
+  * Added support for for personalizing unsubscribe link, web link, unique ID, 
     subscriber IP, and subscriber registration date.
   * Throttle settings can now be incremented/decremented through buttons
-  * Added "comment" subscriber field type to recieve messages from subscribers
-  * Added /docs/OVERVIEW file to explain organization hieararchy for developers
+  * Added "comment" subscriber field type to receive messages from subscribers
+  * Added /docs/OVERVIEW file to explain organization hierarchy for developers
   * Added /docs/template.txt to explain template changes and additions
   * Errors and Spawn attempts are now logged to working_director/ERROR_LOG
   * Added ability to test mailing processor from configuration
@@ -50,7 +50,7 @@
   * Improved maintenance routine, cleanup
   * Optimized I/O during mailing personalizations
   * Improved mail processor test
-  * Simplified Subcriber Activation Routines (update/unsubscribe)
+  * Simplified Subscriber Activation Routines (update/unsubscribe)
   * Enhanced mailing preview, public mailings display
   
 [Bug Fixes]
@@ -67,7 +67,7 @@
   * Language file updates
   * Addressed several division by 0 scenarios
   * Forced upgrades no longer skip current revision update routines
-  * Moved Brazilian Portugese language from "BR" to "PT" in accordance with ISO-639
+  * Moved Brazilian Portuguese language from "BR" to "PT" in accordance with ISO-639
   * Subscriber data is now truncated to 255 (from 60) on the program 
     level (still limited by database)
   * Frozen mailing fixes
@@ -75,6 +75,5 @@
     mailing special links or personalizations.
   * Test mailings will now complain if a current mailing is taking place
   * Installer (clean install) now adds default mailing templates
-  * PHP Notice supressions
+  * PHP Notice suppressions
   * Fixed personalization regex to better support win32 / IIS
-  
