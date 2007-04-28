@@ -51,7 +51,7 @@ switch(v) {
 	<a href="ajax/mailing_preview.php" title="{t}Preview Message{/t}" onclick="return !window.open(this.href)">{t}Click Here{/t}</a>
 	<hr />
 	{/if}
-	{$altbody}
+	<pre>{$altbody}</pre>
 </div>
 
 
