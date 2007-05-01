@@ -90,7 +90,7 @@ class PommoMailCtl {
 		
 		$logger->addMsg('Attempting to spawn '.(($ssl) ? 'https://' : 'http://').$pommo->_hostname.':'.$pommo->_hostport.$page,2,TRUE);
 		
-		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 10);
+		$socket = fsockopen($ssl . $pommo->_hostname, $pommo->_hostport, $errno, $errstr, 25);
 
 		// LOG SPAWN ATTEMPTS TO FILE *TEMP, DEBUG*
 		if($log || $pommo->_debug) {
