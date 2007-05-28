@@ -119,6 +119,8 @@ class PommoHelperMessages {
 	
 	function testExchanger($to,$exchanger) {
 		global $pommo;
+		$logger =& $pommo->_logger;
+		
 		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
 		
 		$subject = Pommo::_T('poMMo test message');
