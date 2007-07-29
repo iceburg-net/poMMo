@@ -188,7 +188,7 @@ class PommoSQL {
 	
 	// accepts a logic array
 	// returns an array or SQL sub queries
-	function & getSubQueries(&$in) {
+	function & getSubQueries(&$in) { 
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -204,9 +204,9 @@ class PommoSQL {
 						case "not":
 							$sql.= $dbo->prepare("[ AND value NOT IN (%Q)]",array($v)); break;
 						case "less":
-							$sql.= $dbo->prepare("[ AND value < %I ]",array($v)); break;
+							$sql.= $dbo->prepare("[ AND value < %I ]",array($v[0])); break;
 						case "greater":
-							$sql.= $dbo->prepare("[ AND value > %I ]",array($v)); break;
+							$sql.= $dbo->prepare("[ AND value > %I ]",array($v[0])); break;
 						case "true":
 							$sql.= " AND value = 'on'"; break;
 						case "false":

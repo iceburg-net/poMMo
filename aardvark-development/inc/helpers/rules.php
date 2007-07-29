@@ -149,7 +149,6 @@ class PommoRules {
 		
 		$type = ($type == 'or')? 1 : 0;
 		
-		
 		// remove previous filters
 		PommoRules::deleteRule($group, $match, $logic);
 		
