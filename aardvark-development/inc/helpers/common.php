@@ -134,5 +134,57 @@ class PommoHelper {
 	function isAjax() {
 		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 	}
+	
+	// safeStrtotime function by Ed Lecky-Thompson
+	// Support dates prior to 1970 (Unix epoch) by returning a negative timestamp - needed by some IIS/Windows environments
+	// NOTE/TODO: Not necessary with PHP versions >= 5.2, remove when widespread. 
+	function safeStrtotime($strInput)
+	{
+    $iVal = -1;
+    for ($i = 1900; $i <= 1969; $i++)
+    {
+        // Check for this year string in date
+        $strYear = (string )$i;
+        if (!(strpos($strInput, $strYear) === false))
+        {
+            $replYear = $strYear;
+            $yearSkew = 1970 - $i;
+            $strInput = str_replace($strYear, '1970', $strInput);
+        }
+    }
+    $iVal = strtotime($strInput);
+    if ($yearSkew > 0)
+    {
+        $numSecs = (60 * 60 * 24 * 365 * $yearSkew);
+        $iVal = $iVal - $numSecs;
+        $numLeapYears = 0;// determine number of leap years in period
+        for ($j = $replYear; $j <= 1969; $j++)
+        {
+            $thisYear = $j;
+            $isLeapYear = false;
+            // Is div by 4?
+            if (($thisYear % 4) == 0)
+            {
+                $isLeapYear = true;
+            }
+            // Is div by 100?
+            if (($thisYear % 100) == 0)
+            {
+                $isLeapYear = false;
+            }
+            // Is div by 1000?
+            if (($thisYear % 1000) == 0)
+            {
+                $isLeapYear = true;
+            }
+            if ($isLeapYear == true)
+            {
+                $numLeapYears++;
+            }
+        }
+        $iVal = $iVal - (60 * 60 * 24 * $numLeapYears);
+    }
+    return $iVal;
+}
 }
 ?>

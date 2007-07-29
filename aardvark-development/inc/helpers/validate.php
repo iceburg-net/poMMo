@@ -122,7 +122,7 @@
 					if(is_numeric($in[$id]))
 						$in[$id] = date('m/d/Y',$in[$id]);
 						
-					$in[$id] = strtotime($in[$id]);
+					$in[$id] = PommoHelper::safeStrtotime($in[$id]);
 					
 					if(!$in[$id] || $in[$id] < 0) {
 						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
