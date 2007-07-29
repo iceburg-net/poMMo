@@ -66,20 +66,23 @@ elseif ($type == 'field') {
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 	
+	$field = current(PommoField::get(array('id' => $fid)));
+	
 	// check to see if we're editing
 	
 	$values = array();
 	if ($logic) { // logic is passed *only* when edit button is clicked..
 		foreach($group['rules'] as $rule) {
-			if($rule['logic'] == $logic && $rule['field_id'] == $fid)
-				$values[] = $rule['value'];
+			if($rule['logic'] == $logic && $rule['field_id'] == $fid) {
+				$values[] = ($field['type'] == 'date') ? 
+					strftime("%m/%d/%Y",$rule['value']) : // converts numeric (comparable) timestamp to human readable form -- uses same method as in template files (smarty |date_format modifier).
+					$rule['value'];
+			}
 		}
 	}
 	$firstVal = (empty($values)) ? false : array_shift($values);
 	$smarty->assign('values',$values);
 	$smarty->assign('firstVal',$firstVal);
-	
-	$field = current(PommoField::get(array('id' => $fid)));
 	
 	if ($logic) {
 		$logic = array($logic => PommoRules::getEnglish($logic));

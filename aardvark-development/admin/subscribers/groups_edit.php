@@ -92,8 +92,6 @@ $gnew = & PommoRules::getLegalGroups($group, $groups);
 	//	);
 	
 
-
-
 foreach($rules as $key => $a) {
 	if ($key == 'include' || $key == 'exclude')
 		foreach($a as $k => $gid)

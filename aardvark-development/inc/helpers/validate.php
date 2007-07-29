@@ -124,7 +124,7 @@
 						
 					$in[$id] = PommoHelper::safeStrtotime($in[$id]);
 					
-					if(!$in[$id] || $in[$id] < 0) {
+					if(!$in[$id]) {
 						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
 							unset($in[$id]);
 							break;

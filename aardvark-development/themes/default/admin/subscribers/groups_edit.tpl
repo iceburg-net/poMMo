@@ -108,7 +108,15 @@
 <td>
 <ul>
 {foreach from=$values item=v name=vals}
-{if $v}{if !$smarty.foreach.vals.first}<br />({t}or{/t}) {/if} {$v}{/if}
+{if $v}
+	{if !$smarty.foreach.vals.first}<br />({t}or{/t}){/if}
+	
+	{if $fields[$field_id].type == 'date'}
+	{$v|date_format:"%m/%d/%Y"}
+	{else}
+	{$v}
+	{/if}
+{/if}
 {/foreach}
 </ul>
 </td>
