@@ -24,7 +24,7 @@ $.datePicker = function()
 	var months = ['{t}January{/t}', '{t}Febuary{/t}', '{t}March{/t}', '{t}April{/t}', '{t}May{/t}', '{t}June{/t}', '{t}July{/t}', '{t}August{/t}', '{t}September{/t}', '{t}October{/t}', '{t}November{/t}', '{t}December{/t}'];
 	var days = ['{t}Sunday{/t}', '{t}Monday{/t}', '{t}Tuesday{/t}', '{t}Wednesday{/t}', '{t}Thursday{/t}', '{t}Friday{/t}', '{t}Saturday{/t}'];
 	var navLinks = {ldelim}p:'{t}Prev{/t}', n:'{t}Next{/t}', c:'{t}Close{/t}'{rdelim};
-	var dateFormat = 'dd/mm/yyyy';
+	var dateFormat = '{$config.app.dateformat}';
 	var _firstDate;
 	var _lastDate;
 {literal}
@@ -39,7 +39,7 @@ $.datePicker = function()
 	var _strToDate = function(dIn)
 	{
 		switch (dateFormat.toLowerCase()) {
-			case 'yyyy-mm-dd':
+			case 'yyyy/mm/dd':
 				dParts = dIn.split('-');
 				return new Date(dParts[0], Number(dParts[1])-1, dParts[2]);
 			case 'dd/mm/yyyy':
@@ -58,7 +58,7 @@ $.datePicker = function()
 		var dM = _zeroPad(d.getMonth()+1);
 		var dD = _zeroPad(d.getDate());
 		switch (dateFormat.toLowerCase()) {
-			case 'yyyy-mm-dd':
+			case 'yyyy/mm/dd':
 				return dY + '-' + dM + '-' + dD;
 			case 'dd/mm/yyyy':
 				return dD + '/' + dM + '/' + dY;
@@ -395,7 +395,6 @@ $.fn.datePicker = function(a)
 };
 
 $().ready(function() {
-	$.datePicker.setDateFormat('mm/dd/yyyy');
 	$('input.datepicker').datePicker();
 });
 

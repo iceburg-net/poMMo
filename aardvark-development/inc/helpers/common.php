@@ -77,6 +77,22 @@ class PommoHelper {
 		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address))) ? true : false;
 	}
 	
+	function isEmailS($value) {
+		
+		// in case value is several addresses separated by newlines
+    $_addresses = preg_split('![\n\r]+!', $value);
+
+    foreach($_addresses as $_address) {
+		$_is_valid = !(preg_match('!@.*@|\.\.|\,|\;!', $_address) ||
+	        !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address));
+        
+        if(!$_is_valid)
+            return false;
+    }
+    return true;
+    
+	}
+	
 	// generates a unique code to be used as a confirmation key.
 	// returns code (str)
 	function makeCode($length = false) {
@@ -135,56 +151,88 @@ class PommoHelper {
 		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 	}
 	
-	// safeStrtotime function by Ed Lecky-Thompson
-	// Support dates prior to 1970 (Unix epoch) by returning a negative timestamp - needed by some IIS/Windows environments
-	// NOTE/TODO: Not necessary with PHP versions >= 5.2, remove when widespread. 
-	function safeStrtotime($strInput)
+	// Returns the current dateformat as a string
+	function timeGetFormat() {
+		global $pommo;
+		switch ($pommo->_dateformat) {
+			case 1: $format = 'YYYY/MM/DD'; break;
+			case 2: $format = 'MM/DD/YYYY'; break;
+			case 3: $format = 'DD/MM/YYYY'; break;
+			default: Pommo::kill('Unknown dateformat', TRUE);
+		}
+		return $format;
+	}
+	// converts a timestamp to human readable string. 
+	// Function will allow overidding of default date display format (MM/DD/YY vs. DD/MM/YY vs. YYYY/MM/DD etc.)
+	function timeToStr($int) {
+		global $pommo;
+		
+		if (!defined('ADODB_DATE_VERSION')) // safely load ADODB date library
+			Pommo::requireOnce($pommo->_baseDir.'inc/lib/adodb/adodb-time.inc.php');
+
+		switch ($pommo->_dateformat) {
+			case 1: $format = '%Y/%m/%d'; break;
+			case 2: $format = '%m/%d/%Y'; break;
+			case 3: $format = '%d/%m/%Y'; break;
+			default: Pommo::kill('Unknown dateformat', TRUE);
+		}
+		
+		return adodb_strftime($format,$int);
+	}
+	
+	// convert human readable date strings to unix timestamps
+	// piggy backs on adodb's excellent time library -- supporting a wide range of dates (100AD +)
+	function timeFromStr($str)
 	{
-    $iVal = -1;
-    for ($i = 1900; $i <= 1969; $i++)
-    {
-        // Check for this year string in date
-        $strYear = (string )$i;
-        if (!(strpos($strInput, $strYear) === false))
-        {
-            $replYear = $strYear;
-            $yearSkew = 1970 - $i;
-            $strInput = str_replace($strYear, '1970', $strInput);
-        }
-    }
-    $iVal = strtotime($strInput);
-    if ($yearSkew > 0)
-    {
-        $numSecs = (60 * 60 * 24 * 365 * $yearSkew);
-        $iVal = $iVal - $numSecs;
-        $numLeapYears = 0;// determine number of leap years in period
-        for ($j = $replYear; $j <= 1969; $j++)
-        {
-            $thisYear = $j;
-            $isLeapYear = false;
-            // Is div by 4?
-            if (($thisYear % 4) == 0)
-            {
-                $isLeapYear = true;
-            }
-            // Is div by 100?
-            if (($thisYear % 100) == 0)
-            {
-                $isLeapYear = false;
-            }
-            // Is div by 1000?
-            if (($thisYear % 1000) == 0)
-            {
-                $isLeapYear = true;
-            }
-            if ($isLeapYear == true)
-            {
-                $numLeapYears++;
-            }
-        }
-        $iVal = $iVal - (60 * 60 * 24 * $numLeapYears);
-    }
-    return $iVal;
-}
+		global $pommo;
+		
+		if (!defined('ADODB_DATE_VERSION')) // safely load ADODB date library
+			Pommo::requireOnce($pommo->_baseDir.'inc/lib/adodb/adodb-time.inc.php');
+		
+		// normalize delimiter
+		str_replace('-','/',$str);
+		
+		// Extract Year, Month, and Day from a string like "2007/08/03"
+		$a = explode("/", $str);
+		
+		// Validate the string
+		if (count($a) != 3 || !is_numeric($a[0]) || !is_numeric($a[1]) || !is_numeric($a[2]))
+			return false;
+			
+		switch($pommo->_dateformat) {
+			case 1: 
+				$year = substr($a[0],0,4);
+				$month = substr($a[1],0,2);
+				$day = substr($a[2],0,2);
+				break;
+			case 2: 
+				$year = substr($a[2],0,4);
+				$month = substr($a[0],0,2);
+				$day = substr($a[1],0,2);
+				break;
+			case 3: 
+				$year = substr($a[2],0,4);
+				$month = substr($a[1],0,2);
+				$day = substr($a[0],0,2);
+				break;
+			default:
+				Pommo::kill('Unknown date_format', TRUE);
+		}
+		
+		// Y-M-D validation	
+		if($month < 1 || $month > 12)
+			return false;
+			
+		if($day < 1 || $day > 31)
+			return false;
+		
+		// correction heuristic for short year @ end of century...
+		if (strlen($year) == 2)
+			$year = ($year < 50) ? 
+				'20'.$year :
+				'19'.$year;
+	
+		return adodb_mktime(0, 0, 0, $month, $day, $year);
+	}
 }
 ?>

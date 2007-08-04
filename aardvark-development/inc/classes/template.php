@@ -39,7 +39,8 @@ class PommoTemplate extends Smarty {
 		$this->compile_dir = $pommo->_workDir . '/pommo/smarty';
 		$this->plugins_dir = array (
 				'plugins', // the default under SMARTY_DIR
-				$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext');
+				$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext',
+				$pommo->_baseDir . 'inc/lib/smarty-plugins/pommo');
 				
 		// set base/core variables available to all template
 		$this->assign('url', array (
@@ -54,6 +55,7 @@ class PommoTemplate extends Smarty {
 			'app' => array (
 				'path' => $pommo->_baseDir,
 				'weblink' => '<a href="http://pommo.sourceforge.net/">' . Pommo::_T('poMMo Website') . '</a>',
+				'dateformat' => PommoHelper::timeGetFormat()
 				),
 			'site_name' => $pommo->_config['site_name'],
 			'site_url' => $pommo->_config['site_url'], 
@@ -74,7 +76,8 @@ class PommoTemplate extends Smarty {
 		// destroy pagination data if not in use
 		if(isset($_SESSION['SmartyPaginate']) && $_SESSION['SmartyPaginate']['default']['url'] != $_SERVER['PHP_SELF'])
 			unset($_SESSION['SmartyPaginate']);
-	}
+			
+		}
 
 	// display function falls back to "default" theme if theme file not found
 	// also assigns any poMMo errors or messages
@@ -126,10 +129,6 @@ class PommoTemplate extends Smarty {
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/function.validate.php');
-		
-		// shortcut for {validate} -- function defined in class.smartyvalidate.php
-		$this->register_function('fv', 'smarty_fieldValidate');
-		
 		$this->assign('vErr',array());
 	}
 
@@ -160,38 +159,4 @@ class PommoTemplate extends Smarty {
 	}
 }
 
-// poMMo --> 
-// provide a smarty function as a shortcut for {validate}
-function smarty_fieldValidate($params, &$smarty)
-{
-  static $pre = '';
-  static $post = '';
-  static $form = false;
-  
-  $f = (isset($params['validate'])) ? $params['validate'] : false;
-  $m = (isset($params['message'])) ? $params['message'] : false;
-  
-  $form = (isset($params['form'])) ? $params['form'] : $form;
-  
-  $pre = (isset($params['prepend'])) ? $params['prepend'] : $pre;
-  $post = (isset($params['append'])) ? $params['append'] : $post;
-  
-  $prepend = (isset($params['pre'])) ? $params['pre'] : $pre;
-  $append = (isset($params['post'])) ? $params['post'] : $post;
-  
-  $p = array(
-	'id' => $f,
-	'message' => (isset($smarty->_tpl_vars['vMsg'][$f])) ? $smarty->_tpl_vars['vMsg'][$f] : 'input error',
-	'append' => 'vErr'
-	);
-
-  if($form) 
-  	$p['form'] = $form;
-
-  if ($f) 
-  	return smarty_function_validate($p,$smarty);
-  if ($m && isset($smarty->_tpl_vars['vErr'][$m]))
-  	return $prepend.$smarty->_tpl_vars['vErr'][$m].$append;
-  return;
-}
 ?>

@@ -152,9 +152,18 @@ class PommoRules {
 		// remove previous filters
 		PommoRules::deleteRule($group, $match, $logic);
 		
-		foreach($values as $value)
-			$v[] = $dbo->prepare("(%i,%i,'%s','%s',%i)",array($group, $match, $logic, $value,$type));
-			
+		// get the field
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+		$field = current(PommoField::get(array('id' => $match)));
+
+		foreach($values as $value) {
+			// if this is a date type field, convert the values from human readable date
+			//  strings to timestamps appropriate for matching
+			if($field['type'] == 'date')
+				$value = PommoHelper::timeFromStr($value);
+			$v[] = $dbo->prepare("(%i,%i,'%s','%s',%i)",array($group, $match, $logic, $value, $type));
+		}
+		
 		$query = "
 			INSERT INTO " . $dbo->table['group_rules']."
 			(group_id, field_id, logic, value, type)

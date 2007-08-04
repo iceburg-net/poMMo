@@ -75,7 +75,7 @@ var PommoValidate = {
 				return (regex.test(value));
 				break;
 			case 'date' :
-				var regex = /^\d\d?\/\d\d?\/\d{4}$/;
+				var regex = /^\d\d(\d\d)?[\/-]\d\d[\/-]\d\d(\d\d)?$/;
 				return (regex.test(value));
 				break;
 			case 'email' :

@@ -181,15 +181,21 @@ class PommoSubscriber {
 				p.pending_code,
 				p.pending_array,
 				p.pending_type".
-		  (is_numeric($p['sort']) ? ", d.value" : ''). // dkg: If sort is numeric, we are sorting by a subscriber field value and need to add the additional left join.
-		  " FROM 
-				" . $dbo->table['subscribers']." s
-				LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id) ".
-		  (is_numeric($p['sort']) ? 
-		   "LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data']. 
-		   " WHERE field_id = ".(int)($p['sort'])." ) AS d".
-		   " ON (s.subscriber_id = d.subscriber_id)"
-		   : '').
+				// if sort is numeric, we're sorting by a field and must grab the field from data table
+			    (is_numeric($p['sort']) ? 
+			    	", d.value" : 
+			    	''). 
+
+			" FROM ".$dbo->table['subscribers']." s
+			LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id) ".
+			
+			// if sort is numeric, we're sorting by a field and must grab the field from data table
+			(is_numeric($p['sort']) ?
+				"LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data'].
+					" WHERE field_id = ".(int)($p['sort'])." ) AS d".
+					" ON (s.subscriber_id = d.subscriber_id)" : 
+				'').
+			
 		  " WHERE
 				1
 				[AND s.subscriber_id IN(%C)]
@@ -206,6 +212,12 @@ class PommoSubscriber {
 		
 		// fetch data
 		if (!empty($o)) {
+			
+			// get any date fields for conversion. We can't use the MySQL
+			// engine, as it doesn't support negative timestamps... !!!
+			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+			$dates = PommoField::getDates();
+			
 			$query = "
 				SELECT
 					field_id,
@@ -216,8 +228,11 @@ class PommoSubscriber {
 				WHERE
 					subscriber_id IN(%c)";
 			$query = $dbo->prepare($query,array(array_keys($o)));	
-			while ($row = $dbo->getRows($query)) 
-				$o[$row['subscriber_id']]['data'][$row['field_id']] = $row['value'];
+			while ($row = $dbo->getRows($query)) {
+				$o[$row['subscriber_id']]['data'][$row['field_id']] = (in_array($row['field_id'],$dates)) ?
+					PommoHelper::timeToStr($row['value']) :
+					$row['value'];
+			}
 		}
 		return $o;
 	}

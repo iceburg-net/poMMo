@@ -37,7 +37,7 @@
 </select>
 
 {elseif $field.type == 'date'}
-<input type="text" class="datepicker" size="12" name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|escape}"{elseif $field.normally}"{$field.normally|escape}"{else}"{t}mm/dd/yyyy{/t}"{/if} />
+<input type="text" class="datepicker" size="12" name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|escape}"{elseif $field.normally}"{$field.normally|escape}"{else}"{$config.app.dateformat}"{/if} />
 
 {elseif $field.type == 'comment'}
 <textarea name="comments" rows="3" cols="33" maxlength="255">{if isset($d.$key)}{$d.$key}{elseif $field.normally}{$field.normally}{/if}</textarea>

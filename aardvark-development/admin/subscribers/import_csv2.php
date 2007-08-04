@@ -48,7 +48,7 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 		elseif ($fid == 'email' && PommoHelper::isEmail($col))
 			$subscriber['email'] = $col;
 		elseif ($fid == 'registered')
-			$subscriber['registered'] = PommoHelper::safeStrtotime($col);
+			$subscriber['registered'] = PommoHelper::timeFromStr($col);
 		elseif ($fid == 'ip')
 			$subscriber['ip'] = $col;
 	}

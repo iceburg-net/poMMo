@@ -11,95 +11,81 @@ See config.simple.sample.php for a condensed, readable config file.
 
 ::: MySQL Database Information :::
 
-Set the MySQL database poMMo should use
+[db_hostname] = "localhost"
+	The MySQL Server poMMo will connect to (usually localhost)
+	NOTE: Remote MySQL servers (e.g. mysql.yourwebhost.com) can be used.
 
-	[db_database] = "pommo"
+[db_username] = "brice"
+	The username poMMo will use to login to MySQL server
+
+[db_password] = "1234"
+	The password poMMo will use to login to MySQL server
 	
-Set the MySQL username **
-
-	[db_username] = "pommo"
-
-Set the MySQL password
-
-	[db_password] = "pommo"
+[db_database] = "pommo"
+	The name of the MySQL Database poMMo will use
 	
-Set the MySQL hostname (usually "localhost"). 
-	NOTE; Remote MySQL servers (e.g. mysql.yourwebhost.com) can be used.
+[db_prefix] = "pommo_"
+	Change if you intend to have multiple poMMos running from the same database
 
-	[db_hostname] = "localhost"
-	
-Set the table prefix 
-  (change if you intend to have multiple poMMos running from the same database)
-  
-	[db_prefix] = pommo_
-	
  	
 ::: Language Information :::
-Set this to your desired locale. Current languages available are;
- bg - Bulgarian				es - Spanish
- pt - Brazilian Portugese	fr - French
- da - Danish				it - Italian
- de - German				nl - Dutch
- en - English				ro - Romanian
- en-uk - British			ru - Russian
- 
-	[lang] = en
-	
+
+[lang] = en
+	Set this to your desired locale. Current languages available are;
+	 bg - Bulgarian				es - Spanish
+	 pt - Brazilian Portugese	fr - French
+	 da - Danish				it - Italian
+	 de - German				nl - Dutch
+	 en - English				ro - Romanian
+	 en-uk - British			ru - Russian
+
 
 ::: Optional Configuration :::
+
 ====================================================================
 Below Options are intended for debugging or overriding 
 automatic configuration.
 ====================================================================
 
-Set debug mode. Enable (on) or disable(off). Debug mode is useful for providing
-  information to developers
+[debug] = off
+	Enable (on) or disable(off). Debug mode is useful for providing
+  	information to developers
   
-	[debug] = off
-
-Set the verbosity level of logging (1: Debugging 2: Informational 3: Important[default])
-
-	[verbosity] = 3
-
-
+[verbosity] = 3
+	Set the logging verbosity level.
+	1: Debbuging mode - *EVERYTHING* is outputted. 
+	2: Informational mode - *MOST EVERYTHING* is outputted
+	3: Quiet mode - *IMPORTANT THINGS* are outputted [default]
+	
+[date_format] = 1
+	Set the preferred date format. Available formats are;
+	 1: YYYY/MM/DD (e.g. 1969/12/15) [default]
+	 2: MM/DD/YYYY
+	 3: DD/MM/YYYY
+	
 ::: Overrides :::
   Uncomment (remove the leading "**") to define the following settings.
   NOTE: These settings are auto-detected by default, and best left unchanged.
-  
-Set the Base URL.
-  This is the path to poMMo relative to the WEB. Below are examples with value;
-  (poMMo location)							(baseURL value)
-  http://newsletter.mysite.com/				/
-  http://www.mysite.com/me/pommo			/me/pommo/
-  
-  NOTE: Include trailing slash
-
-	** [baseURL] = "/mysite/newsletter/"
-
-Set the "working" Cache Directory
-  poMMo uses this directory to cache templates. By default, it
-  is set to the "cache" directory in the poMMo root, and can
-  safely be left blank or commented out (default).
-  
-  Make sure the webserver can write to this directory! poMMo
-  will NOT WORK without being able to write to this directory.
  
-  If you change its location, it is recommended to set it to a path
-  outside the web root (for security reasons). 
+** [baseURL] = "/mysite/newsletter/"
+	Set the Base URL (poMMo's path relative to the webserver) e.g.;
+	  (poMMo location)							(baseURL value)
+  	  http://newsletter.mysite.com/				/
+ 	   http://www.mysite.com/me/pommo			/me/pommo/
   
-  DO NOT USE A RELATIVE PATH, USE THE FULL SERVER PATH: e.g.
-  '/home/b/brice/pommoCache'
-
-	** [workDir] = "/path/to/pommoCache"
-
-
-Set the webserver hostname
-  Default: Automatically Detected
- 
-	** [hostname] = www.mysite.com
+  	NOTE: Include trailing slash
 	
-
-Set the webserver port
-  Default: Automatically Detected [Usually 80, 443, or 8080]	
+** [workDir] = "/path/to/pommoCache"
+	Set the "working" directory. poMMo writes files to this directory. 
+  	By default, it is set to the "cache" directory in the poMMo root.
+  	
+  	For increased security move this directory to a location not reachable
+  	via the web (e.g. /home/brice/work vs. /home/brice/public_html/work)
+  	
+  	Make sure the webserver can write to this directory!
 	
-	** [hostport] = 8080
+** [hostname] = www.mysite.com
+	Set the webhost's server name
+	
+** [hostport] = 8080
+	Set the webhost's listening port [Usually 80, 443, or 8080]

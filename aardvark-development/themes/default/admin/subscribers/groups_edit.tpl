@@ -1,5 +1,5 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jq11.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
@@ -112,10 +112,11 @@
 	{if !$smarty.foreach.vals.first}<br />({t}or{/t}){/if}
 	
 	{if $fields[$field_id].type == 'date'}
-	{$v|date_format:"%m/%d/%Y"}
+	{$v|pommoDateFormat}
 	{else}
 	{$v}
 	{/if}
+	
 {/if}
 {/foreach}
 </ul>

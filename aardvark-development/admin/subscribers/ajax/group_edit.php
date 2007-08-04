@@ -75,7 +75,7 @@ elseif ($type == 'field') {
 		foreach($group['rules'] as $rule) {
 			if($rule['logic'] == $logic && $rule['field_id'] == $fid) {
 				$values[] = ($field['type'] == 'date') ? 
-					strftime("%m/%d/%Y",$rule['value']) : // converts numeric (comparable) timestamp to human readable form -- uses same method as in template files (smarty |date_format modifier).
+					PommoHelper::timeFromStr($rule['value']) :
 					$rule['value'];
 			}
 		}

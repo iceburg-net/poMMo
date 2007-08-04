@@ -1,7 +1,7 @@
 
 <div class="alert">
 {if $field.type == 'date'}
-	{t}value must be a date (mm/dd/yyyy){/t}
+	{t}value must be a date{/t} ({$config.app.dateformat})
 
 {elseif $field.type == 'number'}
 	{t}value must be a number{/t}
