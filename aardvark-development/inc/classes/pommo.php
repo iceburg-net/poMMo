@@ -23,7 +23,7 @@
 */
 
 class Pommo {
-	var $_revision = 35; // poMMo's revision #
+	var $_revision = 36; // poMMo's current "file" revision #
 
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object
@@ -41,6 +41,7 @@ class Pommo {
 	var $_slanguage; // the "session" language (if set)
 	var $_debug; // debug status (bool)
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
+	var $_dateformat; // prefered; 1: YYYY/MM/DD, 2: MM/DD/YYYY, 3: DD/MM/YYYY
 
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_session;  // pointer to this install's/instance values in $_SESSION
@@ -76,6 +77,8 @@ class Pommo {
 		$this->_debug = (strtolower($config['debug']) != 'on') ? false : true; 
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_logger->_verbosity = $this->_verbosity;
+		$this->_dateformat = ($config['date_format'] >= 1 && $cofig['date_format'] <= 3) ?
+			intval($config['date_format']) : 1;
 		
 		// the regex strips port info from hostname
 		$this->_hostname = (empty($config['hostname'])) ? preg_replace('/:\d+$/i', '', $_SERVER['HTTP_HOST']) : $config['hostname'];
@@ -177,15 +180,28 @@ class Pommo {
 		// merge submitted parameters
 		$p = PommoAPI :: getParams($defaults, $args);
 		
-		
 		// Bypass Reading of Config, SESSION creation, and authentication checks and return
 		//  if 'install' passed
 		if ($p['install'])
 			return;
 			
-		// read configuration data
-		$this->_config = PommoAPI :: configGetBase();
+		// load configuration data
+		// note; cannot save in session, as session needs unique key -- this is simplest method.
+		$this->_config = PommoAPI::configGetBase();
 		
+		// check current ("file") revision against database ("last") revision
+		$revision = isset($this->_config['revision']) ?
+			$this->_config['revision'] :
+			false;
+		
+		if(!defined('_poMMo_support'))
+			if (!$revision)
+				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
+			elseif ($this->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
+		
+		// toggle DB debugging
+		if ($this->_debug)
+			$this->_dbo->debug(TRUE);
 		
 		// Bypass SESSION creation, reading of config, authentication checks and return
 		//  if 'noSession' passed
@@ -196,23 +212,6 @@ class Pommo {
 		if (!empty($p['sessionID']))
 			session_id($p['sessionID']);
 		$this->startSession();
-		
-		// generate unique session name
-		$key =& $this->_config['key'];
-		
-		if(empty($key))
-			$key = '123456';
-		
-		// create SESSION placeholder for if this is a new session
-		if (empty ($_SESSION['pommo'.$key])) {
-			$_SESSION['pommo'.$key] = array (
-				'data' => array (),
-				'state' => array (),
-				'username' => null
-			);
-		}
-		
-		$this->_session =& $_SESSION['pommo'.$key];
 		
 		// check for "session" language -- user defined language on the fly.
 		if ($this->_slanguage) 
@@ -396,6 +395,23 @@ class Pommo {
 		if (!$start)
 			session_start();
 		$start = true;
+		
+		// generate unique session name
+		$key =& $this->_config['key'];
+		
+		if(empty($key))
+			$key = '123456';
+		
+		// create SESSION placeholder for if this is a new session
+		if (empty ($_SESSION['pommo'.$key])) {
+			$_SESSION['pommo'.$key] = array (
+				'data' => array (),
+				'state' => array (),
+				'username' => null
+			);
+		}
+		
+		$this->_session =& $_SESSION['pommo'.$key];
 	}
 	
 	// error log, E_ERROR trapping

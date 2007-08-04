@@ -34,10 +34,8 @@
 <label{if $field.required == 'on'} class="required"{/if} for="field{$key}">{$field.prompt}:</label>
 {/if}
 
-{if $field.type == 'text' || $field.type == 'number'}
-<input type="text" size="32" name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{/if} />
 
-{elseif $field.type == 'checkbox'}
+{if $field.type == 'checkbox'}
 <input type="checkbox" name="d[{$key}]" id="field{$key}"{if $d.$key == "on"} checked="checked"{/if} />
 
 {elseif $field.type == 'multiple'}
@@ -48,8 +46,8 @@
 {/foreach}
 </select>
 
-{elseif $field.type == 'date'}
-<input type="text" class="text datepicker" size=12 name="d[{$key}]" id="field{$key}" value={if isset($d.$key)}"{$d.$key|date_format:"%m/%d/%Y"}"{/if} />
+{else}
+<input type="text" {if $field.type == 'date'}class="text datepicker" size=12 {else}size="32" {/if} name="d[{$key}]" id="field{$key}"{if isset($d.$key)} value="{$d.$key|escape}"{/if} />
 
 {/if}
 </div>

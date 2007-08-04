@@ -5,16 +5,20 @@ Welcome to the poMMo Configuration File! From here you setup your database and
   
 IMPORTANT: This file must be named "config.php" and saved in the "root"
   directory of your poMMo installation (where bootstrap.php is).
+  
+See config.sample.php for descriptions of settings
 ==========================================================
 
-[db_database] = pommo
-[db_username] = pommo
-[db_password] = pommo
 [db_hostname] = localhost
+[db_username] = brice
+[db_password] = 1234
+[db_database] = pommo
 [db_prefix] = pommo_
+
 [lang] = en
 [debug] = off
 [verbosity] = 3
+[date_format] = 1
 
 The following are auto-detected, and are best left commented out.
 ** [workDir] = "/path/to/pommoCache"

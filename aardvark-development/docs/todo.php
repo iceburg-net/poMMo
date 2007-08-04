@@ -31,6 +31,8 @@ http://www.pommo.org/community/viewtopic.php?id=559
 	+ Remove languages from default distribution, seperate download. ? opt.
 	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
 	+ Rewrite validate.js for scoping by table row
+	
+	+ Change Debugging [not included in $logger, but piped out @ end of template display || script], Offer more helpful info in support
 
 [THEME]
 	ENHACE DEFAULT SUBSCRIPTION FORM -- PLAIN TEXT IS ALWAYS AVAILABLE...

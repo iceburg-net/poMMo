@@ -47,7 +47,7 @@
 </select>
 
 {elseif $field.type == 'date'}
-<input type="text" class="pvDate{if $field.required == 'on'} pvEmpty{/if}" size="12" name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{else}{t}mm/dd/yyyy{/t}{/if}" />
+<input type="text" class="pvDate{if $field.required == 'on'} pvEmpty{/if}" size="12" name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{else}{$config.app.dateformat}{/if}" />
 
 {elseif $field.type == 'number'}
 <input type="text" class="pvNumber{if $field.required == 'on'} pvEmpty{/if}" size="12" name="d[{$key}]" value="{if $field.normally}{$field.normally|escape}{/if}" />

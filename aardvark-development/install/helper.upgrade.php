@@ -23,23 +23,23 @@ function PommoUpgrade() {
 	$dbo =& $pommo->_dbo;
 		
 	// fetch the current/old revision
-	$config = PommoAPI::configGet('revision');
+	$revision = $pommo->_config['revision'];
 	
 	// halts upgrade on failed query
 	$GLOBALS['pommoLooseUpgrade'] = FALSE;
 	
 	// if forced upgrade was requested, fake an earlier version,
 	//	disable die on failed queries
-	if($config['revision'] == $pommo->_revision) {
-		$config['revision'] = $config['revision'] - 1;
+	if($revision == $pommo->_revision) {
+		$revision--;
 		$GLOBALS['pommoLooseUpgrade'] = TRUE;
 		$dbo->dieOnQuery(false);
 	}
 
-	while($config['revision'] < $pommo->_revision) { 
-		if(!PommoRevUpgrade(intval($config['revision'])))
+	while($revision < $pommo->_revision) { 
+		if(!PommoRevUpgrade(intval($revision)))
 			return false;
-		$config = PommoAPI::configGet('revision');
+		$revision = PommoAPI::configGet('revision');
 	}
 	$dbo->dieOnQuery(true);
 	return true;
@@ -203,7 +203,7 @@ function PommoRevUpgrade($rev, $strict = true) {
 			if (!PommoAPI::configUpdate(array('revision' => 34,'version' => 'Aardvark PR15'), true))
 				return false;
 			
-		case 34: // Aardvark PR15 Release
+		case 34: // Changes >=  Aardvark PR15
 		
 			$file = $pommo->_baseDir."install/sql.templates.php";
 			if(!PommoInstall::parseSQL(false,$file))
@@ -213,9 +213,18 @@ function PommoRevUpgrade($rev, $strict = true) {
 			if (!PommoAPI::configUpdate(array('revision' => 35,'version' => 'Aardvark PR15.1'), true))
 				return false;
 		
-		case 35: // Aardvark PR15.1 Release
+		case 35: // Aardvark PR15.1 
+
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 36,'version' => 'Aardvark SVN'), true))
+				return false;
 			
-				
+		case 36: // SVN revision (applied to PR15.1, for next revision)
+			
+			if (!PommoInstall::incUpdate(21,
+			"UPDATE {$dbo->table['config']} SET autoload='on' WHERE config_name='revision'"
+			,"Flagging Revision Autoloading")) return false;
+			
 			// end of upgrade (break), no revision bump.
 			break;
 			

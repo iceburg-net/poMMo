@@ -183,6 +183,20 @@ class PommoField {
 		return $o;
 	}
 	
+	// fetches date type field IDs from the database
+	// returns an array of field IDs. 
+	function & getDates() {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT field_id
+			FROM " . $dbo->table['fields']."
+			WHERE field_type='date'";
+		
+		return $dbo->getAll($query,'assoc','field_id');
+	}
+	
 	// adds a field to the database
 	// accepts a field (array)
 	// returns the database ID of the added field or FALSE if failed

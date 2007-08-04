@@ -23,7 +23,6 @@
 *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
 
 $pommo->init();
@@ -45,19 +44,14 @@ switch($_POST['logic']) {
 		// unserialize the values -- they are given as 'v=123&v=abdv=defsd'
 		$values = preg_split('/&?v=/',substr($_POST['value'],2));
 		
-		// get the field
-		$field = current(PommoField::get(array('id' => $_POST['match'])));
-		
 		// urldecode string, remove if empty
 		foreach($values as $key => $val) {
-			if (!empty($val)) {
-				$values[$key] = ($field['type'] == 'date') ? // if this is a date field, convert human time to unix timestamp
-				PommoHelper::safeStrtotime(urldecode($val)) :
-				urldecode($val);
-			}
+			if (!empty($val))
+				$values[$key] = urldecode($val); 
 			else
 				unset($values[$key]);
 		}
+				
 		$values = array_unique($values);
 		
 		$type = (isset($_POST['type'])) ?

@@ -116,13 +116,12 @@
 						$valid = false;
 					}
 					break;
-				case "date": // TODO -- ENHANCE/VERIFY THIS!
-					// convert date to unix timestamp (# of secs since j1 1970)
+				case "date": // convert date to timestamp [float; using adodb time library]
 					
 					if(is_numeric($in[$id]))
-						$in[$id] = date('m/d/Y',$in[$id]);
+						$in[$id] = PommoHelper::timeToStr($in[$id]);
 						
-					$in[$id] = PommoHelper::safeStrtotime($in[$id]);
+					$in[$id] = PommoHelper::timeFromStr($in[$id]);
 					
 					if(!$in[$id]) {
 						if ($p['ignore'] || ($inactive && $p['ignoreInactive'])) {
@@ -130,7 +129,7 @@
 							break;
 						}
 						if ($p['log'])
-							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a date (mm/dd/yyyy).'),$field['prompt']));
+							$logger->addErr(sprintf(Pommo::_T('Field (%s) must be a date ('.PommoHelper::timeGetFormat().').'),$field['prompt']));
 						$valid = false;
 					}
 					break;

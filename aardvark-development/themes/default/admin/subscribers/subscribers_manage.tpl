@@ -20,6 +20,8 @@ $().ready(function() {
 {/capture}
 {include file="inc/admin.header.tpl" sidebar='off'}
 
+{include file="inc/messages.tpl"}
+
 <ul class="inpage_menu">
 <li><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
 
@@ -155,8 +157,6 @@ $().ready(function() {
 <td><input type="checkbox" disabled="disabled" {if $s.data[$fid] == 'on'}checked="checked"{/if}/></td>
 {elseif $fields[$fid].type == 'multiple'}
 <td class="seMultiple" rel="seM{$fid}">{$s.data[$fid]}</td>{* Add class multiple+field ID so editable column is converted to a select input in pre_edit function *}
-{elseif $fields[$fid].type == 'date'}
-<td>{$s.data[$fid]|date_format:"%m/%d/%Y"}</td>
 {else}
 <td>{$s.data[$fid]}</td>
 {/if}

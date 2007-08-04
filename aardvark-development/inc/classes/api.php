@@ -36,48 +36,26 @@ class PommoAPI {
 		return $p;
 	}
 
-	// Returns base configuration data from SESSION. If optional argument is supplied, configuration will be loaded from
-	// the database & stored in SESSION.
-	function configGetBase($reset = FALSE) {
+
+	// Returns Base Configuration Data
+	function & configGetBase() {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
 		
-		if($pommo->_verbosity > 2)
-			$dbo->debug(FALSE);
-
-		if ($reset || empty ($pommo->_session['config'])) {
-			$pommo->_session['config'] = array ();
-			$query = "
-				SELECT config_name, config_value
-				FROM ".$dbo->table['config'] ."
-				WHERE autoload='on'";
-			$query = $dbo->prepare($query);
-			
-			while ($row = $dbo->getRows($query))
-				$pommo->_session['config'][$row['config_name']] = $row['config_value'];
-		}
+		$config = array();
 		
-		if (!$reset) { // check file revision against database revision
 		$query = "
-			SELECT config_value
+			SELECT config_name, config_value
 			FROM ".$dbo->table['config'] ."
-			WHERE config_name='revision'";
+			WHERE autoload='on'";
 		$query = $dbo->prepare($query);
 		
-		$revision = $dbo->query($query, 0);
-		
-		if(!defined('_poMMo_support'))
-			if (!$revision)
-				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
-			elseif ($pommo->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
-		}
-		
-		if ($pommo->_debug)
-			$dbo->debug(TRUE);
-		
+		while ($row = $dbo->getRows($query))
+			$config[$row['config_name']] = $row['config_value'];
+
 		$dbo->dieOnQUery(TRUE);
-		return $pommo->_session['config'];
+		return $config;
 	}
 
 	// Gets specified config value(s) from the DB. 
