@@ -263,10 +263,12 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 			DELETE FROM ".$dbo->table['group_rules']."
 			WHERE 
 				group_id IN (%c)
-				OR (value IN (%c) AND (logic='is_in' OR logic='not_in'))";
-		$query=$dbo->prepare($query,array($id,$id));
-			
+				OR (logic='is_in' AND value IN (%c))
+				OR (logic='not_in' AND value IN (%c))";
+		$dbo->query($dbo->prepare($query,array($id,$id,$id)));
+		
 		return $affected;
+	
 	}
 	
 	// Returns the # of rules affected by a group deletion

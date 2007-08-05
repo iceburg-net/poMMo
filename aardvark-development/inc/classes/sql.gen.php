@@ -282,7 +282,9 @@ class PommoSQL {
 		$sql .= "
 			FROM {$dbo->table['subscribers']}
 			WHERE status=".intval($status);
-			
+		
+		$q = FALSE;
+		
 		if(!empty($ands)) {
 			$sql .= " AND (\n";
 		
@@ -295,6 +297,8 @@ class PommoSQL {
 				$sql .= "\n OR $s";
 				
 			$sql .="\n)";
+			
+			$q = TRUE;
 		}
 		
 		foreach($rules['exclude'] as $gid) {
@@ -303,14 +307,16 @@ class PommoSQL {
 				$sql .= PommoSQL::groupSQL(current(PommoGroup::get(array('id' => $gid))));
 				$sql .= "\n)";
 			}
+			$q = TRUE;
 		}
 		
 		foreach($rules['include'] as $gid) {
 			if (!isset($groups[$gid])) {
-				$sql .= "\nOR subscriber_id IN (\n";
+				$sql .= "\n".(($q) ? 'OR' : 'AND')." subscriber_id IN (\n";
 				$sql .= PommoSQL::groupSQL(current(PommoGroup::get(array('id' => $gid))));
 				$sql .= "\n)";
 			}
+			$q = TRUE;
 		}
 		
 		return $sql;
