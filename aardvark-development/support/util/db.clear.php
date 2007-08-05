@@ -31,7 +31,7 @@ $dbo =& $pommo->_dbo;
 
 
 foreach($dbo->table as $id => $table) {
-	if($id == 'config' || $id == 'updates' || $id == 'group_criteria')
+	if($id == 'config' || $id == 'updates' || $id == 'group_criteria' || $id == 'templates')
 		continue;
 		
 	$query = "DELETE FROM ".$table;

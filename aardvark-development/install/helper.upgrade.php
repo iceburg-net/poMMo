@@ -225,6 +225,10 @@ function PommoRevUpgrade($rev, $strict = true) {
 			"UPDATE {$dbo->table['config']} SET autoload='on' WHERE config_name='revision'"
 			,"Flagging Revision Autoloading")) return false;
 			
+			if (!PommoInstall::incUpdate(22,
+			"DROP TABLE IF EXISTS {$dbo->table['subscriber_update']}"
+			,"Dropping previous activate routines")) return false;
+			
 			// end of upgrade (break), no revision bump.
 			break;
 			

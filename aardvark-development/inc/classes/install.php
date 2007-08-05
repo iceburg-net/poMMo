@@ -89,7 +89,6 @@ class PommoInstall {
 			
 		$query = $dbo->prepare($query,array($serial));
 		if ($dbo->records($query)) {
-			var_dump($serial);
 			$msg .= "skipped.";
 			$logger->addMsg($msg);
 			return true;

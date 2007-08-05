@@ -107,13 +107,9 @@ $pommo->set(array('notices' => $newNotices));
 $json['notices'] = array_reverse($notices);
 
 // calculate sent
-$query = "
-	SELECT count(subscriber_id) 
-	FROM ".$dbo->table['queue']."
-	WHERE status > 0";
 $json['sent'] = ($json['status'] == 4) ? 
-	$mailing['sent'] :
-	$dbo->query($query,0);
+	PommoMailing::getSent($mailing['id']) :
+	$dbo->query("SELECT count(subscriber_id) FROM {$dbo->table['queue']} WHERE status > 0",0);
 
 $json['percent'] = ($json['status'] == 4) ?
 	100 :
