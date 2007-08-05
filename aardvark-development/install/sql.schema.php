@@ -162,17 +162,6 @@ CREATE TABLE :::subscriber_pending::: (
   KEY `subscriber_id` (`subscriber_id`)
 );
 
--- SUBSCRIBER_UPDATE
-
-CREATE TABLE :::subscriber_update::: (
-  `email` char(60) NOT NULL,
-  `code` char(32) NOT NULL ,
-  `activated` datetime NULL default NULL ,
-  `touched` timestamp(14) NOT NULL,
-PRIMARY KEY ( `email` )
-);
-
-
 --  SUBSCRIBERS
 
 CREATE TABLE :::subscribers::: (

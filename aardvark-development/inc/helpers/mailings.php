@@ -213,6 +213,8 @@ class PommoMailing {
 		return $o;
 	}
 	
+
+	
 	// adds a mailing to the database
 	// accepts a mailing (array)
 	// returns the database ID of the added mailing,
@@ -391,5 +393,16 @@ class PommoMailing {
 		
 	}
 	
+	// returns the # of sent mails for a mailing
+	function getSent($id) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT sent FROM ".$dbo->table['mailings']
+				."WHERE mailing_id = %i"; 
+		$query = $dbo->prepare($query,array($id));
+		return $dbo->query($query,0);
+	}
 }
 ?>

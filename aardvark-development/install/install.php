@@ -106,6 +106,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
 				PommoHelperMessages::resetDefault('all');
 				
+				// install templates
 				$file = $pommo->_baseDir."install/sql.templates.php";
 				if(!PommoInstall::parseSQL(false,$file))
 					$logger->addErr('Error Loading Default Mailing Templates.');
