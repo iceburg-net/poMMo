@@ -191,12 +191,13 @@ class PommoSQL {
 	function & getSubQueries(&$in) { 
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		
+
 		$o = array();
 		foreach($in as $fid => $a) {
+		
 			$sql = "subscriber_id IN
 				(select subscriber_id from {$dbo->table['subscriber_data']} WHERE field_id=$fid ";
-				
+			
 			foreach($a as $logic => $v) {
 				switch ($logic) {
 						case "is" :
@@ -208,14 +209,17 @@ class PommoSQL {
 						case "greater":
 							$sql.= $dbo->prepare("[ AND value > %I ]",array($v[0])); break;
 						case "true":
-							$sql.= " AND value = 'on'"; break;
+							// WHERE field_id=$fid is already sufficient
+							break; 
 						case "false":
-							$sql.= " AND value != 'on'"; break;
+							$sql = "subscriber_id NOT IN (select subscriber_ID from {$dbo->table['subscriber_data']} WHERE field_id=$fid";
+							break;
 					}
 			}
 			$sql .= ")";
 			array_push($o,$sql);
 		}
+
 		return $o;
 	}
 	
