@@ -74,7 +74,7 @@ class PommoHelper {
 	// accepts an email address (str)
 	// returns email legitimacy (bool)
 	function isEmail($_address) {
-		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$!', $_address))) ? true : false;
+		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,6}|[0-9]{1,3})(\]?)$!', $_address))) ? true : false;
 	}
 	
 	function isEmailS($value) {
