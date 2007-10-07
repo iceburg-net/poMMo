@@ -21,7 +21,7 @@
 
 <form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
 
-<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}Fields in %1bold%2 are required{/t}</p>
+<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields marked like %1 this %2 are required.{/t}</p>
 
 <div>
 <label for="name"><span class="required">{t}Name:{/t}</span>{fv message="name"}</label>

@@ -52,7 +52,7 @@
 
 <p><a href="#" id="forceAdd">{t}Force Addition (bypasses validation){/t}</a></p>
 
-<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}%1Fields%2 are required{/t}</p>
+<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields marked like %1 this %2 are required.{/t}</p>
 
 </form>
 

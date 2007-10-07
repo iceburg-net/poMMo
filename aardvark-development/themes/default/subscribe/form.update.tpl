@@ -9,7 +9,7 @@
 <input type="hidden" name="updateForm" value="true" />
 
 <div class="notes">
-<p>{t escape=no 1="<strong class=\"required\">" 2="</strong>"}%1Fields%2 are required{/t}</p>
+<p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields marked like %1 this %2 are required.{/t}</p>
 </div>
 
 <div>
