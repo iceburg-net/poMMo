@@ -196,8 +196,8 @@ class Pommo {
 		
 		if(!defined('_poMMo_support'))
 			if (!$revision)
-				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
-			elseif ($this->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php">', '</a>'));
+				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $this->_baseUrl . 'install/install.php">', '</a>'));
+			elseif ($this->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $this->_baseUrl . 'install/upgrade.php">', '</a>'));
 		
 		// toggle DB debugging
 		if ($this->_debug)

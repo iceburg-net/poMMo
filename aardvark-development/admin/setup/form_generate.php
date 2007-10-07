@@ -57,8 +57,6 @@ $form_name = "signup";
 <fieldset>
 <legend>Subscribe</legend>
 
-<p><?php echo sprintf(Pommo::_T('%sFields%s are required'),'<strong>','</strong>'); ?></p>
-
 <!--	Email field must be named "Email" -->
 <div>
 <label for="email"><strong><?php echo Pommo::_T('Your Email:'); ?></strong></label>

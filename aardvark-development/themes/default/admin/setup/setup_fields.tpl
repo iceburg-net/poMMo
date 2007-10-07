@@ -96,7 +96,7 @@
 </div>
 
 <p>
-{t escape=no 1='<strong>' 2='</strong>'}%1Bold%2 fields are required.{/t} 
+{t escape=no 1='<span class="required">' 2='</span>'}Fields marked like %1 this %2 are required.{/t} 
 {t escape=no 1='<span class="green">' 2='</span>'}%1Green%2 fields are active.{/t}
 </p>
 
