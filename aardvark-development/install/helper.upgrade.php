@@ -229,6 +229,18 @@ function PommoRevUpgrade($rev, $strict = true) {
 			"DROP TABLE IF EXISTS {$dbo->table['subscriber_update']}"
 			,"Dropping previous activate routines")) return false;
 			
+			if (!PommoInstall::incUpdate(23,
+			"CREATE TABLE {$dbo->table['scratch']} (
+				`scratch_id` int(10) unsigned NOT NULL auto_increment,
+				`time` TIMESTAMP NOT NULL,
+				`type` SMALLINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Used to identify row type. 0 = undifined, 1 = ',
+				`int` BIGINT NULL,
+				`str` TEXT NULL,
+				PRIMARY KEY (`scratch_id`),
+				KEY `type`(`type`)
+				) COMMENT = 'General Purpose Table for caches, counts, etc.'"
+			,"Adding Scratch Table")) return false;
+			
 			// end of upgrade (break), no revision bump.
 			break;
 			

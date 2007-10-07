@@ -34,51 +34,44 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-if (isset($_GET['input'])) {
-	$input = (unserialize($_GET['input']));
-}
+$input = (isset($_GET['input'])) ?
+	unserialize($_GET['input']) : array('Email' => NULL);
 
 $pending = (isset($input['adminID'])) ? // check to see if we're resetting admin password
 	PommoPending::getBySubID(0) :
 	PommoPending::getByEmail($input['Email']);
 if (!$pending) 	
 	Pommo::redirect('login.php');
+	
 
+switch ($pending['type']) {
+	case "add" : 
+		$msg = Pommo::_T('subscription request');
+		$pending['type'] = 'subscribe'; // normalize for PommoHelperMessages::sendConfirmation
+		break;
+	case "change" :
+		$msg = Pommo::_T('record update request');
+		$pending['type'] = 'update'; // normalize for PommoHelperMessages::sendConfirmation
+		break;
+	case "password" :
+		$msg = Pommo::_T('password change request');
+		break;
+	default:
+		Pommo::redirect('login.php?badPendingType=TRUE');
+}
+	
 // check if user wants to reconfirm or cancel their request
 if (!empty ($_POST)) {
 	if (isset ($_POST['reconfirm'])) {
 		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-		
-		switch ($pending['type']) {
-			case "add" :
-				$status = PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], 'subscribe');
-				break;
-			case "change" :
-				$status = PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], 'update');
-				break;
-			case "password" :
-				$status = PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], 'password');
-				break;
-		}
-		if (!$status) 
-			$logger->addErr(Pommo::_T('Error sending mail'));
-		else
-			$logger->addMsg(sprintf(Pommo::_T('A confirmation email has been sent to %s. It should arrive within the next few minutes. Please follow its instructions to complete your request. Thanks!'),$input['Email']));
+		PommoHelperMessages::sendConfirmation($input['Email'], $pending['code'], $pending['type']);	
 	} elseif (isset($_POST['cancel'])) {
-		PommoPending::cancel($pending);
-		$logger->addMsg(Pommo::_T('Your pending request has been cancelled.'));		
+		if (PommoPending::cancel($pending))
+			$logger->addMsg(sprintf(Pommo::_T('Your %s has been cancelled.'),$msg));		
 	}
 	$smarty->assign('nodisplay',TRUE);
 } else {
-	switch ($pending['type']) {
-		case "add" :
-		case "change" :
-		case "password" :
-			$logger->addMsg(Pommo::_T('You have pending changes. Please respond to your confirmation email'));
-			break;
-		default :
-			$logger->addErr(sprintf(Pommo::_T('Please Try Again! %s login %s'), '<a href="' . $pommo->_baseUrl . 'user/login.php">', '</a>'));
-	}
+	$logger->addMsg(sprintf(Pommo::_T('Your %s is still pending. To complete this request, please review the confirmation email sent to %s.'), $msg, $input['Email']));
 }
 $smarty->display('user/pending.tpl');
 Pommo::kill();

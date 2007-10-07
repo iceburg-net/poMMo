@@ -41,9 +41,10 @@ $smarty->prepareForSubscribeForm();
 
 // fetch the subscriber, validate code
 $subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
-
-if (empty($subscriber) || md5($subscriber['id'].$subscriber['registered']) != $_REQUEST['code'])
+if (empty($subscriber))
 	Pommo::redirect('login.php');
+if ($_REQUEST['code'] != PommoSubscriber::getActCode($subscriber))
+	Pommo::kill(Pommo::_T('Invalid activation code.'));
 	
 // check if we have pending request
 if (PommoPending::isPending($subscriber['id'])) {
@@ -78,19 +79,15 @@ if (!empty ($_POST['update'])) {
 				$logger->addMsg(Pommo::_T('Email address already exists. Duplicates are not allowed.'));
 			else {
 				$newsub['email'] = $_POST['newemail'];
-				
 				$code = PommoPending::add($newsub, 'change');
 				if (empty($code)) {
-					$logger->addMsg(Pommo::_T('The system could not process your request. Perhaps you already have requested a change?') . 
-					sprintf(Pommo::_T('%s Click Here %s to try again.'),'<a href="'.$pommo->_baseUrl.'user/login.php?Email='.$subscriber['email'].'">','</a>'));
+					Pommo::redirect('login.php?newsubCodeFailed=TRUE');
 				} else {
 					Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 					PommoHelperMessages::sendConfirmation($newsub['email'], $code, 'update');
 					
 					if (isset($notices['update']) && $notices['update'] == 'on')
 						PommoHelperMessages::notify($notices, $newsub, 'update');
-					
-					$logger->addMsg(Pommo::_T('Update request received.') . ' ' . Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 				}
 			}
 		}

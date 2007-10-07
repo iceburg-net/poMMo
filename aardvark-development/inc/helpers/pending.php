@@ -214,9 +214,11 @@ class PommoPending {
 		$p = array(
 			'subscriber_id' => $subscriber['id'],
 			'type' => $type,
-			'code' => PommoHelper::makeCode());
-		if ($p['type'] == 'change')
-			$p['array'] = $subscriber;
+			'code' => PommoHelper::makeCode(),
+			'array' => ($p['type'] == 'change') ?
+				serialize($subscriber) : NULL
+			);
+
 		$pending = PommoPending::make($p);
 		
 		if (!PommoPending::validate($pending)) {
@@ -227,10 +229,6 @@ class PommoPending {
 		// check for pre-existing pending request
 		if (PommoPending::isPending($pending['subscriber_id']))
 			return false;
-		
-		$pending['array'] = (empty($pending['array'])) ? 
-			null : 
-			serialize($pending['array']);
 			
 		$query = "
 			INSERT INTO ".$dbo->table['subscriber_pending']."

@@ -199,3 +199,17 @@ CREATE TABLE :::updates::: (
   `serial` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`serial`)
 );
+
+-- SCRATCH
+
+CREATE TABLE :::scratch::: (
+  `scratch_id` int(10) unsigned NOT NULL auto_increment,
+  `time` TIMESTAMP NOT NULL,
+  `type` SMALLINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Used to identify row type. 0 = undifined, 1 = ',
+  `int` BIGINT NULL,
+  `str` TEXT NULL,
+  PRIMARY KEY (`scratch_id`),
+  KEY `type`(`type`)
+)
+COMMENT = 'General Purpose Table for caches, counts, etc.';
+

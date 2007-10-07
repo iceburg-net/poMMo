@@ -105,6 +105,8 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	}
 	else {
 		
+		$logger->addMsg(Pommo::_T('Subscription request received.'));
+		
 		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
 			$subscriber['registered'] = date("F j, Y, g:i a",$subscriber['registered']);
 			if ($comments || isset($notices['pending']) && $notices['pending'] == 'on')
@@ -112,12 +114,9 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 			
 			if ($config['site_confirm'])
 				Pommo::redirect($config['site_confirm']);
-			$logger->addMsg(Pommo::_T('Subscription request received.').' '.Pommo::_T('A confirmation email has been sent. You should receive this letter within the next few minutes. Please follow its instructions.'));
 		}
 		else {
-			$logger->addErr(Pommo::_T('Problem sending mail! Please contact the administrator.'));
 			$smarty->assign('back', TRUE);
-			
 			// delete the subscriber
 			PommoSubscriber::delete($id);
 		}
