@@ -44,7 +44,6 @@ class PommoHelperMessages {
 		
 		if ($type == 'activate') 
 			$body = preg_replace('@\[\[CODE\]\]@i',$confirmation_key,$body);
-	
 		
 		if (empty($subject) || empty($body)) 
 			return false;
@@ -58,11 +57,13 @@ class PommoHelperMessages {
 		// send the confirmation mail
 		$mail->prepareMail($subject, $body);
 		
-		$ret = true;
-		if (!$mail->bmSendmail($to)) {
-			$logger->addErr(Pommo::_T('Error Sending Mail'));
-			$ret = false;
-		}
+		$ret = $mail->bmSendmail($to);
+		
+		if (!$ret)
+			$logger->addErr(Pommo::_T('Error sending mail'));
+		else
+			$logger->addMsg(sprintf(Pommo::_T('A confirmation mail has been sent to %s. Please follow its instructions to complete your request.'),$to));	
+			
 		// reset demo mode to default
 		$mail->toggleDemoMode();
 		return $ret;
