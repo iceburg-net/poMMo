@@ -82,6 +82,7 @@ http://www.pommo.org/community/viewtopic.php?id=559
  	  (API) multi-byte safe -- see function overloading for common functions to replace
 			- http://us3.php.net/manual/en/ref.mbstring.php
 	  (API) Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
+	  (API) Abstract form errors into a common routine... build a forms validation class [much repetitive code ++ possibility of duplicate translations ]]
 	  
 	  (feature) Add specific emails to a group
 	  		- Allow rules to include base subscriber data such as IP && date_registered.
