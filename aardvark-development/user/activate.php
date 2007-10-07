@@ -23,6 +23,7 @@
  *********************************/
 require ('../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 
 $pommo->init(array('authLevel' => 0,'noSession' => true));
 $logger = & $pommo->_logger;
@@ -34,24 +35,57 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-// make sure email be valid
-
+// make sure email/login is valid
 $subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
 if (empty($subscriber))
 	Pommo::redirect('login.php');
 
+// see if an anctivation email was sent to this subscriber in the last 2 minutes;
+$query = "
+	SELECT 
+		*
+	FROM 
+		".$dbo->table['scratch']."
+	WHERE
+		`type`=1
+		AND `int`=%i
+		AND `time` > (NOW() - INTERVAL 2 MINUTE)
+	LIMIT 1";
+$query = $dbo->prepare($query,array($subscriber['id']));
+$test = $dbo->query($query,0);
 
-// check for request to send activation code
-if (!empty($_GET['send'])) {
-	$code = md5($subscriber['id'].$subscriber['registered']);
-	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-	if (!PommoHelperMessages::sendConfirmation($subscriber['email'], $code, 'activate'))
-		$logger->addErr(Pommo::_T('Error sending mail')); 
-	else
-		Pommo::redirect('activate.php?sent=true&email='.$subscriber['email']);
+// attempt to send activation code if once has not recently been sent
+if (empty($test)) {
+	$code = PommoSubscriber::getActCode($subscriber);
+	if (PommoHelperMessages::sendConfirmation($subscriber['email'], $code, 'activate')) {
+		
+		$smarty->assign('sent', true);
+		
+		// timestamp this activation email
+		$query = "
+			INSERT INTO ".$dbo->table['scratch']."
+			SET
+				`type`=1,
+				`int`=%i";
+		$query = $dbo->prepare($query,array($subscriber['id']));
+		$dbo->query($query);
+		
+		// remove ALL activation email timestamps older than 2 minutes
+		$query = "
+			DELETE FROM 
+				".$dbo->table['scratch']."
+			WHERE
+				`type`=1
+				AND `time` < (NOW() - INTERVAL 2 MINUTE)";
+		$query = $dbo->prepare($query,array());
+		$dbo->query($query);
+	}
+}
+else {
+	$smarty->assign('sent', false);
 }
 
-$smarty->assign('sent', (isset($_GET['sent']))?true:false);
+
 $smarty->assign('email', $subscriber['email']);
 $smarty->display('user/activate.tpl');
 Pommo::kill();

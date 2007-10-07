@@ -549,5 +549,13 @@ class PommoSubscriber {
 		$query=$dbo->prepare($query,array($status));
 		return ($dbo->query($query,0));
 	}
+	
+	// returns the activation code for the passed subscriber
+	function getActCode($subscriber){
+		if (empty($subscriber['id']))
+			Pommo::kill('Invalid Subscriber passed to getActCode!');
+			
+		return md5($subscriber['id'].$subscriber['registered']);
+	}
 }
 ?>

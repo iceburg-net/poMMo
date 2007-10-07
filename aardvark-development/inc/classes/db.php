@@ -48,21 +48,21 @@ class PommoDB {
 		$this->_prefix = $tablePrefix;
 		$this->_database = $database;
 		$this->table = array (
-			'config' => '`'.$tablePrefix . 'config`',
-			'fields' => '`'.$tablePrefix . 'fields`',
-			'group_criteria' => '`'.$tablePrefix . 'group_criteria`', // PHASE OUT (PR14)
-			'group_rules' => '`'.$tablePrefix . 'group_rules`',
-			'groups' => '`'.$tablePrefix . 'groups`',
-			'mailing_notices' => '`'.$tablePrefix . 'mailing_notices`',
-			'mailing_current' => '`'.$tablePrefix . 'mailing_current`',
-			'mailings' => '`'.$tablePrefix . 'mailings`',
-			'subscriber_data' => '`'.$tablePrefix . 'subscriber_data`',
-			'subscriber_pending' => '`'.$tablePrefix . 'subscriber_pending`',
-			'subscriber_update' => '`'.$tablePrefix . 'subscriber_update`', // PHASE OUT (PR15)
-			'subscribers' => '`'.$tablePrefix . 'subscribers`',
-			'templates' => '`'.$tablePrefix . 'templates`',
-			'queue' => '`'.$tablePrefix . 'queue`',
-			'updates' => '`'.$tablePrefix . 'updates`');		
+			'config' => '`'.$tablePrefix.'config`',
+			'fields' => '`'.$tablePrefix.'fields`',
+			'group_rules' => '`'.$tablePrefix.'group_rules`',
+			'groups' => '`'.$tablePrefix.'groups`',
+			'mailing_notices' => '`'.$tablePrefix.'mailing_notices`',
+			'mailing_current' => '`'.$tablePrefix.'mailing_current`',
+			'mailings' => '`'.$tablePrefix.'mailings`',
+			'scratch' => '`'.$tablePrefix.'scratch`',
+			'subscriber_data' => '`'.$tablePrefix.'subscriber_data`',
+			'subscriber_pending' => '`'.$tablePrefix.'subscriber_pending`',
+			'subscriber_update' => '`'.$tablePrefix.'subscriber_update`', // PHASE OUT (PR15)
+			'subscribers' => '`'.$tablePrefix.'subscribers`',
+			'templates' => '`'.$tablePrefix.'templates`',
+			'queue' => '`'.$tablePrefix.'queue`',
+			'updates' => '`'.$tablePrefix.'updates`');		
 
 		$this->_dieOnQuery = TRUE;
 		$this->_debug = FALSE;
@@ -119,7 +119,7 @@ class PommoDB {
 	 * If query is called with numeric arguments, a specific field is returned. This is useful for
 	 * SQL statements that return a single row, or multiple rows of a single column. 
 	 *   ex. 
-	 *      A] query($sql,3) -> returns 4th row of a resultset
+	 *      A] query($sql,3) -> returns 4th column of a resultset
 	 *      B] query($sql,0,2) -> returns the second column of the first row of a resultset.
 	 *   
 	 *     A is useful for a result set containing a single column, ie. "SELECT name FROM people";

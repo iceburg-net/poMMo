@@ -19,6 +19,7 @@
  */
 
 $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/fields.php');
+$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
 
 class PommoHelperPersonalize {
 	
@@ -186,7 +187,7 @@ class PommoHelperPersonalize {
 					$replace = $s['registered'];
 					break;
 				case '!unsubscribe':
-					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/update.php?email='.$s['email'].'&code='.md5($s['id'].$s['registered']);
+					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/update.php?email='.$s['email'].'&code='.PommoSubscriber::getActCode($s);
 					break;
 				case '!weblink':
 					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/mailings.php?mail_id='.$_GET['id'];
