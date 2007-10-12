@@ -25,3 +25,4 @@ The following are auto-detected, and are best left commented out.
 ** [baseURL] = "/mysite/newsletter/";
 ** [hostname] = www.mysite.com
 ** [hostport] = 8080
+** [subscriber_default_sort] = email

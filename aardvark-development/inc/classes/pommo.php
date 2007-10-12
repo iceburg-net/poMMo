@@ -42,6 +42,7 @@ class Pommo {
 	var $_debug; // debug status (bool)
 	var $_verbosity; // logging + debugging verbosity (1(most)-3(less|default))
 	var $_dateformat; // prefered; 1: YYYY/MM/DD, 2: MM/DD/YYYY, 3: DD/MM/YYYY
+	var $_default_subscriber_sort; // what column (or field_id) should be used to sort the subscribers when managing them?
 
 	var $_config; // configuration array to hold values loaded from the DB
 	var $_session;  // pointer to this install's/instance values in $_SESSION
@@ -75,6 +76,7 @@ class Pommo {
 
 		$this->_workDir = (empty($config['workDir'])) ? $this->_baseDir . 'cache' : $config['workDir'];
 		$this->_debug = (strtolower($config['debug']) != 'on') ? false : true; 
+		$this->_default_subscriber_sort = (empty($config['default_subscriber_sort'])) ? 'email' : $config['default_subscriber_sort'];
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_logger->_verbosity = $this->_verbosity;
 		$this->_dateformat = ($config['date_format'] >= 1 && $cofig['date_format'] <= 3) ?
