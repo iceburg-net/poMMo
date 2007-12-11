@@ -166,7 +166,7 @@ class PommoSubscriber {
 			
 		if (is_numeric($p['limit']) && !is_numeric($p['offset']))
 			$p['offset'] = 0;
-	
+		
 		$o = array();
 		
 		$query = "
@@ -203,7 +203,20 @@ class PommoSubscriber {
 				[AND s.email IN (%Q)]
 				[ORDER BY %S] [%S]
 				[LIMIT %I, %I]";
-		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], (is_numeric($p['sort']) ? 'value' : $p['sort']), $p['order'], $p['offset'], $p['limit']));
+		
+		// Check if we're sorting against a field.
+		//   If so, sort against the "value" column select.
+		//   If it's a numeric field, cast the value (string) as an Integer by the DBE for proper sorting.
+		if(is_numeric($p['sort'])) {
+			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+			$numericFields = PommoField::getByType(array('date','number'));
+			
+			$p['sort'] = (in_array($p['sort'],$numericFields)) ?
+				'CAST(value as SIGNED)' :
+				'value';
+		}
+			
+		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
 		
 		while ($row = $dbo->getRows($query)) 
 			$o[$row['subscriber_id']] = (empty($row['pending_code'])) ?
@@ -213,10 +226,10 @@ class PommoSubscriber {
 		// fetch data
 		if (!empty($o)) {
 			
-			// get any date fields for conversion. We can't use the MySQL
+			// get any date fields for conversion. We can't use the MySQL 4.1/5
 			// engine, as it doesn't support negative timestamps... !!!
 			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-			$dates = PommoField::getDates();
+			$dates = PommoField::getByType('date');
 			
 			$query = "
 				SELECT
