@@ -19,16 +19,17 @@
  */
 die();
 ?>
-
-http://www.pommo.org/community/viewtopic.php?id=559
-
-
+http://www.pommo.org/community/viewtopic.php?pid=4305#p4305
+http://www.pommo.org/community/viewtopic.php?id=829
+http://www.pommo.org/community/viewtopic.php?id=701
+http://www.pommo.org/community/viewtopic.php?id=439
+http://www.pommo.org/community/viewtopic.php?pid=4213#p4213
 
 [LEGACY POMMO]
   Port config parser + config.php/sample
 
 [BEFORE Aardvark Final]
-	+ Remove languages from default distribution, seperate download. ? opt.
+	+ Remove languages from default distribution, separate download. ? opt.
 	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
 	+ Rewrite validate.js for scoping by table row
 	

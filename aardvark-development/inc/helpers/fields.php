@@ -183,16 +183,22 @@ class PommoField {
 		return $o;
 	}
 	
-	// fetches date type field IDs from the database
-	// returns an array of field IDs. 
-	function & getDates() {
+	
+	// fetches field's belonging to a type
+	// accepts a field type or array of types
+	// returns an array of field IDs
+	function & getByType($type) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
+		
+		if(!is_array($type))
+			$type = array($type);
 		
 		$query = "
 			SELECT field_id
 			FROM " . $dbo->table['fields']."
-			WHERE field_type='date'";
+			WHERE field_type IN (%q)";
+		$query = $dbo->prepare($query,array($type));
 		
 		return $dbo->getAll($query,'assoc','field_id');
 	}
