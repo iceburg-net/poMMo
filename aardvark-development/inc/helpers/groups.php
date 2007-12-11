@@ -45,7 +45,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	var $_id; // ID of bgroup
  	
  	// ============ NON STATIC METHODS ===================
- 	function PommoGroup($groupID = NULL, $status = 1) {
+ 	function PommoGroup($groupID = NULL, $status = 1, $empty = FALSE) {
  		$this->_status = $status;
  		if (!is_numeric($groupID)) {
  			$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
@@ -58,8 +58,8 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  		}
 		$this->_group = current(PommoGroup::get(array('id' => $groupID)));
 		$this->_name =& $this->_group['name'];
-		$this->_memberIDs = PommoGroup::getMemberIDs($this->_group,$status);
-		$this->_tally = count($this->_memberIDs);
+		$this->_memberIDs = ($empty) ? array() : PommoGroup::getMemberIDs($this->_group,$status);
+		$this->_tally = ($empty) ? PommoGroup::tally($this->_group, $status) : count($this->_memberIDs);
 		$this->_id= $groupID;
 		return;
  	}
