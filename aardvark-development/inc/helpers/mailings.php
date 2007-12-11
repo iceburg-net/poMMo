@@ -94,9 +94,9 @@ class PommoMailing {
 		}
 
 		$o = ($row['status'] == 1) ?
-			PommoType::mailingCurrent() :
-			PommoType::mailing();
-		return PommoAPI::getParams($o,$in);
+			PommoAPI::getParams(PommoType::mailingCurrent(),$in) :
+			PommoAPI::getParams(PommoType::mailing(),$in);
+		return $o;
 	}
 	
 	// mailing validation
