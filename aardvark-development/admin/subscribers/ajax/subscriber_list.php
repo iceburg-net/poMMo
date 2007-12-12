@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 $state =& PommoAPI::stateInit('subscribers_manage');
 
 // Fetch group + member IDs
-$group = new PommoGroup($state['group'], $state['status']);
+$group = new PommoGroup($state['group'], $state['status'], $state['search']);
 
 
 /**********************************
@@ -81,14 +81,14 @@ if($start < 0)
 	OUTPUT METHODS
 *********************************/
 	
-// get the subscribers details
+// fetch subscribers for this page
 $subscribers = $group->members(array(
 	'sort' => $state['sort'],
 	'order' => $state['order'],
 	'limit' => $state['limit'],
 	'offset' => $start));
 
-// format subscribers 
+// format subscribers for JSON output to jqGrid
 $subOut = array();
 
 foreach($subscribers as $s) {

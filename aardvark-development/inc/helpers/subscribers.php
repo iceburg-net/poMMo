@@ -146,8 +146,11 @@ class PommoSubscriber {
 	//   limit (int) limits # subscribers returned
 	//   offset (int) the SQL offset to start at
 	//   id (array||str) A single or an array of subscriber IDs
+	// accepts a search array -->
+	//   field (str) - the numeric field ID or 'email', 'time_touched', 'time_registered', 'ip, 'subscriber_id'
+	//   string (str) - the search query
 	// returns an array of subscribers. Array key(s) correlates to subscriber id.
-	function & get($p = array()) {
+	function & get($p = array(), $search = array('field' => null, 'string' => null)) {
 		$defaults = array(
 			'status' => 'all', 
 			'email' => null, 
@@ -157,7 +160,7 @@ class PommoSubscriber {
 			'offset' => null, 
 			'id' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
-		
+			
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -181,19 +184,31 @@ class PommoSubscriber {
 				p.pending_code,
 				p.pending_array,
 				p.pending_type".
+				
 				// if sort is numeric, we're sorting by a field and must grab the field from data table
 			    (is_numeric($p['sort']) ? 
 			    	", d.value" : 
-			    	''). 
+			    	'').
+			    // if searching against a subriber field, we must fetch subscriber data for this field
+			    (is_numeric($search['field']) ? 
+			    	", search.value" : 
+			    	'').
 
 			" FROM ".$dbo->table['subscribers']." s
 			LEFT JOIN " . $dbo->table['subscriber_pending']." p ON (s.subscriber_id = p.subscriber_id) ".
 			
 			// if sort is numeric, we're sorting by a field and must grab the field from data table
 			(is_numeric($p['sort']) ?
-				"LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data'].
+				"LEFT JOIN (SELECT value FROM " .$dbo->table['subscriber_data'].
 					" WHERE field_id = ".(int)($p['sort'])." ) AS d".
 					" ON (s.subscriber_id = d.subscriber_id)" : 
+				'').
+			
+			// if searching against a subscriber field, left join the data table
+			(is_numeric($search['field']) ?
+				"LEFT JOIN (SELECT value FROM " .$dbo->table['subscriber_data'].
+					" WHERE field_id = ".(int)($search['field'])." ) AS search".
+					" ON (s.subscriber_id = search.subscriber_id)" : 
 				'').
 			
 		  " WHERE
@@ -201,6 +216,7 @@ class PommoSubscriber {
 				[AND s.subscriber_id IN(%C)]
 				[AND s.status=%I]
 				[AND s.email IN (%Q)]
+				[AND %S LIKE '%%S%']
 				[ORDER BY %S] [%S]
 				[LIMIT %I, %I]";
 		
@@ -215,9 +231,21 @@ class PommoSubscriber {
 				'CAST(value as SIGNED)' :
 				'value';
 		}
-			
-		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
 		
+		
+		// If we're searching/filtering, generate the proper SQL
+		$searchSQL = NULL;
+		if(!empty($search['field']) && !empty($search['string'])) {
+			
+			// make MySQL LIKE() compliant
+			$search['string'] = addcslashes($search['string'],'%_');
+			
+			$search['field'] = is_numeric($search['field']) ? 
+				'search.value' :
+				's.'.$search['field'];
+		}
+			
+		$query = $dbo->prepare($query,array($p['id'],$p['status'], $p['email'], $search['field'], $search['string'], $p['sort'], $p['order'], $p['offset'], $p['limit']));
 		while ($row = $dbo->getRows($query)) 
 			$o[$row['subscriber_id']] = (empty($row['pending_code'])) ?
 				PommoSubscriber::makeDB($row) :
@@ -350,6 +378,7 @@ class PommoSubscriber {
 			".$joins."
 			WHERE 1 ".$where;
 		$query = $dbo->prepare($query,array($p));
+		die($query);
 		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	

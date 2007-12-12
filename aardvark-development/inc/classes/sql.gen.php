@@ -67,6 +67,8 @@ class PommoSQL {
 							$joins[] = $join."$p$i.value = 'on')"; break;
 						case "false":
 							$joins[] = $join."$p$i.value != 'on')"; break;
+						case "like" :
+							$joins[] = $dbo->prepare("[".$join."$p$i.value LIKE '%%S%']",array($vals[0])); break;		
 					}
 				}
 			}
@@ -87,6 +89,9 @@ class PommoSQL {
 							$where[] = "AND $p.$col != 'on'"; break;
 						case "equal":
 							$where[] = $dbo->prepare("[AND $p.$col = '%S']", array($vals[0])); break;
+						case "like" :
+							$where[] = $dbo->prepare("[AND $p.$col LIKE '%%S%']",array($vals[0])); break;	
+					
 					}
 				}
 			}
@@ -108,7 +113,7 @@ class PommoSQL {
 		}
 		else {
 			// extract logic ($matches[1]) + value ($matches[2]) 
-			preg_match('/^(?:(not|is|less|greater|true|false|equal):)?(.*)$/i',$val,$matches);
+			preg_match('/^(?:(not|is|less|greater|true|false|equal|like):)?(.*)$/i',$val,$matches);
 			if (!empty($matches[1])) { 
 				if (empty($filters[$col]))
 					$filters[$col] = array();
@@ -225,7 +230,7 @@ class PommoSQL {
 	
 	// generate the group SQL subselects
 	// accepts a group object
-	function groupSQL(&$group, $tally = false, $status = 1) {
+	function groupSQL(&$group, $tally = false, $status = 1, $filter = false) {
 		// used to prevent against group include/exclude recursion
 		static $groups;
 		if (!isset ($groups[$group['id']])) 
@@ -319,6 +324,16 @@ class PommoSQL {
 			$q = TRUE;
 		}
 		
+		// If a filter/search is requested, perform a match
+		if(is_array($filter) && !empty($filter['field']) && !empty($filter['string'])) {
+		
+			// make MySQL LIKE() compliant
+			$filter['string'] = mysql_real_escape_string(addcslashes($filter['string'],'%_'));
+			
+			$sql .= (is_numeric($filter['field'])) ?
+				"\n AND subscriber_id in (select subscriber_id from {$dbo->table['subscriber_data']} WHERE field_id = ".(int)$filter['field']." AND value LIKE '%{$filter['string']}%')" :
+				"\n AND ".mysql_real_escape_string($filter['field'])." LIKE '%{$filter['string']}%'";
+		}
 		return $sql;
 	}
 	
