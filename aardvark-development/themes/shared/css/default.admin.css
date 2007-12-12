@@ -336,6 +336,8 @@ div.helpToggle img {cursor: pointer;}
 	border: none;
 }
 
-.green {
-    color: #0E9749;
-}
+.green { color: #0E9749; }
+
+fieldset.click {border-bottom: none;}
+fieldset.click ul {display: none;}
+legend.click {font-size: 110%; font-weight: bold; cursor: pointer;}

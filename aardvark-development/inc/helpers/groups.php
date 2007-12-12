@@ -45,34 +45,47 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	var $_id; // ID of bgroup
  	
  	// ============ NON STATIC METHODS ===================
- 	function PommoGroup($groupID = NULL, $status = 1, $empty = FALSE) {
+ 	function PommoGroup($groupID = NULL, $status = 1, $filter = FALSE) {
  		$this->_status = $status;
- 		if (!is_numeric($groupID)) {
+ 		if (!is_numeric($groupID)) { // exception if no group ID was passed -- group assumes "all subscribers".
  			$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
- 			$this->_group = null;
+ 			
+ 			$this->_group = array('rules' => array(), 'id' => 0);
+ 			$this->_id = 0;
  			$this->_name = Pommo::_T('All Subscribers');
- 			$this->_memberIDs = null;
- 			$this->_id = null;
- 			$this->_tally = PommoSubscriber::tally($status);
+ 			
+ 			$this->_memberIDs = (is_array($filter)) ?
+ 				PommoGroup::getMemberIDs($this->_group, $status, $filter) :
+ 				null;
+ 			
+ 			$this->_tally = (is_array($filter)) ? 
+ 				count($this->_memberIDs) :
+ 				PommoSubscriber::tally($status);
+ 					
  			return;
  		}
-		$this->_group = current(PommoGroup::get(array('id' => $groupID)));
-		$this->_name =& $this->_group['name'];
-		$this->_memberIDs = ($empty) ? array() : PommoGroup::getMemberIDs($this->_group,$status);
-		$this->_tally = ($empty) ? PommoGroup::tally($this->_group, $status) : count($this->_memberIDs);
+		
+ 		$this->_group = current(PommoGroup::get(array('id' => $groupID)));
 		$this->_id= $groupID;
+ 		$this->_name =& $this->_group['name'];
+ 		
+		$this->_memberIDs = PommoGroup::getMemberIDs($this->_group, $status, $filter);
+		$this->_tally = count($this->_memberIDs);
+		
 		return;
  	}
  	
- 	// returns ordered / filtered / limited member IDs -- scoped to current group member IDs
- 	function members($p = array()) {
+ 	// returns sorted/ordered/limited member IDs -- scoped to current group member IDs
+ 	function members($p = array(), $filter = array('field' => null, 'string' => null)) {
  		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		if(is_array($this->_memberIDs)) 
  			$p['id'] =& $this->_memberIDs;
  		else // status was already passed when fetching IDs
  			$p['status'] = $this->_status;
-		return PommoSubscriber::get($p);
+ 			
+ 		return PommoSubscriber::get($p, $filter);
  	}
+ 	
  	
  	// ============ STATIC METHODS ===================
  	
@@ -190,17 +203,17 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	// accepts filter by status (str) either 1 (active) (default), 0 (inactive), 2 (pending) 
 	// accepts a toggle (bool) to return IDs or Group Tally
 	// returns an array of subscriber IDs
-	function & getMemberIDs($group, $status = 1) {
+	function & getMemberIDs($group, $status = 1, $filter = false) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		$pommo->requireOnce($pommo->_baseDir. 'inc/classes/sql.gen.php');
 		
-		if (empty($group['rules'])) {
+		if (empty($group['rules']) && $group['id'] != 0) {
 			$o = array();
 			return $o;
 		}
 		
-		$query = PommoSQL::groupSQL($group, false, $status);
+		$query = PommoSQL::groupSQL($group, false, $status, $filter);
 		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	

@@ -49,12 +49,13 @@ $smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
 
 // Initialize page state with default values overriden by those held in $_REQUEST
 $state =& PommoAPI::stateInit('subscribers_manage',array(
-	'limit' => 10,
+	'limit' => 150,
 	'sort' => $pommo->_default_subscriber_sort,
 	'order' => 'asc',
 	'status' => 1,
 	'group' => 'all',
-	'page' => 1),
+	'page' => 1,
+	'search' => false),
 	$_REQUEST);
 
 
@@ -80,14 +81,32 @@ if(!is_numeric($state['status']))
 	
 if(!is_numeric($state['group']) && $state['group'] != 'all')
 	$state['group'] = 'all';
-	
+
+if(isset($_REQUEST['searchClear']))
+	$state['search'] = false;
+elseif(isset($_REQUEST['searchField']) && (
+	is_numeric($_REQUEST['searchField']) ||
+ 	$_REQUEST['searchField'] == 'email' ||
+	$_REQUEST['searchField'] == 'ip' ||
+	$_REQUEST['searchField'] == 'time_registered' ||
+	$_REQUEST['searchField'] == 'time_touched')) 
+	{
+	$_REQUEST['searchString'] = trim($_REQUEST['searchString']);
+	$state['search'] = (empty($_REQUEST['searchString'])) ?
+		false :
+		array(
+		'field' => $_REQUEST['searchField'],
+		'string' => trim($_REQUEST['searchString'])
+		);
+	}
+
 
 /**********************************
 	DISPLAY METHODS
 *********************************/
 
 // Get the *empty* group [no member IDs. 3rd arg is set TRUE]
-$group = new PommoGroup($state['group'], $state['status'], TRUE);
+$group = new PommoGroup($state['group'], $state['status'], $state['search']);
 
 // Calculate and Remember number of pages for this group/status combo
 $state['pages'] = (is_numeric($group->_tally) && $group->_tally > 0) ?
