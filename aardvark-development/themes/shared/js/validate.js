@@ -11,8 +11,8 @@ var PommoValidate = {
 		if (this.ranInit)
 			return;
 		this.ranInit = true;
-		var warn = (typeof(warn) != 'undefined') ? warn : true;
-		var scope = (typeof(scope) != 'undefined') ? scope : false;
+		var warn = warn || true;
+		var scope = scope || false; 
 		
 		this.submit = (scope) ? $(submit, scope) : $(submit);
 			if (this.submit.size() != 1) {
@@ -81,7 +81,7 @@ var PommoValidate = {
 			case 'email' :
 				var r1 = /@.*@|\.\.|\,|\;/;
 				var r2 = /^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,6}|[0-9]{1,3})(\]?)$/
-				return (!r1.test(value) || !r2.test(value)) ? true : false;
+				return !(r1.test(value) || !r2.test(value));
 				break;
 		}
 	},
