@@ -3,7 +3,7 @@
 
 <p>{t escape='no' 1='<a href="subscribers_import.php">' 2='</a>'}Welcome to adding subscribers! You can add subscribers one-by-one here. If you would like to add subscribers in bulk, visit the %1Subscriber Import%2 page.{/t}</p>
 
-<form method="post" action="" id="addForm">
+<form method="post" action="ajax/subscriber_add2.php" id="addForm">
 <fieldset>
 <legend>{t}Add Subscriber{/t}</legend>
 
@@ -42,6 +42,10 @@
 
 </fieldset>
 
+<fieldset>
+	<input type="checkbox" name="force" />{t}Force Addition (bypasses validation){/t}
+</fieldset>
+
 <div class="buttons">
 
 <input type="submit" value="{t}Add Subscriber{/t}" />
@@ -50,57 +54,36 @@
 
 </div>
 
-<p><a href="#" id="forceAdd">{t}Force Addition (bypasses validation){/t}</a></p>
-
 <p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields marked like %1 this %2 are required.{/t}</p>
 
 </form>
 
 {literal}
 <script type="text/javascript">
+
+
 $().ready(function(){
 
-	$('#addForm').submit(function() {
-		var input = $(this).formToArray();
-
-		url = "ajax/subscriber_add2.php";
-		if($('#forceAdd').is('.force')) {
-			$('#forceAdd').removeClass('force');
-			url = url+"?force=TRUE";
-		}
-
-		$.post(url, input, function(json) {
-			eval("var args = " + json);
-
-			if (typeof(args.success) == 'undefined') {
-				alert('ajax error!');
-				return;	
-			}
-
-			$('#addOut').html(args.msg);
-
-			if (args.success === true) {
-				var options = {
-					KEY: args.key, 
-					CLASS: 'newRow', 
-					VALUES: args.data,
-					COPY: false 
-				}
-				jQuery.tableEditor.lib.appendRow(options);
-			}
-		});
-
-		return false;
-	});
-
-	$('#forceAdd').click(function() {
-		$(this).addClass('force');
-		$('#addForm').submit();
-		return false;
-	});
-
+    $('#addForm').ajaxForm({ 
+        dataType:  'json', 
+        success: function(ret) { 
+        	$('#addOut').html(ret.msg);
+        	if(ret.success) {
+        		if($('#grid').size() == 0)
+        			history.go(0); // refresh the page if no grid exists, else add new subscriber to grid
+        		$('#grid').addRowData(ret.key,ret.data);
+        	}
+        }
+    }); 
+	
 	PommoValidate.reset(); // TODO -- validate must be scoped to this ROW. Modify validate.js
-	PommoValidate.init('input[@type="text"], input[@type="checkbox"], select','input[@type="submit"]', true, $('#addForm'));
+	PommoValidate.init(':input, select','input[@type="submit"]', true, $('#addForm'));
+
+	$('input[@name="force"]').click(function(){
+		if(this.checked)
+			PommoValidate.enable();
+	});
+
 });
 </script>
 {/literal}

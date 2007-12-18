@@ -199,7 +199,7 @@ class PommoSubscriber {
 			
 			// if sort is numeric, we're sorting by a field and must grab the field from data table
 			(is_numeric($p['sort']) ?
-				"LEFT JOIN (SELECT value FROM " .$dbo->table['subscriber_data'].
+				"LEFT JOIN (SELECT * FROM " .$dbo->table['subscriber_data'].
 					" WHERE field_id = ".(int)($p['sort'])." ) AS d".
 					" ON (s.subscriber_id = d.subscriber_id)" : 
 				'').

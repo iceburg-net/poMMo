@@ -1,17 +1,12 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/grid.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
 
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/jqgrid.css" />
-
-<!-- REMOVED....
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/tableEditor/editor.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
--->
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 {/capture}
 
 
@@ -20,9 +15,11 @@
 {include file="inc/messages.tpl"}
 
 <ul class="inpage_menu">
-<li><a href="ajax/subscriber_add.php?height=400&amp;width=500" title="{t}Add Subscribers{/t}" class="thickbox">{t}Add Subscribers{/t}</a></li>
+<li><a href="ajax/subscriber_add.php" title="{t}Add Subscribers{/t}" class="addTrigger">{t}Add Subscribers{/t}</a></li>
 
-<li><a href="ajax/subscriber_export.php?height=400&amp;width=500" title="{t}Export Subscribers{/t}" class="thickbox">{t}Export Subscribers{/t}</a></li>
+<li><a href="ajax/subscriber_del.php" title="{t}Remove Subscribers{/t}" class="delTrigger">{t}Remove Subscribers{/t}</a></li>
+
+<li><a href="ajax/subscriber_export.php" title="{t}Export Subscribers{/t}" class="expTrigger">{t}Export Subscribers{/t}</a></li>
 
 <li><a href="admin_subscribers.php" title="{t}Return to Subscribers Page{/t}">{t}Return to Subscribers Page{/t}</a></li>
 </ul>
@@ -30,7 +27,7 @@
 <form method="post" action="" id="orderForm">
 
 	<fieldset class="click">
-	<legend class="click">{t}View{/t}</legend>
+	<legend class="click">{t}View{/t} &raquo;</legend>
 	<ul class="inpage_menu view">
 	
 		<li>
@@ -61,7 +58,7 @@
 <form method="post" action="" id="searchForm">
 	
 	<fieldset class="click">
-	<legend class="click">{t}Search{/t}</legend>
+	<legend class="click">{t}Search{/t} &raquo;</legend>
 	<ul class="inpage_menu search">
 	
 		<li>
@@ -109,10 +106,15 @@
 <table id="grid" class="scroll" cellpadding="0" cellspacing="0"></table>
 <div id="gridPager" class="scroll" style="text-align:center;"></div>
 
+<a href="ajax/subscriber_del.php" class="delTrigger"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" />{t}Delete Checked Subscribers{/t}</a>
+<a href="#"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" />{t}Edit Checked{/t}</a>
+
 <script type="text/javascript">
 $().ready(function() {ldelim}	
 	
 	var loadText = "{t}Processing{/t}...";
+	
+	var recordText = "{if empty($state.search)}{t}Subscriber(s){/t}{else}{t}Match(es){/t}{/if}";
 	
 	var imgPath = "{$url.theme.shared}/images/grid";
 	
@@ -128,7 +130,7 @@ $().ready(function() {ldelim}
 	var limit = {$state.limit};
 	
 	var colModel = [
-		{ldelim}name: 'id', index: 'id', key: true, hidden: true, width: 1{rdelim},
+		{ldelim}name: 'id', index: 'id', hidden: true, width: 1{rdelim},
 		{ldelim}name: 'email', width: 150{rdelim},
 		{foreach from=$fields key=id item=f}{ldelim}name: 'd{$id}', width: 120{rdelim},{/foreach}
 		{literal}{name: 'registered', width: 130},
@@ -142,6 +144,7 @@ $().ready(function() {ldelim}
 		colNames: colNames, 
 		colModel: colModel,
 		rowNum: limit,
+		recordtext: recordText,
 		pager: jQuery('#gridPager'),
 		imgpath: imgPath, 
 		viewrecords: true,
@@ -152,6 +155,9 @@ $().ready(function() {ldelim}
 		shrinkToFit: false,
 		jsonReader: {repeatitems: false}
 	});
+	
+	
+
 });
 </script>
 {/literal}
@@ -166,8 +172,20 @@ $().ready(function() {
 	
 	$('legend.click').click(function(){ 
 		$(this).siblings('ul').slideToggle(); 
-	});	
+	});
+	
+	$('#add, #del').jqm({
+		modal: true,
+		ajax: '@href',
+		target: '.jqmdMSG',
+		trigger: false
+	}).jqDrag('div.jqmdTC');
+	
+	$('#add').jqmAddTrigger('a.addTrigger');
+	$('#del').jqmAddTrigger('a.delTrigger');
+	
 });
+
 </script>
 {/literal}
 
@@ -190,5 +208,11 @@ $().ready(function() {
 </script>
 {/literal}
 {/if}
+
+
+{capture name=dialogs}
+{include file="inc/dialog.tpl" dialogID="add" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="del" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
+{/capture}
 
 {include file="inc/admin.footer.tpl"}
