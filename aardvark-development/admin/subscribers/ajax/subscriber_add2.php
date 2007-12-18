@@ -61,7 +61,7 @@ $subscriber = array(
 
 $flag = false;
 if (!PommoValidate::subscriberData($subscriber['data'],array('active' => FALSE, 'ignore' => TRUE))) {
-	if(!isset($_GET['force']))
+	if(!isset($_REQUEST['force']))
 		jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Invalid or missing information.').'<br />'.implode("<br />", $logger->getAll()));
 
 	$flag = true;
@@ -78,8 +78,8 @@ $msg = ($flag) ?
 	sprintf(Pommo::_T('Subscriber %s added!'),$_POST['Email']);
 
 $json = 'email: "'.$subscriber['email'].'",registered: "'.$subscriber['registered'].'",touched: "'.$subscriber['registered'].'",ip: "'.$subscriber['ip'].'"';
-foreach($subscriber['data'] as $key => $val) 
-	$json .= ",$key: \"".htmlspecialchars($val)."\"";
+foreach($subscriber['data'] as $k => $val) 
+	$json .= ",d{$k}: \"".htmlspecialchars($val)."\"";
 
 $json = "{success: true, key: $key, msg: \"".$msg."\", data: {".$json."} }";
 die($json);

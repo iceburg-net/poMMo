@@ -957,6 +957,7 @@ $.fn.jqGrid = function( p ) {
 			}
 			i++;
 		}
+		
 		for(i=0;i<this.p.colNames.length;i++){
 			th = document.createElement("th");
 			idn = ts.p.colModel[i].name;
