@@ -496,6 +496,11 @@ class PommoSubscriber {
 	
 	// updates a subscriber in the database
 	// accepts a subscriber (array)
+	// accepts a mode;
+	// 		REPLACE_ALL =  Removes all assosiated subscriber field data and replaces with passed Data
+	//		REPLACE_ACTIVE = Removes active (non hidden) subscriber field data and replaces with passed data
+	//		REPLACE_PASSED = [default] Removes passed subscriber fields and replaces them.
+	//		
 	// accepts a toggle; TRUE (default) => ALL subscriber_data for this subscriber will be replaced,
 	//   FALSE => only passed data will be replaced
 	// returns success (bool)
@@ -503,7 +508,7 @@ class PommoSubscriber {
 	//   (including values in subscriber_pending/subscriber_data). Make sure to pass
 	//   the entire subscriber!
 	// Does not change the subscriber_id -->  paves the path to add manually assign subs to a group?
-	function update(&$in, $full = true) {
+	function update(&$in, $mode) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -528,9 +533,26 @@ class PommoSubscriber {
 		if (!$dbo->query($query) || ($dbo->affected() != 1))
 				return false;
 		
-		// if this is "full", delete all. otherwise delete FIDs.
-		if (!empty($in['data']) || $full) {
-			$select = ($full) ? null : array_keys($in['data']);
+		
+		if (!empty($in['data']) || $mode == 'REPLACE_ALL') {
+
+			switch ($mode) {
+				case "REPLACE_ACTIVE":
+					Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+					$fields = PommoField::get(array('active' => TRUE));
+					$select = array_keys($fields);
+					break;
+				
+				case "REPLACE_ALL":
+					$select = NULL;
+					break;
+					
+				case "REPLACE_PASSED":
+				default: 
+					$select = array_keys($in['data']);	
+					break;
+			}
+		
 			$query = "
 				DELETE
 				FROM " . $dbo->table['subscriber_data'] . "

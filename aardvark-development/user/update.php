@@ -37,7 +37,7 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
-$smarty->prepareForSubscribeForm(); 
+$smarty->prepareForSubscribeForm();
 
 // fetch the subscriber, validate code
 $subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
@@ -92,7 +92,7 @@ if (!empty ($_POST['update'])) {
 			}
 		}
 		else {
-			if (!PommoSubscriber::update($newsub))
+			if (!PommoSubscriber::update($newsub, 'REPLACE_ACTIVE'))
 				$logger->addErr('Error updating subscriber.');
 			else {
 				$logger->addMsg(Pommo::_T('Your records have been updated.'));
@@ -113,7 +113,7 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		'status' => 0,
 		'data' => array()
 	);
-	if (!PommoSubscriber::update($newsub, FALSE))
+	if (!PommoSubscriber::update($newsub))
 		$logger->addErr('Error updating subscriber.');
 	else {
 		$dbvalues = PommoAPI::configGet(array('messages'));
