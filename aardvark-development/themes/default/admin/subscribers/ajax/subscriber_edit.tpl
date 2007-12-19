@@ -1,15 +1,13 @@
-<div id="addOut" class="error"></div>
+<div id="edOut" class="error"></div>
 <div class="warn"></div>
 
-<p>{t escape='no' 1='<a href="subscribers_import.php">' 2='</a>'}Welcome to adding subscribers! You can add subscribers one-by-one here. If you would like to add subscribers in bulk, visit the %1Subscriber Import%2 page.{/t}</p>
-
-<form method="post" action="ajax/subscriber_add2.php" id="addForm">
+<form method="post" action="ajax/subscriber_edit2.php" id="edForm">
 <fieldset>
-<legend>{t}Add Subscriber{/t}</legend>
+<legend>{t}Edit Subscriber{/t}</legend>
 
 <div>
 <label for="email"><strong class="required">{t}Email:{/t}</strong></label>
-<input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="Email" />
+<input type="text" class="pvEmail pvEmpty" size="32" maxlength="60" name="email" />
 </div>
 
 {foreach name=fields from=$fields key=key item=field}
@@ -48,9 +46,10 @@
 
 <div class="buttons">
 
-<input type="submit" value="{t}Add Subscriber{/t}" />
+<input type="hidden" name="id" value="0" />
 
-<input type="reset" value="{t}Reset{/t}" />
+<input type="submit" value="{t}Update Subscriber{/t}" />
+
 
 </div>
 
@@ -64,25 +63,48 @@
 
 $().ready(function(){
 
-    $('#addForm').ajaxForm({ 
-        dataType:  'json', 
-        success: function(ret) { 
-        	$('#addOut').html(ret.msg);
-        	if(ret.success) {
-        		if($('#grid').size() == 0)
-        			history.go(0); // refresh the page if no grid exists, else add new subscriber to grid
-        		$('#grid').addRowData(ret.key,ret.data);
-        	}
-        }
-    }); 
+	// populate form with first selected row... TODO; add support for multiple subscriber editing at a time.
+	var data = $('#grid').getRowData($('#grid').getSelectedRow());
+	
+	for (var i in data)  {
+		
+		// skip empty values/data
+		var value = data[i].replace(/^\s*|\s*$/g,""); // trim value
+		if(value == '')
+			continue;
+			
+		// transform "d#" to "d[#]"
+		var name = (i.match(/^d\d+$/)) ? 'd['+i.substr(1)+']' : i;
+		$(':input[@name="'+name+'"]',$('#edForm')).each(function(){
+			if($(this).attr('type') == 'checkbox')
+				this.checked = (data[i] == 'on') ? true : false;
+			else
+				$(this).val(""+data[i]+"");
+		}); 
+	}
 	
 	PommoValidate.reset(); // TODO -- validate must be scoped to this ROW. Modify validate.js
-	PommoValidate.init(':input, select','input[@type="submit"]', true, $('#addForm'));
+	PommoValidate.init(':input','input[@type="submit"]', true, $('#edForm'));
 
 	$('input[@name="force"]').click(function(){
 		if(this.checked)
 			PommoValidate.enable();
 	});
+		
+	
+    $('#edForm').ajaxForm({ 
+        dataType:  'json', 
+        success: function(ret) { 
+        	$('#edOut').html(ret.message);
+        	console.log(ret);
+        	if(ret.success) {
+        		
+        		$('#grid').setRowData(ret.key,ret.subscriber);
+        	}
+        }
+    }); 
+	
+	
 
 });
 </script>

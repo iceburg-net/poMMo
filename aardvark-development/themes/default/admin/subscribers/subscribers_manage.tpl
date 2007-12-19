@@ -107,7 +107,7 @@
 <div id="gridPager" class="scroll" style="text-align:center;"></div>
 
 <a href="ajax/subscriber_del.php" class="delTrigger"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" />{t}Delete Checked Subscribers{/t}</a>
-<a href="#"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" />{t}Edit Checked{/t}</a>
+<a href="ajax/subscriber_edit.php" class="editTrigger"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" />{t}Edit Checked{/t}</a>
 
 <script type="text/javascript">
 $().ready(function() {ldelim}	
@@ -174,15 +174,28 @@ $().ready(function() {
 		$(this).siblings('ul').slideToggle(); 
 	});
 	
-	$('#add, #del').jqm({
+	$('#add, #del, #exp, #edit').jqm({
 		modal: true,
 		ajax: '@href',
 		target: '.jqmdMSG',
 		trigger: false
 	}).jqDrag('div.jqmdTC');
 	
+	
 	$('#add').jqmAddTrigger('a.addTrigger');
 	$('#del').jqmAddTrigger('a.delTrigger');
+	$('#exp').jqmAddTrigger('a.expTrigger');
+	
+	
+	$('a.editTrigger').click(function(){
+		// prevent edit window from appearing if no row is selected
+		if($('#grid').getSelectedRow() !== null)
+			$('#edit').jqmShow(this);
+		return false;
+	});
+	
+
+	
 	
 });
 
@@ -212,7 +225,9 @@ $().ready(function() {
 
 {capture name=dialogs}
 {include file="inc/dialog.tpl" dialogID="add" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="edit" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {include file="inc/dialog.tpl" dialogID="del" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="exp" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}
