@@ -69,7 +69,7 @@ else {
 			!isset($_REQUEST['force']))
 				$json['message'] = Pommo::_T('Error updating subscriber.').' '.Pommo::_T('Fields failed validation')." >>> ".implode($logger->getAll(), " : ");
 		else {
-			if (!PommoSubscriber::update($subscriber))
+			if (!PommoSubscriber::update($subscriber,'REPLACE_ALL'))
 				$json['message'] =  Pommo::_T('Error updating subscriber.');
 			else {
 				$json['success'] = TRUE;

@@ -53,14 +53,6 @@ http://www.pommo.org/community/viewtopic.php?pid=4213#p4213
 	  (API) Migrate to SwiftMailer
 	  		- User Swift's Multi-Relay support
 	  		- Rewrite PommoMailer() class (PR13 deprication!)
-	  		
-	  (API) Increase subscriber management performance. 
-	  		- Merge sorting && limiting && ordering into sql.gen.php
-	  		- Rewrite Editing
-	  		- Add "quick delete"
-	  		- Toggle pending status
-	  		- Mail Pending Users a reminder
-	  		- Add Search capability
 	  
 	  (API) Enhance Subscriber Import
 	  		- Protection against Timeouts
@@ -75,11 +67,14 @@ http://www.pommo.org/community/viewtopic.php?pid=4213#p4213
 	  (feature) Theme switcher in configure.
  			"the benefit of using your own theme to change a file or two is that you don't need to worry about overwriting your changes during an upgrade"
  
-	  (fix) multiple choice multiple options in rule editing in IE  ** needs jQuery Patch
-	 
 	
 	MEDIUM TERM: (PR16 - maintenance)
 	=====================================
+ 	  (API) Increase subscriber management performance. 
+	  		- Merge sorting && limiting && ordering into sql.gen.php
+	  		- Toggle pending status
+	  		- Mail Pending Users a reminder
+ 	  
  	  (API) multi-byte safe -- see function overloading for common functions to replace
 			- http://us3.php.net/manual/en/ref.mbstring.php
 	  (API) Rewrite admin reset password request!  -- get rid of PommoPending::getBySubID()!!
