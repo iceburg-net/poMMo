@@ -1,14 +1,11 @@
-<div id="addOut" class="error"></div>
-<div class="warn"></div>
-
-<p>{t}Welcome to subscriber export! You can export subscribers in the current view as a .TXT file of email addresses or as a .CSV file containing all field data. Further, you can choose to export the "current page" (only subscribers listed in the table below) or "all pages" (all matching subscribers).{/t}</p>
+<p>{t}Welcome to subscriber export!{/t}
 
 <form method="post" action="ajax/subscriber_export2.php" id="pForm">
 <fieldset>
 <legend>{t}Export Subscribers{/t}</legend>
 
 <div>
-<label for="emails"><strong class="required">{t}Export Type:{/t}</strong></label>
+<label for="emails"><strong class="required">{t}Export Type{/t}:</strong></label>
 <select name="type">
 <option value="txt">{t}.TXT - Only Email Addresses{/t}</option>
 <option value="csv">{t}.CSV - All subscriber Data{/t}</option>
@@ -16,7 +13,7 @@
 </div>
 
 <div>
-<label for="emails"><strong class="required">{t}Export from:{/t}</strong></label>
+<label for="emails"><strong class="required">{t}Export{/t}:</strong></label>
 <select name="who">
 <option value="all">{t}All Pages{/t}</option>
 <option value="cur">{t}Current Page{/t}</option>
@@ -55,20 +52,14 @@ $().ready(function(){
 			$('#extended').show();
 	});
 
+
 	$('#pForm').submit(function() {
 
-		if ($("select[@name='who']", this).val() == 'cur') {
-			var ids = new Array();
-			$('#subs tbody/tr:visible').find('td:eq(0)').each(function() {
-				ids.push($("p.key", this).html());
-			});
+		var visible = new Array();
+		if ($("select[@name='who']", this).val() == 'cur')
+			visible = $('#grid').getDataIDs()
 			
-			$('#ids',this).val(ids.join());
-		}
-		else {
-			$('#ids',this).val("");
-		}
-
+		$('#ids',this).val(visible.join());
 		return true;
 	});
 
