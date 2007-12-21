@@ -508,7 +508,7 @@ class PommoSubscriber {
 	//   (including values in subscriber_pending/subscriber_data). Make sure to pass
 	//   the entire subscriber!
 	// Does not change the subscriber_id -->  paves the path to add manually assign subs to a group?
-	function update(&$in, $mode) {
+	function update(&$in, $mode = 'REPLACE_PASSED') {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		

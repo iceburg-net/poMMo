@@ -49,19 +49,20 @@ class PommoPending {
 	
 	// pending object validation
 	// accepts a pending object (array)
+	// has the magic behabior of serialzing the passed array (if exists)
 	// returns true if pending object ($in) is valid, false if not
 	function validate(&$in) {
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
 		$invalid = array();
-
+		
 		if (!is_numeric($in['subscriber_id']))
 			$invalid[] = 'subscriber_id';
 		if (empty($in['code']))
 			$invalid[] = 'code';
 		if (!is_array($in['array']))
-			$invalid[] = 'array';
+			$invalid[] = 'in array';
 		
 		switch($in['type']) {
 			case 'add':
@@ -215,16 +216,19 @@ class PommoPending {
 			'subscriber_id' => $subscriber['id'],
 			'type' => $type,
 			'code' => PommoHelper::makeCode(),
-			'array' => ($p['type'] == 'change') ?
-				serialize($subscriber) : NULL
+			'array' => ($type == 'change') ?
+				$subscriber : array()
 			);
-
+			
 		$pending = PommoPending::make($p);
 		
 		if (!PommoPending::validate($pending)) {
 			$logger->addErr('PommoPending::add() failed validation');
 			return false;
 		}
+		
+		if(!empty($pending['array']))
+			$pending['array'] = serialize($pending['array']);
 		
 		// check for pre-existing pending request
 		if (PommoPending::isPending($pending['subscriber_id']))
@@ -303,7 +307,7 @@ class PommoPending {
 				$pommo->requireOnce($pommo->_baseDir. 'inc/helpers/subscribers.php');
 				$subscriber =& $in['array'];
 				
-				if (!PommoSubscriber::update($subscriber)) {
+				if (!PommoSubscriber::update($subscriber,'REPLACE_ACTIVE')) {
 					$logger->addErr('PommoPending::perform() -> Error updating subscriber.');
 					return false;
 				}
