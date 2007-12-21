@@ -81,122 +81,72 @@
 
 {literal}
 <script type="text/javascript">
-pommo = {
-	init: function() {
-		this.disabled = true;
-		this.attempt = 1;
-		this.cmd = false;
-		this.status = false;
-		this.polling = true;
-		
-		$('#commands a.cmd').click(function() { return pommo.click(this); });
-		
-		this.poll();
-	},
-	poll: function(stopPoll) {
-		
-		
-		if(typeof stopPoll == 'undefined') var stopPoll = false;
-		
-		$.post("ajax/status_poll.php?id={/literal}{$mailing.id}{literal}&attempt="+pommo.attempt, {}, function(out) {
-			
-			pommo.disabled = false; // enable commands after AJAX success
-			
-			eval("var json = " + out);
-			if (typeof(json.status) == 'undefined')
-				alert('ajax error!');
-			
 
-			if($('#status').html() != json.statusText)
-				$('#status').html(json.statusText);
-
-			// status >> 1: Processing  2: Stopped  3: Frozen  4: Finished //
-			
-			if (json.status == 1) { 
-				$('#barHead img.go').css({display:'inline'});
-				$('#barHead img.stop').css({display:'none'});
+var pommo = {
+	status: null,
+	poll: function(get){get = get || '';  $.getJSON("ajax/status_poll.php?id={/literal}{$mailing.id}{literal}&"+get,pommo.process)},
+	process: function(mailing) {
+		$('#status').html(mailing.statusText);
+		
+		// status >> 1: Processing  2: Stopped  3: Frozen  4: Finished    5: command Sent	
+		$('#barHead img.go').css({display:((mailing.status == 1)?'inline':'none')});
+		$('#barHead img.stop').css({display:((mailing.status == 1)?'none':'inline')});
+		
+		$('#sent').html(mailing.sent);
+		$('#barFoot').html(mailing.percent+'%');
+		$('#bar').width(mailing.percent+'%');
+		
+		if (mailing.status != pommo.status) {
+			pommo.status = mailing.status;
+			var id = null;
+			switch(mailing.status) {
+				case 1: id = 'started'; break;
+				case 2: id = 'stopped'; break;
+				case 3: id = 'frozen'; break;
+				case 4: id = 'finished'; break; 
 			}
-			else {
-				$('#barHead img.go').css({display:'none'});
-				$('#barHead img.stop').css({display:'inline'});
-			}
-			
-			$('#sent').html(json.sent);
-			$('#barFoot').html(json.percent+'%');
-			$('#bar').width(json.percent+'%');
-			
-			
-			if(json.status != pommo.status) {
-				
-				pommo.cmd = false;
-				
-				switch(json.status) {
-					case 1: $('#started').show().siblings('div.uniq').hide(); break;
-					case 2: $('#stopped').show().siblings('div.uniq').hide(); break;
-					case 3: $('#frozen').show().siblings('div.uniq').hide(); break;
-					case 4: $('#finished').show().siblings('div.uniq').hide(); break;
-				}
-				
-			}
-			
-			pommo.status = json.status;
-
-			if (typeof(json.notices) == 'object')
-				for (i in json.notices)
-					if (json.notices[i] != '')
-						$('#notices').prepend('<li>'+json.notices[i]+'</li>');
-
-			// TODO --> make a nice XPATH selector out of this...
-			if ($('#notices li').size() > 50) {
-				$('#notices li').each(function(i){ if (i > 40) $(this).remove(); });
-			}
-			
-			if(stopPoll) return;
-
-			pommo.attempt = (json.incAttempt) ? pommo.attempt + 1 : 1;
-
-			// repoll
-			if(pommo.cmd || json.status == 1) {
-				pommo.polling = true;
-				if(pommo.attempt == 1)
-					setTimeout('pommo.poll()',5500);
-				else if(pommo.attempt == 2)
-					setTimeout('pommo.poll()',7500);
-				else
-					setTimeout('pommo.poll()',8500);
-			}
-			else {
-				pommo.polling = false
-				setTimeout('pommo.poll(true)',4500);
-			}
-		});
-
-	},
-	sendCmd: function(cmd) {
-		this.disabled = true;
-		this.attempt = 1;
-		this.cmd = true;
+			$('#'+id).show().siblings('div.uniq').hide();
+		}
 		
-		$('#wait').show().siblings('div.uniq').hide();
+		if (typeof(mailing.notices) == 'object')
+			for (i in mailing.notices)
+				if (mailing.notices[i] != '')
+					$('#notices').prepend('<li>'+mailing.notices[i]+'</li>');
+	
+		// TODO --> make a nice XPATH selector out of this...
+		if ($('#notices li').size() > 50) {
+			$('#notices li').each(function(i){ if (i > 40) $(this).remove(); });
+		}		
 		
-		$.post('ajax/status_cmd.php?cmd='+cmd,{}, function(out) {
-			eval("var json = " + out);
-				if (typeof(json.success) == 'undefined')
-					alert('ajax error!');
-				
-				if(!pommo.polling)
-					pommo.poll();
-		});
-	},
-	click: function(e) {
-		if (this.disabled)
-			return false;
-		this.sendCmd($(e).href().replace(/.*\#/,''));
-		return false;
 	}
 };
 
-$().ready(function(){ pommo.init(); });
+// continually ("hearbeat") poll the mailing
+$('body').ajaxStop(function(){ 
+	if (pommo.status == 1)
+		setTimeout('pommo.poll()',4500);
+});
+
+$().ready(function(){ 
+
+	// assign command events
+	$('#commands a.cmd').click(function() { 
+		if(pommo.status != 5) {
+			pommo.status = 5;
+			$('#wait').show().siblings('div.uniq').hide();
+			var cmd = $(this).attr('href').replace(/.*\#/,'');
+			$.getJSON(
+				'ajax/status_cmd.php?cmd='+cmd,
+				function(ret) { setTimeout('pommo.poll()',1500); }
+			);
+		}
+		return false;
+	});
+	
+	// init
+	pommo.poll('resetNotices=true'); 
+});
+
 </script>
 {/literal}
 
