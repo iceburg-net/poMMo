@@ -44,6 +44,8 @@
 <textarea name="box" cols="40" rows="8">{t}Type/Paste Contents...{/t}</textarea>
 </div>
 
+<input type="checkbox" name="excludeUnsubscribed" />{t}Allow unsubscribed emails to be re-subscribed.{/t}
+
 </fieldset>
 
 <div class="buttons">

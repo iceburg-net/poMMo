@@ -106,10 +106,11 @@ class PommoHelper {
 	}
 	
 	// checks to see if an email address exists in the system
-	//  only includes active && pending subscribers
+	//  only includes active && pending subscribers by DEFAULT
 	// accepts a single email (str) or array of emails
+	//  accepts a flag to include unsubcribed subscribers
 	// returns an array of duplicate found emails. FALSE if no dupes were found. 
-	function & isDupe(&$in) {
+	function & isDupe(&$in,$includeUnsubscribed = false) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -117,14 +118,15 @@ class PommoHelper {
 			return false;
 
 		$query = "
-			SELECT email
+			SELECT ".(($includeUnsubscribed) ? 'DISTINCT ' : '')."email
 			FROM " . $dbo->table['subscribers'] ."
 			WHERE email IN (%q)
-			AND status IN(1,2)";
+			AND status IN(".(($includeUnsubscribed) ? '0,' : '')."1,2)";
 		$query = $dbo->prepare($query,array($in));
 		$o = $dbo->getAll($query, 'assoc', 'email');
 		if (empty($o))
 			$o = false;
+		
 		return $o;
 	}
 	

@@ -47,6 +47,8 @@ foreach($preview as $row) {
 		$cols = $c;
 }
 
+
+$smarty->assign('excludeUnsubscribed',(isset($_REQUEST['excludeUnsubscribed'])?true:false));
 $smarty->assign('preview',$preview);
 $smarty->assign('colNum',$cols);
 $smarty->assign('fields',PommoField::get());

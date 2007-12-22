@@ -33,6 +33,8 @@ $dbo = & $pommo->_dbo;
 $dupes = $tally = $flagged = 0;
 $fp = fopen($pommo->_workDir.'/import.csv','r') 
 	or die('Unable to open CSV file');
+	
+$includeUnsubscribed = isset($_REQUEST['excludeUnsubscribed']) ? false : true;
 
 while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 	$subscriber = array(
@@ -55,7 +57,7 @@ while (($row = fgetcsv($fp,2048,',','"')) !== FALSE) {
 	if ($subscriber['email']) {
 		// check for dupe
 		// TODO -- DO THIS IN BATCH ??
-		if (PommoHelper::isDupe($subscriber['email'])) {
+		if (PommoHelper::isDupe($subscriber['email'],$includeUnsubscribed)) {
 			$dupes++;
 			continue;
 		}

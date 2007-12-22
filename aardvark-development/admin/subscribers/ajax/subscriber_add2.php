@@ -48,6 +48,13 @@ function jsonKill($msg) {
 
 if (!PommoHelper::isEmail($_POST['Email']))
 	jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Invalid email.'));
+	
+// check if email is unsubscribed
+if(!isset($_REQUEST['force'])) {
+	$unsubscribed = PommoSubscriber::GetIDByEmail($_POST['Email'],0);
+	if(!empty($unsubscribed))
+		jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.sprintf(Pommo::_T('%s has already unsubscribed. To add the subscriber anyway, check the box to force the addition.'),'<strong>'.$_POST['Email'].'</strong>'));
+}
 
 if(PommoHelper::isDupe($_POST['Email']))
 	jsonKill(Pommo::_T('Error adding subscriber.').'<br />'.Pommo::_T('Email address already exists. Duplicates are not allowed.'));

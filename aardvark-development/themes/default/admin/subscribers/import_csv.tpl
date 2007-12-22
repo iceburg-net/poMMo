@@ -21,6 +21,8 @@
 </div>
 
 <form action="" method="post" id="assign">
+
+{if $excludeUnsubscribed}<input type="hidden" name="excludeUnsubscribed" value="true" />{/if}
 <table summary="{t}Assign Fields{/t}">
 
 <thead>
