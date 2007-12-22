@@ -19,6 +19,8 @@
 
 <input type="submit" value="{t}Remove Subscribers{/t}" />
 
+<input type="hidden" name="status" value="{$status}" />
+
 <input type="reset" value="{t}Reset{/t}" />
 
 </div>

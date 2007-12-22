@@ -51,7 +51,7 @@ class PommoHelper {
 	function parseConfig($file) {
 		$a = array();
 		
-		$file_content = file($file);
+		@$file_content = file($file);
 		if (empty($file_content))
 			Pommo::kill('Could not read config file ('.$file.')');
 		

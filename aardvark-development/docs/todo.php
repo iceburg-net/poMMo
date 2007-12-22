@@ -85,6 +85,7 @@ http://www.pommo.org/community/viewtopic.php?pid=4213#p4213
 	  (feature) Include "first page" which encourages "testing" and loading of sample data -- detect via maintenance routine.
 	  (feature) Display & mail flagged subscribers
 	  (feature) Version Detection, Alerting.
+	  (feature) Maintenance - Shortcuts to purge unsubscribed/pending subscribers older than a set date (e.g. 3 months)
 	  
 	  (fix) Resolve character set issues (http://tinymce.moxiecode.com/punbb/viewtopic.php?pid=17351#p17351)	
 	 
