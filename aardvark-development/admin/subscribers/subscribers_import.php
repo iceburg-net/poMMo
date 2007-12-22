@@ -75,7 +75,9 @@ if(isset($_POST['submit'])) {
 			}
 			
 			// remove dupes
-			$dupes =& PommoHelper::isDupe($a);
+			$includeUnsubscribed = isset($_REQUEST['excludeUnsubscribed']) ? false : true;
+			$dupes =& PommoHelper::isDupe($a,$includeUnsubscribed);
+			
 			if (!$dupes)
 				$dupes = array();
 			$emails = array_diff($a, $dupes);
@@ -112,7 +114,7 @@ if(isset($_POST['submit'])) {
 			}
 			
 			$pommo->set(array('preview' => $a));
-			Pommo::redirect('import_csv.php');
+			Pommo::redirect('import_csv.php'.((isset($_REQUEST['excludeUnsubscribed']))?'?excludeUnsubscribed=true' : ''));
 		}
 		else {
 			$logger->addErr('Unknown Import Type');
