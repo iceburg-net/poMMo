@@ -47,8 +47,8 @@ function jsonKill($msg, $success = "false", $ids = array()) {
 
 
 $emails = array();
-if (isset($_POST['emails'])) {
-	$in = array_unique(preg_split("/[\s,]+/", $_POST['emails']));
+if (isset($_REQUEST['emails'])) {
+	$in = array_unique(preg_split("/[\s,]+/", $_REQUEST['emails']));
 	foreach($in as $email) {
 		if (PommoHelper::isEmail($email))
 			array_push($emails,$email);
@@ -57,7 +57,7 @@ if (isset($_POST['emails'])) {
 
 $c = 0;
 if (count($emails) > 0)  {
-	$ids = PommoSubscriber::getIDByEmail($emails);
+	$ids = PommoSubscriber::getIDByEmail($emails,$_REQUEST['status']);
 	$c = PommoSubscriber::delete($ids);
 }
 

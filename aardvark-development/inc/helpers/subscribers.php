@@ -316,16 +316,18 @@ class PommoSubscriber {
 	
 	// fetches subscriber IDs from passed emails
 	// accepts a email address (str) or array of email addresses
+	// accepts filtering by subscriber status, or all statuses if not supplied
 	// returns an array of subscriber IDs
-	function & getIDByEmail($email) {
+	function & getIDByEmail($email, $status = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$query = "
 			SELECT subscriber_id
 			FROM " . $dbo->table['subscribers'] . "
-			WHERE email IN (%q)";
-		$query = $dbo->prepare($query,array($email));
+			WHERE email IN (%q)
+			[AND status=%I]";
+		$query = $dbo->prepare($query,array($email,$status));
 		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
 	

@@ -33,6 +33,9 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
+@$status = (is_numeric($_REQUEST['status'])) ? $_REQUEST['status'] : 1;
+$smarty->assign('status',$status);
+
 $smarty->display('admin/subscribers/ajax/subscriber_del.tpl');
 Pommo::kill();
 ?>

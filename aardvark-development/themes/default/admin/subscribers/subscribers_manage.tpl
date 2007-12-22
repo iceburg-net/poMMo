@@ -17,7 +17,7 @@
 <ul class="inpage_menu">
 <li><a href="ajax/subscriber_add.php" title="{t}Add Subscribers{/t}" class="addTrigger">{t}Add Subscribers{/t}</a></li>
 
-<li><a href="ajax/subscriber_del.php" title="{t}Remove Subscribers{/t}" class="delTrigger">{t}Remove Subscribers{/t}</a></li>
+<li><a href="ajax/subscriber_del.php?status={$state.status}" title="{t}Remove Subscribers{/t}" class="delTrigger">{t}Remove Subscribers{/t}</a></li>
 
 <li><a href="ajax/subscriber_export.php" title="{t}Export Subscribers{/t}" class="expTrigger">{t}Export Subscribers{/t}</a></li>
 
@@ -106,7 +106,7 @@
 <table id="grid" class="scroll" cellpadding="0" cellspacing="0"></table>
 <div id="gridPager" class="scroll" style="text-align:center;"></div>
 
-<a href="ajax/subscriber_del.php" class="delTrigger"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" />{t}Delete Checked Subscribers{/t}</a>
+<a href="ajax/subscriber_del.php?status={$state.status}" class="delTrigger"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" />{t}Delete Checked Subscribers{/t}</a>
 <a href="ajax/subscriber_edit.php" class="editTrigger"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" />{t}Edit Checked{/t}</a>
 
 <script type="text/javascript">
