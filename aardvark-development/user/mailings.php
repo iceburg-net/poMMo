@@ -23,6 +23,7 @@
 *********************************/
 require ('../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
 
 $config = PommoAPI::configGet('public_history');
 if($config['public_history'] == 'on') {
@@ -64,6 +65,29 @@ SmartyPaginate::assign($smarty);
 // if mail_id is passed, display the mailing.
 if(isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) {
 	$input = current(PommoMailing::get(array('id' => $_GET['mail_id'])));
+	
+	// attempt personalizations
+	if(isset($_GET['email']) && isset($_GET['code'])) {
+		$subscriber = current(PommoSubscriber::get(array('email' => $_GET['email'], 'status' => 1)));
+		if($_GET['code'] == PommoSubscriber::getActCode($subscriber)) {
+			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php'); // require once here so that mailer can use
+			
+			$matches = array();
+			preg_match('/\[\[[^\]]+]]/', $input['body'], $matches);
+			if (!empty($matches)) {
+				$pBody = PommoHelperPersonalize::search($input['body']);
+				$input['body'] = PommoHelperPersonalize::replace($input['body'], $subscriber, $pBody);
+				
+			}
+			preg_match('/\[\[[^\]]+]]/',  $input['altbody'], $matches);
+			if (!empty($matches)) {
+				$pAltBody = PommoHelperPersonalize::search($input['altbody']);
+				$input['altbody'] = PommoHelperPersonalize::replace($input['altbody'], $subscriber, $pAltBody);	
+			}
+		}
+
+	}
+
 	$smarty->assign($input);
 	$smarty->display('inc/mailing.tpl');
 	Pommo::kill();

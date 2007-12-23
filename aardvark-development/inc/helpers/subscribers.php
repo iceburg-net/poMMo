@@ -618,7 +618,7 @@ class PommoSubscriber {
 	
 	// returns the activation code for the passed subscriber
 	function getActCode($subscriber){
-		if (empty($subscriber['id']))
+		if (empty($subscriber['id']) || empty($subscriber['registered']))
 			Pommo::kill('Invalid Subscriber passed to getActCode!');
 			
 		return md5($subscriber['id'].$subscriber['registered']);
