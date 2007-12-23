@@ -190,7 +190,7 @@ class PommoHelperPersonalize {
 					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/update.php?email='.$s['email'].'&code='.PommoSubscriber::getActCode($s);
 					break;
 				case '!weblink':
-					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/mailings.php?mail_id='.$_GET['id'];
+					$replace = $GLOBALS['pommo']->_http.$GLOBALS['pommo']->_baseUrl.'user/mailings.php?mail_id='.$_GET['id'].'&email='.$s['email'].'&code='.PommoSubscriber::getActCode($s);
 					break;
 				case '!subscriber_id':
 					$replace = $s['id'];

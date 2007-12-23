@@ -59,10 +59,8 @@ else {
 	);
 	
 	// check for dupe
-	$lookupID = current(PommoSubscriber::getIDByEmail($subscriber['email']));
-	if ($lookupID != $subscriber['id'])
+	if (PommoHelper::isDupe($subscriber['email']))
 		$json['message'] = Pommo::_T('Email address already exists. Duplicates are not allowed.');
-	
 	else {
 	
 		if (!PommoValidate::subscriberData($subscriber['data'],$validateOptions) && 
