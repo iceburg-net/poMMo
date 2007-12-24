@@ -34,6 +34,12 @@
 </div>
 
 {/if}
+
+<div>
+<label for="debugInstall">{t}To force the upgrade{/t}</label>
+<input type="submit" name="forceUpgrade" value="{t}Click Here{/t}" />
+</div>
+
 </div>
 
 </form>

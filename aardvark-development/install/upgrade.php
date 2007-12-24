@@ -72,6 +72,9 @@ if (empty($_REQUEST['continue'])) {
 
 	if (isset ($_REQUEST['debugInstall']))
 		$dbo->debug(TRUE);
+		
+	if (isset($_REQUEST['forceUpgrade']))
+		$GLOBALS['pommoFakeUpgrade'] = true;
 
 	if (PommoUpgrade()) {
 		$logger->addErr(Pommo::_T('Upgrade Complete!'));

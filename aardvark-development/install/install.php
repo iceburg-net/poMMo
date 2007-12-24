@@ -110,6 +110,11 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 				$file = $pommo->_baseDir."install/sql.templates.php";
 				if(!PommoInstall::parseSQL(false,$file))
 					$logger->addErr('Error Loading Default Mailing Templates.');
+					
+				// serialize the latest updates
+				$GLOBALS['pommoFakeUpgrade'] = true;
+				Pommo::requireOnce($pommo->_baseDir . 'install/helper.upgrade.php');
+				PommoUpgrade();
 
 				$logger->addMsg(Pommo::_T('Installation Complete! You may now login and setup poMMo.'));
 				$logger->addMsg(Pommo::_T('Login Username: ') . 'admin');
