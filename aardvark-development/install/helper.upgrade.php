@@ -48,8 +48,7 @@ function PommoUpgrade() {
 // update routines
 
 // upgrades to a revisions steps
-//	if strict is true, return on query failure, if false, continue
-function PommoRevUpgrade($rev, $strict = true) {
+function PommoRevUpgrade($rev) {
 	global $pommo;
 	$logger =& $pommo->_logger;
 	$dbo =& $pommo->_dbo;
@@ -241,8 +240,16 @@ function PommoRevUpgrade($rev, $strict = true) {
 				) COMMENT = 'General Purpose Table for caches, counts, etc.'"
 			,"Adding Scratch Table")) return false;
 			
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 37,'version' => 'Aardvark PR16rc1'), true))
+				return false;
+				
+		case 37:
+			
 			// end of upgrade (break), no revision bump.
 			break;
+			
+		
 			
 		default: 
 			return false;

@@ -93,16 +93,25 @@ class PommoInstall {
 			$logger->addMsg($msg);
 			return true;
 		}
-			
-		$query = $dbo->prepare($sql);
-		if (!$dbo->query($query)) {
-			$msg .= ($GLOBALS['pommoLooseUpgrade']) ?
-				'IGNORED.' : 'FAILED';
-			$logger->addErr($msg);
-			
-			return $GLOBALS['pommoLooseUpgrade'];
-		}
 		
+		if(!isset($GLOBALS['pommoFakeUpgrade'])) {
+			
+			$query = $dbo->prepare($sql);
+			if (!$dbo->query($query)) {
+				$msg .= ($GLOBALS['pommoLooseUpgrade']) ?
+					'IGNORED.' : 'FAILED';
+				$logger->addErr($msg);
+				
+				return $GLOBALS['pommoLooseUpgrade'];
+			}
+			$msg .= "done.";
+			$logger->addMsg($msg);
+		}
+		else {
+			$msg .= "skipped.";
+			$logger->addMsg($msg,2);
+		}
+
 		$query = "
 			INSERT INTO ".$dbo->table['updates']." 
 			(serial) VALUES(%i)";
@@ -110,8 +119,8 @@ class PommoInstall {
 		if (!$dbo->query($query))
 			Pommo::kill('Unable to serialize');
 		
-		$msg .= "done.";
-		$logger->addMsg($msg);
+		
+		
 		return true;
  	}
 }

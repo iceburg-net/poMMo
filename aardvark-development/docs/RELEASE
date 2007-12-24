@@ -1,13 +1,50 @@
-=== Release Notes for poMMo Aardvark PR15.1 ===
- .: Released April 28, 2007
+=== Release Notes for poMMo Aardvark PR16rc1 ===
+ .: Released December 22, 2007
 
+
+[Additions]
+
+  * Added script to add users from shell/cli
+  * Added ability to select a date format preference from config.php
+  * Added full search capability to all subscribers, or all subscribers in a group
+  * New and improved Subscriber Management, built on jqGrid (a new ajax "data grid")
+  * Added Portuguese translation
+  * Added toggle to "Allow unsubscribed emails to be re-subscribed." during the import process
+  * Public Mailings now display personalizations if accessed via the [[!weblink]] special link 
+  
+
+[Improvements]
+
+  * Simplified the delivery of activation/confirmation emails.
+  * Improved date handling under IIS/Windows
+  * Improved compatibility with latent webhosts
+  * Confirmation emails are now sent when a subscriber elects to change their email address
+  * Clarification of config.sample.php
+  * Greatly improved the date handling range (100BCE -> 3000+ CE)
+  * Code cleanups and optimizations
+  * Removed debugging artifacts from install.php
+  * Introduced a general purpose database table for persistent data
+  * Log entries are posted whenever confirmation mails are sent
+  * Rewritten subscriber management
+  * Renamed Brazilian Portuguese to "pt-br" for ISO 639 compliance
+  * Updated jQuery to v. 1.2.1
+  * Improved update procedure for development (subversion) users (better handling of same revision updates)
+  
 [Bug Fixes]
 
-  * Upgraders are given the default CSS template
-  * Suppressed PHP Notices
-  * Fixed reloading and previewing of plain text mailings
-  * Fixed loading of sample data from support library
-  * WYSIWYG Editor no longer mangles URLs
-  * Bandwidth throttle calculations have been corrected to use kilobytes instead of bytes
-  * Restored no limit throttling and default throttle values
-  * Corrected example include of embedded subscription form
+  * Hidden subscriber field values are now preserved during user update
+  * Testing mail exchanger from config menu now works
+  * Fixed grouping by numerical comparison on DATE and NUMBER fields
+  * Fixed grouping by unchecked CHECKBOX fields
+  * String Values vs. Timestamps are outputted when exporting subscribers
+  * .travel domains now validate
+  * Addressed an issue with group deletion causing orphaned rules
+  * Fixed improper detection of baseURL for install link
+  * Templates no longer removed during a "database reset" via the support library
+  * Pending.php now reports actual pending changes.
+  * Sorting by subscriber field or attribute is now performed across the entire dataset, not just the current view.
+  * Fixed javascript validation of Email fields
+  * Corrected display of field prompts when editing or adding a subscriber via Subscriber Management
+  * Fixed issue where deleteing an active subscriber would also delete unsubscribed subscribers with a matching email address
+  * Rewrote mailing status ajax polling to prevent asyncrocity from cauing an earlier poll to rewrite the latest poll (e.g. could result in inaccurate subscriber sent count)
+  * Previously unsubscribed emails are now flagged as duplicate

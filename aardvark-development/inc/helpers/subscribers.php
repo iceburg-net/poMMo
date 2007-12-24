@@ -326,7 +326,7 @@ class PommoSubscriber {
 			SELECT subscriber_id
 			FROM " . $dbo->table['subscribers'] . "
 			WHERE email IN (%q)
-			[AND status=%I]";
+			[AND status IN (%C)]";
 		$query = $dbo->prepare($query,array($email,$status));
 		return $dbo->getAll($query, 'assoc', 'subscriber_id');
 	}
