@@ -124,7 +124,7 @@ $().ready(function() {ldelim}
 		{foreach from=$fields key=id item=f}'{$f.name|escape}',{/foreach}
 		'{t}Registered{/t}',
 		'{t}Updated{/t}',
-		'{t}IP Address{/t}',
+		'{t}IP Address{/t}'
 	];
 	
 	var limit = {$state.limit};
