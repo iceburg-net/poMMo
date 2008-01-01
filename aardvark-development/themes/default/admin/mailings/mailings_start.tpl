@@ -393,6 +393,10 @@ var s=',separator,';
 
 // poMMo languages not supported by TinyMCE:
 switch (lang) {
+	case 'pt':
+	case 'pt-br':
+		lang='pt_br';
+		break;
 	case 'bg':
 	case 'en-uk':
 		lang='en';
