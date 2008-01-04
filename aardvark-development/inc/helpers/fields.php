@@ -131,15 +131,18 @@ class PommoField {
 	// accepts a filtering array -->
 	//   active (bool) toggle returning of only active fields
 	//   id (array) -> an array of field IDs
+	//   byName -> will order by name (alphabetical .. else by default order)
 	// returns an array of fields. Array key(s) correlates to field key.
 	function & get($p = array()) {
-		$defaults = array('active' => false, 'id' => null);
+		$defaults = array('active' => false, 'id' => null, 'byName' => true);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$p['active'] = ($p['active']) ? 'on' : null;
+		
+		$p['byName'] = ($p['byName']) ? 'field_name' : 'field_ordering';
 		
 		$o = array();
 		
@@ -150,7 +153,7 @@ class PommoField {
 				1
 				[AND field_active='%S']
 				[AND field_id IN(%C)]
-			ORDER BY field_ordering";
+			ORDER BY ".$p['byName'];
 		$query = $dbo->prepare($query,array($p['active'],$p['id']));
 		
 		while ($row = $dbo->getRows($query))
@@ -174,7 +177,8 @@ class PommoField {
 			FROM " . $dbo->table['fields']."
 			WHERE
 				1
-				[AND field_id IN(%C)]";
+				[AND field_id IN(%C)]
+			ORDER BY field_name";
 		$query = $dbo->prepare($query,array($id));
 		
 		while ($row = $dbo->getRows($query))

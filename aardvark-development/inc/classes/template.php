@@ -139,7 +139,7 @@ class PommoTemplate extends Smarty {
 		Pommo :: requireOnce($pommo->_baseDir . 'inc/helpers/fields.php');
 
 		// Get array of fields. Key is ID, value is an array of the demo's info
-		$fields = PommoField::get(array('active' => TRUE));
+		$fields = PommoField::get(array('active' => TRUE,'byName' => FALSE));
 		if (!empty ($fields))
 			$this->assign('fields', $fields);
 			
@@ -156,6 +156,20 @@ class PommoTemplate extends Smarty {
 			$this->assign(array('Email' => $_GET['Email']));
 		
 		$this->assign($_POST);
+	}
+	
+	// returns an array of invalid fields, empty if none.
+	// array key == invalid field, value == message
+	// e.g. array(field => 'email', 'message' => 'Must be an Email Address');
+	function getInvalidFields($form = SMARTY_VALIDATE_DEFAULT_FORM) {
+		$o = array();
+		
+		foreach($_SESSION['SmartyValidate'][$form]['validators'] as $validator) {
+			if(!$validator['valid'])
+				array_push($o,array('field' => $validator['field'], 'message' => $validator['message']));
+		}
+		
+		return $o;
 	}
 }
 
