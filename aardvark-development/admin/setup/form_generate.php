@@ -64,7 +64,7 @@ $form_name = "signup";
 </div>
 
 <?php
-$fields = & PommoField::get(array('active' => TRUE));
+$fields = & PommoField::get(array('active' => TRUE,'byName' => FALSE));
 foreach (array_keys($fields) as $field_id) {
 	$field = & $fields[$field_id];
 
