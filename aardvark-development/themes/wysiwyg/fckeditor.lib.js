@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
+ * Copyright (C) 2005, 2006, 2007, 2008  Brice Burgess <bhb@iceburg.net>
  * 
  * The contents of this directory (themes/default/*) are part of poMMo (http://www.pommo.org)
  * 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
+ * Copyright (C) 2005, 2006, 2007, 2008  Brice Burgess <bhb@iceburg.net>
  * 
  * This file is part of poMMo (http://www.pommo.org)
  * 
@@ -23,7 +23,7 @@
 */
 
 class Pommo {
-	var $_revision = 37; // poMMo's current "file" revision #
+	var $_revision = 38; // poMMo's current "file" revision #
 
 	var $_dbo; // holds the database object
 	var $_logger; // holds the logger (messaging) object

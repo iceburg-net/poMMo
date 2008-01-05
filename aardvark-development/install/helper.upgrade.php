@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2005, 2006, 2007  Brice Burgess <bhb@iceburg.net>
+ * Copyright (C) 2005, 2006, 2007, 2008  Brice Burgess <bhb@iceburg.net>
  * 
  * This file is part of poMMo (http://www.pommo.org)
  * 
@@ -245,6 +245,12 @@ function PommoRevUpgrade($rev) {
 				return false;
 				
 		case 37:
+			
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 38,'version' => 'Aardvark PR16rc2'), true))
+				return false;
+		
+		case 38:
 			
 			// end of upgrade (break), no revision bump.
 			break;
