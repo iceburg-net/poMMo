@@ -1,4 +1,21 @@
-Buffed and Waxed the Mailing Composition Javascripts
+=== Release Notes for poMMo Aardvark PR16rc2 ===
+ .: Released Janurary 5, 2008
+
+[Additions]
+	* Added Polski (pl) Translation
+	* Added FCKEditor 2.5.1 (replaces TinyMCE) and abstraction library
+	
+[Improvements]
+	* Buffed and Waxed the Mailing Composition Javascripts
+	* Implemented an abbreviated plugin architecture for easy customization or replacement of the WYSIWYG Editor.
+	* Subscriber Fields are now generally returned in alphabetical order
+	* Updated core Javascript libraries
+	* Updated Brasil Português (pt-br) translation
+	
+[Bug Fixes]
+	* Fixed display of dialogs/modals in Internet Explorer 6
+	* Subscriber editing and deleting now works under IE6
+
 
 
 === Release Notes for poMMo Aardvark PR16rc1 ===
