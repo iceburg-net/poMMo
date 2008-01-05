@@ -40,6 +40,23 @@ if (PommoMailing::isCurrent())
 
 // TODO -- fix stateInit so we don't NEED to supply the defaults that have already been defined
 
+if(isset($_REQUEST['compose'])) {
+	/**********************************
+		JSON OUTPUT INITIALIZATION
+	 *********************************/
+	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+	$encoder = new json;
+	$json = array(
+		'success' => true,
+		'message' => false,
+		'errors' => false,
+		'callback' => false
+	);
+	die($encoder->encode($json));
+}
+	
 $dbvalues = PommoAPI::configGet(array(
 	'list_fromname',
 	'list_fromemail',
@@ -62,9 +79,11 @@ $state =& PommoAPI::stateInit('mailing',array(
 ),
 $_POST);
 
-
-@$smarty->assign('toggleText',($state['wysiwyg'] == 'on') ? 'HTML' : 'WYSIWYG');
 $smarty->assign($state);
+
+// assign language (for wysiwyg)
+$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
+
 $smarty->display('admin/mailings/mailing/compose.tpl');
 Pommo::kill();
 ?>

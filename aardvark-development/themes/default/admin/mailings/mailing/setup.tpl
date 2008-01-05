@@ -1,9 +1,3 @@
-{if $success}
-<input type="hidden" id="success" value="{$success}" />
-<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...
-{php}return;{/php}
-{/if}
-
 {* Field Validation - see docs/template.txt documentation *}
 {* {fv form='general'} *}
 {fv prepend='<span class="error">' append='</span>'}
@@ -74,6 +68,7 @@
 <div class="buttons">
 
 <input type="submit" id="submit" name="submit" value="{t}Continue{/t}" />
+<img src="{$url.theme.shared}images/loader.gif" name="loading" class="hidden" title="{t}loading...{/t}" alt="{t}loading...{/t}" />
 
 </div>
 

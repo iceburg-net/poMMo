@@ -63,3 +63,13 @@
 </fieldset>
 
 </form>
+
+{literal}
+<script type="text/javascript">
+$().ready(function(){
+	$('#testMailing form.ajax').ajaxForm({
+		target: $('#testMailing div.jqmdMSG')
+	});
+});
+</script>
+{/literal}

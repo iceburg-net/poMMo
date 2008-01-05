@@ -1,22 +1,14 @@
-{if $success}
-{include file="inc/messages.tpl"}
-<div class="buttons">
-<input type="submit" class="jqmClose" value="{t}Close{/t}" />
-</div>
-{php}return;{/php}
-{/if}
-
 {* Field Validation - see docs/template.txt documentation *}
 {fv prepend='<span class="error">' append='</span>'}
 {fv validate="name"}
 {fv validate="description"}
 
-<div class="output">
-{include file="inc/messages.tpl"}
-</div>
-
 <div class="alert">
 {t}Templates allow you to re-use your crafted message bodies. The HTML and text version is remembered.{/t}
+</div>
+
+<div class="output" style="font-size: 130%;">
+{include file="inc/messages.tpl"}
 </div>
 
 <form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
@@ -41,3 +33,13 @@
 </div>
 
 </form>
+
+{literal}
+<script type="text/javascript">
+$().ready(function(){
+	$('#addTemplate form.ajax').ajaxForm({
+		target: $('#addTemplate div.jqmdMSG')
+	});
+});
+</script>
+{/literal}

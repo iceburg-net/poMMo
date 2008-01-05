@@ -62,8 +62,7 @@ $().ready(function(){
         dataType:  'json', 
         success: function(ret) { 
         	$('#delOut').html(ret.msg);
-        	if(ret.success) {
-    			console.log(ret.ids);    		
+        	if(ret.success) {		
         		for (i=0; i<ret.ids.length; i++) {
     				$('#grid').delRowData(ret.ids[i]);
         		}

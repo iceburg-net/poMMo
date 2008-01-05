@@ -27,11 +27,10 @@ FCKConfig.ToolbarSets["Pommo"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image','Flash','Table',],
+	['Image','Flash','Table'],
 	'/',
 	['Style','FontFormat','FontName','FontSize'],
 	['TextColor','BGColor','-','FitWindow']
-	
 ] ;
 
 FCKConfig.EnterMode = 'p' ;			// p | div | br

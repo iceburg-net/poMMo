@@ -35,32 +35,44 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
-if(!empty($_POST['template']) && is_numeric($_POST['template'])) {
+/**********************************
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+$encoder = new json;
+$json = array(
+	'success' => false,
+	'message' => false,
+	'errors' => false,
+	'callback' => false
+);
+
+
+if(isset($_POST['skip']) || (isset($_POST['template']) && !is_numeric($_POST['template'])))
+	$json['success'] = true;
+elseif(isset($_POST['load'])) {
+	$template = current(PommoMailingTemplate::get(array('id' => $_POST['template'])));
+	$pommo->_session['state']['mailing']['body'] = $template['body'];
+	$pommo->_session['state']['mailing']['altbody'] = $template['altbody'];
 	
-	// check if we are to load a template
-	if(isset($_POST['load'])) {
-		$template = current(PommoMailingTemplate::get(array('id' => $_POST['template'])));
-		$pommo->_session['state']['mailing']['body'] = $template['body'];
-		$pommo->_session['state']['mailing']['altbody'] = $template['altbody'];
-		
-		$smarty->assign('success',3);
-				
-	}
-	// check if we are to delete a template
-	elseif(isset($_POST['delete'])) {
-		if(PommoMailingTemplate::delete($_POST['template']))
-			$logger->addMsg(Pommo::_T('Template Deleted'));
-		else
-			$logger->addMsg(Pommo::_T('Error with deletion.'));
-	}
+	$json['success'] = true;
+			
+}
+elseif(isset($_POST['delete'])) {
+	$json['success'] = false;
+	$msg = (PommoMailingTemplate::delete($_POST['template'])) ?
+		Pommo::_T('Template Deleted') :
+		Pommo::_T('Error with deletion.');
+	
+	$json['callback'] = array($_POST['template'],$msg);
+}
+else {
+	$smarty->assign('templates',PommoMailingTemplate::getNames());
+	$smarty->display('admin/mailings/mailing/templates.tpl');
+	Pommo::kill();
 }
 
-// check if we should skip
-if(isset($_POST['template']) && !isset($_POST['delete']))
-	$smarty->assign('success',3);
-else
-	$smarty->assign('templates',PommoMailingTemplate::getNames());
-	
-$smarty->display('admin/mailings/mailing/templates.tpl');
-Pommo::kill();
+die($encoder->encode($json));
 ?>

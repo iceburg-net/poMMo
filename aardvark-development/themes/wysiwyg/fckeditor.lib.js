@@ -23,14 +23,12 @@ var wysiwyg = {
 	language: 'en', // the WYSIWYG language
 	baseURL: '/pommo/themes/wysiwyg/', // the URL path to poMMo's WYSIWYG directory [written via compose.tpl]
 	fck: false, // instance of the FCKEditor
-	textarea: null, // shortcut to the original textarea
+	textarea: false, // shortcut to the original textarea [jQuery Object]
 	enable: function(){ // enable the WYSIWYG
-		if(this.enabled)
-			return false;
-		
 		if(!this.fck) {
-			// set the shortcut to the original textarea
-			this.textarea = $('textarea[@name=body]');
+			
+			// lock the interface
+			this.lock();
 			
 			// prepare FCKEditor
 			var fck = new FCKeditor('body');
@@ -60,10 +58,9 @@ var wysiwyg = {
 					this.fck.MakeEditable();
 		}
 		return this.enabled = true;
-		return true;
 	},
 	disable: function(){
-		if(this.disabled || !this.fck)
+		if(!this.enabled || !this.fck)
 			return false;
 		
 		// hide the WYSIWYG
@@ -74,9 +71,44 @@ var wysiwyg = {
 		
 		this.enabled = false;
 		return true;
-	}
+	},
+	inject: function(text){ // called when adding a personalization
+		
+		// check if WYSIWYG is enabled
+		if (this.enabled) {
+			
+			// check if text should be encased in an anchor tag.
+			if(text == '[[!unsubscribe]]')
+				text = '<a href="'+text+'">'+this.t_unsubscribe+'</a>';
+			if(text == '[[!weblink]]')
+				text = '<a href="'+text+'">'+this.t_weblink+'</a>';
+				
+			this.fck.InsertHtml(text);
+		}
+		else {
+			this.textarea[0].value += text;
+		}
+	},
+	getBody: function() {
+		return (this.enabled) ?
+			this.fck.GetXHTML() :
+			this.textarea.val();
+	},
+	lock: function() { // locks the interface
+		$('#wait').jqmShow();
+	},
+	unlock: function() { // unlocks the interface
+		$('#wait').jqmHide();
+	},
+	init: function(o) { 
+		this.fck = false; 
+		wysiwyg = $.extend(wysiwyg,o);
+	},
+	t_weblink: "View this Mailing on the Web", // translated via compose.tpl
+	t_unsubscribe: "Unsubscribe or Update your Records" // translated via compose.tpl
 }
 
 function FCKeditor_OnComplete(instance) {
 	wysiwyg.fck = instance;
+	wysiwyg.unlock();
 }

@@ -32,11 +32,35 @@ Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
 $pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
 $pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
 
-// save bodies into page state
-$pommo->_session['state']['mailing']['body'] = $_POST['body'];
-$pommo->_session['state']['mailing']['altbody'] = $_POST['altbody'];
 
 $json = array('success' => true);
+
+// TODO:  GETTEMPLATE, SEND MAILING
+
+switch ($_REQUEST['call']) {
+	case 'wysiwyg': // update wysiwyg ++ state
+		$wysiwyg = (isset($_REQUEST['enable'])) ? 'on' : 'off';
+		$pommo->_session['state']['mailing']['wysiwyg'] = $wysiwyg;
+		PommoAPI::configUpdate(array('list_wysiwyg' => $wysiwyg), true);
+	break;
+	
+	case 'savebody' : 
+		$pommo->_session['state']['mailing']['body'] = $_REQUEST['body'];
+		$pommo->_session['state']['mailing']['altbody'] = $_REQUEST['altbody'];
+	break;
+	
+	case 'altbody' :
+		Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
+		$h2t = & new html2text($_REQUEST['body']);
+		$json['altbody'] = $h2t->get_text();
+	break;
+	
+	default:
+		$json['success'] = false;
+		;
+	break;
+}
+
 $encoder = new json;
 die($encoder->encode($json));
 ?>

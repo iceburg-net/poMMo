@@ -96,9 +96,7 @@ $().ready(function(){
         dataType:  'json', 
         success: function(ret) { 
         	$('#edOut').html(ret.message);
-        	console.log(ret);
         	if(ret.success) {
-        		
         		$('#grid').setRowData(ret.key,ret.subscriber);
         	}
         }

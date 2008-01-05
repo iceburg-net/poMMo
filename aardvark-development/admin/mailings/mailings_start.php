@@ -23,7 +23,6 @@
  *********************************/
 require ('../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -42,12 +41,20 @@ if ($pommo->_config['demo_mode'] == 'on')
 	$logger->addMsg(sprintf(Pommo::_T('%sDemonstration Mode%s is on -- no Emails will actually be sent. This is good for testing settings.'),'<a href="'.$pommo->_baseUrl.'admin/setup/setup_configure.php#mailings">','</a>'));
 
 
-// assign language (for wysiwyg)
-$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
-$smarty->assign('fields',PommoField::get());
+// WYSIWYG JavaScript Includes
+Pommo::requireOnce($pommo->_baseDir.'themes/wysiwyg/editors.php');
+$editors = new PommoWYSIWYG();
+$editor = $editors->loadEditor();
+if (!$editor)
+	die('Could not find requested WYSIWYG editor ('.$editor.') in editors.php');
+$smarty->assign('wysiwygJS',$editor);
 
+// translation assignments for dialg titles...
+$smarty->assign('t_personalization',Pommo::_T('Personalization'));
 $smarty->assign('t_testMailing',Pommo::_T('Test Mailing'));
 $smarty->assign('t_saveTemplate',Pommo::_T('Save Template'));
+
+
 $smarty->display('admin/mailings/mailings_start.tpl');
 Pommo::kill();
 ?>

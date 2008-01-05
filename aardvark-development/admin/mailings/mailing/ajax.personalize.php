@@ -22,23 +22,20 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/templates.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+
 $pommo->init();
+$logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 /**********************************
-	JSON OUTPUT INITIALIZATION
+	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+$smarty = new PommoTemplate();
 
-// update wysiwyg ++ state
-$wysiwyg = ($_GET['wysiwyg'] == 'on') ? 'on' : 'off';
-$pommo->_session['state']['mailing']['wysiwyg'] = $wysiwyg;
-PommoAPI::configUpdate(array('list_wysiwyg' => $wysiwyg), true);
-
-
-$json = array('success' => true);
-$encoder = new json;
-die($encoder->encode($json));
+$smarty->assign('fields',PommoField::get(array('byName'=>true)));
+$smarty->display('admin/mailings/mailing/ajax.personalize.tpl');
+Pommo::kill();
 ?>

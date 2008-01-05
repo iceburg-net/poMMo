@@ -70,7 +70,7 @@ class PommoMailingTemplate {
 			$invalid[] = Pommo::_T('Both HTML and Text cannot be empty');
 		
 		if (!empty($invalid)) {
-			$pommo->_logger->addErr("Field failed validation on; ".implode(',',$invalid),3);
+			$pommo->_logger->addErr(implode(',',$invalid),3);
 			return false;
 		}
 		return true;
@@ -172,7 +172,7 @@ class PommoMailingTemplate {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
-		if (!PommoMailingTemplate::validate($in))
+		if (!PommoMailingTemplate::validate($in)) 
 			return false;
 		
 		$query = "
