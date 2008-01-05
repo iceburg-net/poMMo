@@ -122,7 +122,7 @@ function tInit() {
 }
 
 // this is necessary because there is no callback called after SliderSetValues()... =[
-function tUpdate(o) { //console.log(o);
+function tUpdate(o) {
 	var p=$.extend({e:false,type:false,x:false}, o);
 
 	if(p.x === false) {

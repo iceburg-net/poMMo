@@ -70,9 +70,7 @@ $state['charset'] = $state['list_charset'];
 $tempbody = trim($state['body']);
 $tempalt = trim($state['altbody']);
 if(empty($tempbody) && empty($tempalt) || empty($state['subject'])) {
-	$smarty->assign('success',(empty($state['subject']))?1:3); // 1: setup tab, 3: body tab
-	$smarty->display('admin/mailings/mailing/preview.tpl');
-	Pommo::kill();
+	Pommo::kill(Pommo::_T('Subject or Message cannot be empty!'));
 }
 
 // get the group
@@ -86,7 +84,7 @@ $state['ishtml'] = (empty($tempbody))? 'off' : 'on';
 
 
 // processs send request
-if (!empty ($_GET['sendaway'])) {
+if (!empty ($_REQUEST['sendaway'])) {
 	if ($state['tally'] > 0) {
 		
 		if($state['ishtml'] == 'off') {
@@ -109,8 +107,8 @@ if (!empty ($_GET['sendaway'])) {
 
 		// clear mailing composistion data from session
 		PommoAPI::stateReset(array('mailing'));
-		
-		$smarty->assign('success',$pommo->_baseUrl.'admin/mailings/mailing_status.php');
+
+		$smarty->assign('redirect',$pommo->_baseUrl.'admin/mailings/mailing_status.php');
 	}
 	else {
 		$logger->addMsg(Pommo::_T('Cannot send a mailing to 0 subscribers!'));

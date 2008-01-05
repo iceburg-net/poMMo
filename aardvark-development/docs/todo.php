@@ -21,7 +21,9 @@ die();
 ?>
 http://www.pommo.org/community/viewtopic.php?pid=4305#p4305
 http://www.pommo.org/community/viewtopic.php?id=829
-http://www.pommo.org/community/viewtopic.php?id=439
+http://www.pommo.org/community/viewtopic.php?id=439\
+
+Assure all javascript template translations have javascript escaping (e.g. {t escape=js}Translation in Javascript{/t} ... )
 
 [LEGACY POMMO]
   Port config parser + config.php/sample

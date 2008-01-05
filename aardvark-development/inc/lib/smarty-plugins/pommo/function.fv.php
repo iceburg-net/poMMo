@@ -6,7 +6,7 @@ function smarty_function_fv($params, &$smarty)
 {
   static $pre = '';
   static $post = '';
-  static $form = false;
+  static $form = SMARTY_VALIDATE_DEFAULT_FORM;
   
   $f = (isset($params['validate'])) ? $params['validate'] : false;
   $m = (isset($params['message'])) ? $params['message'] : false;
@@ -34,5 +34,4 @@ function smarty_function_fv($params, &$smarty)
   	return $prepend.$smarty->_tpl_vars['vErr'][$m].$append;
   return;
 }
-
 ?>

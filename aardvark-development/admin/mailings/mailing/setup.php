@@ -61,6 +61,20 @@ $state =& PommoAPI::stateInit('mailing',array(
 ),
 $_POST);
 
+/**********************************
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+$encoder = new json;
+$json = array(
+	'success' => false,
+	'message' => false,
+	'errors' => false,
+	'callback' => false
+);
+
 // SmartyValidate Custom Validation Function
 function check_charset($value, $empty, & $params, & $formvars) {
 	$validCharsets = array (
@@ -93,13 +107,13 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	SmartyValidate :: register_validator('mailgroup', 'mailgroup:/(all|\d+)/i', 'isRegExp', false, false, 'trim');
 
 	SmartyValidate :: register_validator('list_charset', 'list_charset', 'isCharSet', false, false, 'trim');
-
-	$formError = array ();
-	$formError['fromname'] = $formError['subject'] = Pommo::_T('Cannot be empty.');
-	$formError['charset'] = Pommo::_T('Invalid Character Set');
-	$formError['fromemail'] = $formError['frombounce'] = Pommo::_T('Invalid email address');
-	$formError['ishtml'] = $formError['mailgroup'] = Pommo::_T('Invalid Input');
-	$smarty->assign('formError', $formError);
+	
+	$vMsg = array ();
+	$vMsg['fromname'] = $vMsg['subject'] = Pommo::_T('Cannot be empty.');
+	$vMsg['charset'] = Pommo::_T('Invalid Character Set');
+	$vMsg['fromemail'] = $vMsg['frombounce'] = Pommo::_T('Invalid email address');
+	$vMsg['ishtml'] = $vMsg['mailgroup'] = Pommo::_T('Invalid Input');
+	$smarty->assign('vMsg', $vMsg);
 	
 } else {
 	// ___ USER HAS SENT FORM ___
@@ -110,16 +124,17 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 		SmartyValidate :: disconnect();
 		
-		// success tab: 1: setup, 2: template, 3: composition, 4: preview
-		$smarty->assign('success',
-			((@empty($pommo->_session['state']['mailing_message']['body'])) ? 2 : 4));
+		$json['success'] = true;
+		die($encoder->encode($json));
 
 	} else {
 		// __ FORM NOT VALID
-		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
 		
-		// clear the page state ([prevent invalid data contamination])
-		PommoAPI::stateReset('mailing_composition');
+		$json['success'] = false;
+		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
+		$json['errors'] = $smarty->getInvalidFields();
+		
+		die($encoder->encode($json));
 	}
 }
 

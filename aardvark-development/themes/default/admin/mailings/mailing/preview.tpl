@@ -1,23 +1,8 @@
-{if $success}
-<input type="hidden" id="redirect" value="{$success}" />
-<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...
-{literal}
+{if $redirect}
 <script type="text/javascript">
-var v=$('#redirect').val().toString();
-switch(v) {
-	case '1':
-	case '2':
-	case '3':
-		setTimeout("$('#mailing').triggerTab("+v+")",400);
-		break;
-	default:
-		window.location = v;
-};
+window.location='{$redirect}';
 </script>
-{/literal}
-{php}return;{/php}
-{/if}
-
+{else}
 <h4>{t}Preview Mailing{/t}</h4>
 
 {include file="inc/messages.tpl"}
@@ -42,6 +27,10 @@ switch(v) {
 <li><a href="#" id="e_send"><img src="{$url.theme.shared}images/icons/world.png" alt="icon" border="0" align="absmiddle" />{t}Send Mailing{/t}</a></li>
 </ul>
 
+<form id="sendForm" action="{$smarty.server.PHP_SELF}" method="post">
+	<input type="hidden" name="sendaway" value="true">
+</form>
+
 
 <h4>{t}Message{/t}</h4>
 
@@ -51,7 +40,8 @@ switch(v) {
 	<a href="ajax/mailing_preview.php" title="{t}Preview Message{/t}" onclick="return !window.open(this.href)">{t}Click Here{/t}</a>
 	<hr />
 	{/if}
-	<pre>{$altbody}</pre>
+	<strong>{t}Text Version{/t}</strong>: <br /><br />
+	<div>{$altbody}</div>
 </div>
 
 
@@ -64,14 +54,18 @@ $().ready(function() {
 		return false;
 	});
 	
+	$('#sendForm').ajaxForm({
+		target: $('#Preview'),
+		beforeSubmit: function() { $('#wait').jqmShow(); },
+		success: function() { $('#wait').jqmHide(); }
+	});
+	
 	$('#e_send').click(function() {
-		// reload the tab (fragment == tab container)
-		$('#wait').jqmShow();
-		$(this).parents('div.fragment:first')
-			.load('mailing/preview.php?sendaway=true', function(){$('#wait').jqmHide();});
+		$('#sendForm').submit();
 		return false;
 	});
 	
 });
 </script>
 {/literal}
+{/if}

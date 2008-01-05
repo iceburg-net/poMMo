@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project:     SmartyValidate: Form Validator for the Smarty Template Engine
  * File:        SmartyValidate.class.php

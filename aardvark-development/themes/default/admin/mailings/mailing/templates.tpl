@@ -1,9 +1,3 @@
-{if $success}
-<input type="hidden" id="success" value="{$success}" />
-<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...
-{php}return;{/php}
-{/if}
-
 <div class="output">
 {include file="inc/messages.tpl"}
 </div>
@@ -59,6 +53,15 @@ $().ready(function() {
 			.html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{literal}')
 			.load('mailing/ajax.gettemplate.php?id='+v);
 	});
+	
+	// called as success callback from form submission
+	poMMo.formCallback = function(p) {
+		// remove the deleted option (p[0])
+		$('option[@value='+p[0]+']',scope).remove();
+		
+		// output the passed message (p[1])
+		$('div.output').addClass('error').html(p[1]);
+	}
 	
 });
 </script>

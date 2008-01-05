@@ -103,21 +103,21 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			else 
 				$smarty->assign('sent',$_POST['email']);
 		}
-	} else {
+	} elseif ($current) {
+		$logger->addMsg(Pommo::_T('A mailing is currently taking place. Please try again later.'));
+		$smarty->assign($_POST);
+	}
+	else { 
 		// __ FORM NOT VALID
-		//$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
+		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
+		$smarty->assign($_POST);
 	}
 }
 
-if ($current) {
-	$logger->addMsg(Pommo::_T('A mailing is currently taking place. Please try again later.'));
-	$smarty->assign($_POST);
-}
-		
 if ($pommo->_config['demo_mode'] == 'on')
 	$logger->addMsg(sprintf(Pommo::_T('%sDemonstration Mode%s is on -- no Emails will actually be sent. This is good for testing settings.'),'<a href="'.$pommo->_baseUrl.'admin/setup/setup_configure.php#mailings">','</a>'));
 
 $smarty->assign('fields',PommoField::get());
-$smarty->display('admin/mailings/ajax/mailing_test.tpl');
+$smarty->display('admin/mailings/mailing/ajax.mailingtest.tpl');
 Pommo::kill();
 ?>
