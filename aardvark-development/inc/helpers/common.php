@@ -24,19 +24,6 @@
 
 class PommoHelper {
 	
-	// deeply strips slashes added by magic quotes. Generally used on $_POST & $_GET.
-	function slashStrip($input) {
-			if (is_array($input)) {
-				foreach ($input as $key => $value) {
-					$input[$key] = PommoHelper::slashStrip($value);
-				}
-				return $input;
-			} else {
-				return stripslashes($input);
-			}
-		}
-		
-	
 	/**
 	 * Parse a config file, return an array containing key: value
 	 * 

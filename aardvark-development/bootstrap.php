@@ -46,12 +46,14 @@ if (!defined('SID')) {
 
 // soft turn off magic quotes -- NOTE; this may break embedded scripts?
 // clean user input of slashes added by magic quotes. TODO; optimize this.
-if (get_magic_quotes_gpc()) {
-	if (!empty ($_POST))
-		$_POST = PommoHelper :: slashStrip($_POST);
-	if (!empty ($_GET))
-		$_GET = PommoHelper :: slashStrip($_GET);
+if (get_magic_quotes_gpc()) { 
+	$_REQUEST = array_map('stripslashes', $_REQUEST); 
+	$_GET = array_map('stripslashes', $_GET); 
+	$_POST = array_map('stripslashes', $_POST); 
 }
+
+// disable escaping from DB
+set_magic_quotes_runtime(0);
 
 // Assign alias to the core global which can be used by the script calling bootstrap.php
 $pommo =& $GLOBALS['pommo'];
