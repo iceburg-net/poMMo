@@ -71,7 +71,7 @@ $().ready(function(){
         	if(ret.success) {
         		if($('#grid').size() == 0)
         			history.go(0); // refresh the page if no grid exists, else add new subscriber to grid
-        		$('#grid').addRowData(ret.key,ret.data);
+        		poMMo.grid.addRow(ret.key,ret.data);
         	}
         }
     }); 

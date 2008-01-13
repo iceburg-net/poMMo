@@ -46,27 +46,23 @@ $().ready(function(){
 			$(this).val(orig);
 	});
 	
-	var selected = $('#grid').getMultiRow();
-	if(selected.length > 0) {
+	var rows = poMMo.grid.getRowIDs();
+	if(rows) {
 		var emails = new Array();
 		var row = null;
-		for (i=0; i<selected.length; i++) {
-			row = $('#grid').getRowData(selected[i]);
+		for (i=0; i<rows.length; i++) {
+			row = poMMo.grid.getRow(rows[i]);
 			emails.push(row.email);
 		}
 		box.val(emails.join("\n"));
-		
 	}
 	
 	 $('#delForm').ajaxForm({ 
         dataType:  'json', 
         success: function(ret) { 
         	$('#delOut').html(ret.msg);
-        	if(ret.success) {		
-        		for (i=0; i<ret.ids.length; i++) {
-    				$('#grid').delRowData(ret.ids[i]);
-        		}
-        	}
+        	if(ret.success) 	
+        		poMMo.grid.delRow(ret.ids);
         	box.val("");
         }
     }); 
