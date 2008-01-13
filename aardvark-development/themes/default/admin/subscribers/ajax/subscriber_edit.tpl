@@ -64,7 +64,7 @@
 $().ready(function(){
 
 	// populate form with first selected row... TODO; add support for multiple subscriber editing at a time.
-	var data = $('#grid').getRowData($('#grid').getSelectedRow());
+	var data = poMMo.grid.getRow();
 	
 	for (var i in data)  {
 		
@@ -96,9 +96,8 @@ $().ready(function(){
         dataType:  'json', 
         success: function(ret) { 
         	$('#edOut').html(ret.message);
-        	if(ret.success) {
-        		$('#grid').setRowData(ret.key,ret.subscriber);
-        	}
+        	if(ret.success) 
+        		poMMo.grid.addRow(ret.key,ret.subscriber);
         }
     }); 
 	

@@ -1,11 +1,10 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/grid.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
 
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/jqgrid.css" />
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+{include file="inc/grid.tpl"}
 {/capture}
 
 
@@ -111,52 +110,28 @@
 <script type="text/javascript">
 $().ready(function() {ldelim}	
 	
-	var loadText = "{t}Processing{/t}...";
-	
-	var recordText = "{if empty($state.search)}{t}Subscriber(s){/t}{else}{t}Match(es){/t}{/if}";
-	
-	var imgPath = "{$url.theme.shared}/images/grid";
-	
-	var colNames = [
+	var p = {ldelim}	
+	limit: {$state.limit},
+	url: 'ajax/subscriber_list.php',
+	colNames: [
 		'ID',
 		'Email',
 		{foreach from=$fields key=id item=f}'{$f.name|escape}',{/foreach}
 		'{t}Registered{/t}',
 		'{t}Updated{/t}',
 		'{t}IP Address{/t}'
-	];
-	
-	var limit = {$state.limit};
-	
-	var colModel = [
+	],
+	colModel: [
 		{ldelim}name: 'id', index: 'id', hidden: true, width: 1{rdelim},
 		{ldelim}name: 'email', width: 150{rdelim},
 		{foreach from=$fields key=id item=f}{ldelim}name: 'd{$id}', width: 120{rdelim},{/foreach}
 		{literal}{name: 'registered', width: 130},
 		{name: 'touched', width: 130},
 		{name: 'ip', width: 90}
-	];
+	]
+	};
 	
-	$('#grid').jqGrid({
-		url:'ajax/subscriber_list.php',
-		datatype: 'json',
-		colNames: colNames, 
-		colModel: colModel,
-		rowNum: limit,
-		recordtext: recordText,
-		pager: jQuery('#gridPager'),
-		imgpath: imgPath, 
-		viewrecords: true,
-		loadtext: loadText,
-		multiselect: true,
-		height: 270,
-		width: 670,
-		shrinkToFit: false,
-		jsonReader: {repeatitems: false}
-	});
-	
-	
-
+	poMMo.grid = PommoGrid.init('#grid',p);
 });
 </script>
 {/literal}
@@ -188,13 +163,10 @@ $().ready(function() {
 	
 	$('a.editTrigger').click(function(){
 		// prevent edit window from appearing if no row is selected
-		if($('#grid').getSelectedRow() !== null)
+		if(poMMo.grid.getRowID())
 			$('#edit').jqmShow(this);
 		return false;
 	});
-	
-
-	
 	
 });
 

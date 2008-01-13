@@ -34,11 +34,23 @@ var PommoGrid = {ldelim}
 		var ids = this.grid.getMultiRow();
 		return (ids.length == 0) ? false : ids;
 	},
+	getRow: function(id){
+		id = id || this.getRowID(); // allows non passing of id to auto-get selected row
+		return (!id) ? false : this.grid.getRowData(id);
+	},
 	delRow: function(ids) {
 		if (!(ids instanceof Array))
 			ids = [ids];
 		for (i=0; i<ids.length; i++)
 			this.grid.delRowData(ids[i]);
+	},
+	addRow: function(id,data) { // id = "key", data = column data
+		data = data || false;
+		if(!data) {
+			data = id;
+			id = data.id;	
+		}
+		this.grid.addRowData(id,data);
 	},
 	reset: function() {
 		// todo; Add method to jqGrid which clears selection.
