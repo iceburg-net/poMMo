@@ -126,57 +126,6 @@ $().ready(function(){
 	$('#personalize').jqm({ajax: 'mailing/ajax.personalize.php'});
 	
 });
-
-// initialize wysiwyg namespace
-
-
-/*
-
-var lang="{/literal}{$lang}{literal}";
-var s=',separator,';
-
-
-// poMMo languages not supported by TinyMCE:
-switch (lang) {
-	case 'pt':
-	case 'pt-br':
-		lang='pt_br';
-		break;
-	case 'bg':
-	case 'en-uk':
-		lang='en';
-		break;
-}
-
-
-tinyMCE.init({
-	mode : 'none',
-	theme : 'advanced',
-	plugins : 'style',
-	language: lang,
-	entity_encoding: 'raw',
-	theme_advanced_buttons1 : 
-		'bold,italic,underline,strikethrough'+s+
-		'bullist,numlist'+s+
-		'link,unlike,image'+s+
-		'hr,sub,sup,charmap'+s+
-		'forecolor,backcolor,styleprops'+s+
-		'undo,redo'
-		,
-	theme_advanced_buttons2 : 
-		'justifyleft,justifycenter,justifyright,justifyfull'+s+
-		'outdent,indent'+s+
-		'formatselect,fontselect,fontsizeselect'+s+
-		'removeformat'
-		,
-	theme_advanced_buttons3 : "",
-	extended_valid_elements : "style[dir<ltr?rtl|lang|media|title|type]", // can add more entities, see tinymce page!
-	remove_linebreaks : false,
-	convert_urls : false
-});
-
-*/
-
 </script>
 {/literal}
 

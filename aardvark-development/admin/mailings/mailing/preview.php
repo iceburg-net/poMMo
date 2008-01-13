@@ -70,7 +70,10 @@ $state['charset'] = $state['list_charset'];
 $tempbody = trim($state['body']);
 $tempalt = trim($state['altbody']);
 if(empty($tempbody) && empty($tempalt) || empty($state['subject'])) {
-	Pommo::kill(Pommo::_T('Subject or Message cannot be empty!'));
+	$logger->addErr(Pommo::_T('Subject or Message cannot be empty!'));
+	$smarty->assign($state);
+	$smarty->display('admin/mailings/mailing/preview.tpl');
+	Pommo::kill();
 }
 
 // get the group
