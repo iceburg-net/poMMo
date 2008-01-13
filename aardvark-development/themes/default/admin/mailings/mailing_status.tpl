@@ -1,6 +1,5 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 {/capture}
 {include file="inc/admin.header.tpl"}
 

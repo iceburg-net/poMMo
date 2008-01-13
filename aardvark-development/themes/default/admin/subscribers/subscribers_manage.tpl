@@ -1,5 +1,4 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/grid.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
@@ -12,8 +11,6 @@
 
 {include file="inc/admin.header.tpl" sidebar='off'}
 
-{include file="inc/messages.tpl"}
-
 <ul class="inpage_menu">
 <li><a href="ajax/subscriber_add.php" title="{t}Add Subscribers{/t}" class="addTrigger">{t}Add Subscribers{/t}</a></li>
 
@@ -23,6 +20,8 @@
 
 <li><a href="admin_subscribers.php" title="{t}Return to Subscribers Page{/t}">{t}Return to Subscribers Page{/t}</a></li>
 </ul>
+
+{include file="inc/messages.tpl"}
 
 <form method="post" action="" id="orderForm">
 

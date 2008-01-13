@@ -1,7 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Include in-place editing of subscriber table *}
 
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/tableEditor/sorter.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
 
