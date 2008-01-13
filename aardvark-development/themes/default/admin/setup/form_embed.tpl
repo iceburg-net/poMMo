@@ -1,6 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/thickbox/thickbox.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}js/thickbox/thickbox.css" />
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
 {/capture}{include file="inc/admin.header.tpl"}
 
 <h2>{t}Embedded Subscription Forms{/t}</h2>
@@ -16,62 +16,70 @@
 <p>{t}This prints a form which prompts for a user's email address. If the inputted email exists as a registered subscriber, it redirects to the subscriber update page. If not, it redirects to the the default subscription form.{/t}</p>
 
 <ul>
-<li><a href="#TB_inline?height=400&amp;width=500&amp;inlineId=miniPreview" class="thickbox">{t}Preview{/t}</a></li>
+<li><a href="#" class="miniPreview">{t}Preview{/t}</a></li>
 <li><a href="{$url.base}embed.miniform.php">{t}URL{/t}</a></li>
 </ul>
 
-<p>PHP: <tt>include('{$config.app.path}embed.miniform.php');</tt></p>
+<p>PHP: <tt style="color: green;">include('{$config.app.path}embed.miniform.php');</tt></p>
 
-<div id="miniPreview" class="hidden">
-
-
-<h4>{t}Mini Subscription Form{/t} {t}Preview{/t}</h4>
-
-{include file="subscribe/form.mini.tpl"}
-
-<h4>PHP Include</h4>
-
-<code>
-include('{$url.base}embed.miniform.php');
-</code>
-
-<h4>HTML Source</h4>
-
-<textarea cols="70" rows="10">
-{include file="subscribe/form.mini.tpl"}
-</textarea>
-
-</div>
 
 <h3>{t}Full Subscription Form{/t}</h3>
 
 <p>{t}This prints the entire subscription form.{/t}</p>
 
 <ul>
-<li><a href="#TB_inline?height=400&amp;width=500&amp;inlineId=fullPreview" class="thickbox">{t}Preview{/t}</a></li>
+<li><a href="#" class="fullPreview">{t}Preview{/t}</a></li>
 <li><a href="{$url.base}embed.form.php">{t}URL{/t}</a></li>
 </ul>
 
-<p>PHP: <tt>include('{$config.app.path}embed.form.php');</tt></p>
+<p>PHP: <tt style="color: green;">include('{$config.app.path}embed.form.php');</tt></p>
 
-<div id="fullPreview" class="hidden">
+{literal}
+<script type="text/javascript">
+$().ready(function(){
+	$('#miniPreview').jqm({
+		trigger: 'a.miniPreview'
+	});
+	
+	$('#fullPreview').jqm({
+		trigger: 'a.fullPreview'
+	});
+});
+</script>
+{/literal}
 
-<h4>{t}Subscription Form{/t} {t}Preview{/t}</h4>
+{capture name=mini}
+	<h4>{t}Mini Subscription Form{/t} {t}Preview{/t}</h4>
+	
+	{include file="subscribe/form.mini.tpl"}
+	
+	<hr />
+	
+	<h4>HTML Source</h4>
+	
+	<textarea cols="60" rows="11">{include file="subscribe/form.mini.tpl"}</textarea>
 
-{include file="subscribe/form.subscribe.tpl"}
+	<br /><br />&nbsp;
+{/capture}
 
-<h4>PHP Include</h4>
 
-<code>
-include('{$url.base}embed.form.php');
-</code>
+{capture name=full}
+	<h4>{t}Subscription Form{/t} {t}Preview{/t}</h4>
+	
+	{include file="subscribe/form.subscribe.tpl"}
+	
+	<hr />
+	
+	<h4>HTML Source</h4>
+	
+	<textarea cols="60" rows="11">{include file="subscribe/form.subscribe.tpl"}</textarea>
 
-<h4>HTML Source</h4>
+	<br /><br />&nbsp;
+{/capture}
 
-<textarea cols="70" rows="10">
-{include file="subscribe/form.subscribe.tpl"}
-</textarea>
-
-</div>
+{capture name=dialogs}
+{include file="inc/dialog.tpl" dialogID="miniPreview" dialogContent=$smarty.capture.mini dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" dialogID="fullPreview" dialogContent=$smarty.capture.full dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{/capture}
 
 {include file="inc/admin.footer.tpl"}
