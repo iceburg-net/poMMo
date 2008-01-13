@@ -47,9 +47,9 @@ if (!defined('SID')) {
 // soft turn off magic quotes -- NOTE; this may break embedded scripts?
 // clean user input of slashes added by magic quotes. TODO; optimize this.
 if (get_magic_quotes_gpc()) { 
-	$_REQUEST = array_map('stripslashes', $_REQUEST); 
-	$_GET = array_map('stripslashes', $_GET); 
-	$_POST = array_map('stripslashes', $_POST); 
+	$_REQUEST = PommoHelper::slashStrip($_REQUEST); 
+	$_GET = PommoHelper::slashStrip($_GET); 
+	$_POST = PommoHelper::slashStrip($_POST); 
 }
 
 // disable escaping from DB

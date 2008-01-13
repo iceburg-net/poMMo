@@ -1,5 +1,4 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jquery.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/accordion.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>

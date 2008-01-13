@@ -404,5 +404,17 @@ class PommoMailing {
 		$query = $dbo->prepare($query,array($id));
 		return $dbo->query($query,0);
 	}
+	
+	// returns the Subject of a Mailing
+	function getSubject($id) {
+		global $pommo;
+		$dbo =& $pommo->_dbo;
+		
+		$query = "
+			SELECT subject FROM ".$dbo->table['mailings']
+				."WHERE mailing_id = %i"; 
+		$query = $dbo->prepare($query,array($id));
+		return $dbo->query($query,0);
+	}
 }
 ?>

@@ -124,6 +124,7 @@ Assure all javascript template translations have javascript escaping (e.g. {t es
 
 	  FIREWALL/DOS PROTECTION: Mailer, only allow x amount of mails from an IP in y time.
 
+	  Get rid of confirm.tpl, use JavaScript confirmation.
 
 [CORINNA]
 

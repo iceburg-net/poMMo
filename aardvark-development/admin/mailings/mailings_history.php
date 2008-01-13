@@ -44,49 +44,43 @@ $smarty->assign('returnStr', Pommo::_T('Mailings Page'));
 // Initialize page state with default values overriden by those held in $_REQUEST
 $state =& PommoAPI::stateInit('mailings_history',array(
 	'limit' => 10,
-	'sort' => 'started',
-	'order' => 'asc'),
+	'sort' => 'finished',
+	'order' => 'asc',
+	'page' => 1),
 	$_REQUEST);
+	
+/**********************************
+	VALIDATION ROUTINES
+*********************************/
+	
+if(!is_numeric($state['limit']) || $state['limit'] < 10 || $state['limit'] > 200)
+	$state['limit'] = 100;
+	
+if($state['order'] != 'asc' && $state['order'] != 'desc')
+	$state['order'] = 'asc';
+	
+if($state['sort'] != 'start' &&
+	$state['sort'] != 'end' &&
+	$state['sort'] != 'subject' &&
+	$state['sort'] != 'sent' &&
+	$state['sort'] != 'status' &&
+	$state['sort'] != 'group')
+		$state['sort'] = 'end';
+		
+		
+/**********************************
+	DISPLAY METHODS
+*********************************/
 
-$deleted = 0;
-if(isset($_GET['delete'])) 
-	if (isset($_GET['mail_id']))
-		$deleted = PommoMailing::delete($_GET['mail_id']);
-if($deleted > 0)
-	$logger->addMsg(sprintf(Pommo::_T('%s mailings deleted'), $deleted));
-	
-	
+// Calculate and Remember number of pages
 $tally = PommoMailing::tally();
-
-// fireup Monte's pager
-$smarty->addPager($state['limit'], $tally);
-$start = SmartyPaginate::getCurrentIndex();
-SmartyPaginate::assign($smarty);
-
-
-// Fetch Mailings
-$mailings = PommoMailing::get(array(
-	'noBody' => TRUE,
-	'sort' => $state['sort'],
-	'order' => $state['order'],
-	'limit' => $state['limit'],
-	'offset' => $start));
+$state['pages'] = (is_numeric($tally) && $tally > 0) ?
+	ceil($tally/$state['limit']) :
+	0;
 	
-// calculates Mails / Hour
-foreach(array_keys($mailings) as $key) {
-	$m =& $mailings[$key];
-	if(!empty($m['end']) && !empty($m['sent'])) {
-		$runtime = strtotime($m['end'])-strtotime($m['start']);
-		$m['mph'] = ($runtime == 0)? $m['sent']*3600 : round(($m['sent'] / ($runtime)) * 3600);
-	}
-	else
-		$m['mph'] = 0;
-}
-
-
 $smarty->assign('state',$state);
+$smarty->assign('tally',$tally);
 $smarty->assign('mailings', $mailings);
-$smarty->assign('tally',$tally); // was "rowinset"
 
 $smarty->display('admin/mailings/mailings_history.tpl');
 Pommo::kill();

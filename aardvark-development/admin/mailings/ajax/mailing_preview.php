@@ -28,9 +28,14 @@ $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-$input = (isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) ? 
-	current(PommoMailing::get(array('id' => $_GET['mail_id']))) :
-	$input = $pommo->_session['state']['mailing'];
+if(isset($_REQUEST['mailings'])) {
+	if(is_array($_REQUEST['mailings']))
+		$_REQUEST['mailings'] = $_REQUEST['mailings'][0];
+	$mailing = current(PommoMailing::get(array('id' => $_REQUEST['mailings'])));
+}
+else
+	$mailing = $pommo->_session['state']['mailing'];
+
 	
 /**********************************
 	SETUP TEMPLATE, PAGE
@@ -38,7 +43,7 @@ $input = (isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) ?
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-$smarty->assign($input);
+$smarty->assign($mailing);
 $smarty->display('inc/mailing.tpl');
 Pommo::kill();
 ?>
