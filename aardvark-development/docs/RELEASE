@@ -1,3 +1,21 @@
+=== Release Notes for poMMo Aardvark PR16 ===
+ .: Released Janurary 13, 2008
+
+[Additions]
+	* Added common Javascripts and abstraction layers
+
+[Improvements]
+	* Javascript optimizations
+	* Rewrote Mailings History to use jqGrid.
+	* Removed Thickbox, replaced occurences with jqModal.
+	* Updated to jQuery 1.2.2b2
+	* Refactored setup pages to use Javascript Tabs and new libraries
+	
+[Bug Fixes]
+	* Fixed slashes escaping WYSIWYG content
+	
+
+
 === Release Notes for poMMo Aardvark PR16rc2 ===
  .: Released Janurary 5, 2008
 
