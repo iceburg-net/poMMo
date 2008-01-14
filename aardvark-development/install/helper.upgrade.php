@@ -252,6 +252,12 @@ function PommoRevUpgrade($rev) {
 		
 		case 38:
 			
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 39,'version' => 'Aardvark PR16rc3'), true))
+				return false;
+			
+		case 39:
+			
 			// end of upgrade (break), no revision bump.
 			break;
 			
