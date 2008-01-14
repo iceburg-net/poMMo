@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
 
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-{include file="inc/grid.tpl"}
+{include file="inc/ui.grid.tpl"}
 {/capture}
 
 
@@ -195,10 +195,10 @@ $().ready(function() {
 
 
 {capture name=dialogs}
-{include file="inc/dialog.tpl" dialogID="add" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="edit" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="del" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="exp" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="add" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="edit" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="del" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="exp" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

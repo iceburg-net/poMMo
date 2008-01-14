@@ -2,7 +2,7 @@
 {* Include in-place editing of subscriber table *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-{include file="inc/grid.tpl"}
+{include file="inc/ui.grid.tpl"}
 {/capture}
 
 {include file="inc/admin.header.tpl" sidebar='off'}
@@ -112,7 +112,7 @@ poMMo.callback.delete = function(p) {
 {/if}
 
 {capture name=dialogs}
-{include file="inc/dialog.tpl" dialogID="modal" dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="modal" dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

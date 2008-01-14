@@ -78,8 +78,8 @@ $().ready(function(){
 {/capture}
 
 {capture name=dialogs}
-{include file="inc/dialog.tpl" dialogID="miniPreview" dialogContent=$smarty.capture.mini dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="fullPreview" dialogContent=$smarty.capture.full dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="miniPreview" dialogContent=$smarty.capture.mini dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="fullPreview" dialogContent=$smarty.capture.full dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

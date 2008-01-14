@@ -129,6 +129,6 @@ $smarty->assign('smtpStatus',$smtpStatus);
 $smarty->assign('smtp', $smtp);
 $smarty->assign('throttle_SMTP', $smtpConfig['throttle_SMTP']);
 
-$smarty->display('admin/setup/ajax/config_smtp.tpl');
+$smarty->display('admin/setup/config/ajax.smtp.tpl');
 Pommo::kill();
 ?>

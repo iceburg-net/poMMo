@@ -1,6 +1,4 @@
-<div id="sbody">
-
-<form action="{$smarty.server.PHP_SELF}" method="post" id="smtpForm">
+<form id="smtpForm" action="{$smarty.server.PHP_SELF}" method="post">
 
 <fieldset>
 <legend>{t}SMTP Throttling{/t}</legend>
@@ -82,14 +80,13 @@
 
 </form>
 
-</div>
 
 {literal}
 <script type="text/javascript">
 $().ready(function(){
-	var form = $('#sbody form');
-	form.find('.onChange').change(function() { form.submit(); });
-	assignForm($('#sbody')[0]);
+	var form = $('#smtpForm');
+	poMMo.form.prepAJAX(form);
+	$('.onChange',form).change(function() { $('#smtpForm').submit(); });
 });
 </script>
 {/literal}

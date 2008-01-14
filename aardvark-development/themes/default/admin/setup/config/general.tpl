@@ -9,7 +9,9 @@
 {fv validate="list_confirm"}
 {fv validate="list_exchanger"}
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.PHP_SELF}" method="post" class="json">
+
+<div class="output alert">{if $output}{$output}{/if}</div>
 
 <div>
 <label for="list_name"><strong class="required">{t}List Name:{/t}</strong>{fv message="list_name"}</label>
@@ -56,30 +58,43 @@
 <option value="mail"{if $list_exchanger == 'mail'} selected="selected"{/if}>{t}PHP Mail Function{/t}</option>
 <option value="smtp"{if $list_exchanger == 'smtp'} selected="selected"{/if}>SMTP Relay</option>
 </select>
-&nbsp;&nbsp; - &nbsp;&nbsp; <a href="ajax/test_exchanger.php" id="testTrigger">{t}Test Exchanger{/t}</a>
+&nbsp;&nbsp; - &nbsp;&nbsp; <a href="config/ajax.testexchanger.php" id="testTrigger">{t}Test Exchanger{/t}</a>
 <span class="notes">{t}(Select Mail Exchanger){/t}</span>
 </div>
 
-{if $list_exchanger == 'smtp'}
-<div>
-<br clear="both" />
-<a href="ajax/config_smtp.php" id="smtpTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
-<span class="notes">{t}(configure SMTP relays){/t}</span>
-<br clear="both" />
+<div class="hidden" id="configSMTP">
+	<br clear="both" />
+	<a href="config/ajax.smtp.php" id="smtpTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="icon" class="navimage" /> {t}Setup your SMTP Servers{/t}</a>
+	<span class="notes">{t}(configure SMTP relays){/t}</span>
+	<br clear="both" />
 </div>
-{/if}
+
 
 <input type="submit" value="{t}Update{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
-<div class="output alert">{if $output}{$output}{/if}</div>
-
 </form>
 
 {literal}
 <script type="text/javascript">
+
+var showSMTP = function() {
+	if(exchanger.val() == 'smtp')
+		$('#configSMTP').show();
+	else
+		$('#configSMTP').hide();
+}
+var exchanger = $('select[@name=list_exchanger]');
+
 $().ready(function(){
 	$('#smtpWindow').jqmAddTrigger($('#smtpTrigger'));
 	$('#testWindow').jqmAddTrigger($('#testTrigger'));
+	
+	exchanger.change(function(){
+		$(this).parents('form:eq(0)').submit();
+		showSMTP(); 
+	});
+	showSMTP();
+	
 });
 </script>
 {/literal}

@@ -59,6 +59,22 @@ if (!SmartyValidate :: is_registered_form('users') || empty ($_POST)) {
 	$smarty->assign($dbVals);
 } else {
 	// ___ USER HAS SENT FORM ___
+	
+	/**********************************
+		JSON OUTPUT INITIALIZATION
+	 *********************************/
+	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+	$encoder = new json;
+	$json = array(
+		'success' => false,
+		'message' => false,
+		'errors' => false,
+		'callbackFunction' => false,
+		'callbackParams' => false
+	);
+
 	if (SmartyValidate :: is_valid($_POST, 'users')) {
 		// __ FORM IS VALID
 		
@@ -71,14 +87,25 @@ if (!SmartyValidate :: is_registered_form('users') || empty ($_POST)) {
 		unset($_POST['admin_password'],$_POST['admin_password2']);
 		
 		$pommo->reloadConfig();
+		
+		$json['success'] = true;
+		$json['message'] = Pommo::_T('Configuration Updated.');
+		
+		die($encoder->encode($json));
 
-		$smarty->assign('output',Pommo::_T('Configuration Updated.'));
+		
 	}
 	else {
-		$smarty->assign('output',Pommo::_T('Please review and correct errors with your submission.'));
+		// __ FORM NOT VALID
+		
+		$json['success'] = false;
+		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
+		$json['errors'] = $smarty->getInvalidFields('users');
+		
+		die($encoder->encode($json));
 	}
 	
 }
 $smarty->assign($_POST);
-$smarty->display('admin/setup/ajax/config_users.tpl');
+$smarty->display('admin/setup/config/users.tpl');
 Pommo::kill();

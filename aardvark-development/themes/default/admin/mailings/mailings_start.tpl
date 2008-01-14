@@ -130,10 +130,10 @@ $().ready(function(){
 {/literal}
 
 {capture name=dialogs}
-{include file="inc/dialog.tpl" dialogID="wait" dialogNoClose=true dialogBodyClass="jqmdShort"}
-{include file="inc/dialog.tpl" dialogID="personalize" dialogTitle=$t_personalize dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="addTemplate" dialogTitle=$t_saveTemplate dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="testMailing" dialogTitle=$t_testMailing dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="wait" dialogNoClose=true dialogBodyClass="jqmdShort"}
+{include file="inc/ui.dialog.tpl" dialogID="personalize" dialogTitle=$t_personalize dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="addTemplate" dialogTitle=$t_saveTemplate dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="testMailing" dialogTitle=$t_testMailing dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

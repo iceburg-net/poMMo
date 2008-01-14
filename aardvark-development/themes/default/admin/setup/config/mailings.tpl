@@ -9,7 +9,9 @@
 {fv validate="list_charset"}
 {fv validate="maxRuntime"}
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.PHP_SELF}" method="post" class="json">
+
+<div class="output alert">{if $output}{$output}{/if}</div>
 
 <div>
 <label for="list_fromname"><strong class="required">{t}From Name:{/t}</strong>{fv message="list_fromname"}</label>
@@ -44,7 +46,7 @@
 </div>
 
 <div>
-<a href="ajax/config_throttle.php" id="throttleTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="icon" class="navimage" /> {t}Set mailing throttle values{/t}</a>
+<a href="config/ajax.throttle.php" id="throttleTrigger"><img src="{$url.theme.shared}images/icons/right.png" alt="icon" class="navimage" /> {t}Set mailing throttle values{/t}</a>
 <span class="notes">{t}(controls mails per second, bytes per second, and domain limits){/t}</span>
 <br clear="left" />
 </div>
@@ -74,7 +76,6 @@
 
 <input type="submit" value="{t}Update{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
-<div class="output alert">{if $output}{$output}{/if}</div>
 
 </form>
 
