@@ -201,7 +201,7 @@ function assignForm(scope) {
 
 
 {capture name=dialogs}
-{include file="inc/dialog.tpl" dialogID="editWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/dialog.tpl" dialogID="confirm" dialogTitle=$confirm.title dialogClass="jqmdWide"}
+{include file="inc/ui.dialog.tpl" dialogID="editWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/ui.dialog.tpl" dialogID="confirm" dialogTitle=$confirm.title dialogClass="jqmdWide"}
 {/capture}
 {include file="inc/admin.footer.tpl"}

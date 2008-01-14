@@ -87,19 +87,45 @@ if (!SmartyValidate :: is_registered_form('mailings') || empty ($_POST)) {
 	$smarty->assign($dbVals);
 } else {
 	// ___ USER HAS SENT FORM ___
+	
+	/**********************************
+		JSON OUTPUT INITIALIZATION
+	 *********************************/
+	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+	$encoder = new json;
+	$json = array(
+		'success' => false,
+		'message' => false,
+		'errors' => false,
+		'callbackFunction' => false,
+		'callbackParams' => false
+	);
+
+	
 	if (SmartyValidate :: is_valid($_POST, 'mailings')) {
 		// __ FORM IS VALID
 
 		PommoAPI::configUpdate($_POST);
 		$pommo->reloadConfig();
-
-			$smarty->assign('output',Pommo::_T('Configuration Updated.'));
+		
+		$json['success'] = true;
+		$json['message'] = Pommo::_T('Configuration Updated.');
+		
+		die($encoder->encode($json));
 	}
 	else {
-			$smarty->assign('output',Pommo::_T('Please review and correct errors with your submission.'));
+			// __ FORM NOT VALID
+		
+		$json['success'] = false;
+		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
+		$json['errors'] = $smarty->getInvalidFields('mailings');
+		
+		die($encoder->encode($json));
 	}
 	
 }
 $smarty->assign($_POST);
-$smarty->display('admin/setup/ajax/config_mailings.tpl');
+$smarty->display('admin/setup/config/mailings.tpl');
 Pommo::kill();

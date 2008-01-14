@@ -223,7 +223,7 @@
 
 <p>{t escape=no 1="<em>`$ruleCount`</em>" 2="<strong>`$tally`</strong>"}%1 rules match a total of %2 active subscribers{/t}</p>
 
-{include file="inc/dialog.tpl" dialogTitle=$dialogTitle dialogID="dialog" dialogDrag=true dialogClass="jqmdWide"}
+{include file="inc/ui.dialog.tpl" dialogTitle=$dialogTitle dialogID="dialog" dialogDrag=true dialogClass="jqmdWide"}
 
 {literal}
 <script type="text/javascript">

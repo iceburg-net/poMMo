@@ -13,7 +13,8 @@
 {fv validate="notify_update"}
 {fv validate="notify_pending"}
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+
+<form action="{$smarty.server.PHP_SELF}" method="post" class="json">
 <fieldset>
 <legend>{t}notifications{/t}</legend>
 
@@ -79,13 +80,13 @@
 
 <div>
 <label for="subscribe_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="subscribe_msg"}</label>
-<textarea name="subscribe_msg" rows="8" cols="44">{$subscribe_msg|escape}</textarea>
+<textarea name="subscribe_msg" cols="70" rows="10">{$subscribe_msg|escape}</textarea>
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
 </div>
 
 <div>
 <label for="subscribe_suc"><strong class="required">{t}Success:{/t}</strong>{fv message="subscribe_suc"}</label>
-<textarea name="subscribe_suc" rows="3" cols="44">{$subscribe_suc|escape}</textarea>
+<textarea name="subscribe_suc" cols="70" rows="10">{$subscribe_suc|escape}</textarea>
 <div class="notes">{t}(Message displayed upon success){/t}</div>
 </div>
 
@@ -110,7 +111,7 @@
 
 <div>
 <label for="activate_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="activate_msg"}</label>
-<textarea name="activate_msg" rows="8" cols="44">{$activate_msg|escape}</textarea>
+<textarea name="activate_msg" cols="70" rows="10">{$activate_msg|escape}</textarea>
 <div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
 </div>
 
@@ -129,7 +130,7 @@
 
 <div>
 <label for="unsubscribe_suc"><strong class="required">{t}Success:{/t}</strong>{fv message="unsubscribe_suc"}</label>
-<textarea name="unsubscribe_suc" rows="3" cols="44">{$unsubscribe_suc|escape}</textarea>
+<textarea name="unsubscribe_suc" cols="70" rows="10">{$unsubscribe_suc|escape}</textarea>
 <div class="notes">{t}(Message displayed upon success){/t}</div>
 </div>
 

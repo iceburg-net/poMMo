@@ -1,17 +1,17 @@
 {* Dialog Include -- 
-	invoke via {include file="inc/dialog.tpl" param="value" ... }
+	invoke via {include file="inc/ui.dialog.tpl" param="value" ... }
 	
 	Valid parameters
 	-------
 	dialogID  ("dialog" by default)
-	dialogClass (can pass multiple classes, e.g. {include file="inc/dialog.tpl" dialogClass="classA classB" ... }
+	dialogClass (can pass multiple classes, e.g. {include file="inc/ui.dialog.tpl" dialogClass="classA classB" ... }
 	dialogBodyClass
 	dialogMsgClass
 	dialogContent
 *}
 
 <div id="{if $dialogID}{$dialogID}{else}dialog{/if}" class="jqmDialog{if $dialogClass} {$dialogClass}{/if}">
-<div class="jqmdTL"><div class="jqmdTR"><div class="jqmdTC {if $dialogDrag}jqDrag{/if}">
+<div class="jqmdTL"><div class="jqmdTR"><div class="jqmdTC">
 {if $dialogTitle}{$dialogTitle}{else}poMMo{/if}
 </div></div></div>
 <div class="jqmdBL"><div class="jqmdBR"><div class="jqmdBC{if $dialogBodyClass} {$dialogBodyClass}{/if}">

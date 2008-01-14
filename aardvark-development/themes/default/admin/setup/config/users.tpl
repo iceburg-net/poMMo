@@ -5,7 +5,9 @@
 {fv validate="admin_password2"}
 {fv validate="admin_email"}
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.PHP_SELF}" method="post" class="json">
+
+<div class="output alert">{if $output}{$output}{/if}</div>
 
 <div>
 <label for="admin_username"><strong class="required">{t}Administrator Username:{/t}</strong>{fv message="admin_username"}</label>
@@ -33,6 +35,4 @@
 
 <input type="submit" value="{t}Update{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
-<div class="output alert">{if $output}{$output}{/if}</div>
-
 </form>

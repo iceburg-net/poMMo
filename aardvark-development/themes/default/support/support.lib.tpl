@@ -37,7 +37,7 @@ $().ready(function() {
 {/literal}
 
 {capture name=dialogs}
-{include file="inc/dialog.tpl" dialogID="modal"}
+{include file="inc/ui.dialog.tpl" dialogID="modal"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

@@ -33,6 +33,21 @@ Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->prepareForForm();
 
+/**********************************
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+$encoder = new json;
+$json = array(
+	'success' => false,
+	'message' => false,
+	'errors' => false,
+	'callbackFunction' => false,
+	'callbackParams' => false
+);
+
 // Check if user requested to restore defaults
 if (isset($_POST['restore'])) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
@@ -43,6 +58,9 @@ if (isset($_POST['restore'])) {
 	}
 	// reset _POST.
 	$_POST = array(); 
+	$json['callbackFunction'] = 'location';
+	$json['callbackParams'] = $pommo->_baseUrl.'admin/setup/setup_configure.php#Messages';
+	die($encoder->encode($json));
 }
 
 // ADD CUSTOM VALIDATOR FOR CHARSET
@@ -130,6 +148,8 @@ if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 } 
 else {
 	// ___ USER HAS SENT FORM ___
+	
+	
 	if (SmartyValidate :: is_valid($_POST,'messages')) {
 	// __ FORM IS VALID
 		$messages = array();
@@ -157,11 +177,19 @@ else {
 		$input = array('messages' => serialize($messages),'notices' => serialize($notices));
 		PommoAPI::configUpdate( $input, TRUE);
 		
-		$smarty->assign('output',Pommo::_T('Settings updated.'));
+		$json['success'] = true;
+		$json['message'] = Pommo::_T('Configuration Updated.');
+		
+		die($encoder->encode($json));
 	} 
 	else {
 		// __ FORM NOT VALID
-		$smarty->assign('output',Pommo::_T('Please review and correct errors with your submission.'));
+		
+		$json['success'] = false;
+		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
+		$json['errors'] = $smarty->getInvalidFields('messages');
+		
+		die($encoder->encode($json));
 	}
 }
 
@@ -171,6 +199,6 @@ $smarty->assign('t_pending',Pommo::_T('Pending'));
 $smarty->assign('t_update',Pommo::_T('Update'));
 
 $smarty->assign($_POST);
-$smarty->display('admin/setup/ajax/config_messages.tpl');
+$smarty->display('admin/setup/config/messages.tpl');
 Pommo::kill();
 			

@@ -37,6 +37,7 @@ $smarty = new PommoTemplate();
 if (!empty($_POST['throttle_restore'])) {
 	$input = array ('throttle_MPS' => 3, 'throttle_BPS' => 0, 'throttle_DP' => 10, 'throttle_DBPP' => 0,'throttle_DMPP' => 0);
 	PommoAPI::configUpdate($input,TRUE);
+	$smarty->assign('output',Pommo::_T('Configuration Updated.'));
 }
 elseif(!empty($_POST['throttle-submit'])) {
 	
@@ -67,21 +68,12 @@ elseif(!empty($_POST['throttle-submit'])) {
 
 $config= PommoAPI::configGet(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
 
+$smarty->assign('mps',$config['throttle_MPS']*60);
+$smarty->assign('bps',$config['throttle_BPS']/1024);
+$smarty->assign('dp',$config['throttle_DP']);
+$smarty->assign('dmpp',$config['throttle_DMPP']);
+$smarty->assign('dbpp',$config['throttle_DBPP']/1024);
 
-/*  slider conversions.. (in template)
- * 	var mps=p.x/40 || maxStr;
- *  var kbps=p.x*2 || maxStr;
- *  var dp=Math.round(p.x/13+5) || maxStr;
- *  var dmpp=Math.round(p.x/40) || maxStr;
- *  var dbpp=p.x;
- */
-
-$smarty->assign('mps',$config['throttle_MPS']*40);
-$smarty->assign('bps',$config['throttle_BPS']/2);
-$smarty->assign('dp',($config['throttle_DP']-5)*13);
-$smarty->assign('dmpp',$config['throttle_DMPP']*40);
-$smarty->assign('dbpp',$config['throttle_DBPP']);
-
-$smarty->display('admin/setup/ajax/config_throttle.tpl');
+$smarty->display('admin/setup/config/ajax.throttle.tpl');
 Pommo::kill();
 ?>
