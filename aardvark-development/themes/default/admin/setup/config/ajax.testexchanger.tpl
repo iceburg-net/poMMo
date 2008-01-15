@@ -26,8 +26,6 @@
 </div>
 {literal}
 <script type="text/javascript">
-$().ready(function(){
-	poMMo.form.prepJSON('#scope form');
-});
+poMMo.form.init('#scope form',{type: 'json'});
 </script>
 {/literal}

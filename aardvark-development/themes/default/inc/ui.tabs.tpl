@@ -29,9 +29,9 @@ var PommoTabs = {ldelim}
 		this.mandatoryForm = false;
 		$('form.json',tab).each(function(){
 			if($(this).hasClass('mandatory'))
-				this.mandatoryForm = poMMo.form.prepJSON(this,PommoTabs.switch);
+				this.mandatoryForm = poMMo.form.init(this,{type: 'json', onValid: PommoTabs.change});
 			else
-				poMMo.form.prepJSON(this);
+				poMMo.form.init(this,{type: 'json'});
 		});
 	},
 	click: function(tab) {
@@ -43,7 +43,7 @@ var PommoTabs = {ldelim}
 		this.force = false;
 		return true;
 	},
-	switch: function() {
+	change: function() {
 		this.force = true;
 		if(!this.clicked)
 			this.clicked = $('li a',this.tabs)[this.tabs.tabsSelected()];
