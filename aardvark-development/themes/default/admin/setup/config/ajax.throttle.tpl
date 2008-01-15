@@ -1,4 +1,4 @@
-<form id="throttleForm" action="{$smarty.server.PHP_SELF}" method="post">
+<form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
 
 <fieldset>
 <legend>{t}Global Rates{/t}</legend>
@@ -140,8 +140,5 @@ $('div.ui-slider').each(function(){
 	PommoSlider.onSlide(this,p.startValue);
 	PommoSlider.init($(this),p);
 });
-
-poMMo.form.prepAJAX('#throttleForm');
-
 </script>
 {/literal}

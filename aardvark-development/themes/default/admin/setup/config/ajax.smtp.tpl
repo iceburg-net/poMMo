@@ -1,4 +1,4 @@
-<form id="smtpForm" action="{$smarty.server.PHP_SELF}" method="post">
+<form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
 
 <fieldset>
 <legend>{t}SMTP Throttling{/t}</legend>
@@ -77,16 +77,4 @@
 {if $addServer}
 <input type="submit" name="addSmtpServer[{$addServer}]" id="addSmtpServer{$addServer}" value="{t}Add Another Relay{/t}" />
 {/if}
-
 </form>
-
-
-{literal}
-<script type="text/javascript">
-$().ready(function(){
-	var form = $('#smtpForm');
-	poMMo.form.prepAJAX(form);
-	$('.onChange',form).change(function() { $('#smtpForm').submit(); });
-});
-</script>
-{/literal}

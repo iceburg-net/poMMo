@@ -49,7 +49,13 @@ $().ready(function(){
 		trigger:false,
 		overlay:0,
 		ajax:'@href',
-		target:'.jqmdMSG'}).jqDrag('div.jqmdTC');
+		target:'.jqmdMSG',
+		onLoad: function(hash){
+			var ajaxForm = $('form.ajax',hash.w)[0] || false;
+			if (ajaxForm)
+				poMMo.form.init(ajaxForm);		
+		}
+	});
 
 	switch(location.hash) {
 		case '#users': $('#tabs li a:eq(0)').click();
