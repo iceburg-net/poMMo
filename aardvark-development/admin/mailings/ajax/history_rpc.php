@@ -90,6 +90,12 @@ switch ($_REQUEST['call']) {
 	case 'delete' :
 		$deleted = PommoMailing::delete($mailingIDS);
 		$logger->addMsg(Pommo::_T('Please Wait').'...');
+		
+		$json = new json;
+		$params = $json->encode(array('ids' => $mailingIDS));
+		$smarty->assign('callbackFunction','deleteMailing');
+		$smarty->assign('callbackParams',$params);
+		
 	break;
 	
 	default:
@@ -98,16 +104,20 @@ switch ($_REQUEST['call']) {
 	break;
 }
 
-// validate the callback -- XSS protection
+
+// validate the callback -- XSS protection, necessary only if callbacks
+//  are to be passed through.
+
+/*
 if(isset($_REQUEST['callback']) && ( 
 	$_REQUEST['callback'] == 'delete'
 	)) {
-	
-	$json = new json;
+
 	$params = $json->encode(array('ids' => $mailingIDS));
 	$smarty->assign('callbackFunction',$_REQUEST['callback']);
 	$smarty->assign('callbackParams',$params);
 	}
+*/
 
 $smarty->display('admin/rpc.tpl');
 ?>
