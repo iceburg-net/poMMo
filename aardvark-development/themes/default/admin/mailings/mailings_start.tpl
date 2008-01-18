@@ -1,16 +1,15 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/ui.tabs.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
+
+{include file="inc/ui.form.tpl"}
+{include file="inc/ui.tabs.tpl"}
 
 {* Include the WYSIWYG Javascripts *}
 {foreach from=$wysiwygJS item=js}
 	<script type="text/javascript" src="{$url.theme.shared}../wysiwyg/{$js}"></script>
 {/foreach}
-
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/default.mailings.css" />
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/ui.tabs.css" />
 {/capture}
 {include file="inc/admin.header.tpl" sidebar='off'}
 
@@ -33,93 +32,23 @@
 
 {literal}
 <script type="text/javascript">
-/* TabWizzard JS (c) 2007 Brice Burgess, <bhb@iceburg.net>
-	Licensed under the GPL */
-var poMMo = {
-	// tabClick: Called when a tab is clicked.
-	tabClick: function(clicked, stop) {
-		this.tabClicked = clicked;
-		if(this.tabForm && !this.forceLoad)
-			return(!this.tabForm.submit()); // stops loading of tab, submits ajaxForm
-		if(stop) return false;
-		this.forceLoad = false
-	},
-	// tabLoaded: Called after a tab is loaded.
-	tabLoaded: function(tab) {
-		this.tabClicked = false;
-		var form = $('form.ajax',tab)[0];
-		this.tabForm = (form) ? 
-			this.formJSON(form) : 
-			false;	
-	},
-	// tabSwitch: Called to switch a tab
-	tabSwitch: function() {
-		this.forceLoad = true;
-		if(!this.tabClicked)
-			this.tabClicked = $('li a',this.tabs)[this.tabs.tabsSelected()];
-		
-		$(this.tabClicked).click();
-	},
-	tabClicked: false, // The clicked tab, or false 
-	tabForm: false, // The form element in the tab, or false if not exists
-	tabs: null,
-	forceLoad: false,
-	formJSON: function(form) {
-		return $(form).ajaxForm({
-			dataType: 'json',
-			beforeSubmit: function(data,form,options) {
-				// reset errors
-				$('label span.error',form).remove();
-				
-				// toggle submit/loading state
-				$('input[@type=submit],img[@name=loading]', form).toggle();
-			},
-			success: function(json) {
-				if(json.callback)
-					if(!poMMo.formCallback(json.callback))
-						return; // if callback function returns false, stop.
-				
-				if(json.message){
-					$('div.output').html(json.message);
-				}
-				
-				if(json.errors) {
-					// append error messages to form fields
-					for (var i=0;i<json.errors.length;i++)
-						$('label[@for='+json.errors[i].field+']').append('<span class="error">'+json.errors[i].message+'</span>');
-				}
-				
-				if(json.success) 
-					return poMMo.tabSwitch();
-				
-				// toggle submit/loading state
-				$('input[@type=submit],img[@name=loading]', form).toggle();
-			}
-		});
-	},
-	formCallback: false
-}
-
 $().ready(function(){ 
 	
-	poMMo.tabs = $('#tabs').tabs({
-		spinner: '{/literal}{t escape=js}loading...{/t}{literal}',
-		ajaxOptions: { async: false }, // make synchronous requests when loading tabs
-		click: function(clicked,hide,show) { return poMMo.tabClick(clicked); },
-		load: function(clicked,content) { poMMo.tabLoaded(content); }
-	});
-	
+	poMMo.tabs = PommoTabs.init('#tabs');
 	
 	// initialize all dialogs
-	
 	$('#wait, #addTemplate, #testMailing, #personalize').jqm({
 		trigger: false,
 		target: 'div.jqmdMSG',
-		ajaxLoadText: '{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t escape=js}Please Wait{/t}...{literal}'
+		ajaxLoadText: '{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t escape=js}Please Wait{/t}...{literal}',
+		onLoad: function(hash){
+			var ajaxForm = $('form.ajax',hash.w)[0] || false;
+			if (ajaxForm)
+				poMMo.form.init(ajaxForm);		
+		}
 	}).jqDrag('div.jqmdTC');
 	
 	// tailor the dialogs
-	
 	$('#wait').jqm({modal: true, overlay: 0});
 	$('#addTemplate').jqm({ajax: 'mailing/ajax.addtemplate.php'});
 	$('#testMailing').jqm({ajax: 'mailing/ajax.mailingtest.php'});

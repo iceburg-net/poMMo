@@ -88,6 +88,16 @@ $state['ishtml'] = (empty($tempbody))? 'off' : 'on';
 
 // processs send request
 if (!empty ($_REQUEST['sendaway'])) {
+	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
+	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+	$encoder = new json;
+	$json = array(
+		'success' => false,
+		'message' => false,
+		'errors' => false
+	);
+	
 	if ($state['tally'] > 0) {
 		
 		if($state['ishtml'] == 'off') {
@@ -103,19 +113,21 @@ if (!empty ($_REQUEST['sendaway'])) {
 
 		$code = PommoMailing::add($mailing);
 		if(!PommoMailCtl::queueMake($group->_memberIDs))
-			Pommo::kill('Unable to populate queue');
-
-		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?code='.$code))
-			Pommo::kill('Unable to spawn background mailer');
-
-		// clear mailing composistion data from session
-		PommoAPI::stateReset(array('mailing'));
-
-		$smarty->assign('redirect',$pommo->_baseUrl.'admin/mailings/mailing_status.php');
+			$json['message'] = 'Unable to populate queue';
+		else if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?code='.$code))
+			$json['message'] = 'Unable to spawn background mailer';
+		else {
+			// clear mailing composistion data from session
+			PommoAPI::stateReset(array('mailing'));
+			$json['callbackFunction'] = 'redirect';
+			$json['callbackParams'] = array('url' => $pommo->_baseUrl.'admin/mailings/mailing_status.php');
+		}
 	}
 	else {
-		$logger->addMsg(Pommo::_T('Cannot send a mailing to 0 subscribers!'));
+		$json['message'] = Pommo::_T('Cannot send a mailing to 0 subscribers!');
 	}
+	
+	die($encoder->encode($json));
 }
 
 $smarty->assign($state);

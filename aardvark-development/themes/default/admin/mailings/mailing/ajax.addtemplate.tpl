@@ -33,13 +33,3 @@
 </div>
 
 </form>
-
-{literal}
-<script type="text/javascript">
-$().ready(function(){
-	$('#addTemplate form.ajax').ajaxForm({
-		target: $('#addTemplate div.jqmdMSG')
-	});
-});
-</script>
-{/literal}

@@ -35,7 +35,7 @@ $pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars
 
 $json = array('success' => true);
 
-// TODO:  GETTEMPLATE, SEND MAILING
+// TODO:  SEND MAILING
 
 switch ($_REQUEST['call']) {
 	case 'wysiwyg': // update wysiwyg ++ state
@@ -54,6 +54,12 @@ switch ($_REQUEST['call']) {
 		$h2t = & new html2text($_REQUEST['body']);
 		$json['altbody'] = $h2t->get_text();
 	break;
+	
+	case 'getTemplateDescription' :
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/templates.php');
+		$template = PommoMailingTemplate::getDescriptions(array('id' => $_REQUEST['id']));
+		$msg = (empty($template[$_REQUEST['id']])) ? 'Unknown' : $template[$_REQUEST['id']];
+		die($msg);
 	
 	default:
 		$json['success'] = false;

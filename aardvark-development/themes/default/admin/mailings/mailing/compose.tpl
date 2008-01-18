@@ -20,7 +20,7 @@
 <span class="notes">({t}Leave blank to send HTML only{/t})</span>
 </div>
 
-<form id="compose" class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
+<form id="compose" class="json mandatory" action="{$smarty.server.PHP_SELF}" method="post">
 <input type="hidden" name="compose" value="true" />
 <ul class="inpage_menu">
 <li><a href="#" id="e_altbody"><img src="{$url.theme.shared}images/icons/reload.png" alt="icon" border="0" align="absmiddle" /> {t}Copy text from HTML Message{/t}</a></li>

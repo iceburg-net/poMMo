@@ -28,10 +28,9 @@ var PommoTabs = {ldelim}
 		this.clicked = false;
 		this.mandatoryForm = false;
 		$('form.json',tab).each(function(){
+			var form = poMMo.form.init(this,{type: 'json', onValid: PommoTabs.change});
 			if($(this).hasClass('mandatory'))
-				this.mandatoryForm = poMMo.form.init(this,{type: 'json', onValid: PommoTabs.change});
-			else
-				poMMo.form.init(this,{type: 'json'});
+				PommoTabs.mandatoryForm = form;
 		});
 	},
 	click: function(tab) {
@@ -44,11 +43,11 @@ var PommoTabs = {ldelim}
 		return true;
 	},
 	change: function() {
-		this.force = true;
-		if(!this.clicked)
-			this.clicked = $('li a',this.tabs)[this.tabs.tabsSelected()];
+		PommoTabs.force = true;
+		if(!PommoTabs.clicked)
+			PommoTabs.clicked = $('li a',PommoTabs.tabs)[$(PommoTabs.tabs).tabsSelected()];
 		
-		$(this.clicked).click();
+		$(PommoTabs.clicked).click();
 	}
 }
 </script>
