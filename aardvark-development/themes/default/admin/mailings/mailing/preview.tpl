@@ -1,11 +1,8 @@
-{if $redirect}
-<script type="text/javascript">
-window.location='{$redirect}';
-</script>
-{else}
 <h4>{t}Preview Mailing{/t}</h4>
 
+<div class="output">
 {include file="inc/messages.tpl"}
+</div>
 
 <div class="msgpreview">
 	<p><strong>{t}Subject:{/t}</strong> <tt>{$subject}</tt></p>
@@ -27,7 +24,7 @@ window.location='{$redirect}';
 <li><a href="#" id="e_send"><img src="{$url.theme.shared}images/icons/world.png" alt="icon" border="0" align="absmiddle" />{t}Send Mailing{/t}</a></li>
 </ul>
 
-<form id="sendForm" action="{$smarty.server.PHP_SELF}" method="post">
+<form id="sendForm" class="json" action="{$smarty.server.PHP_SELF}" method="post">
 	<input type="hidden" name="sendaway" value="true">
 </form>
 
@@ -54,18 +51,15 @@ $().ready(function() {
 		return false;
 	});
 	
-	$('#sendForm').ajaxForm({
-		target: $('#Preview'),
-		beforeSubmit: function() { $('#wait').jqmShow(); },
-		success: function() { $('#wait').jqmHide(); }
-	});
-	
 	$('#e_send').click(function() {
 		$('#sendForm').submit();
 		return false;
 	});
 	
+	poMMo.callback.redirect = function(p) {
+		$('#wait').jqmShow();
+		window.location = p.url;
+	};
 });
 </script>
 {/literal}
-{/if}

@@ -45,8 +45,7 @@ $encoder = new json;
 $json = array(
 	'success' => false,
 	'message' => false,
-	'errors' => false,
-	'callback' => false
+	'errors' => false
 );
 
 
@@ -66,7 +65,10 @@ elseif(isset($_POST['delete'])) {
 		Pommo::_T('Template Deleted') :
 		Pommo::_T('Error with deletion.');
 	
-	$json['callback'] = array($_POST['template'],$msg);
+	$json['callbackFunction'] = 'deleteTemplate';
+	$json['callbackParams'] = array(
+		'id' => $_POST['template'],
+		'msg' => $msg);
 }
 else {
 	$smarty->assign('templates',PommoMailingTemplate::getNames());

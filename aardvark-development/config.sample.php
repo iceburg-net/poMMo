@@ -58,7 +58,8 @@ automatic configuration.
 	3: Quiet mode - *IMPORTANT THINGS* are outputted [default]
 	
 [date_format] = 1
-	Set the preferred date format. Available formats are;
+	Set the preferred date format for "date" type subscriber fields.
+	Available formats are;
 	 1: YYYY/MM/DD (e.g. 1969/12/15) [default]
 	 2: MM/DD/YYYY
 	 3: DD/MM/YYYY

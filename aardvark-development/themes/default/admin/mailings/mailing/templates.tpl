@@ -2,7 +2,7 @@
 {include file="inc/messages.tpl"}
 </div>
 
-<form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
+<form class="json" action="{$smarty.server.PHP_SELF}" method="post">
 
 <div class="alert">
 {t}Templates allow you to re-use your crafted message bodies. The HTML and text version is remembered.{/t}
@@ -42,7 +42,7 @@
 {literal}
 <script type="text/javascript">
 $().ready(function() {
-	var scope = $('form');
+	var scope = $('form.json');
 	
 	$('select',scope).change(function(){
 		var v = $(this).val();
@@ -51,16 +51,16 @@ $().ready(function() {
 		else
 		$('div.t_description div',scope)
 			.html('{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{literal}')
-			.load('mailing/ajax.gettemplate.php?id='+v);
+			.load('mailing/ajax.rpc.php?call=getTemplateDescription&id='+v);
 	});
 	
 	// called as success callback from form submission
-	poMMo.formCallback = function(p) {
+	poMMo.callback.deleteTemplate = function(p) {
 		// remove the deleted option (p[0])
-		$('option[@value='+p[0]+']',scope).remove();
+		$('option[@value='+p.id+']',scope).remove();
 		
 		// output the passed message (p[1])
-		$('div.output').addClass('error').html(p[1]);
+		$('div.output').addClass('error').html(p.msg);
 	}
 	
 });

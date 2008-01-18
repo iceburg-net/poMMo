@@ -11,7 +11,7 @@
 {include file="inc/messages.tpl"}
 </div>
 
-<form class="ajax" action="{$smarty.server.PHP_SELF}" method="post">
+<form class="json mandatory" action="{$smarty.server.PHP_SELF}" method="post">
 
 <p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields marked like %1 this %2 are required.{/t}</p>
 

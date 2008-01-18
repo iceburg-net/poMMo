@@ -51,8 +51,7 @@ if(isset($_REQUEST['compose'])) {
 	$json = array(
 		'success' => true,
 		'message' => false,
-		'errors' => false,
-		'callback' => false
+		'errors' => false
 	);
 	die($encoder->encode($json));
 }
