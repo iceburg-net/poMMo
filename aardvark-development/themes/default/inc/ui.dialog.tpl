@@ -1,37 +1,29 @@
-{* Dialog Include -- 
-	invoke via {include file="inc/ui.dialog.tpl" param="value" ... }
-	
-	Valid parameters
-	-------
-	dialogID  ("dialog" by default)
-	dialogClass (can pass multiple classes, e.g. {include file="inc/ui.dialog.tpl" dialogClass="classA classB" ... }
-	dialogBodyClass
-	dialogMsgClass
-	dialogContent
-*}
+<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/ui.dialog.css" />
 
-<div id="{if $dialogID}{$dialogID}{else}dialog{/if}" class="jqmDialog{if $dialogClass} {$dialogClass}{/if}">
-<div class="jqmdTL"><div class="jqmdTR"><div class="jqmdTC">
-{if $dialogTitle}{$dialogTitle}{else}poMMo{/if}
-</div></div></div>
-<div class="jqmdBL"><div class="jqmdBR"><div class="jqmdBC{if $dialogBodyClass} {$dialogBodyClass}{/if}">
-
-<div class="jqmdMSG{if $dialogMsgClass} {$dialogMsgClass}{/if}">
-{if $dialogContent}{$dialogContent}{else}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t}Please Wait{/t}...{/if}
-</div>
-
-</div></div></div>
-{if !$dialogNoClose}
-<input type="image" src="{$url.theme.shared}images/dialog/close.gif" class="jqmdX jqmClose" />
-{/if}
-</div>
-
-
-{* Cache Dialog Images... *}
-{if !$smarty.capture.dialogCache}
-{capture name=dialogCache}1{/capture}
 {literal}
 <script type="text/javascript">
+
+PommoDialog = {
+	init: function(dialogs) {
+		dialogs = dialogs || new Array('dialog');
+		
+		for(var i=0;i<dialogs.length;i++)
+			$('#'+dialogs[i]).jqm(this.params);
+	},
+	params: {
+		modal: false,
+		ajax: '@href',
+		target: '.jqmdMSG',
+		trigger: false,
+		onLoad: function(hash){
+			// Automatically prepare forms in ajax loaded content
+			if($.isFunction(poMMo.form.assign))
+				poMMo.form.assign(hash.w);
+		}
+	}
+};
+
 $().ready(function() {
 	// Close Button Highlighting. IE doesn't support :hover. Surprise?
 	$('input.jqmdX')
@@ -51,6 +43,8 @@ $().ready(function() {
 });
 </script>
 {/literal}
+
+{capture name=footer}
 <div class="imgCache">
 	<img src="{$url.theme.shared}images/loader.gif" />
 	<img src="{$url.theme.shared}images/dialog/close.gif" />
@@ -60,4 +54,4 @@ $().ready(function() {
 	<img src="{$url.theme.shared}images/dialog/br.gif" />
 	<img src="{$url.theme.shared}images/dialog/bc.gif" />
 </div>
-{/if}
+{/capture}

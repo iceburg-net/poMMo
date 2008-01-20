@@ -74,11 +74,7 @@ poMMo.form = {
 				return poMMo.form.defaults.jsonSuccess(response, hash);
 			
 			// reassign the form [designed to work in default setting, on forms with class ajax]
-			var form = $('form.ajax',hash.target)[0] || false;
-			if(form) {
-				form.pfSerial = hash.form.pfSerial; // conserve memory!
-				poMMo.form.init(form,hash);
-			}
+			poMMo.form.assign(hash.target, hash.form.pfSerial);
 		},
 		jsonSuccess: function(json, hash) {
 			// execute a callback function if passed (and exists).
@@ -86,7 +82,7 @@ poMMo.form = {
 			//   If the callback returns false, halt execution.
 			if(json.callbackFunction && $.isFunction(poMMo.callback[json.callbackFunction])) {
 				json.callbackParams = json.callbackParams || json;
-				if(!poMMo.callback[json.callbackFunction](json.callbackParams))
+				if(poMMo.callback[json.callbackFunction](json.callbackParams) === false)
 					return false;
 			}
 			
@@ -106,9 +102,22 @@ poMMo.form = {
 				$('div.output',hash.form).append('<div class="error">'+poMMo.implode(json.errors)+'</div>');
 		
 			// append error messages to form fields
+			if(json.fieldErrors)
 			for (var i=0;i<json.fieldErrors.length;i++) 
 					$('label[@for='+json.fieldErrors[i].field+']',hash.form).append('<span class="error">'+json.fieldErrors[i].message+'</span>');
 		}
+	},
+	assign: function(scope, reassign) { // prepares forms found in scope. Usually called on ajax loaded content.
+		$('form',scope).each(function(){
+			if(reassign) { // conserve memory! reassign is passed as previous form's serial #
+				this.pfSerial = reassign;
+				poMMo.form.init(this,poMMo.form.hash[reassign]);
+			}
+			else if($(this).is('.ajax'))
+				poMMo.form.init(this,p);
+			else if($(this).is('.json'))
+				poMMo.form.init(this,{type: 'json'});
+		}).filter('.validate').jqValidate();
 	}
 };
 </script>
