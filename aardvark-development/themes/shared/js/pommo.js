@@ -10,6 +10,12 @@ if (typeof(poMMo) == 'undefined') {
 		},
 		isSet: function(arg){
 			return (typeof(args.success) != 'undefined');
+		},
+		implode: function(msg, seperator) {
+			seperator = seperator || '<br />';
+			if(!msg instanceof Array)
+				msg = new Array(msg);
+			return msg.join(seperator);
 		}
 	};
 }
