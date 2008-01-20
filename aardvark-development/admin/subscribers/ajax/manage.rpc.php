@@ -80,7 +80,7 @@ switch ($_REQUEST['call']) {
 		if (!$key)
 			$json->fail();
 			
-		$json->addMsg(Pommo::_T('Subscriber %s added!'));
+		$json->addMsg(sprintf(Pommo::_T('Subscriber %s added!'),'<strong>'.$subscriber['email'].'</strong>'));
 		
 		if($flag)
 			$json->addErr(Pommo::_T('Subscriber has been flagged for update due to invalid or missing information.'));
@@ -89,7 +89,7 @@ switch ($_REQUEST['call']) {
 		$data = array(
 			'key' => $key,
 			'email' => $subscriber['email'],
-			'registered' => $subscriber['registered'],
+			'registered' => timetostr$subscriber['registered'],
 			'touched' => $subscriber['registered'],
 			'ip' => $subscriber['ip']
 		);
@@ -97,7 +97,8 @@ switch ($_REQUEST['call']) {
 		foreach($subscriber['data'] as $k => $val) 
 			$data['d'.$k] = htmlspecialchars($val);
 		
-		$json->add('subscriber',$data);
+		$json->add('callbackFunction','addSubscriber');
+		$json->add('callbackParams',$data);
 		
 	break;
 	default:

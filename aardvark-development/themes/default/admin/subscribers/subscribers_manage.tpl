@@ -1,11 +1,9 @@
-{capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-
+{capture name=head}
+{* used to inject content into the HTML <head> *}
+{include file="inc/ui.dialog.tpl"}
 {include file="inc/ui.grid.tpl"}
 {include file="inc/ui.form.tpl"}
 {/capture}
-
 
 {include file="inc/admin.header.tpl" sidebar='off'}
 
@@ -94,12 +92,7 @@
 	</fieldset>
 </form>
 
-{if $tally < 1}
-
-{t}No subscribers found.{/t}
-
-{else}
-
+{if $tally > 0}
 <table id="grid" class="scroll" cellpadding="0" cellspacing="0"></table>
 <div id="gridPager" class="scroll" style="text-align:center;"></div>
 
@@ -147,27 +140,11 @@ $().ready(function() {
 		$(this).siblings('ul').slideToggle(); 
 	});
 	
-	$('#add, #del, #exp, #edit').jqm({
-		modal: true,
-		ajax: '@href',
-		target: '.jqmdMSG',
-		trigger: false,
-		onLoad: function(hash){
-			// prepare forms in loaded content
-			$('form',hash.w).each(function(){
-				if($(this).is('.ajax'))
-					poMMo.form.init(this);
-				else if($(this).is('.json'))
-					poMMo.form.init(this,{type: 'json'});
-			}).find('.validate').jqValidate();
-		}
-	}).jqDrag('div.jqmdTC');
-	
+	PommoDialog.init(['add','del','exp','edit']);
 	
 	$('#add').jqmAddTrigger('a.addTrigger');
 	$('#del').jqmAddTrigger('a.delTrigger');
 	$('#exp').jqmAddTrigger('a.expTrigger');
-	
 	
 	$('a.editTrigger').click(function(){
 		// prevent edit window from appearing if no row is selected
@@ -176,38 +153,23 @@ $().ready(function() {
 		return false;
 	});
 	
-});
-
+	{/literal}
+	{if !empty($state.search)}
+		$('ul.search').slideDown();
+	{/if}
+	
+	{if $state.group != 'all' || $state.status != 1}
+		$('ul.view').slideDown('slow');
+	{/if}
+	
+{rdelim});
 </script>
-{/literal}
-
-{if !empty($state.search)}
-{literal}
-<script type="text/javascript">
-$().ready(function() {
-	$('ul.search').slideDown();
-});
-</script>
-{/literal}
-{/if}
-
-{if $state.group != 'all' || $state.status != 1}
-{literal}
-<script type="text/javascript">
-$().ready(function() {
-	$('ul.view').slideDown('slow');
-});
-</script>
-{/literal}
-{/if}
-
-
 
 {capture name=dialogs}
-{include file="inc/ui.dialog.tpl" dialogID="add" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="edit" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="del" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="exp" dialogTitle=$testTitle dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" id="add" wide=true tall=true}
+{include file="inc/dialog.tpl" id="edit" wide=true tall=true}
+{include file="inc/dialog.tpl" id="del" tall=true}
+{include file="inc/dialog.tpl" id="exp" tall=true}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

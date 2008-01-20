@@ -65,12 +65,15 @@ $().ready(function(){
 	poMMo.callback.addSubscriber = function(json) {
 		if($('#grid').size() == 0)
         	history.go(0); // refresh the page if no grid exists, else add new subscriber to grid
-        poMMo.grid.addRow(json.key,json.subscriber);
+        else
+        	poMMo.grid.addRow(json.key,json);
 	};
 	
 	$('input[@name="force"]').click(function(){
 		if(this.checked)
-			PommoValidate.enable();
+			$(this).jqvDisable();
+		else
+			$(this).jqvEnable();
 	});
 
 });

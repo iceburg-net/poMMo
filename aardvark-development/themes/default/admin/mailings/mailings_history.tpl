@@ -16,8 +16,6 @@
 {include file="inc/messages.tpl"}
 
 {if $tally > 0}
-
-
 <table id="grid" class="scroll" cellpadding="0" cellspacing="0"></table>
 <div id="gridPager" class="scroll" style="text-align:center;"></div>
 
@@ -109,10 +107,11 @@ poMMo.callback.deleteMailing = function(p) {
 
 </script>
 {/literal}
-{/if}
 
 {capture name=dialogs}
 {include file="inc/ui.dialog.tpl" dialogID="modal" dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
+
+{/if}
 
 {include file="inc/admin.footer.tpl"}
