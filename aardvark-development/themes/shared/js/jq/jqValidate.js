@@ -25,11 +25,27 @@ invalidClass: 'pvInvalid'	// assigned to invalid elements
 };
 return this.each(function(){
 	if(this._jqV) 
-		return $.jqv.validate(this);
+		return;
 	s++; this._jqV=s;
-	H[s] = {scope: this, serial: s, valid: true, params: $.extend(_params,params)};
+	H[s] = {scope: this, valid: true, active: true, params: $.extend(_params,params)};
 	$.jqv.init(this);
-});};
+}).addClass('_jqValidate');};
+
+// enables client side validation. Called on a form or an element within a form that has been initialized with $.jqValidate()
+$.fn.jqvEnable=function(){return this.each(function(){
+	var s = this._jqV || $.jqv.getSerial(this);
+	H[s].active = true;
+	$.jqv.validate(H[s]);
+})};
+
+// disables client side validation. Called on a form or an element within a form that has been initialized with $.jqValidate()
+$.fn.jqvDisable=function(){return this.each(function(){
+	var s = this._jqV || $.jqv.getSerial(this);
+	H[s].active = false;
+	// re-enable submit buttons (if disabled) and remove invalidClass from form elements
+	H[s].inputs.removeClass(H[s].params.invalidClass);
+	$.jqv.setState(true,H[s]); 
+})};
 
 // globals
 $.jqv = {
@@ -37,22 +53,22 @@ hash: {},
 init: function(e) {
 	var h = H[e._jqV];
 	
-	// verify submits
+	// assign submit elements
 	h.submits = $(h.params.submitElements,h.scope);
 	if(h.submits.size() == 0 && h.debug)
 		alert('jqValidate: No Submit Elements found in Form');
 		
-	// verify inputs
+	// assign validation elements
 	h.inputs = $(h.params.validateElements,h.scope);
 	if(h.inputs.size() == 0 && h.debug)
 		alert('jqValidate: No Validation Elements found in Form');
 	
 	// assign validation event to inputs
-	h.inputs.mouseup(function() { $.jqv.validate(this,h); });
-	h.inputs.keyup(function() { $.jqv.validate(this,h); });
+	h.inputs.mouseup(function() { $.jqv.validate(h); });
+	h.inputs.keyup(function() { $.jqv.validate(h); });
 	
 	// validate the form
-	$.jqv.validate(h.inputs,h);
+	$.jqv.validate(h);
 },
 rules: function(value,rule) {
 	// strip the "pv" from the rule
@@ -79,8 +95,11 @@ rules: function(value,rule) {
 			alert('jqValidate: Unknown rule encountered! ('+rule+')');
 	}
 },
-validate: function(e,h) {
-	$(e).each(function(){
+validate: function(h) {
+	if(!h.active) // skip validation if inactive
+		return;
+		
+	$(h.inputs).each(function(){
 		var r = new Array(), c = h.params.validateClasses;
 		for(var i=0;i<c.length;i++)
 			if($(this).is('.'+c[i]))
@@ -104,17 +123,20 @@ validate: function(e,h) {
 		// FORM IS NOT VALID
 		if(!h.valid)
 			return;
-		h.valid = false;
-		h.submits.attr('disabled',true).css('opacity',0.5);
+		$.jqv.setState(false,h);
 	}
 	else {
 		// FORM IS VALID
 		if(h.valid)
 			return;
-		h.valid = true;
-		h.submits.attr('disabled',false).css('opacity',1);
+		$.jqv.setState(true,h);
 	}
-}
+},
+setState: function(valid, h) {
+	h.valid = valid;
+	h.submits.attr('disabled',!valid).css('opacity',(valid) ? 1 : 0.5);
+},
+getSerial: function(e) { return $(e).parents('._jqValidate')[0]._jqV; }
 };
 
 // shortcuts
