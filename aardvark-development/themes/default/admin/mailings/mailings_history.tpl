@@ -23,9 +23,9 @@
 
 <ul class="inpage_menu">
 <li><a href="ajax/mailing_preview.php" class="modal visit"><img src="{$url.theme.shared}images/icons/mailing_small.png"/>{t}View Mailing{/t}</a></li>
-<li><a href="ajax/history_rpc.php?call=notice" class="modal"><img src="{$url.theme.shared}images/icons/examine_small.png"/>{t}View Last Notices{/t}</a></li>
-<li><a href="ajax/history_rpc.php?call=reload" class="modal visit"><img src="{$url.theme.shared}images/icons/typewritter_small.png"/>{t}Reload Checked Mailing{/t}</a></li>
-<li><a href="ajax/history_rpc.php?call=delete" class="modal confirm"><img src="{$url.theme.shared}images/icons/delete.png"/>{t}Delete Checked Mailings{/t}</a></li>
+<li><a href="ajax/history.rpc.php?call=notice" class="modal"><img src="{$url.theme.shared}images/icons/examine_small.png"/>{t}View Last Notices{/t}</a></li>
+<li><a href="ajax/history.rpc.php?call=reload" class="modal visit"><img src="{$url.theme.shared}images/icons/typewritter_small.png"/>{t}Reload Checked Mailing{/t}</a></li>
+<li><a href="ajax/history.rpc.php?call=delete" class="modal confirm"><img src="{$url.theme.shared}images/icons/delete.png"/>{t}Delete Checked Mailings{/t}</a></li>
 </ul>
 
 <script type="text/javascript">
@@ -52,7 +52,7 @@ $().ready(function() {ldelim}
 		{name: 'end', width: 130},
 		{name: 'status', width: 70}
 	],
-	url: 'ajax/history_list.php'
+	url: 'ajax/history.list.php'
 	};
 	
 	poMMo.grid = PommoGrid.init('#grid',p);

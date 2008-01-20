@@ -1,8 +1,9 @@
 <h4>{t}Preview Mailing{/t}</h4>
 
-<div class="output">
-{include file="inc/messages.tpl"}
-</div>
+<form id="sendForm" class="json" action="{$smarty.server.PHP_SELF}" method="post">
+	<div class="output">{include file="inc/messages.tpl"}</div>
+	<input type="hidden" name="sendaway" value="true">
+</form>
 
 <div class="msgpreview">
 	<p><strong>{t}Subject:{/t}</strong> <tt>{$subject}</tt></p>
@@ -23,10 +24,6 @@
 <li><a href="#" id="e_test"><img src="{$url.theme.shared}images/icons/world_test.png" alt="icon" border="0" align="absmiddle" />{t}Send Test{/t}</a></li>
 <li><a href="#" id="e_send"><img src="{$url.theme.shared}images/icons/world.png" alt="icon" border="0" align="absmiddle" />{t}Send Mailing{/t}</a></li>
 </ul>
-
-<form id="sendForm" class="json" action="{$smarty.server.PHP_SELF}" method="post">
-	<input type="hidden" name="sendaway" value="true">
-</form>
 
 
 <h4>{t}Message{/t}</h4>
@@ -59,6 +56,7 @@ $().ready(function() {
 	poMMo.callback.redirect = function(p) {
 		$('#wait').jqmShow();
 		window.location = p.url;
+		return false;
 	};
 });
 </script>

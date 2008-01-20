@@ -36,17 +36,8 @@ $smarty->prepareForForm();
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-$encoder = new json;
-$json = array(
-	'success' => false,
-	'message' => false,
-	'errors' => false,
-	'callbackFunction' => false,
-	'callbackParams' => false
-);
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
 
 // Check if user requested to restore defaults
 if (isset($_POST['restore'])) {
@@ -57,10 +48,11 @@ if (isset($_POST['restore'])) {
 		case 'unsubscribe' : $messages = PommoHelperMessages::resetDefault('unsubscribe'); break;
 	}
 	// reset _POST.
-	$_POST = array(); 
-	$json['callbackFunction'] = 'location';
-	$json['callbackParams'] = $pommo->_baseUrl.'admin/setup/setup_configure.php#Messages';
-	die($encoder->encode($json));
+	$_POST = array();
+	
+	$json->add('callbackFunction','location');
+	$json->add('callbackParams',$pommo->_baseUrl.'admin/setup/setup_configure.php#Messages');
+	$json->serve();
 }
 
 // ADD CUSTOM VALIDATOR FOR CHARSET
@@ -177,19 +169,13 @@ else {
 		$input = array('messages' => serialize($messages),'notices' => serialize($notices));
 		PommoAPI::configUpdate( $input, TRUE);
 		
-		$json['success'] = true;
-		$json['message'] = Pommo::_T('Configuration Updated.');
-		
-		die($encoder->encode($json));
+		$json->success(Pommo::_T('Configuration Updated.'));
 	} 
 	else {
 		// __ FORM NOT VALID
 		
-		$json['success'] = false;
-		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
-		$json['errors'] = $smarty->getInvalidFields('messages');
-		
-		die($encoder->encode($json));
+		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 

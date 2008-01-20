@@ -31,17 +31,8 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
- Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-
-// TODO page needs rewrite to utilize the json class for output. e.g. admin/mailings/ajax/status_poll.php
-
-
-function jsonKill($msg, $success = "false") {
-	$json = "{success: $success, msg: \"".$msg."\"}";
-	die($json);
-}
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
 
 $when = '';
 foreach($_POST['grid'] as $order => $id) { // syntax for multi-row updates in in 1 query.
@@ -54,7 +45,7 @@ $query = "
 	SET field_ordering = 
 		CASE field_id ".$when." ELSE field_ordering END";
 if (!$dbo->query($dbo->prepare($query)))
-	jsonKill('Error Updating Order');
+	$json->fail('Error Updating Order');
 	
-jsonKill(Pommo::_T('Order Updated.'), "true");
+$json->success(Pommo::_T('Order Updated.'));
 			

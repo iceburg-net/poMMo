@@ -7,11 +7,9 @@
 {fv validate="fromemail"}
 {fv validate="frombounce"}
 
-<div class="output">
-{include file="inc/messages.tpl"}
-</div>
-
 <form class="json mandatory" action="{$smarty.server.PHP_SELF}" method="post">
+
+<div class="output alert">{include file="inc/messages.tpl"}</div>
 
 <p>{t escape=no 1="<span class=\"required\">" 2="</span>"}Fields marked like %1 this %2 are required.{/t}</p>
 

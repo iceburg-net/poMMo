@@ -23,7 +23,6 @@
  *********************************/
 require ('../../../bootstrap.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -35,13 +34,19 @@ $logger = & $pommo->_logger;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 
-
 // fetch the mailing IDs
 $mailingIDS = $_REQUEST['mailings'];
 if(!is_array($mailingIDS))
 	$mailingIDS = array($mailingIDS);
 	
-// determine the call
+
+/**********************************
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON(false); // do not toggle escaping
+	
+// EXAMINE CALL
 switch ($_REQUEST['call']) {
 	case 'notice':
 		foreach($mailingIDS as $id) {
@@ -91,33 +96,15 @@ switch ($_REQUEST['call']) {
 		$deleted = PommoMailing::delete($mailingIDS);
 		$logger->addMsg(Pommo::_T('Please Wait').'...');
 		
-		$json = new json;
 		$params = $json->encode(array('ids' => $mailingIDS));
 		$smarty->assign('callbackFunction','deleteMailing');
 		$smarty->assign('callbackParams',$params);
-		
 	break;
 	
 	default:
 		$logger->AddErr('invalid call');
-		;
 	break;
 }
-
-
-// validate the callback -- XSS protection, necessary only if callbacks
-//  are to be passed through.
-
-/*
-if(isset($_REQUEST['callback']) && ( 
-	$_REQUEST['callback'] == 'delete'
-	)) {
-
-	$params = $json->encode(array('ids' => $mailingIDS));
-	$smarty->assign('callbackFunction',$_REQUEST['callback']);
-	$smarty->assign('callbackParams',$params);
-	}
-*/
 
 $smarty->display('admin/rpc.tpl');
 ?>

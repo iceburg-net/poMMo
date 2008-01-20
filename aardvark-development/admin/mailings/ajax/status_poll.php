@@ -44,14 +44,14 @@ $state =& PommoAPI::stateInit('subscribers_manage',array(
 if(!empty($_GET['resetNotices']))
 	$state['notices'] = array();
 
+
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
- Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-//$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-//$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
 
-$json = array(
+$output = array(
 	'percent' => null,
 	'status' => null,
 	'statusText' => null,
@@ -72,27 +72,27 @@ $mailing = (isset($_GET['id'])) ?
 	 
 // status >> 1: Processing  2: Stopped  3: Frozen  4: Finished
 if ($mailing['status'] != 1)
-	$json['status'] = 4;
+	$output['status'] = 4;
 elseif($mailing['current_status'] == 'stopped')
-	$json['status'] = 2;
+	$output['status'] = 2;
 else
-	$json['status'] = 1;
+	$output['status'] = 1;
 
 
 // check for frozen mailing
-if($json['status'] != 4) {
+if($output['status'] != 4) {
 	if($state['touched'] != $mailing['touched']) {
 		$state['touched'] = $mailing['touched'];
 		$state['timestamp'] = time();
 	}
 	else {
 		if((time()-$state['timestamp']) > 25 )
-			$json['status'] = 3;
+			$output['status'] = 3;
 	}
 }
 
 
-$json['statusText'] = $statusText[$json['status']];
+$output['statusText'] = $statusText[$output['status']];
 
 // get last 50 unique notices
 $mailingNotices = PommoMailing::getNotices($mailing['id'], 50, true);
@@ -108,27 +108,27 @@ foreach($mailingNotices as $time => $arr) {
 	}
 }
 $state['notices'] = $mailingNotices;
-$json['notices'] = array_reverse($newNotices);
+$output['notices'] = array_reverse($newNotices);
 
  
 // calculate sent
-if($json['status'] == 4) {
-	$json['sent'] = PommoMailing::getSent($mailing['id']);
+if($output['status'] == 4) {
+	$output['sent'] = PommoMailing::getSent($mailing['id']);
 }
 else {
 	$query = "SELECT count(subscriber_id) FROM {$dbo->table['queue']} WHERE status > 0";
-	$json['sent'] = $dbo->query($query,0);
+	$output['sent'] = $dbo->query($query,0);
 }
 
 // cleanup session if frozen or finished.
-if ($json['status'] > 2)
+if ($output['status'] > 2)
 		PommoAPI::stateInit('subscribers_manage');
 		
 
-$json['percent'] = ($json['status'] == 4) ?
+$output['percent'] = ($output['status'] == 4) ?
 	100 :
-	round($json['sent'] * (100 / $mailing['tally']));
+	round($output['sent'] * (100 / $mailing['tally']));
 	
-$encoder = new json;
-die($encoder->encode($json));
+$json->add($output);
+$json->serve();
 ?>

@@ -61,20 +61,6 @@ $state =& PommoAPI::stateInit('mailing',array(
 ),
 $_POST);
 
-/**********************************
-	JSON OUTPUT INITIALIZATION
- *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-$encoder = new json;
-$json = array(
-	'success' => false,
-	'message' => false,
-	'errors' => false,
-	'callback' => false
-);
-
 // SmartyValidate Custom Validation Function
 function check_charset($value, $empty, & $params, & $formvars) {
 	$validCharsets = array (
@@ -117,24 +103,26 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	
 } else {
 	// ___ USER HAS SENT FORM ___
+
+	/**********************************
+		JSON OUTPUT INITIALIZATION
+	 *********************************/
+	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	$json = new PommoJSON();
+
 	SmartyValidate :: connect($smarty);
 
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID
 
 		SmartyValidate :: disconnect();
-		
-		$json['success'] = true;
-		die($encoder->encode($json));
+		$json->success();
 
 	} else {
 		// __ FORM NOT VALID
 		
-		$json['success'] = false;
-		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
-		$json['errors'] = $smarty->getInvalidFields();
-		
-		die($encoder->encode($json));
+		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 
