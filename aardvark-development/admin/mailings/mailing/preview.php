@@ -88,15 +88,11 @@ $state['ishtml'] = (empty($tempbody))? 'off' : 'on';
 
 // processs send request
 if (!empty ($_REQUEST['sendaway'])) {
-	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-	$encoder = new json;
-	$json = array(
-		'success' => false,
-		'message' => false,
-		'errors' => false
-	);
+	/**********************************
+		JSON OUTPUT INITIALIZATION
+	 *********************************/
+	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	$json = new PommoJSON();
 	
 	if ($state['tally'] > 0) {
 		
@@ -112,22 +108,23 @@ if (!empty ($_REQUEST['sendaway'])) {
 		$mailing = PommoHelper::arrayIntersect($state, $mailing);
 
 		$code = PommoMailing::add($mailing);
+		
 		if(!PommoMailCtl::queueMake($group->_memberIDs))
-			$json['message'] = 'Unable to populate queue';
-		else if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?code='.$code))
-			$json['message'] = 'Unable to spawn background mailer';
-		else {
-			// clear mailing composistion data from session
-			PommoAPI::stateReset(array('mailing'));
-			$json['callbackFunction'] = 'redirect';
-			$json['callbackParams'] = array('url' => $pommo->_baseUrl.'admin/mailings/mailing_status.php');
-		}
+			$json->fail('Unable to populate queue');
+			
+		if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?code='.$code))
+			$json->fail('Unable to spawn background mailer');
+			
+		// clear mailing composistion data from session
+		PommoAPI::stateReset(array('mailing'));
+		$json->add('callbackFunction','redirect');
+		$json->add('callbackParams',array('url' => $pommo->_baseUrl.'admin/mailings/mailing_status.php'));
+		
 	}
 	else {
-		$json['message'] = Pommo::_T('Cannot send a mailing to 0 subscribers!');
+		$json->fail(Pommo::_T('Cannot send a mailing to 0 subscribers!'));
 	}
-	
-	die($encoder->encode($json));
+$json->serve();
 }
 
 $smarty->assign($state);

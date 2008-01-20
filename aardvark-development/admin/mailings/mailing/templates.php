@@ -38,37 +38,30 @@ $smarty->prepareForForm();
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-$encoder = new json;
-$json = array(
-	'success' => false,
-	'message' => false,
-	'errors' => false
-);
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
 
+$success = false;
 
 if(isset($_POST['skip']) || (isset($_POST['template']) && !is_numeric($_POST['template'])))
-	$json['success'] = true;
+	$success = true;
 elseif(isset($_POST['load'])) {
 	$template = current(PommoMailingTemplate::get(array('id' => $_POST['template'])));
 	$pommo->_session['state']['mailing']['body'] = $template['body'];
 	$pommo->_session['state']['mailing']['altbody'] = $template['altbody'];
 	
-	$json['success'] = true;
-			
+	$success = true;
 }
 elseif(isset($_POST['delete'])) {
-	$json['success'] = false;
 	$msg = (PommoMailingTemplate::delete($_POST['template'])) ?
 		Pommo::_T('Template Deleted') :
 		Pommo::_T('Error with deletion.');
 	
-	$json['callbackFunction'] = 'deleteTemplate';
-	$json['callbackParams'] = array(
+	$json->add('callbackFunction','deleteTemplate');
+	$json->add('callbackParams'], array(
 		'id' => $_POST['template'],
-		'msg' => $msg);
+		'msg' => $msg)
+	);
 }
 else {
 	$smarty->assign('templates',PommoMailingTemplate::getNames());
@@ -76,5 +69,5 @@ else {
 	Pommo::kill();
 }
 
-die($encoder->encode($json));
+$json->serve($success);
 ?>

@@ -1,10 +1,9 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+
 {include file="inc/ui.grid.tpl"}
+{include file="inc/ui.form.tpl"}
 {/capture}
 
 
@@ -112,7 +111,7 @@ $().ready(function() {ldelim}
 	
 	var p = {ldelim}	
 	limit: {$state.limit},
-	url: 'ajax/subscriber_list.php',
+	url: 'ajax/manage.list.php',
 	colNames: [
 		'ID',
 		'Email',
@@ -152,7 +151,16 @@ $().ready(function() {
 		modal: true,
 		ajax: '@href',
 		target: '.jqmdMSG',
-		trigger: false
+		trigger: false,
+		onLoad: function(hash){
+			// prepare forms in loaded content
+			$('form',hash.w).each(function(){
+				if($(this).is('.ajax'))
+					poMMo.form.init(this);
+				else if($(this).is('.json'))
+					poMMo.form.init(this,{type: 'json'});
+			}).find('.validate').jqValidate();
+		}
 	}).jqDrag('div.jqmdTC');
 	
 	
@@ -192,6 +200,7 @@ $().ready(function() {
 </script>
 {/literal}
 {/if}
+
 
 
 {capture name=dialogs}

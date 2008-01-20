@@ -28,15 +28,11 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
 
 
-$json = array('success' => true);
-
-// TODO:  SEND MAILING
-
+// EXAMINE CALL
 switch ($_REQUEST['call']) {
 	case 'wysiwyg': // update wysiwyg ++ state
 		$wysiwyg = (isset($_REQUEST['enable'])) ? 'on' : 'off';
@@ -52,7 +48,7 @@ switch ($_REQUEST['call']) {
 	case 'altbody' :
 		Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
 		$h2t = & new html2text($_REQUEST['body']);
-		$json['altbody'] = $h2t->get_text();
+		$json->add('altbody',$h2t->get_text());
 	break;
 	
 	case 'getTemplateDescription' :
@@ -62,11 +58,9 @@ switch ($_REQUEST['call']) {
 		die($msg);
 	
 	default:
-		$json['success'] = false;
-		;
+		$json->fail();
 	break;
 }
 
-$encoder = new json;
-die($encoder->encode($json));
+$json->success();
 ?>

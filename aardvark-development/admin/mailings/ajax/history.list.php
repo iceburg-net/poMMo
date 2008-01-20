@@ -22,22 +22,23 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
+Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
 // Remember the Page State
-$state =& PommoAPI::stateInit('subscribers_manage');
-
-// Fetch group + member IDs
-$group = new PommoGroup($state['group'], $state['status'], $state['search']);
-
+$state =& PommoAPI::stateInit('mailings_history');
 
 /**********************************
-	PAGINATION METHODS
+	JSON OUTPUT INITIALIZATION
+ *********************************/
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
+
+/**********************************
+	PAGINATION AND ORDERING
 *********************************/
 // Get and Remember the requested page
 if(!empty($_REQUEST['page']) && (
@@ -48,14 +49,16 @@ if(!empty($_REQUEST['page']) && (
 
 // Get and Remember the sort column
 if(!empty($_REQUEST['sidx']) && (
-	preg_match('/d\d+/',$_REQUEST['sidx']) || 
-	$_REQUEST['sidx'] == 'email' || 
-	$_REQUEST['sidx'] == 'ip' || 
-	$_REQUEST['sidx'] == 'registered' || 
-	$_REQUEST['sidx'] == 'touched'
+	$_REQUEST['sidx'] == 'start' || 
+	$_REQUEST['sidx'] == 'end' || 
+	$_REQUEST['sidx'] == 'subject' || 
+	$_REQUEST['sidx'] == 'sent' ||
+	$_REQUEST['sidx'] == 'status' || 
+	$_REQUEST['sidx'] == 'group'
 	))
 		$state['sort'] = $_REQUEST['sidx'];
 		
+
 // Get and Remember the sort order
 if(!empty($_REQUEST['sord']) && (
 	$_REQUEST['sord'] == 'asc' || 
@@ -63,13 +66,6 @@ if(!empty($_REQUEST['sord']) && (
 	))
 		$state['order'] = $_REQUEST['sord'];
 		
-
-// Normalize sort column to match DB column
-if ($state['sort'] == 'registered' || $state['sort'] == 'touched') 
-	$state['sort'] = 'time_'.$state['sort'];
-elseif (substr($state['sort'],0,1) == 'd')
-	$state['sort'] = substr($state['sort'],1);
-	
 		
 // Calculate the offset
 $start = $state['limit']*$state['page']-$state['limit'];
@@ -78,44 +74,66 @@ if($start < 0)
 	
 	
 /**********************************
-	OUTPUT METHODS
+	RECORD RETREVIAL
 *********************************/
 	
-// fetch subscribers for this page
-$subscribers = $group->members(array(
+// normalize sort to database column
+if($state['sort'] == 'group') $state['sort'] = 'mailgroup';
+elseif($state['sort'] == 'start') $state['sort'] = 'started';
+elseif($state['sort'] == 'end') $state['sort'] = 'finished';
+	
+// Fetch Mailings for this Page
+$mailings = PommoMailing::get(array(
+	'noBody' => TRUE,
 	'sort' => $state['sort'],
 	'order' => $state['order'],
 	'limit' => $state['limit'],
 	'offset' => $start));
 
-// format subscribers for JSON output to jqGrid
-$subOut = array();
 
-foreach($subscribers as $s) {
-	$sub = array(
-		'id' => $s['id'],
-		'email' => $s['email'],
-		'touched' => $s['touched'],
-		'registered' => $s['registered'],
-		'ip' => $s['ip']	
+/**********************************
+	OUTPUT FORMATTING
+*********************************/
+
+$records = array();
+foreach($mailings as $o) {
+	$row = array(
+		'id' => $o['id'],
+		'subject' => $o['subject'],
+		'group' => $o['group'].' ('.$o['tally'].')',
+		'sent' => $o['sent'],
+		'start' => $o['start'],
+		'end' => $o['end']
 	);
 	
-	foreach($s['data'] as $key => $d)
-		$sub['d'.$key] = $d;
+	if($o['status'] == 0)
+		$o['status'] = Pommo::_T('Complete');
+	elseif($o['status'] == 1)
+		$o['status'] = Pommo::_T('Processing');
+	else
+		$o['status'] = Pommo::_T('Cancelled');
+	$row['status'] = $o['status'];
+	
+	// calculate mails per hour
+	if(!empty($o['end']) && !empty($o['sent'])) {
+		$runtime = strtotime($o['end'])-strtotime($o['start']);
+		$mph = ($runtime == 0)? $o['sent']*3600 : round(($o['sent'] / ($runtime)) * 3600);
+	}
+	else
+		$mph = 0;
 		
-	array_push($subOut,$sub);
+	$row['end'] .= '<br />'.$mph.' '.Pommo::_T('Mails/Hour');
+	
+	array_push($records,$row);
 }
 
-$json = new json;
-$output = $json->encode(
-	array(
+// format for JSON output to jqGrid
+$json->add(array(
 		'page' => $state['page'],
 		'total' => $state['pages'],
-		'records' => $group->_tally,
-		'rows' => $subOut
+		'records' => PommoMailing::tally(),
+		'rows' => $records
 	)
 );
-
-die($output);
+$json->serve();
 ?>
-

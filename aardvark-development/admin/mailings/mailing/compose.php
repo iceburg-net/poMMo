@@ -44,16 +44,9 @@ if(isset($_REQUEST['compose'])) {
 	/**********************************
 		JSON OUTPUT INITIALIZATION
 	 *********************************/
-	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-	$encoder = new json;
-	$json = array(
-		'success' => true,
-		'message' => false,
-		'errors' => false
-	);
-	die($encoder->encode($json));
+	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	$json = new PommoJSON();
+	$json->success();
 }
 	
 $dbvalues = PommoAPI::configGet(array(

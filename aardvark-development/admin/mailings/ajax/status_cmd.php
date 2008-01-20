@@ -22,7 +22,6 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
 Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
 
@@ -34,15 +33,11 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
- Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-
+Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+$json = new PommoJSON();
 
 $mailing = current(PommoMailing::get(array('active' => TRUE)));
 
-
-$json = array('success' => TRUE);
 switch ($_GET['cmd']) {
 	case 'cancel' : // cancel a mailing
 	case 'restart' : // restart mailing
@@ -53,13 +48,11 @@ switch ($_GET['cmd']) {
 			WHERE current_id=%i";
 		$query = $dbo->prepare($query,array($mailing['id']));
 		if (!$dbo->query($query))
-			$json['success'] = FALSE;
+			$json->fail();
 		
 		if($_GET['cmd'] == 'restart' || $_GET['cmd'] == 'cancel') 
 			PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?id='.$mailing['id'].'&code='.$mailing['code']);
-		
 		break;
 }
-$encoder = new json;
-die($encoder->encode($json));
+$json->success();
 ?>

@@ -55,38 +55,26 @@ if (!SmartyValidate :: is_registered_form('exchanger') || empty ($_POST)) {
 	/**********************************
 		JSON OUTPUT INITIALIZATION
 	 *********************************/
-	Pommo::requireOnce($pommo->_baseDir.'inc/lib/class.json.php');
-	$pommo->logErrors(); // PHP Errors are logged, turns display_errors off.
-	$pommo->toggleEscaping(); // Wraps _T and logger responses with htmlspecialchars()
-	$encoder = new json;
-	$json = array(
-		'success' => false,
-		'message' => false,
-		'errors' => false,
-		'callbackFunction' => false,
-		'callbackParams' => false
-	);
+	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	$json = new PommoJSON();
 	
 	if (SmartyValidate :: is_valid($_POST, 'exchanger')) {
 		// __ FORM IS VALID
 		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
 		
-		$json['success'] = true;
-		$json['message'] = (PommoHelperMessages::testExchanger($_POST['email'],$exchanger)) ? 
+		$msg = (PommoHelperMessages::testExchanger($_POST['email'],$exchanger)) ? 
 			Pommo::_T('Mail Sent.') :
 			Pommo::_T('Error Sending Mail');
 			
-		die($encoder->encode($json));
+		$json->success($msg);
 	
 	}
 	else {
 		// __ FORM NOT VALID
 		
-		$json['success'] = false;
-		$json['message'] = Pommo::_T('Please review and correct errors with your submission.');
-		$json['errors'] = $smarty->getInvalidFields('exchanger');
-		
-		die($encoder->encode($json));
+		$json->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
+		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->fail();
 	}
 	
 }
