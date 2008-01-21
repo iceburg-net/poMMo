@@ -1,7 +1,7 @@
-<div id="edOut" class="error"></div>
-<div class="warn"></div>
+<form class="json validate" action="ajax/manage.rpc.php?call=editSubscriber" method="post" id="edForm">
 
-<form method="post" action="ajax/subscriber_edit2.php" id="edForm">
+<div class="output alert"></div>
+
 <fieldset>
 <legend>{t}Edit Subscriber{/t}</legend>
 
@@ -63,19 +63,24 @@
 
 $().ready(function(){
 
-	// populate form with first selected row... TODO; add support for multiple subscriber editing at a time.
+	poMMo.callback.editSubscriber = function(p) {
+		poMMo.grid.setRow(p);
+	};
+	
+	// populate form with first selected row... 
+	// TODO; add support for multiple subscriber editing at a time.
 	var data = poMMo.grid.getRow();
+	var scope = $('#edForm')[0];
 	
 	for (var i in data)  {
 		
 		// skip empty values/data
-		var value = data[i].replace(/^\s*|\s*$/g,""); // trim value
-		if(value == '')
+		if($.trim(data[i]) == '')
 			continue;
 			
 		// transform "d#" to "d[#]"
 		var name = (i.match(/^d\d+$/)) ? 'd['+i.substr(1)+']' : i;
-		$(':input[@name="'+name+'"]',$('#edForm')).each(function(){
+		$(':input[@name="'+name+'"]',scope).each(function(){
 			if($(this).attr('type') == 'checkbox')
 				this.checked = (data[i] == 'on') ? true : false;
 			else
@@ -83,26 +88,13 @@ $().ready(function(){
 		}); 
 	}
 	
-	PommoValidate.reset(); // TODO -- validate must be scoped to this ROW. Modify validate.js
-	PommoValidate.init(':input','input[@type="submit"]', true, $('#edForm'));
-
-	$('input[@name="force"]').click(function(){
+	$('input[@name="force"]',scope).click(function(){
 		if(this.checked)
-			PommoValidate.enable();
+			$(this).jqvDisable();
+		else
+			$(this).jqvEnable();
 	});
 		
-	
-    $('#edForm').ajaxForm({ 
-        dataType:  'json', 
-        success: function(ret) { 
-        	$('#edOut').html(ret.message);
-        	if(ret.success) 
-        		poMMo.grid.addRow(ret.key,ret.subscriber);
-        }
-    }); 
-	
-	
-
 });
 </script>
 {/literal}

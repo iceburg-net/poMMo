@@ -112,6 +112,9 @@ poMMo.callback.deleteMailing = function(p) {
 {include file="inc/ui.dialog.tpl" dialogID="modal" dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
+{else}
+<strong>{t}No records returned.{/t}</strong>
 {/if}
+
 
 {include file="inc/admin.footer.tpl"}
