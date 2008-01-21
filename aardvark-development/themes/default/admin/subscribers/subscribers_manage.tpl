@@ -127,21 +127,17 @@ $().ready(function() {ldelim}
 });
 </script>
 {/literal}
+{else}
+<strong>{t}No records returned.{/t}</strong>
 {/if}
+
 
 {literal}
 <script type="text/javascript">
 $().ready(function() {
-	$('#orderForm select').change(function() {
-		$('#orderForm')[0].submit();
-	});
 	
-	$('legend.click').click(function(){ 
-		$(this).siblings('ul').slideToggle(); 
-	});
-	
+	// Setup Modal Dialogs
 	PommoDialog.init(['add','del','exp','edit']);
-	
 	$('#add').jqmAddTrigger('a.addTrigger');
 	$('#del').jqmAddTrigger('a.delTrigger');
 	$('#exp').jqmAddTrigger('a.expTrigger');
@@ -152,6 +148,16 @@ $().ready(function() {
 			$('#edit').jqmShow(this);
 		return false;
 	});
+	
+	
+	$('#orderForm select').change(function() {
+		$('#orderForm')[0].submit();
+	});
+	
+	$('legend.click').click(function(){ 
+		$(this).siblings('ul').slideToggle(); 
+	});
+	
 	
 	{/literal}
 	{if !empty($state.search)}

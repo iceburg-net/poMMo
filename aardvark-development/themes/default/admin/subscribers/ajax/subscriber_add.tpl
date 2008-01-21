@@ -1,6 +1,6 @@
 <p>{t escape='no' 1='<a href="subscribers_import.php">' 2='</a>'}Welcome to adding subscribers! You can add subscribers one-by-one here. If you would like to add subscribers in bulk, visit the %1Subscriber Import%2 page.{/t}</p>
 
-<form method="post" class="json validate" action="ajax/manage.rpc.php?call=addSubscriber">
+<form class="json validate" action="ajax/manage.rpc.php?call=addSubscriber" method="post">
 
 <div class="output alert"></div>
 

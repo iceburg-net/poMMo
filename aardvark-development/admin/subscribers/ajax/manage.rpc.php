@@ -38,6 +38,7 @@ $json = new PommoJSON();
 
 // EXAMINE CALL
 switch ($_REQUEST['call']) {
+
 	case 'addSubscriber': 
 		
 		$json->setFailMsg(Pommo::_T('Error adding subscriber.'));
@@ -89,7 +90,7 @@ switch ($_REQUEST['call']) {
 		$data = array(
 			'key' => $key,
 			'email' => $subscriber['email'],
-			'registered' => timetostr$subscriber['registered'],
+			'registered' => $subscriber['registered'],
 			'touched' => $subscriber['registered'],
 			'ip' => $subscriber['ip']
 		);
@@ -99,6 +100,88 @@ switch ($_REQUEST['call']) {
 		
 		$json->add('callbackFunction','addSubscriber');
 		$json->add('callbackParams',$data);
+		
+	break;
+	
+	case 'delSubscriber':
+
+		$emails = array();
+		if (isset($_REQUEST['emails'])) {
+			$in = array_unique(preg_split("/[\s,]+/", $_REQUEST['emails']));
+			foreach($in as $email) {
+				if (PommoHelper::isEmail($email))
+					array_push($emails,$email);
+			}
+		}
+
+		if (count($emails) > 0)  {
+			$ids = PommoSubscriber::getIDByEmail($emails,$_REQUEST['status']);
+			$msg = sprintf(Pommo::_T('You have removed %s subscribers!'), 
+				PommoSubscriber::delete($ids));
+				
+			$json->add('callbackFunction','delSubscriber');
+			$json->add('callbackParams',$ids);
+		}
+		else 
+			$msg = Pommo::_T('No subscribers were removed.');
+			
+		$json->success($msg);
+	
+	break;
+	
+	case 'editSubscriber':
+	
+		if(!is_numeric($_REQUEST['id']) || $_REQUEST['id'] == 0)
+			$json->fail('ERROR; Bad Subscriber ID Received');
+
+			$subscriber = array(
+				'id' => $_REQUEST['id'],
+				'email' => $_REQUEST['email'],
+				'data' => $_REQUEST['d']
+			);
+	
+			$validateOptions = array(
+				'skipReq' => TRUE,
+				'active' => FALSE
+			);
+
+		// check if email is valid
+		if (!PommoHelper::isEmail($subscriber['email']))
+			$json->fail(Pommo::_T('Invalid email.'));
+		
+		// check for dupe
+		$lookupID = current(PommoSubscriber::getIDByEmail($subscriber['email'],array(1,2)));
+		if ($lookupID && $lookupID != $subscriber['id'])
+			$json->fail(Pommo::_T('Email address already exists. Duplicates are not allowed.'));
+			
+		if (!PommoValidate::subscriberData($subscriber['data'],$validateOptions) && 
+			!isset($_REQUEST['force'])) {
+			$json->addErr(Pommo::_T('Fields failed validation')." >>> ");
+			$json->addErr($logger->getAll());
+			$json->fail(Pommo::_T('Error updating subscriber.'));
+			}	
+			
+			
+		if (!PommoSubscriber::update($subscriber,'REPLACE_ALL'))
+			$json->fail(Pommo::_T('Error updating subscriber.'));
+			
+		// subscriber updated successfully, build output
+		$out = array('email' => $subscriber['email'],'id' => $subscriber['id']);
+		
+		// return human readable date formatting
+		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+		$dateFields = PommoField::getByType('date');
+		
+		foreach($subscriber['data'] as $k => $val) {
+			$out['d'.$k] = in_array($k,$dateFields) ?
+				PommoHelper::timeToStr($val) :
+				htmlspecialchars($val);
+		}	
+		
+		$json->add('callbackFunction','editSubscriber');
+		$json->add('callbackParams',$out);
+		
+		$json->addMsg(Pommo::_T('Subscriber Updated'));
 		
 	break;
 	default:

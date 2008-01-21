@@ -1,9 +1,8 @@
-<div id="delOut" class="error"></div>
-<div class="warn"></div>
-
 <p>{t escape='no'}Enter email addresses of subscribers in the box below. Seperate emails with commas, spaces, or line breaks.{/t}</p>
 
-<form method="post" action="ajax/subscriber_del2.php" id="delForm">
+<form class="json" action="ajax/manage.rpc.php?call=delSubscriber" method="post">
+
+<div class="output alert"></div>
 
 <fieldset>
 <legend>{t}Remove Subscribers{/t}</legend>
@@ -31,8 +30,13 @@
 <script type="text/javascript">
 $().ready(function(){
 
-	var box = $('#delForm textarea');
+	var box = $('textarea[@name=emails]');
 	var orig = box.val();
+	
+	poMMo.callback.delSubscriber = function(ids) {
+		poMMo.grid.delRow(ids);
+		box.val("");
+	};
 
 	box.focus(function() {
 		if ($(this).val() == orig)
@@ -40,9 +44,7 @@ $().ready(function(){
 	});
 
 	box.blur(function() {
-		var val = $(this).val();
-		val.replace(/^\s*|\s*$/g,"");
-		if (val == "")
+		if($.trim($(this).val()) == '')
 			$(this).val(orig);
 	});
 	
@@ -56,18 +58,6 @@ $().ready(function(){
 		}
 		box.val(emails.join("\n"));
 	}
-	
-	 $('#delForm').ajaxForm({ 
-        dataType:  'json', 
-        success: function(ret) { 
-        	$('#delOut').html(ret.msg);
-        	if(ret.success) 	
-        		poMMo.grid.delRow(ret.ids);
-        	box.val("");
-        }
-    }); 
-    
-
 });
 </script>
 {/literal}

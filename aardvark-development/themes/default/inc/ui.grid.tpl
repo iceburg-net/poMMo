@@ -52,6 +52,14 @@ var PommoGrid = {ldelim}
 		}
 		this.grid.addRowData(id,data);
 	},
+	setRow: function(id,data) { // id = "key", data = column data
+		data = data || false;
+		if(!data) {
+			data = id;
+			id = data.id;	
+		}
+		this.grid.setRowData(id,data);
+	},
 	reset: function() {
 		// todo; Add method to jqGrid which clears selection.
 		return;

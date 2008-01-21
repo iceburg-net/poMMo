@@ -56,7 +56,11 @@ class PommoJSON {
 		if(array_key_exists($key,$this->_output)) {
 			if(!is_array($this->_output[$key]))
 				$this->_output[$key] = array($this->_output[$key]);
-			$this->_output[$key][] = $value;
+			
+			if(is_array($value))
+				$this->_output[$key] = array_merge($this->_output[$key],$value);
+			else
+				$this->_output[$key][] = $value;
 		}
 		elseif(is_array($key))
 			$this->_output = array_merge($key, $this->_output);
