@@ -19,6 +19,12 @@
  */
 die();
 ?>
+
+REFACTORING;
++++ DIALOGS, VALIDATE, JSON, window.load +++
+
+Rewrite groups_edit.php to use Datagrid Plugin for rule listing.
+
 http://www.pommo.org/community/viewtopic.php?pid=4305#p4305
 http://www.pommo.org/community/viewtopic.php?id=829
 http://www.pommo.org/community/viewtopic.php?id=439\
@@ -31,7 +37,6 @@ Assure all javascript template translations have javascript escaping (e.g. {t es
 [BEFORE Aardvark Final]
 	+ Remove languages from default distribution, separate download. ? opt.
 	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
-	+ Rewrite validate.js for scoping by table row
 	
 	+ Change Debugging [not included in $logger, but piped out @ end of template display || script], Offer more helpful info in support
 
