@@ -2,7 +2,19 @@
 
 if (typeof(poMMo) == 'undefined') {
 	var poMMo = {
-		callback: {}, // RPC/Ajax Callback Functions
+		callback: { // RPC/Ajax Callback Functions
+			redirect: function(url) {
+				$('#wait').jqmShow();
+				window.location = url;
+				return false;
+			},
+			pause: function() {
+				$('#wait').jqmShow();
+			},
+			resume: function() {
+				$('#wait').jqmHide();
+			}
+		}, 
 		confirmMsg: 'Are you sure?',
 		confirm: function(message){
 			message = message || this.confirmMsg;

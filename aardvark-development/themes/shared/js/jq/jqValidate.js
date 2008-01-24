@@ -24,8 +24,11 @@ validateClasses: [			// validation elements possessing these classes will be che
 invalidClass: 'pvInvalid'	// assigned to invalid elements
 };
 return this.each(function(){
-	if(this._jqV) 
-		return;
+	// check if form has already been initialized
+	if (this._jqV) 
+		return $.jqv.init(this);
+
+	// initialize this form
 	s++; this._jqV=s;
 	H[s] = {scope: this, valid: true, active: true, params: $.extend(_params,params)};
 	$.jqv.init(this);
@@ -52,7 +55,6 @@ $.jqv = {
 hash: {},
 init: function(e) {
 	var h = H[e._jqV];
-	
 	// assign submit elements
 	h.submits = $(h.params.submitElements,h.scope);
 	if(h.submits.size() == 0 && h.debug)
