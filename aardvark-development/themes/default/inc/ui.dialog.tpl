@@ -5,8 +5,11 @@
 <script type="text/javascript">
 
 PommoDialog = {
-	init: function(dialogs) {
+	init: function(dialogs,params,overloadParams) {
 		dialogs = dialogs || new Array('dialog');
+		params = params || {};
+		if(!overloadParams)
+			params = $.extend(this.params,params);
 		
 		for(var i=0;i<dialogs.length;i++)
 			$('#'+dialogs[i]).jqm(this.params);
@@ -40,6 +43,11 @@ $().ready(function() {
 		$('div.jqmDialog :input:visible')
 			.focus(function(){$(this).addClass('iefocus');})
 			.blur(function(){$(this).removeClass('iefocus');});
+
+
+	// Initialize default wait dialog
+	$('#wait').jqm({modal: true});
+
 });
 </script>
 {/literal}
@@ -54,4 +62,5 @@ $().ready(function() {
 	<img src="{$url.theme.shared}images/dialog/br.gif" />
 	<img src="{$url.theme.shared}images/dialog/bc.gif" />
 </div>
+{include file="inc/dialog.tpl" id=wait}
 {/capture}
