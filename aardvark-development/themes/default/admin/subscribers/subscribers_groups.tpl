@@ -49,7 +49,7 @@
 </span>
 
 <span>
-<button onclick="window.location.href='groups_edit.php?group_id={$id}'; return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
+<button onclick="window.location.href='groups_edit.php?group={$id}'; return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="edit icon" /></button>
 </span>
 
 <span>

@@ -45,7 +45,7 @@ class PommoRules {
 	// accepts a group object (can be empty -- thus returning all legal field filters)
 	// accepts a array of fields
 	// returns an array of logics. Array key correlates to field_id.
-	function & getLegal(&$group, &$fields) {
+	function & getLegal(&$group, $fields) {
 		$c = array();
 		
 		$legalities = array(
@@ -112,6 +112,17 @@ class PommoRules {
 			'is_in' => Pommo::_T('or in group'),
 			'not_in' => Pommo::_T('and not in group')
 		);
+		
+
+		if(is_array($str)) {
+			$out = array();
+			foreach($str as $val) {
+				if(array_key_exists($val,$english))
+					$out[$val] = $english[$val];
+			}
+			return $out;
+		}
+		
 		return (empty($str)) ? $english : $english[$str]; 
 	}
 	
@@ -129,7 +140,7 @@ class PommoRules {
 		return $dbo->affected($query);
 	}
 	
-	function addGroupRule(&$group, &$match, &$logic) {
+	function addGroupRule(&$groupID, &$match, &$logic) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -139,36 +150,35 @@ class PommoRules {
 				group_id=%i,
 				value=%i,
 				logic='%s'";
-		$query=$dbo->prepare($query,array($group,$match,$logic));
+		$query=$dbo->prepare($query,array($groupID,$match,$logic));
 		return $dbo->affected($query);
 	}
 	
-	function addFieldRule(&$group, &$match, &$logic, &$values, $type = 0) {
+	function addFieldRule(&$group, &$field, &$logic, &$values, $type = 0) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
 		$type = ($type == 'or')? 1 : 0;
 		
 		// remove previous filters
-		PommoRules::deleteRule($group, $match, $logic);
+		PommoRules::deleteRule($group, $field, $logic);
 		
 		// get the field
 		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-		$field = current(PommoField::get(array('id' => $match)));
+		$field = current(PommoField::get(array('id' => $field)));
 
 		foreach($values as $value) {
 			// if this is a date type field, convert the values from human readable date
 			//  strings to timestamps appropriate for matching
 			if($field['type'] == 'date')
 				$value = PommoHelper::timeFromStr($value);
-			$v[] = $dbo->prepare("(%i,%i,'%s','%s',%i)",array($group, $match, $logic, $value, $type));
+			$v[] = $dbo->prepare("(%i,%i,'%s','%s',%i)",array($group, $field['id'], $logic, $value, $type));
 		}
 		
 		$query = "
 			INSERT INTO " . $dbo->table['group_rules']."
 			(group_id, field_id, logic, value, type)
 			VALUES ".implode(',', $v);
-		echo $query;
 		return $dbo->affected($query);
 	}
 	
