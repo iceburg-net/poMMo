@@ -1,8 +1,7 @@
-{capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/validate.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+{capture name=head}
 <link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
+{include file="inc/ui.dialog.tpl"}
+{include file="inc/ui.form.tpl"}
 {/capture}
 {include file="inc/admin.header.tpl"}
 
@@ -19,50 +18,53 @@
 
 {include file="inc/messages.tpl"}
 
-<form method="post" action="" id="nameForm" name="nameForm">
-<fieldset>
-<legend>{t}Change Name{/t}</legend>
-
-<div>
-<label for="group_name">{t}Group name:{/t}</label> <input type="text" title="{t}type new group name{/t}" maxlength="60" size="30" name="group_name" id="group_name"  value="{$group.name|escape}" />
-<input type="submit" name="rename" value="{t}Rename{/t}" />
-</div>
-
-</fieldset>
+<form class="json validate" action="ajax/group.rpc.php?call=renameGroup" method="post">
+	
+	<fieldset>
+	<legend>{t}Change Name{/t}</legend>
+	<div>
+	<label for="group_name">{t}Group name:{/t}</label> <input class="pvEmpty" type="text" title="{t}type new group name{/t}" maxlength="60" size="30" name="group_name" id="group_name" value="{$group.name|escape}" />
+	<input type="submit" name="rename" value="{t}Rename{/t}" />
+	<div class="output"></div>
+	</div>
+	</fieldset>
 </form>
 
-<form method="post" action="" id="filterForm" name="filterForm">
+
+<form action="" id="addRule" method="post">
 <fieldset>
+
 <legend>{t}Add Rule{/t}</legend>
-
-<div id="newFilter">
-
 
 <div>
 <label for="field">{t escape=no 1="<strong><a href=\"`$url.base`admin/setup/setup_fields.php\">" 2="</a></strong>"}Select a %1 field %2 to filter{/t}</label>
-<select name="field" id="field" alt="{$group.id}">
+<select name="field">
 <option value="">-- {t}Choose Subscriber Field{/t} --</option>
-{foreach from=$new key=id item=name}
-<option value="{$id}">{$fields[$id].name}</option>
-{/foreach}
+{foreach from=$legalFieldIDs key=id item=name}<option value="{$id}">{$fields[$id].name}</option>{/foreach}
 </select>
 </div>
 
 <div>
 <label for="group">{t escape=no 1="<strong><a href=\"`$url.base`admin/subscribers/subscribers_groups.php\">" 2="</a></strong>"}or, Select a %1 group %2 to include or exclude{/t}</label>
-<select name="group" id="group" alt="{$group.id}">
+<select name="group">
 <option value="">-- {t}Choose Group{/t} --</option>
-{foreach from=$gnew key=id item=name}
-<option value="{$id}">{$name}</option>
-{/foreach}
+{foreach from=$legalGroups key=id item=name}<option value="{$id}">{$name}</option>{/foreach}
 </select>
 </div>
 
-</div>
 </fieldset>
+</form>
 
 {* **** DISPLAY GROUP RULES **** *}
 {cycle reset=true print=false advance=false values="r1,r2,r3"}
+
+<form id="rules" class="json" action="ajax/group.rpc.php?call=updateRule" method="post">
+<input type="hidden" name="fieldID" value=''>
+<input type="hidden" name="logic" value=''>
+<input type="hidden" name="type" value=''>
+<input type="hidden" name="request" value=''>
+
+<div class="output alert"></div>
 
 <fieldset>
 <legend>{t}Group Rules{/t}</legend>
@@ -91,12 +93,12 @@
 {foreach from=$rules.and key=field_id item=rule}
 {foreach from=$rule key=logic_id item=values}
 <tr class="{cycle values="r1,r2,r3"}">
-
-<td><a href="{$getURL}&delete={$field_id|escape}&logic={$logic_id|escape}"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
-
+<td>
+<img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" onClick="poMMo.callback.updateRule({ldelim}fieldID:'{$field_id|escape}',logic:'{$logic_id|escape}',request:'delete'{rdelim});" />
+</td>
 <td>
 {if $logic_id != 'true' && $logic_id != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
-<a href="#" onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic_id}','and'); return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" /></a>
+<img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" onClick="poMMo.callback.editRule({ldelim}fieldID:'{$field_id|escape}',logic:'{$logic_id|escape}', type: 'and'{rdelim});" />
 {/if}
 </td>
 
@@ -122,7 +124,7 @@
 </td>
 
 <td>
-<select name="type" onChange="_redirect('&toggle={$field_id|escape}&logic={$logic_id|escape}&type=or');">
+<select onChange="poMMo.callback.updateRule({ldelim}fieldID:'{$field_id|escape}',logic:'{$logic_id|escape}',type:'or',request:'update'{rdelim});">
 <option selected>{t}AND{/t}</option>
 <option>{t}OR{/t}</option>
 </select>
@@ -148,11 +150,13 @@
 {foreach from=$rule key=logic_id item=values}
 <tr class="{cycle values="r1,r2,r3"}">
 
-<td><a href="{$getURL}&delete={$field_id|escape}&logic={$logic_id|escape}"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+<td>
+<img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" onClick="poMMo.callback.updateRule({ldelim}fieldID:'{$field_id|escape}',logic:'{$logic_id|escape}',request:'delete'{rdelim});" />
+</td>
 
 <td>
 {if $logic_id != 'true' && $logic_id != 'false'}{* DO NOT ALLOW EDITING OF CHECKBOXES *}
-<a href="#" onclick="fwAjaxCall({$field_id},'field',{$group.id},'{$logic_id}','or'); return false;"><img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" /></a>
+<img src="{$url.theme.shared}images/icons/edit.png" alt="{t}Edit{/t}" onClick="poMMo.callback.editRule({ldelim}fieldID:'{$field_id|escape}',logic:'{$logic_id|escape}', type: 'or'{rdelim});" />
 {/if}
 </td>
 
@@ -169,7 +173,7 @@
 </td>
 
 <td>
-<select name="type" onChange="_redirect('&toggle={$field_id|escape}&logic={$logic_id|escape}&type=and');">
+<select onChange="poMMo.callback.updateRule({ldelim}fieldID:'{$field_id|escape}',logic:'{$logic_id|escape}',type:'and',request:'update'{rdelim});">
 <option>{t}AND{/t}</option>
 <option selected=true>{t}OR{/t}</option>
 </select>
@@ -194,7 +198,9 @@
 {foreach from=$rule key=logic_id item=values}
 <tr class="{cycle values="r1,r2,r3"}">
 
-<td colspan="2"><a href="{$getURL}&delete={$field_id|escape}&logic=is_in"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+<td colspan="2">
+<img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" onClick="poMMo.callback.updateRule({ldelim}fieldID:'{$field_id|escape}',logic:'is_in',request:'delete'{rdelim});" />
+</td>
 
 <td colspan="4">{t escape=no 1=<strong> 2=</strong> 3=$values}%1Add%2 members matching %3{/t}</td>
 
@@ -208,7 +214,9 @@
 {foreach from=$rule key=logic_id item=values}
 <tr class="{cycle values="r1,r2,r3"}">
 
-<td colspan="2"><a href="{$getURL}&delete={$field_id|escape}&logic=not_in"><img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" /></a></td>
+<td colspan="2">
+<img src="{$url.theme.shared}images/icons/delete.png" alt="{t}Delete{/t}" onClick="poMMo.callback.updateRule({ldelim}fieldID:'{$field_id|escape}',logic:'not_in',request:'delete'{rdelim});" />
+</td>
 
 <td colspan="4">{t escape=no 1=<strong> 2=</strong> 3=$values}%1Subtract%2 members matching %3{/t}</td>
 
@@ -223,73 +231,50 @@
 
 <p>{t escape=no 1="<em>`$ruleCount`</em>" 2="<strong>`$tally`</strong>"}%1 rules match a total of %2 active subscribers{/t}</p>
 
-{include file="inc/ui.dialog.tpl" dialogTitle=$dialogTitle dialogID="dialog" dialogDrag=true dialogClass="jqmdWide"}
-
 {literal}
 <script type="text/javascript">
+$().ready(function(){
+	// assign ajax + json forms
+	poMMo.form.assign();
+	
+	// Setup Modal Dialogs
+	PommoDialog.init(['dialog'],{modal: true});
 
-// globals
-var fieldID = false, 
-	groupID = false, 
-	ruleType = false,
-	andOr = 'and',
-	logic = 0,
-	origHTML = $('#dialog div.jqmdMSG').html();
-	
-function _redirect(url) {window.location.href = "{/literal}{$getURL}{literal}"+url;}
-
-function fwAjaxCall(fid,type,gid,_logic,_andOr) {
-	fieldID = fid;
-	groupID = gid;
-	ruleType = type;
-	andOr = _andOr;
-	logic = _logic;
-	
-	$('#dialog').jqmShow();
-}
-		
-$().ready(function(){ 
-	
-	$('#dialog').jqm({
-		modal: true, 
-		trigger: false, 
-		onShow: function(h) {
-			h.w.show();
-			$('div.jqmdMSG',h.w).load(
-				'ajax/group_edit.php',
-				{fieldID:fieldID, ruleType:ruleType, groupID:groupID, logic:logic, andOr: andOr},
-				function() { $('#dialog').jqmAddClose($('.jqmClose',this)); });
-		},
-		onHide: function(h) {
-			h.o.remove();
-			h.w.fadeOut(1200);
-			$('div.jqmdMSG',h.w).html(origHTML);
-			
-			// reset selects
-			$('select').each(function() { 
-				var o = this.options;
-				o[0].selected = true;
-			});
-			
-			// reset globals
-			andOr = 'and';
-			logic = 0;
-			
-		}}).jqDrag('div.jqmdTC');
-	
-	$('#newFilter select').change(function() {
-		ruleType = this.name;
-		groupID =$(this).attr('alt');
-		fieldID = $(this).val();
-		
-		if(fieldID == '')
-			return false;
-			
-		$('#dialog').jqmShow();
-		return false;
+	$('#addRule select').change(function(){
+		var type = this.name, fieldID = $(this).val();
+		if($.trim(fieldID) != '')
+			$('#dialog')
+				.jqm({ajax: 'ajax/group.rpc.php?call=displayRule&ruleType='+type+'&fieldID='+fieldID})
+				.jqmShow();
 	});
+	
 });
+
+poMMo.callback.updateRule = function(p) {
+	$('#rules input[@name=fieldID]').val(p.fieldID);
+	$('#rules input[@name=logic]').val(p.logic);
+	$('#rules input[@name=type]').val(p.type);
+	$('#rules input[@name=request]').val(p.request);
+	
+	poMMo.callback.pause();
+	$('#rules').submit();
+	return false;
+};
+
+poMMo.callback.editRule = function(p) {
+	console.log(p.logic);
+	$('#dialog')
+		.jqm({ajax: 'ajax/group.rpc.php?call=displayRule&ruleType=field&fieldID='+p.fieldID+'&logic='+p.logic+'&type='+p.type})
+		.jqmShow();	
+	return false;
+};
+
+
 </script>
 {/literal}
+
+{capture name=dialogs}
+{include file="inc/dialog.tpl" id=dialog wide=true}
+{/capture}
 
 {include file="inc/admin.footer.tpl"}

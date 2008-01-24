@@ -108,6 +108,7 @@ poMMo.form = {
 		}
 	},
 	assign: function(scope, reassign) { // prepares forms found in scope. Usually called on ajax loaded content.
+		scope = scope || $('body')[0];
 		$('form',scope).each(function(){
 			if(reassign) { // conserve memory! reassign is passed as previous form's serial #
 				this.pfSerial = reassign;
@@ -117,7 +118,7 @@ poMMo.form = {
 				poMMo.form.init(this,p);
 			else if($(this).is('.json'))
 				poMMo.form.init(this,{type: 'json'});
-		}).filter('.validate').jqValidate();
+		}).filter('.validate').jqValidate({submitElements: ':submit:not(.jqmClose,.pvSkip)'});
 	}
 };
 </script>

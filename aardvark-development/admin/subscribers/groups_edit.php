@@ -40,10 +40,16 @@ $smarty = new PommoTemplate();
 $smarty->assign('returnStr', Pommo::_T('Groups Page'));
 
 
+// Initialize page state with default values overriden by those held in $_REQUEST
+$state =& PommoAPI::stateInit('groups_edit',array(
+	'group' => 0),
+	$_REQUEST);
+	
+
 $groups = & PommoGroup::get();
 $fields = & PommoField::get();
 
-$group =& $groups[$_REQUEST['group_id']];
+$group =& $groups[$state['group']];
 
 if(empty($group))
 	Pommo::redirect('subscribers_groups.php');
@@ -51,46 +57,6 @@ if(empty($group))
 $rules = PommoSQL::sortRules($group['rules']);
 $rules['and'] = PommoSQL::sortLogic($rules['and']);
 $rules['or'] = PommoSQL::sortLogic($rules['or']);
-	
-// change group name if requested
-if (isset($_POST['rename']) && !empty ($_POST['group_name']))
-	if (PommoGroup::nameChange($group['id'], $_POST['group_name']))
-		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id'].'&renamed='.$_POST['group_name']);
-if (isset($_GET['renamed']))
-	$logger->addMsg(Pommo::_T('Group Renamed'));
-
-if(isset($_GET['delete'])) {
-	PommoRules::deleteRule($group['id'], $_GET['delete'], $_GET['logic']);
-	Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
-}
-
-if(isset($_GET['toggle'])) { 
-	if($_GET['type'] == 'or' && count($rules['and']) < 2)
-		$logger->addMsg(Pommo::_T('At least 1 "and" rule must exist before an "or" rule takes effect.'));
-	else {
-		PommoRules::changeType($group['id'], $_GET['toggle'], $_GET['logic'], $_GET['type']);
-		Pommo::redirect($_SERVER['PHP_SELF'].'?group_id='.$group['id']);
-	}
-}
-
-	
-$new = & PommoRules::getLegal($group, $fields);
-$gnew = & PommoRules::getLegalGroups($group, $groups);
-
-
-// convert the rules array ID's + logics to user readable values
-//	$rules[rule_id] = array (
-	//		'field_id' => $row['field_id'],
-  	//		'logic' => $row['logic'],
-	//		'value' => $row['value'],
-	//	);
-	
-// 	// A "logic array" resembles:
-	//  $logic[field_id] = array(
-	//		[logic] => array(values)
-	//		is_in => array(1,2)
-	//	);
-	
 
 foreach($rules as $key => $a) {
 	if ($key == 'include' || $key == 'exclude')
@@ -98,13 +64,20 @@ foreach($rules as $key => $a) {
 			$rules[$key][$k] = $groups[$gid]['name'];
 }
 
-$smarty->assign('dialogTitle',Pommo::_T("Add Rule"));
+
+$smarty->assign('fields',$fields);
+
+$smarty->assign('legalFieldIDs', PommoRules::getLegal($group, $fields));
+$smarty->assign('legalGroups', PommoRules::getLegalGroups($group, $groups));
+
+
 
 $smarty->assign('group',$group);
-$smarty->assign('fields',$fields);
+
 $smarty->assign('logicNames',PommoRules::getEnglish());
-$smarty->assign('new', $new);
-$smarty->assign('gnew', $gnew);
+
+
+
 $smarty->assign('rules', $rules);
 $smarty->assign('tally', PommoGroup::tally($group));
 $smarty->assign('ruleCount', count($rules['and'])+count($rules['or'])+count($rules['include'])+count($rules['exclude']));
