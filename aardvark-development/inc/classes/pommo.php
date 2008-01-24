@@ -419,6 +419,11 @@ class Pommo {
 	// error log, E_ERROR trapping
 	//  CAN NOT BE CALLED STATICALLY!
 	function logErrors() {
+		
+		// ignore call if verbosity maximum.
+		if($this->_verbosity < 2)
+			return;
+			
 		// error handling
 		error_reporting(E_ALL);
 		ini_set('display_errors',0);
