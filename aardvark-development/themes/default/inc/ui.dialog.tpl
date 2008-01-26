@@ -21,7 +21,7 @@ PommoDialog = {
 		trigger: false,
 		onLoad: function(hash){
 			// Automatically prepare forms in ajax loaded content
-			if($.isFunction(poMMo.form.assign))
+			if(poMMo.form && $.isFunction(poMMo.form.assign))
 				poMMo.form.assign(hash.w);
 		}
 	}

@@ -50,7 +50,7 @@ if (isset($_POST['restore'])) {
 	// reset _POST.
 	$_POST = array();
 	
-	$json->add('callbackFunction','location');
+	$json->add('callbackFunction','redirect');
 	$json->add('callbackParams',$pommo->_baseUrl.'admin/setup/setup_configure.php#Messages');
 	$json->serve();
 }

@@ -52,8 +52,10 @@ class PommoJSON {
 	// add a key: value to JSON output
 	//   accepts a key and value ("success",true), or an array (array('success' => true, 'message' => "hola!"))
 	//   beware of key conflicts (especially when passing arrays)!
-	function add($key,$value) {
-		if(array_key_exists($key,$this->_output)) {
+	function add($key,$value = false) {
+		if(is_array($key))
+			$this->_output = array_merge($key, $this->_output);
+		elseif(array_key_exists($key,$this->_output)) {
 			if(!is_array($this->_output[$key]))
 				$this->_output[$key] = array($this->_output[$key]);
 			
@@ -62,8 +64,6 @@ class PommoJSON {
 			else
 				$this->_output[$key][] = $value;
 		}
-		elseif(is_array($key))
-			$this->_output = array_merge($key, $this->_output);
 		else
 			$this->_output[$key] = $value;
 	}

@@ -39,7 +39,7 @@
 	</div>
 	
 	{* Displayed when a command is clicked *}
-	<div id="wait" class="hidden error uniq">
+	<div id="pause" class="hidden error uniq">
 		{t}Command Recieved. Please wait...{/t}
 	</div>
 	
@@ -132,7 +132,7 @@ $().ready(function(){
 	$('#commands a.cmd').click(function() { 
 		if(pommo.status != 5) {
 			pommo.status = 5;
-			$('#wait').show().siblings('div.uniq').hide();
+			$('#pause').show().siblings('div.uniq').hide();
 			var cmd = $(this).attr('href').replace(/.*\#/,'');
 			$.getJSON(
 				'ajax/status_cmd.php?cmd='+cmd,

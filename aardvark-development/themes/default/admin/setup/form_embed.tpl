@@ -1,6 +1,5 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+{include file="inc/ui.dialog.tpl"}
 {/capture}{include file="inc/admin.header.tpl"}
 
 <h2>{t}Embedded Subscription Forms{/t}</h2>
@@ -78,8 +77,8 @@ $().ready(function(){
 {/capture}
 
 {capture name=dialogs}
-{include file="inc/ui.dialog.tpl" dialogID="miniPreview" dialogContent=$smarty.capture.mini dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="fullPreview" dialogContent=$smarty.capture.full dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
+{include file="inc/dialog.tpl" id="miniPreview" content=$smarty.capture.mini wide=true tall=true}
+{include file="inc/dialog.tpl" id="fullPreview" content=$smarty.capture.full wide=true tall=true}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

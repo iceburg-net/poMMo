@@ -95,10 +95,10 @@ var wysiwyg = {
 			this.textarea.val();
 	},
 	lock: function() { // locks the interface
-		$('#wait').jqmShow();
+		poMMo.pause();
 	},
 	unlock: function() { // unlocks the interface
-		$('#wait').jqmHide();
+		poMMo.resume();
 	},
 	init: function(o) { 
 		this.fck = false; 

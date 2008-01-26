@@ -33,3 +33,11 @@
 </div>
 
 </form>
+
+{literal}
+<script type="text/javascript">
+$().ready(function(){
+	$('form .jqmClose',$('#dialog')[0]).click(function(){$('#dialog').jqmHide();});
+});
+</script>
+{/literal}
