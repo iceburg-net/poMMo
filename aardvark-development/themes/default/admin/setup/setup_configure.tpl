@@ -1,8 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-
 {include file="inc/ui.form.tpl"}
+{include file="inc/ui.dialog.tpl"}
 {include file="inc/ui.tabs.tpl"}
 {include file="inc/ui.slider.tpl"}
 {/capture}
@@ -68,10 +66,6 @@ $().ready(function(){
 			break;
 	}
 	
-	poMMo.callback.location = function(url) {
-		window.location = url;
-	}
-
 });
 
 </script>

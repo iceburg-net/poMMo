@@ -29,6 +29,7 @@ poMMo.form = {
 			this.pfSerial = s;
 			
 			p.form = this;
+			p.scope = p.target || $(this).parent()[0];
 			
 			poMMo.form.hash[s] = p;
 			
@@ -74,7 +75,7 @@ poMMo.form = {
 				return poMMo.form.defaults.jsonSuccess(response, hash);
 			
 			// reassign the form [designed to work in default setting, on forms with class ajax]
-			poMMo.form.assign(hash.target, hash.form.pfSerial);
+			poMMo.form.assign(hash.scope, hash.form.pfSerial);
 		},
 		jsonSuccess: function(json, hash) {
 			// execute a callback function if passed (and exists).
@@ -115,7 +116,7 @@ poMMo.form = {
 				poMMo.form.init(this,poMMo.form.hash[reassign]);
 			}
 			else if($(this).is('.ajax'))
-				poMMo.form.init(this,p);
+				poMMo.form.init(this);
 			else if($(this).is('.json'))
 				poMMo.form.init(this,{type: 'json'});
 		}).filter('.validate').jqValidate({submitElements: ':submit:not(.jqmClose,.pvSkip)'});

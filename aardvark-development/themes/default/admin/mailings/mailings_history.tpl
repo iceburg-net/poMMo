@@ -1,7 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 {* Include in-place editing of subscriber table *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+{include file="inc/ui.dialog.tpl"}
 {include file="inc/ui.grid.tpl"}
 {/capture}
 
@@ -60,13 +59,10 @@ $().ready(function() {ldelim}
 <script type="text/javascript">
 $().ready(function(){
 	
-	$('#modal').jqm({
-		modal: true,
-		ajax: '@href',
-		ajaxLoadText: '{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t escape=js}Please Wait{/t}...{literal}',
-		target: '.jqmdMSG',
-		trigger: false
-	}).jqDrag('div.jqmdTC');
+	
+	
+	// Setup Modal Dialogs
+	PommoDialog.init();
 
 	
 	$('a.modal').click(function(){
@@ -88,7 +84,7 @@ $().ready(function(){
 			if($(this).hasClass('visit'))
 				window.location = this.href;
 			else
-				$('#modal').jqmShow(this);
+				$('#dialog').jqmShow(this);
 			
 			// restore the original HREF
 			this.href = oldHREF;
@@ -102,19 +98,18 @@ $().ready(function(){
 
 poMMo.callback.deleteMailing = function(p) {
 	poMMo.grid.delRow(p.ids);
-	$('#modal').jqmHide();  		
+	$('#dialog').jqmHide();  		
 }
 
 </script>
 {/literal}
 
-{capture name=dialogs}
-{include file="inc/ui.dialog.tpl" dialogID="modal" dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{/capture}
-
 {else}
 <strong>{t}No records returned.{/t}</strong>
 {/if}
 
+{capture name=dialogs}
+{include file="inc/dialog.tpl" id=dialog wide=true tall=true}
+{/capture}
 
 {include file="inc/admin.footer.tpl"}

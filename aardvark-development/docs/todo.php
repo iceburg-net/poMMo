@@ -20,9 +20,6 @@
 die();
 ?>
 
-REFACTORING;
-+++ DIALOGS, VALIDATE, JSON, window.load +++
-
 Rewrite groups_edit.php to use Datagrid Plugin for rule listing.
 
 http://www.pommo.org/community/viewtopic.php?pid=4305#p4305

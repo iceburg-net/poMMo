@@ -1,6 +1,5 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
+{include file="inc/ui.dialog.tpl"}
 {/capture}
 {include file="inc/admin.header.tpl"}
 
@@ -24,20 +23,15 @@ $().ready(function() {
 		return confirm("{/literal}{t}Confirm your action.{/t}{literal}\n"+str+"?");
 	});
 	
-	$('#modal').jqm({
-		trigger: 'a.modal',
-		ajax: '@href',
-		target: 'div.jqmdMSG',
-		modal: true,
-		ajaxLoadText: '{/literal}<img src="{$url.theme.shared}images/loader.gif" alt="Loading Icon" title="Please Wait" border="0" />{t escape=js}Please Wait{/t}...{literal}'
-	});
+	// Setup Modal Dialogs
+	PommoDialog.init();
 	
 });
 </script>
 {/literal}
 
 {capture name=dialogs}
-{include file="inc/ui.dialog.tpl" dialogID="modal"}
+{include file="inc/ui.dialog.tpl" id=dialog}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

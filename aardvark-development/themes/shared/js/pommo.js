@@ -4,16 +4,12 @@ if (typeof(poMMo) == 'undefined') {
 	var poMMo = {
 		callback: { // RPC/Ajax Callback Functions
 			redirect: function(url) {
-				$('#wait').jqmShow();
+				this.pause();
 				window.location = url;
 				return false;
 			},
-			pause: function() {
-				$('#wait').jqmShow();
-			},
-			resume: function() {
-				$('#wait').jqmHide();
-			}
+			pause: function() { this.pause(); },
+			resume: function() { this.resume(); }
 		}, 
 		confirmMsg: 'Are you sure?',
 		confirm: function(message){
@@ -28,6 +24,12 @@ if (typeof(poMMo) == 'undefined') {
 			if(!msg instanceof Array)
 				msg = new Array(msg);
 			return msg.join(seperator);
+		},
+		pause: function() {
+			$('#wait').jqmShow();
+		},
+		resume: function() {
+			$('#wait').jqmHide();
 		}
 	};
 }

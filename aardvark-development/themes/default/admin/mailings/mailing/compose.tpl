@@ -10,8 +10,8 @@
 
 <ul class="inpage_menu">
 <li><a href="#" id="e_toggle"><img src="{$url.theme.shared}images/icons/viewhtml.png" alt="icon" border="0" align="absmiddle" /><span id="toggleText">{t}Enable WYSIWYG{/t}</span></a></li>
-<li><a href="#" id="e_personalize"><img src="{$url.theme.shared}images/icons/subscribers_tiny.png" alt="icon" border="0" align="absmiddle" /> {t}Add Personalization{/t}</a></li>
-<li><a href="#" id="e_template"><img src="{$url.theme.shared}images/icons/edit.png" alt="icon" border="0" align="absmiddle" /> {t}Save as Template{/t}</a></li>
+<li><a href="mailing/ajax.personalize.php" id="e_personalize"><img src="{$url.theme.shared}images/icons/subscribers_tiny.png" alt="icon" border="0" align="absmiddle" /> {t}Add Personalization{/t}</a></li>
+<li><a href="mailing/ajax.addtemplate.php" id="e_template"><img src="{$url.theme.shared}images/icons/edit.png" alt="icon" border="0" align="absmiddle" /> {t}Save as Template{/t}</a></li>
 </ul>
 
 <div class="compose">
@@ -68,7 +68,7 @@ $().ready(function() {ldelim}
 	});
 	
 	$('#e_personalize').click(function() {
-		$('#personalize').jqmShow();
+		$('#dialog').jqmShow(this);
 		return false;
 	});
 	
@@ -78,13 +78,14 @@ $().ready(function() {ldelim}
 		var post = {
 			body: wysiwyg.getBody(),
 			altbody: $('textarea[@name=altbody]').val()
-		}
+		},
+		trigger = this;
 		
-		$('#wait').jqmShow();
+		poMMo.pause();
 		
 		$.post('mailing/ajax.rpc.php?call=savebody',post,function(){
-			$('#addTemplate').jqmShow();
-			$('#wait').jqmHide();
+			$('#dialog').jqmShow(trigger);
+			poMMo.resume();
 		});
 		
 		return false;
@@ -97,11 +98,11 @@ $().ready(function() {ldelim}
 			body: wysiwyg.getBody()
 		}
 		
-		$('#wait').jqmShow();
+		poMMo.pause();
 		
 		$.post('mailing/ajax.rpc.php?call=altbody',post,function(json){
 			$('textarea[@name=altbody]').val(json.altbody);
-			$('#wait').jqmHide();
+			poMMo.resume();
 		},"json");
 		
 		return false;
@@ -114,10 +115,10 @@ $().ready(function() {ldelim}
 			altbody: $('textarea[@name=altbody]').val()
 		}
 		
-		$('#wait').jqmShow();
+		poMMo.pause();
 		
 		$.post('mailing/ajax.rpc.php?call=savebody',post,function(){
-			$('#wait').jqmHide();
+			poMMo.resume();
 		});
 	});
 	

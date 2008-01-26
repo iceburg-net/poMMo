@@ -58,7 +58,7 @@ elseif(isset($_POST['delete'])) {
 		Pommo::_T('Error with deletion.');
 	
 	$json->add('callbackFunction','deleteTemplate');
-	$json->add('callbackParams'], array(
+	$json->add('callbackParams', array(
 		'id' => $_POST['template'],
 		'msg' => $msg)
 	);

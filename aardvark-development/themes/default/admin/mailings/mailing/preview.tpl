@@ -44,7 +44,7 @@
 $().ready(function() {
 	
 	$('#e_test').click(function() {
-		$('#testMailing').jqmShow();
+		$('#dialog').jqmShow(this);
 		return false;
 	});
 	
@@ -52,12 +52,6 @@ $().ready(function() {
 		$('#sendForm').submit();
 		return false;
 	});
-	
-	poMMo.callback.redirect = function(p) {
-		$('#wait').jqmShow();
-		window.location = p.url;
-		return false;
-	};
 });
 </script>
 {/literal}
