@@ -6,7 +6,7 @@
 
 PommoDialog = {
 	init: function(dialogs,params,overloadParams) {
-		dialogs = dialogs || 'div.jqmDialog';
+		dialogs = dialogs || 'div.jqmDialog[id!=wait]';
 		params = params || {};
 		if(!overloadParams)
 			params = $.extend(this.params,params);
@@ -43,7 +43,6 @@ $().ready(function() {
 			.focus(function(){$(this).addClass('iefocus');})
 			.blur(function(){$(this).removeClass('iefocus');});
 
-
 	// Initialize default wait dialog
 	$('#wait').jqm({modal: true});
 
@@ -61,5 +60,5 @@ $().ready(function() {
 	<img src="{$url.theme.shared}images/dialog/br.gif" />
 	<img src="{$url.theme.shared}images/dialog/bc.gif" />
 </div>
-{include file="inc/dialog.tpl" id=wait}
+{include file="inc/dialog.tpl" id=wait wait=true}
 {/capture}

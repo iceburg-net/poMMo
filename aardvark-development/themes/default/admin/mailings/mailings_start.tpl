@@ -34,11 +34,11 @@
 $().ready(function(){ 
 	
 	poMMo.tabs = PommoTabs.init('#tabs');
-	
+	PommoDialog.init();
 	
 	// Setup Modal Dialogs
 	//PommoDialog.init(['addTemplate,testMailing,personalize']);
-	PommoDialog.init();
+	
 	/*
 	$('#addTemplate').jqm({ajax: 'mailing/ajax.addtemplate.php'});
 	$('#testMailing').jqm({ajax: 'mailing/ajax.mailingtest.php'});
@@ -50,8 +50,6 @@ $().ready(function(){
 
 {capture name=dialogs}
 {include file="inc/dialog.tpl" id=dialog wide=true tall=true}
-{include file="inc/dialog.tpl" id="addTemplate" title=$t_saveTemplate wide=true tall=true}
-{include file="inc/dialog.tpl" id="testMailing" title=$t_testMailing dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
 {/capture}
 
 {include file="inc/admin.footer.tpl"}

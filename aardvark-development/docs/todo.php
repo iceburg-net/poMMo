@@ -20,7 +20,7 @@
 die();
 ?>
 
-Refactor form.js, table.js, ui.dialog.tpl, grid.css
+Cleanup/Unify Admin Mailings History and User Mailings List
 
 Rewrite groups_edit.php to use Datagrid Plugin for rule listing.
 
