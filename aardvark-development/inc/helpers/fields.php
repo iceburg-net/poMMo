@@ -307,7 +307,7 @@ class PommoField {
 	// adds an option to a multiple choice field (adds to the array in field_array)
 	// accepts a field (array)
 	// accepts a value (str)
-	// returns success (bool)
+	// returns field options (array), or false (bool)
 	function optionAdd(&$field, $value) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -326,13 +326,13 @@ class PommoField {
 			WHERE field_id=%i";
 		$query = $dbo->prepare($query,array($o,$field['id']));
 		
-		return ($dbo->affected($query) > 0) ? TRUE : FALSE;
+		return ($dbo->affected($query) > 0) ? $field['array'] : FALSE;
 	}
 	
 	// deletes an option from a multiple choice field (removes from the array in field_array)
 	// accepts a field (array)
 	// accepts a value (str)
-	// returns success (bool)
+	// returns field options (array), or false (bool)
 	function optionDel(&$field, &$value) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
@@ -353,7 +353,7 @@ class PommoField {
 			WHERE field_id=%i";
 		$query = $dbo->prepare($query,array($o,$field['id']));
 		
-		return ($dbo->affected($query) > 0) ? TRUE : FALSE;
+		return ($dbo->affected($query) > 0) ? $field['array'] : FALSE;
 	}
 	
 	// Fetches the subscriber IDs of those who will be affected by a field change
