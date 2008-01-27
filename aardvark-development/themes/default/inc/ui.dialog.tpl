@@ -6,13 +6,12 @@
 
 PommoDialog = {
 	init: function(dialogs,params,overloadParams) {
-		dialogs = dialogs || new Array('dialog');
+		dialogs = dialogs || 'div.jqmDialog';
 		params = params || {};
 		if(!overloadParams)
 			params = $.extend(this.params,params);
 		
-		for(var i=0;i<dialogs.length;i++)
-			$('#'+dialogs[i]).jqm(this.params);
+		$(dialogs).jqm(this.params);
 	},
 	params: {
 		modal: false,

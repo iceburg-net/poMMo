@@ -20,6 +20,8 @@
 die();
 ?>
 
+Refactor form.js, table.js, ui.dialog.tpl, grid.css
+
 Rewrite groups_edit.php to use Datagrid Plugin for rule listing.
 
 http://www.pommo.org/community/viewtopic.php?pid=4305#p4305
@@ -43,6 +45,9 @@ Assure all javascript template translations have javascript escaping (e.g. {t es
 	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
 	ReStripe rows on delete/tableSort
 	ELEMENTS with TITLE="??" : Title needs to be translated -- use SAME text as INNERHTML/LINK text
+	
+	SETUP SHORTCUT FOR "<img src="{$url.theme.shared}images/loader.gif" name="loading" class="hidden" title="{t}loading...{/t}" alt="{t}loading...{/t}" />"
+	
 	
 [BRICE -- "Feel free to inherit any of these ;)" ]
 
