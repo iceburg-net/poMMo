@@ -1,3 +1,18 @@
+=== Release Notes for poMMo Aardvark PR16rc4 ===
+ .: Released Janurary 27, 2008
+
+[Additions]
+	* Added a JSON helper class
+	* Added jqValidate and jqStripe plugins
+
+[Improvements]
+	* Reduced code size and maintainence
+	* Modernized Javascripts - Complete rewrite or refactor of all code
+	* Public Mailing page now uses a grid to display
+	* Improved Cross-Browser Compatibility (Internet Explorer, Firefox, etc.) of Administrative Area
+
+
+
 === Release Notes for poMMo Aardvark PR16rc3 ===
  .: Released Janurary 13, 2008
 

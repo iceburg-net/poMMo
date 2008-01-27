@@ -39,9 +39,9 @@ INSERT INTO :::config::: VALUES ('throttle_BPS', '0', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_MPS', '3', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('throttle_SMTP', 'individual', '', 'off', 'on');
 INSERT INTO :::config::: VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on');
-INSERT INTO :::config::: VALUES ('version', 'Aardvark PR16rc3', 'poMMo Version', 'on', 'off');
+INSERT INTO :::config::: VALUES ('version', 'Aardvark PR16rc4', 'poMMo Version', 'on', 'off');
 INSERT INTO :::config::: VALUES ('key', '123456', 'Unique Identifier', 'on', 'off');
-INSERT INTO :::config::: VALUES ('revision', '39', 'Internal Revision', 'on', 'off');
+INSERT INTO :::config::: VALUES ('revision', '40', 'Internal Revision', 'on', 'off');
 
 -- DEMOGRAPHICS
 
