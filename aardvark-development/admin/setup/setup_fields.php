@@ -81,7 +81,7 @@ if (!empty ($_GET['delete'])) {
 }
 
 // Get array of fields. Key is ID, value is an array of the demo's info
-$fields = PommoField::get();
+$fields = PommoField::get(array('byName' => FALSE));
 if (!empty($fields))
 	$smarty->assign('fields', $fields);
 	

@@ -1,9 +1,8 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/interface.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/jqModal.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/modal.css" />
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
+{include file="inc/ui.form.tpl"}
+{include file="inc/ui.dialog.tpl"}
+{include file="inc/ui.cssTable.tpl"}
+{include file="inc/ui.sort.tpl"}
 {/capture}
 {include file="inc/admin.header.tpl"}
 
@@ -81,7 +80,7 @@
 </span>
 
 <span>
-<img src="{$url.theme.shared}images/icons/order.png" alt="order icon" class="handle" id="a{$key}" />
+<img src="{$url.theme.shared}images/icons/order.png" alt="order icon" class="handle" />
 </span>
 
 <span class="name{if $field.active == 'on'} green{/if}">
@@ -100,108 +99,55 @@
 </p>
 
 {if $added}
-<a href="ajax/field_edit.php?field_id={$added}" id="added" class="hidden"></a>
+<a href="ajax/field_edit.php?field_id={$key}" id="added" class="hidden"></a>
 {/if}
-
 
 {literal}
 <script type="text/javascript">
-var pommoSort = {
-	init: function() {
-		var s = $.SortSerialize('grid');
-		this.hash = s.hash;
-	},
-	update: function(hash) {
-		if (this.hash == hash)
-			return false; // don't do a thing if unchanged...
-		this.hash = hash;
-
-		$.post("ajax/fields_order.php", this.hash, function(json) {
-			eval("var args = " + json);
-
-			if (typeof(args.success) == 'undefined') {
-				alert('ajax error!');
-				return;
-			}
-
-			$('#ajaxOut').html(args.msg).fadeIn('fast');
-
-			if (args.success === true)
-				$('#ajaxOut').fadeOut(6000);
-
-		});
-
-		return false;
-	}
-};
-
 $().ready(function(){
 
-	$('#grid').Sortable({
-		accept : 'sortable',
-		handle: 'img.handle',
-		opacity: 0.8,
-		tolerance: 'intersect',
-		onStop: function() {
-			var s = $.SortSerialize('grid');
-			pommoSort.update(s.hash);
-		}
-	});
-	pommoSort.init();
+	// setup dialogs
+	PommoDialog.init('#dialog',{modal: true, trigger: '.editTrigger'});
 	
-	$('#editWindow').jqm({
-		modal: true,
-		ajax: '@href',
-		target: '.jqmdMSG',
-		trigger: '.editTrigger',
-		onLoad: function(){assignForm(this);}
-	}).jqDrag('div.jqmdTC');
+	// setup sorting
+	PommoSort.init('#grid',{updateURL: 'ajax/fields.rpc.php?call=updateOrdering'});
 	
-	if($('#added')[0]) {
-		var a = $('#added');
-		$('#editWindow').jqmAddTrigger(a);
-		a.click();
-	}
+	// trigger editing of recently added field
+	var a = $('#added')[0];
+	if(a) 
+		$('#dialog').jqmShow(a);
 	
-	$('#confirm').jqm({trigger:false,modal:true,zIndex:5000});
 });
 
-function assignForm(scope) {
-	$('form',scope).ajaxForm( { 
-		target: scope,
-		beforeSubmit: function() {
-			$('input[@type=submit]', scope).hide();
-			$('img[@name=loading]', scope).show();
-		},
-		success: function() {
-			assignForm(this); 
-			$('div.output',this).fadeOut(5000); 
-			
-			if($('input[@name=success]',this).val()) {
-				var name=$('input[@name=field_name]',this).val();
-				var req=$('input[@name=field_required]:checked',this).val();
-				var active=$('input[@name=field_active]:checked',this).val();
-				
-				if(req == 'on')
-					name='<strong>'+name+'</strong>';
-				
-				var e=$('#id'+$('input[@name=field_id]',this).val()+' span.name').html(name);
-				
-				if(active == 'on')
-					e.addClass('green');
-				else
-					e.removeClass('green');}
-			}
-		}
-	);
-}
+poMMo.callback.updateField = function(f) {
+	var name = f.name;
+	if(f.required == 'on')
+		name = '<strong>'+name+'</strong';
+		
+	var e = $('#id'+f.id+' span.name').html(name);
+	
+	e.removeClass('green');
+	if(f.active == 'on')
+		e.addClass('green');
+};
+
+poMMo.callback.updateOptions = function(json) {
+	// remove existing options
+	$('#delOptions option').remove();
+	
+	// clear addOptions input
+	$('#addOptions').val('');
+	
+	// populate options
+	for(var i=0;i<json.length;i++)
+		$('#delOptions, #normally').append('<option>'+json[i]+'</option>');
+};
+
 </script>
 {/literal}
 
 
-
 {capture name=dialogs}
-{include file="inc/ui.dialog.tpl" dialogID="editWindow" dialogTitle=$testTitle dialogDrag=true dialogClass="jqmdWide" dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="confirm" dialogTitle=$confirm.title dialogClass="jqmdWide"}
+{include file="inc/dialog.tpl" id="dialog" wide=true tall=true}
 {/capture}
 {include file="inc/admin.footer.tpl"}
