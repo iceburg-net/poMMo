@@ -31,29 +31,13 @@
 <br class="clear">
 <br class="clear">&nbsp;
 
-<!-- end content (no footer)-->
-
-{include file="inc/ui.dialog.tpl" dialogID="throttleWindow" dialogTitle=$throttleTitle dialogDrag=true dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="smtpWindow" dialogTitle=$smtpTitle dialogDrag=true dialogBodyClass="jqmdTall"}
-{include file="inc/ui.dialog.tpl" dialogID="testWindow" dialogTitle=$testTitle dialogDrag=true}
-
 {literal}
 <script type="text/javascript">
 $().ready(function(){ 
 
-	poMMo.tabs = PommoTabs.init('#tabs');
+	PommoDialog.init();
 	
-	$('div.jqmDialog').jqm({
-		trigger:false,
-		overlay:0,
-		ajax:'@href',
-		target:'.jqmdMSG',
-		onLoad: function(hash){
-			var ajaxForm = $('form.ajax',hash.w)[0] || false;
-			if (ajaxForm)
-				poMMo.form.init(ajaxForm);		
-		}
-	});
+	poMMo.tabs = PommoTabs.init('#tabs');
 
 	switch(location.hash) {
 		case '#users': $('#tabs li a:eq(0)').click();
@@ -70,3 +54,11 @@ $().ready(function(){
 
 </script>
 {/literal}
+
+{capture name=dialogs}
+{include file="inc/dialog.tpl" id="throttleWindow" title=$throttleTitle tall=true}
+{include file="inc/dialog.tpl" id="smtpWindow" title=$smtpTitle tall=true}
+{include file="inc/dialog.tpl" id="testWindow" title=$testTitle}
+{/capture}
+
+{include file="inc/admin.footer.tpl"}
