@@ -1,5 +1,5 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-<script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
+{include file="inc/ui.form.tpl"}
 {include file="inc/ui.cssTable.tpl"}
 {/capture}
 {include file="inc/admin.header.tpl" sidebar='off'}

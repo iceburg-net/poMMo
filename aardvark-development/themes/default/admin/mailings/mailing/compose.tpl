@@ -78,8 +78,7 @@ $().ready(function() {ldelim}
 		var post = {
 			body: wysiwyg.getBody(),
 			altbody: $('textarea[@name=altbody]').val()
-		},
-		trigger = this;
+		},trigger = this;
 		
 		poMMo.pause();
 		
@@ -96,7 +95,7 @@ $().ready(function() {ldelim}
 		
 		var post = {
 			body: wysiwyg.getBody()
-		}
+		};
 		
 		poMMo.pause();
 		
@@ -108,12 +107,13 @@ $().ready(function() {ldelim}
 		return false;
 	});
 	
+	
 	$('#compose').submit(function() {
 		// submit the bodies
 		var post = {
 			body: wysiwyg.getBody(),
 			altbody: $('textarea[@name=altbody]').val()
-		}
+		};
 		
 		poMMo.pause();
 		

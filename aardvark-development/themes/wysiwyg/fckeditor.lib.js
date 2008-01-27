@@ -28,7 +28,7 @@ var wysiwyg = {
 		if(!this.fck) {
 			
 			// lock the interface
-			this.lock();
+			poMMo.pause();
 			
 			// prepare FCKEditor
 			var fck = new FCKeditor('body');
@@ -94,12 +94,6 @@ var wysiwyg = {
 			this.fck.GetXHTML() :
 			this.textarea.val();
 	},
-	lock: function() { // locks the interface
-		poMMo.pause();
-	},
-	unlock: function() { // unlocks the interface
-		poMMo.resume();
-	},
 	init: function(o) { 
 		this.fck = false; 
 		wysiwyg = $.extend(wysiwyg,o);
@@ -110,5 +104,7 @@ var wysiwyg = {
 
 function FCKeditor_OnComplete(instance) {
 	wysiwyg.fck = instance;
-	wysiwyg.unlock();
+	
+	// unlock the interface
+	poMMo.resume();
 }

@@ -83,7 +83,7 @@ $().ready(function(){
 		wysiwyg.inject(out);
 		
 		// close the dialog
-		$('#personalize').jqmHide();
+		$('#dialog').jqmHide();
 		
 	});
 });

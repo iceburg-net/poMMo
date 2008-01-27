@@ -8,8 +8,8 @@ if (typeof(poMMo) == 'undefined') {
 				window.location = url;
 				return false;
 			},
-			pause: function() { this.pause(); },
-			resume: function() { this.resume(); },
+			pause: function() { poMMo.pause(); },
+			resume: function() { poMMo.resume(); },
 			confirm: function(msg,form) {
 				if (poMMo.confirm(msg)) {
 					$(form).append('<input type="hidden" name="confirmed" value="true" />');

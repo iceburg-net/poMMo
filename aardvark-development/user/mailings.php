@@ -40,27 +40,21 @@ $dbo = & $pommo->_dbo;
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
 $smarty = new PommoTemplate();
 $smarty->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('Mailing History'));
-$smarty->assign('returnStr', Pommo::_T('Mailings Page'));
-
 
 /** SET PAGE STATE
  * limit	- # of mailings per page
- * sort		- Sorting of Mailings [subject, mailgroup, subscriberCount, started, etc.]
+ * sort		- Sorting of Mailings [subject, started]
  * order	- Order Type (ascending - ASC /descending - DESC)
  */
 // Initialize page state with default values overriden by those held in $_REQUEST
 $state =& PommoAPI::stateInit('mailings_history',array(
-	'limit' => 10,
-	'sort' => 'started',
-	'order' => 'desc'),
+	'limit' => 100,
+	'sort' => 'finished',
+	'order' => 'asc',
+	'page' => 1),
 	$_REQUEST);
-	
-$tally = PommoMailing::tally();
 
-// fireup Monte's pager
-$smarty->addPager($state['limit'], $tally);
-$start = SmartyPaginate::getCurrentIndex();
-SmartyPaginate::assign($smarty);
+
 
 // if mail_id is passed, display the mailing.
 if(isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) {
@@ -93,18 +87,35 @@ if(isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) {
 	Pommo::kill();
 }
 
-// Fetch Mailings
-$mailings = PommoMailing::get(array(
-	'noBody' => TRUE,
-	'sort' => $state['sort'],
-	'order' => $state['order'],
-	'limit' => $state['limit'],
-	'offset' => $start));
-	
 
+/**********************************
+	VALIDATION ROUTINES
+*********************************/
+	
+if(!is_numeric($state['limit']) || $state['limit'] < 10 || $state['limit'] > 200)
+	$state['limit'] = 100;
+	
+if($state['order'] != 'asc' && $state['order'] != 'desc')
+	$state['order'] = 'asc';
+	
+if($state['sort'] != 'start' &&
+	$state['sort'] != 'subject')
+		$state['sort'] = 'start';
+		
+		
+/**********************************
+	DISPLAY METHODS
+*********************************/
+
+// Calculate and Remember number of pages
+$tally = PommoMailing::tally();
+$state['pages'] = (is_numeric($tally) && $tally > 0) ?
+	ceil($tally/$state['limit']) :
+	0;
+	
 $smarty->assign('state',$state);
+$smarty->assign('tally',$tally);
 $smarty->assign('mailings', $mailings);
-$smarty->assign('tally',$tally); // was "rowinset"
 
 $smarty->display('user/mailings.tpl');
 Pommo::kill();

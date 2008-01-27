@@ -1,6 +1,5 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
-{* Styling of CSS table *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/grid.css" />
+{include file="inc/ui.cssTable.tpl"}
 {/capture}{include file="inc/admin.header.tpl"}
 
 <h2>{t}Groups Page{/t}</h2>
@@ -59,8 +58,6 @@
 {/foreach}
 
 </div>
-
-
 
 </fieldset>
 {include file="inc/admin.footer.tpl"}
