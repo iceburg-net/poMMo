@@ -7,7 +7,8 @@
   * Form Javascript Copyright 2008 by Brice Burgess <bhb@iceburg.net>, all rights reserved.
   */
 poMMo.form = {
-	currentForm: false, // the serial of the current submitted form
+	currentForm: false, // (int) serial of the submitted form
+	confirmForm: false,
 	serial: 0,
 	hash: [],
 	init: function(e,p) {
@@ -70,6 +71,14 @@ poMMo.form = {
 		// Default success callback [if not overriden]
 		success: function(response, hash) { 
 			
+			if($(hash.form).is('.confirm')) {
+				var confirmed = $('input[@name=confirmed]',hash.form)[0];
+				if (confirmed) {
+					$(confirmed).remove();
+					poMMo.resume();
+				}
+			}
+			
 			// if we're expecting a JSON return, execute the default JSON callback
 			if(hash.type == 'json')
 				return poMMo.form.defaults.jsonSuccess(response, hash);
@@ -83,7 +92,7 @@ poMMo.form = {
 			//   If the callback returns false, halt execution.
 			if(json.callbackFunction && $.isFunction(poMMo.callback[json.callbackFunction])) {
 				json.callbackParams = json.callbackParams || json;
-				if(poMMo.callback[json.callbackFunction](json.callbackParams) === false)
+				if(poMMo.callback[json.callbackFunction](json.callbackParams, hash.form) === false)
 					return false;
 			}
 			

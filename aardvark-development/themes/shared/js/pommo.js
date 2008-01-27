@@ -9,12 +9,20 @@ if (typeof(poMMo) == 'undefined') {
 				return false;
 			},
 			pause: function() { this.pause(); },
-			resume: function() { this.resume(); }
-		}, 
+			resume: function() { this.resume(); },
+			confirm: function(msg,form) {
+				if (poMMo.confirm(msg)) {
+					$(form).append('<input type="hidden" name="confirmed" value="true" />');
+					poMMo.pause();
+					$(form).submit();
+				}
+			}
+		},
+		confirmForm: false,
 		confirmMsg: 'Are you sure?',
 		confirm: function(message){
 			message = message || this.confirmMsg;
-			return confirm(this.confirmMsg);
+			return confirm(message);
 		},
 		isSet: function(arg){
 			return (typeof(args.success) != 'undefined');
