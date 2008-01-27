@@ -137,7 +137,7 @@ $().ready(function() {ldelim}
 $().ready(function() {
 	
 	// Setup Modal Dialogs
-	PommoDialog.init(['add','del','exp','edit']);
+	PommoDialog.init();
 	$('#add').jqmAddTrigger('a.addTrigger');
 	$('#del').jqmAddTrigger('a.delTrigger');
 	$('#exp').jqmAddTrigger('a.expTrigger');

@@ -59,12 +59,9 @@ $().ready(function() {ldelim}
 <script type="text/javascript">
 $().ready(function(){
 	
-	
-	
 	// Setup Modal Dialogs
 	PommoDialog.init();
 
-	
 	$('a.modal').click(function(){
 		var rows = poMMo.grid.getRowIDs();
 		if(rows) {

@@ -238,7 +238,7 @@ $().ready(function(){
 	poMMo.form.assign();
 	
 	// Setup Modal Dialogs
-	PommoDialog.init(['dialog'],{modal: true});
+	PommoDialog.init('#dialog',{modal: true});
 
 	$('#addRule select').change(function(){
 		var type = this.name, fieldID = $(this).val();

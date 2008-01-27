@@ -1,8 +1,6 @@
 {capture name=head}{* used to inject content into the HTML <head> *}
 <script type="text/javascript" src="{$url.theme.shared}js/jq/form.js"></script>
-<script type="text/javascript" src="{$url.theme.shared}js/table.js"></script>
-{* Styling of table *}
-<link type="text/css" rel="stylesheet" href="{$url.theme.shared}css/table.css" />
+{include file="inc/ui.cssTable.tpl"}
 {/capture}
 {include file="inc/admin.header.tpl" sidebar='off'}
 
@@ -75,7 +73,7 @@
 $().ready(function(){
 	
 	// stripe table body rows
-	$('table tbody tr').rowStripe();
+	$('table tbody').jqStripe();
 	
 	$('#import').click(function() {
 		
