@@ -31,12 +31,12 @@ $().ready(function() {ldelim}
 	var p = {ldelim}	
 	colNames: [
 		'ID',
-		'{t}Subject{/t}',
-		'{t}Group (count){/t}',
-		'{t}Sent{/t}',
-		'{t}Started{/t}',
-		'{t}Finished{/t}',
-		'{t}Status{/t}'
+		'{t escape=js}Subject{/t}',
+		'{t escape=js}Group (count){/t}',
+		'{t escape=js}Sent{/t}',
+		'{t escape=js}Started{/t}',
+		'{t escape=js}Finished{/t}',
+		'{t escape=js}Status{/t}'
 	],
 	limit: {$state.limit},
 	{literal}

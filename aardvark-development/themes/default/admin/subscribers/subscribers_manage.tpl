@@ -109,9 +109,9 @@ $().ready(function() {ldelim}
 		'ID',
 		'Email',
 		{foreach from=$fields key=id item=f}'{$f.name|escape}',{/foreach}
-		'{t}Registered{/t}',
-		'{t}Updated{/t}',
-		'{t}IP Address{/t}'
+		'{t escape=js}Registered{/t}',
+		'{t escape=js}Updated{/t}',
+		'{t escape=js}IP Address{/t}'
 	],
 	colModel: [
 		{ldelim}name: 'id', index: 'id', hidden: true, width: 1{rdelim},

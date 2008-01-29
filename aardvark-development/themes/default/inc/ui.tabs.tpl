@@ -14,7 +14,7 @@ var PommoTabs = {ldelim}
 	mandatoryForm: false,
 	force: false,
 	defaults: {ldelim}
-		spinner: "{t}Processing{/t}...",
+		spinner: "{t escape=js}Processing{/t}...",
 		{literal}
 		ajaxOptions: { async: false }, // make synchronous requests when loading tabs
 		click: function(clicked,hide,show) { return PommoTabs.click(clicked,hide,show); },
