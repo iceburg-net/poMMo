@@ -33,7 +33,9 @@
 <script type="text/javascript">
 $().ready(function(){ 
 	
-	poMMo.tabs = PommoTabs.init('#tabs');
+	$('#tabs').tabs();
+	//poMMo.tabs = PommoTabs.init('#tabs');
+	
 	PommoDialog.init();
 	
 	// Setup Modal Dialogs

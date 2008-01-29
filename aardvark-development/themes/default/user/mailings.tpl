@@ -23,8 +23,8 @@ $().ready(function() {ldelim}
 	var p = {ldelim}	
 	colNames: [
 		'ID',
-		'{t}Subject{/t}',
-		'{t}Sent{/t}'
+		'{t escape=js}Subject{/t}',
+		'{t escape=js}Sent{/t}'
 	],
 	limit: {$state.limit},
 	{literal}

@@ -21,9 +21,9 @@ $.datePicker = function()
 	// so that firebug console.log statements don't break IE
 	if (window.console == undefined) { window.console = {log:function(){}}; }
 {/literal}
-	var months = ['{t}January{/t}', '{t}Febuary{/t}', '{t}March{/t}', '{t}April{/t}', '{t}May{/t}', '{t}June{/t}', '{t}July{/t}', '{t}August{/t}', '{t}September{/t}', '{t}October{/t}', '{t}November{/t}', '{t}December{/t}'];
-	var days = ['{t}Sunday{/t}', '{t}Monday{/t}', '{t}Tuesday{/t}', '{t}Wednesday{/t}', '{t}Thursday{/t}', '{t}Friday{/t}', '{t}Saturday{/t}'];
-	var navLinks = {ldelim}p:'{t}Prev{/t}', n:'{t}Next{/t}', c:'{t}Close{/t}'{rdelim};
+	var months = ['{t escape=js}January{/t}', '{t escape=js}Febuary{/t}', '{t escape=js}March{/t}', '{t escape=js}April{/t}', '{t escape=js}May{/t}', '{t escape=js}June{/t}', '{t escape=js}July{/t}', '{t escape=js}August{/t}', '{t escape=js}September{/t}', '{t escape=js}October{/t}', '{t escape=js}November{/t}', '{t escape=js}December{/t}'];
+	var days = ['{t escape=js}Sunday{/t}', '{t escape=js}Monday{/t}', '{t escape=js}Tuesday{/t}', '{t escape=js}Wednesday{/t}', '{t escape=js}Thursday{/t}', '{t escape=js}Friday{/t}', '{t escape=js}Saturday{/t}'];
+	var navLinks = {ldelim}p:'{t escape=js}Prev{/t}', n:'{t escape=js}Next{/t}', c:'{t escape=js}Close{/t}'{rdelim};
 	var dateFormat = '{$config.app.dateformat}';
 	var _firstDate;
 	var _lastDate;
@@ -379,7 +379,7 @@ $.fn.datePicker = function(a)
 		if(this.nodeName.toLowerCase() != 'input') return;
 		$.datePicker.setDateWindow(this, a);
 		if (!$.datePicker.isInited(this)) {
-			var calBut = $.A({href:'javascript:;', className:'date-picker', title: {/literal}'{t}Choose Date{/t}'{rdelim}, $.SPAN({ldelim}{rdelim}, '{t}Choose Date{/t}{literal}'));
+			var calBut = $.A({href:'javascript:;', className:'date-picker', title: {/literal}'{t escape=js}Choose Date{/t}'{rdelim}, $.SPAN({ldelim}{rdelim}, '{t escape=js}Choose Date{/t}{literal}'));
 			$(calBut).click($.datePicker.show);
 			$(this).wrap(
 				'<div class="date-picker-holder"></div>'

@@ -29,8 +29,8 @@
 </form>
 
 <script type="text/javascript">
-var onText = '{t}Disable WYSIWYG{/t}';
-var offText = '{t}Enable WYSIWYG{/t}';
+var onText = '{t escape=js}Disable WYSIWYG{/t}';
+var offText = '{t escape=js}Enable WYSIWYG{/t}';
 
 $().ready(function() {ldelim}
 	

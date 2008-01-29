@@ -5,8 +5,8 @@
 var PommoGrid = {ldelim}
 	grid: null,
 	defaults: {ldelim}
-		loadtext: "{t}Processing{/t}...",
-		recordtext: "{if empty($state.search)}{t}Record(s){/t}{else}{t}Match(es){/t}{/if}",
+		loadtext: "{t escape=js}Processing{/t}...",
+		recordtext: "{if empty($state.search)}{t escape=js}Record(s){/t}{else}{t escape=js}Match(es){/t}{/if}",
 		imgpath: "{$url.theme.shared}/images/grid",
 		{literal}
 		colNames: [],
