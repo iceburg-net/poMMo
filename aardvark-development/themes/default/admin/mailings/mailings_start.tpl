@@ -22,10 +22,10 @@
         
 <div id="tabs">
 	<ul>
-	    <li><a href="mailing/setup.php" title="{t}Setup{/t}"><span>{t}Setup{/t}</span></a></li>
-	    <li><a href="mailing/templates.php" title="{t}Templates{/t}"><span>{t}Templates{/t}</span></a></li>
-	    <li><a href="mailing/compose.php" title="{t}Compose{/t}"><span>{t}Compose{/t}</span></a></li>
-	    <li><a href="mailing/preview.php" title="{t}Preview{/t}"><span>{t}Preview{/t}</span></a></li>
+	    <li><a href="mailing/setup.php"><span>{t}Setup{/t}</span></a></li>
+	    <li><a href="mailing/templates.php"><span>{t}Templates{/t}</span></a></li>
+	    <li><a href="mailing/compose.php"><span>{t}Compose{/t}</span></a></li>
+	    <li><a href="mailing/preview.php"><span>{t}Preview{/t}</span></a></li>
 	</ul>
 </div>
 
