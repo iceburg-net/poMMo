@@ -915,7 +915,7 @@ $.fn.jqGrid = function( p ) {
 			if(ts.p.rowList.length >0){
 				var str="<SELECT class='selbox'>";
 				for(var i=0;i<ts.p.rowList.length;i++){
-					str +="<OPTION value="+ts.p.rowList[i]+">"+ts.p.rowList[i];
+					str +="<OPTION value="+ts.p.rowList[i]+((ts.p.rowNum == ts.p.rowList[i])?' selected':'')+">"+ts.p.rowList[i];
 				}
 				str +="</SELECT>";
 				$(ts.p.pager).append("&nbsp;&nbsp;"+str);

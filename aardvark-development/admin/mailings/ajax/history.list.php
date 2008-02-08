@@ -40,6 +40,16 @@ $json = new PommoJSON();
 /**********************************
 	PAGINATION AND ORDERING
 *********************************/
+
+// Get and Remember the requested number of rows
+if(!empty($_REQUEST['page']) && (
+	is_numeric($_REQUEST['rows']) && (
+		$_REQUEST['rows'] > 0 &&
+		$_REQUEST['rows'] <= 1000
+		)
+	))
+		$state['limit'] = $_REQUEST['rows'];
+		
 // Get and Remember the requested page
 if(!empty($_REQUEST['page']) && (
 	is_numeric($_REQUEST['page']) && 

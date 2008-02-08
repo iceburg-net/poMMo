@@ -19,6 +19,7 @@
  */
 die();
 ?>
+Adjustable limit on subscribers
 
 Cleanup/Unify Admin Mailings History and User Mailings List
 

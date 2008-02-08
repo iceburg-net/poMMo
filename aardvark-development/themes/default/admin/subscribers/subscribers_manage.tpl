@@ -103,7 +103,7 @@
 $().ready(function() {ldelim}	
 	
 	var p = {ldelim}	
-	limit: {$state.limit},
+	rowNum: {$state.limit},
 	url: 'ajax/manage.list.php',
 	colNames: [
 		'ID',
