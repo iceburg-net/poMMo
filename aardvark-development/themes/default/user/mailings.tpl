@@ -26,7 +26,8 @@ $().ready(function() {ldelim}
 		'{t escape=js}Subject{/t}',
 		'{t escape=js}Sent{/t}'
 	],
-	limit: {$state.limit},
+	rowNum: {$state.limit},
+	rowList: [],
 	{literal}
 	colModel: [
 		{name: 'id', index: 'id', hidden: true, width: 1},

@@ -38,7 +38,7 @@ $().ready(function() {ldelim}
 		'{t escape=js}Finished{/t}',
 		'{t escape=js}Status{/t}'
 	],
-	limit: {$state.limit},
+	rowNum: {$state.limit},
 	{literal}
 	colModel: [
 		{name: 'id', index: 'id', hidden: true, width: 1},

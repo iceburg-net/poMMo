@@ -53,8 +53,8 @@ $state =& PommoAPI::stateInit('mailings_history',array(
 	VALIDATION ROUTINES
 *********************************/
 	
-if(!is_numeric($state['limit']) || $state['limit'] < 10 || $state['limit'] > 200)
-	$state['limit'] = 100;
+if(!is_numeric($state['limit']) || $state['limit'] < 1 || $state['limit'] > 1000)
+	$state['limit'] = 10;
 	
 if($state['order'] != 'asc' && $state['order'] != 'desc')
 	$state['order'] = 'asc';
