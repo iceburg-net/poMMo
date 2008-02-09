@@ -1,3 +1,4 @@
+q
 <?php
 /**
  * Copyright (C) 2005, 2006, 2007, 2008  Brice Burgess <bhb@iceburg.net>
@@ -19,38 +20,30 @@
  */
 die();
 ?>
-Adjustable limit on subscribers
-
-Cleanup/Unify Admin Mailings History and User Mailings List
-
-Rewrite groups_edit.php to use Datagrid Plugin for rule listing.
-
-http://www.pommo.org/community/viewtopic.php?pid=4305#p4305
-http://www.pommo.org/community/viewtopic.php?id=829
-http://www.pommo.org/community/viewtopic.php?id=439\
-
-Assure all javascript template translations have javascript escaping (e.g. {t escape=js}Translation in Javascript{/t} ... )
-
 [LEGACY POMMO]
   Port config parser + config.php/sample
 
 [BEFORE Aardvark Final]
 	+ Remove languages from default distribution, separate download. ? opt.
 	+ Remove all unused JS/CSS/TPL/PHP/PNG/GIF/ETC Files
-	
 	+ Change Debugging [not included in $logger, but piped out @ end of template display || script], Offer more helpful info in support
 
 [THEME]
 	ENHACE DEFAULT SUBSCRIPTION FORM -- PLAIN TEXT IS ALWAYS AVAILABLE...
 	ADD MESSAGE OUTPUT/DETECTION TO EVERY PAGE (logger messages -- esp. debugging stuff)
 	Layout Fixes for IE -- see http://www.flickr.com/photos/26392873@N00/322986007/
-	ReStripe rows on delete/tableSort
 	ELEMENTS with TITLE="??" : Title needs to be translated -- use SAME text as INNERHTML/LINK text
-	
 	SETUP SHORTCUT FOR "<img src="{$url.theme.shared}images/loader.gif" name="loading" class="hidden" title="{t}loading...{/t}" alt="{t}loading...{/t}" />"
 	
 	
 [BRICE -- "Feel free to inherit any of these ;)" ]
+
+
+	Cleanup/Unify Admin Mailings History and User Mailings List
+	Rewrite groups_edit.php to use Datagrid Plugin for rule listing.
+	http://www.pommo.org/community/viewtopic.php?pid=4305#p4305
+	http://www.pommo.org/community/viewtopic.php?id=829
+	http://www.pommo.org/community/viewtopic.php?id=439
 
 	NOTES:
 		MAKE BETTER USE OF PommoValidate::FUNCTIONS  (move more stuff to this file!)
@@ -120,10 +113,6 @@ Assure all javascript template translations have javascript escaping (e.g. {t es
 	  
 	  (cleanup) vs. smarty->assign($_POST), just use the {$smarty.post} global in templates...
 	
-	  (cleanup) SWITCH "phase1" dialogs of subscriber add/delete/search/export to INLINE DISPLAY vs. AJAX POLL 
- 			+ Requires unobtrusive modal window (thickbox destroys event bindings). Keep eye on Gavin's plugin
- 			+  scratch Gavin's -- use jQmodal ! (mine)
- 		 
 	  (API) include some kind of bandwith throttling / DOS detection / firewalling to drop pages from offending IPs / halt system for 3 mins if too many page requests ??
 	  (API) Plugin architecture -- allow handler & manipulation injections/replacements to API functions
 	  	+ Can be used to chain the subscription process (process.php) through custom functions, add an extended authentication layer, etc.
