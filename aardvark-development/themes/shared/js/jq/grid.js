@@ -1,7 +1,7 @@
-;(function ($) {
+(function ($) {
 /**
  * jqGrid 3.0 rc - jQuery Grid plugin 29/10/2007
- * rev. 25 26/12/2007
+ * rev. 27 05/02/2008
  * http://trirand.com/blog/
  *
  * Dual licensed under the MIT and GPL licenses:
@@ -22,8 +22,8 @@ $.fn.jqGrid = function( p ) {
 		sortorder: "asc",
 		sortname: "",
 		imgpath: "",
-		sortascimg :  "sort_asc.gif",
-		sortdescimg : "sort_desc.gif",
+		sortascimg: "sort_asc.gif",
+		sortdescimg: "sort_desc.gif",
 		firstimg: "first.gif",
 		previmg: "prev.gif",
 		nextimg: "next.gif",
@@ -38,34 +38,34 @@ $.fn.jqGrid = function( p ) {
 		onSortCol: null,
 		ondblClickRow: null,
 		onRightClickRow: null,
-		datatype:"xml",
-		mtype:"GET",
+		datatype: "xml",
+		mtype: "GET",
 		viewrecords: false,
-		recordtext:"Record(s)",
+		recordtext: "Record(s)",
 		loadtext: "Loading...",
 		loadonce: false,
 		multiselect: false,
 		multikey: null,
-		selarrrow:[],
-		rowheight:null,
+		selarrrow: [],
+		rowheight: null,
 		loadComplete: null, //Joe Tataro
 		editurl: null,
 		savedRow: [],
 		shrinkToFit: true, //Brice Burgess
-		xReader : {
-			root : "rows",
+		xReader: {
+			root: "rows",
 			row: "row",
 			page: "rows>page",
-			total : "rows>total",
+			total: "rows>total",
 			records : "rows>records",
 			repeatitems: true,
 			cell: "cell",
 			id: "[id]", 
 			subgrid: {root:"rows", row: "row", repeatitems: true, cell:"cell"}
 		},
-		xmlReader : {},
-		jReader : {
-			root : "rows",
+		xmlReader: {},
+		jReader: {
+			root: "rows",
 			page: "page",
 			total: "total",
 			records: "records",
@@ -74,7 +74,7 @@ $.fn.jqGrid = function( p ) {
 			id: "id",
 			subgrid: {root:"rows", repeatitems: true, cell:"cell"}
 			},
-		jsonReader :{}
+		jsonReader: {}
 	}, p || {});
 
 	var grid={         
@@ -258,8 +258,11 @@ $.fn.jqGrid = function( p ) {
 				case "checkbox" :
 					elem = document.createElement("input");
 					elem.type = "checkbox";
-					elem.value = vl;
-					if(vl == options.value.split(":")[0]) elem.checked = true;
+					$(elem).attr({id:options.id,name:options.name});
+					if(vl == options.value.split(":")[0]) {
+						elem.checked=true;
+						elem.defaultChecked=true;
+					}
 					break;
 				case "select" :
 					var so = options.value.split(";"),sv, ov;
@@ -294,6 +297,7 @@ $.fn.jqGrid = function( p ) {
 				nm = $t.p.colModel[i].name;
 				if ( nm !== 'cb' && nm !== 'subgrid' && $t.p.colModel[i].editable===true) {
 					if( $t.p.colModel[i].hidden===true) tmp[nm] = $(this).html();
+					else if( $t.p.colModel[i].edittype==='checkbox') tmp[nm]=  $("input",this).attr("checked") ? 1 : 0;
 					else tmp[nm]= $("input, select>option:selected, textarea",this).val();
 				}
 			});
@@ -1116,9 +1120,9 @@ $.fn.jqGrid = function( p ) {
 			.prepend('<div class="loading">'+ts.p.loadtext+'</div>')					
 			.append(grid.hTable)
 			.bind("selectstart", function () { return false; });
-		$(this).mouseover(function(e) {
+		$(ts).mouseover(function(e) {
 			td = (e.target || e.srcElement);
-			ptr = $(td,ts).parent("tr");
+			ptr = $(td,ts).parents("tr:first");
 			if($(ptr).attr("class") !== "subgrid") {
 				$(ptr).addClass("over");
 				td.title = $(td).text();
@@ -1126,23 +1130,23 @@ $.fn.jqGrid = function( p ) {
 			return false;
 		}).mouseout(function(e) {
 			td = (e.target || e.srcElement);
-			ptr = $(td,ts).parent("tr");
+			ptr = $(td,ts).parents("tr:first");
 			$(ptr).removeClass("over");
 			td.title = "";
 			return false;
 		}).css("width", grid.width+"px").before(grid.hDiv).click(function(e) {
 			if ( !ts.p.multikey) {
 				td = (e.target || e.srcElement);
-				ptr = $(td,ts).parent("tr");
+				ptr = $(td,ts).parents("tr:first");
 				$(ts).setSelection($(ptr).attr("id"));
 			} else {
 				if (e[ts.p.multikey]){
 					td = (e.target || e.srcElement);
-					ptr = $(td,ts).parent("tr");
+					ptr = $(td,ts).parents("tr:first");
 					$(ts).setSelection($(ptr).attr("id"));
 				} else {
 					td = (e.target || e.srcElement);
-					ptr = $(td).parent("td");
+					ptr = $(td).parents("td:first");
 					if ( $(ptr).html() !== null) {
 						td = $("[@id^=jqg_]",ptr).attr("checked");
 						td = typeof td == "undefined" ? false: td;
@@ -1150,7 +1154,7 @@ $.fn.jqGrid = function( p ) {
 					}
 				}
 			}
-			return false;
+			e.stopPropagation();
 		}).bind('reloadGrid', function(e) {
 			ts.p.selrow=null;
 			if(ts.p.multiselect) {ts.p.selarrrow =[];$('#cb_jqg',ts.grid.hDiv).attr("checked",false);}
@@ -1159,7 +1163,7 @@ $.fn.jqGrid = function( p ) {
 		if( ondblClickRow ) {
 			$(this).dblclick(function(e) {
 				td = (e.target || e.srcElement);
-				ptr = $(td,ts).parent("tr");
+				ptr = $(td,ts).parents("tr:first");
 				ts.p.ondblClickRow($(ptr).attr("id"));
 				return false;
 			});
@@ -1167,7 +1171,7 @@ $.fn.jqGrid = function( p ) {
 		if (onRightClickRow)
 			$(this).bind('contextmenu', function(e) {
 				td = (e.target || e.srcElement);
-				ptr = $(td,ts).parent("tr");
+				ptr = $(td,ts).parents("tr:first");
 				ts.p.onRightClickRow($(ptr).attr("id"));
 				return false;
 			});
