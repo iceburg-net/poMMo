@@ -132,8 +132,13 @@ poMMo.callback.updateField = function(f) {
 };
 
 poMMo.callback.updateOptions = function(json) {
+	
+	// remember #normally
+	var normally = $('#normally').val();
+	
 	// remove existing options
-	$('#delOptions option').remove();
+	$('#delOptions option, #normally option:gt(0)').remove();
+	
 	
 	// clear addOptions input
 	$('#addOptions').val('');
@@ -141,6 +146,10 @@ poMMo.callback.updateOptions = function(json) {
 	// populate options
 	for(var i=0;i<json.length;i++)
 		$('#delOptions, #normally').append('<option>'+json[i]+'</option>');
+
+	// restore #normally
+	$('#normally').val(normally);
+	
 };
 
 </script>
