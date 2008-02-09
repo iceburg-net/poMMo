@@ -10,14 +10,15 @@
 
 <h2>{t}Import Subscribers{/t}</h2>
 
+
+<form action="" method="post" id="assign">
+
 <fieldset>
 <legend>{t}Assign Fields{/t}</legend>
 
 <div>
 {t}Below is a preview of your CSV data. You can assign subscriber fields to columns. At the very least, you must assign an email address.{/t}
 </div>
-
-<form action="" method="post" id="assign">
 
 {if $excludeUnsubscribed}<input type="hidden" name="excludeUnsubscribed" value="true" />{/if}
 <table summary="{t}Assign Fields{/t}">
@@ -55,6 +56,8 @@
 
 </tbody>
 </table>
+
+
 </form>
 
 
@@ -62,6 +65,7 @@
 <a href="#" id="import"><button>{t}Import{/t}</button></a>
 </div>
 </fieldset>
+
 
 <div id="ajax" class="warn hidden">
 <img src="{$url.theme.shared}images/loader.gif" alt="Importing..." />... {t}Processing{/t}
