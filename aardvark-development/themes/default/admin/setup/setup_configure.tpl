@@ -38,7 +38,9 @@ $().ready(function(){
 	PommoDialog.init();
 	
 	poMMo.tabs = PommoTabs.init('#tabs');
-
+	// override changeTab function
+	PommoTabs.change = function() { return true; };
+	
 	switch(location.hash) {
 		case '#users': $('#tabs li a:eq(0)').click();
 			break;

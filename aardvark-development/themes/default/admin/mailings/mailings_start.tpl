@@ -32,20 +32,11 @@
 {literal}
 <script type="text/javascript">
 $().ready(function(){ 
+	// initialize tabs
+	poMMo.tabs = PommoTabs.init('#tabs');
 	
-	$('#tabs').tabs();
-	//poMMo.tabs = PommoTabs.init('#tabs');
-	
+	// initialize dialog(s)
 	PommoDialog.init();
-	
-	// Setup Modal Dialogs
-	//PommoDialog.init(['addTemplate,testMailing,personalize']);
-	
-	/*
-	$('#addTemplate').jqm({ajax: 'mailing/ajax.addtemplate.php'});
-	$('#testMailing').jqm({ajax: 'mailing/ajax.mailingtest.php'});
-	$('#personalize').jqm({ajax: 'mailing/ajax.personalize.php'});
-	*/
 });
 </script>
 {/literal}

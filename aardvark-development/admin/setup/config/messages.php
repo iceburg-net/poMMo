@@ -174,7 +174,7 @@ else {
 	else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->add('fieldErrors',$smarty->getInvalidFields('messages'));
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }

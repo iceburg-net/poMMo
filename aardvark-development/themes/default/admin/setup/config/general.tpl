@@ -9,7 +9,7 @@
 {fv validate="list_confirm"}
 {fv validate="list_exchanger"}
 
-<form action="{$smarty.server.PHP_SELF}" method="post" class="json">
+<form class="json" action="{$smarty.server.PHP_SELF}" method="post">
 
 <div class="output alert">{if $output}{$output}{/if}</div>
 

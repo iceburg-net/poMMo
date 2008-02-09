@@ -89,7 +89,7 @@ if (!SmartyValidate :: is_registered_form('general') || empty ($_POST)) {
 	else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->add('fieldErrors',$smarty->getInvalidFields('general'));
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 	
