@@ -73,7 +73,7 @@ if (!SmartyValidate :: is_registered_form('exchanger') || empty ($_POST)) {
 		// __ FORM NOT VALID
 		
 		$json->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
-		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->add('fieldErrors',$smarty->getInvalidFields('exchanger'));
 		$json->fail();
 	}
 	
