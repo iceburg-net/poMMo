@@ -8,10 +8,12 @@ var PommoGrid = {ldelim}
 		loadtext: "{t escape=js}Processing{/t}...",
 		recordtext: "{if empty($state.search)}{t escape=js}Record(s){/t}{else}{t escape=js}Match(es){/t}{/if}",
 		imgpath: "{$url.theme.shared}/images/grid",
+		sortorder: '{$state.order}',
+		sortname: '{$state.sort}',
+		rowNum: {$state.limit},
 		{literal}
 		colNames: [],
 		colModel: [],
-		rowNum: 10,
 		rowList: [10,50,150,300,500,1000],
 		url: 'ajax/404',
 		datatype: 'json',
