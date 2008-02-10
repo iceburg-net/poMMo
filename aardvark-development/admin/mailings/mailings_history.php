@@ -44,8 +44,8 @@ $smarty->assign('returnStr', Pommo::_T('Mailings Page'));
 // Initialize page state with default values overriden by those held in $_REQUEST
 $state =& PommoAPI::stateInit('mailings_history',array(
 	'limit' => 10,
-	'sort' => 'finished',
-	'order' => 'asc',
+	'sort' => 'end',
+	'order' => 'desc',
 	'page' => 1),
 	$_REQUEST);
 	
