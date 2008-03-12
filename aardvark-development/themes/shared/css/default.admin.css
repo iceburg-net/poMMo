@@ -8,14 +8,13 @@
 /********************/
 /* BASE PAGE LAYOUT */
 /********************/
-
 body {
 	margin: 0 auto;
 	padding: 0;
 	background: #FFF url(../images/bg_body.gif) repeat-x;
 	font: 80% Tahoma, Arial, Helvetica, sans-serif;
 	color: #7E7E7E;
-	
+
 	/* remove for a liquid layout  */
 	width: 780px;
 }
@@ -26,7 +25,6 @@ body {
 	padding: 5px 15px;
 	background: #FFF;
 }
-
 #content.wide {
 	margin: 0;
 }
@@ -44,9 +42,12 @@ body {
 /*********************/
 /* BASE PAGE STYLING */
 /*********************/
-
-a { color: #339CC7; }
-a:hover { color: #575757; }
+a {
+	color: #339CC7;
+}
+a:hover {
+	color: #575757;
+}
 
 #content li {
 	padding-top: .5em;
@@ -77,14 +78,16 @@ a img {
 	vertical-align: middle;
 }
 
-h1
-{
+h1 {
 	margin: 0;
 	padding: 0;
 	font: bold 1.8em Arial, sans-serif;
 	letter-spacing: -1px;
 }
-h2 a, h3 a { text-decoration: none;}
+h2 a,
+h3 a {
+	text-decoration: none;
+}
 h3 {
 	margin: 0;
 	padding: 3px 0 6px;
@@ -93,8 +96,9 @@ h3 {
 	color: #808080;
 	text-transform: uppercase;
 }
-h3 a { color: #6AC65D; }
-
+h3 a {
+	color: #6AC65D;
+}
 pre {
 	padding: 4px;
 	border: 1px dashed #CCC;
@@ -102,13 +106,12 @@ pre {
 	color: #333;
 }
 
-
 /**************************/
 /* Menu & Sidebar Styling */
 /**************************/
-
-#boxMenu { float: left; }
-
+#boxMenu {
+	float: left;
+}
 #boxMenu div { 
     clear: both;
     padding: 15px 0;
@@ -118,7 +121,6 @@ ul.inpage_menu {
 	margin: 5px 0;
 	text-align: right;
 }
-
 ul.inpage_menu li {
 	display: inline;
 	padding: .5em 1em;
@@ -217,11 +219,9 @@ ul.inpage_menu li {
 	text-align: center;
 }
 
-
 /*********************/
 /* HTML Form Styling */
 /*********************/
-
 label {
 	color: #333;
 }
@@ -243,8 +243,8 @@ legend {
 div.buttons {
 	margin: 1em;
 }
-
-div.buttons button, div.buttons input[type="submit"] {
+div.buttons button,
+div.buttons input[type="submit"] {
     margin-right: 1em;
 }
 
@@ -280,11 +280,9 @@ select.pvInvalid {
 	border: 1px solid red;
 }
 
-
 /*******************/
 /* Message Styling */
 /*******************/
-
 #alertmsg {
 	margin: .5em 0;
 }
@@ -323,18 +321,32 @@ select.pvInvalid {
 	background: #FFF;
 }
 
-
 /****************/
 /* MISC STYLING */
 /****************/
+.hidden {
+	display: none;
+}
+.clear {
+	clear: both;
+}
 
-.hidden { display: none; }
-.clear { clear: both; }
-.right { float: right; }
+div.pager {
+	text-align:center;
+}
 
-div.pager {text-align:center;}
+div.helpToggle img {
+	cursor: pointer;
+}
 
-div.helpToggle img {cursor: pointer;}
+#languageselection {
+	text-align: right;
+}
+.donate {
+	clear: both;
+	padding: 1em 3em;
+	text-align: center;
+}
 
 /* make the button look like a link */
 #resetPassword {
@@ -342,8 +354,10 @@ div.helpToggle img {cursor: pointer;}
 	border: none;
 }
 
-.green { color: #0E9749; }
-
 fieldset.click {border-bottom: none;}
 fieldset.click ul {display: none;}
 legend.click {font-size: 110%; font-weight: bold; cursor: pointer;}
+
+/* these are horrible style specific class names and should be removed */
+.green { color: #0E9749; }
+.right { float: right; }
