@@ -19,54 +19,86 @@
  */
 
 class PommoHelperMessages {
-
-	// send a confirmation message
- 	// accepts to address (str) [email]
- 	// accepts a confirmation code (str)
- 	// accepts a confirmation type (str) either; 'subscribe', 'activate', 'password', 'update'
-	function sendConfirmation($to, $confirmation_key, $type) {
-	 	global $pommo;
+	
+	// send a message
+	// accepts a parameter array;
+	   // to: email to send message to [str]
+	   // type: message type type [str] either; 'subscribe', 'unsubscribe', 'confirm', 'activate', 'update', or 'password'
+	   // code: confirmation code [str]
+	function sendMessage($p = array('to' => false, 'type' => false, 'code' => false)) {
+		global $pommo;
 		$logger = & $pommo->_logger;
 		
-		if (empty($confirmation_key) || empty ($to) || empty($type)) 
-			return false;
-		
+		// retrieve messages
 		$dbvalues = PommoAPI::configGet('messages');
 		$messages = unserialize($dbvalues['messages']);
+		
+		$type = $p['type'];
+		
+		$output = false;
+		switch($type) {
+		case 'subscribe' :
+		case 'unsubscribe' :
+			
+			$output = $messages[$type]['web'];
 
-		$subject = $messages[$type]['sub'];
-	
-		$url = ($type == 'activate') ? 
-			$pommo->_http.$pommo->_baseUrl.'user/update.php?email='.$to.'&code='.$confirmation_key :
-			$pommo->_http.$pommo->_baseUrl.'user/confirm.php?code='.$confirmation_key;
+			// break out of switch statement if subscribe/unsubscribe emails are disabled
+			if (!$messages[$type]['email'])
+				break;
+				
+		case 'activate' :
+			$output = ($output) ? $output : 
+				sprintf(Pommo::_T('An actvation mail has been sent to %s. Please follow its instructions to access your records.'),$p['to']);
+		case 'confirm' :
+		case 'password' :
+		case 'update' :
+		
+			$output = ($output) ? $output : 
+				sprintf(Pommo::_T('A confirmation mail has been sent to %s. Please follow its instructions to complete your request.'),$p['to']);
+		
+			// fetch subject, body
+			$subject = $messages[$type]['sub'];
+			$body = $messages[$type]['msg'];
 			
-		$body = preg_replace('@\[\[URL\]\]@i',$url,$messages[$type]['msg']);
-		
-		if ($type == 'activate') 
-			$body = preg_replace('@\[\[CODE\]\]@i',$confirmation_key,$body);
-		
-		if (empty($subject) || empty($body)) 
-			return false;
-	
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
-		$mail = new PommoMailer();
-	
-		// allow mail to be sent, even if demo mode is on
-		$mail->toggleDemoMode("off");
-	
-		// send the confirmation mail
-		$mail->prepareMail($subject, $body);
-		
-		$ret = $mail->bmSendmail($to);
-		
-		if (!$ret)
-			$logger->addErr(Pommo::_T('Error sending mail'));
-		else
-			$logger->addMsg(sprintf(Pommo::_T('A confirmation mail has been sent to %s. Please follow its instructions to complete your request.'),$to));	
+			// personalize body
+			$url = ($type == 'activate') ? 
+				$pommo->_http.$pommo->_baseUrl.'user/update.php?email='.$p['to'].'&code='.$p['code'] :
+				$pommo->_http.$pommo->_baseUrl.'user/confirm.php?code='.$p['code'];
+			$body = preg_replace('@\[\[URL\]\]@i',$url,$body);
 			
-		// reset demo mode to default
-		$mail->toggleDemoMode();
-		return $ret;
+			
+			if (empty($subject) || empty($body)) {
+				$logger->addErr('PommoHelperMessages::sendMessage() - subject or body empty');
+				return false;
+			}
+				
+				
+		
+			Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
+			$mail = new PommoMailer();
+		
+			// allow mail to be sent, even if demo mode is on
+			$mail->toggleDemoMode("off");
+		
+			// send the confirmation mail
+			$mail->prepareMail($subject, $body);
+			if (!$mail->bmSendmail($p['to'])) {
+				$logger->addErr(Pommo::_T('Error sending mail'));
+				return false;
+			}
+			
+			// reset demo mode to default
+			$mail->toggleDemoMode();
+			
+			break;
+			
+		default:
+			$logger->addErr('unknown type passed');
+			return false;	
+		}
+		
+		$logger->addMsg($output);
+		return true;
 	}
 	
 	function resetDefault($section = 'all') {
@@ -81,14 +113,29 @@ class PommoHelperMessages {
 
 		if ($section == 'all' || $section == 'subscribe') {
 		$messages['subscribe'] = array();
-		$messages['subscribe']['msg'] = sprintf(Pommo::_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $pommo->_config['list_name'])."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
-		$messages['subscribe']['sub'] = Pommo::_T('Subscription request'); 
-		$messages['subscribe']['suc'] = Pommo::_T('Welcome to our mailing list. Enjoy your stay.');
+		$messages['subscribe']['msg'] = sprintf(Pommo::_T('Welcome to our mailing list. You can always login to update your records or unsubscribe by visiting: %s'),"\n  ".$pommo->_http.$pommo->_baseUrl.'user/login.php');
+		$messages['subscribe']['sub'] = sprintf(Pommo::_T('Welcome to %s'), $pommo->_config['list_name']); 
+		$messages['subscribe']['web'] = Pommo::_T('Welcome to our mailing list. Enjoy your stay.');
+		$messages['subscribe']['email'] = false;
+		}
+		
+		if ($section == 'all' || $section == 'unsubscribe') {
+		$messages['unsubscribe'] = array();
+		$messages['unsubscribe']['sub'] = sprintf(Pommo::_T('Farewell from %s'), $pommo->_config['list_name']);
+		$messages['unsubscribe']['msg'] = Pommo::_T('You have been unsubscribed and will not receive any more mailings from us. Feel free to come back anytime!');
+		$messages['unsubscribe']['web'] = Pommo::_T('You have successfully unsubscribed. Enjoy your travels.');
+		$messages['unsubscribe']['email'] = false;
+		}
+		
+		if ($section == 'all' || $section == 'confirm') {
+		$messages['confirm'] = array();
+		$messages['confirm']['msg'] = sprintf(Pommo::_T('You have requested to subscribe to %s. We would like to validate your email address before adding you as a subscriber. Please click the link below to be added ->'), $pommo->_config['list_name'])."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['confirm']['sub'] = Pommo::_T('Subscription request'); 
 		}
 		
 		if ($section == 'all' || $section == 'activate') {
 		$messages['activate'] = array();
-		$messages['activate']['msg'] =  sprintf(Pommo::_T('Someone has requested to access your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('You may edit your information or unsubscribe by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
+		$messages['activate']['msg'] =  sprintf(Pommo::_T('Someone has requested to access to your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('You may edit your information or unsubscribe by visiting the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['activate']['sub'] = sprintf(Pommo::_T('%s: Account Access.'),$pommo->_config['list_name']); 
 		}
 		
@@ -97,19 +144,12 @@ class PommoHelperMessages {
 		$messages['password'] = array();
 		$messages['password']['msg'] =  sprintf(Pommo::_T('You have requested to change your password for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\r\n\t[[url]]\r\n\r\n".Pommo::_T('If you have received this message in error, please ignore it.');
 		$messages['password']['sub'] = Pommo::_T('Change Password request'); 
-		$messages['password']['suc'] = Pommo::_T('Your password has been reset. Enjoy!');
-		}
-		
-		if ($section == 'all' || $section == 'unsubscribe') {
-		$messages['unsubscribe'] = array();
-		$messages['unsubscribe']['suc'] = Pommo::_T('You have successfully unsubscribed. Enjoy your travels.');
 		}
 		
 		if ($section == 'all' || $section == 'update') {
 			$messages['update'] = array();
 			$messages['update']['msg'] =  sprintf(Pommo::_T('You have requested to update your records for %s.'),$pommo->_config['list_name']).' '.Pommo::_T('Please validate this request by clicking the link below ->')."\n\n\t[[url]]\n\n".Pommo::_T('If you have received this message in error, please ignore it.');
 			$messages['update']['sub'] = Pommo::_T('Update Records request'); 
-			$messages['update']['suc'] = Pommo::_T('Your records have been updated. Enjoy!');
 		}
 
 		$input = array('messages' => serialize($messages));

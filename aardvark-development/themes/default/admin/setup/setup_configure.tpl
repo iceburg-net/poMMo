@@ -41,7 +41,15 @@ $().ready(function(){
 	// override changeTab function
 	PommoTabs.change = function() { return true; };
 	
-	switch(location.hash) {
+	{/literal}
+	{if $smarty.get.tab}
+	  var hash = "#{$smarty.get.tab|lower}";
+	{else}
+	  var hash = location.hash.toLowerCase();
+	{/if}
+	{literal}
+	
+	switch(hash) {
 		case '#users': $('#tabs li a:eq(0)').click();
 			break;
 		case '#general':  $('#tabs li a:eq(1)').click();

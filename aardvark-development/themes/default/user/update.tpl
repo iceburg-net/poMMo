@@ -10,7 +10,9 @@
 <h3>{t}Subscriber Update{/t}</h3>
 
 {include file="inc/messages.tpl"}
- 	
+ 
+{if !$unsubscribe}
+
 {include file="subscribe/form.update.tpl"}
 
 <form method="post" action="">
@@ -31,6 +33,9 @@
 </div>
 
 </form>
+
+{/if}
+
 
 {literal}
 <script type="text/javascript">

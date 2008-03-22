@@ -107,7 +107,8 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 		
 		$logger->addMsg(Pommo::_T('Subscription request received.'));
 		
-		if (PommoHelperMessages::sendConfirmation($subscriber['email'], $subscriber['pending_code'], 'subscribe')) {
+		// send confirmation message.
+		if (PommoHelperMessages::sendMessage(array('to' => $subscriber['email'], 'code' => $subscriber['pending_code'], 'type' => 'confirm'))) {
 			$subscriber['registered'] = date("F j, Y, g:i a",$subscriber['registered']);
 			if ($comments || isset($notices['pending']) && $notices['pending'] == 'on')
 				PommoHelperMessages::notify($notices, $subscriber, 'pending', $comments);
@@ -128,16 +129,17 @@ else { // no email confirmation required
 		$smarty->assign('back', TRUE);
 	}
 	else {
+		
+		// send/print welcome message
+		PommoHelperMessages::sendMessage(array('to' => $subscriber['email'], 'type' => 'subscribe'));
+	
 		$subscriber['registered'] = date("F j, Y, g:i a",$subscriber['registered']);
 		if ($comments || isset($notices['subscribe']) && $notices['subscribe'] == 'on')
 			PommoHelperMessages::notify($notices, $subscriber, 'subscribe',$comments);
-				
+		
+		// redirect
 		if ($config['site_success'])
 			Pommo::redirect($config['site_success']);
-		
-		$dbvalues = PommoAPI::configGet('messages');
-		$messages = unserialize($dbvalues['messages']);
-		$logger->addMsg($messages['subscribe']['suc']);
 	}
 	
 }
