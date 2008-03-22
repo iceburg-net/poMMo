@@ -57,7 +57,7 @@ $test = $dbo->query($query,0);
 // attempt to send activation code if once has not recently been sent
 if (empty($test)) {
 	$code = PommoSubscriber::getActCode($subscriber);
-	if (PommoHelperMessages::sendConfirmation($subscriber['email'], $code, 'activate')) {
+	if (PommoHelperMessages::sendMessage(array('to' => $subscriber['email'], 'code' => $code, 'type' => 'activate'))) {
 		
 		$smarty->assign('sent', true);
 		

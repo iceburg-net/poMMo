@@ -3,10 +3,16 @@
 {fv prepend='<span class="error">' append='</span>'}
 {fv validate="subscribe_sub"}
 {fv validate="subscribe_msg"}
-{fv validate="subscribe_suc"}
+{fv validate="subscribe_web"}
+{fv validate="unsubscribe_sub"}
+{fv validate="unsubscribe_msg"}
+{fv validate="unsubscribe_web"}
+{fv validate="confirm_sub"}
+{fv validate="confirm_msg"}
 {fv validate="activate_sub"}
 {fv validate="activate_msg"}
-{fv validate="unsubscribe_suc"}
+{fv validate="update_sub"}
+{fv validate="update_msg"}
 {fv validate="notify_email"}
 {fv validate="notify_subscribe"}
 {fv validate="notify_unsubscribe"}
@@ -70,24 +76,30 @@
 </fieldset>
 
 <fieldset>
-<legend>{t}subscribe{/t}</legend>
+<legend>{t}Messages{/t}</legend>
 
+{t}Customize the messages sent to your users when they subscribe, unsubscribe, attempt to subscribe, or request to update their records.{/t}
+
+
+<h2>{t}Subscription{/t}</h2>
+
+<h3>{t}Email{/t}</h3>
+<input type="checkbox" name="subscribe_email" {if $subscribe_email}checked {/if}/>{t}(Check to Enable){/t}
 <div>
 <label for="subscribe_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="subscribe_sub"}</label>
 <input type="text" name="subscribe_sub" value="{$subscribe_sub|escape}" />
-<div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
 <div>
 <label for="subscribe_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="subscribe_msg"}</label>
 <textarea name="subscribe_msg" cols="70" rows="10">{$subscribe_msg|escape}</textarea>
-<div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
 </div>
 
+<h3>{t}Website{/t}</h3>
 <div>
-<label for="subscribe_suc"><strong class="required">{t}Success:{/t}</strong>{fv message="subscribe_suc"}</label>
-<textarea name="subscribe_suc" cols="70" rows="10">{$subscribe_suc|escape}</textarea>
-<div class="notes">{t}(Message displayed upon success){/t}</div>
+<label for="subscribe_web"><strong class="required">{t}Message:{/t}</strong>{fv message="subscribe_web"}</label>
+<textarea name="subscribe_web" cols="70" rows="5">{$subscribe_web|escape}</textarea>
+<div class="notes">{t escape='no'}(displayed on webpage){/t}</div>
 </div>
 
 <div class="buttons">
@@ -98,15 +110,66 @@
 
 <div class="output alert">{if $output}{$output}{/if}</div>
 
-</fieldset>
+<hr />
+<h2>{t}Unsubscription{/t}</h2>
 
-<fieldset>
-<legend>{t}activate Records{/t}</legend>
+<h3>{t}Email{/t}</h3>
+<input type="checkbox" name="unsubscribe_email" {if $unsubscribe_email}checked {/if}/>{t}(Check to Enable){/t}
+<div>
+<label for="unsubscribe_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="unsubscribe_sub"}</label>
+<input type="text" name="unsubscribe_sub" value="{$unsubscribe_sub|escape}" />
+</div>
 
+<div>
+<label for="unsubscribe_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="unsubscribe_msg"}</label>
+<textarea name="unsubscribe_msg" cols="70" rows="10">{$unsubscribe_msg|escape}</textarea>
+</div>
+
+<h3>{t}Website{/t}</h3>
+<div>
+<label for="unsubscribe_web"><strong class="required">{t}Message:{/t}</strong>{fv message="unsubscribe_web"}</label>
+<textarea name="unsubscribe_web" cols="70" rows="5">{$unsubscribe_web|escape}</textarea>
+<div class="notes">{t escape='no'}(displayed on webpage){/t}</div>
+</div>
+
+<div class="buttons">
+<input type="submit" value="{t}Update{/t}" />
+<input type="submit" name="restore[unsubscribe]" value="{t}Restore to Defaults{/t}" />
+<img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
+</div>
+
+<div class="output alert">{if $output}{$output}{/if}</div>
+
+<hr />
+<h2>{t}Subscription Confirmation{/t}</h2>
+
+<h3>{t}Email{/t}</h3>
+<div>
+<label for="confirm_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="confirm_sub"}</label>
+<input type="text" name="confirm_sub" value="{$confirm_sub|escape}" />
+</div>
+
+<div>
+<label for="confirm_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="confirm_msg"}</label>
+<textarea name="confirm_msg" cols="70" rows="10">{$confirm_msg|escape}</textarea>
+<div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
+</div>
+
+<div class="buttons">
+<input type="submit" value="{t}Update{/t}" />
+<input type="submit" name="restore[confirm]" value="{t}Restore to Defaults{/t}" />
+<img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
+</div>
+
+<div class="output alert">{if $output}{$output}{/if}</div>
+
+<hr />
+<h2>{t}Account Access{/t}</h2>
+
+<h3>{t}Email{/t}</h3>
 <div>
 <label for="activate_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="activate_sub"}</label>
 <input type="text" name="activate_sub" value="{$activate_sub|escape}" />
-<div class="notes">{t}(Subject of Sent Email){/t}</div>
 </div>
 
 <div>
@@ -123,24 +186,28 @@
 
 <div class="output alert">{if $output}{$output}{/if}</div>
 
-</fieldset>
+<hr />
+<h2>{t}Update Validation{/t}</h2>
 
-<fieldset>
-<legend>{t}Unsubscribe{/t}</legend>
+<h3>{t}Email{/t}</h3>
+<div>
+<label for="update_sub"><strong class="required">{t}Subject:{/t}</strong>{fv message="update_sub"}</label>
+<input type="text" name="update_sub" value="{$update_sub|escape}" />
+</div>
 
 <div>
-<label for="unsubscribe_suc"><strong class="required">{t}Success:{/t}</strong>{fv message="unsubscribe_suc"}</label>
-<textarea name="unsubscribe_suc" cols="70" rows="10">{$unsubscribe_suc|escape}</textarea>
-<div class="notes">{t}(Message displayed upon success){/t}</div>
+<label for="update_msg"><strong class="required">{t}Message:{/t}</strong>{fv message="update_msg"}</label>
+<textarea name="update_msg" cols="70" rows="10">{$update_msg|escape}</textarea>
+<div class="notes">{t escape='no' 1='<tt>' 2='</tt>'}(Use %1[[url]]%2 for the confirm link at least once){/t}</div>
 </div>
 
 <div class="buttons">
 <input type="submit" value="{t}Update{/t}" />
-<input type="submit" name="restore[unsubscribe]" value="{t}Restore to Defaults{/t}" />
+<input type="submit" name="restore[update]" value="{t}Restore to Defaults{/t}" />
 <img src="{$url.theme.shared}images/loader.gif" alt="loading..." class="hidden" name="loading" />
 </div>
 
-<div class="output alert">{if $output}{$output}{/if}</div>
+<div class="output">{if $output}{$output}{/if}</div>
 
 </fieldset>
 

@@ -20,8 +20,9 @@ q
  */
 die();
 ?>
-[LEGACY POMMO]
-  Port config parser + config.php/sample
+
+http://www.pommo.org/community/viewtopic.php?id=62
+http://www.pommo.org/community/viewtopic.php?pid=5031#p5031
 
 [BEFORE Aardvark Final]
 	+ Remove languages from default distribution, separate download. ? opt.

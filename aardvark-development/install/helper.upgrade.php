@@ -270,6 +270,16 @@ function PommoRevUpgrade($rev) {
 			
 		case 41:
 			
+			
+			$sql = 'Pommo::requireOnce($pommo->_baseDir . \'inc/helpers/messages.php\');PommoHelperMessages::resetDefault();';
+			if (!PommoInstall::incUpdate(24,$sql,"Resetting all Messages to Default",true)) return false;
+		
+			// bump revision
+			if (!PommoAPI::configUpdate(array('revision' => 42,'version' => 'Aardvark PR16.1'), true))
+				return false;
+				
+		case 42:
+		
 			// end of upgrade (break), no revision bump.
 			break;
 			

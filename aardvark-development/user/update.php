@@ -81,7 +81,7 @@ if (!empty ($_POST['update']) && PommoValidate::subscriberData($_POST['d'])) {
 			if(!$code)
 				die('Failed to Generate Pending Subscriber Code');
 			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
-			PommoHelperMessages::sendConfirmation($newsub['email'], $code, 'update');
+			PommoHelperMessages::sendMessage(array('to' => $newsub['email'], 'code' => $code, 'type' => 'update'));
 			
 			if (isset($notices['update']) && $notices['update'] == 'on')
 				PommoHelperMessages::notify($notices, $newsub, 'update');
@@ -91,7 +91,6 @@ if (!empty ($_POST['update']) && PommoValidate::subscriberData($_POST['d'])) {
 	elseif (!PommoSubscriber::update($newsub, 'REPLACE_ACTIVE')) 
 		$logger->addErr('Error updating subscriber.');
 	else { // update successful
-		
 		$logger->addMsg(Pommo::_T('Your records have been updated.'));
 		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
 		if (isset($notices['update']) && $notices['update'] == 'on')
@@ -113,12 +112,14 @@ elseif (!empty ($_POST['unsubscribe'])) {
 	else {
 		$dbvalues = PommoAPI::configGet(array('messages'));
 		$messages = unserialize($dbvalues['messages']);
-		$logger->addMsg($messages['unsubscribe']['suc']);
 		
-		if ($comments || isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') {
-			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+		
+		// send unsubscription email / print unsubscription message
+		PommoHelperMessages::sendMessage(array('to' => $subscriber['email'], 'type' => 'unsubscribe'));
+		
+		if ($comments || isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') 
 			PommoHelperMessages::notify($notices, $subscriber, 'unsubscribe',$comments);
-		}
 		
 		$smarty->assign('unsubscribe', TRUE);
 	}

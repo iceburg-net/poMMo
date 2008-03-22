@@ -73,7 +73,7 @@ class PommoInstall {
  	// performs an update increment
  	// checks if the update has already been performed
  	// returns update status
- 	function incUpdate($serial, $sql, $msg = "Performing Update") {
+ 	function incUpdate($serial, $sql, $msg = "Performing Update", $eval = false) {
  		global $pommo;
  		$dbo =& $pommo->_dbo;
  		$logger =& $pommo->_logger;
@@ -96,14 +96,23 @@ class PommoInstall {
 		
 		if(!isset($GLOBALS['pommoFakeUpgrade'])) {
 			
-			$query = $dbo->prepare($sql);
-			if (!$dbo->query($query)) {
-				$msg .= ($GLOBALS['pommoLooseUpgrade']) ?
-					'IGNORED.' : 'FAILED';
-				$logger->addErr($msg);
-				
-				return $GLOBALS['pommoLooseUpgrade'];
+			// run the update
+			
+			if($eval) {
+				eval($sql);
 			}
+			else {
+				$query = $dbo->prepare($sql);
+				if (!$dbo->query($query)) {
+					// query failed...
+					$msg .= ($GLOBALS['pommoLooseUpgrade']) ?
+						'IGNORED.' : 'FAILED';
+					$logger->addErr($msg);
+				
+					return $GLOBALS['pommoLooseUpgrade'];
+				}
+			}
+			
 			$msg .= "done.";
 			$logger->addMsg($msg);
 		}
