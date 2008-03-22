@@ -20,7 +20,7 @@
 
 /** 
  * Common class. Holds Configuration values, authentication state, etc.. (revived from session)
-*ourceforge.ne/
+*/
 
 class Pommo {
 	var $_revision = 42; // poMMo's current "file" revision #
