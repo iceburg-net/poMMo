@@ -91,7 +91,7 @@ var wysiwyg = {
 	},
 	getBody: function() {
 		return (this.enabled) ?
-			this.fck.GetXHTML() :
+			this.fck.GetXHTML(true) :
 			this.textarea.val();
 	},
 	init: function(o) { 
