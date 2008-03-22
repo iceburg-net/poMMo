@@ -21,6 +21,8 @@ q
 die();
 ?>
 
+Add ability to make bulk changes to fields [ multi-subscriber edit ]
+
 BOUNCE MANAGE; http://www.pommo.org/community/viewtopic.php?id=487
 FLASH INTEGRATION; http://www.pommo.org/community/viewtopic.php?id=1085
 

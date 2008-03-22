@@ -13,6 +13,7 @@ FCKConfig.BaseHref = '' ;
 
 FCKConfig.Plugins.Add( 'dragresizetable' );
 
+FCKConfig.AutoDetectLanguage = false;
 
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/silver/' ;
 
