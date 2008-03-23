@@ -62,6 +62,8 @@
 
       // PHP 5.1.1 does not read more than 8192 bytes in one fread()
       // the discussions at PHP Bugs suggest it's the intended behaviour
+      
+      $data = ''; // brice burgess, fix PHP Notice
       while ($bytes > 0) {
         $chunk  = fread($this->_fd, $bytes);
         $data  .= $chunk;
