@@ -21,6 +21,13 @@ q
 die();
 ?>
 
+Recompile FR .mo - http://bugs.pommo.org/?do=details&id=205
+
+Import; 
+  + behaviors on encountering duplicate (update records?) / unsubscribed address (resubscribe?)
+  + Read column names from first line (if applicable) -- in accordance with export.
+  + smart parsing of email column [allow "Brice Burgess <b@iceburg.net>" ]
+  
 Add ability to make bulk changes to fields [ multi-subscriber edit ]
 
 BOUNCE MANAGE; http://www.pommo.org/community/viewtopic.php?id=487
