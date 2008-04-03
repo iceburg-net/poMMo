@@ -1,103 +1,22 @@
-=== Release Notes for poMMo Aardvark PR16rc4 ===
- .: Released Janurary 27, 2008
+=== Release Notes for poMMo Aardvark PR16.1 ===
+ .: Released April 02, 2008
 
 [Additions]
-	* Added a JSON helper class
-	* Added jqValidate and jqStripe plugins
+	* Added fine grain control of all messages sent to users
 
 [Improvements]
-	* Reduced code size and maintainence
-	* Modernized Javascripts - Complete rewrite or refactor of all code
-	* Public Mailing page now uses a grid to display
-	* Improved Cross-Browser Compatibility (Internet Explorer, Firefox, etc.) of Administrative Area
+	* Updated all language files, removed fuzzy translations.
+	* WYSIWYG output is formatted to comply with 8bit encoded emails
+	* Improved HTML standard compliance in default theme
+	* Sort Column, Order, and Row limit are now preserved in Data Grids
+	* Latest Mailings appear first in History
 
-
-
-=== Release Notes for poMMo Aardvark PR16rc3 ===
- .: Released Janurary 13, 2008
-
-[Additions]
-	* Added common Javascripts and abstraction layers
-
-[Improvements]
-	* Javascript optimizations
-	* Rewrote Mailings History to use jqGrid.
-	* Removed Thickbox, replaced occurences with jqModal.
-	* Updated to jQuery 1.2.2b2
-	* Refactored setup pages to use Javascript Tabs and new libraries
-	
 [Bug Fixes]
-	* Fixed slashes escaping WYSIWYG content
+	* Fixed a PHP Notice when utilizing the PHP Gettext library
+	* WYSIWYG (FCKEditor) now properly inherits poMMo's language
+	* Duplicate options are no longer appended to select boxes when editing Multiple Choice Subscriber fields
 	
-
-
-=== Release Notes for poMMo Aardvark PR16rc2 ===
- .: Released Janurary 5, 2008
-
-[Additions]
-	* Added Polski (pl) Translation
-	* Added FCKEditor 2.5.1 (replaces TinyMCE) and abstraction library
-	
-[Improvements]
-	* Buffed and Waxed the Mailing Composition Javascripts
-	* Implemented an abbreviated plugin architecture for easy customization or replacement of the WYSIWYG Editor.
-	* Subscriber Fields are now generally returned in alphabetical order
-	* Updated core Javascript libraries
-	* Updated Brasil Português (pt-br) translation
-	
-[Bug Fixes]
-	* Fixed display of dialogs/modals in Internet Explorer 6
-	* Subscriber editing and deleting now works under IE6
-
-
-
-=== Release Notes for poMMo Aardvark PR16rc1 ===
- .: Released December 22, 2007
-
-
-[Additions]
-
-  * Added script to add users from shell/cli
-  * Added ability to select a date format preference from config.php
-  * Added full search capability to all subscribers, or all subscribers in a group
-  * New and improved Subscriber Management, built on jqGrid (a new ajax "data grid")
-  * Added Portuguese translation
-  * Added toggle to "Allow unsubscribed emails to be re-subscribed." during the import process
-  * Public Mailings now display personalizations if accessed via the [[!weblink]] special link 
-  
-
-[Improvements]
-
-  * Simplified the delivery of activation/confirmation emails.
-  * Improved date handling under IIS/Windows
-  * Improved compatibility with latent webhosts
-  * Confirmation emails are now sent when a subscriber elects to change their email address
-  * Clarification of config.sample.php
-  * Greatly improved the date handling range (100BCE -> 3000+ CE)
-  * Code cleanups and optimizations
-  * Removed debugging artifacts from install.php
-  * Introduced a general purpose database table for persistent data
-  * Log entries are posted whenever confirmation mails are sent
-  * Rewritten subscriber management
-  * Renamed Brazilian Portuguese to "pt-br" for ISO 639 compliance
-  * Updated jQuery to v. 1.2.1
-  * Improved update procedure for development (subversion) users (better handling of same revision updates)
-  
-[Bug Fixes]
-
-  * Hidden subscriber field values are now preserved during user update
-  * Testing mail exchanger from config menu now works
-  * Fixed grouping by numerical comparison on DATE and NUMBER fields
-  * Fixed grouping by unchecked CHECKBOX fields
-  * String Values vs. Timestamps are outputted when exporting subscribers
-  * .travel domains now validate
-  * Addressed an issue with group deletion causing orphaned rules
-  * Fixed improper detection of baseURL for install link
-  * Templates no longer removed during a "database reset" via the support library
-  * Pending.php now reports actual pending changes.
-  * Sorting by subscriber field or attribute is now performed across the entire dataset, not just the current view.
-  * Fixed javascript validation of Email fields
-  * Corrected display of field prompts when editing or adding a subscriber via Subscriber Management
-  * Fixed issue where deleteing an active subscriber would also delete unsubscribed subscribers with a matching email address
-  * Rewrote mailing status ajax polling to prevent asyncrocity from cauing an earlier poll to rewrite the latest poll (e.g. could result in inaccurate subscriber sent count)
-  * Previously unsubscribed emails are now flagged as duplicate
+[Notes]
+    * IMPORTANT! You will need to re-create messages you have customized
+    ** in Setup > Configure > Messages  if you are upgrading !!!
+    
