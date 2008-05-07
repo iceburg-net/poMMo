@@ -38,7 +38,8 @@ See config.simple.sample.php for a condensed, readable config file.
 	 en - English			pt - Portuguese
 	 en-uk - British		pt-br - Brazilian Portuguese
 	 es - Spanish			ro - Romanian
-	 fr - French			ru - Russian			
+	 fi - Finnish			ru - Russian
+	 fr - French		
 	 		
 ::: Optional Configuration :::
 
