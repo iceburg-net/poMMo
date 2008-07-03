@@ -74,4 +74,4 @@ unlink($pommo->_workDir.'/mailing.test.php');
 if($time == 90)
 	Pommo::kill('SUCCESS');
 
-Pommo::kill('FAILED -- Your webserver or a 3rd party tool is force terminating PHP. Mailings may freeze. If you are having problems with frozen mailings, try setting the Mailing Runtime Value to '.($time-10).' or below');
+Pommo::kill('FAILED -- Your webserver or a 3rd party tool is force terminating PHP. Mailings may freeze. If you are having problems with frozen mailings, try setting the Mailing Runtime Value to '.($time-10));

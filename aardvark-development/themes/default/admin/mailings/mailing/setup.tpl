@@ -16,7 +16,6 @@
 <div>
 <label for="subject"><span class="required">{t}Subject:{/t}</span>{fv message="subject"}</label>
 <input type="text" name="subject" value="{$subject|escape}" />
-<span class="notes">{t}(maximum of 60 characters){/t}</span>
 </div>
 
 <div>
