@@ -280,6 +280,10 @@ function PommoRevUpgrade($rev) {
 				
 		case 42:
 		
+			if (!PommoInstall::incUpdate(25,
+			"ALTER TABLE `{$dbo->table['mailings']}` CHANGE `fromname` `fromname` VARCHAR(80),CHANGE `subject` `subject` VARCHAR(80)"
+			,"Extending character limit of Mailing Subject and From Name to 80")) return false;
+		
 			// end of upgrade (break), no revision bump.
 			break;
 			
