@@ -262,7 +262,6 @@ poMMo.callback.updateRule = function(p) {
 };
 
 poMMo.callback.editRule = function(p) {
-	console.log(p.logic);
 	$('#dialog')
 		.jqm({ajax: 'ajax/group.rpc.php?call=displayRule&ruleType=field&fieldID='+p.fieldID+'&logic='+p.logic+'&type='+p.type})
 		.jqmShow();	
