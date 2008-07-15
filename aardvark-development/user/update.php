@@ -34,10 +34,10 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
-$smarty->prepareForSubscribeForm();
+$template->prepareForSubscribeForm();
 
 // fetch the subscriber, validate code
 $subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
@@ -57,7 +57,7 @@ $config = PommoAPI::configGet(array('notices'));
 $notices = unserialize($config['notices']);
 
 if (!isset($_POST['d']))
-	$smarty->assign('d', $subscriber['data']);
+	$template->assign('d', $subscriber['data']);
 
 // check for an update + validate new subscriber info (also converts dates to ints)
 if (!empty ($_POST['update']) && PommoValidate::subscriberData($_POST['d'])) {
@@ -121,12 +121,12 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		if ($comments || isset($notices['unsubscribe']) && $notices['unsubscribe'] == 'on') 
 			PommoHelperMessages::notify($notices, $subscriber, 'unsubscribe',$comments);
 		
-		$smarty->assign('unsubscribe', TRUE);
+		$template->assign('unsubscribe', TRUE);
 	}
 }
 
-$smarty->assign('email',$subscriber['email']);
-$smarty->assign('code',$_REQUEST['code']);
-$smarty->display('user/update.tpl');
+$template->assign('email',$subscriber['email']);
+$template->assign('code',$_REQUEST['code']);
+$template->display('user/update.tpl');
 Pommo::kill();
 ?>

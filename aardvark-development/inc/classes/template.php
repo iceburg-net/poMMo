@@ -21,11 +21,11 @@
 Pommo :: requireOnce($GLOBALS['pommo']->_baseDir . 'inc/lib/smarty/Smarty.class.php');
 
 // wrapper class around smarty
-class PommoTemplate extends Smarty {
+class PommoTheme extends Smarty {
 
 	var $_pommoTheme;
 
-	function PommoTemplate() {
+	function PommoTheme() {
 		global $pommo;
 
 		// set theme -- TODO; extend this to the theme selector

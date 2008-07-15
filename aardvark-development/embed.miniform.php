@@ -32,13 +32,13 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // subscription forms will be activated from this template
-$smarty->prepareForSubscribeForm();
+$template->prepareForSubscribeForm();
 
 // assign referer since this is an embedded form
-$smarty->assign('referer',htmlspecialchars($_SERVER['PHP_SELF']));
+$template->assign('referer',htmlspecialchars($_SERVER['PHP_SELF']));
 
-$smarty->display('subscribe/form.mini.tpl');
+$template->display('subscribe/form.mini.tpl');
 ?>

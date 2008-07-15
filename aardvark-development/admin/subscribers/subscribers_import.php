@@ -32,14 +32,14 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 
 //Pommo::kill('Importing and Exporting is temporarily disabled until PR15');
 
 // Maximum File Size (in MB) 
 $max_file_size = 2;
-$smarty->assign('maxSize',$max_file_size * 1024 * 1024);
+$template->assign('maxSize',$max_file_size * 1024 * 1024);
 
 // Filename (in $_FILES array)
 $fname = "csvfile";
@@ -122,6 +122,6 @@ if(isset($_POST['submit'])) {
 	}
 }
 
-$smarty->display('admin/subscribers/subscribers_import.tpl');
+$template->display('admin/subscribers/subscribers_import.tpl');
 Pommo::kill();
 ?>

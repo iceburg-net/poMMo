@@ -33,8 +33,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
@@ -81,7 +81,7 @@ function check_charset($value, $empty, & $params, & $formvars) {
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
-	SmartyValidate :: connect($smarty, true);
+	SmartyValidate :: connect($template, true);
 
 	// register custom criteria
 	SmartyValidate :: register_criteria('isCharSet', 'check_charset');
@@ -99,7 +99,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	$vMsg['charset'] = Pommo::_T('Invalid Character Set');
 	$vMsg['fromemail'] = $vMsg['frombounce'] = Pommo::_T('Invalid email address');
 	$vMsg['ishtml'] = $vMsg['mailgroup'] = Pommo::_T('Invalid Input');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 	
 } else {
 	// ___ USER HAS SENT FORM ___
@@ -110,7 +110,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
 	$json = new PommoJSON();
 
-	SmartyValidate :: connect($smarty);
+	SmartyValidate :: connect($template);
 
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID
@@ -121,13 +121,13 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	} else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->add('fieldErrors',$template->getInvalidFields());
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 
-$smarty->assign('groups',PommoGroup::get());
-$smarty->assign($state);
-$smarty->display('admin/mailings/mailing/setup.tpl');
+$template->assign('groups',PommoGroup::get());
+$template->assign($state);
+$template->display('admin/mailings/mailing/setup.tpl');
 Pommo::kill();
 ?>

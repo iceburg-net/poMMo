@@ -34,9 +34,9 @@ Pommo::requireOnce($pommo->_baseDir . 'inc/lib/phpmailer/class.smtp.php');
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
-$smarty->assign('returnStr', Pommo::_T('Configure'));
+$template = new PommoTheme();
+$template->prepareForForm();
+$template->assign('returnStr', Pommo::_T('Configure'));
 
 // Read user requested changes	
 if (!empty ($_POST['addSmtpServer'])) {
@@ -71,7 +71,7 @@ elseif (!empty ($_POST['throttle_SMTP'])) {
 }
 
 if(isset($update))
-	$smarty->assign('output',($update)?Pommo::_T('Configuration Updated.'):Pommo::_T('Please review and correct errors with your submission.'));
+	$template->assign('output',($update)?Pommo::_T('Configuration Updated.'):Pommo::_T('Please review and correct errors with your submission.'));
 
 // Get the SMTP settings from DB
 $smtpConfig = PommoAPI::configGet(array (
@@ -124,11 +124,11 @@ for ($i = 1; $i < 5; $i++) {
 	}
 }
 
-$smarty->assign('addServer',$addServer);
-$smarty->assign('smtpStatus',$smtpStatus);
-$smarty->assign('smtp', $smtp);
-$smarty->assign('throttle_SMTP', $smtpConfig['throttle_SMTP']);
+$template->assign('addServer',$addServer);
+$template->assign('smtpStatus',$smtpStatus);
+$template->assign('smtp', $smtp);
+$template->assign('throttle_SMTP', $smtpConfig['throttle_SMTP']);
 
-$smarty->display('admin/setup/config/ajax.smtp.tpl');
+$template->display('admin/setup/config/ajax.smtp.tpl');
 Pommo::kill();
 ?>

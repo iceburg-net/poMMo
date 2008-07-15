@@ -32,8 +32,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 // add field if requested, redirect to its edit page on success
 if (!empty ($_POST['field_name'])) {
@@ -47,7 +47,7 @@ if (!empty ($_POST['field_name'])) {
 	
 	$id = PommoField::add($field);
 	if ($id)
-		$smarty->assign('added',$id);
+		$template->assign('added',$id);
 	else
 		$logger->addMsg(Pommo::_T('Error with addition.'));
 }
@@ -64,12 +64,12 @@ if (!empty ($_GET['delete'])) {
 	else {
 		$affected = PommoField::subscribersAffected($field['id']);
 		if(count($affected) > 0 && empty($_GET['dVal-force'])) {
-			$smarty->assign('confirm', array (
+			$template->assign('confirm', array (
 				'title' => Pommo::_T('Confirm Action'),
 				'nourl' => $_SERVER['PHP_SELF'] . '?field_id=' . $_GET['field_id'],
 				'yesurl' => $_SERVER['PHP_SELF'] . '?field_id=' . $_GET['field_id'] . '&delete=TRUE&dVal-force=TRUE',
 				'msg' => sprintf(Pommo::_T('Currently, %1$s subscribers have a non empty value for %2$s. All Subscriber data relating to this field will be lost.'), '<b>' . count($affected) . '</b>','<b>' . $field['name'] . '</b>')));
-			$smarty->display('admin/confirm.tpl');
+			$template->display('admin/confirm.tpl');
 			Pommo::kill();
 		}
 		else {
@@ -83,8 +83,8 @@ if (!empty ($_GET['delete'])) {
 // Get array of fields. Key is ID, value is an array of the demo's info
 $fields = PommoField::get(array('byName' => FALSE));
 if (!empty($fields))
-	$smarty->assign('fields', $fields);
+	$template->assign('fields', $fields);
 	
-$smarty->display('admin/setup/setup_fields.tpl');
+$template->display('admin/setup/setup_fields.tpl');
 Pommo::kill();
 ?>

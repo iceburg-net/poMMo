@@ -48,7 +48,7 @@ switch ($_REQUEST['call']) {
 			SETUP TEMPLATE, PAGE
 		 *********************************/
 		Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-		$smarty = new PommoTemplate();
+		$template = new PommoTheme();
 
 		$group = current(PommoGroup::get(array('id' => $state['group'])));
 		if(empty($group))
@@ -77,23 +77,23 @@ switch ($_REQUEST['call']) {
 				PommoRules::getEnglish(array($logic)) : 
 				PommoRules::getEnglish(end(PommoRules::getLegal($group,array($field))));
 				
-			$smarty->assign('type', $type);
-			$smarty->assign('field',$field);
-			$smarty->assign('logic',$logic);
-			$smarty->assign('values',$values);
-			$smarty->assign('firstVal',$firstVal);
+			$template->assign('type', $type);
+			$template->assign('field',$field);
+			$template->assign('logic',$logic);
+			$template->assign('values',$values);
+			$template->assign('firstVal',$firstVal);
 		
-			$smarty->display('admin/subscribers/ajax/rule.field.tpl');
+			$template->display('admin/subscribers/ajax/rule.field.tpl');
 			Pommo::kill();
 		}
 		elseif($_REQUEST['ruleType'] == 'group') {
 			$match = PommoGroup::getNames($_REQUEST['fieldID']);
 			$key = key($match);
 			
-			$smarty->assign('match_name',$match[$key]);
-			$smarty->assign('match_id',$key);
+			$template->assign('match_name',$match[$key]);
+			$template->assign('match_id',$key);
 			
-			$smarty->display('admin/subscribers/ajax/rule.group.tpl');
+			$template->display('admin/subscribers/ajax/rule.group.tpl');
 			Pommo::kill();
 		}
 	break;

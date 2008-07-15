@@ -32,8 +32,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 
 // add group if requested
@@ -59,12 +59,12 @@ if (!empty ($_GET['delete'])) {
 
 	// See if this change will affect any subscribers, if so, confirm the change.
 	if ($affected > 1 && empty ($_GET['dVal-force'])) {
-		$smarty->assign('confirm', array (
+		$template->assign('confirm', array (
 			'title' => Pommo::_T('Confirm Action'),
 			'nourl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'],
 			'yesurl' => $_SERVER['PHP_SELF'] . '?group_id=' . $_GET['group_id'] . '&delete=TRUE&dVal-force=TRUE',
 			'msg' => sprintf(Pommo::_T('%1$s filters belong this group . Are you sure you want to remove %2$s?'), '<b>' . $affected . '</b>','<b>' . $group['name'] . '</b>')));
-		$smarty->display('admin/confirm.tpl');
+		$template->display('admin/confirm.tpl');
 		Pommo::kill();
 	} else {
 		// delete group
@@ -78,7 +78,7 @@ if (!empty ($_GET['delete'])) {
 // Get array of mailing groups. Key is ID, value is name
 $groups = PommoGroup::getNames();
 
-$smarty->assign('groups',$groups);
-$smarty->display('admin/subscribers/subscribers_groups.tpl');
+$template->assign('groups',$groups);
+$template->display('admin/subscribers/subscribers_groups.tpl');
 Pommo::kill();
 ?>

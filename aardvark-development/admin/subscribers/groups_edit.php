@@ -36,8 +36,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->assign('returnStr', Pommo::_T('Groups Page'));
+$template = new PommoTheme();
+$template->assign('returnStr', Pommo::_T('Groups Page'));
 
 
 // Initialize page state with default values overriden by those held in $_REQUEST
@@ -65,27 +65,27 @@ foreach($rules as $key => $a) {
 }
 
 
-$smarty->assign('fields',$fields);
+$template->assign('fields',$fields);
 
-$smarty->assign('legalFieldIDs', PommoRules::getLegal($group, $fields));
-$smarty->assign('legalGroups', PommoRules::getLegalGroups($group, $groups));
-
-
-
-$smarty->assign('group',$group);
-
-$smarty->assign('logicNames',PommoRules::getEnglish());
+$template->assign('legalFieldIDs', PommoRules::getLegal($group, $fields));
+$template->assign('legalGroups', PommoRules::getLegalGroups($group, $groups));
 
 
 
-$smarty->assign('rules', $rules);
-$smarty->assign('tally', PommoGroup::tally($group));
-$smarty->assign('ruleCount', count($rules['and'])+count($rules['or'])+count($rules['include'])+count($rules['exclude']));
+$template->assign('group',$group);
 
-$smarty->assign('getURL',$_SERVER['PHP_SELF'].'?group_id='.$group['id']);
-$smarty->assign('t_include',Pommo::_T('INCLUDE'));
+$template->assign('logicNames',PommoRules::getEnglish());
 
-$smarty->display('admin/subscribers/groups_edit.tpl');
+
+
+$template->assign('rules', $rules);
+$template->assign('tally', PommoGroup::tally($group));
+$template->assign('ruleCount', count($rules['and'])+count($rules['or'])+count($rules['include'])+count($rules['exclude']));
+
+$template->assign('getURL',$_SERVER['PHP_SELF'].'?group_id='.$group['id']);
+$template->assign('t_include',Pommo::_T('INCLUDE'));
+
+$template->display('admin/subscribers/groups_edit.tpl');
 Pommo::kill();
 
 ?>

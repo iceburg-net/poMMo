@@ -34,29 +34,29 @@ session_start(); // required by smartyValidate. TODO -> move to prepareForForm()
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
+$template = new PommoTheme();
+$template->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
 
-$smarty->prepareForForm();
+$template->prepareForForm();
 
 if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
-	SmartyValidate :: connect($smarty, true);
+	SmartyValidate :: connect($template, true);
 	SmartyValidate :: register_validator('email', 'Email', 'isEmail', false, false, 'trim');
 
 	$formError = array ();
 	$formError['email'] = Pommo::_T('Invalid email address');
-	$smarty->assign('formError', $formError);
+	$template->assign('formError', $formError);
 	
 	// Assign email to form if pre-provided
 	if (isset($_REQUEST['Email']))
-		$smarty->assign('Email',$_REQUEST['Email']);
+		$template->assign('Email',$_REQUEST['Email']);
 	elseif (isset($_REQUEST['email']))
-		$smarty->assign('Email',$_REQUEST['email']);
+		$template->assign('Email',$_REQUEST['email']);
 		
 } else {
 	// ___ USER HAS SENT FORM ___
-	SmartyValidate :: connect($smarty);
+	SmartyValidate :: connect($template);
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID __
 		if (PommoHelper::isDupe($_POST['Email'])) {
@@ -77,8 +77,8 @@ if (!SmartyValidate :: is_registered_form() || empty($_POST)) {
 			$logger->addMsg(sprintf(Pommo::_T('To subscribe, %sclick here%s'),'<a href="'.$pommo->_baseUrl.'user/subscribe.php?Email='.$_POST['Email'].'">','</a>'));
 		}
 	}
-	$smarty->assign($_POST);
+	$template->assign($_POST);
 }
-$smarty->display('user/login.tpl');
+$template->display('user/login.tpl');
 Pommo::kill();
 ?>

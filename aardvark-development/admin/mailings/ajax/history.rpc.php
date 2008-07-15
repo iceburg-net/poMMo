@@ -32,7 +32,7 @@ $logger = & $pommo->_logger;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // fetch the mailing IDs
 $mailingIDS = $_REQUEST['mailings'];
@@ -97,8 +97,8 @@ switch ($_REQUEST['call']) {
 		$logger->addMsg(Pommo::_T('Please Wait').'...');
 		
 		$params = $json->encode(array('ids' => $mailingIDS));
-		$smarty->assign('callbackFunction','deleteMailing');
-		$smarty->assign('callbackParams',$params);
+		$template->assign('callbackFunction','deleteMailing');
+		$template->assign('callbackParams',$params);
 	break;
 	
 	default:
@@ -106,5 +106,5 @@ switch ($_REQUEST['call']) {
 	break;
 }
 
-$smarty->display('admin/rpc.tpl');
+$template->display('admin/rpc.tpl');
 ?>

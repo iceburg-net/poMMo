@@ -30,10 +30,10 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
-SmartyValidate :: connect($smarty);
+SmartyValidate :: connect($template);
 
 if (!SmartyValidate :: is_registered_form('general') || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
@@ -55,7 +55,7 @@ if (!SmartyValidate :: is_registered_form('general') || empty ($_POST)) {
 	$vMsg = array();
 	$vMsg['site_url'] = $vMsg['site_success'] = $vMsg['site_confirm'] = Pommo::_T('Must be a valid URL');
 	$vMsg['list_name'] = $vMsg['site_name'] = Pommo::_T('Cannot be empty.');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 	
 	// populate _POST with info from database (fills in form values...)
 	$dbVals = PommoAPI::configGet(array (
@@ -68,7 +68,7 @@ if (!SmartyValidate :: is_registered_form('general') || empty ($_POST)) {
 	$dbVals['site_name'] = $pommo->_config['site_name'];
 	$dbVals['list_name'] = $pommo->_config['list_name'];
 	
-	$smarty->assign($dbVals);
+	$template->assign($dbVals);
 } else {
 	// ___ USER HAS SENT FORM ___
 	
@@ -89,12 +89,12 @@ if (!SmartyValidate :: is_registered_form('general') || empty ($_POST)) {
 	else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields('general'));
+		$json->add('fieldErrors',$template->getInvalidFields('general'));
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 	
 }
-$smarty->assign($_POST);
-$smarty->display('admin/setup/config/general.tpl');
+$template->assign($_POST);
+$template->display('admin/setup/config/general.tpl');
 Pommo::kill();
 			

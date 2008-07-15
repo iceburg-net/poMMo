@@ -33,8 +33,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 $current = PommoMailing::isCurrent();
 
@@ -42,16 +42,16 @@ $current = PommoMailing::isCurrent();
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
-	SmartyValidate :: connect($smarty, true);
+	SmartyValidate :: connect($template, true);
 
 	SmartyValidate :: register_validator('email', 'email', 'isEmail', false, false, 'trim');
 	$vMsg = array ();
 	$vMsg['email'] = Pommo::_T('Invalid email address');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 	
 } else {
 	// ___ USER HAS SENT FORM ___
-	SmartyValidate :: connect($smarty);
+	SmartyValidate :: connect($template);
 
 	if (SmartyValidate :: is_valid($_POST) && !$current) {
 		// __ FORM IS VALID
@@ -101,23 +101,23 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 			else if (!PommoMailCtl::spawn($pommo->_baseUrl.'admin/mailings/mailings_send4.php?test=TRUE&code='.$code))
 				$logger->addErr('Unable to spawn background mailer');
 			else 
-				$smarty->assign('sent',$_POST['email']);
+				$template->assign('sent',$_POST['email']);
 		}
 	} elseif ($current) {
 		$logger->addMsg(Pommo::_T('A mailing is currently taking place. Please try again later.'));
-		$smarty->assign($_POST);
+		$template->assign($_POST);
 	}
 	else { 
 		// __ FORM NOT VALID
 		$logger->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
-		$smarty->assign($_POST);
+		$template->assign($_POST);
 	}
 }
 
 if ($pommo->_config['demo_mode'] == 'on')
 	$logger->addMsg(sprintf(Pommo::_T('%sDemonstration Mode%s is on -- no Emails will actually be sent. This is good for testing settings.'),'<a href="'.$pommo->_baseUrl.'admin/setup/setup_configure.php#mailings">','</a>'));
 
-$smarty->assign('fields',PommoField::get());
-$smarty->display('admin/mailings/mailing/ajax.mailingtest.tpl');
+$template->assign('fields',PommoField::get());
+$template->display('admin/mailings/mailing/ajax.mailingtest.tpl');
 Pommo::kill();
 ?>

@@ -32,10 +32,10 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->assign('fields',PommoField::get());
+$template->assign('fields',PommoField::get());
 
-$smarty->display('admin/subscribers/ajax/subscriber_add.tpl');
+$template->display('admin/subscribers/ajax/subscriber_add.tpl');
 Pommo::kill();
 ?>

@@ -33,8 +33,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 // validate field ID
 $field = current(PommoField::get(array('id' => $_REQUEST['field_id'])));
@@ -44,7 +44,7 @@ if ($field['id'] != $_REQUEST['field_id'])
 
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
-	SmartyValidate :: connect($smarty, true);
+	SmartyValidate :: connect($template, true);
 	
 	SmartyValidate :: register_validator('field_name', 'field_name', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('field_prompt', 'field_prompt', 'notEmpty', false, false, 'trim');
@@ -53,7 +53,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	
 	$vMsg = array ();
 	$vMsg['field_name'] = $vMsg['field_prompt'] = Pommo::_T('Cannot be empty.');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 
 } else {
 	// ___ USER HAS SENT FORM ___
@@ -65,7 +65,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
 	$json = new PommoJSON();
 	
-	SmartyValidate :: connect($smarty);
+	SmartyValidate :: connect($template);
 
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID
@@ -91,7 +91,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	} else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields());
+		$json->add('fieldErrors',$template->getInvalidFields());
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
@@ -105,25 +105,25 @@ $f_comm = sprintf(Pommo::_T('%s -. If a subscriber enters a value for a comment 
 
 switch ($field['type']) {
 		case 'text' :
-			$smarty->assign('intro', $f_text);
+			$template->assign('intro', $f_text);
 			break;
 		case 'checkbox' :
-			$smarty->assign('intro', $f_check);
+			$template->assign('intro', $f_check);
 			break;
 		case 'number' :
-			$smarty->assign('intro', $f_num);
+			$template->assign('intro', $f_num);
 			break;
 		case 'date' :
-			$smarty->assign('intro', $f_date);
+			$template->assign('intro', $f_date);
 			break;
 		case 'multiple' :
-			$smarty->assign('intro', $f_mult);
+			$template->assign('intro', $f_mult);
 			break;
 		case 'comment' :
-			$smarty->assign('intro', $f_comm);
+			$template->assign('intro', $f_comm);
 			break;
 	}
 
-$smarty->assign('field', $field);
-$smarty->display('admin/setup/ajax/field_edit.tpl');
+$template->assign('field', $field);
+$template->display('admin/setup/ajax/field_edit.tpl');
 Pommo::kill();

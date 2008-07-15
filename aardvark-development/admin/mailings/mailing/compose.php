@@ -32,8 +32,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
@@ -71,11 +71,11 @@ $state =& PommoAPI::stateInit('mailing',array(
 ),
 $_POST);
 
-$smarty->assign($state);
+$template->assign($state);
 
 // assign language (for wysiwyg)
-$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
+$template->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
 
-$smarty->display('admin/mailings/mailing/compose.tpl');
+$template->display('admin/mailings/mailing/compose.tpl');
 Pommo::kill();
 ?>

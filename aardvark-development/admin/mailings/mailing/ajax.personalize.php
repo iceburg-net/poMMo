@@ -33,9 +33,9 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->assign('fields',PommoField::get(array('byName'=>true)));
-$smarty->display('admin/mailings/mailing/ajax.personalize.tpl');
+$template->assign('fields',PommoField::get(array('byName'=>true)));
+$template->display('admin/mailings/mailing/ajax.personalize.tpl');
 Pommo::kill();
 ?>

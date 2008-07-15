@@ -32,7 +32,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 $input = (isset($_GET['input'])) ?
 	unserialize($_GET['input']) : array('Email' => NULL);
@@ -69,10 +69,10 @@ if (!empty ($_POST)) {
 		if (PommoPending::cancel($pending))
 			$logger->addMsg(sprintf(Pommo::_T('Your %s has been cancelled.'),$msg));		
 	}
-	$smarty->assign('nodisplay',TRUE);
+	$template->assign('nodisplay',TRUE);
 } else {
 	$logger->addMsg(sprintf(Pommo::_T('Your %s is still pending. To complete this request, please review the confirmation email sent to %s.'), $msg, $input['Email']));
 }
-$smarty->display('user/pending.tpl');
+$template->display('user/pending.tpl');
 Pommo::kill();
 ?>

@@ -41,9 +41,9 @@ else
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->assign($mailing);
-$smarty->display('inc/mailing.tpl');
+$template->assign($mailing);
+$template->display('inc/mailing.tpl');
 Pommo::kill();
 ?>

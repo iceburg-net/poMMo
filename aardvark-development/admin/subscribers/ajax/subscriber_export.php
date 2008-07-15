@@ -31,8 +31,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->display('admin/subscribers/ajax/subscriber_export.tpl');
+$template->display('admin/subscribers/ajax/subscriber_export.tpl');
 Pommo::kill();
 ?>

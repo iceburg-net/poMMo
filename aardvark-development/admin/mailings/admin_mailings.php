@@ -32,11 +32,11 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
 
-$smarty->display('admin/mailings/admin_mailings.tpl');
+$template->display('admin/mailings/admin_mailings.tpl');
 Pommo::kill();
 ?>

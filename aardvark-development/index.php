@@ -31,7 +31,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // log the user out if requested
 if (isset($_GET['logout'])) {
@@ -76,7 +76,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		// generate captcha
 		$captcha = substr(md5(rand()), 0, 4);
 
-		$smarty->assign('captcha', $captcha);
+		$template->assign('captcha', $captcha);
 	}
 	elseif ($_POST['captcha'] == $_POST['realdeal']) {
 		// user inputted captcha matched. Reset password
@@ -95,7 +95,7 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 		$code = PommoPending::add($subscriber,'password');
 		PommoHelperMessages::sendMessage(array('to' => $pommo->_config['admin_email'], 'code' => $code, 'type' => 'password'));
 		
-		$smarty->assign('captcha',FALSE);
+		$template->assign('captcha',FALSE);
 		
 	} else {
 		// captcha did not match
@@ -104,8 +104,8 @@ elseif (!empty ($_POST['resetPassword'])) { // TODO -- visit this function later
 }
 
 // referer (used to return user to requested page upon login success)
-$smarty->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : $pommo->_baseUrl . 'admin/admin.php'));
+$template->assign('referer',(isset($_REQUEST['referer']) ? $_REQUEST['referer'] : $pommo->_baseUrl . 'admin/admin.php'));
 
-$smarty->display('index.tpl');
+$template->display('index.tpl');
 die();
 ?>

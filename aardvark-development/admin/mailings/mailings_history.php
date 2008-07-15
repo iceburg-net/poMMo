@@ -32,8 +32,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->assign('returnStr', Pommo::_T('Mailings Page'));
+$template = new PommoTheme();
+$template->assign('returnStr', Pommo::_T('Mailings Page'));
 
 
 /** SET PAGE STATE
@@ -78,10 +78,10 @@ $state['pages'] = (is_numeric($tally) && $tally > 0) ?
 	ceil($tally/$state['limit']) :
 	0;
 	
-$smarty->assign('state',$state);
-$smarty->assign('tally',$tally);
-$smarty->assign('mailings', $mailings);
+$template->assign('state',$state);
+$template->assign('tally',$tally);
+$template->assign('mailings', $mailings);
 
-$smarty->display('admin/mailings/mailings_history.tpl');
+$template->display('admin/mailings/mailings_history.tpl');
 Pommo::kill();
 ?>

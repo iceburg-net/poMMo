@@ -30,12 +30,12 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 $exchanger = current(PommoAPI::configGet(array ('list_exchanger')));
 
-SmartyValidate :: connect($smarty);
+SmartyValidate :: connect($template);
 if (!SmartyValidate :: is_registered_form('exchanger') || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	SmartyValidate::register_form('exchanger', true);
@@ -44,10 +44,10 @@ if (!SmartyValidate :: is_registered_form('exchanger') || empty ($_POST)) {
     
 	$vMsg = array();
 	$vMsg['email'] = Pommo::_T('Invalid email address');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 	
 	$dbvals = array('exchanger' => $exchanger, 'email' => $pommo->_config['admin_email']);
-	$smarty->assign($dbvals);
+	$template->assign($dbvals);
 	
 } else {
 	// ___ USER HAS SENT FORM ___
@@ -73,12 +73,12 @@ if (!SmartyValidate :: is_registered_form('exchanger') || empty ($_POST)) {
 		// __ FORM NOT VALID
 		
 		$json->addMsg(Pommo::_T('Please review and correct errors with your submission.'));
-		$json->add('fieldErrors',$smarty->getInvalidFields('exchanger'));
+		$json->add('fieldErrors',$template->getInvalidFields('exchanger'));
 		$json->fail();
 	}
 	
 }
-$smarty->assign($_POST);
-$smarty->display('admin/setup/config/ajax.testexchanger.tpl');
+$template->assign($_POST);
+$template->display('admin/setup/config/ajax.testexchanger.tpl');
 Pommo::kill();
 			

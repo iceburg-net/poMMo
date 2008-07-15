@@ -32,7 +32,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 if (PommoMailing::isCurrent())
 	Pommo::kill(sprintf(Pommo::_T('A Mailing is currently processing. Visit the %sStatus%s page to check its progress.'),'<a href="mailing_status.php">','</a>'));
@@ -47,14 +47,14 @@ $editors = new PommoWYSIWYG();
 $editor = $editors->loadEditor();
 if (!$editor)
 	die('Could not find requested WYSIWYG editor ('.$editor.') in editors.php');
-$smarty->assign('wysiwygJS',$editor);
+$template->assign('wysiwygJS',$editor);
 
 // translation assignments for dialg titles...
-$smarty->assign('t_personalization',Pommo::_T('Personalization'));
-$smarty->assign('t_testMailing',Pommo::_T('Test Mailing'));
-$smarty->assign('t_saveTemplate',Pommo::_T('Save Template'));
+$template->assign('t_personalization',Pommo::_T('Personalization'));
+$template->assign('t_testMailing',Pommo::_T('Test Mailing'));
+$template->assign('t_saveTemplate',Pommo::_T('Save Template'));
 
 
-$smarty->display('admin/mailings/mailings_start.tpl');
+$template->display('admin/mailings/mailings_start.tpl');
 Pommo::kill();
 ?>

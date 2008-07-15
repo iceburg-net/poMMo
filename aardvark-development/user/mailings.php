@@ -38,8 +38,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('Mailing History'));
+$template = new PommoTheme();
+$template->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('Mailing History'));
 
 /** SET PAGE STATE
  * limit	- # of mailings per page
@@ -82,8 +82,8 @@ if(isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) {
 
 	}
 
-	$smarty->assign($input);
-	$smarty->display('inc/mailing.tpl');
+	$template->assign($input);
+	$template->display('inc/mailing.tpl');
 	Pommo::kill();
 }
 
@@ -113,10 +113,10 @@ $state['pages'] = (is_numeric($tally) && $tally > 0) ?
 	ceil($tally/$state['limit']) :
 	0;
 	
-$smarty->assign('state',$state);
-$smarty->assign('tally',$tally);
-$smarty->assign('mailings', $mailings);
+$template->assign('state',$state);
+$template->assign('tally',$tally);
+$template->assign('mailings', $mailings);
 
-$smarty->display('user/mailings.tpl');
+$template->display('user/mailings.tpl');
 Pommo::kill();
 ?>
