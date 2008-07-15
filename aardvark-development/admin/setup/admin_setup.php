@@ -30,7 +30,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->display('admin/setup/admin_setup.tpl');
+$template->display('admin/setup/admin_setup.tpl');
 Pommo::kill();

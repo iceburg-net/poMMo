@@ -34,8 +34,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->assign('returnStr',Pommo::_T('Import'));
+$template = new PommoTheme();
+$template->assign('returnStr',Pommo::_T('Import'));
 
 $preview = $pommo->get('preview');
 
@@ -48,11 +48,11 @@ foreach($preview as $row) {
 }
 
 
-$smarty->assign('excludeUnsubscribed',(isset($_REQUEST['excludeUnsubscribed'])?true:false));
-$smarty->assign('preview',$preview);
-$smarty->assign('colNum',$cols);
-$smarty->assign('fields',PommoField::get());
+$template->assign('excludeUnsubscribed',(isset($_REQUEST['excludeUnsubscribed'])?true:false));
+$template->assign('preview',$preview);
+$template->assign('colNum',$cols);
+$template->assign('fields',PommoField::get());
 
-$smarty->display('admin/subscribers/import_csv.tpl');
+$template->display('admin/subscribers/import_csv.tpl');
 Pommo::kill();
 ?>

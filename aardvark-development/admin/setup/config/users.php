@@ -31,10 +31,10 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
-SmartyValidate :: connect($smarty);
+SmartyValidate :: connect($template);
 
 if (!SmartyValidate :: is_registered_form('users') || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
@@ -49,14 +49,14 @@ if (!SmartyValidate :: is_registered_form('users') || empty ($_POST)) {
 	$vMsg['admin_username'] = Pommo::_T('Cannot be empty.');
 	$vMsg['admin_email'] = Pommo::_T('Invalid email address');
 	$vMsg['admin_password2'] = Pommo::_T('Passwords must match.');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 
 	// populate _POST with info from database (fills in form values...)
 	$dbVals = PommoAPI::configGet(array (
 		'admin_username',
 	));
 	$dbVals['admin_email'] = $pommo->_config['admin_email'];
-	$smarty->assign($dbVals);
+	$template->assign($dbVals);
 } else {
 	// ___ USER HAS SENT FORM ___
 	
@@ -84,11 +84,11 @@ if (!SmartyValidate :: is_registered_form('users') || empty ($_POST)) {
 	else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields('users'));
+		$json->add('fieldErrors',$template->getInvalidFields('users'));
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 	
 }
-$smarty->assign($_POST);
-$smarty->display('admin/setup/config/users.tpl');
+$template->assign($_POST);
+$template->display('admin/setup/config/users.tpl');
 Pommo::kill();

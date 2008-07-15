@@ -33,11 +33,11 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 $mailing = current(PommoMailing::get(array('active' => TRUE)));
 
-$smarty->assign('mailing', $mailing);
-$smarty->display('admin/mailings/mailing_status.tpl');
+$template->assign('mailing', $mailing);
+$template->display('admin/mailings/mailing_status.tpl');
 Pommo::kill();
 ?>

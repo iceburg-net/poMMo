@@ -31,11 +31,11 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 @$status = (is_numeric($_REQUEST['status'])) ? $_REQUEST['status'] : 1;
-$smarty->assign('status',$status);
+$template->assign('status',$status);
 
-$smarty->display('admin/subscribers/ajax/subscriber_del.tpl');
+$template->display('admin/subscribers/ajax/subscriber_del.tpl');
 Pommo::kill();
 ?>

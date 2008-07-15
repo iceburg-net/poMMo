@@ -32,25 +32,25 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 
 if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 
-	SmartyValidate :: connect($smarty, true);
+	SmartyValidate :: connect($template, true);
 
 	SmartyValidate :: register_validator('name', 'name', 'notEmpty', false, false, 'trim');
 	SmartyValidate :: register_validator('description', 'description', 'dummyValid', false, false, 'trim');
 
 	$vMsg = array ();
 	$vMsg['name'] = Pommo::_T('Cannot be empty.');
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 	
 } else {
 	// ___ USER HAS SENT FORM ___
-	SmartyValidate :: connect($smarty);
+	SmartyValidate :: connect($template);
 
 	if (SmartyValidate :: is_valid($_POST)) {
 		// __ FORM IS VALID
@@ -65,7 +65,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 		
 		if ($id) {
 			$logger->addMsg(sprintf(Pommo::_T('Template %s saved.'),'<strong>'.$_POST['name'].'</strong>'));
-			$smarty->assign('success',true);
+			$template->assign('success',true);
 		}
 		else
 			$logger->addMsg(Pommo::_T('Error with addition.'));
@@ -77,6 +77,6 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	}
 }
 
-$smarty->display('admin/mailings/mailing/ajax.addtemplate.tpl');
+$template->display('admin/mailings/mailing/ajax.addtemplate.tpl');
 Pommo::kill();
 ?>

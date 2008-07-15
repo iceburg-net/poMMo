@@ -36,9 +36,9 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->assign('header',array(
+$template->assign('header',array(
 	'main' => 'poMMo '.$pommo->_config['version'],
 	'sub' => sprintf(Pommo::_T('Powerful mailing list software for %s'),$pommo->_config['list_name']) 
 	));
@@ -46,7 +46,7 @@ $smarty->assign('header',array(
 if($lang)
 	$logger->addErr(Pommo::_T('You have changed the language for this session. To make this the default language, you must update your config.php file.'));
 
-$smarty->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
-$smarty->display('admin/admin.tpl');
+$template->assign('lang',($pommo->_slanguage) ? $pommo->_slanguage : $pommo->_language);	
+$template->display('admin/admin.tpl');
 Pommo::kill();
 	

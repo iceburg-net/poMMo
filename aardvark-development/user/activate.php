@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // make sure email/login is valid
 $subscriber = current(PommoSubscriber::get(array('email' => (empty($_REQUEST['email'])) ? '0' : $_REQUEST['email'], 'status' => 1)));
@@ -59,7 +59,7 @@ if (empty($test)) {
 	$code = PommoSubscriber::getActCode($subscriber);
 	if (PommoHelperMessages::sendMessage(array('to' => $subscriber['email'], 'code' => $code, 'type' => 'activate'))) {
 		
-		$smarty->assign('sent', true);
+		$template->assign('sent', true);
 		
 		// timestamp this activation email
 		$query = "
@@ -82,11 +82,11 @@ if (empty($test)) {
 	}
 }
 else {
-	$smarty->assign('sent', false);
+	$template->assign('sent', false);
 }
 
 
-$smarty->assign('email', $subscriber['email']);
-$smarty->display('user/activate.tpl');
+$template->assign('email', $subscriber['email']);
+$template->display('user/activate.tpl');
 Pommo::kill();
 ?>

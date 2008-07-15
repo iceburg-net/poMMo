@@ -30,12 +30,12 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
-$smarty->assign('throttleTitle',Pommo::_T('Throttle Settings'));
-$smarty->assign('smtpTitle',Pommo::_T('SMTP Settings'));
-$smarty->assign('testTitle',Pommo::_T('Test Exchanger'));
+$template->assign('throttleTitle',Pommo::_T('Throttle Settings'));
+$template->assign('smtpTitle',Pommo::_T('SMTP Settings'));
+$template->assign('testTitle',Pommo::_T('Test Exchanger'));
 
-$smarty->display('admin/setup/setup_configure.tpl');
+$template->display('admin/setup/setup_configure.tpl');
 Pommo::kill();
 ?>

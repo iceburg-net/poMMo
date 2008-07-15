@@ -32,8 +32,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 /**********************************
 	JSON OUTPUT INITIALIZATION
@@ -64,8 +64,8 @@ elseif(isset($_POST['delete'])) {
 	);
 }
 else {
-	$smarty->assign('templates',PommoMailingTemplate::getNames());
-	$smarty->display('admin/mailings/mailing/templates.tpl');
+	$template->assign('templates',PommoMailingTemplate::getNames());
+	$template->display('admin/mailings/mailing/templates.tpl');
 	Pommo::kill();
 }
 

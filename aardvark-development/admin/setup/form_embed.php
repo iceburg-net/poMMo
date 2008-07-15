@@ -30,10 +30,10 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // subscription forms will be activated from this template
-$smarty->prepareForSubscribeForm();
+$template->prepareForSubscribeForm();
 
-$smarty->display('admin/setup/form_embed.tpl');
+$template->display('admin/setup/form_embed.tpl');
 Pommo::kill();

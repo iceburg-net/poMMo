@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // attempt to detect if referer was set 
 //  TODO; enable HTTP_REFERER after stripping out ?input= tags. These will continually repeat
@@ -41,7 +41,7 @@ $smarty = new PommoTemplate();
 $referer = (!empty($_POST['bmReferer'])) ? $_POST['bmReferer'] : $pommo->_http.$pommo->_baseUrl.'user/subscribe.php';
 
 // append stored input
-$smarty->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
+$template->assign('referer',$referer.'?input='.urlencode(serialize($_POST)));
 
 /**********************************
 	VALIDATE INPUT
@@ -65,14 +65,14 @@ if (!PommoHelper::isEmail($subscriber['email']))
 // ** check if email already exists in DB ("duplicates are bad..")
 if (PommoHelper::isDupe($subscriber['email'])) {
 	$logger->addErr(Pommo::_T('Email address already exists. Duplicates are not allowed.'));
-	$smarty->assign('dupe', TRUE);
+	$template->assign('dupe', TRUE);
 }
 
 // check if errors exist with data, if so print results and die.
 if ($logger->isErr() || !PommoValidate::subscriberData($subscriber['data'], array(
 	'active' => FALSE))) {
-	$smarty->assign('back', TRUE);
-	$smarty->display('user/process.tpl');
+	$template->assign('back', TRUE);
+	$template->display('user/process.tpl');
 	Pommo::kill();
 }
 
@@ -101,7 +101,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 	$id = PommoSubscriber::add($subscriber);
 	if (!$id) {
 		$logger->addErr('Error adding subscriber! Please contact the administrator.');
-		$smarty->assign('back', TRUE);
+		$template->assign('back', TRUE);
 	}
 	else {
 		
@@ -117,7 +117,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 				Pommo::redirect($config['site_confirm']);
 		}
 		else {
-			$smarty->assign('back', TRUE);
+			$template->assign('back', TRUE);
 			// delete the subscriber
 			PommoSubscriber::delete($id);
 		}
@@ -126,7 +126,7 @@ if ($config['list_confirm'] == 'on') { // email confirmation required.
 else { // no email confirmation required
 	if (!PommoSubscriber::add($subscriber)) {
 		$logger->addErr('Error adding subscriber! Please contact the administrator.');
-		$smarty->assign('back', TRUE);
+		$template->assign('back', TRUE);
 	}
 	else {
 		
@@ -143,7 +143,7 @@ else { // no email confirmation required
 	}
 	
 }
-$smarty->display('user/process.tpl');
+$template->display('user/process.tpl');
 Pommo::kill();
 
 ?>

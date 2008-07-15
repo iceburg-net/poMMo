@@ -32,12 +32,12 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 
-$smarty->assign('version',$pommo->_config['version']);
-$smarty->assign('revision',$pommo->_config['revision']);
+$template->assign('version',$pommo->_config['version']);
+$template->assign('revision',$pommo->_config['revision']);
 
-$smarty->display('support/support.tpl');
+$template->display('support/support.tpl');
 Pommo::kill();
 ?>

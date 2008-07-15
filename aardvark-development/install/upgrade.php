@@ -34,27 +34,27 @@ $dbo->dieOnQuery(FALSE);
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 // Check to make sure poMMo is installed
 if (!PommoInstall::verify()) {
 	$logger->addErr(sprintf(Pommo::_T('poMMo does not appear to be installed! Please %s INSTALL %s before attempting an upgrade.'), '<a href="' . $pommo->_baseUrl . 'install/install.php">', '</a>'));
-	$smarty->display('upgrade.tpl');
+	$template->display('upgrade.tpl');
 	Pommo::kill();
 }
 
 // Check to make sure poMMo is PR14 or higher.
 if ($pommo->_config['revision'] < 26) {
 	$logger->addErr('Upgrade path unavailable. Cannot upgrade from Aardvark PR13.2 or below!');
-	$smarty->display('upgrade.tpl');
+	$template->display('upgrade.tpl');
 	Pommo::kill();
 }
 
 // Check to make sure poMMo is not already up to date.
 if ($pommo->_config['revision'] == $pommo->_revision && !isset ($_REQUEST['forceUpgrade']) && !isset ($_REQUEST['continue'])) {
 	$logger->addErr(sprintf(Pommo::_T('poMMo appears to be up to date. If you want to force an upgrade, %s click here %s'), '<a href="' . $_SERVER['PHP_SELF'] . '?forceUpgrade=TRUE">', '</a>'));
-	$smarty->display('upgrade.tpl');
+	$template->display('upgrade.tpl');
 	Pommo::kill();
 }
 
@@ -63,12 +63,12 @@ Pommo::requireOnce($pommo->_baseDir . 'install/helper.upgrade.php');
 
 if (isset ($_REQUEST['disableDebug']))
 	unset ($_REQUEST['debugInstall']);
-elseif (isset ($_REQUEST['debugInstall'])) $smarty->assign('debug', TRUE);
+elseif (isset ($_REQUEST['debugInstall'])) $template->assign('debug', TRUE);
 
 if (empty($_REQUEST['continue'])) {
 	$logger->addErr(sprintf(Pommo::_T('To upgrade poMMo, %s click here %s'), '<a href="' . $pommo->_baseUrl . 'install/upgrade.php?continue=TRUE">', '</a>'));
 } else {
-	$smarty->assign('attempt', TRUE);
+	$template->assign('attempt', TRUE);
 
 	if (isset ($_REQUEST['debugInstall']))
 		$dbo->debug(TRUE);
@@ -85,14 +85,14 @@ if (empty($_REQUEST['continue'])) {
 		$x = fread($handle, filesize($filename));
 		fclose($handle);
 
-		$smarty->assign('notes', $x);
-		$smarty->assign('upgraded', TRUE);
+		$template->assign('notes', $x);
+		$template->assign('upgraded', TRUE);
 	} else {
 		$logger->addErr(Pommo::_T('Upgrade Failed!'));
 	}
 	
 	// clear the working directory template files
-	$smarty->display('upgrade.tpl');
+	$template->display('upgrade.tpl');
 	
 	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
 	if(!PommoHelperMaintenance::delDir($pommo->_workDir.'/pommo/smarty'))
@@ -101,6 +101,6 @@ if (empty($_REQUEST['continue'])) {
 	Pommo::kill();	
 }
 
-$smarty->display('upgrade.tpl');
+$template->display('upgrade.tpl');
 Pommo::kill();
 ?>

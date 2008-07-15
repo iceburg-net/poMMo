@@ -33,8 +33,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->assign('returnStr', Pommo::_T('Subscribers Page'));
+$template = new PommoTheme();
+$template->assign('returnStr', Pommo::_T('Subscribers Page'));
 
 
 /** SET PAGE STATE
@@ -113,11 +113,11 @@ $state['pages'] = (is_numeric($group->_tally) && $group->_tally > 0) ?
 	ceil($group->_tally/$state['limit']) :
 	0;
 	
-$smarty->assign('state',$state);
-$smarty->assign('tally',$group->_tally);
-$smarty->assign('groups',PommoGroup::get());
-$smarty->assign('fields',PommoField::get());
+$template->assign('state',$state);
+$template->assign('tally',$group->_tally);
+$template->assign('groups',PommoGroup::get());
+$template->assign('fields',PommoField::get());
 
-$smarty->display('admin/subscribers/subscribers_manage.tpl');
+$template->display('admin/subscribers/subscribers_manage.tpl');
 Pommo::kill();
 ?>

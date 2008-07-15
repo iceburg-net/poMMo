@@ -21,6 +21,30 @@ q
 die();
 ?>
 
+Public Mailings - add "latest" which is a link to the last successfully sent mailing.
+
+
+Personalize confirmation/unsubscription/etc. mailings.. AND welcome page
+
+
+Write an ajax friendly process.php which returns JSON, and then an ajax based subscription form example.
+
+Add grouping by (active) email addresses. Allow to upload .CSV of failed/unsent addresses. 
+
+enhance initial debugging support to handle cases; http://www.pommo.org/community/viewtopic.php?id=1206
+
+bouncemangement - 3rd party script; http://www.pommo.org/community/viewtopic.php?pid=5639#p5639
+
+datepicker outputs invalid dates (hyphen vs. slash) - http://www.pommo.org/community/viewtopic.php?pid=5642#p5642
+
+grid: support liquid layout - (don't hard code width in ui.grid.tpl) - http://www.pommo.org/community/viewtopic.php?pid=5637#p5637
+
+Multuiple Edit @ Subscribers Manage, Mark pending as active.
+
+http://www.pommo.org/community/viewtopic.php?pid=5561
+
+DE Meters (forums)
+
 Recompile FR .mo - http://bugs.pommo.org/?do=details&id=205
 
 Import; 
@@ -124,7 +148,7 @@ http://www.pommo.org/community/viewtopic.php?pid=5031#p5031
 	  (module) Visual Verrification / CAPTCHA @ subscribe form
 	  (design) client side validation of subscribe form (use validation.js), potential AJAX processing
 	  
-	  (cleanup) vs. smarty->assign($_POST), just use the {$smarty.post} global in templates...
+	  (cleanup) vs. smarty->assign($_POST), just use the {$template.post} global in templates...
 	
 	  (API) include some kind of bandwith throttling / DOS detection / firewalling to drop pages from offending IPs / halt system for 3 mins if too many page requests ??
 	  (API) Plugin architecture -- allow handler & manipulation injections/replacements to API functions

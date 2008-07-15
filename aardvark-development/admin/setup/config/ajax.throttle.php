@@ -31,13 +31,13 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 // Read user requested changes	
 if (!empty($_POST['throttle_restore'])) {
 	$input = array ('throttle_MPS' => 3, 'throttle_BPS' => 0, 'throttle_DP' => 10, 'throttle_DBPP' => 0,'throttle_DMPP' => 0);
 	PommoAPI::configUpdate($input,TRUE);
-	$smarty->assign('output',Pommo::_T('Configuration Updated.'));
+	$template->assign('output',Pommo::_T('Configuration Updated.'));
 }
 elseif(!empty($_POST['throttle-submit'])) {
 	
@@ -60,20 +60,20 @@ elseif(!empty($_POST['throttle-submit'])) {
 
 	if(!empty($input)) {
 		PommoAPI::configUpdate($input,TRUE);
-		$smarty->assign('output',Pommo::_T('Configuration Updated.'));
+		$template->assign('output',Pommo::_T('Configuration Updated.'));
 	}
 	else 
-		$smarty->assign('output',Pommo::_T('Please review and correct errors with your submission.'));	
+		$template->assign('output',Pommo::_T('Please review and correct errors with your submission.'));	
 }
 
 $config= PommoAPI::configGet(array('throttle_MPS', 'throttle_BPS', 'throttle_DP', 'throttle_DBPP','throttle_DMPP'));
 
-$smarty->assign('mps',$config['throttle_MPS']*60);
-$smarty->assign('bps',$config['throttle_BPS']/1024);
-$smarty->assign('dp',$config['throttle_DP']);
-$smarty->assign('dmpp',$config['throttle_DMPP']);
-$smarty->assign('dbpp',$config['throttle_DBPP']/1024);
+$template->assign('mps',$config['throttle_MPS']*60);
+$template->assign('bps',$config['throttle_BPS']/1024);
+$template->assign('dp',$config['throttle_DP']);
+$template->assign('dmpp',$config['throttle_DMPP']);
+$template->assign('dbpp',$config['throttle_DBPP']/1024);
 
-$smarty->display('admin/setup/config/ajax.throttle.tpl');
+$template->display('admin/setup/config/ajax.throttle.tpl');
 Pommo::kill();
 ?>

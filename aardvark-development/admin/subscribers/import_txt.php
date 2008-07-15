@@ -34,7 +34,7 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
+$template = new PommoTheme();
 
 $emails =& $pommo->get('emails');
 $dupes =& $pommo->get('dupes');
@@ -64,10 +64,10 @@ if(isset($_GET['continue'])) {
 	die(Pommo::_T('Complete!').' <a href="subscribers_import.php">'.Pommo::_T('Return to').' '.Pommo::_T('Import').'</a>');
 }
 
-$smarty->assign('flag',$flag);
-$smarty->assign('tally',count($emails));
-$smarty->assign('dupes',$dupes);
+$template->assign('flag',$flag);
+$template->assign('tally',count($emails));
+$template->assign('dupes',$dupes);
 
-$smarty->display('admin/subscribers/import_txt.tpl');
+$template->display('admin/subscribers/import_txt.tpl');
 Pommo::kill();
 ?>

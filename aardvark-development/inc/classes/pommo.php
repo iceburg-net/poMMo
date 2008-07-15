@@ -351,9 +351,9 @@ class Pommo {
 				$logger =& $pommo->_logger;
 				$logger->addErr($msg);
 				Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-				$smarty = new PommoTemplate();
-				$smarty->assign('fatalMsg',TRUE);
-				$smarty->display('message.tpl');
+				$template = new PommoTheme();
+				$template->assign('fatalMsg',TRUE);
+				$template->display('message.tpl');
 			}	
 		}
 		

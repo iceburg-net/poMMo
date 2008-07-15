@@ -30,8 +30,8 @@ $dbo = & $pommo->_dbo;
 	SETUP TEMPLATE, PAGE
  *********************************/
 Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
-$smarty = new PommoTemplate();
-$smarty->prepareForForm();
+$template = new PommoTheme();
+$template->prepareForForm();
 
 /**********************************
 	JSON OUTPUT INITIALIZATION
@@ -67,7 +67,7 @@ function check_notifyMails($value, $empty, & $params, & $formvars) {
 	return $ret;
 }
 
-SmartyValidate :: connect($smarty);
+SmartyValidate :: connect($template);
 if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 	// ___ USER HAS NOT SENT FORM ___
 	SmartyValidate::register_form('messages', true);
@@ -116,7 +116,7 @@ if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 	$vMsg['update_msg'] = 
 	$vMsg['activate_msg'] = Pommo::_T('You must include "[[URL]]" for the confirm link');
 	
-	$smarty->assign('vMsg', $vMsg);
+	$template->assign('vMsg', $vMsg);
 
 	// populate _POST with info from database (fills in form values...)
 	$dbvalues = PommoAPI::configGet(array(
@@ -165,7 +165,7 @@ if (!SmartyValidate :: is_registered_form('messages') || empty ($_POST)) {
 	$p['update_sub'] = $messages['update']['sub'];
 	$p['update_msg'] = $messages['update']['msg'];
 	
-	$smarty->assign($p);
+	$template->assign($p);
 } 
 else {
 	// ___ USER HAS SENT FORM ___
@@ -216,17 +216,17 @@ else {
 	else {
 		// __ FORM NOT VALID
 		
-		$json->add('fieldErrors',$smarty->getInvalidFields('messages'));
+		$json->add('fieldErrors',$template->getInvalidFields('messages'));
 		$json->fail(Pommo::_T('Please review and correct errors with your submission.'));
 	}
 }
 
-$smarty->assign('t_subscribe',Pommo::_T('Subscription'));
-$smarty->assign('t_unsubscribe',Pommo::_T('Unsubscription'));
-$smarty->assign('t_pending',Pommo::_T('Pending'));
-$smarty->assign('t_update',Pommo::_T('Update'));
+$template->assign('t_subscribe',Pommo::_T('Subscription'));
+$template->assign('t_unsubscribe',Pommo::_T('Unsubscription'));
+$template->assign('t_pending',Pommo::_T('Pending'));
+$template->assign('t_update',Pommo::_T('Update'));
 
-$smarty->assign($_POST);
-$smarty->display('admin/setup/config/messages.tpl');
+$template->assign($_POST);
+$template->display('admin/setup/config/messages.tpl');
 Pommo::kill();
 			
