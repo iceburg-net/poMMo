@@ -32,14 +32,14 @@ See config.simple.sample.php for a condensed, readable config file.
 
 [lang] = en
 	Set this to your desired locale. Current languages available are;
-	 bg - Bulgarian			it - Italian				
-	 da - Danish			nl - Dutch
-	 de - German			pl - Polish
-	 en - English			pt - Portuguese
-	 en-uk - British		pt-br - Brazilian Portuguese
-	 es - Spanish			ro - Romanian
-	 fi - Finnish			ru - Russian
-	 fr - French		
+	 bg - Bulgarian			hu - Hungarian			
+	 da - Danish			it - Italian
+	 de - German			nl - Dutch
+	 en - English			pl - Polish
+	 en-uk - British		pt - Portuguese
+	 es - Spanish			pt-br - Brazilian Portuguese
+	 fi - Finnish			ro - Romanian
+	 fr - French			ru - Russian
 	 		
 ::: Optional Configuration :::
 
