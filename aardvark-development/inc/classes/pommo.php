@@ -79,7 +79,7 @@ class Pommo {
 		$this->_default_subscriber_sort = (empty($config['default_subscriber_sort'])) ? 'email' : $config['default_subscriber_sort'];
 		$this->_verbosity = (empty($config['verbosity'])) ? 3 : $config['verbosity'];
 		$this->_logger->_verbosity = $this->_verbosity;
-		$this->_dateformat = ($config['date_format'] >= 1 && $cofig['date_format'] <= 3) ?
+		$this->_dateformat = ($config['date_format'] >= 1 && $config['date_format'] <= 3) ?
 			intval($config['date_format']) : 1;
 		
 		// the regex strips port info from hostname
