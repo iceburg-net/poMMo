@@ -18,30 +18,40 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 // include smarty template class
-Pommo :: requireOnce($GLOBALS['pommo']->_baseDir . 'inc/lib/smarty/Smarty.class.php');
+require_once($GLOBALS['pommo']->_baseDir . 'inc/lib/smarty/Smarty.class.php');
 
 // wrapper class around smarty
 class PommoTheme extends Smarty {
 
 	var $_pommoTheme;
+	var $_gettext_func;
+	var $_gettext_plural_func;
 
-	function PommoTheme() {
+	function __construct() {
 		global $pommo;
+		parent::__construct();
 
 		// set theme -- TODO; extend this to the theme selector
-		$this->_pommoTheme = 'default';
+		$this->_pommoTheme = 'biscuit';
 
-		// set smarty directories
-		$this->_themeDir = $pommo->_baseDir . 'themes/';
-		$this->template_dir = $this->_themeDir . $this->_pommoTheme;
-		$this->config_dir = $this->template_dir . '/inc/config';
-		$this->cache_dir = $pommo->_workDir . '/pommo/smarty';
-		$this->compile_dir = $pommo->_workDir . '/pommo/smarty';
-		$this->plugins_dir = array (
-				'plugins', // the default under SMARTY_DIR
-				$pommo->_baseDir . 'inc/lib/smarty-plugins/gettext',
-				$pommo->_baseDir . 'inc/lib/smarty-plugins/pommo');
-				
+		$theme_path = $pommo->_baseDir . 'themes/' . $this->_pommoTheme;
+
+		$this->setTemplateDir(array(
+			$theme_path,
+			$pommo->_baseDir . 'themes/default',
+		));
+
+	   $this->setConfigDir($theme_path . '/inc/config' );
+       $this->setCompileDir($pommo->_workDir . '/pommo/smarty_c');
+	   $this->setCacheDir($pommo->_workDir . '/pommo/smarty_cache');
+
+	   $this->setPluginsDir(array(
+		   'plugins',
+		   $pommo->_baseDir . 'inc/lib/smarty-plugins/gettext',
+		   $pommo->_baseDir . 'inc/lib/smarty-plugins/pommo'
+	   ));
+	   
+
 		// set base/core variables available to all template
 		$this->assign('url', array (
 			'theme' => array (
@@ -73,23 +83,17 @@ class PommoTheme extends Smarty {
 		// assign section (used for sidebar template)
 		$this->assign('section', $pommo->_section);
 			
-		}
+	}
 
 	// display function falls back to "default" theme if theme file not found
 	// also assigns any poMMo errors or messages
 	function display($resource_name, $cache_id = null, $compile_id = null, $display = false) {
 		global $pommo;
 
-		// attempt to load the theme's requested template
-		if (!is_file($this->template_dir . '/' . $resource_name))
-			// template file not existant in theme, fallback to "default" theme
-			if (!is_file($this->_themeDir . 'default/' . $resource_name))
-				// requested template file does not exist in "default" theme, die.
-				Pommo :: kill(sprintf(Pommo::_T('Template file (%s) not found in default or current theme'), $resource_name));
-			else {
-				$resource_name = $this->_themeDir . 'default/' . $resource_name;
-				$this->template_dir = $this->_themeDir . 'default';
-			}
+		if(!$this->templateExists($resource_name)) {
+			Pommo :: kill(sprintf(Pommo::_T('Template file (%s) not found in default or current theme'), $resource_name), true, true);
+		}
+
 		if ($pommo->_logger->isMsg())
 			$this->assign('messages', $pommo->_logger->getMsg());
 		if ($pommo->_logger->isErr())
@@ -102,8 +106,8 @@ class PommoTheme extends Smarty {
 		global $pommo;
 
 		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
-		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
-		Pommo :: requireOnce($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/function.validate.php');
+		require_once($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
+		require_once($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/function.validate.php');
 		$this->assign('vErr',array());
 	}
 
@@ -111,7 +115,7 @@ class PommoTheme extends Smarty {
 	function prepareForSubscribeForm() {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		Pommo :: requireOnce($pommo->_baseDir . 'inc/helpers/fields.php');
+		require_once($pommo->_baseDir . 'inc/helpers/fields.php');
 
 		// Get array of fields. Key is ID, value is an array of the demo's info
 		$fields = PommoField::get(array('active' => TRUE,'byName' => FALSE));
