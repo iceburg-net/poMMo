@@ -22,8 +22,8 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/classes/mailctl.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 $mailing = current(PommoMailing::get(array('active' => TRUE)));

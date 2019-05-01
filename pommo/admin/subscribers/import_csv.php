@@ -22,9 +22,9 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/import.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/import.php');
+require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->assign('returnStr',Pommo::_T('Import'));
 

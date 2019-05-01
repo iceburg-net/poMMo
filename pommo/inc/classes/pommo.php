@@ -48,7 +48,7 @@ class Pommo {
 	var $_session;  // pointer to this install's/instance values in $_SESSION
 	
 	// default constructor
-	function Pommo($baseDir) {
+	function __construct($baseDir) {
 		$this->_baseDir = $baseDir;
 		$this->_config = array ();
 		$this->_auth = null;
@@ -58,10 +58,10 @@ class Pommo {
 	// preInit() populates poMMo's core with values from config.php 
 	//  initializes the logger + database
 	function preInit() {
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/log.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/db.php');
-		Pommo::requireOnce($this->_baseDir . 'inc/classes/auth.php');
+		require_once($this->_baseDir . 'inc/classes/log.php');
+		require_once($this->_baseDir . 'inc/lib/safesql/SafeSQL.class.php');
+		require_once($this->_baseDir . 'inc/classes/db.php');
+		require_once($this->_baseDir . 'inc/classes/auth.php');
 		
 		// initialize logger
 		$this->_logger = new PommoLog(); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
@@ -97,7 +97,7 @@ class Pommo {
 		$this->_l10n = FALSE;
 		if ($this->_language != 'en') {
 			$this->_l10n = TRUE;
-			Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
+			require_once($this->_baseDir . 'inc/helpers/l10n.php');
 			PommoHelperL10n::init($this->_language, $this->_baseDir);
 		}
 		
@@ -109,7 +109,7 @@ class Pommo {
 			// If we're called from an outside (embedded) script, read baseURL from "last known good".
 			// Else, set it based off of REQUEST
 			if (defined('_poMMo_embed')) {
-				Pommo::requireOnce($this->_baseDir . 'inc/helpers/maintenance.php');
+				require_once($this->_baseDir . 'inc/helpers/maintenance.php');
 				$this->_baseUrl = PommoHelperMaintenance :: rememberBaseURL();
 			} else {
 				$baseUrl = preg_replace('@/(inc|setup|user|install|support(/tests)?|admin(/subscribers|/user|/mailings|/setup)?(/ajax|/mailing|/config)?)$@i', '', dirname($_SERVER['PHP_SELF']));
@@ -198,8 +198,8 @@ class Pommo {
 		
 		if(!defined('_poMMo_support'))
 			if (!$revision)
-				$this->kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $this->_baseUrl . 'install/install.php">', '</a>'));
-			elseif ($this->_revision != $revision) $this->kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $this->_baseUrl . 'install/upgrade.php">', '</a>'));
+				Pommo :: kill(sprintf(Pommo :: _T('Error loading configuration. Has poMMo been installed? %sClick Here%s to install.'), '<a href="' . $this->_baseUrl . 'install/install.php">', '</a>'));
+			elseif ($this->_revision != $revision) Pommo :: kill(sprintf(Pommo :: _T('Version Mismatch. %sClick Here%s to upgrade.'), '<a href="' . $this->_baseUrl . 'install/upgrade.php">', '</a>'));
 		
 		// toggle DB debugging
 		if ($this->_debug)
@@ -224,7 +224,7 @@ class Pommo {
 				$this->_l10n = FALSE;
 			else {
 				$this->_l10n = TRUE;
-				Pommo::requireOnce($this->_baseDir . 'inc/helpers/l10n.php');
+				require_once($this->_baseDir . 'inc/helpers/l10n.php');
 				PommoHelperL10n::init($this->_session['slanguage'], $this->_baseDir);
 			}
 			$this->_slanguage = $this->_session['slanguage'];
@@ -232,7 +232,7 @@ class Pommo {
 		
 		// if authLevel == '*' || _poMMo_support (0 if poMMo not installed, 1 if installed)
 		if (defined('_poMMo_support')) {
-			Pommo::requireOnce($this->_baseDir.'inc/classes/install.php');
+			require_once($this->_baseDir.'inc/classes/install.php');
 			$p['authLevel'] = (PommoInstall::verify()) ? 1 : 0;
 		}
 		
@@ -263,14 +263,14 @@ class Pommo {
 	 *  Translation (l10n) Function
 	 */
 	 
-	 function _T($msg) {
+	 public static function _T($msg) {
 		global $pommo;
 		if($pommo->_escaping)
 			return ($pommo->_l10n) ? htmlspecialchars(PommoHelperL10n::translate($msg)) : htmlspecialchars($msg);
 		return ($pommo->_l10n) ? PommoHelperL10n::translate($msg) : $msg;
 	}
 
-	function _TP($msg, $plural, $count) { // for plurals
+	public static function _TP($msg, $plural, $count) { // for plurals
 		global $pommo;
 		if($pommo->_escaping)
 			return ($pommo->_l10n) ? htmlspecialchars(PommoHelperL10n::translatePlural($msg, $plural, $count)) : htmlspecialchars($msg);
@@ -329,20 +329,20 @@ class Pommo {
 		header('Location: ' . $url);
 		if ($kill)
 			if ($msg)
-				$pommo->kill($msg);
+				Pommo :: kill($msg);
 			else
-				$pommo->kill($pommo->_T('Redirecting, please wait...'));
+				Pommo :: kill(Pommo::_T('Redirecting, please wait...'));
 		return;
 	}
 	
 	// kill => used to terminate a script
-	function kill($msg = NULL, $backtrace = FALSE) {
+	public static function kill($msg = NULL, $backtrace = FALSE, $skipTemplate = FALSE) {
 		global $pommo;
 		
 		// output passed message
 		if ($msg || !ob_get_length()) {
 			
-			if (empty($pommo->_workDir)) {
+			if (empty($pommo->_workDir) || $skipTemplate) {
 				echo ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
 				echo ('<title>poMMo Error</title>'); // Very basics added for valid output
 				echo '<div><img src="' . $pommo->_baseUrl . 'themes/shared/images/icons/alert.png" alt="alert icon" style="vertical-align: middle; margin-right: 20px;"/> ' . $msg . '</div>';
@@ -350,7 +350,7 @@ class Pommo {
 			else {
 				$logger =& $pommo->_logger;
 				$logger->addErr($msg);
-				Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+				require_once($pommo->_baseDir.'inc/classes/template.php');
 				$template = new PommoTheme();
 				$template->assign('fatalMsg',TRUE);
 				$template->display('message.tpl');
@@ -360,7 +360,7 @@ class Pommo {
 		// output debugging info if enabled (in config.php)
 		if ($pommo->_debug) {
 			if (is_object($pommo)) {
-				Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/debug.php');
+				require_once($pommo->_baseDir . 'inc/helpers/debug.php');
 				$debug = new PommoHelperDebug();
 				$debug->bmDebug();
 			}
@@ -379,17 +379,6 @@ class Pommo {
 		
 		// kill script
 		die();
-	}
-	
-	// faster performance than standard require_once
-	// TODO -> extend function to make "smart" -- auto paths, jail to poMMo directory, etc.
-	function requireOnce($file) {
-		static $files;
-
-		if (!isset ($files[$file])) {
-			require ($file);
-			$files[$file] = TRUE;
-		}
 	}
 	
 	function startSession($name = null) {

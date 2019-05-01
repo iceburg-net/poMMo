@@ -22,8 +22,8 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
 
 $config = PommoAPI::configGet('public_history');
 if($config['public_history'] == 'on') {
@@ -37,7 +37,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('Mailing History'));
 
@@ -64,7 +64,7 @@ if(isset($_GET['mail_id']) && is_numeric($_GET['mail_id'])) {
 	if(isset($_GET['email']) && isset($_GET['code'])) {
 		$subscriber = current(PommoSubscriber::get(array('email' => $_GET['email'], 'status' => 1)));
 		if($_GET['code'] == PommoSubscriber::getActCode($subscriber)) {
-			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php'); // require once here so that mailer can use
+			require_once($pommo->_baseDir.'inc/helpers/personalize.php'); // require once here so that mailer can use
 			
 			$matches = array();
 			preg_match('/\[\[[^\]]+]]/', $input['body'], $matches);

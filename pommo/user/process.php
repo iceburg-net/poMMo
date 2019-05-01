@@ -22,8 +22,8 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+require_once($pommo->_baseDir.'inc/helpers/validate.php');
+require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
 
 $pommo->init(array('authLevel' => 0,'noSession' => true));
 $logger = & $pommo->_logger;
@@ -32,7 +32,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 // attempt to detect if referer was set 
@@ -89,7 +89,7 @@ $config = PommoAPI::configGet(array (
 	'notices'
 ));
 $notices = unserialize($config['notices']);
-Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+require_once($pommo->_baseDir . 'inc/helpers/messages.php');
 
 if ($config['list_confirm'] == 'on') { // email confirmation required. 
 	// add user as "pending"

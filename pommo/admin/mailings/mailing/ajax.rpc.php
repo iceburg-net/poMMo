@@ -28,7 +28,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 
@@ -46,13 +46,13 @@ switch ($_REQUEST['call']) {
 	break;
 	
 	case 'altbody' :
-		Pommo::requireOnce($pommo->_baseDir.'inc/lib/lib.html2txt.php');
+		require_once($pommo->_baseDir.'inc/lib/lib.html2txt.php');
 		$h2t = & new html2text($_REQUEST['body']);
 		$json->add('altbody',$h2t->get_text());
 	break;
 	
 	case 'getTemplateDescription' :
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/templates.php');
+		require_once($pommo->_baseDir.'inc/helpers/templates.php');
 		$template = PommoMailingTemplate::getDescriptions(array('id' => $_REQUEST['id']));
 		$msg = (empty($template[$_REQUEST['id']])) ? 'Unknown' : $template[$_REQUEST['id']];
 		die($msg);

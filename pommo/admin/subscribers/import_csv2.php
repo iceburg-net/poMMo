@@ -22,9 +22,9 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/import.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+require_once($pommo->_baseDir.'inc/helpers/import.php');
+require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
+require_once($pommo->_baseDir.'inc/helpers/validate.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;

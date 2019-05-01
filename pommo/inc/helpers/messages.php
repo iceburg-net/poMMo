@@ -74,7 +74,7 @@ class PommoHelperMessages {
 				
 				
 		
-			Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
+			require_once($pommo->_baseDir.'inc/classes/mailer.php');
 			$mail = new PommoMailer();
 		
 			// allow mail to be sent, even if demo mode is on
@@ -162,7 +162,7 @@ class PommoHelperMessages {
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
+		require_once($pommo->_baseDir.'inc/classes/mailer.php');
 		
 		$subject = Pommo::_T('poMMo test message');
 		$body = sprintf(Pommo::_T("This message indicates that poMMo is able to use the %s exchanger."),$exchanger);
@@ -187,7 +187,7 @@ class PommoHelperMessages {
 	
 	function notify(&$notices,&$sub,$type,$comments=false) {
 		global $pommo;
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailer.php');
+		require_once($pommo->_baseDir.'inc/classes/mailer.php');
 		
 		$mails = PommoHelper::trimArray(explode(',',$notices['email']));
 		if(empty($mails[0]))
@@ -203,7 +203,7 @@ class PommoHelperMessages {
 		if($comments) $body .= "COMMENTS: $comments \n\n";
 		$body .= "DATA:\n";
 		
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+		require_once($pommo->_baseDir.'inc/helpers/fields.php');
 		$fields = PommoField::getNames();
 		
 		foreach($sub['data'] as $fid => $v)

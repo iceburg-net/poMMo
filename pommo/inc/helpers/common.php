@@ -47,7 +47,7 @@ class PommoHelper {
 	 * If parser comes across a trimmed line not beginning with [, the line will be ignored.
 	 *   this flexible grammar allows for commets and user error (non homogenous syntax)
 	 */
-	function parseConfig($file) {
+	public static function parseConfig($file) {
 		$a = array();
 		
 		@$file_content = file($file);
@@ -169,7 +169,7 @@ class PommoHelper {
 		global $pommo;
 		
 		if (!defined('ADODB_DATE_VERSION')) // safely load ADODB date library
-			Pommo::requireOnce($pommo->_baseDir.'inc/lib/adodb/adodb-time.inc.php');
+			require_once($pommo->_baseDir.'inc/lib/adodb/adodb-time.inc.php');
 
 		switch ($pommo->_dateformat) {
 			case 1: $format = '%Y/%m/%d'; break;
@@ -188,7 +188,7 @@ class PommoHelper {
 		global $pommo;
 		
 		if (!defined('ADODB_DATE_VERSION')) // safely load ADODB date library
-			Pommo::requireOnce($pommo->_baseDir.'inc/lib/adodb/adodb-time.inc.php');
+			require_once($pommo->_baseDir.'inc/lib/adodb/adodb-time.inc.php');
 		
 		// normalize delimiter
 		str_replace('-','/',$str);

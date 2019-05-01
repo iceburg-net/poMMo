@@ -31,7 +31,7 @@ class PommoLog {
 	var $_verbosity;
 	var $_escape; // htmlspecialchars escaping (disabled by default)
 	
-	function PommoLog($verbosity = 3) {
+	function __construct($verbosity = 3) {
 		$this->_errors = array();
 		$this->_messages = array();
 		$this->_log = FALSE;

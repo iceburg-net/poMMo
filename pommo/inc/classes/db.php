@@ -38,7 +38,7 @@ class PommoDB {
 	var $_safeSQL; // holds Monte's SafeSQL Class , referenced via prepare()
 	var $_results; // array holding unique results (for use with executing queries within loops & not overwriting the loops conditional resultset)
 
-	function PommoDB($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
+	function __construct($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
 
 		// turn off magic quotes runtime
 		if (get_magic_quotes_runtime())
@@ -71,7 +71,7 @@ class PommoDB {
 
 		// connect to mysql database using config variables from poMMo class (set in setup/config.php). 
 		// supress errors to hide login information...
-		$this->_link = mysql_connect($hostname, $username, $password);
+		$this->_link = mysqli_connect($hostname, $username, $password);
 
 		if (!$this->_link)
 			Pommo::kill(Pommo::_T('Could not establish database connection.').' '.Pommo::_T('Verify your settings in config.php'));

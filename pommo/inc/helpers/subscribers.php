@@ -19,7 +19,7 @@
  */
 
 // include the subscriber prototype object 
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 
 /**
  * Subscriber: A Subscriber
@@ -224,7 +224,7 @@ class PommoSubscriber {
 		//   If so, sort against the "value" column select.
 		//   If it's a numeric field, cast the value (string) as an Integer by the DBE for proper sorting.
 		if(is_numeric($p['sort'])) {
-			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+			require_once($pommo->_baseDir.'inc/helpers/fields.php');
 			$numericFields = PommoField::getByType(array('date','number'));
 			
 			$p['sort'] = (in_array($p['sort'],$numericFields)) ?
@@ -256,7 +256,7 @@ class PommoSubscriber {
 			
 			// get any date fields for conversion. We can't use the MySQL 4.1/5
 			// engine, as it doesn't support negative timestamps... !!!
-			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+			require_once($pommo->_baseDir.'inc/helpers/fields.php');
 			$dates = PommoField::getByType('date');
 			
 			$query = "
@@ -353,7 +353,7 @@ class PommoSubscriber {
 	function & getIDByAttr($f = array('subscriber_pending' => array(), 'subscriber_data' => array(), 'subscribers' => array())) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		$pommo->requireOnce($pommo->_baseDir.'inc/classes/sql.gen.php');
+		require_once($pommo->_baseDir.'inc/classes/sql.gen.php');
 		
 		$sql = array('where' => array(), 'join' => array());
 		
@@ -540,7 +540,7 @@ class PommoSubscriber {
 
 			switch ($mode) {
 				case "REPLACE_ACTIVE":
-					Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+					require_once($pommo->_baseDir.'inc/helpers/fields.php');
 					$fields = PommoField::get(array('active' => TRUE));
 					$select = array_keys($fields);
 					break;

@@ -25,6 +25,6 @@ define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init();
 
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+require_once($pommo->_baseDir.'inc/helpers/maintenance.php');
 
 echo (PommoHelperMaintenance::delDir($pommo->_workDir)) ? 'Work Directory Cleared' : 'Unable to Clear Work Directory -- Does it exist?';

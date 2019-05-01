@@ -25,7 +25,7 @@ define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init();
 
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+require_once($pommo->_baseDir.'inc/classes/mailctl.php');
 
 echo 'Please Wait...';
 ob_flush();

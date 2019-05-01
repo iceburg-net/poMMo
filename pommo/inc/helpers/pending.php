@@ -21,7 +21,7 @@
 // TODO -> homogenize/reduce the get methods -- make more efficient!
 
 // include the pending prototype object 
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 
 class PommoPending {
 	// make a pending template
@@ -262,7 +262,7 @@ class PommoPending {
 		
 		// if the user is pending to be added, remove entire subscriber.
 		if ($in['type'] == 'add') {
-			$pommo->requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+			require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
 			return PommoSubscriber::delete($in['subscriber_id']);
 		}
 		
@@ -304,7 +304,7 @@ class PommoPending {
 				}
 				break;
 			case 'change': // update
-				$pommo->requireOnce($pommo->_baseDir. 'inc/helpers/subscribers.php');
+				require_once($pommo->_baseDir. 'inc/helpers/subscribers.php');
 				$subscriber =& $in['array'];
 				
 				if (!PommoSubscriber::update($subscriber,'REPLACE_ACTIVE')) {
@@ -313,7 +313,7 @@ class PommoPending {
 				}
 				break;
 			case 'password' : // change (admin) password
-				$pommo->requireOnce($pommo->_baseDir. 'inc/helpers/subscribers.php');
+				require_once($pommo->_baseDir. 'inc/helpers/subscribers.php');
 				$password = PommoHelper::makePassword();
 				
 				$config = PommoAPI::configGet(array(

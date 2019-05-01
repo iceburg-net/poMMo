@@ -22,9 +22,9 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/rules.php');
+require_once($pommo->_baseDir.'inc/helpers/groups.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/rules.php');
 			
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 // Remember the Page State
@@ -47,7 +47,7 @@ switch ($_REQUEST['call']) {
 		/**********************************
 			SETUP TEMPLATE, PAGE
 		 *********************************/
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+		require_once($pommo->_baseDir.'inc/classes/template.php');
 		$template = new PommoTheme();
 
 		$group = current(PommoGroup::get(array('id' => $state['group'])));
@@ -125,7 +125,7 @@ switch ($_REQUEST['call']) {
 	break;
 	
 	case 'updateRule' :
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/sql.gen.php');
+		require_once($pommo->_baseDir.'inc/classes/sql.gen.php');
 		$group =& current(PommoGroup::get(array('id' => $state['group'])));
 		$rules = PommoSQL::sortRules($group['rules']);
 		

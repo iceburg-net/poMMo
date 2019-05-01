@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/templates.php');
+require_once($pommo->_baseDir.'inc/helpers/templates.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -31,14 +31,14 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 $success = false;

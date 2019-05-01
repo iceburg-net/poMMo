@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+require_once($pommo->_baseDir.'inc/helpers/groups.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -31,7 +31,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 

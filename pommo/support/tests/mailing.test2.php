@@ -31,7 +31,7 @@ $pommo->logErrors();
 
 // ignore user abort
 ignore_user_abort(true);
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+require_once($pommo->_baseDir.'inc/classes/mailctl.php');
 
 $code = (empty($_GET['code'])) ? null : $_GET['code'];
 $spawn = (!isset($_GET['spawn'])) ? 0 : ($_GET['spawn'] + 1);

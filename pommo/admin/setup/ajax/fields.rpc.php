@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -31,7 +31,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 
@@ -93,7 +93,7 @@ switch ($_REQUEST['call']) {
 		}
 		else {
 			
-			Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+			require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
 			
 			$options = PommoField::optionDel($field,$_REQUEST['options']);
 			if(!options)

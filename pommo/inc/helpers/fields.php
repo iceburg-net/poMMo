@@ -19,7 +19,7 @@
  */
 
 // include the field prototype object 
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 
 /**
  * Field: A SubscriberField

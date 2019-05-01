@@ -22,8 +22,8 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/templates.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/templates.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -32,7 +32,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 $template->assign('fields',PommoField::get(array('byName'=>true)));

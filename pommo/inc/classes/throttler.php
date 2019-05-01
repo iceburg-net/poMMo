@@ -162,7 +162,7 @@ class PommoThrottler {
 	// ------------------------------
 
 	// bThrottler() - simple initialization of class variables.
-	function PommoThrottler($p = array(), & $history, &$sent, &$sentBytes) { 
+	function __construct($p = array(), & $history, &$sent, &$sentBytes) { 
 		global $pommo;
 		
 		$this->logger =& $pommo->_logger;

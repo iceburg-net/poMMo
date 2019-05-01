@@ -2,11 +2,11 @@
 /*
  * Project:     SafeSQL: db access library extension
  * File:        SafeSQL.class.php
- * Author:      Monte Ohrt <monte@ispi.net>
+ * Author:      Monte Ohrt <monte at newdigitalgroup dot com>
  *
- * Version:     2.1
- * Date:        August 13, 2004
- * Copyright:   2001,2002,2003,2004 ispi of Lincoln, Inc.
+ * Version:     2.3
+ * Date:        April 30th, 2019
+ * Copyright:   2001-2005 New Digital Group, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,7 @@ class SafeSQL
     Function: SafeSQL
     Purpose:  constructor
 \*======================================================================*/
-	function SafeSQL() { }
+	function __construct() { }
 
 /*======================================================================*\
     Function: query
@@ -47,7 +47,7 @@ class SafeSQL
 			
 			$_var_count = count($query_vars);
 			
-			if($_var_count != preg_match_all('!%[sSiIfFcClLqQ]!', $query_string, $_match)) {
+			if($_var_count != preg_match_all('!%[sSiIfFcClLqQnN]!', $query_string, $_match)) {
 				$this->_error_msg('unmatched number of vars and % placeholders: ' . $query_string);
 			}
 						
@@ -70,7 +70,7 @@ class SafeSQL
                 }
 				// escape string
 				$query_vars[$_x] = $this->_sql_escape($query_vars[$_x]);
-				if(in_array($_match[0][$_x], array('%S','%I','%F','%C','%L','%Q'))) {
+				if(in_array($_match[0][$_x], array('%S','%I','%F','%C','%L','%Q','%N'))) {
 					// get positions of [ and ]
                     if(isset($_last_var_pos))
 					    $_right_pos = strpos($query_string, ']', $_last_var_pos);
@@ -122,6 +122,7 @@ class SafeSQL
 				%c, %C - comma separate, cast each element to integer
 				%l, %L - comma separate, no quotes, no casting
 				%q, %Q - quote/comma separate
+				%n, %N - wrap value in single quotes unless NULL
 \*======================================================================*/
 	function _convert_var($var, $type) {
 		switch($type) {
@@ -161,6 +162,11 @@ class SafeSQL
 				// quote comma separate
 				$var = "'" . implode("','", $var) . "'";
 				break;
+            case '%n':
+            case '%N':
+                if($var != 'NULL')
+                    $var = "'" . $var . "'";
+                break;
 		}
 		return $var;
 	}	
@@ -198,7 +204,7 @@ class SafeSQL
     Function: _sql_escape
     Purpose:  method overridden by subclass
 \*======================================================================*/
-	function _sql_escape() { }
+	function _sql_escape($var) { }
 	
 }
 		
@@ -210,7 +216,7 @@ class SafeSQL_MySQL extends SafeSQL {
     Function: SafeSQL_MySQL
     Purpose:  constructor
 \*======================================================================*/
-	function SafeSQL_MySQL($link_id = null) {
+	function __construct($link_id = null) {
 		$this->_link_id = $link_id;
 	}
 
@@ -220,13 +226,15 @@ class SafeSQL_MySQL extends SafeSQL {
 \*======================================================================*/
 	function _sql_escape($var) {
 		if(is_array($var)) {
-		  $_newvar = array();
 			foreach($var as $_element) {
 				$_newvar[] = $this->_sql_escape($_element);
 			}
 			return $_newvar;
 		}
-		if(function_exists('mysql_real_escape_string')) {
+
+		if(function_exists('mysqli_real_escape_string') && isset($this->_link_id)) {
+			return mysqli_real_escape_string($this->_link_id, $var);
+		} elseif(function_exists('mysql_real_escape_string')) {
 			if(!isset($this->_link_id)) {
 				return mysql_real_escape_string($var);
 			} else {
@@ -236,8 +244,7 @@ class SafeSQL_MySQL extends SafeSQL {
 			return mysql_escape_string($var);
 		} else {
 			return addslashes($var);
-		}	
-		break;
+		}
 	}	
 }
 
@@ -248,7 +255,7 @@ class SafeSQL_ANSI extends SafeSQL {
     Function: SafeSQL_ANSI
     Purpose:  constructor
 \*======================================================================*/
-	function SafeSQL_ANSI() { }
+	function __construct() { }
 
 /*======================================================================*\
     Function: _sql_escape
@@ -262,7 +269,6 @@ class SafeSQL_ANSI extends SafeSQL {
 			return $_newvar;
 		}
 		return str_replace("'", "''", $var);
-		break;
 	}	
 }
 

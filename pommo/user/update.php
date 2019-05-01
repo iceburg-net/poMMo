@@ -22,9 +22,9 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
+require_once($pommo->_baseDir.'inc/helpers/validate.php');
+require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
+require_once($pommo->_baseDir.'inc/helpers/pending.php');
 
 $pommo->init(array('authLevel' => 0,'noSession' => true));
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 // Prepare for subscriber form -- load in fields + POST/Saved Subscribe Form
@@ -80,7 +80,7 @@ if (!empty ($_POST['update']) && PommoValidate::subscriberData($_POST['d'])) {
 			$code = PommoPending::add($newsub, 'change');
 			if(!$code)
 				die('Failed to Generate Pending Subscriber Code');
-			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+			require_once($pommo->_baseDir . 'inc/helpers/messages.php');
 			PommoHelperMessages::sendMessage(array('to' => $newsub['email'], 'code' => $code, 'type' => 'update'));
 			
 			if (isset($notices['update']) && $notices['update'] == 'on')
@@ -92,7 +92,7 @@ if (!empty ($_POST['update']) && PommoValidate::subscriberData($_POST['d'])) {
 		$logger->addErr('Error updating subscriber.');
 	else { // update successful
 		$logger->addMsg(Pommo::_T('Your records have been updated.'));
-		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+		require_once($pommo->_baseDir . 'inc/helpers/messages.php');
 		if (isset($notices['update']) && $notices['update'] == 'on')
 			PommoHelperMessages::notify($notices, $newsub, 'update');	
 	}
@@ -113,7 +113,7 @@ elseif (!empty ($_POST['unsubscribe'])) {
 		$dbvalues = PommoAPI::configGet(array('messages'));
 		$messages = unserialize($dbvalues['messages']);
 		
-		Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+		require_once($pommo->_baseDir . 'inc/helpers/messages.php');
 		
 		// send unsubscription email / print unsubscription message
 		PommoHelperMessages::sendMessage(array('to' => $subscriber['email'], 'type' => 'unsubscribe'));

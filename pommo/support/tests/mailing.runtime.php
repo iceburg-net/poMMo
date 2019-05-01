@@ -25,7 +25,7 @@ define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init();
 
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
+require_once($pommo->_baseDir.'inc/classes/mailctl.php');
 
 set_time_limit(0);
 

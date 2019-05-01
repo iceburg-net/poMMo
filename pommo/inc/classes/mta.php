@@ -21,11 +21,11 @@
  // poMMo MTA - poMMo's background mailer
  
  // includes
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/mailctl.php');
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/mailer.php');
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/throttler.php');
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/mailings.php');
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/mailctl.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/mailer.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/throttler.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/helpers/mailings.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
 
  class PommoMTA {
 
@@ -70,7 +70,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscri
 	// the throttle object
 	var $_throttler;	
 	
-	function PommoMTA($args = array()) {
+	function __construct($args = array()) {
 		
 		$defaults = array (
 			'queueSize' => 100,

@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+require_once($pommo->_baseDir.'inc/helpers/groups.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -38,7 +38,7 @@ $group = new PommoGroup($state['group'], $state['status'], $state['search']);
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 /**********************************

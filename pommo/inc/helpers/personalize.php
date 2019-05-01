@@ -18,8 +18,8 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/fields.php');
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/helpers/fields.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
 
 class PommoHelperPersonalize {
 	

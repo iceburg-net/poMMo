@@ -18,7 +18,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/lib/phpmailer/class.phpmailer.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/lib/phpmailer/class.phpmailer.php');
 
 // TODO; class depricated since PR13.2 .. needs major overhaul!
 //  OLDSCHOOL KLUDGE
@@ -50,7 +50,7 @@ class PommoMailer extends PHPMailer {
 
 	// called like $pommo = new bMailer(fromname,fromemail,frombounce, exchanger)
 	//  If an argument is not supplied, resorts to default value (from setup/config.php).
-	function PommoMailer($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL, $charset = NULL, $personalize = FALSE) {
+	function __construct($fromname = NULL, $fromemail = NULL, $frombounce = NULL, $exchanger = NULL, $demonstration = NULL, $charset = NULL, $personalize = FALSE) {
 		global $pommo;
 		$this->logger =& $pommo->_logger;
 		

@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -31,7 +31,7 @@ $logger = & $pommo->_logger;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 // fetch the mailing IDs
@@ -43,7 +43,7 @@ if(!is_array($mailingIDS))
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON(false); // do not toggle escaping
 	
 // EXAMINE CALL
@@ -58,7 +58,7 @@ switch ($_REQUEST['call']) {
 	
 	case 'reload' :
 	
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
+		require_once($pommo->_baseDir.'inc/helpers/groups.php');
 
 		$mailing = current(PommoMailing::get(array('id' => $_REQUEST['mailings'])));
 		

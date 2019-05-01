@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -31,7 +31,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 if (PommoMailing::isCurrent())
@@ -42,7 +42,7 @@ if ($pommo->_config['demo_mode'] == 'on')
 
 
 // WYSIWYG JavaScript Includes
-Pommo::requireOnce($pommo->_baseDir.'themes/wysiwyg/editors.php');
+require_once($pommo->_baseDir.'themes/wysiwyg/editors.php');
 $editors = new PommoWYSIWYG();
 $editor = $editors->loadEditor();
 if (!$editor)

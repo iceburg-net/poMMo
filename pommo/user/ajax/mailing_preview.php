@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
 
 
 $config = PommoAPI::configGet('public_history');
@@ -47,7 +47,7 @@ else
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 $template->assign($mailing);

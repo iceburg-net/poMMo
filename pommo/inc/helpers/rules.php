@@ -164,7 +164,7 @@ class PommoRules {
 		PommoRules::deleteRule($group, $field, $logic);
 		
 		// get the field
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+		require_once($pommo->_baseDir.'inc/helpers/fields.php');
 		$field = current(PommoField::get(array('id' => $field)));
 
 		foreach($values as $value) {

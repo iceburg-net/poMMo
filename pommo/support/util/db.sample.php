@@ -27,7 +27,7 @@ define('_poMMo_support', TRUE);
 require ('../../bootstrap.php');
 $pommo->init();
 
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/install.php'); 
+require_once($pommo->_baseDir.'inc/classes/install.php'); 
 $dbo =& $pommo->_dbo;
 
 // reset DB

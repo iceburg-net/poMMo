@@ -24,7 +24,7 @@ class PommoJSON {
 	var $_successMsg;
 	var $_failMsg;
 
-	function PommoJSON($toggleEscaping = true) {
+	function __construct($toggleEscaping = true) {
 		global $pommo;
 		
 		if($toggleEscaping) {

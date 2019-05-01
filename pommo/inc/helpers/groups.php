@@ -19,7 +19,7 @@
  */
 
 // include the group prototype object 
-$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
+require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 
 /**
  * Group: A Group of Subscribers
@@ -45,10 +45,10 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	var $_id; // ID of bgroup
  	
  	// ============ NON STATIC METHODS ===================
- 	function PommoGroup($groupID = NULL, $status = 1, $filter = FALSE) {
+ 	function __construct($groupID = NULL, $status = 1, $filter = FALSE) {
  		$this->_status = $status;
  		if (!is_numeric($groupID)) { // exception if no group ID was passed -- group assumes "all subscribers".
- 			$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
+ 			require_once($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  			
  			$this->_group = array('rules' => array(), 'id' => 0);
  			$this->_id = 0;
@@ -77,7 +77,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
  	
  	// returns sorted/ordered/limited member IDs -- scoped to current group member IDs
  	function members($p = array(), $filter = array('field' => null, 'string' => null)) {
- 		$GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
+ 		require_once($GLOBALS['pommo']->_baseDir. 'inc/helpers/subscribers.php');
  		if(is_array($this->_memberIDs)) 
  			$p['id'] =& $this->_memberIDs;
  		else // status was already passed when fetching IDs
@@ -206,7 +206,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	function & getMemberIDs($group, $status = 1, $filter = false) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		$pommo->requireOnce($pommo->_baseDir. 'inc/classes/sql.gen.php');
+		require_once($pommo->_baseDir. 'inc/classes/sql.gen.php');
 		
 		if (empty($group['rules']) && $group['id'] != 0) {
 			$o = array();
@@ -225,7 +225,7 @@ $GLOBALS['pommo']->requireOnce($GLOBALS['pommo']->_baseDir. 'inc/classes/prototy
 	function tally($group, $status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
-		$pommo->requireOnce($pommo->_baseDir. 'inc/classes/sql.gen.php');
+		require_once($pommo->_baseDir. 'inc/classes/sql.gen.php');
 		
 		if (empty($group['rules']))
 			return 0;

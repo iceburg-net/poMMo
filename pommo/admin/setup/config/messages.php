@@ -29,19 +29,19 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 // Check if user requested to restore defaults
 if (isset($_POST['restore'])) {
-	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/messages.php');
+	require_once($pommo->_baseDir.'inc/helpers/messages.php');
 	switch (key($_POST['restore'])) {
 		case 'subscribe' : $messages = PommoHelperMessages::ResetDefault('subscribe'); break;
 		case 'activate' : $messages = PommoHelperMessages::resetDefault('activate'); break;

@@ -22,8 +22,8 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
@@ -32,7 +32,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
@@ -55,9 +55,9 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 
 	if (SmartyValidate :: is_valid($_POST) && !$current) {
 		// __ FORM IS VALID
-		Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+		require_once($pommo->_baseDir.'inc/classes/mailctl.php');
+		require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
+		require_once($pommo->_baseDir.'inc/helpers/validate.php');
 		
 		// get a copy of the message state
 		// composition is valid (via preview.php)

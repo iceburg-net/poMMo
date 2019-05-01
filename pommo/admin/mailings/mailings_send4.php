@@ -24,7 +24,7 @@
 $serial = (empty($_GET['serial'])) ? time() : addslashes($_GET['serial']);
 
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mta.php');
+require_once($pommo->_baseDir.'inc/classes/mta.php');
 
 $pommo->init(array('sessionID' => $serial, 'keep' => TRUE, 'authLevel' => 0));
 $logger = & $pommo->_logger;
@@ -87,7 +87,7 @@ $mailing->poll();
 // check if message body contains personalizations
 // personalizations are cached in session
 
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/personalize.php'); // require once here so that mailer can use
+require_once($pommo->_baseDir.'inc/helpers/personalize.php'); // require once here so that mailer can use
 if(!isset($pommo->_session['personalization'])) {
 	$pommo->_session['personalization'] = FALSE;
 	$matches = array();

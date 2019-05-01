@@ -27,7 +27,7 @@ class PommoAuth {
 
 
 	// default constructor. Get current logged in user from session. Check for permissions.
-	function PommoAuth($args = array ()) {
+	function __construct($args = array ()) {
 		global $pommo;
 		
 		$defaults = array (

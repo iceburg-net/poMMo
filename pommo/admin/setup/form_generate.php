@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;

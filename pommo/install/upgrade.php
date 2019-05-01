@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/install.php');
+require_once($pommo->_baseDir.'inc/classes/install.php');
 $pommo->init(array('authLevel' => 0, 'install' => TRUE));
 $pommo->reloadConfig();
 
@@ -33,7 +33,7 @@ $dbo->dieOnQuery(FALSE);
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
@@ -59,7 +59,7 @@ if ($pommo->_config['revision'] == $pommo->_revision && !isset ($_REQUEST['force
 }
 
 // include the upgrade procedure file
-Pommo::requireOnce($pommo->_baseDir . 'install/helper.upgrade.php');
+require_once($pommo->_baseDir . 'install/helper.upgrade.php');
 
 if (isset ($_REQUEST['disableDebug']))
 	unset ($_REQUEST['debugInstall']);
@@ -94,7 +94,7 @@ if (empty($_REQUEST['continue'])) {
 	// clear the working directory template files
 	$template->display('upgrade.tpl');
 	
-	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/maintenance.php');
+	require_once($pommo->_baseDir.'inc/helpers/maintenance.php');
 	if(!PommoHelperMaintenance::delDir($pommo->_workDir.'/pommo/smarty'))
 		$logger->addErr('Unable to Clear Working Directory (non fatal)');
 	

@@ -30,7 +30,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
@@ -63,7 +63,7 @@ if (!SmartyValidate :: is_registered_form('users') || empty ($_POST)) {
 	/**********************************
 		JSON OUTPUT INITIALIZATION
 	 *********************************/
-	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	require_once($pommo->_baseDir.'inc/classes/json.php');
 	$json = new PommoJSON();
 
 	if (SmartyValidate :: is_valid($_POST, 'users')) {

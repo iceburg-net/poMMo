@@ -101,7 +101,7 @@ function PommoRevUpgrade($rev) {
 			"INSERT INTO {$dbo->table['config']} VALUES ('public_history', 'off', 'Public Mailing History', 'off', 'on')"
 			,"Adding configuration of Public Mailings")) return false;
 			
-			Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+			require_once($pommo->_baseDir . 'inc/helpers/messages.php');
 			PommoHelperMessages::resetDefault();
 			
 			// bump revision
@@ -271,7 +271,7 @@ function PommoRevUpgrade($rev) {
 		case 41:
 			
 			
-			$sql = 'Pommo::requireOnce($pommo->_baseDir . \'inc/helpers/messages.php\');PommoHelperMessages::resetDefault();';
+			$sql = 'require_once($pommo->_baseDir . \'inc/helpers/messages.php\');PommoHelperMessages::resetDefault();';
 			if (!PommoInstall::incUpdate(24,$sql,"Resetting all Messages to Default",true)) return false;
 		
 			// bump revision

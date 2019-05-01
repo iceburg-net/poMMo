@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
+require_once($pommo->_baseDir.'inc/helpers/pending.php');
 
 $pommo->init(array('authLevel' => 0, 'noSession' => true));
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ session_start(); // required by smartyValidate. TODO -> move to prepareForForm()
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->assign('title', $pommo->_config['site_name'] . ' - ' . Pommo::_T('subscriber logon'));
 

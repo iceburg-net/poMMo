@@ -25,7 +25,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require('../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/pending.php');
+require_once($pommo->_baseDir.'inc/helpers/pending.php');
 
 $pommo->init(array('authLevel' => 0, 'noSession' => true));
 $logger = & $pommo->_logger;
@@ -34,7 +34,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
 if (empty($_GET['code'])) {
@@ -63,10 +63,10 @@ $notices = unserialize($config['notices']);
 
 if(PommoPending::perform($pending)) {
 	
-	Pommo::requireOnce($pommo->_baseDir . 'inc/helpers/messages.php');
+	require_once($pommo->_baseDir . 'inc/helpers/messages.php');
 	
 	// get subscriber info
-	Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
+	require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
 	$subscriber = current(PommoSubscriber::get(array('id' => $pending['subscriber_id'])));
 			
 	switch ($pending['type']) {

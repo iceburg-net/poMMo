@@ -22,7 +22,7 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+require_once($pommo->_baseDir.'inc/helpers/fields.php');
 
 $pommo->init(array('keep' => TRUE));
 $logger = & $pommo->_logger;
@@ -32,7 +32,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
@@ -62,7 +62,7 @@ if (!SmartyValidate :: is_registered_form() || empty ($_POST)) {
 	/**********************************
 		JSON OUTPUT INITIALIZATION
 	 *********************************/
-	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	require_once($pommo->_baseDir.'inc/classes/json.php');
 	$json = new PommoJSON();
 	
 	SmartyValidate :: connect($template);

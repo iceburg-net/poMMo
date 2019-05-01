@@ -26,14 +26,14 @@ $pommo->init();
 $logger = & $pommo->_logger;
 $dbo = & $pommo->_dbo;
 
-Pommo::requireOnce($pommo->_baseDir . 'inc/lib/phpmailer/class.phpmailer.php');
-Pommo::requireOnce($pommo->_baseDir . 'inc/lib/phpmailer/class.smtp.php');
+require_once($pommo->_baseDir . 'inc/lib/phpmailer/class.phpmailer.php');
+require_once($pommo->_baseDir . 'inc/lib/phpmailer/class.smtp.php');
 
 
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 $template->assign('returnStr', Pommo::_T('Configure'));

@@ -22,8 +22,8 @@
 	INITIALIZATION METHODS
 *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/subscribers.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/validate.php');
+require_once($pommo->_baseDir.'inc/helpers/subscribers.php');
+require_once($pommo->_baseDir.'inc/helpers/validate.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	JSON OUTPUT INITIALIZATION
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+require_once($pommo->_baseDir.'inc/classes/json.php');
 $json = new PommoJSON();
 
 // EXAMINE CALL
@@ -169,7 +169,7 @@ switch ($_REQUEST['call']) {
 		$out = array('email' => $subscriber['email'],'id' => $subscriber['id']);
 		
 		// return human readable date formatting
-		Pommo::requireOnce($pommo->_baseDir.'inc/helpers/fields.php');
+		require_once($pommo->_baseDir.'inc/helpers/fields.php');
 		$dateFields = PommoField::getByType('date');
 		
 		foreach($subscriber['data'] as $k => $val) {

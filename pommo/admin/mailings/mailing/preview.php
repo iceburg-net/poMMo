@@ -22,9 +22,9 @@
 	INITIALIZATION METHODS
  *********************************/
 require ('../../../bootstrap.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/groups.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/mailctl.php');
-Pommo::requireOnce($pommo->_baseDir.'inc/helpers/mailings.php');
+require_once($pommo->_baseDir.'inc/helpers/groups.php');
+require_once($pommo->_baseDir.'inc/classes/mailctl.php');
+require_once($pommo->_baseDir.'inc/helpers/mailings.php');
 
 $pommo->init();
 $logger = & $pommo->_logger;
@@ -33,7 +33,7 @@ $dbo = & $pommo->_dbo;
 /**********************************
 	SETUP TEMPLATE, PAGE
  *********************************/
-Pommo::requireOnce($pommo->_baseDir.'inc/classes/template.php');
+require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 $template->prepareForForm();
 
@@ -91,7 +91,7 @@ if (!empty ($_REQUEST['sendaway'])) {
 	/**********************************
 		JSON OUTPUT INITIALIZATION
 	 *********************************/
-	Pommo::requireOnce($pommo->_baseDir.'inc/classes/json.php');
+	require_once($pommo->_baseDir.'inc/classes/json.php');
 	$json = new PommoJSON();
 	
 	if ($state['tally'] > 0) {
