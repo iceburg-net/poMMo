@@ -23,9 +23,7 @@ ob_start();
 
 // while poMMo is in development state, we'll attempt to display PHP notices, warnings, errors
 ini_set('display_errors', '1');
-
-error_reporting(E_ALL); // [DEVELOPMENT]
-//error_reporting(E_ALL ^ E_NOTICE); // [RELEASE] 
+error_reporting(E_ALL);
 
 // Include core components
 require(dirname(__FILE__) . '/inc/helpers/common.php'); // base helper functions

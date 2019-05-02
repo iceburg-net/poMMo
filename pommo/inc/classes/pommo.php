@@ -53,6 +53,25 @@ class Pommo {
 		$this->_config = array ();
 		$this->_auth = null;
 		$this->_escaping = false;
+
+		set_error_handler(array($this, 'errorHandler')); 
+	}
+
+	function errorHandler ($severity, $message, $file, $line) {
+		if(is_object($this->_logger)){
+			if($severity > E_NOTICE) {
+				$level = 1;
+			} elseif($severity > E_WARNING) {
+				$level = 2;
+			} else {
+				$level = 3;
+			}
+
+			$this->_logger->addErr("[$severity] $message in $file:$line", $level);
+		}
+		else {
+			throw new \ErrorException($message, $severity, $severity, $file, $line);
+		}
 	}
 
 	// preInit() populates poMMo's core with values from config.php 
@@ -65,6 +84,8 @@ class Pommo {
 		
 		// initialize logger
 		$this->_logger = new PommoLog(); // NOTE -> this clears messages that may have been retained (not outputted) from logger.
+
+		
 		
 		// read in config.php (configured by user)
 		// TODO -> write a web-based frontend to config.php creation
