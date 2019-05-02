@@ -40,11 +40,6 @@ class PommoDB {
 
 	function __construct($username = NULL, $password = NULL, $database = NULL, $hostname = NULL, $tablePrefix = NULL) {
 
-		// turn off magic quotes runtime
-		if (get_magic_quotes_runtime())
-			if (!set_magic_quotes_runtime(0))
-				Pommo::kill('Could not turn off PHP\'s magic_quotes_runtime');
-				
 		$this->_prefix = $tablePrefix;
 		$this->_database = $database;
 		$this->table = array (
@@ -76,15 +71,15 @@ class PommoDB {
 		if (!$this->_link)
 			Pommo::kill(Pommo::_T('Could not establish database connection.').' '.Pommo::_T('Verify your settings in config.php'));
 
-		if (!@ mysql_select_db($database, $this->_link))
+		if (!@ mysqli_select_db($this->_link, $database))
 			Pommo::kill(sprintf(Pommo::_T('Connected to database server but could not select database (%s). Does it exist?'),$database).' '.Pommo::_T('Verify your settings in config.php'));
 
 		// Make sure any results we retrieve or commands we send use the same charset and collation as the database:
 		//  code taken from Juliette Reinders Folmer; http://www.adviesenzo.nl/examples/php_mysql_charset_fix/
 		//  TODO: Cache the charset?
-		$db_charset = mysql_query("SHOW VARIABLES LIKE 'character_set_database'", $this->_link);
-		$charset_row = mysql_fetch_assoc($db_charset);
-		mysql_query("SET NAMES '" . $charset_row['Value'] . "'", $this->_link);
+		$db_charset = mysqli_query($this->_link, "SHOW VARIABLES LIKE 'character_set_database'");
+		$charset_row = mysqli_fetch_assoc($db_charset);
+		mysqli_query($this->_link, "SET NAMES '" . $charset_row['Value'] . "'");
 		unset ($db_charset, $charset_row);
 		
 		// setup safeSQL class
@@ -132,7 +127,7 @@ class PommoDB {
 	 * 
 	 *   $sql = "SOME SQL QUERY";
 	 *   if ($DB->query($sql)) {
-	 *   while ($row = mysql_fetch_assoc($dbo->_result)) { echo $row[fieldname]; }
+	 *   while ($row = mysqli_fetch_assoc($dbo->_result)) { echo $row[fieldname]; }
 	 *   }
 	 *   
 	 *  $dbo->dieOnQuery(FALSE);
@@ -159,7 +154,7 @@ class PommoDB {
 		$logger =& $pommo->_logger;
 		
 		// execute query
-		$this->_result = mysql_query($query, $this->_link);
+		$this->_result = mysqli_query($this->_link, $query);
 
 		// output debugging info if enabled
 		if ($this->_debug) {
@@ -174,23 +169,27 @@ class PommoDB {
 		// check if query was unsuccessful
 		if (!$this->_result) {
 			if ($this->_debug)
-				$logger->addMsg('Query failed with error --> ' . mysql_error()); 
+				$logger->addMsg('Query failed with error --> ' . mysqli_error($this->_link)); 
 
 			if ($this->_dieOnQuery)
 				Pommo::kill('MySQL Query Failed.'.$query);
 		}
 		
 		if (is_numeric($row)) {
-			$this->_result = ($this->records() === 0) ? false :
-				mysql_result($this->_result, $row, $col);
+			if($this->records() === 0){
+				$this->_result = false;
+			} else {
+				mysqli_data_seek($this->_result,$row);
+				$resrow = (is_numeric($col)) ? mysqli_fetch_row($this->_result) : mysqli_fetch_assoc($this->_result);
+				$this->_result = $resrow[$col];
+			}
 		}
-		
 		// return the result
 		return $this->_result;
 	}
 
 	function getError() {
-		return mysql_error();
+		return mysqli_error($this->_link);
 	}
 
 	// function affected - returns the amount of affects rows from a INSERT,UPDATE, or DELETE Query.
@@ -200,7 +199,7 @@ class PommoDB {
 		if ($sql)
 			$this->query($sql);
 			
-		return ($this->_result) ? mysql_affected_rows($this->_link) : 0;
+		return ($this->_result) ? mysqli_affected_rows($this->_link) : 0;
 	}
 
 	// function records - returns the number of rows resultings in a SELECT query -- 0 (false) if none...
@@ -209,7 +208,7 @@ class PommoDB {
 		if ($sql)
 			$this->query($sql);
 			
-		return ($this->_result) ? mysql_num_rows($this->_result) : 0;
+		return ($this->_result) ? mysqli_num_rows($this->_result) : 0;
 	}
 
 	// returns the ID of the pkey from an INSERT Statement FALSE if bad result
@@ -217,13 +216,12 @@ class PommoDB {
 		if ($sql)
 			$this->query($sql);
 			
-		return ($this->_result) ? mysql_insert_id($this->_link) : false;
+		return ($this->_result) ? mysqli_insert_id($this->_link) : false;
 	}
 
 	// closes the mySql link & frees the resources
 	function close() {
-		mysql_free($this->_link);
-		mysql_close($this->_link);
+		mysqli_close($this->_link);
 	}
 
 	// returns an array representing 1 row in a resultset. Returns an assosiative array by default
@@ -260,7 +258,7 @@ class PommoDB {
 		}
 		
 		// Fetch row from result set at end of result stack
-		 ($enumerated) ? $row = mysql_fetch_row(end($set)) : $row = mysql_fetch_assoc(end($set));
+		 ($enumerated) ? $row = mysqli_fetch_row(end($set)) : $row = mysqli_fetch_assoc(end($set));
 
 		if (!$row)
 			array_pop($set); // fetching row failed, result set is empty.
@@ -278,9 +276,9 @@ class PommoDB {
 			$this->query($sql);
 
 		if ($field != NULL)
-			eval ('while(@$r = mysql_fetch_' . $type . '($this->_result)) array_push($a, $r[\'' . $field . '\']);');
+			eval ('while(@$r = mysqli_fetch_' . $type . '($this->_result)) array_push($a, $r[\'' . $field . '\']);');
 		else
-			eval ('while(@$r = mysql_fetch_' . $type . '($this->_result)) array_push($a, $r);');
+			eval ('while(@$r = mysqli_fetch_' . $type . '($this->_result)) array_push($a, $r);');
 		return $a;
 	}
 

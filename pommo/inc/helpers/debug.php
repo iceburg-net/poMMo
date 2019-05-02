@@ -24,9 +24,9 @@ class PommoHelperDebug {
 		global $pommo;
 		echo "\n\n<br><br><b>BASIC DEBUG</b><hr><br>\n\n";
 		echo "\n\nPHP: " . phpversion() . "<br><br>\n\n";
-		echo "\n\nMYSQL CLIENT: " . mysql_get_client_info() . "<br><br>\n\n";
-		echo "\n\nMYSQL HOST: " . mysql_get_host_info() . "<br><br>\n\n";
-		echo "\n\nMYSQL SERVER: " . mysql_get_server_info() . "<br><br>\n\n";
+		echo "\n\nMYSQL CLIENT: " . mysqli_get_client_info() . "<br><br>\n\n";
+		echo "\n\nMYSQL HOST: " . mysqli_get_host_info() . "<br><br>\n\n";
+		echo "\n\nMYSQL SERVER: " . mysqli_get_server_info() . "<br><br>\n\n";
 		echo "\n\nBACKTRACE: " . $this->bmBacktrace() . "<br><br>\n\n";
 		echo "\nBaseURL:" . $pommo->_baseUrl . "<br>\n";
 		echo "\n HTTP:" . $pommo->_http . "<br>\n";
