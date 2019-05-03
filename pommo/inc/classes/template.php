@@ -46,7 +46,8 @@ class PommoTheme extends Smarty {
 	   $this->setCacheDir($pommo->_workDir . '/pommo/smarty_cache');
 
 	   $this->setPluginsDir(array(
-		   'plugins',
+		   $pommo->_baseDir . 'inc/lib/smarty/plugins',
+		   $pommo->_baseDir . 'inc/lib/smarty-plugins/validate/plugins',
 		   $pommo->_baseDir . 'inc/lib/smarty-plugins/gettext',
 		   $pommo->_baseDir . 'inc/lib/smarty-plugins/pommo'
 	   ));
@@ -87,7 +88,7 @@ class PommoTheme extends Smarty {
 
 	// display function falls back to "default" theme if theme file not found
 	// also assigns any poMMo errors or messages
-	function display($resource_name, $cache_id = null, $compile_id = null, $display = false) {
+	function display($resource_name = null, $cache_id = null, $compile_id = null, $display = false) {
 		global $pommo;
 
 		if(!$this->templateExists($resource_name)) {
@@ -104,10 +105,7 @@ class PommoTheme extends Smarty {
 	
 	function prepareForForm() {
 		global $pommo;
-
-		$this->plugins_dir[] = $pommo->_baseDir . 'inc/lib/smarty-plugins/validate';
-		require_once($pommo->_baseDir . 'inc/lib/class.smartyvalidate.php');
-		require_once($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/function.validate.php');
+		require_once($pommo->_baseDir . 'inc/lib/smarty-plugins/validate/libs/SmartyValidate.class.php');
 		$this->assign('vErr',array());
 	}
 

@@ -27,7 +27,7 @@
 
 function smarty_function_validate($params, &$smarty) {
 
-    $_init_params = $smarty->get_template_vars('validate_init');
+    $_init_params = $smarty->getTemplateVars('validate_init');
 
     if(isset($_init_params)) {
         $params = array_merge($_init_params, $params);
@@ -35,12 +35,28 @@ function smarty_function_validate($params, &$smarty) {
     
     static $_halt = array();
     static $_is_init = null;
+    static $_form = null;
+    static $_local_is_init = null;
 
-    $_form = isset($params['form']) ? $params['form'] : 'default';
+    $_form = SmartyValidate::$form;
+ 
+    if(isset($params['form']))
+    {
+       if($params['form'] != $_form)
+          $_is_init = null;
+       $_form = $params['form'];
+    } 
+
     $_sess =& $_SESSION['SmartyValidate'][$_form];
 
-    if(!isset($_is_init))
+    if(!isset($_is_init)) {
         $_is_init = $_sess['is_init'];
+    }
+    
+    if(!isset($_local_is_init))
+    {
+      $_local_is_init = $_is_init;
+    }
 
     if(!SmartyValidate::is_registered_form($_form)) {
         trigger_error("SmartyValidate: [validate plugin] form '$_form' is not registered.");
@@ -51,26 +67,26 @@ function smarty_function_validate($params, &$smarty) {
         return;    
     
     if (!class_exists('SmartyValidate')) {
-        $smarty->trigger_error("validate: missing SmartyValidate class");
+        trigger_error("validate: missing SmartyValidate class");
         return;
     }
     if (!isset($_SESSION['SmartyValidate'])) {
-        $smarty->trigger_error("validate: SmartyValidate is not initialized, use connect() first");
+        trigger_error("validate: SmartyValidate is not initialized, use connect() first");
         return;        
     }
     
     if(isset($params['id'])) {
         if (($_validator_key = SmartyValidate::is_registered_validator($params['id'], $_form)) === false) {
-            $smarty->trigger_error("validate: validator id '" . $params['id'] . "' is not registered.");
+            trigger_error("validate: validator id '" . $params['id'] . "' is not registered.");
             return;         
         }
     } else {
         if (strlen($params['field']) == 0) {
-            $smarty->trigger_error("validate: missing 'field' parameter");
+            trigger_error("validate: missing 'field' parameter");
             return;
         }
         if (strlen($params['criteria']) == 0) {
-            $smarty->trigger_error("validate: missing 'criteria' parameter");
+            trigger_error("validate: missing 'criteria' parameter");
             return;
         }
     }
@@ -86,9 +102,9 @@ function smarty_function_validate($params, &$smarty) {
                 
     if(isset($_sess['validators']) && is_array($_sess['validators'])) {
         if(isset($params['id'])) {
-            if($_is_init) {
-                $_sess['validators'][$_validator_key]['message'] = $params['message'];
-            }
+          if($_local_is_init) {
+            $_sess['validators'][$_validator_key]['message'] = $params['message'];
+          }
         } else {
             foreach($_sess['validators'] as $_key => $_field) {
                 if($_field['field'] == $params['field']
@@ -100,7 +116,7 @@ function smarty_function_validate($params, &$smarty) {
             }
         }
         
-        if(!$_is_init) {
+        if(!$_local_is_init) {
 
             if(!$_sess['is_error']) // no validation error
                 return;
@@ -114,8 +130,7 @@ function smarty_function_validate($params, &$smarty) {
                 if(isset($params['assign'])) {
                     $smarty->assign($params['assign'], $_sess['validators'][$_validator_key]['message']);                   
                 } elseif (isset($params['append'])) {
-                   // bb $smarty->append($params['append'], $_sess['validators'][$_validator_key]['message']);                                        
-               		$smarty->append($params['append'], array($_sess['validators'][$_validator_key]['field']=>$_sess['validators'][$_validator_key]['message']), true);
+                    $smarty->append($params['append'], $_sess['validators'][$_validator_key]['message']);                                        
                 } else {
                     // no assign or append, so echo message
                     echo $_sess['validators'][$_validator_key]['message'];

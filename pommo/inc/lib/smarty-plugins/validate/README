@@ -7,10 +7,12 @@ AUTHOR:
     Monte Ohrt (monte [AT] ohrt [DOT] com)
 
 VERSION:
-    2.8
+    3.0.3
+
+NOTE: As of version 3.0, SmartyValidate requires Smarty 3.0 or higher.
     
 DATE:
-    February 7th, 2005
+    December 12th, 2011
 
 WEBSITE:
     http://www.phpinsider.com/php/code/SmartyValidate/
@@ -18,10 +20,6 @@ WEBSITE:
 DOWNLOAD:
     http://www.phpinsider.com/php/code/SmartyValidate/SmartyValidate-current.tar.gz   
     
-ANONYMOUS CVS: (leave password empty)
-    cvs -d :pserver:anonymous@cvs.phpinsider.com:/export/CVS login
-    cvs -d :pserver:anonymous@cvs.phpinsider.com:/export/CVS checkout SmartyValidate
-
 SYNOPSIS:
 
     index.php
@@ -251,11 +249,21 @@ PUBLIC METHODS:
     
     examples:
     SmartyValidate::disconnect();
+    SmartyValidate::disconnect(true);
     
-    This clears the SmartyValidate session data. Call this after you are
-    completely finished with SmartyValidate (eg. do NOT call between form
-    submissions.)
+    This clears the SmartyValidate session data for the current form. Call
+    this after you are completely finished with the SmartyValidate form.
+    (eg. do NOT call between posts to the same form.) A parameter of true
+    will force all forms to reset.
 
+    function set_form($form_name)
+    -----------------------------
+
+    examples:
+    SmartyValidate::set_form('myfoo');
+
+    This sets the form name for the current session. Setting this omits the
+    need to supply this formname to other functions thereafter.
 
     function register_object($obj_name,&$object)
     --------------------------------------------
