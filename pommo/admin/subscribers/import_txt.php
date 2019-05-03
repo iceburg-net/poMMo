@@ -36,8 +36,8 @@ $dbo = & $pommo->_dbo;
 require_once($pommo->_baseDir.'inc/classes/template.php');
 $template = new PommoTheme();
 
-$emails =& $pommo->get('emails');
-$dupes =& $pommo->get('dupes');
+$emails = $pommo->get('emails');
+$dupes = $pommo->get('dupes');
 $fields =& PommoField::get();
 $flag = FALSE;
 
@@ -51,6 +51,7 @@ if(isset($_GET['continue'])) {
 			'email' => $email,
 			'registered' => time(),
 			'ip' => $_SERVER['REMOTE_ADDR'],
+			'flag' => 0,
 			'status' => 1,
 			'data' => array());
 		if($flag)

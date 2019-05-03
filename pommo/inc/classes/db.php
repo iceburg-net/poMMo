@@ -149,7 +149,7 @@ class PommoDB {
 	 * 	}
 	 */
 
-	function & query(& $query, $row = NULL, $col = NULL) {
+	function & query(& $query, $row = NULL, $col = 0) {
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
@@ -181,7 +181,7 @@ class PommoDB {
 			} else {
 				mysqli_data_seek($this->_result,$row);
 				$resrow = (is_numeric($col)) ? mysqli_fetch_row($this->_result) : mysqli_fetch_assoc($this->_result);
-				$this->_result = $resrow[$col];
+				$this->_result = (isset($resrow[$col])) ? $resrow[$col] : false;
 			}
 		}
 		// return the result

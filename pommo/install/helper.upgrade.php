@@ -92,7 +92,7 @@ function PommoRevUpgrade($rev) {
 				`email` varchar(60) NOT NULL,
   				`code` char(32) NOT NULL ,
   				`activated` datetime NULL default NULL ,
-  				`touched` timestamp(14) NOT NULL,
+  				`touched` timestamp NOT NULL,
 				PRIMARY KEY ( `email` )
 			)"
 			,"Adding Update Activation Table")) return false;
