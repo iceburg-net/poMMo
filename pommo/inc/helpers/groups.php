@@ -135,7 +135,7 @@ require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 	// accepts a filtering array -->
 	//   id (array) -> an array of field IDs
 	// returns an array of groups. Array key(s) correlates to group ID.
-	function & get($p = array()) {
+	public static function & get($p = array()) {
 		$defaults = array('id' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
@@ -238,7 +238,7 @@ require_once($GLOBALS['pommo']->_baseDir. 'inc/classes/prototypes.php');
 	// adds a group to the database
 	// accepts a group object (array)
 	// returns the database ID of the added group or FALSE if failed
-	function add(&$in) {
+	public static function add(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		

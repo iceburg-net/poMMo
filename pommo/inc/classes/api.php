@@ -22,7 +22,7 @@
 
 class PommoAPI {
 
-	function & getParams(& $defaults, & $args) {
+	public static function & getParams(& $defaults, & $args) {
 		$p = array_merge($defaults, $args);
 
 		// make sure all submitted parameters are "known" by verifying size of final array
@@ -38,7 +38,7 @@ class PommoAPI {
 
 
 	// Returns Base Configuration Data
-	function & configGetBase() {
+	public static function & configGetBase() {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
@@ -60,7 +60,7 @@ class PommoAPI {
 
 	// Gets specified config value(s) from the DB. 
 	// Pass a single or array of config_names, returns array of their name>value.
-	function configGet($arg) {
+	public static function configGet($arg) {
 		global $pommo;
 		$dbo = & $pommo->_dbo;
 		$dbo->dieOnQuery(FALSE);
@@ -125,7 +125,7 @@ class PommoAPI {
 	// accepts array of default state variables
 	// accepts array of ovverriding variables
 	// returns the current page state (array)
-	function & stateInit($name = 'default', $defaults = array (), $source = array()) {
+	public static function & stateInit($name = 'default', $defaults = array (), $source = array()) {
 		global $pommo;
 				
 		if (empty($pommo->_session['state'][$name]))

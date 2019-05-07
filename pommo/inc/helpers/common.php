@@ -72,11 +72,11 @@ class PommoHelper {
 	// check an email. Function lifted from Monte's SmartyValidate class for consistency.
 	// accepts an email address (str)
 	// returns email legitimacy (bool)
-	function isEmail($_address) {
+	public static function isEmail($_address) {
 		return (!(preg_match('!@.*@|\.\.|\,|\;!', $_address) || !preg_match('!^.+\@(\[?)[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,6}|[0-9]{1,3})(\]?)$!', $_address))) ? true : false;
 	}
 	
-	function isEmailS($value) {
+	public static function isEmailS($value) {
 		
 		// in case value is several addresses separated by newlines
     $_addresses = preg_split('![\n\r]+!', $value);
@@ -131,7 +131,7 @@ class PommoHelper {
 	
 	// array_intersect_key requires PHP 5.1 +, here's a compat function --> (limited to 2 arrs)
 	// returns an array containing all the values of array1  which have matching keys that are present in a2
-	function & arrayIntersect(&$a1, &$a2) {		
+	public static function & arrayIntersect(&$a1, &$a2) {		
 		$o = array();
 		if (!is_array($a1) || !is_array($a2))
 			return $o;
@@ -148,12 +148,12 @@ class PommoHelper {
 	function trimValue(&$value){$value = trim($value);}
 	
 	// returns true if the page has been requested via a browser XMLHTTPRequest (AJAX call)
-	function isAjax() {
+	public static function isAjax() {
 		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 	}
 	
 	// Returns the current dateformat as a string
-	function timeGetFormat() {
+	public static function timeGetFormat() {
 		global $pommo;
 		switch ($pommo->_dateformat) {
 			case 1: $format = 'YYYY/MM/DD'; break;

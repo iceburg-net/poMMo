@@ -91,7 +91,7 @@ class PommoSubscriber {
 	// accepts a subscriber object (array)
 	// returns true if subscriber ($in) is valid, false if not
 	// NOTE: has the magic functionality of converting english status to bool equiv.
-	function validate(&$in) {
+	public static function validate(&$in) {
 		global $pommo;
 		$logger =& $pommo->_logger;
 		
@@ -150,7 +150,7 @@ class PommoSubscriber {
 	//   field (str) - the numeric field ID or 'email', 'time_touched', 'time_registered', 'ip, 'subscriber_id'
 	//   string (str) - the search query
 	// returns an array of subscribers. Array key(s) correlates to subscriber id.
-	function & get($p = array(), $search = array('field' => null, 'string' => null)) {
+	public static function & get($p = array(), $search = array('field' => null, 'string' => null)) {
 		$defaults = array(
 			'status' => 'all', 
 			'email' => null, 
@@ -392,7 +392,7 @@ class PommoSubscriber {
 	
 	// TODO -> potentially use the REPLACE INTO of this function
 	//  as a means for UPDATE?
-	function add(&$in, $id = null) {
+	public static function add(&$in, $id = null) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		
@@ -410,6 +410,7 @@ class PommoSubscriber {
 			[subscriber_id=%I,]
 			email='%s',
 			time_registered=FROM_UNIXTIME(%i),
+			time_touched=CURRENT_TIMESTAMP,
 			flag=%i,
 			ip=INET_ATON('%s'),
 			status=%i";
@@ -601,7 +602,7 @@ class PommoSubscriber {
 	// gets the number of subscribers
 	// accepts filter by status (str) either either 1 (active) (default), 0 (inactive), 2 (pending) or 'all'/NULL (any/all)
 	// returns subscriber tally (int)
-	function tally($status = 1) {
+	public static function tally($status = 1) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 

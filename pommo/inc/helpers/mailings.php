@@ -174,7 +174,7 @@ class PommoMailing {
 	//   limit (int) limits # mailings returned
 	//   offset (int) the SQL offset to start at
 	// returns an array of mailings. Array key(s) correlates to mailing ID.
-	function & get($p = array()) {
+	public static function & get($p = array()) {
 		$defaults = array('active' => false, 'noBody' => false, 'id' => null, 'code' => null, 'sort' => null, 'order' => null, 'limit' => null, 'offset' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
@@ -220,7 +220,7 @@ class PommoMailing {
 	// returns the database ID of the added mailing,
 	//  OR if the mailing is a current mailing (status == 1), returns
 	//  the security code of the mailing. FALSE if failed
-	function add(&$in) {
+	public static function add(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		

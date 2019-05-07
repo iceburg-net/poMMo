@@ -49,7 +49,7 @@ class PommoField {
 	// accepts a field template (assoc array) 
 	// return a field (array)
 	function & makeDB(&$row) {
-		$in = @array(
+		$in = array(
 		'id' => $row['field_id'],
 		'active' => $row['field_active'],
 		'ordering' => $row['field_ordering'],
@@ -61,8 +61,9 @@ class PommoField {
 		
 		if (!empty($row['field_array']))
 			$in['array'] = unserialize($row['field_array']);
-		
-		$o = PommoAPI::getParams(PommoType::field(),$in);
+
+	    $f = PommoType::field();
+		$o = PommoAPI::getParams($f,$in);
 		return $o;
 	}
 	
@@ -133,7 +134,7 @@ class PommoField {
 	//   id (array) -> an array of field IDs
 	//   byName -> will order by name (alphabetical .. else by default order)
 	// returns an array of fields. Array key(s) correlates to field key.
-	function & get($p = array()) {
+	public static function & get($p = array()) {
 		$defaults = array('active' => false, 'id' => null, 'byName' => true);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
@@ -210,7 +211,7 @@ class PommoField {
 	// adds a field to the database
 	// accepts a field (array)
 	// returns the database ID of the added field or FALSE if failed
-	function add(&$in) {
+	public static function add(&$in) {
 		global $pommo;
 		$dbo =& $pommo->_dbo;
 		

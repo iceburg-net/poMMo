@@ -120,7 +120,7 @@ class PommoForm {
 		}
 	}
 	
-	
+	/*
 	public function validate($group = false) {
 		$fieldIDs = ($group) ? $this->_groups[$group] : array_keys($this->_fields);
 		
@@ -138,6 +138,7 @@ class PommoForm {
 		
 		
 	}
+	*/
 	
     
 }

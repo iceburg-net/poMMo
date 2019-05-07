@@ -328,11 +328,11 @@ class PommoSQL {
 		if(is_array($filter) && !empty($filter['field']) && !empty($filter['string'])) {
 		
 			// make MySQL LIKE() compliant
-			$filter['string'] = mysql_real_escape_string(addcslashes($filter['string'],'%_'));
+			$filter['string'] = mysqli_real_escape_string($dbo->_link, addcslashes($filter['string'],'%_'));
 			
 			$sql .= (is_numeric($filter['field'])) ?
 				"\n AND subscriber_id in (select subscriber_id from {$dbo->table['subscriber_data']} WHERE field_id = ".(int)$filter['field']." AND value LIKE '%{$filter['string']}%')" :
-				"\n AND ".mysql_real_escape_string($filter['field'])." LIKE '%{$filter['string']}%'";
+				"\n AND ".mysqli_real_escape_string($dbo->_link, $filter['field'])." LIKE '%{$filter['string']}%'";
 		}
 		return $sql;
 	}

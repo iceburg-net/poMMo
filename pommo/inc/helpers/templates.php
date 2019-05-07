@@ -81,7 +81,7 @@ class PommoMailingTemplate {
 	//   id (array||str) -> A single or an array of template IDs
 	//   name (str) name of mailing template
 	// returns an array of mailings. Array key(s) correlates to template ID.
-	function & get($p = array()) {
+	public static function & get($p = array()) {
 		$defaults = array('id' => null, 'name' => null);
 		$p = PommoAPI :: getParams($defaults, $p);
 		
