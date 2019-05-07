@@ -6,7 +6,7 @@
 
 <div id="footer">
 
-<p>-- {t escape="no" url='<a href="http://www.pommo.org/" target="_blank">poMMo</a>'}Page fueled by %1 mailing management software{/t} -- <a href="{$config.site_url}"><img src="{$url.theme.shared}images/pommo.gif" alt="pommo logo" /></p>
+<p>-- {t escape="no" url='poMMo'}Page fueled by %1 mailing management software{/t} -- <a href="http://www.pommo.org/" target="_blank"><img src="{$url.theme.shared}images/pommo.gif" alt="pommo logo" /></a></p>
 
 </div>
 <!-- end footer -->
